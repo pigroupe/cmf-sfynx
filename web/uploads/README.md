@@ -1,8 +1,8 @@
-ORCHESTRA Bundles
+CMF-PI Bundles
 =====================
 
 
-Orchestra is not just the description you just read above. It also allows you to create your own CMS. 
+Cmf-Pi is not just the description you just read above. It also allows you to create your own CMS. 
 It's a CMF easy to use, build your own template (layout), add your own custom block with your own logic, 
 build all the widget you need. That it what Orcherstra is made for.
 
@@ -19,7 +19,7 @@ The bundle has been split into 2 directories :
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 
 * MediaBundle : A bundle which overload the SonataMediaBundle.
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate orchestra bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
+* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate cmfpi bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
 * TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
 * UserBundle : A bundle which overload the FOSUserBundle.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
@@ -97,7 +97,7 @@ new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
                 new PiApp\GedmoBundle\PiAppGedmoBundle(),
                 new PiApp\TemplateBundle\PiAppTemplateBundle(),
                 
-                #override Orchestra bundles
+                #override Cmf-Pi bundles
                 new OrApp\OrAdminBundle\OrAppOrAdminBundle(),
                 new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
                 new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),      
@@ -202,8 +202,8 @@ Register all namespace before using the bundle. Add the following line to your `
         "autoload": {
             "psr-0": {
                 "OrApp" : "src",
-                "PiApp": "vendor/Orchestra",
-                "BootStrap": "vendor/Orchestra",
+                "PiApp": "vendor/Cmf-Pi",
+                "BootStrap": "vendor/Cmf-Pi",
                 "Zend_": "vendor/Zend/library"
             }
         }    
@@ -251,7 +251,7 @@ To use Doctrine, you will need to have installed PDO. And you must have installe
 
 ### Step 1: Configuring parameters  BDD and mailer
 
-* Open the file orchestra_project / app / config / parameters.ini.
+* Open the file cmfpi_project / app / config / parameters.ini.
 * Give the name "mydatabase" for example in the database and choose the type pdo_mysql to use a MySQL database.
 * Give your user and password of your Gmail count.
 * Change the secret code that will be used to protect your application from XSS attacks.
@@ -348,7 +348,7 @@ http://getcomposer.org/ or just run the following command:
 
 
 - Open your console (cmd) or Putty.
-- Go to the root of the application orchestra_project.
+- Go to the root of the application cmfpi_project.
 
 **Type the following command to create the database**
 
