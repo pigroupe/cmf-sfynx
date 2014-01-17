@@ -1,0 +1,171 @@
+/* ==============================================
+   FEUILLE DE STYLES DES GABARITS HTML/CSS --- 05
+   � Elephorm & Alsacreations.com
+   Conditions d'utilisation:
+   http://creativecommons.org/licenses/by/2.0/fr/
+   ============================================== */
+
+
+/* --- COULEURS --- */
+
+/* Note: vous pouvez modifier simplement l'aspect de ce gabarit en modifiant
+   uniquement les couleurs de fond (propri�t�s background) et les couleurs
+   du texte (propri�t� color).
+   Pour modifier la disposition des blocs, voir plus bas dans la feuille de
+   styles la partie �positionnement�. */
+
+/* G�n�ral */
+body {
+	color: #F0E39E;
+	background: #2C2F22;
+}
+a {
+	color: #FF6533;
+}
+a:hover, a:focus {
+	color: #FF4C00;
+}
+strong {
+	color: #A1B55D;
+}
+
+/* Global */
+#global {
+	color: #F0E39E;
+	background: #181A12; /* Voir -> Note 1 ci-dessous */
+}
+
+/* Navigation */
+#navigation {
+	background: #181A12;
+}
+#navigation a {
+	color: #FF6533;
+}
+#navigation a:hover, #navigation a:focus {
+	background: #000000;
+}
+
+/* Contenu principal */
+#contenu {
+	color: #363B29;
+	background: #cbd888;
+}
+#contenu a {
+	color: #332510;
+}
+#contenu a:hover, #contenu a:focus {
+	color: #6E5122;
+}
+#contenu strong {
+	color: #181A12;
+}
+
+
+/* --- POSITIONNEMENT --- */
+
+/* Page */
+body {
+	padding: 30px 50px 30px 50px; /* -> 2 */
+}
+#global {
+	width: 100%; /* -> 3 */
+	overflow: hidden; /* -> 3 */
+}
+
+/* En-t�te */
+#entete {
+	padding: 20px;
+}
+#entete h1 {
+	margin: 0;
+}
+#entete h1 img {
+	float: left;
+	margin: 7px 20px 10px 0;
+}
+#entete .sous-titre {
+	margin: 4px 0 15px 0;
+}
+
+/* Menu de navigation */
+#menuleft {
+	width: 18%; /* -> 4 */
+	padding: 20px 10px;
+}
+#navigation {
+    float: left;
+}
+#connexion {
+    float: left;
+}
+#navigation ul {
+	margin: 0;
+	list-style: none;
+}
+#navigation a {
+	display: block;
+	height: 1%; /* -> 5 */
+	padding: 6px 6px 6px 10px;
+	line-height: 1.5;
+	font-size: .9em;
+	text-decoration: none;
+}
+
+/* Contenu */
+#contenu {
+	margin-left: 20%; /* -> 6 */
+	padding: 10px 20px;
+}
+#contenu > :first-child {
+	margin-top: 10px;
+}
+#contenu p, #contenu li {
+	line-height: 1.5;
+}
+
+
+/* --- NOTES ---
+
+1.	C'est la couleur de fond de div#global qui permet de simuler des colonnes
+	de m�me hauteur. On applique � div#global la m�me couleur de fond que le
+	menu de gauche, tandis que le bloc de droite (div#contenu), plus long,
+	a sa propre couleur de fond. Visuellement, on obtient donc deux colonnes.
+	Notez bien, cependant, que si la colonne de gauche est plus longue que
+	la colonne de droite... l'effet sera perdu.
+
+2.	Ce gabarit utilise du padding sur l'�l�ment BODY pour cr�er un retrait
+	esth�tique tout autour du conteneur principal.
+	Rappel: "padding: 20px 50px 30px 50px;" se lit ainsi: padding-top de 20px,
+	padding-right de 50px, padding-bottom de 30px, et padding-left de 50px.
+
+3.	On utilise ces propri�t�s pour emp�cher le d�passement des flottants (cf.
+	http://web.covertprestige.info/test/
+	03-elements-flottants-et-element-parent-1.html).
+	Le overflow:hidden cr�e un contexte de formatage qui vient contenir les
+	flottants. Le width:100% a le m�me r�le, mais uniquement pour Internet
+	Explorer 6 (utilisation du HasLayout). Dans l'id�al, on le placera avec
+	des correctifs destin�s � IE6 dans une feuille de styles appel�e via un
+	commentaire conditionnel.
+
+4.	C'est la propri�t� "float" qui nous permet de placer deux blocs
+	c�te-�-c�te. Notez bien que l'�l�ment flottant (ici, notre menu de
+	navigation) doit �tre plac� en premier dans le code HTML. Il est
+	pr�f�rable de lui donner une largeur, ce que nous faisons ici avec un
+	"width: 18%;".
+
+5.	Correction d'un bug d'Internet Explorer 6. Voir la derni�re partie de
+	http://blog.alsacreations.com/2006/10/20/294-impact-sur-le-rendu-de-la-
+	mise-en-forme-du-code-html
+	Dans l'id�al, on placera ce correctif dans une feuille s�par�e, appel�e
+	via un commentaire conditionnel visant IE6.
+
+6.	Les �l�ments flottants ne repoussent pas les blocs, mais repoussent
+	uniquement leur contenu. Pour que notre bloc de contenu principal forme
+	une colonne distincte du menu, on lui donne donc une marge � gauche de 20%.
+	Il existe une autre technique pour adapter la largeur d'un bloc aux
+	flottants qui le pr�c�dent. On pourra lire l'article suivant:
+		http://css.alsacreations.com/Faire-une-mise-en-page-sans-tableaux/
+		design-trois-colonnes-positionnement-flottant
+
+*/

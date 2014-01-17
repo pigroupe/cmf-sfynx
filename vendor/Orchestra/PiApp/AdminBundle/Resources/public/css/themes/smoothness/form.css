@@ -1,0 +1,297 @@
+/*******************************************************
+ * Development by
+ * <etienne de Longeaux> <etienne.delongeaux@gmail.com>
+ *******************************************************/
+.myform{
+    max-width: 1200px;
+}
+.myform img{
+    max-width: 300px;
+    height:auto;
+}
+.myform fieldset{
+	margin: 11px;
+    padding: 11px;
+    background: #EBEBEB;
+    border: 1px dotted #e3e3e3; /* #d0d0d0 #ddd */
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    /* -moz-box-shadow: 6px 6px 6px #e3e3e3;
+    -webkit-box-shadow: 6px 6px 6px #e3e3e3;
+    box-shadow: 6px 6px 6px #e3e3e3; */
+}
+.myform fieldset > legend {
+    font-weight:bold;
+    background: #e3e3e3;
+    cursor: pointer;cursor:hand;
+    padding: 2px 5px;
+    width: 100%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+/* deb SBLA */
+.myform fieldset.no-accordion{
+    float:left;
+    width:46%;
+    /*margin-top: 0;*/
+    margin-bottom:10px;
+    margin: 11px;
+    padding: 11px;
+}
+.myform .accordion-form{
+    float:right;
+    margin-bottom:10px;
+    width:45%;
+}
+.myform fieldset.accordion{
+    height:16px;
+    overflow:hidden;
+    margin-bottom:20px;
+    margin: 11px;
+    padding: 11px;
+}
+.myform fieldset.accordion > div{
+    display: none;
+}
+.myform fieldset.accordion.open{
+    height:auto;
+}
+.myform fieldset.accordion.open > div{
+    display: block;
+}
+.myform fieldset.accordion.open a:first-child{
+    display:block;
+    margin-bottom:20px;
+}
+/* fin SBLA */
+.myform .clearfix label {
+    clear: both;
+}
+.myform .clearfix > label {
+    display: block;
+    font: bold 1.2em arial,verdana,tahoma,sans-serif;
+    text-shadow: 2px 2px 2px #ccc;
+    color: #000;
+    clear: left;
+}
+.clearfix {
+    margin-bottom: 11px;
+}
+.myform span.help-block {
+    background-color: #FFFACD;
+    font-style: italic;
+}
+/* APPLIES THE STYLE TO EACH FORM ELEMENT */
+.myform input[type=text],
+.myform input[type=number],
+.myform input[type=email],
+.myform textarea,
+.myform select {
+    width: 217px;
+    font: normal 1.1em arial,verdana,tahoma,sans-serif;
+    color: #666;
+    padding: 5px 8px;
+    background: #f2f2f2;
+    border: 1px solid #d0d0d0;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px; 
+}
+.myform .time select{
+    width: 75px;
+}
+.myform textarea{
+    height: 71px;
+    resize: both;
+}
+.myform p{
+    margin-top: 11px;
+    margin-bottom: 11px;
+}
+.myform textarea.pi_editor{
+    width: 400px;
+    height: 320px;
+}
+/* CHANGE THE STYLE WHEN THE FORM ELEMENT IS CLICKED */
+.myform input:focus, .myform select:focus, .myform textarea:focus {
+    background: #fff;
+    border: 1px solid #ddd;
+    -moz-box-shadow: 2px 1px 1px #ddd;
+    -webkit-box-shadow: 2px 1px 1px #ddd;
+    box-shadow: 2px 1px 1px #ddd;
+    outline: none;
+}
+/* OPTIONAL SET ATTRIBUTES FOR THE CHOICE RADIO LIST */
+.myform .choice ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.myform .choice li {
+    float: left;
+    margin-right: 11px;
+    /*width: 131px;*/
+    min-width: 11%;
+    margin-bottom: 11px;
+    list-style-type: none;
+    line-height: 18px;
+    padding: 0 0 0 12px;
+}
+.ui-icon-radio-off
+{
+    background-position: -80px -144px;
+}
+/* OPTIONAL SET ATTRIBUTES FOR THE ERRORS AND HELPS */
+.myform span.help-inline {
+    position: absolute;
+    font: bold 0.8em arial,verdana,tahoma,sans-serif;
+    text-shadow: none;
+    color: #000;
+    margin: -5px 0 0 15px;
+    padding: 10px 15px;
+    background: #ffff80;
+    border: 2px solid #f7de35;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;  
+    -moz-box-shadow: 4px 4px 4px #ddd;
+    -webkit-box-shadow: 4px 4px 4px #ddd;
+    box-shadow: 4px 4px 4px #ddd;   
+    z-index: 999;
+}
+.myform .choice span.help-inline {
+    position: absolute;
+    font: bold 0.8em arial,verdana,tahoma,sans-serif;
+    text-shadow: none;
+    color: #000;
+    margin: -10px 0 0 15px;
+    padding: 10px 15px;
+    background: #ffff80;
+    border: 2px solid #f7de35;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;  
+    -moz-box-shadow: 4px 4px 4px #ddd;
+    -webkit-box-shadow: 4px 4px 4px #ddd;
+    box-shadow: 4px 4px 4px #ddd;   
+}
+/* OPTIONAL SET ATTRIBUTES FOR THE ERRORS DIALOG */
+#symfony-form-errors span.ui-icon {
+    margin-bottom: -7px;
+}
+#symfony-form-errors p {
+    margin-bottom: 17px;
+}
+/* OPTIONAL SET ATTRIBUTES FOR THE TABS DIALOG */
+#dialog label, #dialog input,
+.dialog_form label, .dialog_form input
+{
+    display: block;
+}
+#dialog label, .dialog_form label
+{
+    margin-top: 0.5em;
+}
+#dialog input, #dialog textarea,
+.dialog_form input, .dialog_form textarea 
+{
+    width: 95%;
+}
+.dialog_form textarea 
+{
+    height: 71px;
+}
+#tabs
+{
+    margin-top: 1em;
+}
+#tabs li .ui-icon-close
+{
+    float: left;
+    margin: 0.2em 0.2em 0 0;
+    cursor: pointer;
+}
+/* OPTIONAL SET ATTRIBUTES FOR THE FOOTER BUTTON */
+ul.ui-widget-header {
+    -moz-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.05);
+    -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.05);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.05);
+    /*background-color: #242122;*/
+    /*border: 1px solid #d0d0d0;*/
+    -moz-border-radius: 5px 5px 0px 0px;
+    -webkit-border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
+    /*
+    -moz-box-shadow: 4px 4px 4px #ddd;
+    -webkit-box-shadow: 4px 4px 4px #ddd;
+    box-shadow: 4px 4px 4px #ddd;*/       
+    font-weight: normal;
+    color: #fafafa;
+    margin: -1px 0px 11px 0px; 
+}
+ul.ui-footer {
+    -moz-border-radius: Opx 0px 5px 5px;
+    -webkit-border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px 5px 5px;
+}
+ul.ui-widget-header {
+    text-align: center;
+    white-space: nowrap;
+    line-height: 12px;
+    overflow: hidden;
+    width: 100%;
+}
+div.tool-tabs ul.ui-widget-header {
+    /*border: solid 1px #aaa;*/
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 12px;
+    overflow: hidden;
+    width: 556px;
+    height: 40px;
+    top: 22px;
+    left: 1px;
+}
+ul.ui-widget-header li {
+    display: inline-block;
+    letter-spacing: normal;
+    font-size: normal;
+    white-space: normal;
+    text-align: normal;
+    vertical-align: middle;
+    margin: 10px;
+}
+ul.ui-widget-header li {
+    *display: inline;
+    *margin: 0 20px 0 20px;
+}
+button.ui-multiselect{
+	border:0px;
+	margin-bottom: 3px;
+	font: 11px "Helvetica Neue",Helvetica,Arial,sans-serif;
+	height: 26px;
+}
+/* CHECKBOX */
+.icheckbox_square-blue{
+    margin-bottom: 11px;
+}
+.myform .error {
+    border: 1px solid #f00 !important;
+}
+/* VERSION DIALOG */
+@media screen and (max-width:805px) {
+    .myform .accordion-form {
+		float: left;
+		width:90%;
+	}
+	.myform fieldset.no-accordion{
+	    float:left;
+	    width:90%;
+	}
+}

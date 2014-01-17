@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app_dev.php [QSA,L]
+</IfModule>
+
+php_value  session.save_handler  memcache
+php_value  session.save_path  tcp://server:port?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15

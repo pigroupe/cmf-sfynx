@@ -1,0 +1,57 @@
+parameters:
+    bootstrap.user.repository.class: BootStrap\UserBundle\Repository\Repository
+    bootstrap.user.validator.unique.class: BootStrap\UserBundle\Validator\Constraints\MyUniqueValidator
+
+services:
+    #
+    # configuration of the main repository manager allowed for the User management
+    # 
+    bootstrap.user.repository:
+        class: %bootstrap.user.repository.class%
+        arguments: ['@doctrine.orm.entity_manager']
+        
+    #
+    # configuration of the user form registration
+    # 
+    bootstrap_user.registration.form.type:
+        class: BootStrap\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: bootstrap_user_registration }
+
+    bootstrap_user.form.handler.registration:
+        class: BootStrap\UserBundle\Form\Handler\RegistrationFormHandler
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer"]
+        scope: request
+        public: false
+                    
+    bootstrap_user.profile.form.type:
+        class: BootStrap\UserBundle\Form\Type\ProfileFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: bootstrap_user_profile }
+            
+    #
+    # configuration overload validators
+    # 
+    bootstrap.user.validator.unique:
+        class: %bootstrap.user.validator.unique.class%
+        arguments: [@fos_user.user_manager]
+        tags:
+            - { name: validator.constraint_validator, alias: bootstrap.user.validator.unique }
+            
+    #
+    # configuration overload security encoder
+    #             
+    my_password_encoder:
+        class: BootStrap\UserBundle\Security\Encoder\MyPasswordEncoder               
+                        
+    #
+    # configuration of IP address allowed for the Admin and user access control
+    #    
+    #security.access.blacklist_voter:
+    #    class:      BootStrap\UserBundle\Security\Authorization\Voter\ClientIpVoter
+    #    arguments:  [@service_container, [127.0.0.1, ::1, 188.165.248.255]]
+    #    public:     false
+    #    tags:
+    #        -       { name: security.voter } 

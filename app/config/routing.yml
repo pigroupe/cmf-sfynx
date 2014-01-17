@@ -1,0 +1,55 @@
+#
+#   Import PiAppAdminBundle routing files
+#     
+PiAppAdminBundle:
+    resource: "@PiAppAdminBundle/Resources/config/routing.yml"
+    prefix:   / 
+
+#
+#   Import PiAppGedmoBundle routing files
+#        
+PiAppGedmoBundle:
+    resource: "@PiAppGedmoBundle/Resources/config/routing.yml"
+    prefix: /      
+
+#
+#   Import BootStrapUserBundle routing files
+#       
+BootStrapUserBundle:
+    resource: "@BootStrapUserBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+#
+#   Import BootStrapTranslationBundle routing files
+#       
+BootStrapTranslationBundle:
+    resource: "@BootStrapTranslationBundle/Resources/config/routing.yml"
+    prefix:   /    
+    
+#
+#   Import SonataAdminBundle routing files
+#     
+BootStrapAdminBundle:
+    resource: "@BootStrapAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+#
+#   Import SonataPageBundle routing files
+#     
+BootStrapMediaBundle:
+    resource: "@BootStrapMediaBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+#
+#   Import SonataPageBundle routing files
+#     
+BootStrapTranslatorBundle:
+    resource: "@BootStrapTranslatorBundle/Resources/config/routing.yml"
+    prefix:   /      
+  
+#
+#   Import BootStrapWsBundle routing files
+#     
+BootStrapWsBundle:
+    resource: "@BootStrapWsBundle/Resources/config/routing.yml"
+    prefix:   /  
