@@ -17,7 +17,7 @@ services:
       class: %pi_cache.client.memcache.class%
       arguments: ['@php_memcache']
       calls:
-        - [ addServers, [ %pi_cache.client.memcache.servers% ] ]
+        - [ addServer, [ %session_memcache_host%, %session_memcache_port% ] ]
         
     pi_memcache:
         class: %pi_cache.factory.class%
@@ -38,7 +38,7 @@ services:
     pi_session.memcache:
         class: %php_memcache.class%
         calls:
-             - [ addServers, [ %pi_cache.client.memcache.servers% ] ]
+             - [ addServer, [ %session_memcache_host%, %session_memcache_port% ] ]
                  
     pi_session.handler.memcache:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcacheSessionHandler
