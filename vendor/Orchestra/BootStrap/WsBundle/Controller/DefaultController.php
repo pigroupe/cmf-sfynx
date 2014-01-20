@@ -87,7 +87,6 @@ class DefaultController extends abstractController
     		}
     	    throw ClientException::callBadAuthRequest(__CLASS__);
     	}
-
     	$key            = $request->get('ws_key', '');
     	$format         = $request->get('ws_format', 'json');
     	$userId         = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($request->get('ws_user_id', null), $key);

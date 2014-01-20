@@ -314,7 +314,7 @@ class MediaType extends AbstractType
          }     
 
 
-         if (($this->_simpleLink != "hidden") && ($this->_simpleLink != "simple")) {
+         if (($this->_simpleLink != "hidden") && ($this->_simpleLink != "simple") && ($this->_simpleLink != "crop")) {
              $builder
                  ->add('mediadelete', 'checkbox', array(
                      'data'  => false,
@@ -328,11 +328,20 @@ class MediaType extends AbstractType
                  ));    
          }     
          
+         $builder
+         ->add('copyright', 'text', array(
+         		"label"     => "Crédit photo",
+         		"label_attr" => array(
+         				"class"=> $this->_class,
+         		),
+         		'required'  => false,
+         ));         
+         
     }
 
     public function getName()
     {
-        return 'piapp_gedmobundle_mediatype';
+        return 'piapp_gedmobundle_mediatype_' . $this->_status;
     }
     
     public function getDefaultOptions(array $options)

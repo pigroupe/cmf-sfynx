@@ -388,7 +388,7 @@ class MediaController extends abstractController
         $entity = new Media();
         $entity->setStatus($status);
         $entity->setUpdatedAt(new \Datetime());
-        $form   = $this->createForm(new MediaType($this->container, $em, $status), $entity, array('show_legend' => false));
+        $form   = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
     
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new.html.twig";
@@ -431,7 +431,7 @@ class MediaController extends abstractController
         $entity  = new Media();
         $entity->setStatus($status);
         $request = $this->getRequest();
-        $form    = $this->createForm(new MediaType($this->container, $em, $status), $entity, array('show_legend' => false));
+        $form    = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
         $form->bind($request);
     
         if ($form->isValid()) {
@@ -479,7 +479,7 @@ class MediaController extends abstractController
         }
 
         $entity->setUpdatedAt(new \Datetime());
-        $editForm   = $this->createForm(new MediaType($this->container, $em, $status), $entity, array('show_legend' => false));
+        $editForm   = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render("PiAppGedmoBundle:Media:$template", array(
@@ -519,7 +519,7 @@ class MediaController extends abstractController
             $entity = $em->getRepository("PiAppGedmoBundle:Media")->find($id);
         }
 
-        $editForm   = $this->createForm(new MediaType($this->container, $em, $status), $entity, array('show_legend' => false));
+        $editForm   = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
 
         $editForm->bind($this->getRequest(), $entity);

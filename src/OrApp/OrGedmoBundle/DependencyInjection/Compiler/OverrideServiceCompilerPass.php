@@ -33,5 +33,46 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
         
         //http://blog.nicolashachet.com/niveaux/confirme/surcharger-vos-entites-doctrine-en-symfony-2-exemple-avec-le-fosuserbundle/
         //http://symfony.com/doc/master/cookbook/bundles/override.html#entities-entity-mapping
+        
+        
+        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_file');
+        $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
+        $definition->setArguments(array(
+        		new \Symfony\Component\DependencyInjection\Reference('service_container'),
+        		new \Symfony\Component\DependencyInjection\Reference('doctrine.orm.entity_manager'),
+        		'file',
+        		'media_collection',
+        		'all'
+        ));
+         
+        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_image');
+        $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
+        $definition->setArguments(array(
+        		new \Symfony\Component\DependencyInjection\Reference('service_container'),
+        		new \Symfony\Component\DependencyInjection\Reference('doctrine.orm.entity_manager'),
+        		'image',
+        		'media_collection',
+        		'all'
+        ));
+         
+        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_youtube');
+        $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
+        $definition->setArguments(array(
+        		new \Symfony\Component\DependencyInjection\Reference('service_container'),
+        		new \Symfony\Component\DependencyInjection\Reference('doctrine.orm.entity_manager'),
+        		'youtube',
+        		'media_collection',
+        		'all'
+        ));
+        
+        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_dailymotion');
+        $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
+        $definition->setArguments(array(
+        		new \Symfony\Component\DependencyInjection\Reference('service_container'),
+        		new \Symfony\Component\DependencyInjection\Reference('doctrine.orm.entity_manager'),
+        		'dailymotion',
+        		'media_collection',
+        		'all'
+        ));        
     }
 }
