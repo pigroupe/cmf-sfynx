@@ -4,7 +4,7 @@ CMF-PI Bundles
 
 Cmf-Pi is not just the description you just read above. It also allows you to create your own CMS. 
 It's a CMF easy to use, build your own template (layout), add your own custom block with your own logic, 
-build all the widget you need. That it what Orcherstra is made for.
+build all the widget you need. That it what CMF-PI is made for.
 
 
 ## Structure of the framework
@@ -42,7 +42,7 @@ Register all bundle in your `app/AppKernel.php` file:
     public function registerBundles()
     {
               $bundles = array(
-new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+                new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
                 new Symfony\Bundle\SecurityBundle\SecurityBundle(),
                 new Symfony\Bundle\TwigBundle\TwigBundle(),
                 new Symfony\Bundle\MonologBundle\MonologBundle(),
@@ -200,8 +200,8 @@ new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
         "autoload": {
             "psr-0": {
                 "OrApp" : "src",
-                "PiApp": "vendor/Cmf-Pi",
-                "BootStrap": "vendor/Cmf-Pi",
+                "PiApp": "vendor/Orchestra",
+                "BootStrap": "vendor/Orchestra",
                 "Zend_": "vendor/Zend/library"
             }
         }    
