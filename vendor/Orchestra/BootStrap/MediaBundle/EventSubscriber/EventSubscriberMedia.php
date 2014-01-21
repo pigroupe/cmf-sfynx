@@ -216,8 +216,7 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
 	    					default:
 	    						echo "L'image n'est pas dans un format reconnu. Extensions autorisÃ©es : jpg, jpeg, gif, png";
 	    						break;
-	    				}
-	    
+	    				}	    
 	    				$dst_r = imagecreatetruecolor($targ_w, $targ_h);
 	    				imagecopyresampled($dst_r, $img_r, 0, 0, $tab_post['x'], $tab_post['y'], $targ_w, $targ_h, $tab_post['w'], $tab_post['h']);
 	    				switch ($extension) {
@@ -240,61 +239,59 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
 	    				@chmod($this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, 0777);
 	    			}
 	    		}
-	    	}elseif(!empty($tab_post['img_crop']) && $tab_post['img_crop'] > '1'){
+	    	} elseif(!empty($tab_post['img_crop']) && count($tab_post['img_crop']) >= 1){                
 	    		if ($this->isUsernamePasswordToken() ) {
-                    foreach($tab_post['img_crop'] as $media_id => $value){
-                        $mediaPath = $this->_container()->get('sonata.media.twig.extension')->path($media_id, 'reference');
-                        $src = $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
-                        if (file_exists($src)) {
-                            $extension =  pathinfo($src, PATHINFO_EXTENSION);
-                            $mediaCrop = $this->_container()->get('sonata.media.twig.extension')->path($media_id, $tab_post['img_name_'.$media_id]);
-                            $targ_w = $tab_post['img_width_'.$media_id]; //$globals['tailleWidthEdito1'];
-                            $targ_h = $tab_post['img_height_'.$media_id];
-                            $jpeg_quality = $tab_post['img_quality_'.$media_id];
-                            switch ($extension) {
-                                case 'jpg':
-                                    $img_r = imagecreatefromjpeg($src);
-                                    break;
-                                case 'jpeg':
-                                    $img_r = imagecreatefromjpeg($src);
-                                    break;
-                                case 'gif':
-                                    $img_r = imagecreatefromgif($src);
-                                    break;
-                                case 'png':
-                                    $img_r = imagecreatefrompng($src);
-                                    break;
-                                default:
-                                    echo "L'image n'est pas dans un format reconnu. Extensions autorisÃ©es : jpg, jpeg, gif, png";
-                                    break;
-                            }
-
-                            $dst_r = imagecreatetruecolor($targ_w, $targ_h);
-                            imagecopyresampled($dst_r, $img_r, 0, 0, $tab_post['x_'.$media_id], $tab_post['y_'.$media_id], $targ_w, $targ_h, $tab_post['w_'.$media_id], $tab_post['h_'.$media_id]);
-                            switch ($extension) {
-                                case 'jpg':
-                                    imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
-                                    break;
-                                case 'jpeg':
-                                    imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
-                                    break;
-                                case 'gif':
-                                    imagegif($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
-                                    break;
-                                case 'png':
-                                    imagepng($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
-                                    break;
-                                default:
-                                    echo "L'image n'est pas dans un format reconnu. Extensions autorisÃ©es : jpg, gif, png";
-                                    break;
-                            }
-                            @chmod($this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, 0777);
-                        }                    
-
+                    foreach ($tab_post['img_crop'] as $media_id => $value) {
+                        if ($value == 1) {
+                            $mediaPath = $this->_container()->get('sonata.media.twig.extension')->path($media_id, 'reference');
+                            $src = $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
+                            if (file_exists($src)) {
+                                $extension =  pathinfo($src, PATHINFO_EXTENSION);
+                                $mediaCrop = $this->_container()->get('sonata.media.twig.extension')->path($media_id, $tab_post['img_name_'.$media_id]);
+                                $targ_w = $tab_post['img_width_'.$media_id]; //$globals['tailleWidthEdito1'];
+                                $targ_h = $tab_post['img_height_'.$media_id];
+                                $jpeg_quality = $tab_post['img_quality_'.$media_id];
+                                switch ($extension) {
+                                    case 'jpg':
+                                        $img_r = imagecreatefromjpeg($src);
+                                        break;
+                                    case 'jpeg':
+                                        $img_r = imagecreatefromjpeg($src);
+                                        break;
+                                    case 'gif':
+                                        $img_r = imagecreatefromgif($src);
+                                        break;
+                                    case 'png':
+                                        $img_r = imagecreatefrompng($src);
+                                        break;
+                                    default:
+                                        echo "L'image n'est pas dans un format reconnu. Extensions autorisÃ©es : jpg, jpeg, gif, png";
+                                        break;
+                                }
+                                $dst_r = imagecreatetruecolor($targ_w, $targ_h);
+                                imagecopyresampled($dst_r, $img_r, 0, 0, $tab_post['x_'.$media_id], $tab_post['y_'.$media_id], $targ_w, $targ_h, $tab_post['w_'.$media_id], $tab_post['h_'.$media_id]);
+                                switch ($extension) {
+                                    case 'jpg':
+                                        imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
+                                        break;
+                                    case 'jpeg':
+                                        imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
+                                        break;
+                                    case 'gif':
+                                        imagegif($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
+                                        break;
+                                    case 'png':
+                                        imagepng($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
+                                        break;
+                                    default:
+                                        echo "L'image n'est pas dans un format reconnu. Extensions autorisÃ©es : jpg, gif, png";
+                                        break;
+                                }
+                                @chmod($this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, 0777);
+                            }                            
+                        }
                     }                    
-	    			
 	    		}
-	    	            
             }
     	}
     }
