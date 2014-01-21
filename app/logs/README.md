@@ -1,10 +1,10 @@
-CMF-PI Bundles
+CMF PI-ORCHESTRA Bundles
 =====================
 
 
-Cmf-Pi is not just the description you just read above. It also allows you to create your own CMS. 
+piOrchestra is not just the description you just read above. It also allows you to create your own CMS. 
 It's a CMF easy to use, build your own template (layout), add your own custom block with your own logic, 
-build all the widget you need. That it what Orcherstra is made for.
+build all the widget you need. That it what CMF piOrchestra is made for.
 
 
 ## Structure of the framework
@@ -19,7 +19,7 @@ The bundle has been split into 2 directories :
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 
 * MediaBundle : A bundle which overload the SonataMediaBundle.
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate cmfpi bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
+* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate piOrchestra bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
 * TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
 * UserBundle : A bundle which overload the FOSUserBundle.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
@@ -28,7 +28,7 @@ The bundle has been split into 2 directories :
 **PiApp**
 
 ``` bash
-* AdminBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets (Varsnish and memcache handler).
+* AdminBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
 * GedmoBundle : A bundle which is used to create a project with the CMF.
 * TemplateBundle :  A bundle which is used to stock all template of layout and others.
 ```
@@ -42,7 +42,7 @@ Register all bundle in your `app/AppKernel.php` file:
     public function registerBundles()
     {
               $bundles = array(
-new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+                new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
                 new Symfony\Bundle\SecurityBundle\SecurityBundle(),
                 new Symfony\Bundle\TwigBundle\TwigBundle(),
                 new Symfony\Bundle\MonologBundle\MonologBundle(),
@@ -97,11 +97,10 @@ new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
                 new PiApp\GedmoBundle\PiAppGedmoBundle(),
                 new PiApp\TemplateBundle\PiAppTemplateBundle(),
                 
-                #override Cmf-Pi bundles
+                #override piOrchestra bundles
                 new OrApp\OrAdminBundle\OrAppOrAdminBundle(),
                 new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
                 new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),      
-                new OrApp\OrUserBundle\OrAppOrUserBundle(),
 
                 # recaptcha
                 new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),        
@@ -110,8 +109,6 @@ new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 ```
 
 ## composer.json
-
-Register all namespace before using the bundle. Add the following line to your `app/autoload.php` 
 
 ``` json
 
@@ -173,7 +170,7 @@ Register all namespace before using the bundle. Add the following line to your `
             "sonata-project/media-bundle": "2.2.*@dev",
             "sonata-project/notification-bundle": "2.2.*@dev",
             
-            "excelwebzone/recaptcha-bundle": "2.0.*"
+            "excelwebzone/recaptcha-bundle": "dev-master"
         },
         "scripts": {
             "post-install-cmd": [
@@ -202,9 +199,9 @@ Register all namespace before using the bundle. Add the following line to your `
         },
         "autoload": {
             "psr-0": {
-                "OrApp" => "src",
-                "PiApp": "vendor/Cmf-Pi",
-                "BootStrap": "vendor/Cmf-Pi",
+                "OrApp" : "src",
+                "PiApp": "vendor/Orchestra",
+                "BootStrap": "vendor/Orchestra",
                 "Zend_": "vendor/Zend/library"
             }
         }    
@@ -245,6 +242,7 @@ Execute the `check.php` script from the command line:
     - php_intl.dll
     - php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)
     - php_curl.dll
+    - php_openssl.dll (enabled Socket transport “ssl” in PHP)
     
 **Doctrine** : 
 
