@@ -395,7 +395,6 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                         // console.log('response', response);
                                                         if (response.length > 0) {
                                                             $.each(response, function(key, value) {
-                                                                if(key > 9) { return false; }
                                                                 // prevent doubles
                                                                 // if(container.find('option[value='+value.id+']').length == 0) {
                                                                     var opt = $('<option />', {
@@ -445,7 +444,6 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                         if (response.length > 0) {
                                                             container.empty();
                                                             $.each(response, function(key, value) {
-                                                                if(key > 9) { return false; }
                                                                 // prevent doubles
                                                                 // if(container.find('option[value='+value.id+']').length == 0) {
                                                                     var opt = $('<option />', {
@@ -610,7 +608,6 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                         											el.multiselect('enable');
                         											if (response.length > 0) {
                         												$.each(response, function(key, value) {
-                                                    						if(key > 9) { return false; }
                         													    if(el.find('option[value='+value.id+']').length == 0) {
                         				                                            var opt = $('<option />', {
                         				                                                value: value.id,

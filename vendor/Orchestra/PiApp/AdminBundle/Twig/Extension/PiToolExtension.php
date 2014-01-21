@@ -445,8 +445,7 @@ class PiToolExtension extends \Twig_Extension
         try {
             $lang         = $this->container->get('request')->getLocale();
             // probleme avec les esi => pas de valeur retourné
-            //$pathInfo	  = $this->container->get('request')->getPathInfo();
-            $pathInfo	  = $_SERVER['REQUEST_URI'];
+            $pathInfo	  = $this->container->get('request')->getPathInfo();
             $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
             $route        = $match['_route'];
             
@@ -535,8 +534,7 @@ class PiToolExtension extends \Twig_Extension
         try {
             // title management
             // probleme avec les esi => pas de valeur retourné
-            //$pathInfo	  = $this->container->get('request')->getPathInfo();
-            $pathInfo	  = $_SERVER['REQUEST_URI'];
+            $pathInfo	  = $this->container->get('request')->getPathInfo();
             $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
             $route        = $match['_route'];
             if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])) {

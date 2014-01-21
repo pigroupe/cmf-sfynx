@@ -44,7 +44,7 @@ class MediaController extends abstractController
     /**
      * Enabled Media entities.
      *
-     * @Route("/admin/gedmo/media/enabled", name="admin_gedmo_media_enabledentity_ajax")
+     * @Route("/content/gedmo/media/enabled", name="admin_gedmo_media_enabledentity_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
@@ -59,7 +59,7 @@ class MediaController extends abstractController
     /**
      * Disable Media entities.
      * 
-     * @Route("/admin/gedmo/media/disable", name="admin_gedmo_media_disablentity_ajax")
+     * @Route("/content/gedmo/media/disable", name="admin_gedmo_media_disablentity_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
@@ -74,7 +74,7 @@ class MediaController extends abstractController
     /**
      * Position Media entities.
      *
-     * @Route("/admin/gedmo/media/position", name="admin_gedmo_media_position_ajax")
+     * @Route("/content/gedmo/media/position", name="admin_gedmo_media_position_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
@@ -89,7 +89,7 @@ class MediaController extends abstractController
     /**
      * Delete Media entities.
      *
-     * @Route("/admin/gedmo/media/delete", name="admin_gedmo_media_deletentity_ajax")
+     * @Route("/content/gedmo/media/delete", name="admin_gedmo_media_deletentity_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      *
@@ -104,7 +104,7 @@ class MediaController extends abstractController
     /**
      * Archive a Media entity.
      *
-     * @Route("/admin/gedmo/media/archive", name="admin_gedmo_media_archiveentity_ajax")
+     * @Route("/content/gedmo/media/archive", name="admin_gedmo_media_archiveentity_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      *
@@ -117,9 +117,9 @@ class MediaController extends abstractController
     }    
     
     /**
-     * Enabled BlocGeneral entities.
+     * get entities in ajax request for select form.
      *
-     * @Route("/admin/gedmo/media/select/{type}", name="admin_gedmo_media_selectentity_ajax")
+     * @Route("/content/gedmo/media/select/{type}", name="admin_gedmo_media_selectentity_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      *
@@ -128,57 +128,56 @@ class MediaController extends abstractController
      */
     public function selectajaxAction($type)
     {
-        $request = $this->container->get('request');
+    	$request = $this->container->get('request');
     	$em		 = $this->getDoctrine()->getEntityManager();
     	$locale  = $this->container->get('request')->getLocale();
     	//
-    	$pagination = $this->container->get('request')->query->get('pagination', null);
-    	$keyword    = $this->container->get('request')->query->get('keyword', '');
-    	$MaxResults = $this->container->get('request')->query->get('max', 10);
-    	//
-    	if ($request->isXmlHttpRequest()) {
-    		$query                = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory('', null, '', '', false);
-    		$query
-    		->leftJoin('a.image', 'm')
-    		->leftJoin('a.translations', 'trans')
-    		->andWhere('a.enabled = 1')
-    		->andWhere('a.image IS NOT NULL')
-    		->andWhere("a.status = '{$type}'");    		
-    		// pagination
-    		if (!is_null($pagination)) {
-    			$query->setFirstResult((intVal($pagination)-1)*intVal($MaxResults));
-    			$query->setMaxResults(intVal($MaxResults));
-    		}
-    		// autocompletion
-    		if (!empty($keyword)) {
-    			$andModule_title = $query->expr()->andx();
-                $andModule_title->add($query->expr()->eq('LOWER(trans.locale)', "'{$locale}'"));
-                $andModule_title->add($query->expr()->eq('LOWER(trans.field)', "'title'"));
-                $andModule_title->add($query->expr()->like('LOWER(trans.content)', $query->expr()->literal('%'.strtolower(addslashes($keyword)).'%')));
-                
-                $andModule_id = $query->expr()->andx();
-                $andModule_id->add($query->expr()->like('LOWER(a.id)', $query->expr()->literal('%'.strtolower(addslashes($keyword)).'%')));
-                
-                $orModule  = $query->expr()->orx();
-                $orModule->add($andModule_title);
-                $orModule->add($andModule_id);
-                
-                $query->andWhere($orModule);
-    		}    
-    		// result		
-    		$entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
+    	$pagination = $this->container->get('request')->get('pagination', null);
+    	$keyword    = $this->container->get('request')->get('keyword', '');
+    	$MaxResults = $this->container->get('request')->get('max', 10);
+    	// we set query
+   		$query  = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory('', null, '', '', false);
+   		$query
+   		->leftJoin('a.image', 'm')
+   		->leftJoin('a.translations', 'trans')
+   		->andWhere('a.enabled = 1')
+   		->andWhere('a.image IS NOT NULL')
+   		->andWhere("a.status = '{$type}'");    		
+   		//
+  		$keyword = array(
+			0 => array(
+				'field_name' => 'title',
+   				'field_value' => $keyword,
+			),
+   		);
+  		// we set type value
+  		$this->type = $type;
+    		
+   		return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, false);
+    }   
+
+    /**
+     * Select all entities.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access  protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function renderselectajaxQuery($entities, $locale)
+    {
     		$tab = array();
     		foreach ($entities as $obj) {
     			$content = $obj->getId();
-    			$title = $obj->translate($locale)->getTitle();
-    			$cat = $obj->getCategory();
+    			$title   = $obj->translate($locale)->getTitle();
+    			$cat     = $obj->getCategory();
     			if ($title) {
     				$content .=  " - " .$title;
     			}
     			if (!is_null($cat)) {
     				$content .=  '('. $cat->translate($locale)->getName() .')';
     			}
-    			if ( ($type == 'image') && ($obj->getImage() instanceof \BootStrap\MediaBundle\Entity\Media)) {
+    			if ( ($this->type == 'image') && ($obj->getImage() instanceof \BootStrap\MediaBundle\Entity\Media)) {
     				$content .= "<img width='100px' src=\"{{ media_url('".$obj->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
     			}
     			$tab[] = array(
@@ -186,13 +185,8 @@ class MediaController extends abstractController
     					'text' =>$this->container->get('twig')->render($content, array())
     			);
     		}
-    		$response = new Response(json_encode($tab));
-    		$response->headers->set('Content-Type', 'application/json');
-    		
-    		return $response;
-    	} else {
-    		throw ControllerException::callAjaxOnlySupported(' selectajax');
-    	}
+    
+    	return $tab;
     }    
 
     /**
@@ -223,9 +217,9 @@ class MediaController extends abstractController
         ->leftJoin('a.image', 'm')
         ->leftJoin('a.category', 'c')
         ->andWhere('a.image IS NOT NULL');
-        
+        //
         $is_Server_side = true;
-        
+        //
         if ($request->isXmlHttpRequest() && $is_Server_side) {
            $aColumns    = array('a.id','c.name','a.status','m.name',"a.enabled",'a.created_at', 'a.updated_at',"a.enabled","a.enabled");
            $q1 = clone $query;
@@ -318,14 +312,11 @@ class MediaController extends abstractController
             
             return $response;
         }
-        
         if (!$is_Server_side) {
            $entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
         } else {
            $entities   = null;
         }
-        
-        //print_r(count($entities));exit;
         
         return $this->render("PiAppGedmoBundle:Media:$template", array(
         'isServerSide' => $is_Server_side,
@@ -388,6 +379,7 @@ class MediaController extends abstractController
         $entity = new Media();
         $entity->setStatus($status);
         $entity->setUpdatedAt(new \Datetime());
+        //$form   = $this->createForm(new MediaType($this->container, $em, $status), $entity, array('show_legend' => false));
         $form   = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
     
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
@@ -438,6 +430,7 @@ class MediaController extends abstractController
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
             $em->flush();
+            
             return $this->redirect($this->generateUrl('admin_gedmo_media_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout, 'category' => $category)));
         }
     

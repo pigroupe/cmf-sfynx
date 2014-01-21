@@ -640,8 +640,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     private function redirectHomePublicPage(){
         // It tries to redirect to the original page.
         // probleme avec les esi => pas de valeur retourné
-        //$url = $this->container->get('request')->headers->get('referer');
-        $url = $_SERVER["HTTP_REFERER"];
+        $url = $this->container->get('request')->headers->get('referer');
         if (empty($url)) {
             $url = $this->container->get('router')->generate('home_page');
         }

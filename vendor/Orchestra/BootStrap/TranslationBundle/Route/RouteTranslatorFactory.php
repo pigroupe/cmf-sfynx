@@ -74,9 +74,7 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         	$request->setLocale('_locale', $langue);
         }        
         // It tries to redirect to the original page.
-        // probleme avec les esi => pas de valeur retourné
-        //$old_url_path     = $request->headers->get('referer');
-        $old_url_path    = $_SERVER["HTTP_REFERER"];
+        $old_url_path     = $request->headers->get('referer'); // probleme avec les esi => pas de valeur retourné
         $old_url         = str_replace($request->getUriForPath(''), '', $old_url_path);
         
         $old_info = explode('?', $old_url);
@@ -119,18 +117,18 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
     {
         if ($langue == '')    {
             $langue = $this->getContainer()->get('request')->getLocale();
-        }
-        // probleme avec les esi => pas de valeur retourné
-        //$data            = $this->getRouterTranslator()->match($this->getContainer()->get('request')->getPathInfo());
-        $data            = $this->getRouterTranslator()->match($_SERVER['REQUEST_URI']);
+        }    
+        $data            = $this->getRouterTranslator()->match($this->getContainer()->get('request')->getPathInfo());
         try {
             $new_url     = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue));
         } catch (\Exception $e) {
-            $new_url     = $_SERVER['REQUEST_URI'];
+            $new_url    = $this->getContainer()->get('request')->getRequestUri();
         }
+    
         if (empty($new_url) || ($new_url == "/")) {
             $new_url     = $this->getContainer()->get('router')->generate('home_page');
         }
+    
         if (isset($options['result']) && ($options['result'] == 'match')) {
 			return	$data;
 		} else {
@@ -162,7 +160,7 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         if (is_null($route_name))    {
             $route_name = $this->getContainer()->get('request')->get('_route');
         }
-
+        
         try {
             $new_url     = $this->getContainer()->get('router')->generate($route_name, $params);
         } catch (\Exception $e) {
@@ -246,8 +244,6 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
             $all_route_values = $this->getDoctrineRoute()->getAllRouteValues();
         }
         
-        //print_r($all_route_values);exit;
-        
         return $all_route_values;
     }    
     
@@ -264,26 +260,26 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
     {
         $all_routes = array();
         $results    = $this->getDoctrineRoute()->getConnection()->fetchAll("SELECT id,route,locales,defaults,requirements FROM pi_routing");
-        foreach($results as $key => $values){
+        foreach ($results as $key => $values) {
             $all_routes[ $values['route'] ]['id']                = $values['id'];
             $all_routes[ $values['route'] ]['locales']         = $values['locales'];
             $all_routes[ $values['route'] ]['defaults']        = $values['defaults'];
             $all_routes[ $values['route'] ]['requirements']    = $values['requirements'];
         }
-        
+        //
         $all_pages     = $this->getEntityManager()->getRepository('PiAppAdminBundle:Page')->getAllPageHtml()->getQuery()->getResult();
-        foreach($all_pages as $key => $page){
-            if ( ($page instanceof Page) && $page->getEnabled() ){
+        foreach ($all_pages as $key => $page) {
+            if ( ($page instanceof Page) && $page->getEnabled() ) {
                 if ( !$page->getTranslations()->isEmpty() ){                    
                     // we get the page manager
                     $locales          = $this->getContainer()->get('pi_app_admin.manager.page')->getUrlByPage($page);
                     $route            = $page->getRouteName();
-                    
-                    if (!isset($all_routes[ $route ]) || empty($all_routes[ $route ]['defaults']))
+                    //
+                    if (!isset($all_routes[ $route ]) || empty($all_routes[ $route ]['defaults'])) {
                         $defaults        = array('_controller'=>'PiAppAdminBundle:Frontend:page');
-                    else
+                    } else {
                         $defaults        = json_decode($all_routes[ $route ]['defaults'], true);
-                    
+                    }                    
                     $requirements         = array('_method'=>'GET|POST');
                     
 //                     if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])){
@@ -297,7 +293,7 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
 //                         }
 //                     }
 
-                    if (isset($all_routes[ $route ])){
+                    if (isset($all_routes[ $route ])) {
                         $this->getDoctrineRoute()->addRoute($route, $all_routes[ $route ], $locales, $defaults, $requirements);
 //                        print_r($all_routes[ $route ]);print_r(' - ');print_r($requirements);
 //                        print_r("<br />");

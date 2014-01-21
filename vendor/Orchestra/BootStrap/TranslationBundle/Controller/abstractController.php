@@ -312,6 +312,97 @@ abstract class abstractController extends Controller
     } 
     
     /**
+     * get entities in ajax request for select form.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *     
+     * @access  protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function selectajaxQuery($pagination, $MaxResults, $keywords = null, $query = null, $locale = '', $only_enabled  = true)
+    {
+    	$request = $this->container->get('request');
+    	$em		 = $this->getDoctrine()->getEntityManager();
+    	//
+    	if (empty($locale)) {
+    		$locale = $this->container->get('request')->getLocale();
+    	}
+    	//
+    	if ($request->isXmlHttpRequest()) {
+    		if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) ) {
+    			$query    = $em->getRepository($this->_entityName)->getAllByCategory('', null, '', '', false);
+    		}
+    		$query
+    		->leftJoin('a.translations', 'trans');
+    		if ($only_enabled) {
+    			$query    			
+    			->andWhere('a.enabled = 1');
+    		}
+    		// groupe by
+    		$query->groupBy('a.id');
+    		// autocompletion
+    		if (is_array($keywords) && (count($keywords) >= 1)) {
+    			foreach ($keywords as $info) {
+    				if (isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+		    			$andModule_title = $query->expr()->andx();
+		    			$andModule_title->add($query->expr()->eq('LOWER(trans.locale)', "'{$locale}'"));
+		    			$andModule_title->add($query->expr()->eq('LOWER(trans.field)', "'".$info['field_name']."'"));
+		    			$andModule_title->add($query->expr()->like('LOWER(trans.content)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+		    			 
+		    			$andModule_id = $query->expr()->andx();
+		    			$andModule_id->add($query->expr()->like('LOWER(a.id)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+		    			 
+		    			$orModule  = $query->expr()->orx();
+		    			$orModule->add($andModule_title);
+		    			$orModule->add($andModule_id);
+		    			 
+		    			$query->andWhere($orModule);
+    				}
+    			}
+    		}
+    		// pagination
+    		if (!is_null($pagination)) {
+    			$query->setFirstResult((intVal($pagination)-1)*intVal($MaxResults));
+    			$query->setMaxResults(intVal($MaxResults));
+    		}
+    		// result
+    		$entities = $em->getRepository($this->_entityName)->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
+    		$tab      = $this->renderselectajaxQuery($entities, $locale);
+    		// response
+    		$response = new Response(json_encode($tab));
+    		$response->headers->set('Content-Type', 'application/json');
+    		 
+    		return $response;    		 	
+    	} else {
+    		throw ControllerException::callAjaxOnlySupported(' selectajax');
+    	}    	
+    }    
+    
+    /**
+     * Select all entities.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access  protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function renderselectajaxQuery($entities, $locale)
+    {
+    	$tab = array();
+    	foreach ($entities as $obj) {
+    		$content   = $obj->translate($locale)->getTitle();
+    		if (!empty($content)) {
+    			$tab[] = array(
+    					'id' => $obj->getId(),
+    					'text' =>$this->container->get('twig')->render($content, array())
+    			);
+    		}
+    	}
+    	
+    	return $tab;
+    }    
+    
+    /**
      * Create Ajax query
      *
      * @param string $type        ["select","count"]

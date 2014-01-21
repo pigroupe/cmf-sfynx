@@ -170,8 +170,7 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
         $translationPage = $page->getTranslationByLocale($this->language);
         if ($translationPage instanceof \PiApp\AdminBundle\Entity\TranslationPage){
             // probleme avec les esi => pas de valeur retourné
-            //$pathInfo    = str_replace($this->container->get('request')->getUriForPath(''), '', $this->container->get('request')->headers->get('referer'));
-            $pathInfo    = str_replace($this->container->get('request')->getUriForPath(''), '', $_SERVER["HTTP_REFERER"]);
+            $pathInfo    = str_replace($this->container->get('request')->getUriForPath(''), '', $this->container->get('request')->headers->get('referer'));
             $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
             $route        = $match['_route'];
             

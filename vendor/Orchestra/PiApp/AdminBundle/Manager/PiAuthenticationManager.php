@@ -114,8 +114,7 @@ class PiAuthenticationManager extends PiCoreManager implements PiTreeManagerBuil
         }        
         if (isset($params['referer_redirection']) && !empty($params['referer_redirection']) && ($params['referer_redirection'] == "true")) {
             // probleme avec les esi => pas de valeur retourné
-            //$referer_url = $this->container->get('request')->headers->get('referer');
-            $referer_url = $_SERVER["HTTP_REFERER"];
+            $referer_url = $this->container->get('request')->headers->get('referer');
         } else {
             $referer_url = "";
         }  
