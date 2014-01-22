@@ -8,3 +8,13 @@ erreur.typology.notblank: يجب إدخال التصنيف
 erreur.slug.notblank: يجب إدخال حالة السبيكة
 erreur.title.notblank: يجب إدخال عنوان
 erreur.metacontenttype.notblank: يجب إدخال نوع المحتوى
+error.password.confirmation: خطأ كلمة المرور
+
+
+erreur.regex.email: يجب عليك إدخال البريد
+erreur.regex.cp: يجب عليك إدخال الرمز البريدي
+erreur.regex.date: يجب إدخال تاريخ بالتنسيق الصحيح
+erreur.regex.name: يجب إدخال اسم   
+erreur.regex.nickname: يجب إدخال الاسم الأول 
+erreur.regex.phone: يجب إدخال رقم الهاتف
+erreur.regex.text: يجب عليك إدخال الرقم مع النص فقط

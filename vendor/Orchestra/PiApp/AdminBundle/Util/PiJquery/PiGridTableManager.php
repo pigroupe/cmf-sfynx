@@ -357,7 +357,7 @@ class PiGridTableManager extends PiJqueryExtension
                          <?php if(isset($options['grid-filters-tfoot-up']) && (($options['grid-filters-tfoot-up'] === 'true') || ($options['grid-filters-tfoot-up'] === true)) ) : ?>
                          $('tfoot tr').addClass("tfoot-up");
                          $('tfoot').replaceWith(function(){
-                                return $("<thead class='grid-header' />", {html: $(this).html()});
+                                return $("<thead />", {html: $(this).html()});
                          }); 
                          <?php endif; ?>
                     }

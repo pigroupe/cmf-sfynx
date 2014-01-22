@@ -555,7 +555,7 @@ abstract class abstractController extends Controller
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function getErrorMessages(\Symfony\Component\Form\Form $form, $type = 'array') {
+    protected function getErrorMessages(\Symfony\Component\Form\Form $form, $type = 'array', $delimiter = "<br />") {
     	$errors = array();
     	foreach ($form->getErrors() as $key => $error) {
     		if($error->getMessagePluralization() !== null) {
@@ -574,7 +574,7 @@ abstract class abstractController extends Controller
     	if ($type == 'array') {
       		return $errors;
      	} else {
-     		return \PiApp\AdminBundle\Util\PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', "<br />");
+     		return \PiApp\AdminBundle\Util\PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
      	}
     }
     

@@ -218,7 +218,31 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     } else {
                         return false;
                     }
+                    
+                case "cp":
+                   	if (preg_match_all("/[0-9]{4,6}/",$w_var, $matches, $flags))
+                   	{
+                   		return $matches;
+                   	} else {
+                   		return false;
+                   	}  
 
+                case "date-fr":
+                	if (preg_match_all("/[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}/",$w_var, $matches, $flags))
+                	{
+                   		return $matches;
+                   	} else {
+                   		return false;
+                   	}                   	
+
+                case "date-en":
+                	if (preg_match_all("/[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/",$w_var, $matches, $flags))
+                	{
+                		return $matches;
+                	} else {
+                		return false;
+                	}
+                   	
                 // Recherche les couples de balises HTML                 
                 case "balise":
                     if (preg_match_all("|<[^>]+>(.*)</[^>]+>|U",$w_var, $matches, $flags))
