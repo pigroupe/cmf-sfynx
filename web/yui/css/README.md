@@ -1,10 +1,10 @@
-CMF PI-ORCHESTRA Bundles
+﻿CMF PI-ORCHESTRA Bundles
 =====================
 
 
-piOrchestra is not just the description you just read above. It also allows you to create your own CMS. 
+Orchestra is not just the description you just read above. It also allows you to create your own CMS. 
 It's a CMF easy to use, build your own template (layout), add your own custom block with your own logic, 
-build all the widget you need. That it what CMF piOrchestra is made for.
+build all the widget you need. That it what CMF Orchestra is made for.
 
 
 ## Structure of the framework
@@ -19,7 +19,7 @@ The bundle has been split into 2 directories :
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 
 * MediaBundle : A bundle which overload the SonataMediaBundle.
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate piOrchestra bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
+* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate Orchestra bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
 * TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
 * UserBundle : A bundle which overload the FOSUserBundle.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
@@ -29,6 +29,7 @@ The bundle has been split into 2 directories :
 
 ``` bash
 * AdminBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
+( includes management of permissions Event, management varnish and memcache, SEO pages, a library, a library of tools, implementation of full table with DataTable, management of complete multi-forms with multiselect with pagination and search ajax with cropping system on the media, etc. )
 * GedmoBundle : A bundle which is used to create a project with the CMF.
 * TemplateBundle :  A bundle which is used to stock all template of layout and others.
 ```

@@ -329,7 +329,7 @@ abstract class abstractController extends Controller
     	}
     	//
     	if ($request->isXmlHttpRequest()) {
-    		if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) ) {
+    	    if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder) ) {
     			$query    = $em->getRepository($this->_entityName)->getAllByCategory('', null, '', '', false);
     		}
     		$query
@@ -613,11 +613,17 @@ abstract class abstractController extends Controller
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function authenticateUser(UserInterface $user, $deleteToken = true, &$response = null)
+    protected function authenticateUser(UserInterface $user = null, $deleteToken = true, &$response = null)
     {
     	$em 		 = $this->getDoctrine()->getEntityManager();
+    	$request     = $this->container->get('request');
         $providerKey = $this->container->getParameter('fos_user.firewall_name');
         $userManager = $this->container->get('fos_user.user_manager');
+        // set user
+        if (is_null($user)) {
+        	$token 		= $request->query->get('token');
+        	$user       = $userManager->findUserByConfirmationToken($token);
+        }
         //
         $token       = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
         $this->container->get('security.context')->setToken($token);

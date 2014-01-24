@@ -139,8 +139,6 @@ class MediaController extends abstractController
    		$query  = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory('', null, '', '', false);
    		$query
    		->leftJoin('a.image', 'm')
-   		->leftJoin('a.translations', 'trans')
-   		->andWhere('a.enabled = 1')
    		->andWhere('a.image IS NOT NULL')
    		->andWhere("a.status = '{$type}'");    		
    		//
@@ -153,7 +151,7 @@ class MediaController extends abstractController
   		// we set type value
   		$this->type = $type;
     		
-   		return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, false);
+   		return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true);
     }   
 
     /**

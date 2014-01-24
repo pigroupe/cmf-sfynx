@@ -113,7 +113,6 @@ class PiAuthenticationManager extends PiCoreManager implements PiTreeManagerBuil
             $params['locale']        = $this->container->get('request')->getLocale();
         }        
         if (isset($params['referer_redirection']) && !empty($params['referer_redirection']) && ($params['referer_redirection'] == "true")) {
-            // probleme avec les esi => pas de valeur retourné
             $referer_url = $this->container->get('request')->headers->get('referer');
         } else {
             $referer_url = "";
@@ -189,9 +188,9 @@ class PiAuthenticationManager extends PiCoreManager implements PiTreeManagerBuil
         } else {
             $user     = $userManager->findUserByConfirmationToken($token);
         }
-        
         if (null === $user) {
-        	throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+            header('Location: '. $url_redirection);
+            exit;
         }
         $form = $formFactory->createForm();
         $form->setData($user);

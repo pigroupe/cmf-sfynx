@@ -323,7 +323,6 @@ class PiGridTableManager extends PiJqueryExtension
                                 var values = $(this).data('values');
                                 var type = $(this).data('type');
                                 var title = $(this).data('title');
-                                console.log(title)
                                 if (column != undefined) {
                                     var options = [];
                                     $('select', this).find(':selected').each(function(j,v){
@@ -349,7 +348,15 @@ class PiGridTableManager extends PiJqueryExtension
                                         noneSelectedText: title,
                                         create: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
                                         open: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
-                                    }).multiselectfilter(); 
+                                    }).multiselectfilter({
+                                        filter: function(e, matches) {
+                                            e.preventDefault();
+                                            var keyword = $('.ui-multiselect-filter:visible').find('input').val();
+                                            if(keyword != $(e.target).data('keyword')) {
+                                                <?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, column, true );
+                                            }
+                                        }
+                                    });
                                 } else if (type != undefined) {
                                     this.innerHTML = '' ;
                                 }
@@ -608,17 +615,12 @@ class PiGridTableManager extends PiJqueryExtension
                                 "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>",
                                 "events": {
                                     "onPreSubmit": function (data) {
-                                        console.log(data);
                                     },
                                     "onPostSubmit": function (json, data) {
-                                        console.log(json);
-                                        console.log(data);
                                     },                                    
                                     "onPreRemove": function (json) {
-                                        //console.log(json);
                                     },
                                     "onPostRemove": function (json) {
-                                        //console.log(json);
                                     }
                                 }                    
                             } );
@@ -630,17 +632,12 @@ class PiGridTableManager extends PiJqueryExtension
                                 "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>",
                                 "events": {
                                     "onPreSubmit": function (data) {
-                                        console.log(data);
                                     },
                                     "onPostSubmit": function (json, data) {
-                                        console.log(json);
-                                        console.log(data);
                                     },                                    
                                     "onPreRemove": function (json) {
-                                        //console.log(json);
                                     },
                                     "onPostRemove": function (json) {
-                                        //console.log(json);
                                     }
                                 }    
                             } );
