@@ -265,9 +265,9 @@
 			
 			<div class="nav-divider">&nbsp;</div>
 			
-			<ul {{ in_paths("admin_gedmo_contact:admin_gedmo_organigram_tree:admin_gedmo_media:admin_snippet:admin_gedmo_block:admin_gedmo_content:admin_gedmo_menu:admin_gedmo_slider:admin_gedmo_menu_tree", 'class="current"', 'class="select"')|raw }} ><li><a href="#nogo"><strong>{{ 'pi.dashboard.menu4.title'|trans }}</strong><!--[if IE 7]><!--></a><!--<![endif]-->
+			<ul {{ in_paths("admin_gedmo_contact:admin_gedmo_organigram_tree:admin_snippet:admin_gedmo_block:admin_gedmo_content:admin_gedmo_menu:admin_gedmo_slider:admin_gedmo_menu_tree", 'class="current"', 'class="select"')|raw }} ><li><a href="#nogo"><strong>{{ 'pi.dashboard.menu4.title'|trans }}</strong><!--[if IE 7]><!--></a><!--<![endif]-->
 			<!--[if lte IE 6]><table><tr><td><![endif]-->
-			<div class="select_sub {{ in_paths("admin_gedmo_contact:admin_gedmo_organigram_tree:admin_gedmo_media:admin_snippet:admin_gedmo_block:admin_gedmo_content:admin_gedmo_menu:admin_gedmo_slider:admin_gedmo_menu_tree", 'show')|raw }} ">
+			<div class="select_sub {{ in_paths("admin_gedmo_contact:admin_gedmo_organigram_tree:admin_snippet:admin_gedmo_block:admin_gedmo_content:admin_gedmo_menu:admin_gedmo_slider:admin_gedmo_menu_tree", 'show')|raw }} ">
 				<ul class="sub">
 					<li {{ in_paths("admin_snippet", 'class="sub_show"')|raw }}		><a href="{{ path("admin_snippet") }}" >{{ 'pi.dashboard.menu2.snippet'|trans }}</a></li>
 					<li><a style="color:#238BDB" >&#187;</a></li>
@@ -275,7 +275,6 @@
 					<li {{ in_paths("admin_gedmo_menu_tree", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_menu_tree", { 'category': ''}) }}" >{{ 'pi.dashboard.menu4.menu'|trans }}</a></li>
 					<li {{ in_paths("admin_gedmo_organigram_tree", 'class="sub_show"')|raw }}	><a href="{{ path("admin_gedmo_organigram_tree", { 'category': ''}) }}" >{{ 'pi.dashboard.menu4.organigram'|trans }}</a></li>
 					<li><a style="color:#238BDB" >&#187;</a></li>
-					<li {{ in_paths("admin_gedmo_media", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_media") }}" >{{ 'pi.dashboard.menu4.media'|trans }}</a></li>
 					<li {{ in_paths("admin_gedmo_block", 'class="sub_show"')|raw }}			><a href="{{ path("admin_gedmo_block") }}" >{{ 'pi.dashboard.menu4.block'|trans }}</a></li>
 					<li {{ in_paths("admin_gedmo_content", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_content") }}" >{{ 'pi.dashboard.menu4.content'|trans }}</a></li>
 					<li {{ in_paths("admin_gedmo_contact", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_contact") }}" >{{ 'pi.dashboard.menu6.contact'|trans }}</a></li>	
@@ -284,6 +283,14 @@
 			<!--[if lte IE 6]></td></tr></table></a><![endif]-->
 			</li>
 			</ul>
+			
+			<div class="nav-divider">&nbsp;</div>	
+            
+			<ul {{ in_paths("admin_gedmo_media", 'class="current"', 'class="select"')|raw }} >
+                <li>
+                    <a href="{{ path("admin_gedmo_media") }}"><strong>{{ 'Médiathèque'|trans }}</strong><!--[if IE 7]><!--></a><!--<![endif]-->
+                </li>
+			</ul> 			
 			
 			<div class="clear"></div>
 			</div>
@@ -361,7 +368,7 @@
 	<!-- start footer -->    
 	<div class="footer">
 	    <div>
-    	    <a rel='Copyright' href='http://www.cmf-orchestra.net/#Copyright' id='copyright'>{{ 'pi.footer.copyright'|trans }}</a> © 2004-{{ "now"|date("Y") }} Ltd. <a href="ttp://www.cmf-orchestra.net" title="" target="_blank">www.cmf-orchestra.net</a>.
+    	    <a rel='Copyright' href='http://cmf-orchestra.pi-groupe.fr/#Copyright' id='copyright'>{{ 'pi.footer.copyright'|trans }}</a> © 2004-{{ "now"|date("Y") }} Ltd. <a href="ttp://cmf-orchestra.pi-groupe.fr" title="" target="_blank">cmf-orchestra.pi-groupe.fr</a>.
 			<img src="{{ asset('bundles/piappadmin/images/logo/html5-badge.png') }}" alt="html5 validated by contactpfelix@gmail.com" />
 	    </div>
     </div>

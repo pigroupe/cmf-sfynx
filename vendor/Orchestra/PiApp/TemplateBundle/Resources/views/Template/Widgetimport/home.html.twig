@@ -6,8 +6,8 @@
                     <h3>Orchestra</h3>
                 </div>
                 <div class="widget-content">
-                    <p><a href="http://www.cmf-orchestra.net/" target="_blank"> > WEBSITE</a></p>
-                    <p><a href="https://github.com/CmfOrchestra/cmfOrchestra" target="_blank"> > GIT</a></p>
+                    <p><a href="http://cmf-orchestra.pi-groupe.fr/" target="_blank"> > WEBSITE</a></p>
+                    <p><a href="https://github.com/pigroupe/cmf-orchestra" target="_blank"> > GIT</a></p>
                     <p><a href="https://cmf-orchestra.atlassian.net/" target="_blank"> > JIRA</a></p>
                 </div>
             </li>
@@ -23,26 +23,26 @@
             </li>     
             <li class="widget color-white" id="intro">  
                 <div class="widget-head">
-                    <h3>Médiathèque</h3>
+                    <h3>CMS</h3>
                 </div>
                 <div class="widget-content">
-                    <p><a href="{{ path('admin_gedmo_media', { 'NoLayout': 0 }) }}"> > {{ 'Accèder à la médiathèque'|trans }}</a></p>
+                    <p><a href="{{ path('admin_pagebytrans')}}"> > {{ 'pi.dashboard.menu2.page'|trans }}</a></p>       
+                    <p><a href="{{ path("admin_layout") }}" > > {{ 'pi.dashboard.menu2.layout'|trans }}</a></p>
+                    <p><a href="{{ path('admin_langue')}}"> > {{ 'pi.dashboard.menu3.language'|trans }}</a></p>
+                    <p><a href="{{ path('admin_gedmo_category')}}"> > {{ 'pi.dashboard.menu3.category'|trans }}</a></p>
                 </div>
-            </li>                 
+            </li>
         </ul>
 
         <ul  id="column2" class="column" style="width: 50%">
             <li class="widget color-white" id="intro">  
                 <div class="widget-head">
-                    <h3>Contenus</h3>
+                    <h3>Médiathèque</h3>
                 </div>
                 <div class="widget-content">
-                    <p><a href="{{ path('admin_pagebytrans')}}"> > {{ 'pi.dashboard.menu2.page'|trans }} (CMS)</a></p>       
-                    <p><a href="{{ path("admin_layout") }}" > > {{ 'pi.dashboard.menu2.layout'|trans }} (CMS)</a></p>
-                    <p><a href="{{ path('admin_langue')}}"> > {{ 'pi.dashboard.menu3.language'|trans }} (CMS)</a></p>
-                    <p><a href="{{ path('admin_gedmo_category')}}"> > {{ 'pi.dashboard.menu3.category'|trans }} (CMS)</a></p>
+                    <p><a href="{{ path('admin_gedmo_media', { 'NoLayout': 0 }) }}"> > {{ 'Accèder à la médiathèque'|trans }}</a></p>
                 </div>
-            </li>
+            </li> 
             <li class="widget color-white" id="intro">  
                 <div class="widget-head">
                     <h3>Widgets</h3>
@@ -51,6 +51,7 @@
                     <p><a href="{{ path("admin_snippet") }}" > > {{ 'pi.dashboard.menu2.snippet'|trans }}</a></p>
                     <p><a href="{{ path("admin_gedmo_menu_tree", { 'category': ''}) }}" > > {{ 'pi.dashboard.menu4.menu'|trans }}</a></p>
                     <p><a href="{{ path("admin_gedmo_block") }}" > > {{ 'pi.dashboard.menu4.block'|trans }}</a></p>
+                    <p><a href="{{ path("admin_gedmo_slider") }}" > > {{ 'pi.dashboard.menu4.slider'|trans }}</a></p>
                 </div>
             </li>
         </ul>
