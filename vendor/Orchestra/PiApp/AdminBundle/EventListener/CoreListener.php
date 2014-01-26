@@ -851,12 +851,15 @@ abstract class CoreListener extends abstractListener
      */
     final protected function _updateCacheUrlGenerator(LifecycleEventArgs $eventArgs)
     {
-        $entity            = $eventArgs->getEntity();
-        if ( $this->isUsernamePasswordToken() 
+        $entity = $eventArgs->getEntity();
+        if ( 
+        		$this->isUsernamePasswordToken() 
                 && ($entity instanceof \PiApp\AdminBundle\Entity\Page) 
                 && $entity->getEnabled() 
-                && !$entity->getTranslations()->isEmpty() ){
-        } elseif ($entity instanceof \PiApp\AdminBundle\Entity\TranslationPage) {
+                && !$entity->getTranslations()->isEmpty() ) {
+        } elseif (
+        		$this->isUsernamePasswordToken() 
+                && ($entity instanceof \PiApp\AdminBundle\Entity\TranslationPage) ) {
         } else {
             return false;
         }
