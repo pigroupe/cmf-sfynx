@@ -139,6 +139,46 @@ class TranslationPageType extends AbstractType
                             "class"=>"pi_multiselect",
                     ),
             ))
+            //             ->add('tag', 'entity', array(
+            //             		'class' => 'PiAppAdminBundle:Tag',
+            //             		'query_builder' => function(EntityRepository $er) use ($id_tags) {
+            //             			$translatableListener = $this->_container->get('gedmo.listener.translatable');
+            //             			$translatableListener->setTranslationFallback(true);
+            //             			return $er->createQueryBuilder('a')
+            //             			->select('a')
+            //             			->where("a.id IN (:id)")
+            //             			->andWhere('a.enabled = 1')
+            //             			->setParameter('id', $id_tags)
+            //             			//->where("a.status = 'image'")
+            //             			//->andWhere("a.image IS NOT NULL")
+            //             			//->andWhere("a.enabled = 1")
+            //             			->orderBy('a.id', 'ASC')
+            //             			;
+            //             		},
+            //             		//'property' => 'title',
+            //             		'empty_value' => 'pi.form.label.select.choose.tag',
+            //             		'label' => "Tag",
+            //             		'multiple' => true,
+            //             		'required'  => false,
+            //             		'constraints' => array(
+            //             				new Constraints\NotBlank(),
+            //             		),
+            //             		"attr" => array(
+            //             				"class"=>"pi_multiselect ajaxselect", // ajaxselect
+            //             				"data-url"=>$this->_container->get('bootstrap.RouteTranslator.factory')->getRoute("admin_content_tag_selectentity_ajax"),
+            //             				//"data-selectid" => json_encode($id_tags)
+            //             				"data-max" => 40,
+            //             		),
+            //             		'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+            //              				title="Ajouter un tag à la sélection"
+            //              				data-title="Tags"
+            //              				data-href="'.$this->_container->get('bootstrap.RouteTranslator.factory')->getRoute("admin_content_tag_new", array("NoLayout"=>"false", "category"=>'')).'"
+            //              				data-selectid="#piapp_adminbundle_tagtype_id"
+            //              				data-selecttitle="#piapp_adminbundle_tagtype_name"
+            //              				data-insertid="#piapp_adminbundle_translationpagetype_tag"
+            //              				data-inserttype="multiselect"
+            //              				></a>',
+            //             ))            
             ->add('breadcrumb', 'hidden', array(
                     'label'    => 'pi.page.form.breadcrumb',
                     'required' => false,

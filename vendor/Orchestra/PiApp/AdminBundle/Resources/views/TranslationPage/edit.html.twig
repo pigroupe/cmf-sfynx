@@ -16,6 +16,7 @@
 		<form class="myform" action="{{ path('admin_transpage_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }} novalidate>
 			<div id="tabs-1">
 				    {{ form_widget(edit_form) }} 
+				    <input type="hidden" id="piapp_adminbundle_tagtype_id" name="piapp_gedmobundle_tagtype[id]"  value="{{ entity.id }}">
 			</div>		    
 		    <ul class="ui-widget-header ui-footer">
 			    <li>

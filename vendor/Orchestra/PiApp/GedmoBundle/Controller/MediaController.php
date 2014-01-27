@@ -146,6 +146,7 @@ class MediaController extends abstractController
 			0 => array(
 				'field_name' => 'title',
    				'field_value' => $keyword,
+			    'field_trans' => true,
 			),
    		);
   		// we set type value

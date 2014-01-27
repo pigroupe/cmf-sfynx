@@ -342,8 +342,12 @@ abstract class abstractController extends Controller
     		$query->groupBy('a.id');
     		// autocompletion
     		if (is_array($keywords) && (count($keywords) >= 1)) {
-    			foreach ($keywords as $info) {
-    				if (isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+    		    foreach ($keywords as $info) {
+    				$is_trans = true;
+    				if (isset($info['field_trans']) && !empty($info['field_trans']) ) {
+    					$is_trans = $info['field_trans'];
+    				}
+    				if ($is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
 		    			$andModule_title = $query->expr()->andx();
 		    			$andModule_title->add($query->expr()->eq('LOWER(trans.locale)', "'{$locale}'"));
 		    			$andModule_title->add($query->expr()->eq('LOWER(trans.field)', "'".$info['field_name']."'"));
@@ -357,6 +361,8 @@ abstract class abstractController extends Controller
 		    			$orModule->add($andModule_id);
 		    			 
 		    			$query->andWhere($orModule);
+    				} elseif (!$is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+    					$query->add($query->expr()->like('LOWER('.$info['field_name'].')', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
     				}
     			}
     		}

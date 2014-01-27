@@ -91,6 +91,63 @@ class TagController extends abstractController
     }
 
     /**
+     * get entities in ajax request for select form.
+     *
+     * @Route("/admin/content/tag/select", name="admin_content_tag_selectentity_ajax")
+     * @Secure(roles="ROLE_USER")
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access  public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function selectajaxAction()
+    {
+    	$request = $this->container->get('request');
+    	$em		 = $this->getDoctrine()->getEntityManager();
+    	$locale  = $this->container->get('request')->getLocale();
+    	//
+    	$pagination = $this->container->get('request')->get('pagination', null);
+    	$keyword    = $this->container->get('request')->get('keyword', '');
+    	$MaxResults = $this->container->get('request')->get('max', 10);
+    	// we set query
+    	$query  = $em->getRepository("PiAppAdminBundle:Tag")->getAllByCategory('', null, '', '', false);
+    	//
+        $keyword = array(
+    	    0 => array(
+    	        'field_name' => 'name',
+    	        'field_value' => $keyword,
+    	        'field_trans' => true,
+    	    ),
+    	);
+    
+    	return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true);
+    }
+    
+    /**
+     * Select all entities.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access  protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function renderselectajaxQuery($entities, $locale)
+    {
+    	$tab = array();
+    	foreach ($entities as $obj) {
+    		$content   = $obj->translate($locale)->getTitle();
+    		if (!empty($content)) {
+    			$tab[] = array(
+    					'id' => $obj->getId(),
+    					'text' =>$this->container->get('twig')->render($content, array())
+    			);
+    		}
+    	}
+    	 
+    	return $tab;
+    }    
+    	    
+    /**
      * Finds and displays a Tag entity.
      * 
      * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
