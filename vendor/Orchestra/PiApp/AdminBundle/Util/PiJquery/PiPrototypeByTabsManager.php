@@ -441,8 +441,8 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                         contentType: "application/json; charset=utf-8",
                                                         dataType: "json"
                                                     }).done(function(response) {
+                                                    	container.empty();
                                                         if (response.length > 0) {
-                                                            container.empty();
                                                             $.each(response, function(key, value) {
                                                                 // prevent doubles
                                                                 // if(container.find('option[value='+value.id+']').length == 0) {
