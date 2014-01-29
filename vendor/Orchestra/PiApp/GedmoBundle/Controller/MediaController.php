@@ -138,6 +138,7 @@ class MediaController extends abstractController
     	// we set query
    		$query  = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory('', null, '', '', false);
    		$query
+   		->leftJoin('a.translations', 'trans')
    		->leftJoin('a.image', 'm')
    		->andWhere('a.image IS NOT NULL')
    		->andWhere("a.status = '{$type}'");    		
@@ -147,6 +148,7 @@ class MediaController extends abstractController
 				'field_name' => 'title',
    				'field_value' => $keyword,
 			    'field_trans' => true,
+			    'field_trans_name' => 'trans',
 			),
    		);
   		// we set type value

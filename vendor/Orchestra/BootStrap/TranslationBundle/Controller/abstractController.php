@@ -332,8 +332,6 @@ abstract class abstractController extends Controller
     	    if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder) ) {
     			$query    = $em->getRepository($this->_entityName)->getAllByCategory('', null, '', '', false);
     		}
-    		$query
-    		->leftJoin('a.translations', 'trans');
     		if ($only_enabled) {
     			$query    			
     			->andWhere('a.enabled = 1');
@@ -343,15 +341,19 @@ abstract class abstractController extends Controller
     		// autocompletion
     		if (is_array($keywords) && (count($keywords) >= 1)) {
     		    foreach ($keywords as $info) {
-    				$is_trans = true;
-    				if (isset($info['field_trans']) && !empty($info['field_trans']) ) {
+    				$is_trans = false;
+    				if (isset($info['field_trans']) && !empty($info['field_trans'])) {
     					$is_trans = $info['field_trans'];
+    					if (!isset($info['field_trans_name']) || empty($info['field_trans_name'])) {
+    						$is_trans = false;
+    					}
     				}
-    				if ($is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+    				if ($is_trans && isset($info['field_trans_name']) && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+    					$trans_name = $info['field_trans_name'];
 		    			$andModule_title = $query->expr()->andx();
-		    			$andModule_title->add($query->expr()->eq('LOWER(trans.locale)', "'{$locale}'"));
-		    			$andModule_title->add($query->expr()->eq('LOWER(trans.field)', "'".$info['field_name']."'"));
-		    			$andModule_title->add($query->expr()->like('LOWER(trans.content)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+		    			$andModule_title->add($query->expr()->eq("LOWER({$trans_name}.locale)", "'{$locale}'"));
+		    			$andModule_title->add($query->expr()->eq("LOWER({$trans_name}.field)", "'".$info['field_name']."'"));
+		    			$andModule_title->add($query->expr()->like("LOWER({$trans_name}.content)", $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
 		    			 
 		    			$andModule_id = $query->expr()->andx();
 		    			$andModule_id->add($query->expr()->like('LOWER(a.id)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
@@ -481,11 +483,14 @@ abstract class abstractController extends Controller
 
                 $or = $qb->expr()->orx();
                 foreach ($search_tab as $s) {
-                    if (is_numeric($s)) {
-                        $or->add($qb->expr()->eq($aColumns[(intval($i)-1)], (int)$s));
-                    }else{
-                        $or->add($qb->expr()->like('LOWER('.$aColumns[(intval($i)-1)].')', $qb->expr()->literal('%'.strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s)).'%')));
-                    }
+//                     if (is_numeric($s)) {
+//                         //$or->add($qb->expr()->eq($aColumns[(intval($i)-1)], (int)$s));
+//                         $or->add(new \Doctrine\ORM\Query\Expr\Comparison('LOWER('.$aColumns[(intval($i)-1)].')', ' REGEXP ', "'^(.*)({$s})(.*)'"));
+//                     }else{
+//                     	//$or->add(new Doctrine\ORM\Query\Expr\Comparison('LOWER('.$aColumns[(intval($i)-1)].')', 'REGEXP', '%'.strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s)).'%'));
+//                         $or->add($qb->expr()->like('LOWER('.$aColumns[(intval($i)-1)].')', $qb->expr()->literal('%'.strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s)).'%')));
+//                     }
+                    $or->add("LOWER(".$aColumns[(intval($i)-1)].") LIKE '%".strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s))."%'");
                 }
                 $and->add($or);
             }

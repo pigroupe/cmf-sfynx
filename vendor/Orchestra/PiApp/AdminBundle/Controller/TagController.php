@@ -111,12 +111,15 @@ class TagController extends abstractController
     	$MaxResults = $this->container->get('request')->get('max', 10);
     	// we set query
     	$query  = $em->getRepository("PiAppAdminBundle:Tag")->getAllByCategory('', null, '', '', false);
+    	$query
+    	->leftJoin('a.translations', 'trans');
     	//
         $keyword = array(
     	    0 => array(
     	        'field_name' => 'name',
     	        'field_value' => $keyword,
     	        'field_trans' => true,
+    	        'field_trans_name' => 'trans',
     	    ),
     	);
     

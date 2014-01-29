@@ -59,6 +59,10 @@ table.filter td.center {
 	text-align: center;
 }
 
+.dataTables_processing {
+    z-index: 9998;
+}
+
 /*
  * footer positioning
  */

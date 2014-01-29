@@ -299,6 +299,12 @@ class PiGridTableManager extends PiJqueryExtension
 
                     function fnCreateFooterFilter() 
                     {
+                         <?php if(isset($options['grid-filters-tfoot-up']) && (($options['grid-filters-tfoot-up'] === 'true') || ($options['grid-filters-tfoot-up'] === true)) ) : ?>
+                         $('tfoot tr').addClass("tfoot-up");
+                         $('tfoot').replaceWith(function(){
+                                return $("<thead />", {html: $(this).html()});
+                         }); 
+                         <?php endif; ?>                        
                         /* Add a select menu for each TH element in the table footer
                          *
                          *   <tfoot>
@@ -318,55 +324,100 @@ class PiGridTableManager extends PiJqueryExtension
                          *      </tr>
                          *  </tfoot>
                          */
-                         $("table th").each( function ( i ) {
+                        $("table th").each( function ( i ) {
                                 var column = $(this).data('column');
                                 var values = $(this).data('values');
                                 var type = $(this).data('type');
                                 var title = $(this).data('title');
                                 if (column != undefined) {
-                                    var options = [];
-                                    $('select', this).find(':selected').each(function(j,v){
-                                        options[j] = $(v).val();
-                                    });
                                     if (values == undefined) {
                                         values = <?php echo $options['grid-name']; ?>oTable.fnGetColumnData(column) 
                                     }
                                     if (type != "input") {
+                                        var options = [];
+                                        $('select', this).find(':selected').each(function(j,v){
+                                            options[j] = $(v).val();
+                                        });                                        
                                         $(this).html( fnCreateSelect( values, title, i) ); 
-                                    }  
-                                    $('input', this).width('91%').keyup( function () {
-                                        <?php echo $options['grid-name']; ?>oTable.fnFilter( $(this).val(), column, true );
-                                    });   
-                                    $('select', this).val(options);
-                                    $('select', this).change( function () {
-                                        var values = $("#select_"+i).val().join('|');
-                                        <?php echo $options['grid-name']; ?>oTable.fnFilter( values, column, true );
-                                    });
-                                    $("#select_"+i).multiselect({
-                                        multiple: true,
-                                        header: true,
-                                        noneSelectedText: title,
-                                        create: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
-                                        open: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
-                                    }).multiselectfilter({
-                                        filter: function(e, matches) {
-                                            e.preventDefault();
-                                            var keyword = $('.ui-multiselect-filter:visible').find('input').val();
-                                            if(keyword != $(e.target).data('keyword')) {
-                                                <?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, column, true );
+                                        $('select', this).data('title', title).data('column', column).val(options);
+                                        
+                                        $('select', this).change( function () {
+                                            var values = $("#select_"+i).val().join('|');
+                                            <?php echo $options['grid-name']; ?>oTable.fnFilter( values, column, true );
+                                        });
+                                        $("#select_"+i).multiselect({
+                                            multiple: true,
+                                            header: true,
+                                            noneSelectedText: title,
+                                            create: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
+                                            open: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
+                                        }).multiselectfilter({
+                                            filter: function(e, matches) {
+                                                e.preventDefault();
+                                                var keyword = $('.ui-multiselect-filter:visible').find('input').val();
+                                                if(keyword != $(e.target).data('keyword')) {
+                                                    <?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, column, true );
+                                                }
                                             }
-                                        }
-                                    });
+                                        });                                        
+                                    } else {
+                                        var search_timeout = undefined;
+                                        $(this).find('input').width('91%').attr('id', 'input_'+i).data('title', title).data('column', column).keyup( function () {
+                                            /* Filter on the column (the index) of this element */
+                                            if(search_timeout != undefined) {
+                                                clearTimeout(search_timeout);
+                                            }
+                                            $this = this;
+                                            search_timeout = setTimeout(function() {
+                                              search_timeout = undefined;
+                                              <?php echo $options['grid-name']; ?>oTable.fnFilter( $this.value, column, true );
+                                            }, 1000);                                            
+                                        } );
+                                    }
                                 } else if (type != undefined) {
                                     this.innerHTML = '' ;
                                 }
-                         });
-                         <?php if(isset($options['grid-filters-tfoot-up']) && (($options['grid-filters-tfoot-up'] === 'true') || ($options['grid-filters-tfoot-up'] === true)) ) : ?>
-                         $('tfoot tr').addClass("tfoot-up");
-                         $('tfoot').replaceWith(function(){
-                                return $("<thead />", {html: $(this).html()});
-                         }); 
-                         <?php endif; ?>
+                        });
+/*
+                        $("[id^='select_']").change( function () {
+                            var values = $(this).val().join('|');
+                            <?php echo $options['grid-name']; ?>oTable.fnFilter( values, $(this).data('column'), true );
+                        });
+                        $("[id^='select_']").multiselect({
+                            multiple: true,
+                            header: true,
+                            noneSelectedText: $(this).data('title'),
+                            create: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
+                            open: function(){ $(this).next().width('auto');$(this).multiselect("widget").width('auto'); },
+                        }).multiselectfilter({
+                            filter: function(e, matches) {
+                                e.preventDefault();
+                                var keyword = $('.ui-multiselect-filter:visible').find('input').val();
+                                if(keyword != $(e.target).data('keyword')) {
+                                    <?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, $(this).data('column'), true );
+                                }
+                            }
+                        });
+                        var foo_input = function() {
+                            <?php echo $options['grid-name']; ?>oTable.fnFilter( $(this).val(), $(this).data('column'), true );
+                        };
+                        $("[id^='input_']").off("keyup", foo_input);   
+                        $("[id^='input_']").on("keyup", foo_input);                         
+*/
+                        $("[id^='ui-multiselect-']").each(function(i){
+                            var string = $(this).next('span').html();
+                            string = string.toString().replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                            string = string.replace(/&#0*39;/g, "'");
+                            string = string.replace(/&quot;/g, '"');
+                            string = string.replace(/&amp;/g, '&');
+                            $(this).next('span').html(string);
+                            $(this).click(function() {
+                                    var id = $(this).attr('id').toString().replace(/-option-(.+)/ig,'').replace('ui-multiselect-','');
+                                    var string = $(this).val();
+                                    string = string.toString().replace(/&amp;lt;img.*?\/&amp;gt;/ig,'');
+                                    $("#"+id).next("button.ui-multiselect").html(string);
+                            });
+                        });
                     }
 
 					function fnCreateSelect( aData, title, myColumnID)
@@ -1330,7 +1381,11 @@ class PiGridTableManager extends PiJqueryExtension
                                     return $(this).prop('title');
                                 }                            
                         });
-                        fnCreateFooterFilter();                        
+                        fnCreateFooterFilter();   
+                        <?php if(!isset($options['grid-server-side']) || ($options['grid-server-side'] === 'false') || ($options['grid-server-side'] === false) ) : ?>                     
+                        fnCreateFooterFilter(); 
+                        <?php endif; ?>  
+
                    });
 
             //]]>
