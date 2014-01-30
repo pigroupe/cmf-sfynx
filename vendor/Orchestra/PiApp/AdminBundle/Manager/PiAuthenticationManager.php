@@ -246,7 +246,7 @@ class PiAuthenticationManager extends PiCoreManager implements PiTreeManagerBuil
     {
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
         $user->setConfirmationToken($tokenGenerator->generateToken());
-        $em = $this->container->get('doctrine')->getEntityManager();
+        $em = $this->container->get('doctrine')->getManager();
         $em->persist($user);
         $em->flush();
         
@@ -272,7 +272,7 @@ class PiAuthenticationManager extends PiCoreManager implements PiTreeManagerBuil
     {
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
         $user->setConfirmationToken($tokenGenerator->generateToken());
-        $em = $this->container->get('doctrine')->getEntityManager();
+        $em = $this->container->get('doctrine')->getManager();
         $em->persist($user);
         $em->flush();
 
@@ -293,7 +293,7 @@ class PiAuthenticationManager extends PiCoreManager implements PiTreeManagerBuil
     {
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
         $user->setConfirmationToken($tokenGenerator->generateToken());
-        $em = $this->container->get('doctrine')->getEntityManager();
+        $em = $this->container->get('doctrine')->getManager();
         $em->persist($user);
         $em->flush();
         

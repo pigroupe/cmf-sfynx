@@ -322,7 +322,7 @@ abstract class abstractController extends Controller
     protected function selectajaxQuery($pagination, $MaxResults, $keywords = null, $query = null, $locale = '', $only_enabled  = true)
     {
     	$request = $this->container->get('request');
-    	$em		 = $this->getDoctrine()->getEntityManager();
+    	$em		 = $this->getDoctrine()->getManager();
     	//
     	if (empty($locale)) {
     		$locale = $this->container->get('request')->getLocale();
@@ -626,7 +626,7 @@ abstract class abstractController extends Controller
      */
     protected function authenticateUser(UserInterface $user = null, $deleteToken = true, &$response = null)
     {
-    	$em 		 = $this->getDoctrine()->getEntityManager();
+    	$em 		 = $this->getDoctrine()->getManager();
     	$request     = $this->container->get('request');
         $providerKey = $this->container->getParameter('fos_user.firewall_name');
         $userManager = $this->container->get('fos_user.user_manager');

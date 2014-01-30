@@ -91,10 +91,10 @@
 				<th data-type="input"><input type="text" name="" value="Id" style="width:100%" /></th>
 				<th data-column='2' data-title="{{ 'pi.form.label.field.category'|trans }}"></th>
 				<th data-column='3' data-title="{{ 'pi.form.label.field.type'|trans }}" data-values='{"image":"{{ 'pi.form.label.media.picture'|trans }}","file":"{{ 'pi.form.label.media.file'|trans }}","youtube":"{{ 'youtube'|trans }}","dailymotion":"{{ 'dailymotion'|trans }}"}'></th>
-				<th data-column='4' data-title="{{ 'pi.form.label.field.title'|trans }}"></th>
+				<th data-column='4' data-type="input" ><input type="text" name="" value="" style="width:100%" /></th>
 				<th data-type='input'><input type="text" name="" value="{{ 'pi.form.label.media.picture'|trans }}" style="width:100%" /></th>
-				<th data-column='6' data-title="{{ 'pi.create.name'|trans }}"></th>
-				<th data-column='7' data-title="{{ 'pi.update.name'|trans }}"></th>
+				<th data-type="input"><input type="text" name="" value="{{ 'pi.create.name'|trans }}" style="width:100%" /></th>
+                <th data-type="input"><input type="text" name="" value="{{ 'pi.update.name'|trans }}" style="width:100%" /></th>				
 				<th data-column='8' data-title="{{ 'pi.page.form.status'|trans }}" data-values='{"1":"Actif","0":"En attente d activation"}'></th>
 				<th></th>
 			</tr>
@@ -116,6 +116,7 @@
 					'4':'Type',
 					'5':'Titre',
 				},
+			'grid-filters-tfoot-up':'true',
 			'grid-sorting': { 
 					'6':'desc',
 				},

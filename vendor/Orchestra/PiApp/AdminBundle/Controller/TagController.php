@@ -103,7 +103,7 @@ class TagController extends abstractController
     public function selectajaxAction()
     {
     	$request = $this->container->get('request');
-    	$em		 = $this->getDoctrine()->getEntityManager();
+    	$em		 = $this->getDoctrine()->getManager();
     	$locale  = $this->container->get('request')->getLocale();
     	//
     	$pagination = $this->container->get('request')->get('pagination', null);

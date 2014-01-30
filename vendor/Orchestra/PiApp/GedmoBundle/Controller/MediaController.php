@@ -129,7 +129,7 @@ class MediaController extends abstractController
     public function selectajaxAction($type)
     {
     	$request = $this->container->get('request');
-    	$em		 = $this->getDoctrine()->getEntityManager();
+    	$em		 = $this->getDoctrine()->getManager();
     	$locale  = $this->container->get('request')->getLocale();
     	//
     	$pagination = $this->container->get('request')->get('pagination', null);
@@ -222,7 +222,7 @@ class MediaController extends abstractController
         $is_Server_side = true;
         //
         if ($request->isXmlHttpRequest() && $is_Server_side) {
-           $aColumns    = array('a.id','c.name','a.status','m.name',"a.enabled",'a.created_at', 'a.updated_at',"a.enabled","a.enabled");
+           $aColumns    = array('a.id','c.name','a.status','a.title',"a.enabled",'a.created_at', 'a.updated_at',"a.enabled","a.enabled");
            $q1 = clone $query;
            $q2 = clone $query;
            $result    = $this->createAjaxQuery('select',$aColumns, $q1, 'a', null, array(

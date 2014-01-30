@@ -63,7 +63,7 @@ class DefaultController extends abstractController
     public function getAuthPermisssionAction()
     {
         $request        = $this->container->get('request');
-    	$em             = $this->getDoctrine()->getEntityManager();
+    	$em             = $this->getDoctrine()->getManager();
     	
     	if (!$request->get('ws_key', false) || !$request->get('ws_format', false) || !$request->get('ws_user_id', false) || !$request->get('ws_application', false)) {
     		//-----we initialize de logger-----
@@ -190,7 +190,7 @@ class DefaultController extends abstractController
     public function validateTokenAction()
     {
     	$request = $this->container->get('request');
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
     	
         if (!$request->get('ws_key', false) || !$request->get('ws_format', false) || !$request->get('ws_user_id', false) || !$request->get('ws_token', false) || !$request->get('ws_application', false)) {
         	//-----we initialize de logger-----
@@ -271,7 +271,7 @@ class DefaultController extends abstractController
      */
     public function connectUserByTokenAction()
     {    
-    	$em          = $this->getDoctrine()->getEntityManager();
+    	$em          = $this->getDoctrine()->getManager();
     	$request     = $this->container->get('request');
     	$userManager = $this->container->get('fos_user.user_manager');
     	//
@@ -351,7 +351,7 @@ class DefaultController extends abstractController
     public function _ajax_getAuthAction()
     {
     	$request = $this->container->get('request');
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
     	$result = array();
     
     	$handler     = $request->get('handler', '');

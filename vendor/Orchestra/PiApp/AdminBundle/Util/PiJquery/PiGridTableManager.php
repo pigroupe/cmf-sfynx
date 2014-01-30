@@ -134,7 +134,7 @@ class PiGridTableManager extends PiJqueryExtension
         // plugin Editor
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/datatable/plugins/Editor/js/dataTables.editor.js");
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addCssFile("bundles/piappadmin/js/datatable/plugins/Editor/css/dataTables.editor.css", "append");
-        
+
         // plugin fancybox for dialog box
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/fancybox/jquery.fancybox.pack.js");
         
@@ -311,9 +311,9 @@ class PiGridTableManager extends PiJqueryExtension
                          *      <tr>
                          *        <th data-type="input"><input type="text" name="" value="Position" style="width:100%" /></th>
                          *        <th data-type="input"><input type="text" name="" value="Id" style="width:100%" /></th>
-                         *        <th data-column='2' data-title="{{ 'pi.form.label.field.topic'|trans }}" data-values='{{ rubriques|json_encode }}'></th>
+                         *        <th data-column='2' data-title="{{ 'pi.form.label.field.topic'|trans }}"  data-ajaxsearch="false" data-values='{{ rubriques|json_encode }}'></th>
                          *        <th data-column='3' data-title="{{ 'pi.form.label.field.tag'|trans }}"></th>
-                         *        <th data-column='4' data-type="input"><input type="text" name="" value="intitulé" style="width:100%" /></th>
+                         *        <th data-column='4' data-type="input" ><input type="text" name="" value="" style="width:100%" /></th>
                          *        <th data-column='5' data-title="{{ 'pi.form.label.field.type'|trans }}" data-values='{"article":"Articles","diaporama":"Dossiers","test":"Tests","page":"Pages"}'></th>
                          *        <th data-column='6' data-title="{{ 'pi.form.label.field.author'|trans }}"></th>
                          *        <th data-column='7' data-title="{{ 'pi.page.form.status'|trans }}" data-values='{"Actif":"Actif","Archive":"Archivé","En attente dactivation":"En attente d activation"}'></th>
@@ -329,6 +329,7 @@ class PiGridTableManager extends PiJqueryExtension
                                 var values = $(this).data('values');
                                 var type = $(this).data('type');
                                 var title = $(this).data('title');
+                                var ajaxsearch = $(this).data('ajaxsearch');
                                 if (column != undefined) {
                                     if (values == undefined) {
                                         values = <?php echo $options['grid-name']; ?>oTable.fnGetColumnData(column) 
@@ -355,15 +356,16 @@ class PiGridTableManager extends PiJqueryExtension
                                             filter: function(e, matches) {
                                                 e.preventDefault();
                                                 var keyword = $('.ui-multiselect-filter:visible').find('input').val();
-                                                if(keyword != $(e.target).data('keyword')) {
-                                                    <?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, column, true );
-                                                }
+                                                if ( (ajaxsearch === true) || (ajaxsearch === 'true') ) {
+                                                	if(keyword != $(e.target).data('keyword')) {
+                                                    	<?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, column, true );
+                                                	}
+                                            	}
                                             }
                                         });                                        
                                     } else {
                                         var search_timeout = undefined;
                                         $(this).find('input').width('91%').attr('id', 'input_'+i).data('title', title).data('column', column).keyup( function () {
-                                            /* Filter on the column (the index) of this element */
                                             if(search_timeout != undefined) {
                                                 clearTimeout(search_timeout);
                                             }
@@ -371,7 +373,7 @@ class PiGridTableManager extends PiJqueryExtension
                                             search_timeout = setTimeout(function() {
                                               search_timeout = undefined;
                                               <?php echo $options['grid-name']; ?>oTable.fnFilter( $this.value, column, true );
-                                            }, 1000);                                            
+                                            }, 1000);
                                         } );
                                     }
                                 } else if (type != undefined) {
@@ -478,8 +480,7 @@ class PiGridTableManager extends PiJqueryExtension
     					return ((x < y) ?  1 : ((x > y) ? -1 : 0));
     				}; 
 
-
-    				(function($) {
+    				(function($) {                        
     					/*
     					 * Function: fnGetColumnData
     					 * Purpose:  Return an array of table values from a particular column.
@@ -725,6 +726,10 @@ class PiGridTableManager extends PiJqueryExtension
                         "bJQueryUI":true,
                         "bAutoWidth": false,
                         "bProcessing": true,
+
+                        "fnInitComplete": function(oSettings, json) {
+                          //
+                        },                    
                         
                         <?php if(isset($options['grid-state-save']) && ($options['grid-state-save'] === 'true')) : ?>
                         "bStateSave": true,
@@ -853,15 +858,13 @@ class PiGridTableManager extends PiJqueryExtension
                             "sSwfPath": "<?php echo $Urlpath; ?>",
                             "sRowSelect": "<?php if (isset($options['grid-row-select']) && !empty($options['grid-row-select'])): ?><?php echo $options['grid-row-select']; ?><?php else: ?>multi<?php endif; ?>",       //  ['single', 'multi']
                             "aButtons": [
-
-
                         <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && is_array($options['grid-actions'])): ?>
                             <?php foreach($options['grid-actions'] as $actionName => $params): ?>
                                     <?php if ($actionName == "rows_enabled"): ?>
                                             <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.rows_enabled'; ?>
                                             {
                                                 "sExtends": "editor_remove",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $penabled ?>' title='<?php echo $this->translator->trans('pi.grid.action.row_enabled'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.row_enabled'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $penabled ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                                 "editor": enabled,
                                                 "formButtons": [
                                                     {
@@ -894,7 +897,7 @@ class PiGridTableManager extends PiJqueryExtension
                                             <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.rows_disable'; ?>
                                             {
                                                 "sExtends": "editor_remove",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $pdisable ?>' title='<?php echo $this->translator->trans('pi.grid.action.row_disable'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.row_disable'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $pdisable ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                                 "editor": disablerow,
                                                 "formButtons": [
                                                     {
@@ -927,7 +930,7 @@ class PiGridTableManager extends PiJqueryExtension
                                             <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.row_delete'; ?>
                                             {
                                                 "sExtends": "editor_remove",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $remove; ?>' title='<?php echo $this->translator->trans('pi.grid.action.row_delete'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.row_delete'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $remove; ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                                 "editor": deleterow,
                                                 "formButtons": [
                                                     {
@@ -963,7 +966,7 @@ class PiGridTableManager extends PiJqueryExtension
                                             <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.row_archive'; ?>
                                             {
                                                 "sExtends": "editor_remove",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $archive ?>' title='<?php echo $this->translator->trans('pi.grid.action.row_archive'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.row_archive'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $archive ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                                 "editor": archiverow,
                                                 "formButtons": [
                                                     {
@@ -996,36 +999,41 @@ class PiGridTableManager extends PiJqueryExtension
                                                 }
                                             },
                                     <?php elseif ($actionName == "select_all"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.select_all'; ?>
                                             {
                                                 "sExtends": "select_all",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $select_all ?>' title='<?php echo $this->translator->trans('pi.grid.action.select_all'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.select_all'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $select_all ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                                 "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
                                                     $("input[type=checkbox]").prop('checked', false);
                                                 },
                                             },    
                                     <?php elseif ($actionName == "select_none"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.select_none'; ?>
                                             {
                                                 "sExtends": "select_none",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $select_none ?>' title='<?php echo $this->translator->trans('pi.grid.action.select_none'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.select_none'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $select_none ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                                 "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
                                                     $("input[type=checkbox]").prop('checked', false);
                                                 },
                                             },                                                                                                                                
                                     <?php elseif ($actionName == "copy"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.copy'; ?>
                                             {
                                                 "sExtends": "copy",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $copy ?>' title='<?php echo $this->translator->trans('pi.grid.action.copy'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.copy'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $copy ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                             },
                                     <?php elseif ($actionName == "print"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.print'; ?>
                                             {
                                                 "sExtends": "print",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $print; ?>' title='<?php echo $this->translator->trans('pi.grid.action.print'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.print'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $print; ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                             },
                                     <?php elseif ($actionName == "export"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Orchestra'; ?>
                                             {
                                                 "sExtends":    "collection",
-                                                "sButtonText": "<?php echo $this->translator->trans('pi.grid.action.export'); ?>",
+                                                "sButtonText": "<?php echo $this->translator->trans($params['sButtonText']); ?>",
                                                 "aButtons":    [ 
                                                                  {
                                                                      "sExtends": "csv",
@@ -1044,27 +1052,30 @@ class PiGridTableManager extends PiJqueryExtension
                                                  ]
                                             },
                                     <?php elseif ($actionName == "export_csv"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.csv'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Orchestra'; ?>
                                             {
                                                 "sExtends": "csv",
                                                 "sTitle": "<?php echo $this->translator->trans($params['sTitle']); ?>",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $export_csv; ?>' title='<?php echo $this->translator->trans('pi.grid.action.export.csv'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.export.csv'); ?>'  height='28' width='28' />"
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $export_csv; ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />"
                                             },
                                     <?php elseif ($actionName == "export_pdf"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.pdf'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Orchestra'; ?>
                                             {
                                                 "sExtends": "pdf",
                                                 "sTitle": "<?php echo $this->translator->trans($params['sTitle']); ?>",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $export_pdf; ?>' title='<?php echo $this->translator->trans('pi.grid.action.export.pdf'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.export.pdf'); ?>'  height='28' width='28' />",
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $export_pdf; ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />",
                                                 "sPdfOrientation": "landscape",
                                                 "sPdfMessage": "PDF export (<?php echo date("Y/m/d"); ?>)"
                                             },
                                     <?php elseif ($actionName == "export_xls"): ?>
+                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.xls'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Orchestra'; ?>
                                             {
                                                 "sExtends": "xls",
                                                 "sTitle": "<?php echo $this->translator->trans($params['sTitle']); ?>",
-                                                "sButtonText": "<img class='btn-action' src='<?php echo $export_xls; ?>' title='<?php echo $this->translator->trans('pi.grid.action.export.xls'); ?>' alt='<?php echo $this->translator->trans('pi.grid.action.export.xls'); ?>'  height='28' width='28' />"
+                                                "sButtonText": "<img class='btn-action' src='<?php echo $export_xls; ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  height='28' width='28' />"
                                             },
                                     <?php elseif (!empty($actionName) && (strstr($actionName, 'rows_default_') != "") ): ?>
                                             <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = '_new_'; ?>
@@ -1202,7 +1213,6 @@ class PiGridTableManager extends PiJqueryExtension
                         <?php endif; ?>    
                                         ]                            
                         },
-
                         "oColVis": {
                             "buttonText": "&nbsp;",
                             "bRestore": true,
@@ -1240,7 +1250,6 @@ class PiGridTableManager extends PiJqueryExtension
                         },
 
                     });
-
 
                 <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && is_array($options['grid-actions'])): ?>
                     <?php foreach($options['grid-actions'] as $actionName => $params): ?>
@@ -1384,8 +1393,7 @@ class PiGridTableManager extends PiJqueryExtension
                         fnCreateFooterFilter();   
                         <?php if(!isset($options['grid-server-side']) || ($options['grid-server-side'] === 'false') || ($options['grid-server-side'] === false) ) : ?>                     
                         fnCreateFooterFilter(); 
-                        <?php endif; ?>  
-
+                        <?php endif; ?> 
                    });
 
             //]]>

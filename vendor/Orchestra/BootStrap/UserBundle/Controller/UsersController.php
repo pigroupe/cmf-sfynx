@@ -128,6 +128,7 @@ class UsersController extends abstractController
         $is_Server_side = true;
         if ( ($request->isXmlHttpRequest() && $is_Server_side) ||  !$is_Server_side) {
             $query	= $em->getRepository("BootStrapUserBundle:User")->createQueryBuilder('a')
+            ->leftJoin('a.groups', 'gps')
             ->andWhere("a.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
             ->andWhere("a.roles NOT LIKE '%ROLE_MEMBER%'")
             ->andWhere("a.roles NOT LIKE '%ROLE_PROVIDER%'")
@@ -137,10 +138,11 @@ class UsersController extends abstractController
         if ($request->isXmlHttpRequest() && $is_Server_side) {
            $aColumns    = array(
            		'a.id',
+                'a.username',
            		'a.nickname',
            		'a.name',
            		'a.email',
-           		"case when a.roles LIKE '%ROLE_SUPER_ADMIN%' then 'ROLE_SUPER_ADMIN' when a.roles LIKE '%ROLE_ADMIN%' then 'ROLE_ADMIN' when a.roles LIKE '%ROLE_USER%' then 'ROLE_USER' when a.roles LIKE '%ROLE_EDITOR%' then 'ROLE_EDITOR' when a.roles LIKE '%ROLE_MODERATOR%' then 'ROLE_MODERATOR' when a.roles LIKE '%ROLE_DESIGNER%' then 'ROLE_DESIGNER' when a.roles LIKE '%ROLE_CONTENT_MANAGER%' then 'ROLE_CONTENT_MANAGER' else 'Autres' end",
+           		"case when a.roles LIKE '%ROLE_SUPER_ADMIN%' OR gps.roles LIKE '%ROLE_SUPER_ADMIN%' then 'ROLE_SUPER_ADMIN' when a.roles LIKE '%ROLE_ADMIN%' OR gps.roles LIKE '%ROLE_ADMIN%' then 'ROLE_ADMIN' when a.roles LIKE '%ROLE_USER%' OR gps.roles LIKE '%ROLE_USER%' then 'ROLE_USER' when a.roles LIKE '%ROLE_EDITOR%' OR gps.roles LIKE '%ROLE_EDITOR%' then 'ROLE_EDITOR' when a.roles LIKE '%ROLE_MODERATOR%' OR gps.roles LIKE '%ROLE_MODERATOR%' then 'ROLE_MODERATOR' when a.roles LIKE '%ROLE_DESIGNER%' OR gps.roles LIKE '%ROLE_DESIGNER%' then 'ROLE_DESIGNER' when a.roles LIKE '%ROLE_CONTENT_MANAGER%' OR gps.roles LIKE '%ROLE_CONTENT_MANAGER%' then 'ROLE_CONTENT_MANAGER' else 'Autres' end",
            		'a.created_at',
            		'a.updated_at',
            		"case when a.enabled = 1 then 'Actif' when a.archive_at IS NOT NULL and a.archived = 1  then 'Supprime' else 'En attente dactivation' end",
@@ -170,6 +172,8 @@ class UsersController extends abstractController
               $row = array();
               $row[] = $e->getId() . '_row_' . $e->getId();
               $row[] = $e->getId();
+              
+              $row[] = (string) $e->getUsername();
               
               $row[] = (string) $e->getNickname();
               

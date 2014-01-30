@@ -56,7 +56,7 @@ class ResettingController extends ContainerAware
             $template = 'PiAppTemplateBundle:Template\\Login\\Resetting:request.html.twig';
         }
 
-        $user  =  $this->container->get('doctrine')->getEntityManager()->getRepository('BootStrapUserBundle:User')->findOneBy(array('username' => $username));
+        $user  =  $this->container->get('doctrine')->getManager()->getRepository('BootStrapUserBundle:User')->findOneBy(array('username' => $username));
 
         $request   = $this->container->get('request');
 
@@ -71,7 +71,7 @@ class ResettingController extends ContainerAware
             else {
                 $tokenGenerator = $this->container->get('fos_user.util.token_generator');
                 $user->setConfirmationToken($tokenGenerator->generateToken());
-                $em = $this->container->get('doctrine')->getEntityManager();
+                $em = $this->container->get('doctrine')->getManager();
                 $em->persist($user);
                 $em->flush();
 
@@ -93,7 +93,7 @@ class ResettingController extends ContainerAware
             }
             $tokenGenerator = $this->container->get('fos_user.util.token_generator');
             $user->setConfirmationToken($tokenGenerator->generateToken());
-            $em = $this->container->get('doctrine')->getEntityManager();
+            $em = $this->container->get('doctrine')->getManager();
             $em->persist($user);
             $em->flush();
             //
