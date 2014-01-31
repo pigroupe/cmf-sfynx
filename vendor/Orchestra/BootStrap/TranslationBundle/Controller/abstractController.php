@@ -329,7 +329,7 @@ abstract class abstractController extends Controller
     	}
     	//
     	if ($request->isXmlHttpRequest()) {
-    	    if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder) ) {
+    		if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder) ) {
     			$query    = $em->getRepository($this->_entityName)->getAllByCategory('', null, '', '', false);
     		}
     		if ($only_enabled) {
@@ -340,7 +340,7 @@ abstract class abstractController extends Controller
     		$query->groupBy('a.id');
     		// autocompletion
     		if (is_array($keywords) && (count($keywords) >= 1)) {
-    		    foreach ($keywords as $info) {
+    			foreach ($keywords as $info) {
     				$is_trans = false;
     				if (isset($info['field_trans']) && !empty($info['field_trans'])) {
     					$is_trans = $info['field_trans'];
@@ -505,7 +505,8 @@ abstract class abstractController extends Controller
         		$keywords = preg_split("/\s+/", strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($request->get('sSearch'))));
         		foreach ($keywords as $keyword) {
         			if(!empty($keyword)){
-                            $or->add($qb->expr()->like('LOWER('.$aColumns[$i].')', $qb->expr()->literal('%'.$keyword.'%')));
+                            //$or->add($qb->expr()->like('LOWER('.$aColumns[$i].')', $qb->expr()->literal('%'.$keyword.'%')));
+                            $or->add("LOWER(".$aColumns[$i].") LIKE '%".$keyword."%'");
         			}
         		}
         	}

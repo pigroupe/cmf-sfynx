@@ -176,5 +176,28 @@ class HandlerRequest
     		$this->request->setLocale($lang_value);
     	}
     }   
+    
+    /**
+     * Sets the SEO url valule if is a old url.
+     *
+     * @return void
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function isSEOUrl()
+    {
+    	$filename = md5($this->request->getUri());
+    	$dossier  = $this->container->getParameter("kernel.root_dir")."/cache/seo/old_urls/";
+    	if (!is_dir($dossier)){
+    		mkdir($dossier);
+    	}
+    	$this->container->get("pi_filecache")->getClient()->setPath($dossier);
+    	if (!$this->container->get("pi_filecache")->get($filename)){
+    		return false;
+    	} else {
+    		return $this->container->get("pi_filecache")->get($filename);
+    	}
+    }    
 
 }

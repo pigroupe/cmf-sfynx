@@ -372,7 +372,8 @@ class PiGridTableManager extends PiJqueryExtension
                                             $this = this;
                                             search_timeout = setTimeout(function() {
                                               search_timeout = undefined;
-                                              <?php echo $options['grid-name']; ?>oTable.fnFilter( $this.value, column, true );
+                                              var values = $this.value.split(' ');
+                                              <?php echo $options['grid-name']; ?>oTable.fnFilter( values.join('|'), column, true );
                                             }, 1000);
                                         } );
                                     }
