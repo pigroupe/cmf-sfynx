@@ -48,8 +48,8 @@ $GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA']= array(
 //        'getContact',
 );
 $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']= array(
-        'Proxies\PiAppGedmoBundleEntityMediaProxy' => true,
-        'Proxies\BootStrapMediaBundleEntityMediaProxy' => true,
+//        'Proxies\PiAppGedmoBundleEntityMediaProxy' => true,
+//        'Proxies\BootStrapMediaBundleEntityMediaProxy' => true,
         
 //         'PiApp\GedmoBundle\Entity\Block' => true,
 //         'PiApp\GedmoBundle\Entity\Translation\BlockTranslation' => true,

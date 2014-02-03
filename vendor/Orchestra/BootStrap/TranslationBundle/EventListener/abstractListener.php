@@ -48,7 +48,27 @@ abstract class abstractListener
     {
         $this->container                = $container;
         $this->EntitiesContainer        = $container->get('bootstrap.EntitiesContainer.listener');
+        // Sets parameter template values.
+        $this->setParams();
     }
+    
+    /**
+     * Sets parameter values.
+     *
+     * @return void
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function setParams()
+    {
+    	$this->is_permission_restriction_by_roles                 = $this->container->getParameter('pi_app_admin.permission.restriction_by_roles');
+    	$this->is_permission_authorization_prepersist_authorized  = $this->container->getParameter('pi_app_admin.permission.authorization.prepersist');
+    	$this->is_permission_authorization_preupdate_authorized   = $this->container->getParameter('pi_app_admin.permission.authorization.preupdate');
+    	$this->is_permission_authorization_preremove_authorized   = $this->container->getParameter('pi_app_admin.permission.authorization.preremove');
+    	$this->is_permission_prohibition_preupdate_authorized     = $this->container->getParameter('pi_app_admin.permission.prohibition.preupdate');
+    	$this->is_permission_prohibition_preremove_authorized     = $this->container->getParameter('pi_app_admin.permission.prohibition.preremove');
+    }    
     
     /**
      * Create the pi_routing table for the route management.
@@ -99,12 +119,16 @@ abstract class abstractListener
         //update updated_at field when method setUpdatedAt exists in entity object
         if (method_exists($entity, 'setUpdatedAt')) {
             // we modify the Update_at value
-            $entity->setUpdatedAt(new \DateTime());
+            if(!$entity->getUpdatedAt()) {
+                $entity->setUpdatedAt(new \DateTime());
+            }
         }
         //update created_at field when method setCreatedAt exists in entity object
         if (method_exists($entity, 'setCreatedAt')) {
             // we modify the Update_at value
-            $entity->setCreatedAt(new \DateTime());
+            if(!$entity->getCreatedAt()) {
+                $entity->setCreatedAt(new \DateTime());
+            }
         }
         //update heritage field when method setHeritage exists in entity object
         if (method_exists($entity, 'setHeritage')) {
@@ -118,11 +142,12 @@ abstract class abstractListener
         }        
         // we give the right of persist if the entity is in the AUTHORIZATION_PREPERSIST container
         if ($this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
-            if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
+            if ($this->is_permission_authorization_prepersist_authorized && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
                 if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
                     $route = $this->container->get('request')->get('_route');
-                    if ((empty($route) || ($route == "_internal")))
+                    if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->container->get('request')->getLocale());
+                    }
                     if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
                         $entityManager->initializeObject($entity);
                         
@@ -143,10 +168,10 @@ abstract class abstractListener
         if ($isAnonymousToken && $this->isAnonymousToken()) {
             // we schedules the orphaned entity for removal
             $entityManager->getUnitOfWork()->scheduleOrphanRemoval($entity);
-               // we throw the message.
-               $this->setFlash('pi.session.flash.right.anonymous');
+            // we throw the message.
+            $this->setFlash('pi.session.flash.right.anonymous');
                
-               return false;
+            return false;
         }
         // If  autentication user
         if ($isUsernamePasswordToken && $this->isUsernamePasswordToken()) {
@@ -190,13 +215,12 @@ abstract class abstractListener
     {
         $entity         = $eventArgs->getEntity();
         $entityManager     = $eventArgs->getEntityManager();
-        $entity_name     = get_class($entity);
-        
-        // we given't the right of remove if the entity is in the AUTHORIZATION_PREREMOVE container
-        if (isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])){
-            if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])){
+        $entity_name     = get_class($entity);        
+        // we given't the right of remove if the entity is in the PROHIBITION_PREUPDATE container
+        if ($this->is_permission_prohibition_preupdate_authorized && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
+            if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
                 $id_entity = $entity->getId();
-                if (in_array($id_entity, $GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])){
+                if (in_array($id_entity, $GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
                        // just for register in data the change do in this class listener :
                        $class = $entityManager->getClassMetadata(get_class($entity));
                        $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
@@ -205,35 +229,35 @@ abstract class abstractListener
                        
                        return false;
                 }
-            }elseif ($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name] == true){
-                   // just for register in data the change do in this class listener :
-                   $class = $entityManager->getClassMetadata(get_class($entity));
-                   $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
-                   // we throw the message.
-                   $this->setFlash('pi.session.flash.right.anonymous');
+            } elseif ($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name] == true) {
+                // just for register in data the change do in this class listener :
+                $class = $entityManager->getClassMetadata(get_class($entity));
+                $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
+                // we throw the message.
+                $this->setFlash('pi.session.flash.right.anonymous');
                    
-                   return false;
+                return false;
             }
         }        
         if (method_exists($entity, 'setUpdatedAt')) {
             // we modify the Update_at value
             $entity->setUpdatedAt(new \DateTime());
         }
-        
         if ($this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
             // we give the right of update if the entity is in the AUTHORIZATION_PREPERSIST container
-            if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])){
-                if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])){
+            if ($this->is_permission_authorization_preupdate_authorized && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
+                if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
                     $route = $this->container->get('request')->get('_route');
-                    if ((empty($route) || ($route == "_internal")))
+                    if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->container->get('request')->getLocale());
-                    if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])){
+                    }
+                    if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
                         $class = $entityManager->getClassMetadata(get_class($entity));
                         $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
                            
                         return true;
                     }
-                }elseif ($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name] == true){
+                } elseif ($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name] == true) {
                     $class = $entityManager->getClassMetadata(get_class($entity));
                     $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
                        
@@ -243,48 +267,49 @@ abstract class abstractListener
         } else {
             $class = $entityManager->getClassMetadata(get_class($entity));
             $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
+            
             return true;
         }
-           // If AnonymousToken user,
-           if ($isAnonymousToken && $this->isAnonymousToken()) {
-               // just for register in data the change do in this class listener :
-               $class = $entityManager->getClassMetadata(get_class($entity));
-               $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
-               // we throw the message.
-               $this->setFlash('pi.session.flash.right.anonymous');
+        // If AnonymousToken user,
+        if ($isAnonymousToken && $this->isAnonymousToken()) {
+            // just for register in data the change do in this class listener :
+            $class = $entityManager->getClassMetadata(get_class($entity));
+            $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
+            // we throw the message.
+            $this->setFlash('pi.session.flash.right.anonymous');
                
-               return false;
-           }
-           // If  autentication user
-           if ($isUsernamePasswordToken && $this->isUsernamePasswordToken()) {
-               if ($this->isRestrictionByRole($entity)){
-                   // just for register in data the change do in this class listener :
-                   $class = $entityManager->getClassMetadata(get_class($entity));
-                   $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
-                   // we throw the message.
-                   $this->setFlash('pi.session.flash.right.unupdate');
+            return false;
+        }
+        // If  autentication user
+        if ($isUsernamePasswordToken && $this->isUsernamePasswordToken()) {
+            if ($this->isRestrictionByRole($entity)) {
+                // just for register in data the change do in this class listener :
+                $class = $entityManager->getClassMetadata(get_class($entity));
+                $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
+                // we throw the message.
+                $this->setFlash('pi.session.flash.right.unupdate');
                    
-                   return false;
-               }               
-               // if user have the edit right
-               if ( in_array('EDIT', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) || $isAllPermissions) {
-                   // we persist the values of the entity
-                   $class = $entityManager->getClassMetadata(get_class($entity));
-                   $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
-                   // we throw the message.
-                  $this->setFlash('pi.session.flash.right.update');
+                return false;
+            }               
+            // if user have the edit right
+            if ( in_array('EDIT', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) || $isAllPermissions) {
+                // we persist the values of the entity
+                $class = $entityManager->getClassMetadata(get_class($entity));
+                $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
+                // we throw the message.
+                $this->setFlash('pi.session.flash.right.update');
                   
-                   return true;
-               } else {
-                   // just for register in data the change do in this class listener :
-                   $class = $entityManager->getClassMetadata(get_class($entity));
-                   $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
-                   // we throw the message.
-                   $this->setFlash('pi.session.flash.right.unupdate');
+                return true;
+            } else {
+                // just for register in data the change do in this class listener :
+                $class = $entityManager->getClassMetadata(get_class($entity));
+                $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
+                // we throw the message.
+                $this->setFlash('pi.session.flash.right.unupdate');
                    
-                   return false;
-               }
-         }
+                return false;
+            }
+        }
     }    
     
     /**
@@ -308,11 +333,11 @@ abstract class abstractListener
         $entity         = $eventArgs->getEntity();
         $entityManager     = $eventArgs->getEntityManager();
         $entity_name     = get_class($entity);
-        // we given't the right of remove if the entity is in the AUTHORIZATION_PREREMOVE container
-        if (isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])){
-            if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])){
+        // we given't the right of remove if the entity is in the PROHIBITION_PREREMOVE container
+        if ($this->is_permission_prohibition_preremove_authorized && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])) {
+            if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])) {
                 $id_entity = $entity->getId();
-                if (in_array($id_entity, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])){
+                if (in_array($id_entity, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                     // we stop the remove method.
                     $entityManager->getUnitOfWork()->detach($entity);                
                     // we throw the message.
@@ -320,7 +345,7 @@ abstract class abstractListener
                     
                     return false;
                 }
-            }elseif ($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name] == true){
+            } elseif ($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name] == true) {
                 // we stop the remove method.
                 $entityManager->getUnitOfWork()->detach($entity);                
                 // we throw the message.
@@ -331,15 +356,16 @@ abstract class abstractListener
         }        
         if ($this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
             // we give the right of remove if the entity is in the AUTHORIZATION_PREREMOVE container
-            if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])){
-                if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])){
+            if ($this->is_permission_authorization_preremove_authorized && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
+                if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                     $route = $this->container->get('request')->get('_route');
-                    if ((empty($route) || ($route == "_internal")))
+                    if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->container->get('request')->getLocale());
-                    if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])){
+                    }
+                    if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                         return true;
                     }
-                }elseif ($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name] == true){
+                } elseif ($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name] == true) {
                     return true;
                 }
             }
@@ -357,7 +383,7 @@ abstract class abstractListener
         }
         // If  autentication user
         if ($isUsernamePasswordToken && $this->isUsernamePasswordToken()) {
-            if ($this->isRestrictionByRole($entity)){
+            if ($this->isRestrictionByRole($entity)) {
                 //  we stop the remove method.
                 $entityManager->getUnitOfWork()->detach($entity);                    
                 // we throw the message.
@@ -578,10 +604,11 @@ abstract class abstractListener
      */
     protected function isAnonymousToken()
     {
-        if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\AnonymousToken)
+        if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\AnonymousToken) {
             return true;
-        else
+        } else {
             return false;
+        }
     }    
     
     /**
@@ -594,10 +621,11 @@ abstract class abstractListener
      */
     protected function isUsernamePasswordToken()
     {
-        if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken)
+        if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -610,10 +638,11 @@ abstract class abstractListener
      */
     protected function isPersistRight()
     {
-        if ( in_array('CREATE', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) )
+        if ( in_array('CREATE', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) ) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
     
     /**
@@ -626,10 +655,11 @@ abstract class abstractListener
      */
     protected function isUpdateRight()
     {
-        if ( in_array('EDIT', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) )
+        if ( in_array('EDIT', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) ) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
     
     /**
@@ -642,10 +672,11 @@ abstract class abstractListener
      */
     protected function isDeleteRight()
     {
-        if ( in_array('DELETE', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) )
+        if ( in_array('DELETE', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) ) {
             return true;
-        else
+        } else {
             return false;
+        }
     }    
     
     /**
@@ -659,60 +690,59 @@ abstract class abstractListener
      */
     protected function isRestrictionByRole($entity)
     {
-        $right          = true;
+        $right       = true;
         $entity_name = get_class($entity);
         
         if ( 
-            $this->isAnonymousToken()
+            $this->is_permission_restriction_by_roles
             && !($this->container->get('security.context')->isGranted('ROLE_ADMIN'))
             && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']) 
             && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])
         ){
                if (is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
                    $route = $this->container->get('request')->get('_route');
-                   if ((empty($route) || ($route == "_internal")))
+                   if ((empty($route) || ($route == "_internal"))) {
                        $route = $this->container->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->container->get('request')->getLocale());
-                   if (!in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
+                   }
+                   if (!in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])) {
                        return false;
                    }
                }
-               
                // Gets all user roles.
                $user_roles                = $this->container->get('bootstrap.Role.factory')->getAllUserRoles();
                // Gets the best role authorized to access to the entity.
                $authorized_page_roles     = $this->container->get('bootstrap.Role.factory')->getBestRoles($entity->getHeritage());
-               
                $right = false;
-               if (is_null($authorized_page_roles) || empty($authorized_page_roles))
+               if (is_null($authorized_page_roles) || empty($authorized_page_roles)) {
                    $right = true;
-               else{
-                   foreach($authorized_page_roles as $key=>$role_page){
-                       if (in_array($role_page, $user_roles))
+               } else {
+                   foreach ($authorized_page_roles as $key=>$role_page) {
+                       if (in_array($role_page, $user_roles)) {
                            $right = true;
+                       }
                    }                        
                }
-               
                if ( 
                    ( (get_class($entity) == 'Proxies\BootStrapMediaBundleEntityMediaProxy') || get_class($entity) == 'Proxies\PiAppGedmoBundleEntityMediaProxy')
                    	&& isset($GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA']) 
                   	&& is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA'])
-                   ){
+               ) {
                    $methods_authorized = $GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA'];
-                  
-                   if (get_class($entity) == 'Proxies\BootStrapMediaBundleEntityMediaProxy')
+                   if (get_class($entity) == 'Proxies\BootStrapMediaBundleEntityMediaProxy') {
                        $media    = $this->_container()->get('pi_app_gedmo.repository')->getRepository('Media')->findOneByMediaId($entity->getId());
-                   else
+                   } else {
                        $media    = $entity;
-                      
-                  $right = true;
-                  foreach($methods_authorized as $method){
-                       if ( method_exists($media, $method) && is_object($media->$method()) ){
+                   }
+                   $right = true;
+                   foreach ($methods_authorized as $method) {
+                       if ( method_exists($media, $method) && is_object($media->$method()) ) {
                            $right = false;
                        }    
-                  }
+                   }
                }
         }
-           return !$right;
+        
+        return !$right;
     }
     
     /**
@@ -740,13 +770,14 @@ abstract class abstractListener
      */
     protected function getRepository($nameEntity = '')
     {
-        if (empty($this->repository))
+        if (empty($this->repository)) {
             $this->setRepository();
-    
-        if (!empty($nameEntity))
+        }    
+        if (!empty($nameEntity)) {
             return $this->repository->getRepository($nameEntity);
-        else
+        } else {
             throw new \Doctrine\ORM\EntityNotFoundException();
+        }
     }   
     
 }

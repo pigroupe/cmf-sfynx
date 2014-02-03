@@ -37,7 +37,7 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    private $container;
+    protected $container;
     
     /**
      * @var \Doctrine\ORM\EntityManager

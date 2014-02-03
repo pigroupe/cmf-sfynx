@@ -463,14 +463,14 @@ pi_app_admin:
             template_flash: flash.html.twig
         meta_head:
             author: Orchestra
-            copyright: http://www.cmf-orchestra.net/
+            copyright: http://pigroupe.github.io/cmf-orchestra/
             title: Orchestra
             description: Based in Europe with operational offices in Switzerland, France, Russia, West and South Africa, Singapore.
             keywords: Orchestra, symfony 2, framework, CMF, CMS, PHP web applications
             og_title_add: "Orchestra : "            
             og_type: website
             og_image: bundles/piappadmin/images/logo/logo-orchestra-white.png
-            og_site_name: http://www.cmf-orchestra.com/
+            og_site_name: http://pigroupe.github.io/cmf-orchestra/
     page:
         homepage_deletewidget: true
         page_management_by_user_only: true
@@ -478,6 +478,7 @@ pi_app_admin:
         refresh_allpage_containing_snippet: true
         refresh_css_js_cache_file: true
         indexation_authorized_automatically: false
+        switch_redirection_seo_authorized: true
         switch_language_browser_authorized: false
         switch_layout_mobile_authorized: false
         switch_layout_init_redirection_authorized: false
@@ -487,6 +488,15 @@ pi_app_admin:
         date_expire: false
         date_interval: PT4H
         application_id: orchestra  
+    permission:
+        restriction_by_roles: false
+        authorization:
+            prepersist: true
+            preupdate: true
+            preremove: true
+        prohibition:
+            preupdate: true
+            preremove: true        
     form:
         show_legend: true
         show_child_legend: false

@@ -95,10 +95,12 @@ class PiAppAdminExtension extends Extension
                 $container->setParameter('pi_app_admin.page.switch_layout_init_redirection_authorized', $config['page']['switch_layout_init_redirection_authorized']);
             if (isset($config['page']['switch_language_browser_authorized']))
                 $container->setParameter('pi_app_admin.page.switch_language_browser_authorized', $config['page']['switch_language_browser_authorized']);
+            if (isset($config['page']['switch_redirection_seo_authorized']))
+                $container->setParameter('pi_app_admin.page.switch_redirection_seo_authorized', $config['page']['switch_redirection_seo_authorized']);
             if (isset($config['page']['memcache_enable_only_page']))
                 $container->setParameter('pi_app_admin.page.memcache_enable_only_page', $config['page']['memcache_enable_only_page']);
             if (isset($config['page']['memcache_enable_all']))
-            	$container->setParameter('pi_app_admin.page.memcache_enable_all', $config['page']['memcache_enable_all']);            
+            	$container->setParameter('pi_app_admin.page.memcache_enable_all', $config['page']['memcache_enable_all']);
         }    
 
         /**
@@ -114,6 +116,30 @@ class PiAppAdminExtension extends Extension
             if (isset($config['cookies']['application_id'])) {
             	$container->setParameter('pi_app_admin.cookies.application_id',$config['cookies']['application_id']);
             }
+        }        
+        
+        /**
+         * Permission config parameter
+         */
+        if (isset($config['permission'])){
+        	if (isset($config['permission']['restriction_by_roles'])) {
+        		$container->setParameter('pi_app_admin.permission.restriction_by_roles', $config['permission']['restriction_by_roles']);
+        	}
+        	if (isset($config['permission']['authorization']) && isset($config['permission']['authorization']['prepersist'])) {
+        		$container->setParameter('pi_app_admin.permission.authorization.prepersist', $config['permission']['authorization']['prepersist']);
+        	}
+        	if (isset($config['permission']['authorization']) && isset($config['permission']['authorization']['preupdate'])) {
+        		$container->setParameter('pi_app_admin.permission.authorization.preupdate', $config['permission']['authorization']['preupdate']);
+        	}
+        	if (isset($config['permission']['authorization']) && isset($config['permission']['authorization']['preremove'])) {
+        		$container->setParameter('pi_app_admin.permission.authorization.preremove', $config['permission']['authorization']['preremove']);
+        	}
+        	if (isset($config['permission']['prohibition']) && isset($config['permission']['prohibition']['preupdate'])) {
+        		$container->setParameter('pi_app_admin.permission.prohibition.preupdate', $config['permission']['prohibition']['preupdate']);
+        	}
+        	if (isset($config['permission']['prohibition']) && isset($config['permission']['prohibition']['preremove'])) {
+        		$container->setParameter('pi_app_admin.permission.prohibition.preremove', $config['permission']['prohibition']['preremove']);
+        	}        	        	
         }        
         
         /**

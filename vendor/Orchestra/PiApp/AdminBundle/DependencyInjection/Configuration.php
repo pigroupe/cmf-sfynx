@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
         $this->addFormConfig($rootNode);
         $this->addMailConfig($rootNode);
         $this->addCookiesConfig($rootNode);
+        $this->addPermissionConfig($rootNode);
 
         return $treeBuilder;
     }
@@ -57,7 +58,8 @@ class Configuration implements ConfigurationInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function addAdminConfig(ArrayNodeDefinition $rootNode){
+    protected function addAdminConfig(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
                 ->arrayNode('admin')
@@ -100,7 +102,8 @@ class Configuration implements ConfigurationInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function addPageConfig(ArrayNodeDefinition $rootNode){
+    protected function addPageConfig(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
                 ->arrayNode('page')
@@ -131,6 +134,10 @@ class Configuration implements ConfigurationInterface
                         ->defaultValue(false)
                         ->end()                        
 
+                    ->booleanNode('switch_redirection_seo_authorized')
+                        ->defaultValue(false)
+                        ->end()
+                        
                     ->booleanNode('switch_layout_mobile_authorized')
                         ->defaultValue(false)
                         ->end()
@@ -149,7 +156,7 @@ class Configuration implements ConfigurationInterface
                         
                     ->booleanNode('memcache_enable_only_page')
                         ->defaultValue(false)
-                        ->end() 
+                        ->end()                        
                         
                 ->end()
         
@@ -167,7 +174,8 @@ class Configuration implements ConfigurationInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function addFormConfig(ArrayNodeDefinition $rootNode){
+    protected function addFormConfig(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
                 ->arrayNode('form')
@@ -203,7 +211,8 @@ class Configuration implements ConfigurationInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function addMailConfig(ArrayNodeDefinition $rootNode){
+    protected function addMailConfig(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
                 ->arrayNode('mail')
@@ -230,7 +239,8 @@ class Configuration implements ConfigurationInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function addCookiesConfig(ArrayNodeDefinition $rootNode){
+    protected function addCookiesConfig(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
                 ->arrayNode('cookies')
@@ -256,6 +266,47 @@ class Configuration implements ConfigurationInterface
     }    
     
     /**
+     * Permission config
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     *
+     * @return void
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function addPermissionConfig(ArrayNodeDefinition $rootNode)
+    {
+    	$rootNode
+	    	->children()
+		    	->arrayNode('permission')
+			    	->children()
+			    	
+			    		->booleanNode('restriction_by_roles')->defaultValue(false)->end()
+			    				    	
+				    	->arrayNode('authorization')
+					    ->isRequired()
+						   	->children()
+						    	->booleanNode('prepersist')->defaultValue(true)->end()
+						    	->booleanNode('preupdate')->defaultValue(true)->end()
+						    	->booleanNode('preremove')->defaultValue(true)->end()
+					    	->end()
+				    	->end()
+				    	
+				    	->arrayNode('prohibition')
+				    	->isRequired()
+					    	->children()
+						    	->booleanNode('preupdate')->defaultValue(true)->end()
+						    	->booleanNode('preremove')->defaultValue(true)->end()
+					    	->end()
+				    	->end()				    	
+				    	
+			    	->end()
+		    	->end()
+	    	->end();
+    }    
+    
+    /**
      * Layout config
      *
      * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
@@ -265,7 +316,8 @@ class Configuration implements ConfigurationInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function addLayoutConfig(ArrayNodeDefinition $rootNode){
+    protected function addLayoutConfig(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
                 ->arrayNode('layout')
