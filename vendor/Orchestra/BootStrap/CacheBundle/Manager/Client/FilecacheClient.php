@@ -33,16 +33,17 @@ class FilecacheClient implements CacheClientInterface
         if ( !$this->isSafe() || empty( $key ) ){
             return false;
         }
-
         if ( file_exists( $this->buildFilename( $key ) ) ){
             $file = file_get_contents( $this->buildFilename( $key ) );
             $file = unserialize( $file );
-
-            if ( !is_array( $file ) ){
+            //
+            if ( !is_array( $file ) ) {
                 return false;
-            }elseif ( $file[ 'key' ] != $key ){
+            } elseif ( $file[ 'key' ] != $key ) {
                 return false;
-            }elseif ( time() - $file[ 'ctime' ] > $file[ 'ttl' ] ){
+            } elseif ($file[ 'ttl' ] ==  0) {
+            	return unserialize( $file[ 'value' ] );
+            } elseif ( time() - $file[ 'ctime' ] > $file[ 'ttl' ] ) {
                 return false;
             } else {
                 return unserialize( $file[ 'value' ] );
@@ -52,7 +53,7 @@ class FilecacheClient implements CacheClientInterface
         }
     }
 
-    public function set( $key, $value, $ttl = 300 )
+    public function set( $key, $value, $ttl = 3600 )
     {
         $file = array();
         $file[ 'key' ] = $key;

@@ -478,12 +478,15 @@ pi_app_admin:
         refresh_allpage_containing_snippet: true
         refresh_css_js_cache_file: true
         indexation_authorized_automatically: false
-        switch_redirection_seo_authorized: true
         switch_language_browser_authorized: false
         switch_layout_mobile_authorized: false
         switch_layout_init_redirection_authorized: false
         memcache_enable_only_page: false
         memcache_enable_all: false
+        seo_redirection:
+            seo_authorized: true
+            seo_repository : "%kernel.root_dir%/cache/seo"
+            seo_file_name : seo_links.yml        
     cookies:
         date_expire: false
         date_interval: PT4H

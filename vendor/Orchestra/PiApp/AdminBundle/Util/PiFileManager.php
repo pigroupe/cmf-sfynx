@@ -62,7 +62,47 @@ class PiFileManager implements PiFileManagerBuilderInterface
             return file_get_contents($path);
         }
     }    
-        
+    
+    /**
+     * Returns the content by curl.
+     *
+     * @param  str    $path  url link
+     *
+     * @return string
+     * @access public
+     *
+     * @author Riad HELLAL <hellal.riad@gmail.com>
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public static function getCurl($path, $proxy_host = null, $proxy_port = null, $getUriForPath = false)
+    {
+    	if ($getUriForPath) {
+    		$path = str_replace(array("://"), array(":||"), $path);
+    		$path = str_replace(array("//"), array("/"), $path);
+    		$path = str_replace(array(":||"), array("://"), $path);
+    		if (preg_match("#^\/(.*)$#i", $path)) {
+    			$path = $getUriForPath . $path;
+    		} elseif (preg_match("#^www.(.*)$#i", $path)) {
+    			$path = "http://" . $path;
+    		} elseif (preg_match("#^(?!http|ftp?)#i", $path)) {
+    			$path = "http://" . $path;
+    		}
+    	}
+        if (!empty($path)) {
+            //initialisation 
+            $ch = curl_init($path); 
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+            if (!empty($proxy_host) and !empty($proxy_host)){
+                curl_setopt($ch, CURLOPT_PROXY, $proxy_host.":".$proxy_port); 
+                curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port );                
+            }
+            $content = curl_exec($ch);
+            curl_close($ch);
+            
+            return $content;
+        }
+    }
+    
     /**
      * Retrieves the extension of a file.
      *
@@ -398,17 +438,18 @@ class PiFileManager implements PiFileManagerBuilderInterface
      *
      * @param  string    $path      path file
      * @param  string    $content      content to push in th file
-     * @param  int         $mode      mode file
+     * @param  int       $mode      mode file
+     * @param  int		 [FILE_APPEND, LOCK_EX, FILE_APPEND | LOCK_EX]
      *
      * @return booean    return 0 if the file is save correctly.    
      * @access public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public static function save($path, $content = '',  $mode = 0777)
+    public static function save($path, $content = '',  $mode = 0777, $flags = LOCK_EX)
     {
         if (self::mkdirr(dirname($path), $mode)) {
-            return file_put_contents($path, $content);
+            return file_put_contents($path, $content, $flags);
         } else {
             return false;
         }
@@ -669,7 +710,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
                 'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
     
                 // application store
-        // over the air blackberry
+                // over the air blackberry
                 'jad' => 'text/vnd.sun.j2me.app-descriptor',
                 // over the air blackberry
                 'cod' => 'application/vnd.rim.cod',

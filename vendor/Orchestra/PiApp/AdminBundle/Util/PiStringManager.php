@@ -799,13 +799,12 @@ class PiStringManager implements PiStringManagerBuilderInterface
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public static function filter($fst, $arr, $e ='utf-8', $output){
-        $new_arr=array();
-    
+    public static function filter($fst, $arr, $e ='utf-8', $output)
+    {
+        $new_arr=array();    
         for($i=0;$i<=(count($arr)-1);$i++){
             $first_letter_withoutaccent = substr(self::withoutaccent($arr[$i]['label'], $e), 0, 1);
-            $fst_letter_withoutaccent    = self::withoutaccent($fst, $e);
-    
+            $fst_letter_withoutaccent    = self::withoutaccent($fst, $e);    
             if (strcasecmp($first_letter_withoutaccent, $fst_letter_withoutaccent)  == 0){
                 $new_arr[] = $arr[$i]['label'];
             }

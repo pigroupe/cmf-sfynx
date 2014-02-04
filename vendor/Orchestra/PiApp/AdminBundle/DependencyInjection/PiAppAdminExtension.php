@@ -95,12 +95,20 @@ class PiAppAdminExtension extends Extension
                 $container->setParameter('pi_app_admin.page.switch_layout_init_redirection_authorized', $config['page']['switch_layout_init_redirection_authorized']);
             if (isset($config['page']['switch_language_browser_authorized']))
                 $container->setParameter('pi_app_admin.page.switch_language_browser_authorized', $config['page']['switch_language_browser_authorized']);
-            if (isset($config['page']['switch_redirection_seo_authorized']))
-                $container->setParameter('pi_app_admin.page.switch_redirection_seo_authorized', $config['page']['switch_redirection_seo_authorized']);
             if (isset($config['page']['memcache_enable_only_page']))
                 $container->setParameter('pi_app_admin.page.memcache_enable_only_page', $config['page']['memcache_enable_only_page']);
             if (isset($config['page']['memcache_enable_all']))
             	$container->setParameter('pi_app_admin.page.memcache_enable_all', $config['page']['memcache_enable_all']);
+            
+            if (isset($config['page']['seo_redirection']) && isset($config['page']['seo_redirection']['seo_authorized'])) {
+            	$container->setParameter('pi_app_admin.page.seo_redirection.seo_authorized', $config['page']['seo_redirection']['seo_authorized']);
+            } 
+            if (isset($config['page']['seo_redirection']) && isset($config['page']['seo_redirection']['seo_repository'])) {
+            	$container->setParameter('pi_app_admin.page.seo_redirection.seo_repository', $config['page']['seo_redirection']['seo_repository']);
+            } 
+            if (isset($config['page']['seo_redirection']) && isset($config['page']['seo_redirection']['seo_file_name'])) {
+            	$container->setParameter('pi_app_admin.page.seo_redirection.seo_file_name', $config['page']['seo_redirection']['seo_file_name']);
+            }                                
         }    
 
         /**

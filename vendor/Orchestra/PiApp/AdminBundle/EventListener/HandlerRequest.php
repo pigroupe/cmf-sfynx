@@ -78,7 +78,7 @@ class HandlerRequest
         $SEOUrl = $this->isSEOUrl();
         if ($SEOUrl) {
         	// we set response
-        	$event->setResponse(new Response(file_get_contents($SEOUrl)));
+        	$event->setResponse(new Response(\PiApp\AdminBundle\Util\PiFileManager::getCurl($SEOUrl, null, null, $this->request->getUriForPath(''))));
         } else {        
             // we set the browser information
             $browser = $this->browscap->getBrowser();
@@ -160,9 +160,18 @@ class HandlerRequest
     	$this->init_pc_layout                           = $this->container->getParameter('pi_app_admin.layout.init.pc.template');
     	$this->init_pc_redirection                         = $this->container->getParameter('pi_app_admin.layout.init.pc.redirection');
     	$this->init_mobile_layout                       = $this->container->getParameter('pi_app_admin.layout.init.mobile.template');
-    	$this->init_mobile_redirection                     = $this->container->getParameter('pi_app_admin.layout.init.mobile.redirection');
+    	$this->init_mobile_redirection                  = $this->container->getParameter('pi_app_admin.layout.init.mobile.redirection');
     
-    	$this->is_switch_redirection_seo_authorized     = $this->container->getParameter('pi_app_admin.page.switch_redirection_seo_authorized');
+    	$this->is_switch_redirection_seo_authorized     = $this->container->getParameter('pi_app_admin.page.seo_redirection.seo_authorized');
+    	$this->seo_redirection_repository     			= $this->container->getParameter('pi_app_admin.page.seo_redirection.seo_repository');
+    	$this->seo_redirection_file_name			    = $this->container->getParameter('pi_app_admin.page.seo_redirection.seo_file_name');
+    	if (empty($this->seo_redirection_repository)) {
+    		$this->seo_redirection_repository = $this->container->getParameter("kernel.root_dir") . "/cache/seo";
+    	}
+    	if (empty($this->seo_redirection_file_name)) {
+    		$this->seo_redirection_file_name = "seo_links.yml";
+    	}
+    	    	
     	$this->is_switch_language_browser_authorized    = $this->container->getParameter('pi_app_admin.page.switch_language_browser_authorized');
     	$this->is_init_redirection_authorized           = $this->container->getParameter('pi_app_admin.page.switch_layout_init_redirection_authorized');
     }    
@@ -195,12 +204,33 @@ class HandlerRequest
      */
     protected function isSEOUrl()
     {
-    	if ($this->is_switch_redirection_seo_authorized) {
-	    	$filename = md5($this->request->getUri());
-	        $dossier  = $this->container->getParameter("kernel.root_dir")."/cache/seo/old_urls/";
-	        if (!is_dir($dossier)){
-	        	mkdir($dossier);
-	        }
+        $dossier  = $this->seo_redirection_repository . "/old_urls/";
+   		$fileSeo  = $this->seo_redirection_repository . "/" . $this->seo_redirection_file_name;
+        if (
+    	    $this->is_switch_redirection_seo_authorized
+    	    &&
+    	    \PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777)
+    	) {
+        	// if all cache seo files are not created from the seo file, we create them.
+        	$all_cache_files = \PiApp\AdminBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' );
+        	if (file_exists($fileSeo) && is_array($all_cache_files) && (count($all_cache_files) === 0)) {
+        		$this->container->get("pi_filecache")->getClient()->setPath($dossier);
+        		$file_handle = fopen($fileSeo, "r");
+        		while (!feof($file_handle)) {
+        			$line = (string) fgets($file_handle);
+        			$line_infos = explode(':', $line);
+        			if (
+        				isset( $line_infos[0]) && !empty( $line_infos[0])
+        				&&
+        				isset( $line_infos[1]) && !empty( $line_infos[1])
+        			) {
+        				$this->container->get("pi_filecache")->set(str_replace(PHP_EOL, '', $line_infos[0]), str_replace(PHP_EOL, '', $line_infos[1]), 0);
+        			}
+        		}
+        		fclose($file_handle);
+        	}
+        	//
+	    	$filename = $this->request->getPathInfo();
 	        $this->container->get("pi_filecache")->getClient()->setPath($dossier);
 	        if (!$this->container->get("pi_filecache")->get($filename)){
 	        	return false;

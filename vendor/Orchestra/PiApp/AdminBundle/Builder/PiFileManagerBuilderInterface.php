@@ -23,6 +23,7 @@ namespace PiApp\AdminBundle\Builder;
 interface PiFileManagerBuilderInterface
 {
     public static function getFileContent($path);
+    public static function getCurl($path, $proxy_host = null, $proxy_port = null, $getUriForPath = false);
     public static function getFileExtension($filename);
     public static function getFileName($path);
     public static function GlobFiles($dirRegex, $options = null);
@@ -32,7 +33,7 @@ interface PiFileManagerBuilderInterface
     public function getContentCodeFile($file_code);
     public static function mkdirr($pathname, $mode = null);
     public static function rmdirr($dir);
-    public static function save($path, $content = '',  $mode = 0777);
+    public static function save($path, $content = '',  $mode = 0777, $flags = LOCK_EX);
     public static function rename($source, $newName);
     public static function copy( $source, $target);
     public static function move($source, $target);

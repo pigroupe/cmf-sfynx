@@ -110,53 +110,58 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
 
-                    ->booleanNode('homepage_deletewidget')
+                    ->booleanNode('homepage_deletewidget')->isRequired()
                         ->defaultValue(true)
                         ->end()
                         
-                    ->booleanNode('page_management_by_user_only')
+                    ->booleanNode('page_management_by_user_only')->isRequired()
                         ->defaultValue(false)
                         ->end()                        
                 
-                    ->booleanNode('single_slug')
+                    ->booleanNode('single_slug')->isRequired()
                         ->defaultValue(false)
                         ->end()
                     
-                    ->booleanNode('refresh_allpage_containing_snippet')
+                    ->booleanNode('refresh_allpage_containing_snippet')->isRequired()
                         ->defaultValue(true)
                         ->end()
                         
-                    ->booleanNode('refresh_css_js_cache_file')
+                    ->booleanNode('refresh_css_js_cache_file')->isRequired()
                         ->defaultValue(true)
                         ->end()                        
                         
-                    ->booleanNode('indexation_authorized_automatically')
+                    ->booleanNode('indexation_authorized_automatically')->isRequired()
                         ->defaultValue(false)
                         ->end()                        
 
-                    ->booleanNode('switch_redirection_seo_authorized')
-                        ->defaultValue(false)
-                        ->end()
-                        
-                    ->booleanNode('switch_layout_mobile_authorized')
+                    ->booleanNode('switch_layout_mobile_authorized')->isRequired()
                         ->defaultValue(false)
                         ->end()
                     
-                    ->booleanNode('switch_layout_init_redirection_authorized')
+                    ->booleanNode('switch_layout_init_redirection_authorized')->isRequired()
                         ->defaultValue(false)
                         ->end()
                          
-                    ->booleanNode('switch_language_browser_authorized')
+                    ->booleanNode('switch_language_browser_authorized')->isRequired()
                         ->defaultValue(false)
                         ->end()
                          
-                    ->booleanNode('memcache_enable_all')
+                    ->booleanNode('memcache_enable_all')->isRequired()
                         ->defaultValue(false)
                         ->end()
                         
-                    ->booleanNode('memcache_enable_only_page')
+                    ->booleanNode('memcache_enable_only_page')->isRequired()
                         ->defaultValue(false)
-                        ->end()                        
+                        ->end()    
+
+                    ->arrayNode('seo_redirection')
+                    ->isRequired()
+                        ->children()
+                    	    ->booleanNode('seo_authorized')->defaultValue(false)->end()
+	                        ->scalarNode('seo_repository')->defaultValue("")->end()
+    	                    ->scalarNode('seo_file_name')->defaultValue("")->end()
+                        ->end()
+                    ->end()                        
                         
                 ->end()
         
@@ -282,22 +287,22 @@ class Configuration implements ConfigurationInterface
 		    	->arrayNode('permission')
 			    	->children()
 			    	
-			    		->booleanNode('restriction_by_roles')->defaultValue(false)->end()
+			    		->booleanNode('restriction_by_roles')->isRequired()->defaultValue(false)->end()
 			    				    	
 				    	->arrayNode('authorization')
 					    ->isRequired()
 						   	->children()
-						    	->booleanNode('prepersist')->defaultValue(true)->end()
-						    	->booleanNode('preupdate')->defaultValue(true)->end()
-						    	->booleanNode('preremove')->defaultValue(true)->end()
+						    	->booleanNode('prepersist')->defaultValue(false)->end()
+						    	->booleanNode('preupdate')->defaultValue(false)->end()
+						    	->booleanNode('preremove')->defaultValue(false)->end()
 					    	->end()
 				    	->end()
 				    	
 				    	->arrayNode('prohibition')
 				    	->isRequired()
 					    	->children()
-						    	->booleanNode('preupdate')->defaultValue(true)->end()
-						    	->booleanNode('preremove')->defaultValue(true)->end()
+						    	->booleanNode('preupdate')->defaultValue(false)->end()
+						    	->booleanNode('preremove')->defaultValue(false)->end()
 					    	->end()
 				    	->end()				    	
 				    	

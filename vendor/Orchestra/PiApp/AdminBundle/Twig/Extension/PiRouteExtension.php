@@ -109,7 +109,7 @@ class PiRouteExtension extends \Twig_Extension
                 $this->container->get("pi_filecache")->getClient()->setPath($dossier);
                 if (!$this->container->get("pi_filecache")->get($format.$pattern.$id.'_'.$timestamp)){
                     $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
-                    $this->container->get("pi_filecache")->set($format.$pattern.$id.'_'.$timestamp,$url_public_media);
+                    $this->container->get("pi_filecache")->set($format.$pattern.$id.'_'.$timestamp, $url_public_media, 0);
                 } else {
                     $url_public_media = $this->container->get("pi_filecache")->get($format.$pattern.$id.'_'.$timestamp);
                 }                 

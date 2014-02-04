@@ -62,12 +62,36 @@ abstract class abstractListener
      */
     protected function setParams()
     {
-    	$this->is_permission_restriction_by_roles                 = $this->container->getParameter('pi_app_admin.permission.restriction_by_roles');
-    	$this->is_permission_authorization_prepersist_authorized  = $this->container->getParameter('pi_app_admin.permission.authorization.prepersist');
-    	$this->is_permission_authorization_preupdate_authorized   = $this->container->getParameter('pi_app_admin.permission.authorization.preupdate');
-    	$this->is_permission_authorization_preremove_authorized   = $this->container->getParameter('pi_app_admin.permission.authorization.preremove');
-    	$this->is_permission_prohibition_preupdate_authorized     = $this->container->getParameter('pi_app_admin.permission.prohibition.preupdate');
-    	$this->is_permission_prohibition_preremove_authorized     = $this->container->getParameter('pi_app_admin.permission.prohibition.preremove');
+    	if ($this->container->hasParameter('pi_app_admin.page.switch_redirection_seo_authorized')) {
+    		$this->is_permission_restriction_by_roles                = $this->container->getParameter('pi_app_admin.permission.restriction_by_roles');
+    	} else {
+    		$this->is_permission_restriction_by_roles                = false;
+    	}
+    	if ($this->container->hasParameter('pi_app_admin.permission.authorization.prepersist')) {
+    		$this->is_permission_authorization_prepersist_authorized  = $this->container->getParameter('pi_app_admin.permission.authorization.prepersist');
+    	} else {
+    		$this->is_permission_authorization_prepersist_authorized  = false;
+    	}
+    	if ($this->container->hasParameter('pi_app_admin.permission.authorization.preupdate')) {
+    		$this->is_permission_authorization_preupdate_authorized   = $this->container->getParameter('pi_app_admin.permission.authorization.preupdate');
+    	} else {
+    		$this->is_permission_authorization_preupdate_authorized   = false;
+    	}
+    	if ($this->container->hasParameter('pi_app_admin.permission.authorization.preremove')) {
+    		$this->is_permission_authorization_preremove_authorized   = $this->container->getParameter('pi_app_admin.permission.authorization.preremove');
+    	} else {
+    		$this->is_permission_authorization_preremove_authorized   = false;
+    	}
+    	if ($this->container->hasParameter('pi_app_admin.permission.prohibition.preupdate')) {
+    		$this->is_permission_prohibition_preupdate_authorized     = $this->container->getParameter('pi_app_admin.permission.prohibition.preupdate');
+    	} else {
+    		$this->is_permission_prohibition_preupdate_authorized     = false;
+    	}
+    	if ($this->container->hasParameter('pi_app_admin.permission.prohibition.preremove')) {
+    		$this->is_permission_prohibition_preremove_authorized     = $this->container->getParameter('pi_app_admin.permission.prohibition.preremove');
+    	} else {
+    		$this->is_permission_prohibition_preremove_authorized     = false;
+    	}
     }    
     
     /**
@@ -141,8 +165,8 @@ abstract class abstractListener
             }
         }        
         // we give the right of persist if the entity is in the AUTHORIZATION_PREPERSIST container
-        if ($this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
-            if ($this->is_permission_authorization_prepersist_authorized && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
+        if ($this->is_permission_authorization_prepersist_authorized && $this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
+            if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
                 if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
                     $route = $this->container->get('request')->get('_route');
                     if ((empty($route) || ($route == "_internal"))) {
@@ -243,9 +267,9 @@ abstract class abstractListener
             // we modify the Update_at value
             $entity->setUpdatedAt(new \DateTime());
         }
-        if ($this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
+        if ($this->is_permission_authorization_preupdate_authorized && $this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
             // we give the right of update if the entity is in the AUTHORIZATION_PREPERSIST container
-            if ($this->is_permission_authorization_preupdate_authorized && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
+            if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
                 if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
                     $route = $this->container->get('request')->get('_route');
                     if ((empty($route) || ($route == "_internal"))) {
@@ -354,9 +378,9 @@ abstract class abstractListener
                 return false;
             }
         }        
-        if ($this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
+        if ($this->is_permission_authorization_preremove_authorized && $this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
             // we give the right of remove if the entity is in the AUTHORIZATION_PREREMOVE container
-            if ($this->is_permission_authorization_preremove_authorized && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
+            if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                 if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                     $route = $this->container->get('request')->get('_route');
                     if ((empty($route) || ($route == "_internal"))) {

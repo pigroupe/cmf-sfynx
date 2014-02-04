@@ -502,11 +502,14 @@ abstract class abstractController extends Controller
         $or = $qb->expr()->orx();
         for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
         	if ( $request->get('bSearchable_'.$i) == "true" && $request->get('sSearch') != '' ) {
-        		$keywords = preg_split("/\s+/", strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($request->get('sSearch'))));
-        		foreach ($keywords as $keyword) {
-        			if(!empty($keyword)){
+        		$expression = str_replace("(^|\s*/+\s*)(","",$request->get('sSearch'));
+                $search = str_replace(")(\s*/+\s*|$)","",$expression);
+                $search_tab = explode("|", $search);
+                //
+        		foreach ($search_tab as $s) {
+        			if(!empty($s)){
                             //$or->add($qb->expr()->like('LOWER('.$aColumns[$i].')', $qb->expr()->literal('%'.$keyword.'%')));
-                            $or->add("LOWER(".$aColumns[$i].") LIKE '%".$keyword."%'");
+                            $or->add("LOWER(".$aColumns[$i].") LIKE '%".strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s))."%'");
         			}
         		}
         	}
