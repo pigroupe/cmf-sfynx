@@ -268,11 +268,9 @@ class PiStringManager implements PiStringManagerBuilderInterface
             else
                 $truncate = substr($text, 0, $length - strlen($ending));
         }
-    
         if (!$exact) {
-            $spacepos = strrpos($truncate, " ");
-    
-            if (isset($spacepos)) {
+            $spacepos = strrpos($truncate, " ");    
+            if ($spacepos) {
                 if ($html) {
                     $bits = substr($truncate, $spacepos);
                     preg_match_all('/<\/([a-z]+)>/', $bits, $droppedTags, PREG_SET_ORDER);
@@ -285,12 +283,12 @@ class PiStringManager implements PiStringManagerBuilderInterface
                 $truncate = substr($truncate, 0, $spacepos);
             }
         }
-    
         $truncate .= $ending;
-    
-        if ($html)
-            foreach ($openTags as $tag)
-            $truncate .= '</'.$tag.'>';
+        if ($html) {
+            foreach ($openTags as $tag) {
+        	    $truncate .= '</'.$tag.'>';
+            }
+        }
     
         return $truncate;
     }    
@@ -804,7 +802,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
         $new_arr=array();    
         for($i=0;$i<=(count($arr)-1);$i++){
             $first_letter_withoutaccent = substr(self::withoutaccent($arr[$i]['label'], $e), 0, 1);
-            $fst_letter_withoutaccent    = self::withoutaccent($fst, $e);    
+            $fst_letter_withoutaccent    = self::withoutaccent($fst, $e);   
             if (strcasecmp($first_letter_withoutaccent, $fst_letter_withoutaccent)  == 0){
                 $new_arr[] = $arr[$i]['label'];
             }

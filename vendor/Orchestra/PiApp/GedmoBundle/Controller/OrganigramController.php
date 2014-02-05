@@ -352,6 +352,7 @@ class OrganigramController extends abstractController
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $e) {
+                $this->container->get('request')->getSession()->getFlashBag()->clear();
                 $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
             }
         }
