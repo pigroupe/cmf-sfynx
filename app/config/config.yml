@@ -144,22 +144,35 @@ doctrine:
                       enum:       string
                       varbinary:  string
                       tinyblob:   text
-
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
         mappings:
             ## http://brentertainment.com/other/docs/book/doctrine/orm.html
+            ## http://symfony.com/fr/doc/current/reference/configuration/doctrine.html
             #MyBundle1: ~
             #MyBundle2: yml
             #MyBundle3: { type: annotation, dir: Entity/ , alias: BundleAlias}
             #MyBundle4: { type: xml, dir: Resources/config/doctrine/mapping , alias: BundleAlias }
+            #MyBundle5:
+            #    mapping:              true
+            #    type:                 ~
+            #    dir:                  ~
+            #    alias:                ~
+            #    prefix:               ~
+            #    is_bundle:            ~
             FOSUserBundle: ~
             StofDoctrineExtensionsBundle: ~
             SonataMediaBundle: ~
             OrAppOrAdminBundle: ~
             OrAppOrGedmoBundle: ~
             BootStrapUserBundle: ~
+            #BootStrapUserBundle:
+            #    type: xml
+            #    dir: "%kernel.root_dir%/../src/OrApp/OrUserBundle/Resources/config/doctrine/mapping"
+            #    prefix: BootStrap\UserBundle\Entity
+            #    alias: BootStrapUserBundle
+            #    is_bundle: false            
             BootStrapTranslationBundle: ~
             BootStrapTranslatorBundle: ~
             BootStrapMediaBundle: ~        

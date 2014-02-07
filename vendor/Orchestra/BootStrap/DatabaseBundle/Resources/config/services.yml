@@ -1,5 +1,6 @@
 parameters:
     bootstrap.database.factory.class: BootStrap\DatabaseBundle\Manager\DatabaseFactory
+    bootstrap.database.db.class: BootStrap\DatabaseBundle\Manager\Db
 
 services:
     #
@@ -8,3 +9,7 @@ services:
     bootstrap.database.factory:
         class: %bootstrap.database.factory.class%
         arguments: ['@service_container']
+        
+    bootstrap.database.db:
+        class: %bootstrap.database.db.class%
+        arguments: ['@service_container']        

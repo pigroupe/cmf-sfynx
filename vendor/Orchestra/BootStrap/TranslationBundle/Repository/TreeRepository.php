@@ -146,7 +146,7 @@ class TreeRepository extends NestedTreeRepository
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function findTranslationsByQuery($locale, Query $query, $result = "object", $INNER_JOIN = false, $FALLBACK = true)
+    public function findTranslationsByQuery($locale, Query $query, $result = "object", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
         if (!$query) {
             throw new NotFoundHttpException(sprintf(
@@ -154,7 +154,7 @@ class TreeRepository extends NestedTreeRepository
                     $id
             ));
         }
-        $query = $this->setTranslatableHints($query, $locale, $INNER_JOIN, $FALLBACK);
+        $query = $this->setTranslatableHints($query, $locale, $INNER_JOIN, $FALLBACK, $lazy_loading);
         //$query = $this->cacheQuery($query);
         if ($result == 'array') {
             $entities = $query->getArrayResult();
@@ -207,12 +207,16 @@ class TreeRepository extends NestedTreeRepository
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function setTranslatableHints(Query $query, $locale, $INNER_JOIN = false, $FALLBACK = true)
+    public function setTranslatableHints(Query $query, $locale, $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
         $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\Translatable\Query\TreeWalker\TranslationWalker');
         if($INNER_JOIN) {
         	$query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_INNER_JOIN, $INNER_JOIN); // will use INNER joins for translations instead of LEFT joins, so that in case if you do not want untranslated records in your result set for instance.
         }
+        if (!$lazy_loading) {
+        	// to avoid lazy-loading.
+        	$query->setHint(\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true);
+        }        
         $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale);
         $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_FALLBACK, $FALLBACK);
         
@@ -231,13 +235,13 @@ class TreeRepository extends NestedTreeRepository
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */  
-    public function findNodeOr404($id, $locale, $result = "object", $INNER_JOIN = false)
+    public function findNodeOr404($id, $locale, $result = "object", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
         $query = $this->_em->createQuery("SELECT node FROM {$this->_entityName} node WHERE node.id = :id");
         $query->setParameter('id', $id);
         $query->setMaxResults(1);
     
-        return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN));
+        return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading));
     }
     
     /**
@@ -252,7 +256,7 @@ class TreeRepository extends NestedTreeRepository
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function findOneByEntity($locale, $id, $result = "array", $INNER_JOIN = false, $FALLBACK = true)
+    public function findOneByEntity($locale, $id, $result = "array", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
     	$qb = $this->_em->createQueryBuilder()
     	->select('node')
@@ -264,7 +268,7 @@ class TreeRepository extends NestedTreeRepository
     	$query->setParameter('id', $id);
     	$query->setMaxResults(1);
     
-    	return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK));
+    	return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading));
     }    
     
     /**
@@ -449,7 +453,7 @@ class TreeRepository extends NestedTreeRepository
     /**
      * {@inheritDoc}
      */
-    public function getEntities($locale, $result = "object", $INNER_JOIN = true)
+    public function getEntities($locale, $result = "object", $INNER_JOIN = true, $FALLBACK = true, $lazy_loading = true)
     {
         $qb = $this->_em->createQueryBuilder()
         ->select('c')
@@ -473,13 +477,13 @@ class TreeRepository extends NestedTreeRepository
         }
         $q = $qb->getQuery();
 
-        return $this->findTranslationsByQuery($locale, $q, $result, $INNER_JOIN);
+        return $this->findTranslationsByQuery($locale, $q, $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     }
     
     /**
      * {@inheritDoc}
      */
-    public function getEntitiesByIds($identifier, array $values, $locale, $result = "object", $INNER_JOIN = true)
+    public function getEntitiesByIds($identifier, array $values, $locale, $result = "object", $INNER_JOIN = true, $FALLBACK = true, $lazy_loading = true)
     {
         $query = $this->_em->createQueryBuilder()
         ->select('c')
@@ -492,7 +496,7 @@ class TreeRepository extends NestedTreeRepository
         ->getQuery()
         ;
 
-        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN);
+        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     }
     
     /**

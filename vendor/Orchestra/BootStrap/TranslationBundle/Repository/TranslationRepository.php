@@ -169,7 +169,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function findTranslationsByQuery($locale, Query $query, $result = "array", $INNER_JOIN = false, $FALLBACK = true)
+    public function findTranslationsByQuery($locale, Query $query, $result = "array", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
         if (!$query) {
             throw new \Gedmo\Exception\InvalidArgumentException(sprintf(
@@ -177,7 +177,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
                     $id
             ));
         }
-        $query = $this->setTranslatableHints($query, $locale, $INNER_JOIN, $FALLBACK);
+        $query = $this->setTranslatableHints($query, $locale, $INNER_JOIN, $FALLBACK, $lazy_loading);
         //$query = $this->cacheQuery($query);
         if ($result == 'array') {
             $entities = $query->getArrayResult();
@@ -230,11 +230,15 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function setTranslatableHints(Query $query, $locale, $INNER_JOIN = false, $FALLBACK = true)
+    public function setTranslatableHints(Query $query, $locale, $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
         $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\Translatable\Query\TreeWalker\TranslationWalker'); // if you use memcache or apc. You should set locale and other options like fallbacks to query through hints. Otherwise the query will be cached with a first used locale
-        if($INNER_JOIN) {
+        if ($INNER_JOIN) {
         	$query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_INNER_JOIN, $INNER_JOIN); // will use INNER joins for translations instead of LEFT joins, so that in case if you do not want untranslated records in your result set for instance.
+        }
+        if (!$lazy_loading) {
+        	// to avoid lazy-loading.
+        	$query->setHint(\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true);
         }
         $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale); // take locale from session or request etc.
         $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_FALLBACK, $FALLBACK); // fallback to default values in case if record is not translated
@@ -254,7 +258,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function findAllByEntity($locale, $result = "array", $INNER_JOIN = false, $MaxResults = null, $FALLBACK = true)
+    public function findAllByEntity($locale, $result = "array", $INNER_JOIN = false, $MaxResults = null, $FALLBACK = true, $lazy_loading = true)
     {
         $qb = $this->_em->createQueryBuilder()
         ->select('a')
@@ -266,7 +270,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         if (!is_null($MaxResults))
             $query->setMaxResults($MaxResults);
         
-        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK);        
+        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading);        
     }
 
     /**
@@ -281,7 +285,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function findOneByEntity($locale, $id, $result = "array", $INNER_JOIN = false, $FALLBACK = true)
+    public function findOneByEntity($locale, $id, $result = "array", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
         $qb = $this->_em->createQueryBuilder()
         ->select('a')
@@ -293,7 +297,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         $query->setParameter('id', $id);
         $query->setMaxResults(1);
         
-        return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK));
+        return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading));
     }
 
     /**
@@ -781,7 +785,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getAllEnabled($locale, $result = "object", $INNER_JOIN = false, $MaxResults = null, $is_checkRoles = true, $FALLBACK = true)
+    public function getAllEnabled($locale, $result = "object", $INNER_JOIN = false, $MaxResults = null, $is_checkRoles = true, $FALLBACK = true, $lazy_loading = true)
     {
         $query = $this->_em->createQueryBuilder()
         ->select('a')
@@ -793,7 +797,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         if ($is_checkRoles)
             $query = $this->checkRoles($query);
         
-        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK);
+        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     }    
 
     /**
@@ -808,7 +812,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getAllEnableByCat($locale, $category, $result = "object", $INNER_JOIN = false, $is_checkRoles = true, $FALLBACK = true)
+    public function getAllEnableByCat($locale, $category, $result = "object", $INNER_JOIN = false, $is_checkRoles = true, $FALLBACK = true, $lazy_loading = true)
     {
         $query = $this->_em->createQueryBuilder()
         ->select('a')
@@ -827,7 +831,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         if ($is_checkRoles)
             $query = $this->checkRoles($query);
         
-        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK);
+        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     }    
 
     /**
@@ -842,7 +846,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getAllEnableByCatAndByPosition($locale, $category, $result = "object", $INNER_JOIN = false, $is_checkRoles = true, $FALLBACK = true)
+    public function getAllEnableByCatAndByPosition($locale, $category, $result = "object", $INNER_JOIN = false, $is_checkRoles = true, $FALLBACK = true, $lazy_loading = true)
     {
         $query = $this->_em->createQueryBuilder()
         ->select('a')
@@ -862,7 +866,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         if ($is_checkRoles)
             $query = $this->checkRoles($query);
     
-        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK);
+        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     } 
 
     /**
