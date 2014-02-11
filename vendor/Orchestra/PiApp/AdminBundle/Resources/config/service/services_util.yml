@@ -9,6 +9,7 @@ parameters:
     piapp.manager.mailer.class: PiApp\AdminBundle\Util\PiMailerManager
     piapp.manager.rest.class: PiApp\AdminBundle\Util\PiRestManager
     piapp.manager.log.class: PiApp\AdminBundle\Util\PiLogManager
+    piapp.manager.encryption.class: PiApp\AdminBundle\Util\PiEncryption
     
     piapp.manager.jquery.languagechoice.class: PiApp\AdminBundle\Util\PiJquery\PiLanguageChoiceManager
     piapp.manager.jquery.gridtable.class: PiApp\AdminBundle\Util\PiJquery\PiGridTableManager
@@ -68,14 +69,18 @@ services:
         
     pi_app_admin.mailer_manager:
         class: %piapp.manager.mailer.class%  
-        arguments: ['@service_container']   
+        arguments: ['@service_container']
         
     pi_app_admin.rest_manager:
         class: %piapp.manager.rest.class%
         
     pi_app_admin.log_manager:
         class: %piapp.manager.log.class%      
-        arguments: ['@service_container']                      
+        arguments: ['@service_container']    
+        
+    pi_app_admin.encryption_manager:
+        class: %piapp.manager.encryption.class%      
+        arguments: ['@service_container']                           
         
     #
     # configuration of the JQUERY Util classes
@@ -158,15 +163,15 @@ services:
         
     pi_app_admin.jquery_manager.widgetimport:
         class: %piapp.manager.jquery.widgetimport.class%
-        arguments: ['@service_container']     
+        arguments: ['@service_container']   
         
     pi_app_admin.jquery_manager.dialog:
         class: %piapp.manager.jquery.dialog.class%
-        arguments: ['@service_container']  
-        
+        arguments: ['@service_container']           
+
     pi_app_admin.jquery_manager.spinner:
         class: %piapp.manager.jquery.spinner.class%
-        arguments: ['@service_container']                    
+        arguments: ['@service_container']           
 
     #
     # configuration of the WIDGET Util classes

@@ -104,11 +104,27 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
         $entity            = $eventArgs->getEntity();
         $entityManager     = $eventArgs->getEntityManager();
         
-        $result                    = $this->getSortableOrders($eventArgs);
+        $result                  = $this->getSortableOrders($eventArgs);
         $sort_position_by_and    = $result['sort_position_by_and'];
-        $sort_position_by_where    = $result['sort_position_by_where'];    
+        $sort_position_by_where  = $result['sort_position_by_where'];   
 
-        if ( $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
+        $_is_change_position = false;
+        $entity_name   = get_class($entity);
+        if (isset($GLOBALS['ENTITIES']['POSITION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name])) {
+        	if (is_array($GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name])) {
+        		$route = $this->_container()->get('request')->get('_route');
+        		if ((empty($route) || ($route == "_internal"))) {
+        			$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+        		}
+        		if (in_array($route, $GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name])) {
+        			$_is_change_position = true;
+        		}
+        	} elseif ($GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name] == true) {
+        		$_is_change_position =  true;
+        	}
+        }        
+
+        if ( $_is_change_position && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
         {
             $entity_table     = $this->getOwningTable($eventArgs, $entity);
         
@@ -194,9 +210,25 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
         
         $result                    = $this->getSortableOrders($eventArgs);
         $sort_position_by_and    = $result['sort_position_by_and'];
-        $sort_position_by_where    = $result['sort_position_by_where'];                
+        $sort_position_by_where    = $result['sort_position_by_where']; 
+
+        $_is_change_position = false;
+        $entity_name   = get_class($entity);
+        if (isset($GLOBALS['ENTITIES']['POSITION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name])) {
+        	if (is_array($GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name])) {
+        		$route = $this->_container()->get('request')->get('_route');
+        		if ((empty($route) || ($route == "_internal"))) {
+        			$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+        		}
+        		if (in_array($route, $GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name])) {
+        			$_is_change_position = true;
+        		}
+        	} elseif ($GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name] == true) {
+        		$_is_change_position =  true;
+        	}
+        }        
         
-        if ( $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
+        if ( $_is_change_position && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
         {
             $entity_table    = $this->getOwningTable($eventArgs, $entity);
             $remove_position = $entity->getPosition();            
@@ -214,14 +246,30 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
      */
     public function prePersist(EventArgs $eventArgs)
     {
-        $entity            = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
+        $entity        = $eventArgs->getEntity();
+        $entityManager = $eventArgs->getEntityManager();
         
-        $result                    = $this->getSortableOrders($eventArgs);
-        $sort_position_by_and    = $result['sort_position_by_and'];
-        $sort_position_by_where    = $result['sort_position_by_where'];   
+        $result                 = $this->getSortableOrders($eventArgs);
+        $sort_position_by_and   = $result['sort_position_by_and'];
+        $sort_position_by_where = $result['sort_position_by_where'];   
         
-        if ( $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
+        $_is_change_position = false;
+        $entity_name   = get_class($entity);
+        if (isset($GLOBALS['ENTITIES']['POSITION_PREPERSIST']) && isset($GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name])) {
+        	if (is_array($GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name])) {
+        		$route = $this->_container()->get('request')->get('_route');
+        		if ((empty($route) || ($route == "_internal"))) {
+        			$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+        		}
+        		if (in_array($route, $GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name])) {
+        			$_is_change_position = true;
+        		}
+        	} elseif ($GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name] == true) {
+        		$_is_change_position =  true;
+        	}
+        }
+        
+        if ( $_is_change_position && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
         {
             $entity_table   = $this->getOwningTable($eventArgs, $entity);
             $new_position    = $entity->getPosition();

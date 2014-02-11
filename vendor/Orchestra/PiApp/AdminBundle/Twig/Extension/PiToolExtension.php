@@ -59,6 +59,10 @@ class PiToolExtension extends \Twig_Extension
      *  {{ comment.content|html }}
      *  {{ 'pi.page.translation.title'|trans|limite('0', 25) }}
      *  {{ "%s Result"|translate_plural("%s Results", entitiesByMonth|count) }}
+     *  
+     *  <span class="hiddenLink {{ url|obfuscateLink }}">
+     *  {{ obfuscateLinkJS('a', 'hiddenLink') }}
+     *  
      * </code> 
      * 
      * @return array An array of filters
@@ -116,13 +120,11 @@ class PiToolExtension extends \Twig_Extension
                 'pluralize'            => new \Twig_Filter_Method($this, 'pluralizeFilter'),
                 'depluralize'        => new \Twig_Filter_Method($this, 'depluralizeFilter'),
                 
-                // SEO
-                'obfuscateLink'     => new \Twig_Filter_Method($this, 'obfuscateLinkFilter'),            
-
                 // cryptage
                 'encrypt'            => new \Twig_Filter_Method($this, 'encryptFilter'),
                 'decrypt'            => new \Twig_Filter_Method($this, 'decryptFilter'),
-                
+        		'obfuscateLink'     => new \Twig_Filter_Method($this, 'obfuscateLinkFilter'),
+        		
                 // status
                 'status'         => new \Twig_Filter_Method($this, 'statusFilter'),
         );
@@ -155,7 +157,9 @@ class PiToolExtension extends \Twig_Extension
                 'picture_form'                => new \Twig_Function_Method($this, 'getPictureFormFunction'),
                 'picture_index'                => new \Twig_Function_Method($this, 'getPictureIndexFunction'),
                 'picture_crop'                => new \Twig_Function_Method($this, 'getPictureCropFunction'),
-                
+        		
+        		// cryptage
+        		'obfuscateLinkJS'     		=> new \Twig_Function_Method($this, 'obfuscateLinkFunction'),                
         );
     }   
      
@@ -174,7 +178,7 @@ class PiToolExtension extends \Twig_Extension
      *
      * @author Riad Hellal <r.hellal@novediagroup.com>
      */
-    public static function getCleanNameFunction($fileName)
+    public function getCleanNameFunction($fileName)
     {
     	$fileName = strtolower($fileName);
     	$string = substr($fileName, 0, strlen($fileName)- 4);
@@ -443,7 +447,7 @@ class PiToolExtension extends \Twig_Extension
         }
                 
         try {
-            $lang         = $this->container->get('request')->getLocale();
+            $lang          = $this->container->get('request')->getLocale();
             // probleme avec les esi => pas de valeur retourné
             $pathInfo	  = $this->container->get('request')->getPathInfo();
             $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
@@ -954,15 +958,8 @@ class PiToolExtension extends \Twig_Extension
      */
     public function encryptFilter($string, $key = "0A1TG4GO")
     {
-        $key = $key . "0A1TG4GO";
-        $result = '';
-        for($i=0; $i<strlen($string); $i++) {
-            $char = substr($string, $i, 1);
-            $keychar = substr($key, ($i % strlen($key))-1, 1);
-            $char = chr(ord($char)+ord($keychar));
-            $result.=$char;
-        }
-        return strtr(base64_encode($result), '+/=', '-_,');
+        $encryption    = $this->container->get('pi_app_admin.encryption_manager');
+        return $encryption->encryptFilter($string, $key);
     }
     
     /**
@@ -973,36 +970,34 @@ class PiToolExtension extends \Twig_Extension
      */
     public function decryptFilter($string, $key = "0A1TG4GO")
     {
-        $key = $key . "0A1TG4GO";
-        $result = '';
-        $string = base64_decode(strtr($string, '-_,', '+/='));
-        for($i=0; $i<strlen($string); $i++) {
-            $char = substr($string, $i, 1);
-            $keychar = substr($key, ($i % strlen($key))-1, 1);
-            $char = chr(ord($char)-ord($keychar));
-            $result.=$char;
-        }
-        return $result;
+        $encryption    = $this->container->get('pi_app_admin.encryption_manager');
+        return $encryption->decryptFilter($string, $key);
     }  
     
     /**
      * Obfuscate link. SEO worst practice.
-     * Code by @position
      *
      * @param string $url
      */
-    public function obfuscateLinkFilter($url)
+    public function obfuscateLinkFilter($url, $base16 = "0A12B34C56D78E9F")
     {
-        $_base16 = "0A12B34C56D78E9F";
-    
-        $output = "";
-        for ($i = 0; $i < strlen($url); $i++) {
-            $cc = ord($url[$i]);
-            $ch = $cc >> 4;
-            $cl = $cc - ($ch * 16);
-            $output .= $_base16[$ch] . $_base16[$cl];
-        }
-        return $output;
+        $encryption    = $this->container->get('pi_app_admin.encryption_manager');
+        return $encryption->obfuscateLinkEncrypt($url, $base16);
     }    
+    
+    /**
+     * Obfuscate link JS. SEO worst practice.
+     *
+     * @param string $fileName
+     * @access public
+     * @return string
+     * @static
+     *
+     */
+    public function obfuscateLinkFunction($balise = "a", $class = "hiddenLink", $base16 = "0A12B34C56D78E9F")
+    {
+    	$encryption    = $this->container->get('pi_app_admin.encryption_manager');
+        return $encryption->obfuscateLinkDecrypt($balise, $class, $base16);                         
+    }        
     
 }
