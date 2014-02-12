@@ -1,8 +1,8 @@
-﻿CMF PI-ORCHESTRA Bundles
+﻿CMF ORCHESTRA Bundles
 =====================
 
 
-CMF PI-ORCHESTRA is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web 
+CMF ORCHESTRA is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web 
 applications. It also allows you to create your own CMS. It's a CMF easy to use, build your own template (layout), add your own custom block
  with your own logic, build all the widget you need.
 

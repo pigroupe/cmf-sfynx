@@ -1,10 +1,10 @@
-﻿CMF PI-ORCHESTRA Bundles
+﻿CMF ORCHESTRA Bundles
 =====================
 
 
-Orchestra is not just the description you just read above. It also allows you to create your own CMS. 
-It's a CMF easy to use, build your own template (layout), add your own custom block with your own logic, 
-build all the widget you need. That it what CMF Orchestra is made for.
+CMF ORCHESTRA is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web 
+applications. It also allows you to create your own CMS. It's a CMF easy to use, build your own template (layout), add your own custom block
+ with your own logic, build all the widget you need.
 
 
 ## Structure of the framework
