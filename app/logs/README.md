@@ -244,6 +244,12 @@ Execute the `check.php` script from the command line:
     - php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)
     - php_curl.dll
     - php_openssl.dll (enabled Socket transport “ssl” in PHP)
+    - activation d'envoi de mail
+         - sous windows : 
+              - SMTP = smtp-host-value
+              - smtp_port = smtp-port-value
+         - sous linux :
+              - sendmail_path = "var-bin-sendmail"    
     
 **Doctrine** : 
 
@@ -284,9 +290,6 @@ Many systems allow you to use ACL chmod a +.
 Then you must add the uploads/media folder to allow specific users to load :
 
 ``` bash
-mkdir app/cache/ Backup
-mkdir app/cache/ Indexation
-mkdir app/cache/ media
 chmod –R 0777 app / cache
 chmod –R 0777 app / log
 chmod –R 0777 Orcehstra / BootStrap/TranslatorBundle/Resources/translations

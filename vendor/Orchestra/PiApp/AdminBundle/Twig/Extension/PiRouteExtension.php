@@ -103,11 +103,9 @@ class PiRouteExtension extends \Twig_Extension
                 $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
             } else {
                 $dossier = $this->container->getParameter("kernel.root_dir")."/cache/media/";
-                if (!is_dir($dossier)){
-                    mkdir($dossier);
-                }
+                \PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777);
                 $this->container->get("pi_filecache")->getClient()->setPath($dossier);
-                if (!$this->container->get("pi_filecache")->get($format.$pattern.$id.'_'.$timestamp)){
+                if ( !$this->container->get("pi_filecache")->get($format.$pattern.$id.'_'.$timestamp) ) {
                     $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
                     $this->container->get("pi_filecache")->set($format.$pattern.$id.'_'.$timestamp, $url_public_media, 0);
                 } else {
@@ -117,9 +115,7 @@ class PiRouteExtension extends \Twig_Extension
         } catch (\Exception $e) {
             $url_public_media = "";
         }
-        
         $src = $this->container->get('kernel')->getRootDir() . '/../web' . $url_public_media;
-        
         if ((empty($url_public_media) || !file_exists($src)) && ($format != 'reference')) {
             return $this->getMediaUrlFunction($id, "reference", $cachable, $modifdate, $pattern);
         } else {

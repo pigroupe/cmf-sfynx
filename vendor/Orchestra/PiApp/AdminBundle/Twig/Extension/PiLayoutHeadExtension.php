@@ -329,6 +329,8 @@ class PiLayoutHeadExtension extends \Twig_Extension
      */    
     private function compress($result = "path", $compressor = "yui")
     {    
+        \PiApp\AdminBundle\Util\PiFileManager::mkdirr($this->container->getParameter("kernel.root_dir"). '/../web/yui/css', 0777);
+        \PiApp\AdminBundle\Util\PiFileManager::mkdirr($this->container->getParameter("kernel.root_dir"). '/../web/yui/js', 0777);        
         // create the input
         foreach ($this->files as $file) {            
             $basePath        = str_replace($this->container->getParameter("kernel.root_dir"). '/../web/', '', dirname($file));

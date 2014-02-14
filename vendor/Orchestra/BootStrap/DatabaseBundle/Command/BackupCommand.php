@@ -99,12 +99,12 @@ EOT
         $this->_logger->setInit('log_databasebundle_backup', date("YmdH"));
         $this->_logger->setInfo(date("Y-m-d H:i:s")." [LOG BACKUP] Begin launch  :");
                 
-        $path                 = $input->getArgument('path');
-        $fileName            = $input->getArgument('filename') ? $input->getArgument('filename') : null;
+        $path             = $input->getArgument('path');
+        $fileName         = $input->getArgument('filename') ? $input->getArgument('filename') : null;
         
-        $container             = $this->getContainer();
-        $DatabaseManager     = $container->get('bootstrap.database.factory');
-        $output             = $DatabaseManager->getBackupFactory()->run($output, array('path'=>$path, 'filename'=>$fileName));
+        $container        = $this->getContainer();
+        $DatabaseManager  = $container->get('bootstrap.database.factory');
+        $output           = $DatabaseManager->getBackupFactory()->run($output, array('path'=>$path, 'filename'=>$fileName));
 
         //-----we close the logger-----
         $this->_logger->setInfo(date("Y-m-d H:i:s")." [END] End launch");
