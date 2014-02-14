@@ -96,11 +96,15 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     /**
      * Instantiates the mailer
      * @param string    $from
-     * @param string    $to
+     * @param mixed     $to
      * @param string    $subject
      * @param string    $body
-     * @param string    $fileInputName
-     * @param string    $prefix
+     * @param mixed     $cc
+     * @param mixed     $bcc
+     * @param string    $replayto
+     * @param array     $filespath
+     * @param boolean   $is_pictureEmbed
+     * @param boolean   $is_Html2Text
      * @return void
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -110,19 +114,18 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     	$parameters = $this->container->getParameter('pi_app_admin.mail.overloading_mail');
     	if (!empty($parameters)) {
     		$to = $this->container->getParameter('pi_app_admin.mail.overloading_mail');
-    	}
-    	
+    	}    	
         try {
             $this->init($this->message, $from, $to, $cc, $bcc, $replayto, $subject, $body);
             
-            if ($is_pictureEmbed && $this->supports($this->mailer))
+            if ($is_pictureEmbed && $this->supports($this->mailer)) {
                 $this->pictureEmbed($this->message);
-            
-            if ($is_Html2Text && $this->supports($this->mailer))
+            }            
+            if ($is_Html2Text && $this->supports($this->mailer)) {
                 $this->Html2Text($this->message);            
-    
-            if (is_array($filespath)){
-                foreach($filespath as $key=>$file){
+            }    
+            if (is_array($filespath)) {
+                foreach ($filespath as $key=>$file) {
                     $this->message->attach(\Swift_Attachment::fromPath($file));
                 }
             }
@@ -141,21 +144,22 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      */
     public function init(\Swift_Mime_Message $message, $from, $to, $cc, $bcc, $replayto, $subject, $body)
     {
-        if (is_string($cc)){
+        if (is_string($cc)) {
             $cc_new    = $this->container->get('pi_app_admin.regex_manager')->verifByRegularExpression($cc, 'mail', PREG_SPLIT_NO_EMPTY);
-            if ( is_array($cc_new) && (count($cc_new)==1) && (count($cc_new[0])>=1) )
+            if ( is_array($cc_new) && (count($cc_new)==1) && (count($cc_new[0])>=1) ) {
                 $cc = $cc_new[0];
-            else
+            } else {
                 $cc = null;
+            }
         }
-        if (is_string($bcc)){
+        if (is_string($bcc)) {
             $bcc_new = $this->container->get('pi_app_admin.regex_manager')->verifByRegularExpression($bcc, 'mail', PREG_SPLIT_NO_EMPTY);
-            if ( is_array($bcc_new) && (count($bcc_new)==1) && (count($bcc_new[0])>=1) )
+            if ( is_array($bcc_new) && (count($bcc_new)==1) && (count($bcc_new[0])>=1) ) {
                 $bcc = $bcc_new[0];
-            else
+            } else {
                 $cc = null;
-        }        
-
+            }
+        }     
         try {
             $message
             ->setTo($to)
@@ -221,8 +225,9 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     {
         try {
             foreach ($files as $inputname => $file ) {
-                      unlink ($file);
+            	unlink ($file);
             }
+            
             return true;
         } catch (\Exception $e) {
             return false;
@@ -234,8 +239,7 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      */
     public function pictureEmbed(\Swift_Mime_Message $message)
     {
-        $body = $message->getBody();
-    
+        $body = $message->getBody();    
         $body = preg_replace_callback('/(src|background)="(http[^"]*)"/',
                 function($matches) use ($message) {
                     $attribute = $matches[1];
@@ -247,8 +251,7 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
                     }
     
                     return sprintf('%s="%s"', $attribute, $imagePath);
-                }, $body);
-    
+                }, $body);    
         $body = preg_replace_callback('/url\((http[^"]*)\)/',
                 function($matches) use ($message) {
                     $imagePath = $matches[1];
@@ -271,8 +274,7 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     {
         $processor = new \Symfony\Component\Process\Process($this->getCommand());
         $processor->setStdin($message->getBody());
-        $processor->run();
-    
+        $processor->run();    
         if ($processor->isSuccessful()) {
             $message->addPart($processor->getOutput(), 'text/plain');
         }
@@ -293,20 +295,16 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      */
     protected function getCommand()
     {
-        $command = $this->options['binary'];
-    
+        $command = $this->options['binary'];    
         if ($this->options['utf8']) {
             $command .= ' -utf8';
-        }
-    
+        }    
         if ($this->options['style']) {
             $command .= ' -style';
-        }
-    
+        }    
         if ($this->options['pretty']) {
             $command .= ' pretty';
-        }
-    
+        }    
         //@todo continue, integrate other options
     
         return $command;

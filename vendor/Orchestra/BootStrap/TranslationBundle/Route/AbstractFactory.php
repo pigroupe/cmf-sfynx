@@ -76,8 +76,27 @@ abstract class AbstractFactory
         //print_r('<PRE>');
         //print_r(var_dump($services_list));
         //print_r('</PRE>');
-        
     }
+    
+    /**
+     * Gets the connection service
+     *
+     * @return \Doctrine\DBAL\Connection
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-02-03
+     */
+    public function getConnection()
+    {
+    	if (empty($this->_connection))
+    		$this->setConnection();
+    
+    	if ($this->_connection instanceof Connection)
+    		return $this->_connection;
+    	else
+    		throw TranslationException::serviceNotSupported();
+    }    
 
     /**
      * Sets the connection service.
@@ -91,26 +110,6 @@ abstract class AbstractFactory
     private function setConnection()
     {
         $this->_connection = $this->getContainer()->get('doctrine.dbal.default_connection');
-    }
-    
-    /**
-     * Gets the connection service
-     *
-     * @return \Doctrine\DBAL\Connection
-     * @access protected
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-03
-     */
-    protected function getConnection()
-    {
-        if (empty($this->_connection))
-            $this->setConnection();
-    
-        if ($this->_connection instanceof Connection)
-            return $this->_connection;
-        else
-            throw TranslationException::serviceNotSupported();
     }
     
     /**

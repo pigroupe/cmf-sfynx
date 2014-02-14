@@ -244,6 +244,12 @@ Execute the `check.php` script from the command line:
     - php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)
     - php_curl.dll
     - php_openssl.dll (enabled Socket transport “ssl” in PHP)
+    - activation d'envoi de mail
+         - sous windows : 
+                SMTP = smtp-host-value
+                smtp_port = smtp-port-value
+         - sous linux :
+                sendmail_path = "var-bin-sendmail"    
     
 **Doctrine** : 
 

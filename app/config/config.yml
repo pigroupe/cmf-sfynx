@@ -27,7 +27,7 @@ framework:
         #handler_id:     pi_session.handler.memcache
         #cookie_lifetime: 604800
     #esi: true # Pour utiliser les tags ESI dans les templates Twig         
-    fragments:       ~ # { path: /_fragment }
+    fragments:  ~ # { path: /_fragment }
 
 # Twig Configuration
 twig:

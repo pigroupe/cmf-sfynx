@@ -444,7 +444,7 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
         {
             $Drapeau    = true;
             $Result[]    = array_search($Val,$Tableau);
-            /*On récupère le chemin d'indexation menat � la valeur
+            /*On récupère le chemin d'indexation menat  la valeur
              Afin d'éviter Fatal error: Cannot use string offset as an array in..., on :
     
             - Inverse le tableau de r�sultats

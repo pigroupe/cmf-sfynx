@@ -13,6 +13,7 @@
 namespace PiApp\AdminBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Action Functions used in twig
@@ -84,11 +85,16 @@ class PiForwardExtension extends \Twig_Extension
      */
     public function renderForwardFunction($controller, $params = array())
     {
-        if (strpos($controller, ':') == false)
+        if (strpos($controller, ':') == false) {
             $controller = 'PiAppAdminBundle:Frontend:index';
+        }
+        $params['lang']   = $this->container->get('request')->getLocale();
+        $params['_route'] = $this->container->get('request')->get('_route');
+        // this allow Redirect Response in controller action
+        $params['_controller'] = $controller;
+        $subRequest = $this->container->get('request')->duplicate($_GET, $_POST, $params);
+        $response   =  $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         
-        $response = $this->container->get('http_kernel')->forward($controller, $params);        
-
         return $response->getContent();
     }
 }

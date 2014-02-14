@@ -56,7 +56,13 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
-        $this->_indexPath = $container->get('kernel')->getRootDir() . '/cache/Indexation/' . self::NAME_INDEX;
+        //
+        $dossier = $container->get('kernel')->getRootDir() . '/cache/Indexation/';
+        if (\PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777)) {
+            $this->_indexPath = $dossier . self::NAME_INDEX;
+        } else {
+            throw new \InvalidArgumentException("The Indexation cache repository is not created correctly");
+        }
     }
     
     /**

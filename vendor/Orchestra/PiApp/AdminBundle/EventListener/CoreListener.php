@@ -404,9 +404,7 @@ abstract class CoreListener extends abstractListener
                 $entity_page->setRouteName('home_page');
                 $entity_page->setEnabled(true);
                 $entity_page->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
-            }
-            if ($eventArgs->hasChangedField('route_name') && ($eventArgs->getOldValue('route_name') == 'home_page')) {
-                $isflash = true;                
+                $isflash = true;
             }
             if ($isflash) {
                 $this->setFlash('pi.session.flash.right.homepage.notchange', 'warning');
@@ -530,9 +528,13 @@ abstract class CoreListener extends abstractListener
         } else {
             if ($entity instanceof \PiApp\AdminBundle\Entity\Page) {
                 // if we try to delete a page other than the home page.
-                if (($entity->getRouteName() != 'home_page' ) && ($eventArgs->hasChangedField('route_name'))){
+                if (
+                	($entity->getRouteName() != 'home_page' ) 
+                	&& 
+                	$eventArgs->hasChangedField('route_name')
+                ) {
                     // we delete the row in relation with the pi_routing table
-                    $query     = "SELECT id FROM pi_routing WHERE route = ?";
+                    $query  = "SELECT id FROM pi_routing WHERE route = ?";
                     $id     = $this->_connexion($eventArgs)->fetchColumn($query, array($entity->getRouteName()));
                     $this->_connexion($eventArgs)->delete('pi_routing', array('id'=>$id));
                 }
@@ -760,7 +762,11 @@ abstract class CoreListener extends abstractListener
         if ($no_permission){
             switch (true) {
                 case( ($entity instanceof \PiApp\AdminBundle\Entity\Page) && ($eventArgs instanceof PreUpdateEventArgs) ):
-                    if ($eventArgs->hasChangedField('url')) {
+                    if (
+                    	$eventArgs->hasChangedField('url')
+                    	&&
+                    	($eventArgs->getOldValue('url') != $eventArgs->getNewValue('url'))
+                    ) {
                         $entity->setUrl('undefined-value');
                     }
                     break;
@@ -885,7 +891,11 @@ abstract class CoreListener extends abstractListener
         $entityManager     = $eventArgs->getEntityManager();
         // we set the persist of the Page entity
         if ( $this->isUsernamePasswordToken() && $entity instanceof TranslationPage){
-            if ($eventArgs->hasChangedField('status')) {
+            if (
+            	$eventArgs->hasChangedField('status')
+            	&&
+            	($eventArgs->getOldValue('status') != $eventArgs->getNewValue('status'))
+            ) {
                 $historicalStatus = new HistoricalStatus();
                 $historicalStatus->setCreatedAt(new \DateTime(date('Y-m-d')));
                 $historicalStatus->setPageTranslation($entity);

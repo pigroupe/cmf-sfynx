@@ -535,6 +535,23 @@ abstract class abstractListener
     protected function _container()
     {
         return $this->container;
+    }
+
+    /**
+     * Forwards the request to another controller.
+     *
+     * @param string $controller The controller name (a string like BlogBundle:Post:index)
+     * @param array  $path       An array of path parameters
+     * @param array  $query      An array of query parameters
+     * @access protected
+     * @return Response A Response instance
+     */
+    protected function forward($controller, array $params = array(), array $GET = array(), $POST = null)
+    {
+    	$params['_controller'] = $controller;
+    	$subRequest = $this->container->get('request')->duplicate($GET, $POST, $params);
+    
+    	return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }    
     
     /**
