@@ -208,7 +208,7 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
             } catch (\Exception $e) {
             }
         }      
-        $this->script['js'][$container.$NameAction]        = $this->extensionWidget->ScriptJsFunction($container, $NameAction);
+        $this->script['js'][$container.$NameAction]     = $this->extensionWidget->ScriptJsFunction($container, $NameAction);
         $this->script['css'][$container.$NameAction]    = $this->extensionWidget->ScriptCssFunction($container, $NameAction);
     }
 

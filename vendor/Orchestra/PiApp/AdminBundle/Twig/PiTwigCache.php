@@ -109,12 +109,11 @@ class PiTwigCache
         // OR the content name isn't register in the memcache 
         if ( !$isMemCacheEnable || !$this->container->has("pi_memcache") || ($this->container->has("pi_memcache") && !$this->container->get("pi_memcache")->get($name)) ) {
             //$response->setContent($this->getTwigEnvironment()->loadTemplate($name)->render($parameters));
-            $response = $this->container->get('pi_app_admin.templating')->renderResponse($name, $parameters, $response);
-            
+            $response = $this->container->get('pi_app_admin.templating')->renderResponse($name, $parameters, $response);            
             // if the memcache service does exist, we register the content page in the memcache
-            if ($isMemCacheEnable){
+            if ($isMemCacheEnable) {
                 //$source =  $this->getTwigEnvironment()->getLoader()->getSource($name);
-                   $this->container->get("pi_memcache")->set($name, $response);
+                $this->container->get("pi_memcache")->set($name, $response);
             }
         } elseif ($isMemCacheEnable) {
             $response = $this->container->get("pi_memcache")->get($name);

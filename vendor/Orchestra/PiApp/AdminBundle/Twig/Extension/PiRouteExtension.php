@@ -67,9 +67,9 @@ class PiRouteExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'media_url'            => new \Twig_Function_Method($this, 'getMediaUrlFunction'),
-            'path_url'             => new \Twig_Function_Method($this, 'getUrlByRouteFunction'),
-            'match_url'         => new \Twig_Function_Method($this, 'getMatchUrlFunction'),
+            'media_url'     => new \Twig_Function_Method($this, 'getMediaUrlFunction'),
+            'path_url'      => new \Twig_Function_Method($this, 'getUrlByRouteFunction'),
+            'match_url'     => new \Twig_Function_Method($this, 'getMatchUrlFunction'),
         );
     }
     

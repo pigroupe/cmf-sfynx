@@ -12,8 +12,8 @@ framework:
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: %kernel.debug%
-    form:            ~
-    csrf_protection: ~
+    form:            true
+    csrf_protection: true
     validation:      { enabled: true, enable_annotations: true }
     templating:
         engines: ['twig']
@@ -26,7 +26,7 @@ framework:
         # surcharge session handler with memcache
         #handler_id:     pi_session.handler.memcache
         #cookie_lifetime: 604800
-    #esi: true # Pour utiliser les tags ESI dans les templates Twig         
+    #esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig         
     fragments:  ~ # { path: /_fragment }
 
 # Twig Configuration

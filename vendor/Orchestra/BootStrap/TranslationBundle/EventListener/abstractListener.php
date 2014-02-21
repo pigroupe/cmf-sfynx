@@ -16,6 +16,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * abstract listener manager.
@@ -62,7 +63,7 @@ abstract class abstractListener
      */
     protected function setParams()
     {
-    	if ($this->container->hasParameter('pi_app_admin.page.switch_redirection_seo_authorized')) {
+    	if ($this->container->hasParameter('pi_app_admin.permission.restriction_by_roles')) {
     		$this->is_permission_restriction_by_roles                = $this->container->getParameter('pi_app_admin.permission.restriction_by_roles');
     	} else {
     		$this->is_permission_restriction_by_roles                = false;
@@ -138,8 +139,8 @@ abstract class abstractListener
     final protected function _prePersist(LifecycleEventArgs $eventArgs, $isAnonymousToken = true, $isUsernamePasswordToken = true, $isAllPermissions = false)
     {        
         $entity         = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
-        $entity_name     = get_class($entity);
+        $entityManager  = $eventArgs->getEntityManager();
+        $entity_name    = get_class($entity);
         //update updated_at field when method setUpdatedAt exists in entity object
         if (method_exists($entity, 'setUpdatedAt')) {
             // we modify the Update_at value
@@ -238,20 +239,20 @@ abstract class abstractListener
     final protected function _preUpdate(LifecycleEventArgs $eventArgs, $isAnonymousToken = true, $isUsernamePasswordToken = true, $isAllPermissions = false)
     {
         $entity         = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
-        $entity_name     = get_class($entity);        
+        $entityManager  = $eventArgs->getEntityManager();
+        $entity_name    = get_class($entity);        
         // we given't the right of remove if the entity is in the PROHIBITION_PREUPDATE container
         if ($this->is_permission_prohibition_preupdate_authorized && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
             if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
                 $id_entity = $entity->getId();
                 if (in_array($id_entity, $GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
-                       // just for register in data the change do in this class listener :
-                       $class = $entityManager->getClassMetadata(get_class($entity));
-                       $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
-                       // we throw the message.
-                       $this->setFlash('pi.session.flash.right.anonymous');
-                       
-                       return false;
+                    // just for register in data the change do in this class listener :
+                    $class = $entityManager->getClassMetadata(get_class($entity));
+                    $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
+                    // we throw the message.
+                    $this->setFlash('pi.session.flash.right.anonymous');
+                   
+                    return false;
                 }
             } elseif ($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name] == true) {
                 // just for register in data the change do in this class listener :
@@ -355,8 +356,8 @@ abstract class abstractListener
     {
         // get the order entity
         $entity         = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
-        $entity_name     = get_class($entity);
+        $entityManager  = $eventArgs->getEntityManager();
+        $entity_name    = get_class($entity);
         // we given't the right of remove if the entity is in the PROHIBITION_PREREMOVE container
         if ($this->is_permission_prohibition_preremove_authorized && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])) {
             if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])) {

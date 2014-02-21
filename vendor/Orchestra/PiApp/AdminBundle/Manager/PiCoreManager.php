@@ -330,7 +330,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             // we get config.yml content in array
             $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
             $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']) && ($parsed_yaml_file['framework']['esi'] == 1)) {
+            if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
             } else {
             	$response->setMaxAge($object->getLifetime());
             }

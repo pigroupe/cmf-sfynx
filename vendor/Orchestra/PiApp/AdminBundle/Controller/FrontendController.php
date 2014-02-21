@@ -109,6 +109,28 @@ class FrontendController extends BaseController
     }
     
     /**
+     * Redirection function
+     *
+     * @Secure(roles="ROLE_USER")
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-01-24
+     */
+    public function redirectionuserAction()
+    {
+    	if ($this->getRequest()->cookies->has('orchestra-redirection')) {
+    		$parameters   = array();
+    		$redirection  = $this->getRequest()->cookies->get('orchestra-redirection');
+    		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute($redirection, $parameters));
+    	} else {
+    		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute('home_page'));
+    	}
+    	 
+    	return $response;
+    }    
+    
+    /**
      * Execute an applying esi widget.
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -138,37 +160,6 @@ class FrontendController extends BaseController
     }    
     
     /**
-     * Refresh a page with all these languages
-     *
-     * @Secure(roles="ROLE_USER")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-02
-     */
-    public function refreshpageAction()
-    {
-        try {
-            $lang        = $this->container->get('request')->getLocale();
-            $data        = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang, array('result' => 'match'));
-            $new_url     = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang);            
-            // we get the page manager
-            $pageManager = $this->get('pi_app_admin.manager.page');
-            // we get the object Page by route
-            $page        = $pageManager->setPageByRoute($data['_route'], true);
-            // we set the result
-            if ($page instanceof Page){
-                $pageManager->cacheRefresh();
-            }
-            $this->container->get('request')->setLocale($lang);            
-        } catch (\Exception $e) {
-            $new_url = $this->container->get('router')->generate('home_page');
-        }        
-        
-        return new RedirectResponse($new_url);
-    }
-    
-    /**
      * Copy the referer page.
      *
      * @Secure(roles="ROLE_USER")
@@ -196,7 +187,38 @@ class FrontendController extends BaseController
     	}
     	
     	return new RedirectResponse($new_url);
-    }     
+    }   
+
+    /**
+     * Refresh a page with all these languages
+     *
+     * @Secure(roles="ROLE_USER")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-04-02
+     */
+    public function refreshpageAction()
+    {
+    	try {
+    		$lang        = $this->container->get('request')->getLocale();
+    		$data        = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang, array('result' => 'match'));
+    		$new_url     = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang);
+    		// we get the page manager
+    		$pageManager = $this->get('pi_app_admin.manager.page');
+    		// we get the object Page by route
+    		$page        = $pageManager->setPageByRoute($data['_route'], true);
+    		// we set the result
+    		if ($page instanceof Page){
+    			$pageManager->cacheRefresh();
+    		}
+    		$this->container->get('request')->setLocale($lang);
+    	} catch (\Exception $e) {
+    		$new_url = $this->container->get('router')->generate('home_page');
+    	}
+    
+    	return new RedirectResponse($new_url);
+    }    
     
     /**
      * Indexation mamanger of a page (archiving or delete)
@@ -316,28 +338,6 @@ class FrontendController extends BaseController
         ));        
     }   
 
-    /**
-     * Redirection function
-     * 
-     * @Secure(roles="ROLE_USER")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
-     */
-    public function redirectionuserAction()
-    {
-    	if ($this->getRequest()->cookies->has('orchestra-redirection')) {
-    	    $parameters   = array();
-    	    $redirection  = $this->getRequest()->cookies->get('orchestra-redirection');
-    		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute($redirection, $parameters));
-    	} else {
-    		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute('home_page'));
-    	}
-    	
-    	return $response;
-    }
-        
     /**
      * Main default page
      *

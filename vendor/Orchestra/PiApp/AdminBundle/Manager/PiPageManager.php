@@ -100,9 +100,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // If the translation page is secure and the user is not authorized, we return to the home page.
             if ($pageTrans && $pageTrans->getSecure() && $this->isUsernamePasswordToken()) {
                 // Gets all user roles.
-                $user_roles                = $this->container->get('bootstrap.Role.factory')->getAllUserRoles();
+                $user_roles             = $this->container->get('bootstrap.Role.factory')->getAllUserRoles();
                 // Gets the best role authorized to access to the entity.
-                $authorized_page_roles     = $this->container->get('bootstrap.Role.factory')->getBestRoles($pageTrans->getHeritage());                
+                $authorized_page_roles  = $this->container->get('bootstrap.Role.factory')->getBestRoles($pageTrans->getHeritage());                
                 $right = false;
                 if (is_null($authorized_page_roles)) {
                     $right = true;
@@ -158,7 +158,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 // we get config.yml content in array
                 $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
                 $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-                if (isset($parsed_yaml_file['framework']['esi']) && ($parsed_yaml_file['framework']['esi'] == 1)) {
+                if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
                 	$is_esi_activate = true;
                 } else {
                 	$is_esi_activate = false;
@@ -1263,7 +1263,6 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     					// we set all widget of the block
     					if (isset($this->widgets[$id][$block->getId()]) && !empty($this->widgets[$id][$block->getId()])){
     						$all_widgets      = $this->widgets[$id][$block->getId()];
-    						//print_r('cocniconi');
     						foreach ($all_widgets as $widget) {
     							if ($widget->getEnabled()) {
     								$new_widget = clone($widget);

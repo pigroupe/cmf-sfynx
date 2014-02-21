@@ -59,6 +59,7 @@ $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']= array(
 //         'PiApp\GedmoBundle\Entity\Translation\ContactTranslation' => true,
 );
 
+/**************************  MATRIX POSITION BY ROUTE ***************************/
 $GLOBALS['ENTITIES']['POSITION_PREPERSIST']= array(
 );
 $GLOBALS['ENTITIES']['POSITION_PREUPDATE']= array(
@@ -66,6 +67,7 @@ $GLOBALS['ENTITIES']['POSITION_PREUPDATE']= array(
 $GLOBALS['ENTITIES']['POSITION_PREREMOVE']= array(
 );
 
+/**************************  MATRIX AUTHORIZATION/PROHIBITION RIGHT ON THE ENTITIES ***************************/
 $GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST']= array(
         'BootStrap\MediaBundle\Entity\Media'    => true,
         'PiApp\GedmoBundle\Entity\Media'    => true,
