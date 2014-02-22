@@ -317,31 +317,27 @@ abstract class CoreListener extends abstractListener
     final protected function _Layout($eventArgs)
     {
         $entity         = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
-    
+        $entityManager     = $eventArgs->getEntityManager();    
         // we set the persist of the Page entity
-        if ($entity instanceof \PiApp\AdminBundle\Entity\Layout){
+        if ($entity instanceof \PiApp\AdminBundle\Entity\Layout) {
             // If  autentication user
             if ($this->isUsernamePasswordToken()) {
-                    $init_pc_layout        = str_replace("\\", "/", $entity->getFilePc());
-                    $init_mobile_layout    = str_replace("\\", "/", $entity->getFileMobile());
-                    $root_url            = $this->_container()->get('kernel')->getBundle('PiAppTemplateBundle')->getPath() . '/Resources/views/Template/Layout';
-    
-                    if (empty($init_pc_layout))
-                        $init_pc_layout     = $this->_container()->getParameter('pi_app_admin.layout.init.pc.template');
-                    if (empty($init_mobile_layout))
-                        $init_mobile_layout = $this->_container()->getParameter('pi_app_admin.layout.init.mobile.template');
-    
-                    $path_pc_layout        = realpath($root_url . '/Pc/' . $init_pc_layout);
-                    $path_mobile_layout    = realpath($root_url . '/Mobile/' . $init_mobile_layout . '/' . 'modele.html.twig');
-                    
-                    //print_r($root_url . '/Pc/' . $init_pc_layout);exit;
-                    
+                    $init_pc_layout      = str_replace("\\", "/", $entity->getFilePc());
+                    $init_mobile_layout  = str_replace("\\", "/", $entity->getFileMobile());
+                    //
+                    if (empty($init_pc_layout)) { 
+                    	$init_pc_layout     = $this->_container()->getParameter('pi_app_admin.layout.init.pc.template'); 
+                    }
+                    if (empty($init_mobile_layout)) { 
+                    	$init_mobile_layout = $this->_container()->getParameter('pi_app_admin.layout.init.mobile.template'); 
+                    }
+					//
+                    $path_pc_layout        		 = realpath($this->_container()->get('kernel')->locateResource('@PiAppTemplateBundle/Resources/views/Template/Layout/Pc/' . $init_pc_layout));
+                    $path_mobile_layout    		 = realpath($this->_container()->get('kernel')->locateResource('@PiAppTemplateBundle/Resources/views/Template/Layout/Mobile/' . $init_mobile_layout . '/' . 'modele.html.twig'));
                     // if the both path layout exist.
-                    if (!empty($path_pc_layout) && !empty($path_mobile_layout)){
+                    if (!empty($path_pc_layout) && !empty($path_mobile_layout)) {
                         $content_file_pc         = $this->_container()->get('pi_app_admin.file_manager')->getFileContent($path_pc_layout);
                         $content_file_mobile     = $this->_container()->get('pi_app_admin.file_manager')->getFileContent($path_mobile_layout);
-    
                         // Gets the different blocks from Twig layout
                         if (preg_match_all('#{% block (?P<block_name>(.*)) %}#sU', $content_file_pc, $matches_pc)
                             &&
@@ -351,29 +347,26 @@ abstract class CoreListener extends abstractListener
                         } else {
                             $tabs = array();
                         }
-                        
                         $tabs = $this->_container()->get('pi_app_admin.array_manager')->TrimArray($tabs);
-                        
                         // we get the list of all global blocks.
                         $pageManager      = $this->_container()->get('pi_app_admin.manager.page');
                         $unset_values    = $pageManager::$global_blocks;
-                        
                         // we create the xml content about all layout block information.
                         $source_xml  = "<?xml version=\"1.0\"?>\n";
                         $source_xml .= "<config>\n";
                         $source_xml .= "    <blocks>\n";
-                        foreach($tabs as $key=>$block_name){
-                            if (!in_array($block_name, $unset_values))
+                        foreach ($tabs as $key=>$block_name) {
+                            if (!in_array($block_name, $unset_values)) {
                                 $source_xml .= "        <name>$block_name</name>\n";
+                            }
                         }
                         $source_xml .= "    </blocks>\n";
                         $source_xml .= "</config>\n";
-                        
                         // we insert the config_xml value.
                         $entity->setConfigXml($source_xml);
-                        
-                    }else
+                    } else {
                         $this->setFlash('pi.session.flash.layout.notexist', 'warning');
+                    }
             }
         }
     }
