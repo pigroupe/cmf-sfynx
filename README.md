@@ -377,6 +377,14 @@ http://getcomposer.org/ or just run the following command:
 
 ```
 
+**Type the following command to install assets of the bundles**
+
+``` bash
+
+    php app/console assets:install web
+
+```
+
 **For more information** : http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
 
 ### Step 6: Connexion on /login
