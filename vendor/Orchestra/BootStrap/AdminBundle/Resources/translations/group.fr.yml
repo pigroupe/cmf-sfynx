@@ -1,6 +1,7 @@
 # Help
 help: Aide
-help.group.name: coicncoi
+help.group.name: groupe recommandé
+help.role.name: rôle recommandé
 
 # fields
 field.group.name : Nom

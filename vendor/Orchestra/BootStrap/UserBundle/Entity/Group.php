@@ -14,6 +14,7 @@ namespace BootStrap\UserBundle\Entity;
 
 use FOS\UserBundle\Entity\Group as BaseGroup;
 use Doctrine\ORM\Mapping as ORM;
+use BootStrap\UserBundle\Repository\PermissionRepository;
 
 /**
  * @ORM\Entity
@@ -54,6 +55,12 @@ class Group extends BaseGroup
       * @ORM\Column(name="enabled", type="boolean", nullable=true)
       */
      protected $enabled;
+     
+     /**
+      * @var array
+      * @ORM\Column(type="array")
+      */
+     protected $permissions = array();     
 
      public function __construct($name, $roles = array())
      {
@@ -160,5 +167,59 @@ class Group extends BaseGroup
     {
         return $this->enabled;
     }
+    
+    /**
+     * Set permissions
+     *
+     * @param array $permissions
+     */
+    public function setPermissions(array $permissions)
+    {
+    	$this->permissions = array();
+    	foreach ($permissions as $permission) {
+    		$this->addPermission($permission);
+    	}
+    }
+    
+    /**
+     * Get permissions
+     *
+     * @return array
+     */
+    public function getPermissions()
+    {
+    	$permissions = $this->permissions;
+    	// we need to make sure to have at least one role
+    	$permissions[] = PermissionRepository::ShowDefaultPermission();
+    
+    	return array_unique($permissions);
+    }
+    
+    /**
+     * Adds a permission to the user.
+     *
+     * @param string $permission
+     */
+    public function addPermission($permission)
+    {
+    	$permission = strtoupper($permission);
+    	if (!in_array($permission, $this->permissions, true)) {
+    		$this->permissions[] = $permission;
+    	}
+    }
+    
+    /**
+     * Remove a permission to the user.
+     *
+     * @param string $permission
+     */
+    public function removePermission($permission)
+    {
+    	$permission = strtoupper($permission);
+    	if (in_array($permission, $this->permissions, true)) {
+    		$key = array_search($permission, $this->permissions);
+    		unset($this->permissions[$key]);
+    	}
+    }    
     
 }

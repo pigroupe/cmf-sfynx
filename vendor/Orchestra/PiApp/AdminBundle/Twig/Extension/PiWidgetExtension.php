@@ -986,6 +986,9 @@ class PiWidgetExtension extends \Twig_Extension
      */
     protected function runByService($serviceName, $id, $lang, $params = null)
     {
+        if (!isset($params['locale']) || empty($params['locale'])) {
+    		$params['locale']    = $lang;
+    	}
         if (!is_null($params)) {
             krsort($params);
             $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params); 
@@ -1012,7 +1015,7 @@ class PiWidgetExtension extends \Twig_Extension
             	$post 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_POST, JSON_UNESCAPED_UNICODE), $key);
             	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_SERVER, JSON_UNESCAPED_UNICODE), $key);
             	
-             	$set = " {{ render_esi(url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$id', 'lang':'$lang', 'params':'$json', 'key':'$key', 'get':'$get', 'post':'$post', 'server':'$server'})) }} \n";
+             	$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$id', 'lang':'$lang', 'params':'$json', 'key':'$key', 'get':'$get', 'post':'$post', 'server':'$server'})) }} \n";
              } else {
             	$set  = "{% set widget_service_params = $json %} \n";
             	$set .= " {{ getService('$serviceName').renderSource('$id', '$lang', widget_service_params)|raw }} \n";
@@ -1050,7 +1053,9 @@ class PiWidgetExtension extends \Twig_Extension
         } else {
             throw new \InvalidArgumentException("you have not configure correctly the attibute id");
         }        
-        $params['locale']    = $lang;                
+        if (!isset($params['locale']) || empty($params['locale'])) {
+    		$params['locale']    = $lang;
+    	}                
         if (!is_null($params)) {
             krsort($params);
             $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);  
@@ -1077,7 +1082,7 @@ class PiWidgetExtension extends \Twig_Extension
             	$post 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_POST, JSON_UNESCAPED_UNICODE), $key);
             	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_SERVER, JSON_UNESCAPED_UNICODE), $key);
             	 
-            	$set = " {{ render_esi(url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$JQcontainer', 'lang':'$method', 'params':'$json', 'key':'$key', 'get':'$get', 'post':'$post', 'server':'$server'})) }} \n";
+            	$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$JQcontainer', 'lang':'$method', 'params':'$json', 'key':'$key', 'get':'$get', 'post':'$post', 'server':'$server'})) }} \n";
             } else {          
             	$set  = "{% set widget_render_params = $json %} \n";
             	$set .= " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('$JQcontainer', '$method', widget_render_params)|raw }} \n";

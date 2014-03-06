@@ -63,7 +63,8 @@ class GroupAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('roles')            
+            ->add('roles')
+            ->add('permissions')
             ->add('_action', 'actions', array( 'actions' => array(  
                      'edit'   => array(),
                      'view'   => array(),
@@ -89,13 +90,18 @@ class GroupAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', null, array('required' => true, 'label' => $this->trans('field.group.name') ))
-            ->add('roles', 'bootstrap_security_roles', array( 'multiple' => true, 'required' => false))
-            
-            // you can define help messages like this
-            ->setHelps(array(
-                    'roles' => $this->trans('help.group.name')
-            ));            
+            ->with('General')
+                ->add('name', null, array('required' => true, 'label' => $this->trans('field.group.name') ))
+            ->end()
+            ->with('Roles')
+                ->add('roles', 'bootstrap_security_roles', array( 'multiple' => true, 'required' => false, 'expanded' => true))
+                ->setHelps(array(
+                    'roles' => $this->trans('help.role.name')
+                ))
+            ->end()
+            ->with('Permissions')
+                ->add('permissions', 'bootstrap_security_permissions', array( 'multiple' => true, 'required' => false, 'expanded' => true))
+            ->end()
         ;
     }    
     

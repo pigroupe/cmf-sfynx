@@ -70,6 +70,7 @@ class UserAdmin extends Admin
             ->add('email')
             ->add('langCode')
             ->add('roles')
+            ->add('permissions')
             ->add('enabled')
             ->add('locked')
             
@@ -126,18 +127,14 @@ class UserAdmin extends Admin
                 	'expanded' => true,
                 ))
             ->end()
-            ->with('Management')
-                ->add('roles', 'bootstrap_security_roles', array( 'multiple' => true, 'required' => false))
-                ->add('locked', null, array('required' => false))
-                ->add('expired', null, array('required' => false))
-                ->add('enabled', null, array('required' => false))
-                ->add('credentialsExpired', null, array('required' => false))
+            ->with('Roles')
+                ->add('roles', 'bootstrap_security_roles', array( 'multiple' => true, 'required' => false, 'expanded' => true,))
+                ->setHelps(array(
+                		'roles' => $this->trans('help.role.name')
+                ))
             ->end()
             ->with('Permissions')
-                ->add('permissions', 'bootstrap_security_permissions', array( 'multiple' => true, 'required' => false))
-                ->add('locked', null, array('required' => false))
-                ->add('expired', null, array('required' => false))
-                ->add('credentialsExpired', null, array('required' => false))
+                ->add('permissions', 'bootstrap_security_permissions', array( 'multiple' => true, 'required' => false, 'expanded' => true,))
             ->end()
             ;
     }

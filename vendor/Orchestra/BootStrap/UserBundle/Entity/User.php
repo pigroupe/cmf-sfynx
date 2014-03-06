@@ -226,6 +226,9 @@ class User extends AbstractUser
     public function getPermissions()
     {
         $permissions = $this->permissions;
+        foreach ($this->getGroups() as $group) {
+            $permissions = array_merge($permissions, $group->getPermissions());
+        }
         // we need to make sure to have at least one role
         $permissions[] = PermissionRepository::ShowDefaultPermission();
     
@@ -240,8 +243,11 @@ class User extends AbstractUser
     public function addPermission($permission)
     {
         $permission = strtoupper($permission);
+        if ($permission === PermissionRepository::ShowDefaultPermission()) {
+        	return;
+        }
         if (!in_array($permission, $this->permissions, true)) {
-            $this->permissions[] = $permission;
+        	$this->permissions[] = $permission;
         }
     }  
 

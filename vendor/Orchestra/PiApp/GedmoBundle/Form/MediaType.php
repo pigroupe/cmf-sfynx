@@ -73,7 +73,7 @@ class MediaType extends AbstractType
      * @param string $status    ['file', 'image', 'youtube', 'dailymotion']
      * @return void
      */
-    public function __construct(ContainerInterface $container, EntityManager $em, $status = "image", $class =  "media_collection", $simpleLink = "all", $labelLink = "", $context = "")
+    public function __construct(ContainerInterface $container, EntityManager $em, $status = "image", $class =  "media_collection", $simpleLink = "all", $labelLink = "", $context = "default")
     {
         $this->_em            = $em;
         $this->_container     = $container;

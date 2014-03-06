@@ -108,7 +108,7 @@ class RoleAdmin extends Admin
                 ->add('comment')
             ->end()
             ->with('Heritage')
-                ->add('heritage', 'bootstrap_security_roles', array( 'multiple' => true, 'required' => false))
+                ->add('heritage', 'bootstrap_security_roles', array( 'multiple' => true, 'required' => false, 'expanded' => true))
             ->end()
             ->with('Redirection')
                 ->add('route_login', 'bootstrap_routes', array( 'multiple' => false, 'required' => false))
