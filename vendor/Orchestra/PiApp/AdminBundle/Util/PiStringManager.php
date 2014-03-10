@@ -126,7 +126,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
      * @access public
      * @static
      *
-     * @author riad hellal <r.hellal@novediagroup.com>
+     * @author riad hellal <hellel.riad@gmail.com>
      */    
     public static function splitHtml($string){
         $cpt = 0;    $left = '';    $right = '';
@@ -166,7 +166,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
      * @access public
      * @static
      *
-     * @author riad hellal <r.hellal@novediagroup.com>
+     * @author riad hellal <hellel.riad@gmail.com>
      */    
     public static function splitText($string){
         $left = substr($string, 0, strlen($string)/2);

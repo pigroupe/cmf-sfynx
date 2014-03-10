@@ -386,7 +386,7 @@ class FrontendController extends BaseController
     
     /**
      *
-     * @author Riad HELLAL <r.hellal@novediagroup.com>
+     * @author Riad HELLAL <hellel.riad@gmail.com>
      * @return type
      */
     public function contactAction()

@@ -176,7 +176,7 @@ class PiToolExtension extends \Twig_Extension
      * @return string
      * @static
      *
-     * @author Riad Hellal <r.hellal@novediagroup.com>
+     * @author Riad Hellal <hellel.riad@gmail.com>
      */
     public function getCleanNameFunction($fileName)
     {
@@ -245,10 +245,8 @@ class PiToolExtension extends \Twig_Extension
     {
         if ($media instanceof \BootStrap\MediaBundle\Entity\Media){
             $id         = $media->getId();
-
             try {
                     $file_url = $this->container->get('sonata.media.twig.extension')->path($id, "reference");
-
                     if ($is_by_mimetype){
                        $mime = str_replace('/','-',$media->getContentType());
                        $picto = '/bundles/piappadmin/images/icons/mimetypes/'.$mime.'.png';
@@ -256,18 +254,15 @@ class PiToolExtension extends \Twig_Extension
                         $ext = substr(strtolower(strrchr(basename($file_url), ".")), 1);
                         $picto = '/bundles/piappadmin/images/icons/form/download-'.$ext.'.png';
                     }
-
                     if (!file_exists('.'.$picto)) {
                         $picto = '/bundles/piappadmin/images/icons/form/download-32.png';
                     }
             } catch (\Exception $e) {
                 return "";
             }
-
             $content     = "<div id='file_$id'> \n";
-            $content    .= "<a href='{$file_url}' target='_blanc' style='{$style}'> <img src='$picto' /> ".$media->getName()."</a>";
+            $content    .= "<a href='{$file_url}' target='_blanc' style='{$style}'> <img src='$picto' /> ".$media->getName()." <br/> {$file_url}</a>";
             $content    .= "</div> \n";
-
             $content    .= "<script type='text/javascript'> \n";
             $content    .= "//<![CDATA[ \n";
             $content    .= "$('#file_$id').detach().appendTo('#{$nameForm}'); \n";
@@ -645,7 +640,7 @@ class PiToolExtension extends \Twig_Extension
     /**
      * translation of date.
      *
-     * @author riad hellal <r.hellal@novediagroup.com>
+     * @author riad hellal <hellel.riad@gmail.com>
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getDatePatternByLocalFunction($locale, $fileName = 'i18n_date.json')
@@ -675,7 +670,7 @@ class PiToolExtension extends \Twig_Extension
     /**
      * parsing translaion js files.
      *
-     * @author riad hellal <r.hellal@novediagroup.com>
+     * @author riad hellal <hellel.riad@gmail.com>
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     private function updateCulturesJsFilesFunction($fileName = 'i18n_date.json')

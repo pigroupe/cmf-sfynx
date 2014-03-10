@@ -173,7 +173,7 @@ class PiDateExtension extends \Twig_Extension
      * @return strgin                 Duration
      * @access public
      *
-     * @author Riad Hellal <r.hellal@novediagroup.com>
+     * @author Riad Hellal <hellel.riad@gmail.com>
      */
     public function NextDateFilter(\DateTime $dateTime, $from = null)
     {

@@ -127,7 +127,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @access    public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @author Riad Hellal <r.hellal@novediagroup.com>
+     * @author Riad Hellal <hellel.riad@gmail.com>
      */    
     public function checkRoles(\Doctrine\ORM\QueryBuilder $query)
     {
@@ -544,7 +544,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @return object
      * @access public
      *
-     * @author Riad HELLAL <r.hellal@novediagroup.com>
+     * @author Riad HELLAL <hellel.riad@gmail.com>
      * @since 2013-05-30
      */    
     public function getTranslationsByObjectId($id)
@@ -623,7 +623,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @return array\entity
      * @access public
      *
-     * @author Riad HELLAL <r.hellal@novediagroup.com>
+     * @author Riad HELLAL <hellel.riad@gmail.com>
      * @since 2012-03-15
      */
     public function getAllByFields($fields = array(), $MaxResults = null, $ORDER_PublishDate = '', $ORDER_Position = '', $is_checkRoles = true)

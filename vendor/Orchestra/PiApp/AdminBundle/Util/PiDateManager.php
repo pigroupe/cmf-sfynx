@@ -264,7 +264,7 @@ class PiDateManager implements PiDateManagerBuilderInterface
      * @return strgin                 Duration
      * @access public
      *
-     * @author Riad Hellal <r.hellal@novediagroup.com>
+     * @author Riad Hellal <hellel.riad@gmail.com>
      */
     public function NextDate(\DateTime $dateTime, $from = null)
     {

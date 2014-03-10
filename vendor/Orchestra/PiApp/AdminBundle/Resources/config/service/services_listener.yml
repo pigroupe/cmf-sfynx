@@ -6,6 +6,7 @@ parameters:
     piapp.admin.handler.authenticationHandler.class: PiApp\AdminBundle\EventListener\HandlerAuthentication
     piapp.admin.handler.controllerHandler.class: PiApp\AdminBundle\EventListener\HandlerController
     
+    piapp.admin.listener.exception.class: PiApp\AdminBundle\EventListener\ExceptionListener
     piapp.admin.listener.postload.class: PiApp\AdminBundle\EventListener\PostLoadListener
     piapp.admin.listener.loadclassmetadata.class: PiApp\AdminBundle\EventListener\loadClassMetadataListener
     piapp.admin.listener.onflush.class: PiApp\AdminBundle\EventListener\OnFlushListener
@@ -70,6 +71,12 @@ services:
     #               
     # Doctrine events Configuration
     #            
+    pi_app_admin.exception_listener:
+        class: %piapp.admin.listener.exception.class%
+        arguments: [@templating, @kernel, @service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }    
+    
     pi_app_admin.postload_listener:
         class: %piapp.admin.listener.postload.class%
         arguments: [@service_container]

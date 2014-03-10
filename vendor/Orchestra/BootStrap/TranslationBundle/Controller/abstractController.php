@@ -474,23 +474,15 @@ abstract class abstractController extends Controller
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
          */
+        $array_params = array();
         $and = $qb->expr()->andx();
         for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
             if ( $request->get('bSearchable_'.$i) == "true" && $request->get('sSearch_'.$i) != '' ) {
-                $expression = str_replace("(^|\s*/+\s*)(","",$request->get('sSearch_'.$i));
-                $search = str_replace(")(\s*/+\s*|$)","",$expression);
-                $search_tab = explode("|", $search);
-
+                $search_tab = explode("|", $request->get('sSearch_'.$i));
                 $or = $qb->expr()->orx();
                 foreach ($search_tab as $s) {
-//                     if (is_numeric($s)) {
-//                         //$or->add($qb->expr()->eq($aColumns[(intval($i)-1)], (int)$s));
-//                         $or->add(new \Doctrine\ORM\Query\Expr\Comparison('LOWER('.$aColumns[(intval($i)-1)].')', ' REGEXP ', "'^(.*)({$s})(.*)'"));
-//                     }else{
-//                     	//$or->add(new Doctrine\ORM\Query\Expr\Comparison('LOWER('.$aColumns[(intval($i)-1)].')', 'REGEXP', '%'.strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s)).'%'));
-//                         $or->add($qb->expr()->like('LOWER('.$aColumns[(intval($i)-1)].')', $qb->expr()->literal('%'.strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s)).'%')));
-//                     }
-                    $or->add("LOWER(".$aColumns[(intval($i)-1)].") LIKE '%".strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s))."%'");
+                    $or->add("LOWER(".$aColumns[(intval($i)-1)].") LIKE :var".$i."");
+                    $array_params["var".$i] = '%'.strtolower($s).'%';
                 }
                 $and->add($or);
             }
@@ -502,14 +494,11 @@ abstract class abstractController extends Controller
         $or = $qb->expr()->orx();
         for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
         	if ( $request->get('bSearchable_'.$i) == "true" && $request->get('sSearch') != '' ) {
-        		$expression = str_replace("(^|\s*/+\s*)(","",$request->get('sSearch'));
-                $search = str_replace(")(\s*/+\s*|$)","",$expression);
-                $search_tab = explode("|", $search);
-                //
+                $search_tab = explode("|", $request->get('sSearch'));
         		foreach ($search_tab as $s) {
         			if(!empty($s)){
-                            //$or->add($qb->expr()->like('LOWER('.$aColumns[$i].')', $qb->expr()->literal('%'.$keyword.'%')));
-                            $or->add("LOWER(".$aColumns[$i].") LIKE '%".strtolower(\PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s))."%'");
+                        $or->add("LOWER(".$aColumns[$i].") LIKE :var2".$i."");
+                        $array_params["var2".$i] = '%'.strtolower($s).'%';
         			}
         		}
         	}
@@ -547,11 +536,13 @@ abstract class abstractController extends Controller
             $iDisplayLength = $request->get('iDisplayLength', 25);
             $qb->setFirstResult($iDisplayStart);
             $qb->setMaxResults($iDisplayLength);
+            $qb->setParameters($array_params);
             //$query_sql = $qb->getQuery()->getSql();
             //var_dump($query_sql);
             //exit;            
             $result = $em->getRepository("BootStrapUserBundle:User")->setTranslatableHints($qb->getQuery(), $locale, false, true)->getResult();
         } else {
+            $qb->setParameters($array_params);
             //$query_sql = $qb->getQuery()->getSql();
             //var_dump($query_sql);
             //exit;

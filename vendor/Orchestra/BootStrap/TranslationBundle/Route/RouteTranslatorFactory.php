@@ -15,6 +15,7 @@ namespace BootStrap\TranslationBundle\Route;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use BootStrap\TranslationBundle\Route\AbstractFactory;
 use BootStrap\TranslationBundle\Builder\RouteTranslatorFactoryInterface;
@@ -81,13 +82,13 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         $data            = $this->getRouterTranslator()->match($old_info[0]);    
         
         try {
-            $new_url     = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue));
+            $new_url     = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue), UrlGeneratorInterface::RELATIVE_PATH);
         } catch (\Exception $e) {
             $new_url    = $old_url_path;
         }
         
         if (empty($new_url) || ($new_url == "/")) {
-            $new_url = $this->getContainer()->get('router')->generate('home_page');
+            $new_url = $this->getContainer()->get('router')->generate('home_page', array(), UrlGeneratorInterface::RELATIVE_PATH);
         }
         
     	if (isset($options['result']) && ($options['result'] == 'match')) {
@@ -120,13 +121,13 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         }    
         $data            = $this->getRouterTranslator()->match($this->getContainer()->get('request')->getPathInfo());
         try {
-            $new_url     = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue));
+            $new_url     = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue), UrlGeneratorInterface::RELATIVE_PATH);
         } catch (\Exception $e) {
             $new_url    = $this->getContainer()->get('request')->getRequestUri();
         }
     
         if (empty($new_url) || ($new_url == "/")) {
-            $new_url     = $this->getContainer()->get('router')->generate('home_page');
+            $new_url     = $this->getContainer()->get('router')->generate('home_page', array(), UrlGeneratorInterface::RELATIVE_PATH);
         }
     
         if (isset($options['result']) && ($options['result'] == 'match')) {
@@ -162,16 +163,16 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         }
         
         try {
-            $new_url     = $this->getContainer()->get('router')->generate($route_name, $params);
+            $new_url     = $this->getContainer()->get('router')->generate($route_name, $params, UrlGeneratorInterface::RELATIVE_PATH);
         } catch (\Exception $e) {
             unset($params['locale']);
             try {
-                $new_url = $this->getContainer()->get('router')->generate($route_name, $params);
+                $new_url = $this->getContainer()->get('router')->generate($route_name, $params, UrlGeneratorInterface::RELATIVE_PATH);
             } catch (\Exception $e) {
                 try {
-                    $new_url = $this->getContainer()->get('router')->generate($route_name);
+                    $new_url = $this->getContainer()->get('router')->generate($route_name, array(), UrlGeneratorInterface::RELATIVE_PATH);
                 } catch (\Exception $e) {
-                    $new_url = $this->getContainer()->get('router')->generate('home_page');
+                    $new_url = $this->getContainer()->get('router')->generate('home_page', array(), UrlGeneratorInterface::RELATIVE_PATH);
                 }
             }            
         }
