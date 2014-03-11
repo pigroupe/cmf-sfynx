@@ -154,6 +154,17 @@ class FrontendController extends BaseController
     	
     	$_SERVER['REQUEST_URI'] =  $GLOBALS['_SERVER_']['REQUEST_URI'];
     	//
+    	if ($get && is_array($get)) {
+    		foreach($get as $k => $v) {
+    			$_GET[$k] = $v;
+    		}
+    	}
+    	if ($post && is_array($post)) {
+    		foreach($post as $k => $v) {
+    			$_POST[$k] = $v;
+    		}
+    	}    	
+    	//
      	$result = $this->container->get($serviceName)->$method($id, $lang, $params);
     	
     	return new Response($result);

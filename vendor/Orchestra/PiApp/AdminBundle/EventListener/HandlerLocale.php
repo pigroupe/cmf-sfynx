@@ -15,6 +15,7 @@ namespace PiApp\AdminBundle\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\HttpKernel;
 
 /**
  * Custom locale handler.
@@ -47,6 +48,10 @@ class HandlerLocale implements EventSubscriberInterface
     */   
    public function onKernelRequest(GetResponseEvent $event)
    {
+       if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
+       	// ne rien faire si ce n'est pas la requête principale
+       	return;
+       }       
    	   //print_r('priority 1');
        $request = $event->getRequest();
        if (!$request->hasPreviousSession()) {

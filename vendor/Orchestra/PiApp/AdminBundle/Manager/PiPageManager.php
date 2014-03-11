@@ -148,8 +148,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             } else {
                 // or render a template with the $response you've already started
                 $response->headers->set('Content-Type', $page->getMetaContentType());
-                $response->headers->set('Pragma', "no-cache");
                 if ($this->isUsernamePasswordToken()){
+                    $response->headers->set('Pragma', "no-cache");
                     $response->headers->set('Cache-control', "private");
                 }
                 // we get instances of parser and dumper component yaml files.

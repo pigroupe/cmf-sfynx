@@ -13,6 +13,7 @@
 namespace PiApp\AdminBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -68,6 +69,10 @@ class HandlerRequest
      */    
     public function onKernelRequest(GetResponseEvent $event)
     {
+        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
+        	// ne rien faire si ce n'est pas la requête principale
+        	return;
+        }        
     	//print_r('priority 2');
         // set request
     	$this->request    = $event->getRequest($event);
