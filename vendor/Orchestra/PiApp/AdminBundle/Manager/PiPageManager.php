@@ -136,7 +136,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // We set the Etag value
             $id		= $page->getId();
             $lang_	= $this->language;
-            $this->setEtag("page:$id:$lang_");
+            $params = $this->container->get('request')->getRequestUri();
+            $this->setEtag("page:$id:$lang_:$params");
             // Create a Response with a Last-Modified header.
             $response = $this->configureCache($page, $response);
             // Check that the Response is not modified for the given Request.
@@ -152,25 +153,29 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                     $response->headers->set('Pragma', "no-cache");
                     $response->headers->set('Cache-control', "private");
                 }
-                // we get instances of parser and dumper component yaml files.
-                $yaml   = new \Symfony\Component\Yaml\Parser();
-                //$dumper = new \Symfony\Component\Yaml\Dumper();
-                // we get config.yml content in array
-                $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
-                $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-                if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
-                	$is_esi_activate = true;
-                } else {
-                	$is_esi_activate = false;
-                }
-                //
-                $isMemCacheEnable = $this->container->getParameter("pi_app_admin.page.memcache_enable_only_page");
-                if ($is_esi_activate || $isMemCacheEnable) {
-                	$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
-                } else {             
-                	// We set the reponse
-                	$response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
-                }
+                
+//                 // we get instances of parser and dumper component yaml files.
+//                 $yaml   = new \Symfony\Component\Yaml\Parser();
+//                 //$dumper = new \Symfony\Component\Yaml\Dumper();
+//                 // we get config.yml content in array
+//                 $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
+//                 $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
+//                 if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
+//                 	$is_esi_activate = true;
+//                 } else {
+//                 	$is_esi_activate = false;
+//                 }
+//                 //
+//                 $isMemCacheEnable = $this->container->getParameter("pi_app_admin.page.memcache_enable_only_page");
+//                 if ($is_esi_activate || $isMemCacheEnable) {
+//                 	$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
+//                 } else {             
+//                 	// We set the reponse
+//                 	$response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
+//                 }
+                
+                //$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
+                $response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);                
                 
                 return $response;
             }
@@ -432,32 +437,6 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             return false;
         }
     }  
-
-    /**
-     * Return the content of a page.
-     *
-     * @param string $route_name        route name of a page
-     * @param string $lang
-     * @return string    content page
-     * @access    public
-     *
-     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-06-11
-     */
-    public function contentPage($route_name, $lang = '')
-    {
-        $page = $this->setPageByRoute($route_name);        
-        if (empty($lang)) {
-        	$lang = $this->language;
-        }        
-        if ($page instanceof \PiApp\AdminBundle\Entity\Page) {
-            $id = $page->getId();
-            // Symfony\Bundle\TwigBundle\TwigEngine
-   		    return $this->container->get('pi_app_admin.caching')->renderResponse("page:$id:$lang")->getContent();
-        } else {
-            return '';
-        }
-  	} 
 
   	/**
   	 * Redirect to the url by his route name.
@@ -906,7 +885,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 // we get the lang page
                 $lang_page = $translation->getLangCode()->getId();
                 // we create the cache name
-                $name_page    = 'page:'.$page->getId().':'.$lang_page;
+                $referer_url = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang_page, null, true);
+                $referer_url = str_replace($this->container->get('request')->getUriForPath(''), '', $referer_url);
+                $name_page    = 'page:'.$page->getId().':'.$lang_page.':'.$referer_url;
                 if (isset($this->widgets[$page->getId()]) && is_array($this->widgets[$page->getId()])) {
                     foreach ($this->widgets[$page->getId()] as $key_block=>$widgets) {
                         if (isset($this->widgets[$page->getId()][$key_block]) && is_array($this->widgets[$page->getId()][$key_block])) {
@@ -1465,6 +1446,11 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                     case (empty($url) && empty($slug)) :
                         $urls[$locale] = "";
                         break;
+                }
+                $is_prefix_locale = $this->container->getParameter("pi_app_admin.page.page_management_with_prefix_locale");
+                if ($is_prefix_locale) {
+                	$locale_tmp = explode('_', $locale);
+                	$urls[$locale] = $locale_tmp[0] . '/' . $urls[$locale];
                 }
                 $urls[$locale]     = str_replace("//","/",$urls[$locale]);                
                 if ($type == 'sql') {

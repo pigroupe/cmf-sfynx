@@ -26,7 +26,7 @@ interface PiSearchLuceneManagerBuilderInterface
     public static function create($directory);
     public static function open($directory);
     public static function commit();
-    public function contentPage($Etag, $locale, $Query = null, $MaxLimitWord = 0);
+    public function contentPage($pathInfo, $Query = null, $MaxResultByWord = 5, $class = "", $MaxLimitCara = 0);
     public function indexPage(\PiApp\AdminBundle\Entity\Page $page);
     public function deletePage(\PiApp\AdminBundle\Entity\Page $page);
     public function searchPage($query, $options = null, $locale = '');

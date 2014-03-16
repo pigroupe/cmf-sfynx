@@ -182,6 +182,13 @@ class Contact extends AbstractDefault
      * @Assert\Email()
      */
     protected $email;  
+    
+    /**
+     * @var string $email_sender
+     *
+     * @ORM\Column(name="email_sender", type="string", length=255, nullable = true)
+     */
+    protected $email_sender;    
 
     /**
      * @var string $email_subject
@@ -642,6 +649,28 @@ class Contact extends AbstractDefault
     public function getEmail()
     {
         return $this->email;
+    }   
+
+    /**
+     * Set email sender
+     *
+     * @param string $email_sender
+     * @return this
+     */
+    public function setEmailSender($email_sender)
+    {
+    	$this->email_sender = $email_sender;
+    	return $this;
+    }
+    
+    /**
+     * Get email sender
+     *
+     * @return string
+     */
+    public function getEmailSender()
+    {
+    	return $this->email_sender;
     }    
 
     /**

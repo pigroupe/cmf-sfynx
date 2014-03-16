@@ -117,10 +117,18 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode('page_management_by_user_only')->isRequired()
                         ->defaultValue(false)
                         ->end()                        
-                
+
+                    ->booleanNode('page_management_with_prefix_locale')->isRequired()
+                        ->defaultValue(false)
+                        ->end()                        
+                        
                     ->booleanNode('single_slug')->isRequired()
                         ->defaultValue(false)
                         ->end()
+                        
+                    ->booleanNode('refresh_allpage')->isRequired()
+                        ->defaultValue(true)
+                        ->end()                        
                     
                     ->booleanNode('refresh_allpage_containing_snippet')->isRequired()
                         ->defaultValue(true)
@@ -138,10 +146,6 @@ class Configuration implements ConfigurationInterface
                         ->defaultValue(false)
                         ->end()
                     
-                    ->booleanNode('switch_layout_init_redirection_authorized')->isRequired()
-                        ->defaultValue(false)
-                        ->end()
-                         
                     ->booleanNode('switch_language_browser_authorized')->isRequired()
                         ->defaultValue(false)
                         ->end()
@@ -150,10 +154,6 @@ class Configuration implements ConfigurationInterface
                         ->defaultValue(false)
                         ->end()
                         
-                    ->booleanNode('memcache_enable_only_page')->isRequired()
-                        ->defaultValue(false)
-                        ->end()    
-
                     ->arrayNode('seo_redirection')
                     ->isRequired()
                         ->children()

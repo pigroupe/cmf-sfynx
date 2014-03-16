@@ -143,6 +143,13 @@ class ContactType extends AbstractType
                      ),
                      'required'  => false,
              ))
+             ->add('email_sender', 'text', array(
+             		"label" => 'Nom expéditeur',
+             		"label_attr" => array(
+             				"class"=>"email_collection",
+             		),
+             		'required'  => false,
+             ))             
              ->add('email_subject', 'text', array(
                      "label" => 'pi.form.label.field.email.subject',
                      "label_attr" => array(

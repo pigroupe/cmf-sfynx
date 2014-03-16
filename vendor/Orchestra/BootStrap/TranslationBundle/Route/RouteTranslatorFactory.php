@@ -72,7 +72,7 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         }
         if ($setLocale)    {
         	// Record the language
-        	$request->setLocale('_locale', $langue);
+        	$request->setLocale($langue);
         }        
         // It tries to redirect to the original page.
         $old_url_path     = $request->headers->get('referer'); // probleme avec les esi => pas de valeur retourné

@@ -487,14 +487,14 @@ pi_app_admin:
     page:
         homepage_deletewidget: true
         page_management_by_user_only: true
+        page_management_with_prefix_locale: true
         single_slug: false
+        refresh_allpage: true
         refresh_allpage_containing_snippet: true
         refresh_css_js_cache_file: true
         indexation_authorized_automatically: false
         switch_language_browser_authorized: false
         switch_layout_mobile_authorized: false
-        switch_layout_init_redirection_authorized: false
-        memcache_enable_only_page: false
         memcache_enable_all: false
         seo_redirection:
             seo_authorized: true

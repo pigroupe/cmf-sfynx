@@ -495,25 +495,25 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
     /**
      * Gets the indexed page content.
      *
-     * @param string $Etag        Etag of the page
-     * @param string $match_path
+     * @param string $pathInfo        url path of the page
      * @param string $Query        The search query index file
+     * @param int    $MaxResultByWord
+     * @param string $class
+     * @param int    $MaxLimitCara
      * @return string
      * @access    public
      *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      * @since 2012-06-11
      */
-    public function contentPage($Etag, $match_path, $Query = null, $MaxResultByWord = 5, $class = "", $MaxLimitCara = 0)
+    public function contentPage($pathInfo, $Query = null, $MaxResultByWord = 5, $class = "", $MaxLimitCara = 0)
     {
         $body = "";        
         $searchWords    = explode(' ', strtolower($Query));
         $result_search    = null;        
-        // IMPORTANT! we need these values ​​in another controller for example.
-        $_GET = array_merge($match_path, $_GET);        
         try {
             // we get the content of the page.
-            $body = $this->container->get('pi_app_admin.caching')->renderResponse($Etag)->getContent();
+            $body = file_get_contents($this->container->get('request')->getUriForPath('') . $pathInfo);
             // we delete all contents of tags which are given in params (and all tags which are inside).
             $body = $this->deleteTags($body);
             // we get the only words of the body content of the page.

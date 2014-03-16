@@ -104,7 +104,7 @@ class TreeRepository extends NestedTreeRepository
      * @access    public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @author Riad Hellal <hellel.riad@gmail.com>
+     * @author Riad Hellal <hellal.riad@gmail.com>
      */
     public function checkRoles(\Doctrine\ORM\QueryBuilder $query)
     {
@@ -435,7 +435,7 @@ class TreeRepository extends NestedTreeRepository
      * @return object
      * @access public
      *
-     * @author Riad HELLAL <hellel.riad@gmail.com>
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      * @since 2013-05-30
      */
     public function getTranslationsByObjectId($id)

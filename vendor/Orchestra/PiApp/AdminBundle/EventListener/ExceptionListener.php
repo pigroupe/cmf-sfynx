@@ -4,7 +4,7 @@
  *
  * @category   Admin_Eventlistener
  * @package    EventListener
- * @author riad hellal <hellel.riad@gmail.com>
+ * @author riad hellal <hellal.riad@gmail.com>
  * @since 2013-04-18
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @category   Admin_Eventlistener
  * @package    EventListener
  *
- * @author riad hellal <hellel.riad@gmail.com>
+ * @author riad hellal <hellal.riad@gmail.com>
  */
 class ExceptionListener
 {

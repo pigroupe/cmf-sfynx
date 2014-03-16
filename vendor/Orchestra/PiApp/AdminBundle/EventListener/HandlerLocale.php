@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\HttpKernel;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class HandlerLocale implements EventSubscriberInterface
+class HandlerLocale
 {
    private $defaultLocale;
 
@@ -68,13 +68,5 @@ class HandlerLocale implements EventSubscriberInterface
            $_GET['_locale'] = $this->defaultLocale;
        }
    }
-   
-   static public function getSubscribedEvents()
-   {
-	   return array(
-	   		// must be registered before the default Locale listener
-	   		KernelEvents::REQUEST => array(array('onKernelRequest', 66)),
-	   );
-   }   
 
 }

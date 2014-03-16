@@ -81,8 +81,12 @@ class PiAppAdminExtension extends Extension
                 $container->setParameter('pi_app_admin.page.homepage_deletewidget', $config['page']['homepage_deletewidget']);
             if (isset($config['page']['page_management_by_user_only']))
                 $container->setParameter('pi_app_admin.page.management_by_user_only', $config['page']['page_management_by_user_only']);
+            if (isset($config['page']['page_management_with_prefix_locale']))
+            	$container->setParameter('pi_app_admin.page.page_management_with_prefix_locale', $config['page']['page_management_with_prefix_locale']);
             if (isset($config['page']['single_slug']))
                 $container->setParameter('pi_app_admin.page.single_slug', $config['page']['single_slug']);
+            if (isset($config['page']['refresh_allpage']))
+            	$container->setParameter('pi_app_admin.page.refresh_allpage', $config['page']['refresh_allpage']);
             if (isset($config['page']['refresh_allpage_containing_snippet']))
                 $container->setParameter('pi_app_admin.page.refresh_allpage_containing_snippet', $config['page']['refresh_allpage_containing_snippet']);
             if (isset($config['page']['refresh_css_js_cache_file']))
@@ -91,12 +95,8 @@ class PiAppAdminExtension extends Extension
                 $container->setParameter('pi_app_admin.page.indexation_authorized_automatically', $config['page']['indexation_authorized_automatically']);
             if (isset($config['page']['switch_layout_mobile_authorized']))
                 $container->setParameter('pi_app_admin.page.switch_layout_mobile_authorized', $config['page']['switch_layout_mobile_authorized']);
-            if (isset($config['page']['switch_layout_init_redirection_authorized']))
-                $container->setParameter('pi_app_admin.page.switch_layout_init_redirection_authorized', $config['page']['switch_layout_init_redirection_authorized']);
             if (isset($config['page']['switch_language_browser_authorized']))
                 $container->setParameter('pi_app_admin.page.switch_language_browser_authorized', $config['page']['switch_language_browser_authorized']);
-            if (isset($config['page']['memcache_enable_only_page']))
-                $container->setParameter('pi_app_admin.page.memcache_enable_only_page', $config['page']['memcache_enable_only_page']);
             if (isset($config['page']['memcache_enable_all']))
             	$container->setParameter('pi_app_admin.page.memcache_enable_all', $config['page']['memcache_enable_all']);
             

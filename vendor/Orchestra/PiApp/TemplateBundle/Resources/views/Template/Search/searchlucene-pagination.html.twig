@@ -75,7 +75,7 @@
 													<a href="{{ Path }}" title="- {{ Query }} - {{ Keywords }}"  >
 			                                        	<span class="solutionFinderLineTitle">{{ Title|limite('0', 85)|replace({"<p>": "", "</p>": ""})|raw }}</span></br>
 						  								{#{{ ModDate|localedate('long','medium', app.request.locale~"_"~app.request.locale, 'EEEE, LLLL d, y') }}#}
-			                                        	{{ getService('pi_app_admin.manager.search_lucene').contentPage(Etag, match_path, Query, MaxResultByWord, 'highlightedWordSearch', 690)|lower|replace({"<p>": "", "</p>": ""})|raw }}
+			                                        	{{ getService('pi_app_admin.manager.search_lucene').contentPage(Path, Query, MaxResultByWord, 'highlightedWordSearch', 690)|lower|replace({"<p>": "", "</p>": ""})|raw }}
 			                                        </a>  
 			                                    </p>
 			                                </li>

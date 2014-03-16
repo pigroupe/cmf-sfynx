@@ -66,16 +66,16 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container     = $container;
-        $this->mailer        = $this->container->get('mailer');
-        $this->message        = \Swift_Message::newInstance();
+        $this->container    = $container;
+        $this->mailer       = $this->container->get('mailer');
+        $this->message      = \Swift_Message::newInstance();
         
-        $basePath         = $this->container->getParameter("kernel.cache_dir"). '/../mailer/';
-        $dir             = \PiApp\AdminBundle\Util\PiFileManager::mkdirr($basePath);
-        $this->options     = array(
+        $basePath       = $this->container->getParameter("kernel.cache_dir"). '/../mailer/';
+        $dir            = \PiApp\AdminBundle\Util\PiFileManager::mkdirr($basePath);
+        $this->options  = array(
             'binary'    => $dir,
-            'utf8'        => true,
-            'style'        => true,
+            'utf8'      => true,
+            'style'     => true,
             'pretty'    => true,
         );
     }
@@ -105,23 +105,23 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      * @param array     $filespath
      * @param boolean   $is_pictureEmbed
      * @param boolean   $is_Html2Text
+     * @param mixed     $sender
      * @return void
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function send($from, $to, $subject, $body, $cc = null, $bcc = null, $replayto = null, $filespath = null, $is_pictureEmbed = false, $is_Html2Text = false)
+    public function send($from, $to, $subject, $body, $cc = null, $bcc = null, $replayto = null, $filespath = null, $is_pictureEmbed = false, $is_Html2Text = false, $sender = null)
     {
     	$parameters = $this->container->getParameter('pi_app_admin.mail.overloading_mail');
     	if (!empty($parameters)) {
     		$to = $this->container->getParameter('pi_app_admin.mail.overloading_mail');
     	}    	
         try {
-            $this->init($this->message, $from, $to, $cc, $bcc, $replayto, $subject, $body);
-            
-            if ($is_pictureEmbed && $this->supports($this->mailer)) {
+            $this->init($this->message, $from, $to, $cc, $bcc, $replayto, $subject, $body, $sender);            
+            if ($is_pictureEmbed && $this->supports($this->message)) {
                 $this->pictureEmbed($this->message);
             }            
-            if ($is_Html2Text && $this->supports($this->mailer)) {
+            if ($is_Html2Text && $this->supports($this->message)) {
                 $this->Html2Text($this->message);            
             }    
             if (is_array($filespath)) {
@@ -142,7 +142,7 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function init(\Swift_Mime_Message $message, $from, $to, $cc, $bcc, $replayto, $subject, $body)
+    public function init(\Swift_Mime_Message $message, $from, $to, $cc, $bcc, $replayto, $subject, $body, $sender)
     {
         if (is_string($cc)) {
             $cc_new    = $this->container->get('pi_app_admin.regex_manager')->verifByRegularExpression($cc, 'mail', PREG_SPLIT_NO_EMPTY);
@@ -164,6 +164,7 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
             $message
             ->setTo($to)
             ->setFrom($from)
+            ->setSender($sender)
             ->setCc($cc)
             ->setBcc($bcc)
             ->setReplyTo($replayto)
@@ -272,12 +273,8 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      */
     public function Html2Text(\Swift_Mime_Message $message)
     {
-        $processor = new \Symfony\Component\Process\Process($this->getCommand());
-        $processor->setStdin($message->getBody());
-        $processor->run();    
-        if ($processor->isSuccessful()) {
-            $message->addPart($processor->getOutput(), 'text/plain');
-        }
+        $text = strip_tags($message->getBody());
+		$message->addPart($text, 'text/plain');
     }    
     
     /**

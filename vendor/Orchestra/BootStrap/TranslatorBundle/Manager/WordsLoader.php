@@ -4,7 +4,7 @@
  *
  * @category   BootStrap_Manager
  * @package    translator
- * @author Riad HELLAL <hellel.riad@gmail.com>
+ * @author Riad HELLAL <hellal.riad@gmail.com>
  * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
  *
@@ -22,7 +22,7 @@ use Symfony\Component\Translation\MessageCatalogue;
  *
  * @category   BootStrap_Manager
  * @package    translator
- * @author Riad HELLAL <hellel.riad@gmail.com>
+ * @author Riad HELLAL <hellal.riad@gmail.com>
  * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
  * 
  */
@@ -49,7 +49,7 @@ class WordsLoader implements LoaderInterface
      * @return \Symfony\Component\Routing\RouteCollection
      * @access public
      *
-     * @author Riad HELLAL <hellel.riad@gmail.com>
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-11-14
      */    
@@ -109,7 +109,7 @@ class WordsLoader implements LoaderInterface
      * @return \BootStrap\TranslatorBundle\Manager\Loader\LoaderInterface
      * @access private
      * 
-     * @author Riad HELLAL <hellel.riad@gmail.com>
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     private function getLoader($format)
     {
@@ -136,7 +136,7 @@ class WordsLoader implements LoaderInterface
      * @return mixed
      * @access private
      * 
-     * @author Riad HELLAL <hellel.riad@gmail.com>
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     private function loadFile($file, $format, $locale, $domain = 'messages')
     {
@@ -150,7 +150,7 @@ class WordsLoader implements LoaderInterface
      * @return void
      * @access private
      *
-     * @author Riad HELLAL <hellel.riad@gmail.com>
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     public function wordsTranslation()
     {

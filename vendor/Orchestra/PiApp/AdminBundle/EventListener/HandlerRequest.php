@@ -181,7 +181,6 @@ class HandlerRequest
     	}
     	    	
     	$this->is_switch_language_browser_authorized    = $this->container->getParameter('pi_app_admin.page.switch_language_browser_authorized');
-    	$this->is_init_redirection_authorized           = $this->container->getParameter('pi_app_admin.page.switch_layout_init_redirection_authorized');
     }    
     
 
@@ -196,9 +195,11 @@ class HandlerRequest
      */
     protected function setLocaleNavigator()
     {
-    	if ($this->is_switch_language_browser_authorized) {
+        $locale = $this->request->cookies->has('_locale');
+    	if ($this->is_switch_language_browser_authorized && !$locale) {
     		$lang_value = $this->container->get('pi_app_admin.locale_manager')->parseDefaultLanguage();
     		$this->request->setLocale($lang_value);
+    		$_GET['_locale'] = $lang_value;
     	}
     }   
     

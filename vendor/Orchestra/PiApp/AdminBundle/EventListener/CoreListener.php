@@ -99,8 +99,8 @@ abstract class CoreListener extends abstractListener
     final protected function _TwigCache($eventArgs)
     {
         $entity        = $eventArgs->getEntity();
-        
-        if ($this->isUsernamePasswordToken() && 
+        $is_refresh_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh_allpage');
+        if ($this->isUsernamePasswordToken() && $is_refresh_authorized && 
             (
                 $entity instanceof \PiApp\AdminBundle\Entity\Page ||
                 $entity instanceof \PiApp\AdminBundle\Entity\Widget ||
@@ -149,7 +149,7 @@ abstract class CoreListener extends abstractListener
                 $names[$name]     = $name;
                 
                 // we refresh the cache
-                $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name);
+                $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name, true);
                 
                 // we refresh the cache of all widgets of the page
                 if ( ($entity instanceof \PiApp\AdminBundle\Entity\Page) && (!is_null($entity->getId())) ){
@@ -167,7 +167,7 @@ abstract class CoreListener extends abstractListener
                                 $names[$name_trans] = $name_trans;
                                 
                                 // we refresh the cache
-                                $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name_trans);
+                                $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name_trans, true);
                             }
                         }
                     }
@@ -481,15 +481,14 @@ abstract class CoreListener extends abstractListener
                         $query     = "SELECT id FROM pi_routing WHERE route = ?";
                         $id     = $this->_connexion($eventArgs)->fetchColumn($query, array($entity->getRouteName()));
                         $this->_connexion($eventArgs)->delete('pi_routing', array('id'=>$id));
-                    
                         // we delete all caches of the page
-                        $all_lang    = $this->getRepository('Langue')->findByEnabled(true);
-                        foreach($all_lang as $key => $lang){
-                            $name     = "page:" .$entity->getId() . ':' . $lang->getId();
-                            try {
-                                $this->_container()->get('pi_app_admin.caching')->invalidate($name);
-                            } catch (\Exception $e) {
-                            }
+                        $urls          = $this->_container()->get('pi_app_admin.manager.page')->getUrlByPage($entity);
+                        foreach($urls as $locale => $url){
+                        	$name     = "page:" .$entity->getId() . ':' . $locale . ':' . $url;
+                        	try {
+                        		$this->_container()->get('pi_app_admin.caching')->invalidate($name);
+                        	} catch (\Exception $e) {
+                        	}
                         }
                     }
                }

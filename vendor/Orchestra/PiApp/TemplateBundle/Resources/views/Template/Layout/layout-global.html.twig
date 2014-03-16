@@ -27,8 +27,8 @@
         {% block global_meta %}{% endblock %}         
         
         <!--  Css core ['php', 'yui', 'file', 'array', 'empty'] -->
-        {% stylesheet "bundles/piappadmin/css/layout/screen-layout-global.css:prepend" %}
         {% if (is_granted('ROLE_USER')) %}
+            {% stylesheet "bundles/piappadmin/css/layout/screen-layout-global.css:prepend" %}
             {% stylesheet getParameter('pi_app_admin.admin.theme_css')~":append" %}
         {% endif %}	
         {% if (is_granted('ROLE_USER')) %}
@@ -43,8 +43,10 @@
 		<![endif]-->        
         
         <!--  Js core ['php', 'yui', 'file', 'array', 'empty'] -->
-   		{% javascript "bundles/piappadmin/js/ui/jquery-ui-1.10.3.custom.min.js:prepend" %}
-   		{% javascript "bundles/piappadmin/js/jquery/jquery-migrate-1.2.1.min.js:prepend" %}
+   		{% if (is_granted('ROLE_USER')) %}
+   		    {% javascript "bundles/piappadmin/js/ui/jquery-ui-1.10.3.custom.min.js:prepend" %}
+   		    {% javascript "bundles/piappadmin/js/jquery/jquery-migrate-1.2.1.min.js:prepend" %}
+   		{% endif %}
    		{% javascript "bundles/piappadmin/js/jquery/jquery-1.10.2.min.js:prepend" %}
 		{% if (is_granted('ROLE_USER')) %}
    			{% CMFjavascripts 'file' %}

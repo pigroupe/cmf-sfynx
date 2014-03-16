@@ -176,7 +176,7 @@ class PiToolExtension extends \Twig_Extension
      * @return string
      * @static
      *
-     * @author Riad Hellal <hellel.riad@gmail.com>
+     * @author Riad Hellal <hellal.riad@gmail.com>
      */
     public function getCleanNameFunction($fileName)
     {
@@ -640,7 +640,7 @@ class PiToolExtension extends \Twig_Extension
     /**
      * translation of date.
      *
-     * @author riad hellal <hellel.riad@gmail.com>
+     * @author riad hellal <hellal.riad@gmail.com>
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getDatePatternByLocalFunction($locale, $fileName = 'i18n_date.json')
@@ -670,7 +670,7 @@ class PiToolExtension extends \Twig_Extension
     /**
      * parsing translaion js files.
      *
-     * @author riad hellal <hellel.riad@gmail.com>
+     * @author riad hellal <hellal.riad@gmail.com>
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     private function updateCulturesJsFilesFunction($fileName = 'i18n_date.json')
