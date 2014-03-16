@@ -100,9 +100,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // If the translation page is secure and the user is not authorized, we return to the home page.
             if ($pageTrans && $pageTrans->getSecure() && $this->isUsernamePasswordToken()) {
                 // Gets all user roles.
-                $user_roles             = $this->container->get('bootstrap.Role.factory')->getAllUserRoles();
+                $user_roles                = $this->container->get('bootstrap.Role.factory')->getAllUserRoles();
                 // Gets the best role authorized to access to the entity.
-                $authorized_page_roles  = $this->container->get('bootstrap.Role.factory')->getBestRoles($pageTrans->getHeritage());                
+                $authorized_page_roles     = $this->container->get('bootstrap.Role.factory')->getBestRoles($pageTrans->getHeritage());                
                 $right = false;
                 if (is_null($authorized_page_roles)) {
                     $right = true;
@@ -148,19 +148,18 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 return $response;
             } else {
                 // or render a template with the $response you've already started
-                $response->headers->set('Content-Type', $page->getMetaContentType());
-                if ($this->isUsernamePasswordToken()){
-                    $response->headers->set('Pragma', "no-cache");
-                    $response->headers->set('Cache-control', "private");
-                }
+                //$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
+                $response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
                 
-//                 // we get instances of parser and dumper component yaml files.
+                return $response;
+                
+//                // we get instances of parser and dumper component yaml files.
 //                 $yaml   = new \Symfony\Component\Yaml\Parser();
 //                 //$dumper = new \Symfony\Component\Yaml\Dumper();
 //                 // we get config.yml content in array
 //                 $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
 //                 $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-//                 if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
+//                 if (isset($parsed_yaml_file['framework']['esi']) && ($parsed_yaml_file['framework']['esi'] == 1)) {
 //                 	$is_esi_activate = true;
 //                 } else {
 //                 	$is_esi_activate = false;
@@ -173,11 +172,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 //                 	// We set the reponse
 //                 	$response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
 //                 }
-                
-                //$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
-                $response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);                
-                
-                return $response;
+//                return $response;                
             }
         } else {
             return $this->redirectHomePublicPage();
@@ -1449,8 +1444,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 }
                 $is_prefix_locale = $this->container->getParameter("pi_app_admin.page.page_management_with_prefix_locale");
                 if ($is_prefix_locale) {
-                	$locale_tmp = explode('_', $locale);
-                	$urls[$locale] = $locale_tmp[0] . '/' . $urls[$locale];
+                    $locale_tmp = explode('_', $locale);
+                    $urls[$locale] = $locale_tmp[0] . '/' . $urls[$locale];
                 }
                 $urls[$locale]     = str_replace("//","/",$urls[$locale]);                
                 if ($type == 'sql') {

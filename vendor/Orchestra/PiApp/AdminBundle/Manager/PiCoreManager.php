@@ -330,20 +330,31 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             // we get config.yml content in array
             $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
             $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
+            if (isset($parsed_yaml_file['framework']['esi']) && ($parsed_yaml_file['framework']['esi'] == 1)) {
             } else {
             	$response->setMaxAge($object->getLifetime());
             }
-        }    
+        } 
         // Returns a 304 "not modified" status, when the template has not changed since last visit.
         if (method_exists($object, 'getCacheable') &&  $object->getCacheable()) {
             $response->setLastModified($object->getUpdatedAt());
         } else {
             $response->setLastModified(new \DateTime());
         }    
-        //$response->setETag(md5($response->getContent()));
         $response->setETag($this->Etag);
-    
+        // set header tags.
+        if ( 
+            $this->isUsernamePasswordToken() 
+            || 
+            (method_exists($object, 'getLifetime') && ($object->getLifetime() == 0)) 
+        ) {
+        	$response->headers->set('Pragma', "no-cache");
+        	$response->headers->set('Cache-control', "private");
+        }
+        if (method_exists($object, 'getMetaContentType')) {
+        	$response->headers->set('Content-Type', $object->getMetaContentType());
+        }
+        
         return $response;
     }
     
