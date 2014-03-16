@@ -51,26 +51,17 @@ abstract class CoreListener extends abstractListener
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    final protected function _Heritage_roles(LifecycleEventArgs $eventArgs){
+    final protected function _Heritage_roles(LifecycleEventArgs $eventArgs)
+    {
         $entity         = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
+        $entityManager  = $eventArgs->getEntityManager();
         
         // If  autentication user, we set the persist of the Page entity
         if ($this->isUsernamePasswordToken() && ($entity instanceof \BootStrap\UserBundle\Entity\Role)){
             // we register the hierarchy roles in the heritage.jon file in the cache
-            $roles         = $entityManager->getRepository('BootStrapUserBundle:role')->getAllHeritageRoles();
-            $roles_json    = json_encode(array('HERITAGE_ROLES'=>$roles));
-            
-            // we set the heritage.jon file
-            $path_heritages_file = realpath($this->_container()->getParameter("kernel.cache_dir") . "/../heritage.json");
-            if ($path_heritages_file)
-                $result     = file_put_contents($path_heritages_file, $roles_json);
-            else 
-                $result     = file_put_contents($this->_container()->getParameter("kernel.cache_dir") . "/../heritage.json", $roles_json);
-            
-            if ($result)
+            if ($this->_container()->get('bootstrap.Role.factory')->setJsonFileRoles()) {
                 $this->setFlash('pi.session.flash.rolecache.created');
-            
+            }
             $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php");
             $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php.meta");
             $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.xml");
@@ -83,6 +74,28 @@ abstract class CoreListener extends abstractListener
                     unlink($file);
             }            
         }
+    }  
+
+    /**
+     * We create the cached file of languages.
+     *
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     *
+     * @return void
+     * @access protected
+     * @final
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    final protected function _locales_language_json_file(LifecycleEventArgs $eventArgs)
+    {
+    	$entity         = $eventArgs->getEntity();
+    	$entityManager  = $eventArgs->getEntityManager();
+    
+    	// If  autentication user, we set the persist of the Page entity
+    	if ($this->isUsernamePasswordToken() && ($entity instanceof \PiApp\AdminBundle\Entity\Langue)){
+    		$this->_container()->get('pi_app_admin.locale_manager')->setJsonFileLocales();
+    	}
     }    
     
     /**
@@ -99,8 +112,8 @@ abstract class CoreListener extends abstractListener
     final protected function _TwigCache($eventArgs)
     {
         $entity        = $eventArgs->getEntity();
-        $is_refresh_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh_allpage');
-        if ($this->isUsernamePasswordToken() && $is_refresh_authorized && 
+        $is_refresh_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh_allpage');        
+        if ($this->isUsernamePasswordToken() && $is_refresh_authorized &&
             (
                 $entity instanceof \PiApp\AdminBundle\Entity\Page ||
                 $entity instanceof \PiApp\AdminBundle\Entity\Widget ||
@@ -201,8 +214,8 @@ abstract class CoreListener extends abstractListener
                         // we have to warm up all pages which are used by the snippet 
                         if (!($entity->getWidget()->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) ){                            
                             // We check the permission in config.
-                            $is_refresh_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh_allpage_containing_snippet');
-                            if ($is_refresh_authorized){
+                            $is_refresh_snippet_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh_allpage_containing_snippet');
+                            if ($is_refresh_snippet_authorized){
                                 // we get all widgets which use the content snippet 
                                 $all_widget_used_snippet = $this->getRepository('Widget')->getWidgetByOptions('content', 'snippet', '<id>'.$entity->getWidget()->getId().'</id>')->getQuery()->getResult();
                                 
@@ -484,11 +497,11 @@ abstract class CoreListener extends abstractListener
                         // we delete all caches of the page
                         $urls          = $this->_container()->get('pi_app_admin.manager.page')->getUrlByPage($entity);
                         foreach($urls as $locale => $url){
-                        	$name     = "page:" .$entity->getId() . ':' . $locale . ':' . $url;
-                        	try {
-                        		$this->_container()->get('pi_app_admin.caching')->invalidate($name);
-                        	} catch (\Exception $e) {
-                        	}
+                            $name     = "page:" .$entity->getId() . ':' . $locale . ':' . $url;
+                            try {
+                                $this->_container()->get('pi_app_admin.caching')->invalidate($name);
+                            } catch (\Exception $e) {
+                            }
                         }
                     }
                }

@@ -99,8 +99,8 @@ class Db extends AbstractFactory
     		}
     	}
     	
-    	str_replace('select', 'select', $query, $cont_select);
-    	str_replace('insert', 'insert', $query, $cont_insert);
+    	str_replace('select', 'select', strtolower($query), $cont_select);
+    	str_replace('insert', 'insert', strtolower($query), $cont_insert);
     	
     	if ($log) {
     		print_r($query);

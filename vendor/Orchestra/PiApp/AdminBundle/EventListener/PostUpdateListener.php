@@ -51,6 +51,9 @@ class PostUpdateListener extends CoreListener
     {
         // we set the PostUpdate heritage roles management
         $this->_Heritage_roles($eventArgs);
+        
+        // we set the PostUpdate languages management
+        $this->_locales_language_json_file($eventArgs);
                 
         // we set the PostUpdate block page management
         $this->_Create_Block_Page($eventArgs);

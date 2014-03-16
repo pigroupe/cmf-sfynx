@@ -38,7 +38,7 @@ services:
     #
     pi_app_admin.locale_handler:
         class: %piapp.admin.handler.localeHandler.class%
-        arguments: [%locale%]
+        arguments: [%locale%, @service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 66 }
                          

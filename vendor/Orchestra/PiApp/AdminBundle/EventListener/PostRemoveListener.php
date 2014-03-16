@@ -53,6 +53,9 @@ class PostRemoveListener extends CoreListener
         // we set the postRemove heritage roles management
         $this->_Heritage_roles($eventArgs);
         
+        // we set the postRemove languages management
+        $this->_locales_language_json_file($eventArgs);
+        
         // we set the postRemove Cache Url Generator management
         $this->_updateCacheUrlGenerator($eventArgs);        
     }

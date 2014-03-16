@@ -30,6 +30,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PiLocaleManager implements PiLocaleManagerBuilderInterface 
 {    
+    protected $path_json_file;
+    
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -42,7 +44,8 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->container      = $container;
+        $this->path_json_file = $container->getParameter("kernel.cache_dir") . "/../languages.json";
     }
         
     /**
@@ -85,5 +88,61 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
         }
         //return strtolower(substr($deflang,0,2));
         return str_replace('-', '_', $deflang);
+    }
+    
+    /**
+     * Getting all locales of the CMF.
+     *
+     * @param string $locale
+     * @return array
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function getAllLocales($locale = '')
+    {
+        if (empty($locale))    {
+        	$locale = $this->container->get('request')->getLocale();
+        }
+        $return = true;
+    	// we set the json file if does not exist
+        if (!realpath($this->path_json_file)) {
+            $return = $this->setJsonFileLocales();
+        }
+        $locales = array();
+        if ($return) {
+            // we get all locale values
+            $entities     = json_decode(file_get_contents($this->path_json_file), true);
+            foreach($entities as $locale){
+            	$locales[] = $locale['id'];
+            }     
+        }   
+    	
+    	return $locales;
+    }  
+    
+    /**
+     * Create the json file with all languages information.
+     *
+     * @return boolean
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function setJsonFileLocales()
+    {
+        $db = $this->container->get('bootstrap.database.db');
+        //
+        $req = "
+            SELECT
+                *
+            FROM
+                pi_langue as a
+			WHERE
+			    a.enabled = 1
+		";
+        $entities     = $db->executeQuery($req, array());
+        
+        return file_put_contents($this->path_json_file, json_encode($entities,JSON_UNESCAPED_UNICODE));        
     }
 }

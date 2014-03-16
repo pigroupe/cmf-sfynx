@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace BootStrap\TranslationBundle\Route;
+namespace BootStrap\TranslationBundle\Role;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouteCollection;
@@ -36,6 +36,8 @@ use PiApp\AdminBundle\Entity\Page;
  */
 class RoleFactory extends AbstractFactory implements RoleFactoryInterface
 {
+    protected $path_json_file;
+    
     /**
      * Constructor.
      *
@@ -44,6 +46,7 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
+        $this->path_json_file = $container->getParameter("kernel.cache_dir") . "/../heritage.json";
     }
     
     /**
@@ -62,6 +65,23 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
         } else {
             return null;
         }
+    }   
+
+    /**
+     * Create the json heritage file with all roles information.
+     *
+     * @return boolean
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function setJsonFileRoles()
+    {
+    	// we register the hierarchy roles in the heritage.jon file in the cache
+    	$em         = $this->getContainer()->get('doctrine')->getManager();
+        $roles      = $em->getRepository('BootStrapUserBundle:role')->getAllHeritageRoles();
+        
+        return file_put_contents($this->path_json_file, json_encode(array('HERITAGE_ROLES'=>$roles), JSON_UNESCAPED_UNICODE));  
     }    
     
     /**

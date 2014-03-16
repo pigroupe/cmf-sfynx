@@ -52,6 +52,9 @@ class PostPersistListener extends CoreListener
         // we set the PostPersist heritage roles management
         $this->_Heritage_roles($eventArgs);
         
+        // we set the PostPersist languages management
+        $this->_locales_language_json_file($eventArgs);
+        
         // we set the PostPersist block page management
         $this->_Create_Block_Page($eventArgs);
         

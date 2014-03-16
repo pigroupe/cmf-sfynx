@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use PiApp\AdminBundle\Lib\Browscap;
 use PiApp\AdminBundle\Lib\MobileDetect;
@@ -73,82 +74,98 @@ class HandlerRequest
         	// ne rien faire si ce n'est pas la requête principale
         	return;
         }        
+        //if (!$this->request->hasPreviousSession()) {
+        //    return;
+        //}        
     	//print_r('priority 2');
         // set request
-    	$this->request    = $event->getRequest($event);
-        $locale      = $this->request->getLocale();
-        $globals     = $this->container->get("twig")->getGlobals();
+    	$this->request = $event->getRequest($event);
+        $locale        = $this->request->getLocale();
+        $globals       = $this->container->get("twig")->getGlobals();
         // Sets parameter template values.
         $this->setParams();
-        // SEO for old url
+        // home page redirection
+        if ($this->is_prefix_locale) {
+            $route = $this->container->get('request')->get('route_name');
+            $url   = $this->container->get('request')->getRequestUri();
+            if (($route != 'home_page') && ($url == '/')) {
+                $url_homepage = $this->container->get('bootstrap.RouteTranslator.factory')->getRoute('home_page');
+                $response     = new RedirectResponse($url_homepage, 301);
+                $event->setResponse($response);
+                return;
+            }
+        }        
+        // SEO redirecrtion for old url
         $SEOUrl = $this->isSEOUrl();
         if ($SEOUrl) {
         	// we set response
         	$response = new RedirectResponse($SEOUrl, 301);
         	$event->setResponse($response);
+        	return;
         	//$event->setResponse(new Response(\PiApp\AdminBundle\Util\PiFileManager::getCurl($SEOUrl, null, null, $this->request->getUriForPath(''))));
-        } else {        
-	        // we set the browser information
-	        $browser = $this->browscap->getBrowser();
-	        // we add browser info in the request
-	        $this->request->attributes->set('orchestra-browser', $browser);
-	        $this->request->attributes->set('orchestra-mobiledetect', $this->mobiledetect);        
-	        // we stop the website content if the navigator is not configurate correctly.
-	        $nav_desktop    = strtolower($browser->Browser);
-	        $nav_mobile        = strtolower($browser->Platform);
-	        $isNoScope = false;
-	        if ( 
-	            (!$browser->isMobileDevice) 
-	            &&
-	            (!isset($globals["navigator"][$nav_desktop]) || floatval($browser->Version)  <= $globals["navigator"][$nav_desktop]) 
-	        ){
-	            $isNoScope = true;
-	        }elseif ( 
-	            ($browser->isMobileDevice && !$this->mobiledetect->isTablet())
-	            &&  
-	            (!isset($globals["mobile"][$nav_mobile]) || floatval($browser->Platform_Version)  <= $globals["mobile"][$nav_mobile] )
-	        ){
-	            $isNoScope = true;
-	        }elseif ( 
-	            ($browser->isMobileDevice && $this->mobiledetect->isTablet())
-	            &&  
-	            (!isset($globals["tablet"][$nav_mobile]) || floatval($browser->Platform_Version)  <= $globals["tablet"][$nav_mobile] )
-	        ){
-	            $isNoScope = true;
-	        }
-	        if ( ($browser->Version == 0.0) || ($browser->Platform_Version == 0.0) ) {
-	            $isNoScope = false;
-	        }
-	        if ($isNoScope){
-	            if (!$browser->isMobileDevice) {
-	                if ( isset($globals["navigator"][$nav_desktop]) && (floatval($browser->Version)  <= $globals["navigator"][$nav_desktop]) ) $isNav = false; else $isNav = true;
-	            } elseif ($bc->getBrowser()->isMobileDevice) {
-	                if ( isset($globals["navigator"][$nav_mobile]) && (floatval($browser->Platform_Version)  <= $globals["navigator"][$nav_mobile]) ) $isNav = false; else $isNav = true;
-	            }
-	            $isCookies     = $browser->Cookies;
-	            $isJs         = $browser->JavaScript;
-	            // we set response
-	            $response     = new \Symfony\Component\HttpFoundation\Response($this->request->getUri());
-	            $response->headers->set('Content-Type', 'text/html');
-	            $response     = $this->container->get('templating')->renderResponse('PiAppTemplateBundle:Template\\Nonav:nonav.html.twig', array('locale' => $locale, 'isCookies'=>$isCookies, 'isJs'=>$isJs, 'isNav'=>$isNav), $response);
-	            $event->setResponse($response);
-	        } else {
-	        	// Sets the user local value.
-	        	$this->setLocaleNavigator();
-	            // we add orchestra-layout info in the request
-	            if ($this->request->cookies->has('orchestra-layout')){
-	                $this->layout =  $this->request->cookies->get('orchestra-layout');
-	            } else {
-	            	if (isset($browser->isMobileDevice) && $browser->isMobileDevice){
-	            		if ($this->request->attributes->has('orchestra-screen'))    $WurflScreen = $this->request->attributes->get('orchestra-screen'); else    $WurflScreen = 'layout-medium';
-	            		$this->layout        = 'PiAppTemplateBundle::Template\\Layout\\Mobile\\'.$this->init_mobile_layout.'\\' . $WurflScreen . '.html.twig';
-	            	} else {
-	            		$this->layout        = 'PiAppTemplateBundle::Template\\Layout\\Pc\\'.$this->init_pc_layout;
-	            	}
-	            }
-	            $this->request->attributes->set('orchestra-layout', $this->layout);
-	            $this->request->attributes->set('orchestra-screen', "layout"); 
-	        }
+        }       
+        // we set the browser information
+        $browser = $this->browscap->getBrowser();
+        // we add browser info in the request
+        $this->request->attributes->set('orchestra-browser', $browser);
+        $this->request->attributes->set('orchestra-mobiledetect', $this->mobiledetect);        
+        // we stop the website content if the navigator is not configurate correctly.
+        $nav_desktop  = strtolower($browser->Browser);
+        $nav_mobile   = strtolower($browser->Platform);
+        $isNoScope = false;
+        if ( 
+            (!$browser->isMobileDevice) 
+            &&
+            (!isset($globals["navigator"][$nav_desktop]) || floatval($browser->Version)  <= $globals["navigator"][$nav_desktop]) 
+        ) {
+            $isNoScope = true;
+        } elseif ( 
+            ($browser->isMobileDevice && !$this->mobiledetect->isTablet())
+            &&  
+            (!isset($globals["mobile"][$nav_mobile]) || floatval($browser->Platform_Version)  <= $globals["mobile"][$nav_mobile] )
+        ) {
+            $isNoScope = true;
+        } elseif ( 
+            ($browser->isMobileDevice && $this->mobiledetect->isTablet())
+            &&  
+            (!isset($globals["tablet"][$nav_mobile]) || floatval($browser->Platform_Version)  <= $globals["tablet"][$nav_mobile] )
+        ) {
+            $isNoScope = true;
+        }
+        if ( ($browser->Version == 0.0) || ($browser->Platform_Version == 0.0) ) {
+            $isNoScope = false;
+        }
+        if ($isNoScope) {
+            if (!$browser->isMobileDevice) {
+                if ( isset($globals["navigator"][$nav_desktop]) && (floatval($browser->Version)  <= $globals["navigator"][$nav_desktop]) ) $isNav = false; else $isNav = true;
+            } elseif ($bc->getBrowser()->isMobileDevice) {
+                if ( isset($globals["navigator"][$nav_mobile]) && (floatval($browser->Platform_Version)  <= $globals["navigator"][$nav_mobile]) ) $isNav = false; else $isNav = true;
+            }
+            $isCookies     = $browser->Cookies;
+            $isJs         = $browser->JavaScript;
+            // we set response
+            $response     = new \Symfony\Component\HttpFoundation\Response($this->request->getUri());
+            $response->headers->set('Content-Type', 'text/html');
+            $response     = $this->container->get('templating')->renderResponse('PiAppTemplateBundle:Template\\Nonav:nonav.html.twig', array('locale' => $locale, 'isCookies'=>$isCookies, 'isJs'=>$isJs, 'isNav'=>$isNav), $response);
+            $event->setResponse($response);
+        } else {
+            // we add orchestra-layout info in the request
+            if ($this->request->cookies->has('orchestra-layout')) {
+                $this->layout =  $this->request->cookies->get('orchestra-layout');
+            } else {
+            	if (isset($browser->isMobileDevice) && $browser->isMobileDevice) {
+            		if ($this->request->attributes->has('orchestra-screen')) {
+            		    $WurflScreen = $this->request->attributes->get('orchestra-screen');
+            		} else {
+            		    $WurflScreen = 'layout-medium';
+            		}
+            		$this->layout        = 'PiAppTemplateBundle::Template\\Layout\\Mobile\\'.$this->init_mobile_layout.'\\' . $WurflScreen . '.html.twig';
+            	} else {
+            		$this->layout        = 'PiAppTemplateBundle::Template\\Layout\\Pc\\'.$this->init_pc_layout;
+            	}
+            }
+            $this->request->attributes->set('orchestra-layout', $this->layout);
+            $this->request->attributes->set('orchestra-screen', "layout"); 
         }
     }     
     
@@ -180,28 +197,8 @@ class HandlerRequest
     		$this->seo_redirection_file_name = "seo_links.yml";
     	}
     	    	
-    	$this->is_switch_language_browser_authorized    = $this->container->getParameter('pi_app_admin.page.switch_language_browser_authorized');
+    	$this->is_prefix_locale                         = $this->container->getParameter("pi_app_admin.page.page_management_with_prefix_locale");
     }    
-    
-
-
-    /**
-     * Sets the user local value.
-     *
-     * @return void
-     * @access protected
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function setLocaleNavigator()
-    {
-        $locale = $this->request->cookies->has('_locale');
-    	if ($this->is_switch_language_browser_authorized && !$locale) {
-    		$lang_value = $this->container->get('pi_app_admin.locale_manager')->parseDefaultLanguage();
-    		$this->request->setLocale($lang_value);
-    		$_GET['_locale'] = $lang_value;
-    	}
-    }   
     
     /**
      * Sets the SEO url valule if is a old url.
@@ -238,7 +235,7 @@ class HandlerRequest
         	//
 	    	$filename = $this->request->getPathInfo();
 	        $this->container->get("pi_filecache")->getClient()->setPath($dossier);
-	        if (!$this->container->get("pi_filecache")->get($filename)){
+	        if (!$this->container->get("pi_filecache")->get($filename)) {
 	        	return false;
 	        } else {
 	        	return $this->container->get("pi_filecache")->get($filename);
