@@ -212,22 +212,19 @@ class PiGedmoManager extends PiWidgetExtension
      */
     public function renderSnippet($options = null)
     {
-        $xmlConfig            = $this->getConfigXml();
-        $lang                = $options['widget-lang'];
-    
+        $xmlConfig = $this->getConfigXml();
+        $lang      = $options['widget-lang'];
         // if the configXml field of the widget isn't configured correctly.
         try {
             $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
         } catch (\Exception $e) {
             return "  \n";
         }
-    
         // if the gedmo widget is defined correctly as a "listener"
         if ( ($this->action == "snippet") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('snippet') && $xmlConfig->widgets->gedmo->get('id') )
         {
-            if ( $xmlConfig->widgets->gedmo->snippet ){
-                $idWidget = intval($xmlConfig->widgets->gedmo->id);        
-                
+            if ( $xmlConfig->widgets->gedmo->snippet ) {
+                $idWidget = intval($xmlConfig->widgets->gedmo->id);       
                 try {
                     //return " {{ getService('pi_app_admin.manager.widget').exec(".$idWidget.", '$lang')|raw }} \n";
                     return $this->container->get('pi_app_admin.manager.widget')->exec($idWidget, $lang);
@@ -235,8 +232,9 @@ class PiGedmoManager extends PiWidgetExtension
                     return "the gedmo snippet doesn't exist";
                 }
             }
-        }else
+        } else {
             throw ExtensionException::optionValueNotSpecified("gedmo", __CLASS__);
+        }
     }    
     
     /**
@@ -270,35 +268,38 @@ class PiGedmoManager extends PiWidgetExtension
      */
     public function renderListener($options = null)
     {
-        $xmlConfig            = $this->getConfigXml();
-        $lang                = $options['widget-lang'];
-        
+        $xmlConfig = $this->getConfigXml();
+        $lang      = $options['widget-lang'];
         // if the configXml field of the widget isn't configured correctly.
         try {
             $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
         } catch (\Exception $e) {
             return "  \n";
         }
-        
         // if the gedmo widget is defined correctly as a "listener"
-        if ( ($this->action == "listener") && $xmlConfig->widgets->get("gedmo") && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params') )
-        {
-            $controller    = $xmlConfig->widgets->gedmo->controller;
-            $params        = $xmlConfig->widgets->gedmo->params->toArray();
-            
-            if ($xmlConfig->widgets->gedmo->params->get('cachable'))
+        if ( ($this->action == "listener") && $xmlConfig->widgets->get("gedmo") && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params') ) {
+            $controller          = $xmlConfig->widgets->gedmo->controller;
+            $params              = $xmlConfig->widgets->gedmo->params->toArray();
+            $params['widget-id']        = $options['widget-id'];
+            $params['widget-lifetime']  = $options['widget-lifetime'];
+            $params['widget-cacheable'] = $options['widget-cacheable'];
+            $params['widget-update']    = $options['widget-update'];
+            $params['widget-public']    = $options['widget-public'];
+            if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
                 $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-            else
-                $params['cachable'] = 'true';            
-
-            if ($this->isAvailableAction($controller)){
-                if ($params['cachable'] == 'true')
+            } else {
+                $params['cachable'] = 'true';
+            }          
+            if ($this->isAvailableAction($controller)) {
+                if ($params['cachable'] == 'true') {
                     return $this->runByExtension('pi_app_admin.manager.listener', $this->action, $controller, $lang, $params);
-                else
+                } else {
                     return $this->runByService('pi_app_admin.manager.listener', $controller, $lang, $params);
+                }
             }
-        }else
-            throw ExtensionException::optionValueNotSpecified("gedmo", __CLASS__);    
+        } else {
+            throw ExtensionException::optionValueNotSpecified("gedmo", __CLASS__);
+        }    
     }
     
     /**
@@ -353,108 +354,110 @@ class PiGedmoManager extends PiWidgetExtension
      */
     public function renderNavigation($options = null)
     {
-        $xmlConfig    = $this->getConfigXml();
-        $lang        = $options['widget-lang'];
+        $xmlConfig  = $this->getConfigXml();
+        $lang       = $options['widget-lang'];
         $params     = array();
-        
         // if the configXml field of the widget isn't configured correctly.
         try {
             $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
         } catch (\Exception $e) {
             return "  \n";
-        }
-        
+        }        
         // if the gedmo widget is defined correctly as a "navigation"
-        if ( ($this->action == "navigation") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params') )
-        {
-            $controller    = $xmlConfig->widgets->gedmo->controller;
-            
-            if ($this->isAvailableAction($controller)){
+        if ( ($this->action == "navigation") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params') ) {
+            $controller    = $xmlConfig->widgets->gedmo->controller;            
+            if ($this->isAvailableAction($controller)) {
                 //$render_navigation = $this->method . "Action";
-                
-                if ($xmlConfig->widgets->gedmo->params->get('category'))
+                if ($xmlConfig->widgets->gedmo->params->get('category')) {
                     $category = $xmlConfig->widgets->gedmo->params->category;
-                else
+                } else {
                     $category = ""; 
-
-                if ($xmlConfig->widgets->gedmo->params->get('node'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('node')) {
                     $params['node'] = $xmlConfig->widgets->gedmo->params->node;
-                else
+                } else {
                     $params['node'] = "";   
-                
-                if ($xmlConfig->widgets->gedmo->params->get('enabledonly'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('enabledonly')) {
                     $params['enabledonly'] = $xmlConfig->widgets->gedmo->params->enabledonly;
-                else
+                } else {
                     $params['enabledonly'] = "true";    
-                
-                if ($xmlConfig->widgets->gedmo->params->get('cachable'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
                     $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-                else
+                } else {
                     $params['cachable'] = 'true';
-
-                if ($xmlConfig->widgets->gedmo->params->get('template'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('template')) {
                     $template = $xmlConfig->widgets->gedmo->params->template;
-                else
+                } else {
                     $template = "";
-
-                $params['entity']     = $this->entity;
-                $params['category'] = $category;
-                $params['template'] = $template;
-
-                if ($xmlConfig->widgets->gedmo->params->get('navigation')){
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass'))
+                }
+                $params['entity']    = $this->entity;
+                $params['category']  = $category;
+                $params['template']  = $template;
+                $params['widget-id']        = $options['widget-id'];
+                $params['widget-lifetime']  = $options['widget-lifetime'];
+                $params['widget-cacheable'] = $options['widget-cacheable'];
+                $params['widget-update']    = $options['widget-update'];
+                $params['widget-public']    = $options['widget-public'];
+                if ($xmlConfig->widgets->gedmo->params->get('navigation')) {
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass')) {
                         $params['separatorClass'] = $xmlConfig->widgets->gedmo->params->navigation->separatorClass;
-                    else
+                    } else {
                         $params['separatorClass'] = "";
-                    
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorText'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorText')) {
                         $params['separatorText'] = $xmlConfig->widgets->gedmo->params->navigation->separatorText;
-                    else
+                    } else {
                         $params['separatorText'] = "";    
-
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorFirst'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorFirst')) {
                         $params['separatorFirst'] = $xmlConfig->widgets->gedmo->params->navigation->separatorFirst;
-                    else
+                    } else {
                         $params['separatorFirst'] = "false";
-                    
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorLast'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorLast')) {
                         $params['separatorLast'] = $xmlConfig->widgets->gedmo->params->navigation->separatorLast;
-                    else
+                    } else {
                         $params['separatorLast'] = "false";                    
-                    
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('ulClass'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('ulClass')) {
                         $params['ulClass'] = $xmlConfig->widgets->gedmo->params->navigation->ulClass;
-                    else
+                    } else {
                         $params['ulClass'] = "";
-                    
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('liClass'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('liClass')) {
                         $params['liClass'] = $xmlConfig->widgets->gedmo->params->navigation->liClass;
-                    else
+                    } else {
                         $params['liClass'] = "";
-                    
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('counter'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('counter')) {
                         $params['counter'] = $xmlConfig->widgets->gedmo->params->navigation->counter;
-                    else
+                    } else {
                         $params['counter'] = "";
-                    
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('routeActifMenu'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('routeActifMenu')) {
                         $params['routeActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->routeActifMenu->toArray();
-                    
-                    if ($xmlConfig->widgets->gedmo->params->navigation->get('lvlActifMenu'))
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('lvlActifMenu')) {
                         $params['lvlActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->lvlActifMenu->toArray();
-                    
-                    if ($params['cachable'] == 'true')
+                    }
+                    if ($params['cachable'] == 'true') {
                         return $this->runByExtension('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
-                    else
+                    } else {
                         return $this->runByService('pi_app_admin.manager.tree', "$this->entity~$this->method~$category", $lang, $params);
                         //return $this->runByjqueryExtension("MENU", "$this->entity~$this->method~$category", $lang, $params);
-                                        
-                }else
+                    }
+                } else {
                     throw ExtensionException::optionValueNotSpecified("gedmo navigation", __CLASS__);
-            }else
+                }
+            } else {
                 throw ExtensionException::optionValueNotSpecified("gedmo template", __CLASS__);
-        }else
-            throw ExtensionException::optionValueNotSpecified("gedmo params or controller", __CLASS__);            
+            }
+        } else {
+            throw ExtensionException::optionValueNotSpecified("gedmo params or controller", __CLASS__);
+        }            
     }
     
     /**
@@ -558,74 +561,74 @@ class PiGedmoManager extends PiWidgetExtension
      */
     public function renderOrganigram($options = null)
     {
-        $xmlConfig    = $this->getConfigXml();
-        $lang        = $options['widget-lang'];
-        $params     = array();
-    
+        $xmlConfig  = $this->getConfigXml();
+        $lang       = $options['widget-lang'];
+        $params     = array();    
         // if the configXml field of the widget isn't configured correctly.
         try {
             $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
         } catch (\Exception $e) {
             return "  \n";
-        }
-    
+        }    
         // if the gedmo widget is defined correctly as an "organigram"
-        if ( ($this->action == "organigram") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')  )
-        {
-            $controller    = $xmlConfig->widgets->gedmo->controller;
-            
-            if ($this->isAvailableAction($controller)){
-                //$render_navigation = $this->method . "Action";
-            
-                if ($xmlConfig->widgets->gedmo->params->get('category'))
+        if ( ($this->action == "organigram") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')  ) {
+            $controller    = $xmlConfig->widgets->gedmo->controller;            
+            if ($this->isAvailableAction($controller)) {
+                //$render_navigation = $this->method . "Action";            
+                if ($xmlConfig->widgets->gedmo->params->get('category')) {
                     $category = $xmlConfig->widgets->gedmo->params->category;
-                else
+                } else {
                     $category = "";
-                
-                if ($xmlConfig->widgets->gedmo->params->get('node'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('node')) {
                     $params['node'] = $xmlConfig->widgets->gedmo->params->node;
-                else
+                } else {
                     $params['node'] = "";
-                
-                if ($xmlConfig->widgets->gedmo->params->get('enabledonly'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('enabledonly')) {
                     $params['enabledonly'] = $xmlConfig->widgets->gedmo->params->enabledonly;
-                else
+                } else {
                     $params['enabledonly'] = "true";
-                
-                if ($xmlConfig->widgets->gedmo->params->get('cachable'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
                     $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-                else
+                } else {
                     $params['cachable'] = 'true';
-
-                if ($xmlConfig->widgets->gedmo->params->get('template'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('template')) {
                     $template = $xmlConfig->widgets->gedmo->params->template;
-                else
+                } else {
                     $template = "";
-                
-                $params['entity']     = $this->entity;
-                $params['category'] = $category;
-                $params['template'] = $template;
-            
-                if ($xmlConfig->widgets->gedmo->params->get('organigram')){
-
-                    if ($xmlConfig->widgets->gedmo->params->organigram->get('params'))
+                }
+                $params['entity']    = $this->entity;
+                $params['category']  = $category;
+                $params['template']  = $template;
+                $params['widget-id']        = $options['widget-id'];
+                $params['widget-lifetime']  = $options['widget-lifetime'];
+                $params['widget-cacheable'] = $options['widget-cacheable'];
+                $params['widget-update']    = $options['widget-update'];
+                $params['widget-public']    = $options['widget-public'];
+                if ($xmlConfig->widgets->gedmo->params->get('organigram')) {
+                    if ($xmlConfig->widgets->gedmo->params->organigram->get('params')) {
                         $params = array_merge($params, $xmlConfig->widgets->gedmo->params->organigram->params->toArray());
-                    
-                    if ($xmlConfig->widgets->gedmo->params->organigram->get('fields') && $xmlConfig->widgets->gedmo->params->organigram->fields->get('field'))
-                    {
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->organigram->get('fields') && $xmlConfig->widgets->gedmo->params->organigram->fields->get('field')) {
                         $params['fields'] = $xmlConfig->widgets->gedmo->params->organigram->fields->field->toArray();
                     }
-                    
-                    if ($params['cachable'] == 'true')
+                    if ($params['cachable'] == 'true') {
                         return $this->runByExtension('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
-                    else
+                    } else {
                         return $this->runByjqueryExtension("MENU", "$this->entity~$this->method~$category", $lang, $params);
-                }else
+                    }
+                } else {
                     throw ExtensionException::optionValueNotSpecified("gedmo navigation", __CLASS__);
-            }else
-                throw ExtensionException::optionValueNotSpecified("gedmo template", __CLASS__);            
-        }else
+                }
+            } else {
+                throw ExtensionException::optionValueNotSpecified("gedmo template", __CLASS__);
+            }            
+        } else {
             throw ExtensionException::optionValueNotSpecified("gedmo", __CLASS__);
+        }
     }    
 
     /**
@@ -687,67 +690,67 @@ class PiGedmoManager extends PiWidgetExtension
      */
     public function renderSlider($options = null)
     {
-        $xmlConfig            = $this->getConfigXml();
-        $lang                = $options['widget-lang'];
-    
+        $xmlConfig = $this->getConfigXml();
+        $lang      = $options['widget-lang'];    
         // if the configXml field of the widget isn't configured correctly.
         try {
             $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
         } catch (\Exception $e) {
             return "  \n";
-        }
-    
+        }    
         // if the gedmo widget is defined correctly as an "organigram"
-        if ( ($this->action == "slider") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')  )
-        {
+        if ( ($this->action == "slider") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')  ) {
             $controller    = $xmlConfig->widgets->gedmo->controller;
-            
-            if ($this->isAvailableAction($controller)){
-            
-                if ($xmlConfig->widgets->gedmo->params->get('category'))
+            if ($this->isAvailableAction($controller)) {
+                if ($xmlConfig->widgets->gedmo->params->get('category')) {
                     $category = $xmlConfig->widgets->gedmo->params->category;
-                else
+                } else {
                     $category = "";
-                
-                if ($xmlConfig->widgets->gedmo->params->get('template'))
+                }
+                if ($xmlConfig->widgets->gedmo->params->get('template')) {
                     $template = $xmlConfig->widgets->gedmo->params->template;
-                else
+                } else {
                     $template = "";        
-
+                }
                 $params = array();
-                if ($xmlConfig->widgets->gedmo->params->get('slider')){
-
+                if ($xmlConfig->widgets->gedmo->params->get('slider')) {
                     $params = $xmlConfig->widgets->gedmo->params->slider->toArray();
-                    $params['entity']      = $this->entity;
+                    $params['entity']    = $this->entity;
                     $params['category']  = $category;
                     $params['template']  = $template;
-                    
-                    if ($xmlConfig->widgets->gedmo->params->get('cachable'))
+                    $params['widget-id']        = $options['widget-id'];
+                    $params['widget-lifetime']  = $options['widget-lifetime'];
+                    $params['widget-cacheable'] = $options['widget-cacheable'];
+                    $params['widget-update']    = $options['widget-update'];
+                    $params['widget-public']    = $options['widget-public'];
+                    if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
                         $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-                    else
+                    } else {
                         $params['cachable'] = 'true';                    
-                    
-                    if ($xmlConfig->widgets->gedmo->params->slider->get('params'))
-                    {
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->slider->get('params')) {
                         $params['params'] = $xmlConfig->widgets->gedmo->params->slider->params->toArray();
-                    }                    
-                    
-                    if (!isset($params['action']) || empty($params['action']))
+                    }                                        
+                    if (!isset($params['action']) || empty($params['action'])) {
                         $params['action']   = 'renderDefault';
-                    if (!isset($params['menu']) || empty($params['menu']))
+                    }
+                    if (!isset($params['menu']) || empty($params['menu'])) {
                         $params['menu']     = 'entity';
-                    
-                    if ($params['cachable'] == 'true')
+                    }
+                    if ($params['cachable'] == 'true') {
                         return $this->runByExtension('pi_app_admin.manager.slider', $this->action, $this->entity."~".$this->method."~".$category, $lang, $params);
-                    else
+                    } else {
                         return $this->runByService('pi_app_admin.manager.slider', $this->entity."~".$this->method."~".$category, $lang, $params);
-                                        
-                }else
+                    }            
+                } else {
                     throw ExtensionException::optionValueNotSpecified("params xmlConfig", __CLASS__);
-            }else
-                throw ExtensionException::optionValueNotSpecified("controller configuration", __CLASS__);            
-        }else
+                }
+            } else {
+                throw ExtensionException::optionValueNotSpecified("controller configuration", __CLASS__);
+            }            
+        } else {
             throw ExtensionException::optionValueNotSpecified("gedmo", __CLASS__);
+        }
     }    
     
     /**

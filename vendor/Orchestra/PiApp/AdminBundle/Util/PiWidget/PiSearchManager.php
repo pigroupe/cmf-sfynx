@@ -51,7 +51,7 @@ class PiSearchManager extends PiWidgetExtension
      */    
     protected function init()
     {
-        if ( ($this->action == "lucene") && !empty($this->method)){
+        if ( ($this->action == "lucene") && !empty($this->method)) {
             return $this->container->get('pi_app_admin.twig.extension.jquery')->initJquery($this->method);
         }
     }        
@@ -68,10 +68,11 @@ class PiSearchManager extends PiWidgetExtension
      */
     protected function isAvailableJqueryExtension($JQcontainer, $JQservice)
     {
-        if ( isset($GLOBALS['JQUERY'][$JQcontainer][$JQservice]) && $this->container->has($GLOBALS['JQUERY'][$JQcontainer][$JQservice]) ){
+        if ( isset($GLOBALS['JQUERY'][$JQcontainer][$JQservice]) && $this->container->has($GLOBALS['JQUERY'][$JQcontainer][$JQservice]) ) {
             return true;
-        }else
+        } else {
             return false;
+        }
     }
         
 
@@ -85,7 +86,7 @@ class PiSearchManager extends PiWidgetExtension
      *             <search>
      *                 <controller>LUCENE:search-lucene</controller>
      *                 <params>
-     *                     <cachable>false</cachable>
+     *                    <cachable>false</cachable>
      *                    <template>searchlucene-result.html.twig</template>
      *                    <MaxResults></MaxResults>
      *                  <lucene>
@@ -121,61 +122,59 @@ class PiSearchManager extends PiWidgetExtension
      */
     public function renderLucene($options = null)
     {
-        $xmlConfig    = $this->getConfigXml();
-        $lang        = $options['widget-lang'];
-        $params     = array();
-        
+        $xmlConfig  = $this->getConfigXml();
+        $lang       = $options['widget-lang'];
+        $params     = array();        
         // if the configXml field of the widget isn't configured correctly.
         try {
             $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
         } catch (\Exception $e) {
             return "  \n";
-        }
-        
+        }        
         // if the gedmo widget is defined correctly as a "lucene"
-        if ( ($this->action == "lucene") && $xmlConfig->widgets->get('search') && $xmlConfig->widgets->search->get('controller') && $xmlConfig->widgets->search->get('params')  )
-        {
+        if ( ($this->action == "lucene") && $xmlConfig->widgets->get('search') && $xmlConfig->widgets->search->get('controller') && $xmlConfig->widgets->search->get('params')  ) {
             $controller    = $xmlConfig->widgets->search->controller;
-            
-            if ($xmlConfig->widgets->search->params->get('cachable'))
+            if ($xmlConfig->widgets->search->params->get('cachable')) {
                 $params['cachable'] = $xmlConfig->widgets->search->params->cachable;
-            else
+            } else {
                 $params['cachable'] = 'true';
-            
-            if ($xmlConfig->widgets->search->params->get('template'))
+            }
+            if ($xmlConfig->widgets->search->params->get('template')) {
                 $params['template'] = $xmlConfig->widgets->search->params->template;
-            else
+            } else {
                 $params['template'] = "";
-
-            if ($xmlConfig->widgets->search->params->get('MaxResults'))
+            }
+            if ($xmlConfig->widgets->search->params->get('MaxResults')) {
                 $params['MaxResults'] = $xmlConfig->widgets->search->params->MaxResults;
-            else
+            } else {
                 $params['MaxResults'] = 0;            
-            
-            if ($xmlConfig->widgets->search->params->get('lucene')){
-            
-                   $params = array_merge($params, $xmlConfig->widgets->search->params->lucene->toArray());
-            
-                   $values     = explode(':', $controller);
-                   $JQcontainer= strtoupper($values[0]);
-                   $JQservice    = strtolower($values[1]);
-                   
+            }
+            if ($xmlConfig->widgets->search->params->get('lucene')) {            
+                   $params      = array_merge($params, $xmlConfig->widgets->search->params->lucene->toArray());            
+                   $values      = explode(':', $controller);
+                   $JQcontainer = strtoupper($values[0]);
+                   $JQservice   = strtolower($values[1]);
 //                    print_r($this->runByExtension('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params));
 //                    krsort($params); // array_multisort
 //                    print_r($params);exit;                  
-                   
-                   if ($this->isAvailableJqueryExtension($JQcontainer, $JQservice)){
-                       if ($params['cachable'] == 'true')
+                   if ($this->isAvailableJqueryExtension($JQcontainer, $JQservice)) {
+                       $params['widget-id']        = $options['widget-id'];
+                        $params['widget-lifetime']  = $options['widget-lifetime'];
+                        $params['widget-cacheable'] = $options['widget-cacheable'];
+                        $params['widget-update']    = $options['widget-update'];
+                        $params['widget-public']    = $options['widget-public'];
+                       if ($params['cachable'] == 'true') {
                            return $this->runByExtension('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params);
-                       else
+                       } else {
                            return $this->runByjqueryExtension($JQcontainer, $JQservice, $lang, $params);
-                   }
-                   
-            }else
-                throw ExtensionException::optionValueNotSpecified("gedmo navigation", __CLASS__);            
-         
-        }else
-            throw ExtensionException::optionValueNotSpecified("content", __CLASS__);        
+                       }
+                   }                   
+            } else {
+                throw ExtensionException::optionValueNotSpecified("gedmo navigation", __CLASS__);
+            }          
+        } else {
+            throw ExtensionException::optionValueNotSpecified("content", __CLASS__);
+        }        
     }
 
     /**

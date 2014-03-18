@@ -163,7 +163,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         // We cretae and set the Etag value
         if (!is_null($params)) {
             // we sort an array by key in reverse order
-            krsort($params);
+            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
             $params        = $this->paramsEncode($params);
             $id            = $this->_Encode($id, false);
             $this->setEtag("$tag:$id:$lang:$params");
@@ -177,7 +177,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
 
     protected function paramsEncode($params)
     {
-        $string    = json_encode($params);
+        $string    = json_encode($params, JSON_NUMERIC_CHECK  | JSON_UNESCAPED_UNICODE);
         return $this->_Encode($string);    
     }
 
@@ -330,7 +330,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             // we get config.yml content in array
             $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
             $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']) && ($parsed_yaml_file['framework']['esi'] == 1)) {
+            if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
             } else {
             	$response->setMaxAge($object->getLifetime());
             }

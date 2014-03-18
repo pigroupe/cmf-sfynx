@@ -159,7 +159,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 //                 // we get config.yml content in array
 //                 $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
 //                 $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-//                 if (isset($parsed_yaml_file['framework']['esi']) && ($parsed_yaml_file['framework']['esi'] == 1)) {
+//                 if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
 //                 	$is_esi_activate = true;
 //                 } else {
 //                 	$is_esi_activate = false;
@@ -882,7 +882,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 // we create the cache name
                 $referer_url = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang_page, null, true);
                 $referer_url = str_replace($this->container->get('request')->getUriForPath(''), '', $referer_url);
-                $name_page    = 'page:'.$page->getId().':'.$lang_page.':'.$referer_url;
+                $name_page    = 'page:'.$page->getId().':'.$lang_page.':/'.$referer_url;
+                $name_page    = str_replace('//', '/', $name_page);
                 if (isset($this->widgets[$page->getId()]) && is_array($this->widgets[$page->getId()])) {
                     foreach ($this->widgets[$page->getId()] as $key_block=>$widgets) {
                         if (isset($this->widgets[$page->getId()][$key_block]) && is_array($this->widgets[$page->getId()][$key_block])) {
@@ -893,13 +894,14 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 //                                 print_r(' - action : ' . $widget->getAction());
 //                                 print_r('<br />');                                
                                 // we create the cache name of the widget
-                                $Etag_widget    = 'widget:'.$widget->getId().':'.$lang_page;                    
+                                $Etag_widget  = 'widget:'.$widget->getId().':'.$lang_page;
+                                $params_transwidget = json_encode(array('widget-id'=>$widget->getId()), JSON_UNESCAPED_UNICODE);
                                 // we manage the "transwidget"
                                 $widget_translations = $this->getWidgetManager()->setWidgetTranslations($widget);
                                 if (is_array($widget_translations)) {
                                     foreach ($widget_translations as $translang => $translationWidget) {
                                         // we create the cache name of the transwidget
-                                        $Etag_transwidget  = 'transwidget:'.$translationWidget->getId().':'.$translang;
+                                        $Etag_transwidget  = 'transwidget:'.$translationWidget->getId().':'.$translang.':'.$params_transwidget;
                                         // we refresh the cache of the transwidget
                                         $this->cacheRefreshByname($Etag_transwidget);
                                     }
@@ -913,7 +915,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                         if ($xmlConfig->widgets->get('content')) {
                                             $id_snippet    = $xmlConfig->widgets->content->id;
                                             // we create the cache name of the snippet
-                                            $Etag_snippet  = 'transwidget:'.$id_snippet.':'.$lang_page;
+                                            $Etag_snippet  = 'transwidget:'.$id_snippet.':'.$lang_page.':'.$params_transwidget;
                                             // we refresh the cache of the snippet
                                             $this->cacheRefreshByname($Etag_snippet);
                                         }
@@ -933,16 +935,22 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                                 $params['cachable'] = $xmlConfig->widgets->content->params->cachable;
                                             } else {
                                                 $params['cachable'] = 'true';
-                                            }                                
+                                            }    
+                                            $params['widget-id']        = $widget->getId();
+                                            $params['widget-lifetime']  = $widget->getLifetime();
+                                            $params['widget-cacheable'] = strval($widget->getCacheable());
+                                            $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+                                            $params['widget-public']    = strval($widget->getPublic());
                                             $values     = explode(':', $controller);
                                             $JQcontainer= strtoupper($values[0]);
                                             $JQservice  = strtolower($values[1]);                                
                                             // we sort an array by key in reverse order
                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
                                             // we create de Etag cache
-                                            $params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-                                            $params     = $this->_Encode($params);
-                                            $Etag_jqext = $widget->getAction() . ":$JQcontainer~$JQservice:$lang_page:$params";                                
+                                            //$params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+                                            $params = $this->paramsEncode($params);
+                                            $id     = $this->_Encode("$JQcontainer~$JQservice", false);
+                                            $Etag_jqext = $widget->getAction() . ":$id:$lang_page:$params";                                
                                         	// we refesh only if the widget is in cash.
                                            	$this->cacheRefreshByname($Etag_jqext);
                                         }
@@ -978,7 +986,55 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 //                                 print_r(' - action : ' . $widget->getAction());
 //                                 print_r('<br />');                                
                                 
-                                // If the widget is a tree a "listener"
+                                // If the widget is a search lucene
+                                if ( ($widget->getPlugin() == 'search') && ($widget->getAction() == 'lucene') ) {
+                                	$xmlConfig            = $widget->getConfigXml();
+                                	// if the configXml field of the widget is configured correctly.
+                                	try {
+                                		$xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+                                		if ($xmlConfig->widgets->get('search') && $xmlConfig->widgets->search->get('controller') && $xmlConfig->widgets->search->get('params')  ) {
+                                		    $controller    = $xmlConfig->widgets->search->controller;
+                                            if ($xmlConfig->widgets->search->params->get('cachable')) {
+                                                $params['cachable'] = $xmlConfig->widgets->search->params->cachable;
+                                            } else {
+                                                $params['cachable'] = 'true';
+                                            }
+                                            if ($xmlConfig->widgets->search->params->get('template')) {
+                                                $params['template'] = $xmlConfig->widgets->search->params->template;
+                                            } else {
+                                                $params['template'] = "";
+                                            }
+                                            if ($xmlConfig->widgets->search->params->get('MaxResults')) {
+                                                $params['MaxResults'] = $xmlConfig->widgets->search->params->MaxResults;
+                                            } else {
+                                                $params['MaxResults'] = 0;            
+                                            }
+                                            $params['widget-id']        = $widget->getId();
+                                            $params['widget-lifetime']  = $widget->getLifetime();
+                                            $params['widget-cacheable'] = strval($widget->getCacheable());
+                                            $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+                                            $params['widget-public']    = strval($widget->getPublic());
+                                		    if ($xmlConfig->widgets->search->params->get('lucene')) {            
+                                                   $params      = array_merge($params, $xmlConfig->widgets->search->params->lucene->toArray());            
+                                                   $values      = explode(':', $controller);
+                                                   $JQcontainer = strtoupper($values[0]);
+                                                   $JQservice   = strtolower($values[1]);
+                                                   // we sort an array by key in reverse order
+                                                   $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+                                                   // we create de Etag cache
+                                                   //$params            = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+                                                   $params  = $this->paramsEncode($params);
+                                                   $id      = $this->_Encode("$JQcontainer~$JQservice", false);
+                                                   $Etag_searchlucene = $widget->getAction() . ":$id:$lang_page:$params";
+                                                   // we refesh only if the widget is in cash.
+                                                   $this->cacheRefreshByname($Etag_searchlucene);
+                                            } 
+                                		}
+                                	} catch (\Exception $e) {
+                                    }
+                                }
+                                                                
+                                // If the widget is a "listener"
                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'listener') ) {
                                     $xmlConfig            = $widget->getConfigXml();
                                     // if the configXml field of the widget is configured correctly.
@@ -993,13 +1049,20 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                             } else {
                                                 $params['cachable'] = 'true';
                                             }
+                                            $params['widget-id']        = $widget->getId();
+                                            $params['widget-lifetime']  = $widget->getLifetime();
+                                            $params['widget-cacheable'] = strval($widget->getCacheable());
+                                            $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+                                            $params['widget-public']    = strval($widget->getPublic());
                                             // we sort an array by key in reverse order
                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
                                             // we create de Etag cache
-                                            $params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-                                            $params        = $this->_Encode($params);
-                                            $controller        = str_replace(':', '#', $controller);
-                                            $Etag_listener    = $widget->getAction() . ":$controller:$lang_page:$params";	                                            
+                                            //$params        = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+                                            $params = $this->paramsEncode($params);
+                                            $id     = $this->_Encode($controller, false);
+                                            $Etag_listener = $widget->getAction() . ":$id:$lang_page:$params";
+                                            //print_r($Etag_listener);	                                            
+                                            //print_r("<br/><br/>");
                                             // we refesh only if the widget is in cash.
                                            	$this->cacheRefreshByname($Etag_listener);
                                         }
@@ -1043,9 +1106,14 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                             } else {
                                                 $template = "";
                                             }
-                                            $params['entity']   = $entity;
-                                            $params['category'] = $category;
-                                            $params['template'] = $template;
+                                            $params['entity']    = $entity;
+                                            $params['category']  = $category;
+                                            $params['template']  = $template;
+                                            $params['widget-id'] = $widget->getId();
+                                            $params['widget-lifetime']  = $widget->getLifetime();
+                                            $params['widget-cacheable'] = strval($widget->getCacheable());
+                                            $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+                                            $params['widget-public']    = strval($widget->getPublic());
                                             //
                                             if ($xmlConfig->widgets->gedmo->params->get('navigation')) {                                            
                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass')) {
@@ -1101,17 +1169,20 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                             // we sort an array by key in reverse order
                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
                                             // we create de Etag cache
-                                            $params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-                                            $params        = $this->_Encode($params);
-                                            $entity        = stripslashes($this->_Encode($entity, false));
-                                            $Etag_tree    = $widget->getAction() . ":$entity~$method~$category:$lang_page:$params";
+                                            //$params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+                                            $params     = $this->paramsEncode($params);
+                                            $entity     = stripslashes($this->_Encode($entity, false));
+                                            $id         = $this->_Encode("$entity~$method~$category", false);
+                                            $Etag_tree  = $widget->getAction() . ":$id:$lang_page:$params";
                                             // we refesh only if the widget is in cash.
                                            	$this->cacheRefreshByname($Etag_tree);
+                                           	//print_r($Etag_tree);
+                                           	//print_r("<br/><br/>");
                                         }
                                     } catch (\Exception $e) {
                                     }
                                 }                                
-                                // If the widget is a tree a "slider"
+                                // If the widget is a "slider"
                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'slider') ) {
                                     $xmlConfig            = $widget->getConfigXml();
                                     // if the configXml field of the widget is configured correctly.
@@ -1139,6 +1210,11 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                                 $params['entity']    = $entity;
                                                 $params['category']  = $category;
                                                 $params['template']  = $template;
+                                                $params['widget-id'] = $widget->getId();
+                                                $params['widget-lifetime']  = $widget->getLifetime();
+                                                $params['widget-cacheable'] = strval($widget->getCacheable());
+                                                $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+                                                $params['widget-public']    = strval($widget->getPublic());
 												//                                                
                                                 if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
                                                     $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
@@ -1154,15 +1230,15 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                                 if (!isset($params['menu']) || empty($params['menu'])) {
                                                     $params['menu']     = 'entity';
                                                 }
-                                            }
-                                            
+                                            }                                            
                                             // we sort an array by key in reverse order
                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
                                             // we create de Etag cache
-                                            $params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-                                            $params        = $this->_Encode($params);
-                                            $entity        = stripslashes($this->_Encode($entity, false));
-                                            $Etag_slider = $widget->getAction() . ":$entity~$method~$category:$lang_page:$params";
+                                            //$params      = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+                                            $params      = $this->paramsEncode($params);
+                                            $entity      = stripslashes($this->_Encode($entity, false));
+                                            $id          = $this->_Encode("$entity~$method~$category", false);
+                                            $Etag_slider = $widget->getAction() . ":$id:$lang_page:$params";
                                             // we refesh only if the widget is in cash.
                                            	$this->cacheRefreshByname($Etag_slider);
                                         }
@@ -1171,12 +1247,14 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                 }                      
                                 // we refesh only if the widget is in cash.
                                	$this->cacheRefreshByname($Etag_widget);
+                               	//print_r('<br />');print_r('<br />');
                             }
                         }
                     }
                 }
                 // we refesh only if the widget is in cash.
                	$this->cacheRefreshByname($name_page);
+               	//print_r('<br />');print_r('<br />');
             }
         }
         //exit;

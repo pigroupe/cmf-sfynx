@@ -75,15 +75,15 @@ class PiUserManager extends PiWidgetExtension
            $values     = explode(':', $controller);
            $entity     = $values[0] .":". $values[1];
            $method     = strtolower($values[2]);
-           
-           $getAvailable     = "getAvailable" . ucfirst($this->action);
+           //
+           $getAvailable  = "getAvailable" . ucfirst($this->action);
            $Lists         = self::$getAvailable();
-           
-           if ( $entity && !isset($Lists[$entity]) )
+           //
+           if ( $entity && !isset($Lists[$entity]) ) {
                return false;
-           elseif ( $entity && !in_array($method, $Lists[$entity]['method']) )
+           } elseif ( $entity && !in_array($method, $Lists[$entity]['method']) ) {
                return false;
-           
+           }
            $this->entity = $entity;
            $this->setMethod($method);
                           
@@ -153,33 +153,37 @@ class PiUserManager extends PiWidgetExtension
      */
     public function renderConnexion($options = null)
     {
-        $xmlConfig    = $this->getConfigXml();
-        $lang        = $options['widget-lang'];
-        $params     = array();
-        
+        $xmlConfig  = $this->getConfigXml();
+        $lang       = $options['widget-lang'];
+        $params     = array();        
         // if the configXml field of the widget isn't configured correctly.
         try {
             $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
         } catch (\Exception $e) {
             return "  \n";
-        }
-        
+        }        
         // if the gedmo widget is defined correctly as a "lucene"
-        if ( ($this->action == "connexion") && $xmlConfig->widgets->get('user') )
-        {
-            $controller    = $xmlConfig->widgets->user->controller;
-        
-            if ($this->isAvailableAction($controller)){
-                if ($xmlConfig->widgets->user->get('params'))
+        if ( ($this->action == "connexion") && $xmlConfig->widgets->get('user') ) {
+            $controller    = $xmlConfig->widgets->user->controller;        
+            if ($this->isAvailableAction($controller)) {
+                if ($xmlConfig->widgets->user->get('params')) {
                     $params = $xmlConfig->widgets->user->params->toArray();
-                else
+                } else {
                     $params = array();
-        
+                }
+                $params['widget-id']        = $options['widget-id'];
+                $params['widget-lifetime']  = $options['widget-lifetime'];
+                $params['widget-cacheable'] = $options['widget-cacheable'];
+                $params['widget-update']    = $options['widget-update'];
+                $params['widget-public']    = $options['widget-public'];
+                
                 return $this->runByService('pi_app_admin.manager.authentication', "$this->entity~$this->method", $lang, $params);
-            }else
+            } else {
                 throw ExtensionException::optionValueNotSpecified("gedmo controller", __CLASS__);
-        }else
-            throw ExtensionException::optionValueNotSpecified("content", __CLASS__);        
+            }
+        } else {
+            throw ExtensionException::optionValueNotSpecified("content", __CLASS__);
+        }        
     }
     
     /**

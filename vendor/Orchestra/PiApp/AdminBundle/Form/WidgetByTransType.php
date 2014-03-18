@@ -53,7 +53,7 @@ class WidgetByTransType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-            $builder
+        $builder
             ->add('enabled', 'checkbox', array(
                     'data'  => true,
                     'label'    => 'pi.form.label.field.enabled',
@@ -61,22 +61,6 @@ class WidgetByTransType extends AbstractType
             ->add('configCssClass', 'text', array(
                     'label'     => 'Class Name / Snippet Name',
             ))
-//             ->add('cacheable', 'checkbox', array(
-//                     'label'     => 'Static Content?',
-//                     'required'  => false,
-//                     'help_block' => 'Returns a 304 "not modified" status, when the template has not changed since last visit.'
-//             ))
-//             ->add('public', 'checkbox', array(
-//                     'label'     => 'Visitor-independant content?',
-//                     'required'  => false,
-//                     'help_block' => 'Allows proxies to cache the same content for different visitors.'
-//             ))
-//             ->add('lifetime', 'number', array(
-//                     'label'     => 'Cache Lifetime',
-//                     'required'  => false,
-//                     'help_block' => 'Does a full content caching during the specified lifetime. Leave empty for no cache.',
-//                     'data'        => '84600',
-//             ))
             ->add('plugin', 'choice', array(
                     'choices'   => PiWidgetExtension::getAvailableWidgetPlugins(),
                     'required'  => true,
@@ -104,6 +88,35 @@ class WidgetByTransType extends AbstractType
                     'label'    => ' '
             ))            
         ;
+            
+            
+        $builder
+            ->add('cacheable', 'checkbox', array(
+            		'label'     => 'Static Content?',
+            		'required'  => false,
+            		'help_block' => 'Returns a 304 "not modified" status, when the template has not changed since last visit',
+            		"label_attr" => array(
+            				"class"=>"widget_esi",
+            		)
+            ))
+            ->add('public', 'checkbox', array(
+            		'label'     => 'Visitor-independant content?',
+            		'required'  => false,
+            		'help_block' => 'Allows proxies to cache the same content for different visitors',
+            		"label_attr" => array(
+            				"class"=>"widget_esi",
+            		)
+            ))
+            ->add('lifetime', 'number', array(
+            		'label'     => 'Cache Lifetime',
+            		'required'  => false,
+            		'help_block' => 'Does a full content caching during the specified lifetime. Leave empty for no cache',
+            		"label_attr" => array(
+            				"class"=>"widget_esi",
+            		),
+            		'data'        => '84600',
+            ))
+            ;            
     }
 
     public function getName()

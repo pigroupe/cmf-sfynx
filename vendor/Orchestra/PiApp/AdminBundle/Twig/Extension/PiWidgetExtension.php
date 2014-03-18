@@ -990,7 +990,7 @@ class PiWidgetExtension extends \Twig_Extension
     		$params['locale']    = $lang;
     	}
         if (!is_null($params)) {
-            krsort($params);
+            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
             $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params); 
             // we get instances of parser and dumper component yaml files.
             $yaml   = new \Symfony\Component\Yaml\Parser();
@@ -1012,10 +1012,19 @@ class PiWidgetExtension extends \Twig_Extension
             	$json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $key);
             	//
             	$get 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_GET, JSON_UNESCAPED_UNICODE), $key);
-            	$post 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_POST, JSON_UNESCAPED_UNICODE), $key);
-            	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_SERVER, JSON_UNESCAPED_UNICODE), $key);
+            	//
+            	$_server_ = array(
+           	        'REQUEST_URI'  => $this->container->get('request')->getRequestUri(),
+            	    'REDIRECT_URL' => $this->container->get('request')->server->get('REDIRECT_URL'),
+            	    'lifetime'     => $params['widget-lifetime'],
+            	    'cacheable'    => $params['widget-cacheable'],
+            	    'update'       => $params['widget-update'],
+            	    'public'       => $params['widget-public'],
+            	);
+            	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $key);
             	
-             	$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$id', 'lang':'$lang', 'params':'$json', 'key':'$key', 'get':'$get', 'post':'$post', 'server':'$server'})) }} \n";
+             	//$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$id', 'lang':'$lang', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'})) }} \n";
+            	$set = "<esi:include src=\"{{ path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$id', 'lang':'$lang', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'}) }}\" />";
              } else {
             	$set  = "{% set widget_service_params = $json %} \n";
             	$set .= " {{ getService('$serviceName').renderSource('$id', '$lang', widget_service_params)|raw }} \n";
@@ -1057,7 +1066,7 @@ class PiWidgetExtension extends \Twig_Extension
     		$params['locale']    = $lang;
     	}                
         if (!is_null($params)) {
-            krsort($params);
+            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
             $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);  
             // we get instances of parser and dumper component yaml files.
             $yaml   = new \Symfony\Component\Yaml\Parser();
@@ -1079,10 +1088,19 @@ class PiWidgetExtension extends \Twig_Extension
             	$json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $key);
             	//
             	$get 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_GET, JSON_UNESCAPED_UNICODE), $key);
-            	$post 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_POST, JSON_UNESCAPED_UNICODE), $key);
-            	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_SERVER, JSON_UNESCAPED_UNICODE), $key);
+            	//
+            	$_server_ = array(
+           	        'REQUEST_URI'  => $this->container->get('request')->getRequestUri(),
+            	    'REDIRECT_URL' => $this->container->get('request')->server->get('REDIRECT_URL'),
+            	    'lifetime'     => $params['widget-lifetime'],
+            	    'cacheable'    => $params['widget-cacheable'],
+            	    'update'       => $params['widget-update'],
+            	    'public'       => $params['widget-public'],
+            	);
+            	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $key);
             	 
-            	$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$JQcontainer', 'lang':'$method', 'params':'$json', 'key':'$key', 'get':'$get', 'post':'$post', 'server':'$server'})) }} \n";
+            	//$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$JQcontainer', 'lang':'$method', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'})) }} \n";
+            	$set = "<esi:include src=\"{{ path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$JQcontainer', 'lang':'$method', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'}) }}\" />";
             } else {          
             	$set  = "{% set widget_render_params = $json %} \n";
             	$set .= " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('$JQcontainer', '$method', widget_render_params)|raw }} \n";

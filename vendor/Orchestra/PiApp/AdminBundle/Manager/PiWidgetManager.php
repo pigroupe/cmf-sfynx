@@ -156,15 +156,18 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
 //             'widget-id' => $id
 //         );
 //         $source = $this->extensionWidget->FactoryFunction(strtoupper($container), strtolower($NameAction), $options);
-
         if (!empty($cssClass)) {
             $source  = " <div class=\"{$cssClass}\"> \n";
         } else {
             $source  = " <div> \n";
         }        
-        $source .= "     {% set options = {'widget-id': '$id', 'widget-lang': '$lang'} %} \n";
-        $source .= "     {{ renderWidget('".strtoupper($container)."', '".strtolower($NameAction)."', options )|raw }} \n";
-        $source .= " </div> \n";
+        $lifetime  = $this->getCurrentWidget()->getLifetime();
+        $cacheable = strval($this->getCurrentWidget()->getCacheable());
+        $update    = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
+        $public    = strval($this->getCurrentWidget()->getPublic());
+        $source   .= "     {% set options = {'widget-id': '$id', 'widget-lang': '$lang', 'widget-lifetime': '$lifetime', 'widget-cacheable': '$cacheable', 'widget-update': '$update', 'widget-public': '$public'} %} \n";
+        $source   .= "     {{ renderWidget('".strtoupper($container)."', '".strtolower($NameAction)."', options )|raw }} \n";
+        $source   .= " </div> \n";
         
         return $source;
     }
@@ -208,7 +211,7 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
             } catch (\Exception $e) {
             }
         }      
-        $this->script['js'][$container.$NameAction]        = $this->extensionWidget->ScriptJsFunction($container, $NameAction);
+        $this->script['js'][$container.$NameAction]     = $this->extensionWidget->ScriptJsFunction($container, $NameAction);
         $this->script['css'][$container.$NameAction]    = $this->extensionWidget->ScriptCssFunction($container, $NameAction);
     }
 

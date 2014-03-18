@@ -38,17 +38,17 @@ class GroupsFixtures extends AbstractFixture implements OrderedFixtureInterface
 
         $field0 = new Group('Groupe Subscriber', array('ROLE_SUBSCRIBER'));
         $field0->setEnabled(true);
-        $field0->setPermissions(array('VIEW', 'EDIT', 'CREATE', 'DELETE'));
+        $field0->setPermissions(array('VIEW'));
         $manager->persist($field0);
         
         $field0_bis = new Group('Groupe Member', array('ROLE_MEMBER'));
         $field0_bis->setEnabled(true);
-        $field0_bis->setPermissions(array('VIEW', 'EDIT', 'CREATE', 'DELETE'));
+        $field0_bis->setPermissions(array('VIEW'));
         $manager->persist($field0_bis);        
                 
         $field1 = new Group('Groupe User', array('ROLE_USER'));
         $field1->setEnabled(true);
-        $field1->setPermissions(array('VIEW', 'EDIT', 'CREATE', 'DELETE'));
+        $field1->setPermissions(array('VIEW'));
         $manager->persist($field1);
 
         $field2 = new Group('Groupe Admin', array('ROLE_ADMIN'));

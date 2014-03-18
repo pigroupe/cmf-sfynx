@@ -138,36 +138,69 @@ class FrontendController extends BaseController
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2014-01-16
      */
-    public function esipageAction($method, $serviceName, $id, $lang, $params, $get, $post, $server, $key)
+    public function esipageAction($method, $serviceName, $id, $lang, $params, $get, $server, $key)
     {
-    	$request     = $this->container->get('request');
-    	//
     	$method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($method, $key);
     	$serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($serviceName, $key);
     	$id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($id, $key);
     	$lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($lang, $key);
     	$params		 = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($params, $key), true);
     	//
-    	$GLOBALS['_GET_']	 = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($get, $key), true);
-    	$GLOBALS['_POST_']	 = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($post, $key), true);
-    	$GLOBALS['_SERVER_'] = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($server, $key), true);
-    	
-    	$_SERVER['REQUEST_URI'] =  $GLOBALS['_SERVER_']['REQUEST_URI'];
+    	$get	= json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($get, $key), true);
+    	$server = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($server, $key), true);
+    	//
+        if (isset($server['REQUEST_URI']) && !empty($server['REQUEST_URI'])) {
+    	    $this->container->get('request')->server->set('REQUEST_URI', $server['REQUEST_URI']);
+    	}
+    	if (isset($server['REDIRECT_URL']) && !empty($server['REDIRECT_URL'])) {
+    	    $this->container->get('request')->server->set('REDIRECT_URL', $server['REDIRECT_URL']);
+    	}
     	//
     	if ($get && is_array($get)) {
     		foreach($get as $k => $v) {
     			$_GET[$k] = $v;
     		}
     	}
-    	if ($post && is_array($post)) {
-    		foreach($post as $k => $v) {
-    			$_POST[$k] = $v;
-    		}
-    	}    	
-    	//
+    	//     	print_r($server['REQUEST_URI']);
+    	//     	print_r($serviceName);
+    	//     	print_r($method);
+    	//     	print_r($id);
+    	//     	print_r($lang);
+    	//     	print_r($params);
+    	//     	exit;    	
+		// set result
      	$result = $this->container->get($serviceName)->$method($id, $lang, $params);
-    	
-    	return new Response($result);
+     	// set response
+     	$response = new Response($result);
+     	// Allows proxies to cache the same content for different visitors.
+     	if (isset($server['public']) && $server['public']) {
+     		$response->setPublic();
+     	}
+     	if (isset($server['lifetime']) && $server['lifetime']) {
+     		$response->setSharedMaxAge($server['lifetime']);
+     		$response->setMaxAge($server['lifetime']);
+     	}
+         // Returns a 304 "not modified" status, when the template has not changed since last visit.
+     	if (
+     	    isset($server['cacheable']) && $server['cacheable']
+     	    &&
+     	    isset($server['update']) && $server['update']
+     	) {
+     		$response->setLastModified(date('yyyy-MM-dd H:i:s', $server['update']));
+     	}else{
+     	    $response->setLastModified(new \DateTime());
+     	}
+     	// set header tags.
+     	if (
+     			( isset($server['lifetime']) && ($server['lifetime'] == 0) )
+     	) {
+   			$response->headers->set('Pragma', "no-cache");
+   			$response->headers->set('Cache-control', "private");
+   			$response->setSharedMaxAge(0);
+   			$response->setMaxAge(0);
+		}
+
+        return $response;
     }    
     
     /**
