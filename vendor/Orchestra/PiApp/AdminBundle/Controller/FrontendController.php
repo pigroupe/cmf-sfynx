@@ -68,7 +68,7 @@ class FrontendController extends BaseController
     {
         // It tries to redirect to the original page.
         $new_url = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($langue, null, true);
-        $response = new RedirectResponse($new_url);
+        $response = new RedirectResponse($new_url, 302);
         // we get params
         $this->date_expire    = $this->container->getParameter('pi_app_admin.cookies.date_expire');
         $this->date_interval  = $this->container->getParameter('pi_app_admin.cookies.date_interval');        
@@ -145,22 +145,19 @@ class FrontendController extends BaseController
     	$id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($id, $key);
     	$lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($lang, $key);
     	$params		 = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($params, $key), true);
-    	//
-    	$get	= json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($get, $key), true);
-    	$server = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($server, $key), true);
-    	//
-        if (isset($server['REQUEST_URI']) && !empty($server['REQUEST_URI'])) {
-    	    $this->container->get('request')->server->set('REQUEST_URI', $server['REQUEST_URI']);
-    	}
-    	if (isset($server['REDIRECT_URL']) && !empty($server['REDIRECT_URL'])) {
-    	    $this->container->get('request')->server->set('REDIRECT_URL', $server['REDIRECT_URL']);
-    	}
+    	$get	     = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($get, $key), true);
+    	$options     = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($server, $key), true);
     	//
     	if ($get && is_array($get)) {
     		foreach($get as $k => $v) {
     			$_GET[$k] = $v;
     		}
     	}
+    	// we get the page manager
+    	$pageManager = $this->get('pi_app_admin.manager.page');
+    	// we set the ESI page result
+    	$response    = $pageManager->renderESISource($serviceName, $method, $id, $lang, $params, $options);
+
     	//     	print_r($server['REQUEST_URI']);
     	//     	print_r($serviceName);
     	//     	print_r($method);
@@ -168,39 +165,12 @@ class FrontendController extends BaseController
     	//     	print_r($lang);
     	//     	print_r($params);
     	//     	exit;    	
-		// set result
-     	$result = $this->container->get($serviceName)->$method($id, $lang, $params);
-     	// set response
-     	$response = new Response($result);
-     	// Allows proxies to cache the same content for different visitors.
-     	if (isset($server['public']) && $server['public']) {
-     		$response->setPublic();
-     	}
-     	if (isset($server['lifetime']) && $server['lifetime']) {
-     		$response->setSharedMaxAge($server['lifetime']);
-     		$response->setMaxAge($server['lifetime']);
-     	}
-         // Returns a 304 "not modified" status, when the template has not changed since last visit.
-     	if (
-     	    isset($server['cacheable']) && $server['cacheable']
-     	    &&
-     	    isset($server['update']) && $server['update']
-     	) {
-     		$response->setLastModified(date('yyyy-MM-dd H:i:s', $server['update']));
-     	}else{
-     	    $response->setLastModified(new \DateTime());
-     	}
-     	// set header tags.
-     	if (
-     			( isset($server['lifetime']) && ($server['lifetime'] == 0) )
-     	) {
-   			$response->headers->set('Pragma', "no-cache");
-   			$response->headers->set('Cache-control', "private");
-   			$response->setSharedMaxAge(0);
-   			$response->setMaxAge(0);
-		}
+    	//$route_name = $this->container->get('request')->get('_route');
+    	//$route_name = $this->container->get('request')->attributes->get('_route');
+    	//$path_info = $this->container->get('request')->getRequestUri();
+    	//print_r($path_info);exit;
 
-        return $response;
+    	return $response;
     }    
     
     /**
@@ -231,7 +201,7 @@ class FrontendController extends BaseController
     	}
     	
     	return new RedirectResponse($new_url);
-    }   
+    }     
 
     /**
      * Refresh a page with all these languages

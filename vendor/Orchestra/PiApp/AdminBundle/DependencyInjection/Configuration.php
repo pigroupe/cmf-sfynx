@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
         $this->addAdminConfig($rootNode);
         $this->addLayoutConfig($rootNode);
         $this->addPageConfig($rootNode);
+        $this->addTranslationConfig($rootNode);
         $this->addFormConfig($rootNode);
         $this->addMailConfig($rootNode);
         $this->addCookiesConfig($rootNode);
@@ -116,20 +117,20 @@ class Configuration implements ConfigurationInterface
                         
                     ->booleanNode('page_management_by_user_only')->isRequired()
                         ->defaultValue(false)
-                        ->end()                        
+                        ->end()     
 
                     ->booleanNode('page_management_with_prefix_locale')->isRequired()
                         ->defaultValue(false)
                         ->end()                        
-                        
+                
                     ->booleanNode('single_slug')->isRequired()
                         ->defaultValue(false)
                         ->end()
-                        
+                    
                     ->booleanNode('refresh_allpage')->isRequired()
                         ->defaultValue(true)
-                        ->end()                        
-                    
+                        ->end()
+                                                
                     ->booleanNode('refresh_allpage_containing_snippet')->isRequired()
                         ->defaultValue(true)
                         ->end()
@@ -161,7 +162,15 @@ class Configuration implements ConfigurationInterface
 	                        ->scalarNode('seo_repository')->defaultValue("")->end()
     	                    ->scalarNode('seo_file_name')->defaultValue("")->end()
                         ->end()
-                    ->end()                        
+                    ->end()  
+
+                    ->arrayNode('esi')
+                    ->isRequired()
+                        ->children()
+                            ->booleanNode('force_private_response_for_all')->defaultValue(false)->end()
+                            ->booleanNode('force_private_response_only_with_authentication')->defaultValue(true)->end()
+                        ->end()
+                    ->end()                    
                         
                 ->end()
         
@@ -205,6 +214,34 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
     }
+    
+    /**
+     * Translation config
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     *
+     * @return void
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function addTranslationConfig(ArrayNodeDefinition $rootNode)
+    {
+    	$rootNode
+        	->children()
+            	->arrayNode('translation')
+            	    ->addDefaultsIfNotSet()
+            	    ->children()
+            
+                    	->scalarNode('defaultlocale_setting')
+                    	    ->defaultValue(true)
+                    	    ->end()
+            
+            	->end()
+        
+        	->end()
+    	->end();
+    }    
     
     /**
      * Mail config

@@ -1,5 +1,10 @@
 {# default Sliding pagination control implementation #}
 
+{# IMPORTANT !!!! for ESI management #}
+{% set route = app.request.get('_route') %}
+{% set query = getService('bootstrap.RouteTranslator.factory').getLocaleRoute(app.session.locale, {'result':'match'}) %}
+{% set query = query|merge({'_route': null}) %}
+
 <div class="pagination bkgrey clearfix row">
 	<div class="pageNumbers clearfix fright">
 	    {% if first is defined and current != first %}

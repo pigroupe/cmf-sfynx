@@ -336,6 +336,120 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         return $source;
     }
     
+	/**
+	 * Returns the render ESI source of a widget.
+	 *
+	 * @param string $serviceName
+	 * @param string $method
+	 * @param string $id
+	 * @param string $lang
+	 * @param array  $params
+	 * @param array  $options
+	 * @param mixed  $response
+	 * @return string
+	 * @access    public
+	 *
+	 * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+	 * @since 2012-01-31
+	 */
+	public function renderESISource($serviceName, $method, $id, $lang = '', $params = null, $options = null, Response $response = null)
+	{
+	    // we set the langue
+	    if (empty($lang))    $lang = $this->language;
+        // we initialize
+		$this->initializeRequest($lang, $options);
+		// we set the result widget
+		$result = $this->container->get($serviceName)->$method($id, $lang, $params);
+		// set response
+		if (is_null($response)) {
+			$response = new Response($result);
+		} else {
+			$response->setContent($result);
+		}
+		// Allows proxies to cache the same content for different visitors.
+		if (isset($options['public']) && $options['public']) {
+			$response->setPublic();
+		}
+		if (isset($options['lifetime']) && $options['lifetime']) {
+			$response->setSharedMaxAge($options['lifetime']);
+			$response->setMaxAge($options['lifetime']);
+		}
+		// Returns a 304 "not modified" status, when the template has not changed since last visit.
+		if (
+		    isset($options['cacheable']) && $options['cacheable']
+		    &&
+		    isset($options['update']) && $options['update']
+		) {
+			$response->setLastModified(date('yyyy-MM-dd H:i:s', $options['update']));
+		} else {
+			$response->setLastModified(new \DateTime());
+		}
+		// set header tags.
+		$is_force_private_response           = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_for_all");
+		$is_force_private_response_with_auth = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_only_with_authentication");
+		if (
+		    $is_force_private_response
+		    ||
+		    ($this->isUsernamePasswordToken() && $is_force_private_response_with_auth)
+		    ||
+		    ( isset($options['lifetime']) && ($options['lifetime'] == 0) )
+		) {
+			$response->headers->set('Pragma', "no-cache");
+			$response->headers->set('Cache-control', "private");
+			$response->setSharedMaxAge(0);
+			$response->setMaxAge(0);
+		}
+	
+		return $response;
+	}	
+	
+	/**
+	 * Initialize the request with a new uri.
+	 *
+	 * @param $options    ['REQUEST_URI', 'REDIRECT_URL']
+	 * @return void
+	 * @access public
+	 *
+	 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+	 * @since 2012-02-16
+	 */
+	public function initializeRequest($lang = '', array $options = array())
+	{
+	    // we set the langue
+	    if (empty($lang))    $lang = $this->language;
+		// we duplicate the current request
+		$clone_request = $this->container->get('request')->duplicate();
+		// we modify the header request
+		if (isset($options['REQUEST_URI']) && !empty($options['REQUEST_URI'])) {
+			$clone_request->server->set('REQUEST_URI', $options['REQUEST_URI']);
+			$_SERVER['REQUEST_URI'] = $options['REQUEST_URI'];
+		}
+		if (isset($options['REDIRECT_URL']) && !empty($options['REDIRECT_URL'])) {
+			$clone_request->server->set('REDIRECT_URL', $options['REDIRECT_URL']);
+			$_SERVER['REDIRECT_URL'] = $options['REDIRECT_URL'];
+		}
+		// we initialize the request with new values.
+		$query      = $clone_request->query->all();
+		$request    = $clone_request->request->all();
+		$attributes = $clone_request->attributes->all();
+		$cookies    = $clone_request->cookies->all();
+		$files      = $clone_request->files->all();
+		$server     = $clone_request->server->all();
+		$this->container->get('request')->initialize($query, $request, $attributes, $cookies, $files, $server);
+		// we get the _route value of the new uri
+		$match = $this->container->get('bootstrap.RouteTranslator.factory')->getLocaleRoute($lang, array('result'=>'match') );
+// 		if ($match && is_array($match)) {
+// 			foreach($match as $k => $v) {
+// 				$_GET[$k] = $v;
+// 				$this->container->get('request')->query->set($k, $v);
+// 				$this->container->get('request')->attributes->set($k, $v);
+// 			}
+// 		}
+		// we set the _route value
+		$this->container->get('request')->query->set('_route', $match['_route']);
+		$this->container->get('request')->attributes->set('_route', $match['_route']);
+	} 
+    
     /**
      * Sets and return a page by id.
      *

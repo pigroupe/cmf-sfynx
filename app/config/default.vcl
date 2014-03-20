@@ -12,9 +12,6 @@ acl purge {
  
 # vcl_recv is called whenever a request is received 
 sub vcl_recv {
-        set req.http.Surrogate-Capability = "abc=ESI/1.0";
-
-
         if (req.restarts == 0) {
             if (req.http.x-forwarded-for) {
                 set req.http.X-Forwarded-For = req.http.X-Forwarded-For + ", " + client.ip;
@@ -36,69 +33,6 @@ sub vcl_recv {
             set req.http.Referer = regsub(req.http.Referer,"foo","bar");
         }
         
-        #set req.http.header = regsub(req.http.header,"foo","bar");
-        #if (req.url ~ "^http://") {
-        # set req.url = regsub(req.url, "http://[^/]*", "");
-        #}      
-
-        # Do not cache these paths
-        if (req.url ~ "^/esi-widget-page/.*$") {
-            set req.grace = 0s;
-            return(pass);
-        } 
-
-        # admin
-        if (!(req.url ~ "^/admin") && 
-            !(req.url ~ "^/login") && 
-            !(req.url ~ "^/logout") && 
-            !(req.url ~ "^/_fragment") && req.esi_level == 0 && 
-            !(req.url ~ "/client/") && 
-            !(req.url ~ "^/customer/documentation_register_create") && 
-            !(req.url ~ "/tools/") && 
-            !(req.url ~ "^/login_check") && 
-            !(req.url ~ "^/redirectionuser") && 
-            !(req.url ~ "^/my-account") ) {
-                set req.http.Esi-Cookie = req.http.Cookie;
-                unset req.http.Cookie;
-                set req.http.Surrogate-Capability = "abc=ESI/1.0";
-        }
-        if (!(req.url ~ "^/admin") && 
-            req.esi_level > 0 && 
-            !(req.url ~ "^/login_check") && 
-            !(req.url ~ "^/logout") && 
-            !(req.url ~ "^/login") && 
-            !(req.url ~ "^/customer/documentation_register_create") && 
-            !(req.url ~ "/client/outils") && 
-            !(req.url ~ "/tools/myPlanning") && 
-            !(req.url ~ "^/redirectionuser") && 
-            !(req.url ~ "^/my-account") ) {
-                set req.http.Cookie = req.http.Esi-Cookie;
-                
-        }
-        if ( req.url ~ "^/customer/documentation_update"  ||
-                        req.url ~ "^/uploads/media/" ||
-                        req.url ~ "^/admin/.*$" ||
-                        req.url == "/login" || 
-                        req.url == "/logout" || 
-                        req.url ~ "^/login_check" || 
-                        req.url ~ "^/redirectionuser" || 
-                        req.url ~ "^/client/outils" || 
-                        req.url ~ "^/tools/myPlanning" || 
-                        req.url ~ "^/customer/documentation_register_create" || 
-                        req.url ~ "^/my-account" ) {
-
-                return (pass);
-        }                      
- 
-        # This uses the ACL action called "purge". Basically if a request to
-        # PURGE the cache comes from anywhere other than localhost, ignore it.
-        if (req.request == "PURGE") {
-            if (!client.ip ~ purge) {
-                error 405 "Not allowed.";
-            }
-            return(lookup);
-        }
-
         # normalize Accept-Encoding to reduce vary
         if (req.http.Accept-Encoding) {
           if (req.http.User-Agent ~ "MSIE 6") {
@@ -110,12 +44,29 @@ sub vcl_recv {
           } else {
             unset req.http.Accept-Encoding;
           }
+        }  
+
+        set req.http.Surrogate-Capability = "abc=ESI/1.0";   
+
+        # Do not cache these paths
+        if (req.url ~ "^/esi-widget-page/.*$") {
+            #set req.grace = 0s;
+            return(pass);
+        }       
+
+        # Force lookup if the request is a no-cache request from the client.
+        if (req.http.Cache-Control ~ "(private|no-cache|no-store)") {
+            ban_url(req.url);
+        }          
+ 
+        # This uses the ACL action called "purge". Basically if a request to
+        # PURGE the cache comes from anywhere other than localhost, ignore it.
+        if (req.request == "PURGE") {
+            if (!client.ip ~ purge) {
+                error 405 "Not allowed.";
+            }
+            return(lookup);
         }
-        
-        # Always cache the following file types
-        if (req.url ~ "\.(png|jpg|jpeg|gif|ico|swf|pdf|txt|css|js|html|htm|gz|xml)(\?[a-z0-9]+)?$") {
-            unset req.http.Cookie;
-        }    
 
         # Pass any requests that Varnish does not understand straight to the backend.
         if (req.request != "GET" && req.request != "HEAD" &&
@@ -124,26 +75,11 @@ sub vcl_recv {
             req.request != "DELETE") {
             return(pipe);
         }     /* Non-RFC2616 or CONNECT which is weird. */
- 
-        # Pass anything other than GET and HEAD directly.
-        #if (req.request != "GET" && req.request != "HEAD") {
-        #   return(pass);
-        #}      /* We only deal with GET and HEAD by default */
- 
-        # We cache requests with cookies too (e.g. Google Analytics)
-        #if (req.http.Authenticate || req.http.Authorization || req.http.Cookie) {
-        #    return (pass);
-        #}        
- 
-        # Pass any requests with the "If-None-Match" header directly.
-        if (req.http.If-None-Match){
-            #return(pass);
-        }
- 
-        # Force lookup if the request is a no-cache request from the client.
-        if (req.http.Cache-Control ~ "no-cache")
-           {ban_url(req.url);}
- 
+
+        if( req.http.Authorization || req.http.Cookie) {
+            return (pass);
+        }        
+
         return (lookup);
 }
  
@@ -208,24 +144,21 @@ sub vcl_pipe {
  
 # Called after a document has been successfully retrieved from the backend.
 sub vcl_fetch {
-
-        if (req.url ~ "^/esi-widget-page/.*$") {
-            set beresp.do_esi = false;
-            set beresp.ttl = 0s;
-            set beresp.http.Cache-Control = "no-store";
-            return(deliver); 
-        }   
+        set beresp.do_esi = true;
 
         # Don't allow static files to set cookies
         if (req.url ~ "(?i)\.(png|gif|jpeg|jpg|ico|swf|pdf|txt|css|js|html|htm|gz|xml)(\?[a-z0-9]+)?$") {
             unset beresp.http.Set-cookie;
+            return (hit_for_pass);
         } 
 
-        if (beresp.http.Surrogate-Control ~ "ESI/1.0") {
-            unset beresp.http.Surrogate-Control;
-            set beresp.do_esi = true;
-            set beresp.ttl = 0s;
-        }       
+        #Pour que tous les utilisateurs reçoivent la page commune cachée et qu’elle reste dynamique en fonction des utilisateurs il faut enlever la session des cookies pour les pages/parties #communes et la laisser pour les pages/parties individuelles.
+        if ( ! req.url ~ "^/esi-widget-page" ) {
+            set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
+            if (req.http.Cookie ~ "^$") {
+                unset req.http.Cookie;
+            }
+        }
 
         # Allow items to be stale if needed
         if (req.http.Cookie ~"(UserID|_session)") {

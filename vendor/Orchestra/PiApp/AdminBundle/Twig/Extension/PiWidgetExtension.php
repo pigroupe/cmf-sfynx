@@ -141,10 +141,10 @@ class PiWidgetExtension extends \Twig_Extension
     public static function getAvailableWidgetPlugins()
     {
         return array(
-            'content'        =>'Content',
-            'gedmo'            =>'Gedmo',
-             'search'        =>'Search',
-             'user'            =>'User',
+            'content'       =>'Content',
+            'gedmo'         =>'Gedmo',
+            'search'        =>'Search',
+            'user'          =>'User',
 //             'tab'            =>'Tab',
         );
     }    
@@ -1002,16 +1002,16 @@ class PiWidgetExtension extends \Twig_Extension
             	$is_esi_activate = true;
             } else {
             	$is_esi_activate = false;
-            }                        
+            }       
             if ($is_esi_activate) {
-            	$key 		 = '9eu9ghv9';
-            	$method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('renderSource', $key);
-            	$serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($serviceName, $key);
-            	$id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($id, $key);
-            	$lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($lang, $key);
-            	$json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $key);
+            	$esi_key 		 = '9eu9ghv9';
+            	$esi_method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('renderSource', $esi_key);
+            	$esi_serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($serviceName, $esi_key);
+            	$esi_id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($id, $esi_key);
+            	$esi_lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($lang, $esi_key);
+            	$esi_json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $esi_key);
             	//
-            	$get 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_GET, JSON_UNESCAPED_UNICODE), $key);
+            	$esi_get 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_GET, JSON_UNESCAPED_UNICODE), $$esi_key);
             	//
             	$_server_ = array(
            	        'REQUEST_URI'  => $this->container->get('request')->getRequestUri(),
@@ -1021,10 +1021,9 @@ class PiWidgetExtension extends \Twig_Extension
             	    'update'       => $params['widget-update'],
             	    'public'       => $params['widget-public'],
             	);
-            	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $key);
-            	
-             	//$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$id', 'lang':'$lang', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'})) }} \n";
-            	$set = "<esi:include src=\"{{ path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$id', 'lang':'$lang', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'}) }}\" />";
+            	$esi_server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $esi_key);
+
+            	$set = "<esi:include src=\"{{ path_url('public_esi_apply_widget', {'method':'$esi_method', 'serviceName':'$esi_serviceName', 'id':'$esi_id', 'lang':'$esi_lang', 'params':'$esi_json', 'key':'$esi_key', 'get':'$esi_get', 'server':'$esi_server'}) }}\" />";            	
              } else {
             	$set  = "{% set widget_service_params = $json %} \n";
             	$set .= " {{ getService('$serviceName').renderSource('$id', '$lang', widget_service_params)|raw }} \n";
@@ -1080,14 +1079,14 @@ class PiWidgetExtension extends \Twig_Extension
             	$is_esi_activate = false;
             }
             if ($is_esi_activate) {
-            	$key 		 = '9eu9ghv9';
-            	$method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('FactoryFunction', $key);
-            	$serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter("pi_app_admin.twig.extension.jquery", $key);
-            	$id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($id, $key);
-            	$lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($lang, $key);
-            	$json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $key);
+            	$esi_key 		 = '9eu9ghv9';
+            	$esi_method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('FactoryFunction', $esi_key);
+            	$esi_serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter("pi_app_admin.twig.extension.jquery", $esi_key);
+            	$esi_id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($JQcontainer, $esi_key);
+            	$esi_lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($method, $esi_key);
+            	$esi_json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $esi_key);
             	//
-            	$get 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_GET, JSON_UNESCAPED_UNICODE), $key);
+            	$esi_get 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_GET, JSON_UNESCAPED_UNICODE), $esi_key);
             	//
             	$_server_ = array(
            	        'REQUEST_URI'  => $this->container->get('request')->getRequestUri(),
@@ -1097,10 +1096,9 @@ class PiWidgetExtension extends \Twig_Extension
             	    'update'       => $params['widget-update'],
             	    'public'       => $params['widget-public'],
             	);
-            	$server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $key);
+            	$esi_server		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $esi_key);
             	 
-            	//$set = " {{ render_esi(path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$JQcontainer', 'lang':'$method', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'})) }} \n";
-            	$set = "<esi:include src=\"{{ path_url('public_esi_apply_widget', {'method':'$method', 'serviceName':'$serviceName', 'id':'$JQcontainer', 'lang':'$method', 'params':'$json', 'key':'$key', 'get':'$get', 'server':'$server'}) }}\" />";
+            	$set = "<esi:include src=\"{{ path_url('public_esi_apply_widget', {'method':'$esi_method', 'serviceName':'$esi_serviceName', 'id':'$esi_id', 'lang':'$esi_lang', 'params':'$esi_json', 'key':'$esi_key', 'get':'$esi_get', 'server':'$esi_server'}) }}\" />";
             } else {          
             	$set  = "{% set widget_render_params = $json %} \n";
             	$set .= " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('$JQcontainer', '$method', widget_render_params)|raw }} \n";

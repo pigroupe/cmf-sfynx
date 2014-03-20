@@ -82,11 +82,19 @@ class PiAppAdminExtension extends Extension
             if (isset($config['page']['page_management_by_user_only']))
                 $container->setParameter('pi_app_admin.page.management_by_user_only', $config['page']['page_management_by_user_only']);
             if (isset($config['page']['page_management_with_prefix_locale']))
-            	$container->setParameter('pi_app_admin.page.page_management_with_prefix_locale', $config['page']['page_management_with_prefix_locale']);
+                $container->setParameter('pi_app_admin.page.page_management_with_prefix_locale', $config['page']['page_management_with_prefix_locale']);
+            
+            if (isset($config['page']['esi']) && isset($config['page']['esi']['force_private_response_for_all'])) {
+            	$container->setParameter('pi_app_admin.page.esi.force_private_response_for_all', $config['page']['esi']['force_private_response_for_all']);
+            } 
+            if (isset($config['page']['esi']) && isset($config['page']['esi']['force_private_response_only_with_authentication'])) {
+            	$container->setParameter('pi_app_admin.page.esi.force_private_response_only_with_authentication', $config['page']['esi']['force_private_response_only_with_authentication']);
+            } 
+                                                
             if (isset($config['page']['single_slug']))
                 $container->setParameter('pi_app_admin.page.single_slug', $config['page']['single_slug']);
             if (isset($config['page']['refresh_allpage']))
-            	$container->setParameter('pi_app_admin.page.refresh_allpage', $config['page']['refresh_allpage']);
+                $container->setParameter('pi_app_admin.page.refresh_allpage', $config['page']['refresh_allpage']);
             if (isset($config['page']['refresh_allpage_containing_snippet']))
                 $container->setParameter('pi_app_admin.page.refresh_allpage_containing_snippet', $config['page']['refresh_allpage_containing_snippet']);
             if (isset($config['page']['refresh_css_js_cache_file']))
@@ -148,6 +156,17 @@ class PiAppAdminExtension extends Extension
         	if (isset($config['permission']['prohibition']) && isset($config['permission']['prohibition']['preremove'])) {
         		$container->setParameter('pi_app_admin.permission.prohibition.preremove', $config['permission']['prohibition']['preremove']);
         	}        	        	
+        }   
+
+        /**
+         * Translation config parameter
+         */
+        if (isset($config['translation'])){
+        	if (isset($config['translation']['defaultlocale_setting'])) {
+        		$container->setParameter('pi_app_admin.translation.defaultlocale_setting', $config['translation']['defaultlocale_setting']);
+        	} else {
+        		$container->setParameter('pi_app_admin.translation.defaultlocale_setting', true);
+        	}
         }        
         
         /**

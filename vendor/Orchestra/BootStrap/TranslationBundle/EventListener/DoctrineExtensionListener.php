@@ -39,12 +39,20 @@ class DoctrineExtensionListener implements ContainerAwareInterface
     public function onLateKernelRequest(GetResponseEvent $event)
     {
         $locale = $event->getRequest()->getLocale();
+        //$locale = $event->getRequest()->get('lang', $locale);
         
         $translatableListener = $this->container->get('gedmo.listener.translatable');
         $translatableListener->setTranslatableLocale($locale);
         
-        // !!! This force the system to create all translation fields in the default locale language.
-        $translatableListener->setDefaultLocale("important");
+        $is_defaultlocale_setting    = $this->container->getParameter('pi_app_admin.translation.defaultlocale_setting');
+        $defaultlocale               = $this->container->getParameter('locale');
+        if (!$is_defaultlocale_setting) {
+            // !!! This force the system to create all translation fields in the default locale language.
+            $translatableListener->setDefaultLocale("important");
+        } else {
+            $translatableListener->setDefaultLocale($defaultlocale);
+        }
+        
         //$translatableListener->setTranslationFallback(true);
     }
 

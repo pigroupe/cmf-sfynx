@@ -12,6 +12,8 @@
  */
 namespace PiApp\AdminBundle\Builder;
 
+use Symfony\Component\HttpFoundation\Response as Response;
+
 /**
  * PiPageManagerBuilderInterface interface.
  *
@@ -28,13 +30,20 @@ interface PiPageManagerBuilderInterface
     
     public function render($lang = '', $isSetPage = false);
     public function renderSource($id, $lang = '', $params = null);    
+    public function renderESISource($serviceName, $method, $id, $lang = '', $params = null, $options = null, Response $response = null);
     
-    public function getChildrenHierarchyRub();
+    public function redirectPage($route_name = 'error_404');
+    public function copyPage($locale = '');
+    
+    public function cacheRefresh();
+    public function cacheTreeChartPageRefresh();
+    
     public function setTreeWithPages($htmlTree);
     public function setHomePage($htmlTree);
     public function setNode($htmlTree);
     
-    public function cacheRefresh();
+    public function getChildrenHierarchyRub();
+    public function getUrlByPage(\PiApp\AdminBundle\Entity\Page $page, $type = '');
     public function getUrlByType($type, $entity = null);
-    public function cacheTreeChartPageRefresh();
+    
 }
