@@ -27,7 +27,7 @@ sub vcl_recv {
         }
 
         # Normalize hostname to avoid double caching
-        set req.http.host = regsub(req.http.host,"^lamelee\.loc$", "www.lamelee.loc");    
+        set req.http.host = regsub(req.http.host,"^monsite\.loc$", "www.monsite.loc");    
 
         if (req.http.Referer) {
             set req.http.Referer = regsub(req.http.Referer,"foo","bar");
@@ -144,13 +144,19 @@ sub vcl_pipe {
  
 # Called after a document has been successfully retrieved from the backend.
 sub vcl_fetch {
-        set beresp.do_esi = true;
-
         # Don't allow static files to set cookies
-        if (req.url ~ "(?i)\.(png|gif|jpeg|jpg|ico|swf|pdf|txt|css|js|html|htm|gz|xml)(\?[a-z0-9]+)?$") {
+        if (req.url ~ "(?i)\.(ico|swf|css|js|html|htm|gz|xml)(\?[a-z0-9]+)?$") {
             unset beresp.http.Set-cookie;
+            set beresp.ttl = 4h;  
+            return (hit_for_pass);
+        } else  if (req.url ~ "(?i)\.(png|gif|jpeg|jpg|pdf)(\?[a-z0-9]+)?$") {
+            # Don't allow static files to set cookies
+            unset beresp.http.Set-cookie;
+            set beresp.ttl = 0s;  
             return (hit_for_pass);
         } 
+
+        set beresp.do_esi = true;     
 
         #Pour que tous les utilisateurs reçoivent la page commune cachée et qu’elle reste dynamique en fonction des utilisateurs il faut enlever la session des cookies pour les pages/parties #communes et la laisser pour les pages/parties individuelles.
         if ( ! req.url ~ "^/esi-widget-page" ) {
@@ -158,7 +164,7 @@ sub vcl_fetch {
             if (req.http.Cookie ~ "^$") {
                 unset req.http.Cookie;
             }
-        }
+        } 
 
         # Allow items to be stale if needed
         if (req.http.Cookie ~"(UserID|_session)") {

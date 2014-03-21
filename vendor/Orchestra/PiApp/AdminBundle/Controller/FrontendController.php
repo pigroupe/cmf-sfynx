@@ -138,21 +138,14 @@ class FrontendController extends BaseController
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2014-01-16
      */
-    public function esipageAction($method, $serviceName, $id, $lang, $params, $get, $server, $key)
+    public function esipageAction($method, $serviceName, $id, $lang, $params, $server, $key)
     {
     	$method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($method, $key);
     	$serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($serviceName, $key);
     	$id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($id, $key);
     	$lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($lang, $key);
     	$params		 = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($params, $key), true);
-    	$get	     = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($get, $key), true);
     	$options     = json_decode($this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($server, $key), true);
-    	//
-    	if ($get && is_array($get)) {
-    		foreach($get as $k => $v) {
-    			$_GET[$k] = $v;
-    		}
-    	}
     	// we get the page manager
     	$pageManager = $this->get('pi_app_admin.manager.page');
     	// we set the ESI page result
