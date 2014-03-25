@@ -339,7 +339,9 @@ abstract class abstractController extends Controller
     		// groupe by
     		$query->groupBy('a.id');
     		// autocompletion
+    		$array_params = array();
     		if (is_array($keywords) && (count($keywords) >= 1)) {
+    			$i = 0;
     			foreach ($keywords as $info) {
     				$is_trans = false;
     				if (isset($info['field_trans']) && !empty($info['field_trans'])) {
@@ -349,14 +351,22 @@ abstract class abstractController extends Controller
     					}
     				}
     				if ($is_trans && isset($info['field_trans_name']) && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+    					$current_encoding = mb_detect_encoding($info['field_value'], 'auto');
+    					$info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
+    					$info['field_value'] = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+    						
     					$trans_name = $info['field_trans_name'];
 		    			$andModule_title = $query->expr()->andx();
 		    			$andModule_title->add($query->expr()->eq("LOWER({$trans_name}.locale)", "'{$locale}'"));
 		    			$andModule_title->add($query->expr()->eq("LOWER({$trans_name}.field)", "'".$info['field_name']."'"));
-		    			$andModule_title->add($query->expr()->like("LOWER({$trans_name}.content)", $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+		    			//$andModule_title->add($query->expr()->like("LOWER({$trans_name}.content)", $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+		    			$andModule_title->add("LOWER({$trans_name}.content) LIKE :var1".$i."");
+		    			$array_params["var1".$i] = '%'.strtolower($info['field_value']).'%';
 		    			 
 		    			$andModule_id = $query->expr()->andx();
-		    			$andModule_id->add($query->expr()->like('LOWER(a.id)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+		    			//$andModule_id->add($query->expr()->like('LOWER(a.id)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+		    			$andModule_id->add("LOWER(a.id) LIKE :var2".$i."");
+		    			$array_params["var2".$i] = '%'.strtolower($info['field_value']).'%';
 		    			 
 		    			$orModule  = $query->expr()->orx();
 		    			$orModule->add($andModule_title);
@@ -364,14 +374,24 @@ abstract class abstractController extends Controller
 		    			 
 		    			$query->andWhere($orModule);
     				} elseif (!$is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
-    					$query->add($query->expr()->like('LOWER('.$info['field_name'].')', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+    					$current_encoding = mb_detect_encoding($info['field_value'], 'auto');
+    					$info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
+    					$info['field_value'] = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+    					
+    					//$query->add($query->expr()->like('LOWER('.$info['field_name'].')', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+    					$query->add("LOWER(".$info['field_name'].") LIKE :var3".$i."");
+    					$array_params["var3".$i] = '%'.strtolower($info['field_value']).'%';
     				}
+    				$i++;
     			}
-    		}
+    			$query->setParameters($array_params);
+    		}    		
     		// pagination
     		if (!is_null($pagination)) {
     			$query->setFirstResult((intVal($pagination)-1)*intVal($MaxResults));
     			$query->setMaxResults(intVal($MaxResults));
+    			//$query_sql = $query->getQuery()->getSql();
+    			//var_dump($query_sql);
     		}
     		// result
     		$entities = $em->getRepository($this->_entityName)->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
@@ -384,7 +404,7 @@ abstract class abstractController extends Controller
     	} else {
     		throw ControllerException::callAjaxOnlySupported(' selectajax');
     	}    	
-    }    
+    }   
     
     /**
      * Select all entities.
@@ -482,6 +502,11 @@ abstract class abstractController extends Controller
                 $or = $qb->expr()->orx();
                 foreach ($search_tab as $s) {
                     $or->add("LOWER(".$aColumns[(intval($i)-1)].") LIKE :var".$i."");
+                    //
+                    $current_encoding = mb_detect_encoding($s, 'auto');
+                    $s = iconv($current_encoding, 'UTF-8', $s);
+                    $s = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s);
+                    //
                     $array_params["var".$i] = '%'.strtolower($s).'%';
                 }
                 $and->add($or);
@@ -494,11 +519,16 @@ abstract class abstractController extends Controller
         $or = $qb->expr()->orx();
         for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
         	if ( $request->get('bSearchable_'.$i) == "true" && $request->get('sSearch') != '' ) {
-                $search_tab = explode("|", $request->get('sSearch'));
+        		$search_tab = explode("|", $request->get('sSearch'));
         		foreach ($search_tab as $s) {
         			if(!empty($s)){
-                        $or->add("LOWER(".$aColumns[$i].") LIKE :var2".$i."");
-                        $array_params["var2".$i] = '%'.strtolower($s).'%';
+        			    $or->add("LOWER(".$aColumns[$i].") LIKE :var2".$i."");
+        			    //
+        			    $current_encoding = mb_detect_encoding($s, 'auto');
+        			    $s = iconv($current_encoding, 'UTF-8', $s);
+        			    $s = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s);
+        			    //
+        			    $array_params["var2".$i] = '%'.strtolower($s).'%';
         			}
         		}
         	}
@@ -674,7 +704,9 @@ abstract class abstractController extends Controller
 	        		}
 	        	}
 	        } 
-        }    
+        }  
+
+        return $response;
     }   
     
     /**

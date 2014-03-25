@@ -64,7 +64,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
         $locale = strtolower(substr($this->locale, 0, 2));
         $root_file         = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/piappadmin/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
-        	$locale = "en-GB";
+            $locale = "en-GB";
         }
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
 
@@ -110,7 +110,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
         $locale = strtolower(substr($this->locale, 0, 2));
         $root_file         = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/piappadmin/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
-        	$locale = "en-GB";
+            $locale = "en-GB";
         }
         // We open the buffer.
         ob_start ();
@@ -130,23 +130,24 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
             <div id="form-error-dialog" >&nbsp;</div>
 
             <div id="dialog-confirm" title="<?php echo $this->container->get('translator')->trans('pi.grid.action.delete.confirmation.title'); ?>">
-    		    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-    			<?php echo $this->container->get('translator')->trans('pi.grid.action.delete.confirmation.message'); ?></p>
-    		</div>
+                <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                <?php echo $this->container->get('translator')->trans('pi.grid.action.delete.confirmation.message'); ?></p>
+            </div>
 
             <script type="text/javascript">
             //<![CDATA[
 
-            	var id_form_delete = "";
+                var id_form_delete = "";
 
                 // we create the animations.
                 var j_prototype_bytabs = new function()
                 {
-                    var tab_counter         = 2;
+                    var tab_counter            = 2;
                     var name_prototype         = '';
                     var $prototype_content     = '';
                     var name_idForm            = '';
                     var tabTemplate            = '<li><a href="#{href}">#{label}</a> <span class="ui-icon ui-icon-close">Remove Tab</span></li>';
+                    var tab_ajaxselect         = new Array();
 
                     // tabs init with a custom tab template and an "add" callback filling in the content
                     // http://jqueryui.com/tabs/#manipulation
@@ -193,7 +194,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                     this.ftc_init = function(idForm, var_prototype){
                                                 // We initialize the variables.
                                                 name_prototype = var_prototype;
-                                                name_idForm       = idForm;
+                                                name_idForm    = idForm;
 
                                                 if (value_message.length != 0) {
                                                     // modal dialog for the error form
@@ -228,12 +229,12 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                     showOption: {
                                                         blind: false,
                                                         fade: true,
-                                                        duration: 400,
+                                                        duration: 400
                                                     },
                                                     hideOption: {
                                                         blind: false,
                                                         fade: true,
-                                                        duration: 200,
+                                                        duration: 200
                                                     }
                                                 });
 
@@ -255,9 +256,9 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                 $("button.button-ui-create").button({icons: {primary: "ui-icon-circle-plus"}});
                                                 $("button.button-ui-save").button({icons: {primary: "ui-icon-disk"}});
                                                 $("a.button-ui-delete").button({icons: {primary: "ui-icon-trash"}}).click(function( event ) {
-                                                	event.preventDefault();
-                                                	id_form_delete = $(this).data('id');
-                                                	$("#dialog-confirm").dialog("open");
+                                                    event.preventDefault();
+                                                    id_form_delete = $(this).data('id');
+                                                    $("#dialog-confirm").dialog("open");
                                                 });
                                                 $("a.button-ui-back-list").button({icons: {primary: "ui-icon-arrowreturn-1-w"}});
 
@@ -279,16 +280,16 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
 
                                                 // we remove each number of all tabs
                                                 $("[id^='"+var_prototype+"']").each(function(i){
-                                                 	var currentId = $(this).attr('id');
-                                                  	$(this).find('div:first-child > label').remove();
+                                                    var currentId = $(this).attr('id');
+                                                    $(this).find('div:first-child > label').remove();
                                                 });
 
                                                 // we remove each first label of all fieldsets
                                                 $("fieldset.no-accordion > div > label:first-child").each(function(i){
-                                                	var myclass = $(this).parent().attr('class');
-                                                  	if( (typeof(myclass) == "undefined") && (myclass != "clearfix") ){
-                                                  	    $(this).remove();
-                                                  	}
+                                                    var myclass = $(this).parent().attr('class');
+                                                    if( (typeof(myclass) == "undefined") && (myclass != "clearfix") ){
+                                                        $(this).remove();
+                                                    }
                                                 });
                     };
 
@@ -308,7 +309,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                 // It deletes the contents of all collections of such translation.
                                                 $("#prototype_all_widgets_"+name_prototype).remove();
 
-                                                // Applying the widgets plugin "wijmo" on the new collection.
+                                                // Functions are applied to the management of records of fields.
                                                 j_prototype_bytabs.ftc_add_render_form(idForm);
 
                     };
@@ -317,21 +318,21 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                     this.ftc_add_tag = function(){
                                                 var index    = $("div[id^='"+name_prototype+"_']").length;
 
-                                                // On récupère la balise <script> en question qui contient le contenu « data-prototype ».
+                                                // We recover the <script> tag which contains the following content « data-prototype ».
                                                 var $prototype     = $('script#prototype_script_'+name_prototype);
 
-                                                // On remplace la variable $$name$$ ou __name__ qu'il contient par le numéro du champ.
+                                                // The following variable $$name$$ or __name__ is replaced by the number of field.
                                                 //var $dataprototype = $prototype.html().replace(/\$\$name\$\$/g, index);
                                                 var $dataprototype = $prototype.html().replace('<label class="required">__name__label__</label>', '');
                                                 $dataprototype     = $dataprototype.replace(/__name__/g, index);
 
-                                                // On balise le prototype avec la class correspondant
+                                                // We tag the prototype with the corresponding class.
                                                 $prototype_content = '<fieldset><div id="'+name_prototype+'_' + index + '" >' + $dataprototype + '</div></fieldset>';
 
-                                                // On ajoute le contenu dans un nouveau onglet
+                                                // We add the contents into a new tab.
                                                 j_prototype_bytabs.ftc_addTab(index+1);
 
-                                                // On applique les widget du plugin wijmo sur la nouvelle collection
+                                                // Functions are applied to the management of records of fields.
                                                 j_prototype_bytabs.ftc_add_render_form("#"+name_prototype+"_" + index);
                     };
 
@@ -347,138 +348,16 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                 tab_counter++;
                     };
 
-                    // Applying the widgets.
+                    // Applying  Functions which are applied to the management of records of fields.
                     this.ftc_add_render_form = function(prototype_widget){
-                                  				function descrypt(){
-                                    				$("[id^='ui-multiselect-']").each(function(i){
-                                                   	    var string = $(this).next('span').html();
-                                                       	string = string.toString().replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-                                                       	string = string.replace(/&#0*39;/g, "'");
-                                                       	string = string.replace(/&quot;/g, '"');
-                                                       	string = string.replace(/&amp;/g, '&');
-                                                       	$(this).next('span').html(string);
-                                                       	$(this).click(function() {
-                                                         		var id = $(this).attr('id').toString().replace(/-option-(.+)/ig,'').replace('ui-multiselect-','');
-                                                        		var string = $(this).val();
-                                                             	string = string.toString().replace(/&amp;lt;img.*?\/&amp;gt;/ig,'');
-                                                        		$("#"+id).next("button.ui-multiselect").html(string);
-                                                      	});
-                        		                    });
-
-                                                    $("button.ui-multiselect").each(function(i){
-                                                       	var string = $(this).html();
-                                                        if(string) {
-                                                       	  string = string.toString().replace(/&lt;.*?\/&gt;/ig,'');
-                                                       	  $(this).html(string);
-                                                        }
-                                                  	});
-                                  				}
-                                                function getMoreItems(container, kw, max) {
-                                                    var _selectId = container.data('selectid'), spinner = null;
-                                                    container.data('pagination', container.data('pagination') + 1);
-
-                                                    // add spinner in checkboxes list
-                                                    spinner = new Spinner({className:'tempSpinner'}).spin();
-                                                    $('.ui-multiselect-checkboxes.'+container.attr('id')).append(spinner.el);
-                                                    $('.tempSpinner').css({
-                                                        left:'48%',
-                                                        'margin-top':'24px'
-                                                    });
-
-                                                    $.ajax({
-                                                        type: "GET",
-                                                        url: container.data('url'),
-                                                        data: {pagination:container.data('pagination'),keyword:kw, max:max},
-                                                        contentType: "application/json; charset=utf-8",
-                                                        dataType: "json"
-                                                    }).done(function(response) {
-                                                        // console.log('response', response);
-                                                        if (response.length > 0) {
-                                                            $.each(response, function(key, value) {
-                                                                // prevent doubles
-                                                                // if(container.find('option[value='+value.id+']').length == 0) {
-                                                                    var opt = $('<option />', {
-                                                                        value: value.id,
-                                                                        text: value.text
-                                                                    });
-                                                                    opt.appendTo( container );
-                                                                // }
-                                                                if (_selectId instanceof Array) {
-                                                                    _selectId.forEach(function(entry) {
-                                                                        if (entry == value.id) {
-                                                                            container.find(value.id).attr( "selected","selected")
-                                                                        }
-                                                                    });
-                                                                } else if (_selectId == value.id) {
-                                                                   container.find(value.id).attr( "selected","selected")
-                                                                }
-                                                            });
-                                                        }
-                                                    }).complete(function(){
-                                                        spinner.stop();
-                                                        container.multiselect('refresh');
-                                                        $('.ui-multiselect-checkboxes.'+container.attr('id')).find('li').show();
-                                                        container.data('loading', false);
-                                                        descrypt();
-                                                    });
-                                                }
-                                                function filterItems(container, kw, max) {
-                                                    var _selectId = container.data('selectid'),
-                                                        spinner = null;
-                                                    container.data('pagination', 1);
-                                                    // add spinner in checkboxes list
-                                                    spinner = new Spinner({className:'tempSpinner'}).spin();
-                                                    $('.ui-multiselect-checkboxes.'+container.attr('id')).empty().append(spinner.el);
-                                                    $('.tempSpinner').css({
-                                                        left:'48%',
-                                                        top:'48%'
-                                                    });
-
-                                                    $.ajax({
-                                                        type: "GET",
-                                                        url: container.data('url'),
-                                                        data: {pagination: container.data('pagination'), keyword:kw, max:max},
-                                                        contentType: "application/json; charset=utf-8",
-                                                        dataType: "json"
-                                                    }).done(function(response) {
-                                                    	container.empty();
-                                                        if (response.length > 0) {
-                                                            $.each(response, function(key, value) {
-                                                                // prevent doubles
-                                                                // if(container.find('option[value='+value.id+']').length == 0) {
-                                                                    var opt = $('<option />', {
-                                                                        value: value.id,
-                                                                        text: value.text
-                                                                    });
-                                                                    opt.appendTo( container );
-                                                                // }
-                                                                if (_selectId instanceof Array) {
-                                                                    _selectId.forEach(function(entry) {
-                                                                        if (entry == value.id) {
-                                                                            container.find(value.id).attr( "selected","selected")
-                                                                        }
-                                                                    });
-                                                                } else if (_selectId == value.id) {
-                                                                   container.find(value.id).attr( "selected","selected")
-                                                                }
-                                                            });
-                                                        }
-                                                    }).complete(function(){
-                                                        spinner.stop();
-                                                        container.multiselect('refresh');
-                                                        $('.ui-multiselect-checkboxes.'+container.attr('id')).find('li').show();
-                                                        container.data('loading', false);
-                                                        descrypt();
-                                                    });
-                                                }
                                                 $(prototype_widget + " a.button-ui-dialog").button({icons: {primary: "ui-icon-image"}}).css('padding', '7px');
                                                 $(prototype_widget + " input[type='radio']").iCheck({
                                                     handle: 'radio',
-                                                    radioClass: 'iradio_square-blue',
+                                                    radioClass: 'iradio_square-blue'
                                                 });
                                                 $(prototype_widget + " input[type='checkbox']").iCheck({
                                                     handle: 'checkbox',
-                                                    checkboxClass: 'icheckbox_square-blue',
+                                                    checkboxClass: 'icheckbox_square-blue'
                                                 });
                                                 // multiselect
                                                 $(prototype_widget + " select.pi_simpleselect").multiselect({
@@ -487,52 +366,14 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                     noneSelectedText: "<?php echo $this->translator->trans('pi.form.label.select.choose.option'); ?>",
                                                     selectedList: 1,
                                                     selectedText: function(numChecked, numTotal, checkedItems) {
-                                                        var result = '';
-                                                        var nameSelect = $(checkedItems[0]).attr('name').replace('multiselect_', '');
-                                                        if(checkedItems.length > 3) {
-                                                            result = numChecked + ' selected';
-                                                        }
-                                                        else {
-                                                            $.each(checkedItems, function(key, value) {
-                                                                if(key > 0 && key < checkedItems.length) { result += ', '; }
-                                                                result += $(value).next().text();
-                                                            });
-                                                        }
-                                                        $('#'+nameSelect).next('button').text(result);
-                                                        // console.log($('#'+nameSelect).next('button').text());
-                                                        return result;
-                                                    },                                                    
+                                                        return j_prototype_bytabs.fct_util_multiselect_text(numChecked, numTotal, checkedItems);
+                                                    },
                                                     open : function() {
-                                                        var heightList,
-                                                            // ID selecteur correspondant
-                                                            nameSelect = $('.ui-multiselect-checkboxes:visible').find('li:last').find('input').attr('name').replace('multiselect_', '');
-                                                        $('.ui-multiselect-checkboxes:visible').addClass(nameSelect);
-                                                        // calcul height totale de la liste
-                                                        $('.ui-multiselect-checkboxes:visible').on('scroll', function() {
-                                                            heightList = 0;
-                                                            $.each($(this).find('li'), function() {
-                                                                heightList += $(this).height();
-                                                            });
-
-                                                            // if scroll end && items not loading, getMoreItems
-                                                            if($(this).scrollTop() + $(this).outerHeight() + 10 > heightList && $('#'+nameSelect).data('loading') == false) {
-                                                                var keyword = $('.ui-multiselect-filter:visible').find('input').val();
-                                                                $('#'+nameSelect).data('loading', true);
-                                                                getMoreItems($('#'+nameSelect), keyword, $('#'+nameSelect).data('max'));
-                                                            }
-                                                        });
+                                                        j_prototype_bytabs.fct_util_multiselect_open();
                                                     }
                                                 }).multiselectfilter({
                                                     filter: function(e, matches) {
-                                                        e.preventDefault();
-                                                        var keyword = $('.ui-multiselect-filter:visible').find('input').val();
-                                                        $('.ui-multiselect-checkboxes').find('li').show();
-                                                        if($(e.target).data('loading') == false && keyword != $(e.target).data('keyword')) {
-                                                            $(e.target).data('loading', true);
-                                                            $(e.target).data('keyword', keyword);
-                                                            filterItems($(e.target), keyword, $(this).data('max'));
-                                                            $('.ui-multiselect-checkboxes').find('li').show();
-                                                        }
+                                                        j_prototype_bytabs.fct_util_multiselect_filter(e, matches);
                                                     }
                                                 });
 
@@ -541,51 +382,14 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                     header: true,
                                                     noneSelectedText: "<?php echo $this->translator->trans('pi.form.label.select.choose.options'); ?>",
                                                     selectedText: function(numChecked, numTotal, checkedItems) {
-                                                        var result = '';
-                                                        var nameSelect = $(checkedItems[0]).attr('name').replace('multiselect_', '');
-                                                        if(checkedItems.length > 3) {
-                                                            result = numChecked + ' selected';
-                                                        }
-                                                        else {
-                                                            $.each(checkedItems, function(key, value) {
-                                                                if(key > 0 && key < checkedItems.length) { result += ', '; }
-                                                                result += $(value).next().text();
-                                                            });
-                                                        }
-                                                        $('#'+nameSelect).next('button').text(result);
-                                                        // console.log($('#'+nameSelect).next('button').text());
-                                                        return result;
+                                                        return j_prototype_bytabs.fct_util_multiselect_text(numChecked, numTotal, checkedItems);
                                                     },
                                                     open : function() {
-                                                        var heightList,
-                                                        // ID selecteur correspondant
-                                                        nameSelect = $('.ui-multiselect-checkboxes:visible').find('li:last').find('input').attr('name').replace('multiselect_', '');
-                                                        $('.ui-multiselect-checkboxes:visible').addClass(nameSelect);
-                                                        // calcul height totale de la liste
-                                                        $('.ui-multiselect-checkboxes:visible').on('scroll', function() {
-                                                            heightList = 0;
-                                                            $.each($(this).find('li'), function() {
-                                                                heightList += $(this).height();
-                                                            });
-                                                            // if scroll end && items not loading, getMoreItems
-                                                            if($(this).scrollTop() + $(this).outerHeight() + 10 > heightList && $('#'+nameSelect).data('loading') == false) {
-                                                                var keyword = $('.ui-multiselect-filter:visible').find('input').val();
-                                                                $('#'+nameSelect).data('loading', true);
-                                                            	getMoreItems($('#'+nameSelect), keyword, $('#'+nameSelect).data('max'));
-                                                            }
-                                                        });
+                                                        j_prototype_bytabs.fct_util_multiselect_open();
                                                     }
                                                 }).multiselectfilter({
                                                     filter: function(e, matches) {
-                                                        e.preventDefault();
-                                                        var keyword = $('.ui-multiselect-filter:visible').find('input').val();
-                                                        $('.ui-multiselect-checkboxes').find('li').show();
-                                                        if($(e.target).data('loading') == false && keyword != $(e.target).data('keyword')) {
-                                                            $(e.target).data('loading', true);
-                                                            $(e.target).data('keyword', keyword);
-                                                            filterItems($(e.target), keyword, $(this).data('max'));
-                                                            $('.ui-multiselect-checkboxes').find('li').show();
-                                                        }
+                                                        j_prototype_bytabs.fct_util_multiselect_filter(e, matches);
                                                     }
                                                 });
 
@@ -594,44 +398,44 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                 // jquery multiselect I don't get the values that are selected in the multiselect field when performing an AJAX callback triggered
                                                 // http://www.erichynds.com/blog/jquery-ui-multiselect-widget
                                                 $(prototype_widget + " select.pi_simpleselect.ajaxselect, " + prototype_widget + " select.pi_multiselect.ajaxselect").each(function(i){
-                        									var el = $(this).multiselect('disable'); //disable it initially
-                        									var _selectId = $(this).data('selectid');
-                                        				    $(this).data('pagination',1).data('loading', false);
+                                                    var el = $(this).multiselect('disable'); //disable it initially
+                                                    var _selectId = $(this).data('selectid');
+                                                    $(this).data('pagination',1).data('loading', false);      
 
-                        							        $.ajax({
-                        											type: "GET",
-                        									        url: $(this).data('url'),
-                        									        data: {pagination:1, max:$(this).data('max')},
-                        									        contentType: "application/json; charset=utf-8",
-                        									        dataType: "json",
-                        									}).done(function(response) {
-                        											el.multiselect('enable');
-                        											if (response.length > 0) {
-                        												$.each(response, function(key, value) {
-                        													    if(el.find('option[value='+value.id+']').length == 0) {
-                        				                                            var opt = $('<option />', {
-                        				                                                value: value.id,
-                        				                                                text: value.text
-                        				                                            });
-                        															    opt.appendTo( el );
-                        												  	    }
-                        												  	    if (_selectId instanceof Array) {
-                        													  		      _selectId.forEach(function(entry) {
-                        															            if (entry == value.id) {
-                        															  		          el.find(value.id).attr( "selected","selected")
-                        															  	        }
-                        															      });
-                        													    } else if (_selectId == value.id) {
-                        													  		     el.find(value.id).attr( "selected","selected")
-                        												  	    }
-                        												});
-                        											}
-                        									}).complete(function(){
-                        											el.multiselect('refresh');
-                        											descrypt();
-                        									});
+                                                    var _url_ajaxselect = $(this).data('url')
+                                                    + '?pagination=1'
+                                                    + '&max=' + $(this).data('max');                                            
+
+                                                    if( _url_ajaxselect in tab_ajaxselect ) {
+                                                        //console.log('tab: ' + _url_ajaxselect)
+                                                        // We add options of a select element.
+                                                        el.multiselect('enable');
+                                                        j_prototype_bytabs.ftc_util_ajaxselect(el, tab_ajaxselect[_url_ajaxselect], _selectId, 1);
+                                                        el.multiselect('refresh');
+                                                        j_prototype_bytabs.ftc_util_descrypt();
+                                                    } else {
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            url: $(this).data('url'),
+                                                            data: {pagination:1, max:$(this).data('max')},
+                                                            contentType: "application/json; charset=utf-8",
+                                                            dataType: "json",
+                                                            async:  false // IMPORTANT !!! nécessaire afin que l'execution attende la fin de l'éxecution de l'ajax
+                                                        }).done(function(response) {
+                                                            //console.log('ajax: ' + _url_ajaxselect)
+                                                            // We register the response value.
+                                                            tab_ajaxselect[_url_ajaxselect] = response;
+                                                            // We add options of a select element.
+                                                            el.multiselect('enable');
+                                                            j_prototype_bytabs.ftc_util_ajaxselect(el, response, _selectId, 1);
+                                                        }).complete(function(){
+                                                            el.multiselect('refresh');
+                                                            j_prototype_bytabs.ftc_util_descrypt();
+                                                        });
+                                                    }                                           
                                                 });
-                                                descrypt();
+
+                                                j_prototype_bytabs.ftc_util_descrypt();
 
                                                 // date picker
                                                 $(prototype_widget + " .pi_datepicker").datepicker({
@@ -682,7 +486,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                 *           'class' => 'PiAppGedmoBundle:Media',
                                                 *           'query_builder' => function(EntityRepository $er) use ($id_media) {
                                                 *               $translatableListener = $this->_container->get('gedmo.listener.translatable');
-                                                *               $translatableListener->setTranslationFallback(true);                        
+                                                *               $translatableListener->setTranslationFallback(true);
                                                 *               return $er->createQueryBuilder('a')
                                                 *               ->select('a')
                                                 *               ->where("a.id IN (:id)")
@@ -746,26 +550,217 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                                 if ( (_id_  != undefined ) && (_title_  != undefined ) ) {
                                                                     $(_insertId).append('<option value="'+_id_+'" selected="selected">'+_id_+' - '+_title_+'</option>');
                                                                     $(_insertId).multiselect( 'refresh' );
-                                                                }                                                                    
+                                                                }
                                                             } else {
                                                                 if ( _id_  != undefined ) {
                                                                     $(_insertId).val(_id_);
                                                                 }
                                                             }
-                                                            descrypt();
+                                                            j_prototype_bytabs.ftc_util_descrypt();
                                                         },
                                                         close: function () {
                                                             $(this).dialog("close");
                                                         }
                                                     });
-                                                });  
+                                                });
 
+                    };
+
+                    this.ftc_util_getMoreItems = function(container, kw, max) {
+                        var _selectId = container.data('selectid');
+                        container.data('pagination', container.data('pagination') + 1);
+
+                        var _url_ajaxselect = container.data('url') 
+                        + '?pagination=' + container.data('pagination')
+                        + '&keyword=' + kw
+                        + '&max=' + max;
+
+                        // add spinner in checkboxes list
+                        var spinner = new Spinner({className:'tempSpinner'}).spin();
+                        $('.ui-multiselect-checkboxes.'+container.attr('id')).append(spinner.el);
+                        $('.tempSpinner').css({
+                            left:'48%',
+                            'margin-top':'24px'
+                        });
+
+                        j_prototype_bytabs.ftc_util_ajaxselect_main(container, _url_ajaxselect, _selectId, kw, max, spinner, 0);
+                    };
+
+                    this.ftc_util_filterItems = function(container, kw, max) {
+                        var _selectId = container.data('selectid');
+                        container.data('pagination', 1);
+
+                        var _url_ajaxselect = container.data('url')
+                        + '?pagination=' + container.data('pagination')
+                        + '&keyword=' + kw
+                        + '&max=' + max;
+
+                        // add spinner in checkboxes list
+                        var spinner = new Spinner({className:'tempSpinner'}).spin();
+                        $('.ui-multiselect-checkboxes.'+container.attr('id')).empty().append(spinner.el);
+                        $('.tempSpinner').css({
+                            left:'48%',
+                            top:'48%'
+                        });
+
+                        j_prototype_bytabs.ftc_util_ajaxselect_main(container, _url_ajaxselect, _selectId, kw, max, spinner, 1);
+                    };
+
+                    // We add options of a select element.
+                    this.ftc_util_ajaxselect_main = function(container, _url_ajaxselect, _selectId, kw, max, spinner, isEmpty) {
+                        if( _url_ajaxselect in tab_ajaxselect ) {
+                            if (isEmpty == 1) {
+                               container.empty();
+                            }
+                            j_prototype_bytabs.ftc_util_ajaxselect(container, tab_ajaxselect[_url_ajaxselect], _selectId);
+                            //
+                            spinner.stop();
+                            container.multiselect('refresh');
+                            $('.ui-multiselect-checkboxes.'+container.attr('id')).find('li').show();
+                            container.data('loading', false);
+                            j_prototype_bytabs.ftc_util_descrypt();
+                        } else {
+                            $.ajax({
+                                type: "GET",
+                                url: container.data('url'),
+                                data: {pagination: container.data('pagination'), keyword:kw, max:max},
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                            }).done(function(response) {
+                                // We register the response value.
+                                tab_ajaxselect[_url_ajaxselect] = response;
+                                if (isEmpty == 1) {
+                                    container.empty();
+                                }
+                                //
+                                j_prototype_bytabs.ftc_util_ajaxselect(container, response, _selectId);
+                            }).complete(function(){
+                                spinner.stop();
+                                container.multiselect('refresh');
+                                $('.ui-multiselect-checkboxes.'+container.attr('id')).find('li').show();
+                                container.data('loading', false);
+                                j_prototype_bytabs.ftc_util_descrypt();
+                            });
+                        }
+                    };                    
+
+                    // We add options of a select element.
+                    this.ftc_util_ajaxselect = function(el, response, _selectId, prevent_doublon) {
+                        if (response.length > 0) {
+                            $.each(response, function(key, value) {
+                                    if(
+                                        (el.find('option[value='+value.id+']').length == 0)
+                                        ||
+                                        (prevent_doublon == 0)
+                                    ) {
+                                        var opt = $('<option />', {
+                                            value: value.id,
+                                            text: value.text
+                                        });
+                                            opt.appendTo( el );
+                                    }
+                                    if (_selectId instanceof Array) {
+                                              _selectId.forEach(function(entry) {
+                                                    if (entry == value.id) {
+                                                          el.find(value.id).attr( "selected","selected")
+                                                    }
+                                              });
+                                    } else if (_selectId == value.id) {
+                                             el.find(value.id).attr( "selected","selected")
+                                    }
+                            });
+                        }
+                    };
+
+                    this.fct_util_multiselect_text = function(numChecked, numTotal, checkedItems) {
+                        var result = '';
+                        var nameSelect = $(checkedItems[0]).attr('name').replace('multiselect_', '');
+                        if(checkedItems.length > 3) {
+                            result = numChecked + ' selected';
+                        }
+                        else {
+                            $.each(checkedItems, function(key, value) {
+                                if(key > 0 && key < checkedItems.length) { result += ', '; }
+                                result += $(value).next().text();
+                            });
+                        }
+                        $('#'+nameSelect).next('button').text(result);
+                        // console.log($('#'+nameSelect).next('button').text());
+                        return result;
+                    };
+
+                    this.fct_util_multiselect_open = function() {
+                        var heightList,
+                        // ID selecteur correspondant
+                        nameSelect = $('.ui-multiselect-checkboxes:visible').find('li:last').find('input').attr('name').replace('multiselect_', '');
+                        $('.ui-multiselect-checkboxes:visible').addClass(nameSelect);
+                        // calcul height totale de la liste
+                        $('.ui-multiselect-checkboxes:visible').on('scroll', function() {
+                            heightList = 0;
+                            $.each($(this).find('li'), function() {
+                                heightList += $(this).height();
+                            });
+
+                            // if scroll end && items not loading, getMoreItems
+                            if($(this).scrollTop() + $(this).outerHeight() + 10 > heightList && $('#'+nameSelect).data('loading') == false) {
+                                var keyword = $('.ui-multiselect-filter:visible').find('input').val();
+                                $('#'+nameSelect).data('loading', true);
+                                j_prototype_bytabs.ftc_util_getMoreItems($('#'+nameSelect), keyword, $('#'+nameSelect).data('max'));
+                            }
+                        });
+                    };                    
+
+                    this.fct_util_multiselect_filter = function(e, matches) {
+                        e.preventDefault();
+                        var search_timeout = undefined;
+                        $('.ui-multiselect-filter:visible').find('input').keyup( function () {
+                            if(search_timeout != undefined) {
+                                clearTimeout(search_timeout);
+                            }
+                            $this = this;
+                            search_timeout = setTimeout(function() {
+                                search_timeout = undefined;
+                                keyword = $this.value;
+                                $('.ui-multiselect-checkboxes').find('li').show();
+                                if($(e.target).data('loading') == false && keyword != $(e.target).data('keyword')) {
+                                    $(e.target).data('loading', true);
+                                    $(e.target).data('keyword', keyword);
+                                    j_prototype_bytabs.ftc_util_filterItems($(e.target), keyword, $(this).data('max'));
+                                    $   ('.ui-multiselect-checkboxes').find('li').show();
+                                } 
+                            }, 2000);
+                        } );
+                    };
+
+                    this.ftc_util_descrypt = function(){
+                        $("[id^='ui-multiselect-']").each(function(i){
+                            var string = $(this).next('span').html();
+                            string = string.toString().replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                            string = string.replace(/&#0*39;/g, "'");
+                            string = string.replace(/&quot;/g, '"');
+                            string = string.replace(/&amp;/g, '&');
+                            $(this).next('span').html(string);
+                            $(this).click(function() {
+                                    var id = $(this).attr('id').toString().replace(/-option-(.+)/ig,'').replace('ui-multiselect-','');
+                                    var string = $(this).val();
+                                    string = string.toString().replace(/&amp;lt;img.*?\/&amp;gt;/ig,'');
+                                    $("#"+id).next("button.ui-multiselect").html(string);
+                            });
+                        });
+
+                        $("button.ui-multiselect").each(function(i){
+                            var string = $(this).html();
+                            if(string) {
+                              string = string.toString().replace(/&lt;.*?\/&gt;/ig,'');
+                              $(this).html(string);
+                            }
+                        });
                     };
 
                     this.ftc_tinymce_editor = function(idObj){
                         idObj.tinymce({
                             // Location of TinyMCE script
-                            script_url : '<?php echo $url_base ?>/tiny_mce.js',
+                            script_url : '<?php echo $url_base ?>/tiny_mce_src.js',
                             // General options
                             theme : "advanced",
                             language : "<?php echo strtolower(current(explode("_", $this->locale))); ?>",
@@ -790,7 +785,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             convert_fonts_to_spans : true,
                             // don't replace encoding character like : Ã© to &eacutes;
                             entity_encoding : "raw",
-                         	// clean up the content
+                            // clean up the content
                             cleanup_callback : this.fct_tinymce_xhtml_transform,
                             // Theme options
                             theme_advanced_buttons1 : "fullscreen,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,styleselect,fontselect,fontsizeselect",
@@ -814,6 +809,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             media_external_list_url : "<?php echo $url_base ?>/plugins/lists/media_list.js",
                             // count without the lenght of html balise
                             setup : function(ed) {
+                                alert(JSON.stringify(ed));
                                 ed.onKeyUp.add(function(ed, e) {
                                     var strip = (tinymce.activeEditor.getContent()).replace(/(<([^>]+)>)/ig,"").replace(/&[a-z]+;/ig, "");
                                     var text = strip.split(' ').length + " Mots, " +  (10000 - strip.length) + " Caractères "
@@ -857,7 +853,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             convert_fonts_to_spans : true,
                             // don't replace encoding character like : Ã© to &eacutes;
                             entity_encoding : "raw",
-                         	  // clean up the content
+                              // clean up the content
                             cleanup_callback : this.fct_tinymce_xhtml_transform,
                             // Theme options
                             theme_advanced_buttons1 : "fullscreen,bold,italic,underline,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,hr,sub,sup,forecolor,backcolor",
@@ -924,7 +920,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             convert_fonts_to_spans : true,
                             // don't replace encoding character like : Ã© to &eacutes;
                             entity_encoding : "raw",
-                         	// clean up the content
+                            // clean up the content
                             cleanup_callback : this.fct_tinymce_xhtml_transform,
                             // Theme options
                             theme_advanced_buttons1 : "fullscreen,bold,italic,underline,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,forecolor,backcolor",
@@ -1027,37 +1023,37 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             }
                         });
                     };
-                 	// This function allows to convert the entered text
+                    // This function allows to convert the entered text
                     this.fct_tinymce_xhtml_transform = function xhtml_transform(type, value) {
-                    	//console.log(type)
-                    	switch (type) {
-		                        case "get_from_editor":
-			                			value = value.replace(/&nbsp;/ig, " ");
-			                			value = value.replace(/\s/ig, " ");
-		                                break;
-		                        case "insert_to_editor":
-										//value = value.replace(/<p[^>]*><span[^>]*> <\/span><\/p>/g,"<p><span> </span></p>");
-		                    			//value = value.replace(/<p[^>]*> <\/p>/g, "<p> </p>");
-		                    			//value = value.replace(/<\/?[^<]+>/g,'');
-		                    			//value = value.replace(/<\w+>(\w+)<\/\w+>/g,'');
-				            			value = value.replace(/&nbsp;/ig, " ");
-				            			value = value.replace(/\s/ig, " ");
-		                                break;
-		                        case "submit_content":
-		                                break;
-		                        case "get_from_editor_dom":
-		                                break;
-		                        case "insert_to_editor_dom":
-		                                break;
-		                        case "setup_content_dom":
-		                                break;
-		                        case "submit_content_dom":
-		                                break;
-		                }
+                        //console.log(type)
+                        switch (type) {
+                                case "get_from_editor":
+                                        value = value.replace(/&nbsp;/ig, " ");
+                                        value = value.replace(/\s/ig, " ");
+                                        break;
+                                case "insert_to_editor":
+                                        //value = value.replace(/<p[^>]*><span[^>]*> <\/span><\/p>/g,"<p><span> </span></p>");
+                                        //value = value.replace(/<p[^>]*> <\/p>/g, "<p> </p>");
+                                        //value = value.replace(/<\/?[^<]+>/g,'');
+                                        //value = value.replace(/<\w+>(\w+)<\/\w+>/g,'');
+                                        value = value.replace(/&nbsp;/ig, " ");
+                                        value = value.replace(/\s/ig, " ");
+                                        break;
+                                case "submit_content":
+                                        break;
+                                case "get_from_editor_dom":
+                                        break;
+                                case "insert_to_editor_dom":
+                                        break;
+                                case "setup_content_dom":
+                                        break;
+                                case "submit_content_dom":
+                                        break;
+                        }
 
-		                return value;
-		            },
-                 	// THIS FUNCTION ALLOW TO INJECT SEVERAL FIELDS IN A ACCORDION MENU.
+                        return value;
+                    },
+                    // THIS FUNCTION ALLOW TO INJECT SEVERAL FIELDS IN A ACCORDION MENU.
                     // exemple : j_prototype_bytabs.ftc_accordion_form("meta_definition", "SEO", ".myform");
                     // exemple : j_prototype_bytabs.ftc_accordion_form("meta_definition", "SEO", ".myform", 'questionLi0');
                     // exemple : j_prototype_bytabs.ftc_accordion_form("meta_definition", "SEO", ".myform", 'questionLi1');
@@ -1089,7 +1085,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                 $(this).closest('.clearfix').detach().appendTo("#"+accordionId);
                             });
                             $('#'+accordionId+' legend').on('click', function (event, dataObject) {
-                            	event.preventDefault();
+                                event.preventDefault();
                                 var that = $(this);
                                 var newHeight = function(){
                                     var h=16;    //initial height when closed
@@ -1147,7 +1143,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             buttons: {
                                 '<?php echo $this->translator->trans('pi.form.tab.box.close'); ?>': function () {
                                     $(this).dialog('close');
-                                },
+                                }
                             },
                             open: function () {
                                 $(this).dialog({title: title + ' form'});
@@ -1165,9 +1161,9 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                     toggle: { visible: true },
                                     minimize: { visible: false },
                                     maximize: { visible: false }
-                                },
+                            },
                             show: 'scale',
-                            hide: 'scale',
+                            hide: 'scale'
                         });
 
                         button.on('click', function (event) {
@@ -1193,25 +1189,25 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
 
                 $(document).ready(function() {
                     <?php foreach($options['prototype-name'] as $key => $value){ ?>
-	                    // We run the function.
+                        // We run the function.
                         j_prototype_bytabs.ftc_init('<?php echo $options['prototype-idForm']; ?>', '<?php echo $value; ?>');
                     <?php } ?>
 
                     $("#dialog-confirm").dialog({
-	               		 autoOpen: false,
-	               		 resizable: false,
-	               		 height:140,
-	               		 modal: true,
-	               		 buttons: {
-	                   		 "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.delete'); ?>": function() {
-	                           	$('#'+id_form_delete).trigger('submit');
-	                           	$( this ).dialog( "close" );
-	                   		 },
-	                   		 "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.cancel'); ?>": function() {
-	                   		 	$( this ).dialog( "close" );
-	                   		 }
-	               		 }
-               	 	});
+                         autoOpen: false,
+                         resizable: false,
+                         height:140,
+                         modal: true,
+                         buttons: {
+                             "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.delete'); ?>": function() {
+                                $('#'+id_form_delete).trigger('submit');
+                                $( this ).dialog( "close" );
+                             },
+                             "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.cancel'); ?>": function() {
+                                $( this ).dialog( "close" );
+                             }
+                         }
+                    });
                 });
 
             //]]>
@@ -1285,7 +1281,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
               bold : {inline : 'span', 'classes' : 'bold'},
               italic : {inline : 'span', 'classes' : 'italic'},
               underline : {inline : 'span', 'classes' : 'underline', exact : true},
-              strikethrough : {inline : 'del'},
+              strikethrough : {inline : 'del'}
           }
 
         <?php

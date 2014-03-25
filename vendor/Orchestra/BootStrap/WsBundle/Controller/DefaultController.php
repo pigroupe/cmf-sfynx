@@ -121,7 +121,7 @@ class DefaultController extends abstractController
     	    if ($token) {
     	        $isAuthorization = true;
     	    } else {
-    	        $token            = strtoupper(\PiApp\AdminBundle\Util\PiStringManager::random(24));
+    	        $token            = md5($userId) . strtoupper(\PiApp\AdminBundle\Util\PiStringManager::random(24));
     	        $isAuthorization  = false;
     	    }
     	    //-----we initialize de logger-----
@@ -258,87 +258,32 @@ class DefaultController extends abstractController
     }    
     
     /**
-     * Check the demand management of authentication permission.
+     * We connect user by his id value.
      *
      * <code>
-     *  /ws/auth/connectuser/token?ws_user_id=hmA,&ws_key=0A1TG4GO&&ws_token=lWeMZ6x5go6jg3V7pqFtnZByiYKrl2yK
+     *  /ws/auth/connectuserbyid?ws_user_id=hmA,&ws_key=0A1TG4GO
      * </code>
      *
-     * @Route("/ws/auth/connectuser/token", name="ws_auth_connectbyuser")
+     * @Route("/ws/auth/connectuserbyid", name="ws_auth_connectbyuser_by_id")
      * @return \Symfony\Component\HttpFoundation\Response
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function connectUserByTokenAction()
-    {    
+    public function connectUserByIdAction()
+    {
     	$em          = $this->getDoctrine()->getManager();
     	$request     = $this->container->get('request');
     	$userManager = $this->container->get('fos_user.user_manager');
-    	//
-    	if (!$request->get('ws_key', false) || !$request->get('ws_user_id', false) || !$request->get('ws_token', false)) {
-    		//-----we initialize de logger-----
-    		$logger = $this->container->get('pi_app_admin.log_manager');
-    		$logger->setInit('log_client_auth', date("YmdH"));
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET BAD CONNECT USER BY TOKEN AUTH REQUEST]");
-    		//-----we set errors in the logger-----
-    		$logger->setErr(date("Y-m-d H:i:s") . " [LOG] url :" . $request->getUri());
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [END]");
-    		//-----we save in the file log-----
-    		$env = $this->container->get("kernel")->getEnvironment();
-    		$config = $this->container->getParameter("ws.auth");
-    		if (isset($config['log'][$env])) {
-    			$is_debug = $config['log'][$env];
-    			if ($is_debug){
-    				$logger->save();
-    			}
-    		}
-    		throw ClientException::callBadAuthRequest(__CLASS__);
-    	}
-    	
+        //
     	$key     = $request->get('ws_key', '');
     	$userId  = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($request->get('ws_user_id', null), $key);
-    	$token   = $this->container->get('pi_app_admin.twig.extension.tool')->decryptFilter($request->get('ws_token', null), $key);
-    	 
-    	// If the user ID exists,
-    	// we associate the token to the userId
-    	if ($this->isUserdIdExisted($userId)) {
-    		$success = $this->setAssociationUserIdWithApplicationToken($userId, $token, $application);
-    		$user    = $userManager->findUserByConfirmationToken($token);
-    	} else {
-    		$success = false;
-    	}
-    	//-----we initialize de logger-----
-    	$logger = $this->container->get('pi_app_admin.log_manager');
-    	$logger->setInit('log_client_auth', date("YmdH"));
-    	//-----we set info in the logger-----
-    	$logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET VALIDATE TOKEN AUTH REQUEST]");
-    	//-----we set errors in the logger-----
-    	$logger->setInfo(date("Y-m-d H:i:s") . " [URL] " . $request->getUri());
-    	//-----we set info in the logger-----
-    	$logger->setInfo(date("Y-m-d H:i:s") . " [END]");
-    	//-----we save in the file log-----
-    	$env = $this->container->get("kernel")->getEnvironment();
-    	$config = $this->container->getParameter("ws.auth");
-    	if (isset($config['log'][$env])) {
-    		$is_debug = $config['log'][$env];
-    		if ($is_debug){
-    			$logger->save();
-    		}
-    	}
-    	//
-    	if ( $success ) {
-    		$tab= array();
-    		$tab['access_token'] = true;
+        //
+    	$entity = $em->getRepository('BootStrapUserBundle:User')->find($userId);
+    	$response = new Response($userId);
     	
-        	$response = new Response(json_encode($tab));
-        	$this->authenticateUser($user, false, $response);
-    	    $response->headers->set('Content-Type', 'application/json');
-    	}
-    	    	
-    	return $response;
-    }    	    
+    	
+    	return $this->authenticateUser($entity, false,  $response);
+    }   	    
     
     /**
      * Check the result request of a url.

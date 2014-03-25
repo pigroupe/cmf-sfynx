@@ -490,10 +490,10 @@ pi_app_admin:
         homepage_deletewidget: true
         page_management_by_user_only: true
         page_management_with_prefix_locale: false
+        single_slug: false
         esi:
             force_private_response_for_all: false
             force_private_response_only_with_authentication: true        
-        single_slug: false
         refresh_allpage: true
         refresh_allpage_containing_snippet: true
         refresh_css_js_cache_file: true
@@ -557,8 +557,10 @@ boot_strap_ws:
             prod: false
 #        domains:
 #            domain1:
+#                key: or23
 #                url: http://www.orchestra23.local/setCookies.php
 #            domain2:
+#                key: or22
 #                url: http://www.orchestra22.local/setCookies.php            
         handlers:
             getpermisssion:

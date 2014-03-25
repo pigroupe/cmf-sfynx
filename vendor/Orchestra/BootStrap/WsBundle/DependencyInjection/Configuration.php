@@ -65,6 +65,7 @@ class Configuration implements ConfigurationInterface {
                             ->arrayNode('domains')
                             ->prototype('array')
 	                            ->children()
+	                                ->scalarNode('key')->isRequired()->end()
 	                            	->scalarNode('url')->isRequired()->end()
 	                            ->end()
                             ->end()

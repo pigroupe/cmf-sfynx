@@ -10,8 +10,10 @@
 #            prod: false
 #        domains:
 #            domain1:
+#                key: ORCH23
 #                url: http://www.orchestra23.local/setCookies.php
 #            domain2:
+#                key: ORCH22
 #                url: http://www.orchestra22.local/setCookies.php
 #        handlers:
 #            getpermisssion:
