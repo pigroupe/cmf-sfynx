@@ -360,7 +360,7 @@ class PiLayoutHeadExtension extends \Twig_Extension
         $nameFile    = strtolower($this->options['type']) . '/' . $input_hash . '.' . strtolower($this->options['type']);
         $file         = $this->TEMP_FILES_DIR . '/' . $nameFile;
         
-        $is_refresh_css_js_cache_file = $this->container->getParameter("pi_app_admin.page.refresh_css_js_cache_file");
+        $is_refresh_css_js_cache_file = $this->container->getParameter("pi_app_admin.page.refresh.css_js_cache_file");
         
         // we compress the content
         if ( ($is_refresh_css_js_cache_file || !file_exists($file)) && $this->container->get('pi_app_admin.file_manager')->save($file, $this->string, 0777)){        

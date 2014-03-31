@@ -196,14 +196,24 @@ doctrine:
         metadata_cache_driver: array # array|apc
         query_cache_driver: array
         result_cache_driver: array
-#       metadata_cache_driver: memcache        
-#       query_cache_driver: memcache         
+#       metadata_cache_driver:
+#            type: memcache
+#            host: localhost
+#            port: 11211
+#            class: Doctrine\Common\Cache\MemcacheCache
+#            instance_class: Memcache         
+#       query_cache_driver: 
+#            type: memcache
+#            host: localhost
+#            port: 11211
+#            class: Doctrine\Common\Cache\MemcacheCache
+#            instance_class: Memcache          
 #       result_cache_driver:
 #            type: memcache
 #            host: localhost
 #            port: 11211
 #            class: Doctrine\Common\Cache\MemcacheCache
-#            instance_class: Memcache       
+#            instance_class: Memcache     
             
 #               
 # Doctrine MongoDB Configuration
@@ -489,14 +499,17 @@ pi_app_admin:
     page:
         homepage_deletewidget: true
         page_management_by_user_only: true
-        page_management_with_prefix_locale: false
-        single_slug: false
+        route:
+            with_prefix_locale: false
+            single_slug: false
         esi:
             force_private_response_for_all: false
-            force_private_response_only_with_authentication: true        
-        refresh_allpage: true
-        refresh_allpage_containing_snippet: true
-        refresh_css_js_cache_file: true
+            force_private_response_only_with_authentication: true     
+            disable_after_post_request: true 
+        refresh:
+            allpage: true
+            allpage_containing_snippet: true
+            css_js_cache_file: true        
         indexation_authorized_automatically: false
         switch_language_browser_authorized: false
         switch_layout_mobile_authorized: false

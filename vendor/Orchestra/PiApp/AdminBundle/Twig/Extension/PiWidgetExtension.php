@@ -1003,6 +1003,10 @@ class PiWidgetExtension extends \Twig_Extension
             } else {
             	$is_esi_activate = false;
             }       
+            $is_esi_disable_after_post_request = $this->container->getParameter('pi_app_admin.page.esi.disable_after_post_request');
+            if ($is_esi_disable_after_post_request && (count($_POST) == 0)) {
+            	$is_esi_activate = false;
+            }            
             if ($is_esi_activate) {
             	$esi_key 		 = '9eu9ghv9';
             	$esi_method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('renderSource', $esi_key);
@@ -1081,6 +1085,10 @@ class PiWidgetExtension extends \Twig_Extension
             	$is_esi_activate = true;
             } else {
             	$is_esi_activate = false;
+            }
+            $is_esi_disable_after_post_request = $this->container->getParameter('pi_app_admin.page.esi.disable_after_post_request');
+            if ($is_esi_disable_after_post_request && (count($_POST) == 0)) {
+                $is_esi_activate = false;
             }
             if ($is_esi_activate) {
             	$esi_key 		 = '9eu9ghv9';

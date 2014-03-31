@@ -112,7 +112,7 @@ abstract class CoreListener extends abstractListener
     final protected function _TwigCache($eventArgs)
     {
         $entity        = $eventArgs->getEntity();
-        $is_refresh_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh_allpage');        
+        $is_refresh_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh.allpage');        
         if ($this->isUsernamePasswordToken() && $is_refresh_authorized &&
             (
                 $entity instanceof \PiApp\AdminBundle\Entity\Page ||
@@ -214,7 +214,7 @@ abstract class CoreListener extends abstractListener
                         // we have to warm up all pages which are used by the snippet 
                         if (!($entity->getWidget()->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) ){                            
                             // We check the permission in config.
-                            $is_refresh_snippet_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh_allpage_containing_snippet');
+                            $is_refresh_snippet_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh.allpage_containing_snippet');
                             if ($is_refresh_snippet_authorized){
                                 // we get all widgets which use the content snippet 
                                 $all_widget_used_snippet = $this->getRepository('Widget')->getWidgetByOptions('content', 'snippet', '<id>'.$entity->getWidget()->getId().'</id>')->getQuery()->getResult();

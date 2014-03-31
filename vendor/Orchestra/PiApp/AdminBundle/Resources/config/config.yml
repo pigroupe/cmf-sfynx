@@ -36,17 +36,20 @@
 #    page:
 #        homepage_deletewidget: true
 #        page_management_by_user_only: true
-#        page_management_with_prefix_locale: false
-#        esi:
+#        route:
+#            with_prefix_locale: false
+#            single_slug: false
+#        page_esi:
 #            force_private_response_for_all: false
 #            force_private_response_only_with_authentication: true
-#        single_slug: false
-#        refresh_allpage: true
-#        refresh_allpage_containing_snippet: true
-#        refresh_css_js_cache_file: true
+#            disable_after_post_request: true
+#        refresh:
+#            allpage: true
+#            allpage_containing_snippet: true
+#            css_js_cache_file: true        
 #        indexation_authorized_automatically: false
-#        switch_language_browser_authorized: true
-#        switch_layout_mobile_authorized: true
+#        switch_language_browser_authorized: false
+#        switch_layout_mobile_authorized: false
 #        memcache_enable_all: false
 #        seo_redirection:
 #            seo_authorized: true

@@ -1,5 +1,8 @@
 # http://www.mediawiki.org/wiki/Manual:Varnish_caching
 # set default backend if no server cluster specified
+
+# import parsereq;
+
 backend default {
     .host = "127.0.0.1";
     .port = "80";
@@ -12,6 +15,8 @@ acl purge {
  
 # vcl_recv is called whenever a request is received 
 sub vcl_recv {
+        # parsereq.init();
+
         if (req.restarts == 0) {
             if (req.http.x-forwarded-for) {
                 set req.http.X-Forwarded-For = req.http.X-Forwarded-For + ", " + client.ip;
@@ -27,12 +32,12 @@ sub vcl_recv {
         }
 
         # Normalize hostname to avoid double caching
-        set req.http.host = regsub(req.http.host,"^monsite\.loc$", "www.monsite.loc");    
+        set req.http.host = regsub(req.http.host,"^mywebsite\.loc$", "www.mywebsite.loc");    
 
         if (req.http.Referer) {
             set req.http.Referer = regsub(req.http.Referer,"foo","bar");
         }
-        
+
         # normalize Accept-Encoding to reduce vary
         if (req.http.Accept-Encoding) {
           if (req.http.User-Agent ~ "MSIE 6") {
@@ -58,7 +63,7 @@ sub vcl_recv {
         if (req.http.Cache-Control ~ "(private|no-cache|no-store)") {
             ban_url(req.url);
         }          
- 
+
         # This uses the ACL action called "purge". Basically if a request to
         # PURGE the cache comes from anywhere other than localhost, ignore it.
         if (req.request == "PURGE") {
@@ -76,9 +81,20 @@ sub vcl_recv {
             return(pipe);
         }     /* Non-RFC2616 or CONNECT which is weird. */
 
+        # Don't cache POST, PUT, or DELETE requests
+        if (req.request == "POST" || req.request == "PUT" || req.request == "DELETE") {
+            set req.http.Cache-Control = req.http.Cache-Control + ", must-revalidate";
+            return(pass);
+        }         
+
+        if (req.http.host ~ "^www.mywebsite\.loc$") {
+            return(lookup);
+        }         
+
         if( req.http.Authorization || req.http.Cookie) {
             return (pass);
         }        
+
 
         return (lookup);
 }
@@ -126,6 +142,7 @@ sub vcl_hit {
     return (deliver);
 }
 
+# Called if the cache does not have a copy of the page.
 sub vcl_miss {
     if (req.request == "PURGE") {
         error 404 "Not in cache.";
@@ -139,7 +156,7 @@ sub vcl_pass {
 }
 
 sub vcl_pipe {
-  set bereq.http.connection = "close";
+    set bereq.http.connection = "close";
 }
  
 # Called after a document has been successfully retrieved from the backend.
@@ -196,6 +213,7 @@ sub vcl_fetch {
 
 
 sub vcl_deliver {
+    # set resp.http.hoge = parsereq.body(post);
     set resp.http.Age = "0";
     return (deliver);
 

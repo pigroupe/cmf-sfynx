@@ -121,7 +121,8 @@ class DefaultController extends abstractController
     	    if ($token) {
     	        $isAuthorization = true;
     	    } else {
-    	        $token            = md5($userId) . strtoupper(\PiApp\AdminBundle\Util\PiStringManager::random(24));
+    	    	$now = new \Datetime();
+    	        $token            = md5($now->getTimestamp()) . strtoupper(\PiApp\AdminBundle\Util\PiStringManager::random(24));
     	        $isAuthorization  = false;
     	    }
     	    //-----we initialize de logger-----

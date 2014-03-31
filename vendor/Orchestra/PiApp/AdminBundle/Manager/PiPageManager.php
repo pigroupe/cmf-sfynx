@@ -1634,7 +1634,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                         $urls[$locale] = "";
                         break;
                 }
-                $is_prefix_locale = $this->container->getParameter("pi_app_admin.page.page_management_with_prefix_locale");
+                $is_prefix_locale = $this->container->getParameter("pi_app_admin.page.route.with_prefix_locale");
                 if ($is_prefix_locale) {
                     $locale_tmp = explode('_', $locale);
                     $urls[$locale] = $locale_tmp[0] . '/' . $urls[$locale];

@@ -81,8 +81,13 @@ class PiAppAdminExtension extends Extension
                 $container->setParameter('pi_app_admin.page.homepage_deletewidget', $config['page']['homepage_deletewidget']);
             if (isset($config['page']['page_management_by_user_only']))
                 $container->setParameter('pi_app_admin.page.management_by_user_only', $config['page']['page_management_by_user_only']);
-            if (isset($config['page']['page_management_with_prefix_locale']))
-                $container->setParameter('pi_app_admin.page.page_management_with_prefix_locale', $config['page']['page_management_with_prefix_locale']);
+            
+            if (isset($config['page']['route']) && isset($config['page']['route']['with_prefix_locale'])) {
+            	$container->setParameter('pi_app_admin.page.route.with_prefix_locale', $config['page']['route']['with_prefix_locale']);
+            }          
+            if (isset($config['page']['route']) && isset($config['page']['route']['single_slug'])) {
+            	$container->setParameter('pi_app_admin.page.route.single_slug', $config['page']['route']['single_slug']);
+            }
             
             if (isset($config['page']['esi']) && isset($config['page']['esi']['force_private_response_for_all'])) {
             	$container->setParameter('pi_app_admin.page.esi.force_private_response_for_all', $config['page']['esi']['force_private_response_for_all']);
@@ -90,15 +95,20 @@ class PiAppAdminExtension extends Extension
             if (isset($config['page']['esi']) && isset($config['page']['esi']['force_private_response_only_with_authentication'])) {
             	$container->setParameter('pi_app_admin.page.esi.force_private_response_only_with_authentication', $config['page']['esi']['force_private_response_only_with_authentication']);
             } 
+            if (isset($config['page']['esi']) && isset($config['page']['esi']['disable_after_post_request'])) {
+            	$container->setParameter('pi_app_admin.page.esi.disable_after_post_request', $config['page']['esi']['disable_after_post_request']);
+            }            
                                                 
-            if (isset($config['page']['single_slug']))
-                $container->setParameter('pi_app_admin.page.single_slug', $config['page']['single_slug']);
-            if (isset($config['page']['refresh_allpage']))
-                $container->setParameter('pi_app_admin.page.refresh_allpage', $config['page']['refresh_allpage']);
-            if (isset($config['page']['refresh_allpage_containing_snippet']))
-                $container->setParameter('pi_app_admin.page.refresh_allpage_containing_snippet', $config['page']['refresh_allpage_containing_snippet']);
-            if (isset($config['page']['refresh_css_js_cache_file']))
-                $container->setParameter('pi_app_admin.page.refresh_css_js_cache_file', $config['page']['refresh_css_js_cache_file']);
+            if (isset($config['page']['refresh']) && isset($config['page']['refresh']['allpage'])) {
+            	$container->setParameter('pi_app_admin.page.refresh.allpage', $config['page']['refresh']['allpage']);
+            }
+            if (isset($config['page']['refresh']) && isset($config['page']['refresh']['allpage_containing_snippet'])) {
+            	$container->setParameter('pi_app_admin.page.refresh.allpage_containing_snippet', $config['page']['refresh']['allpage_containing_snippet']);
+            }
+            if (isset($config['page']['refresh']) && isset($config['page']['refresh']['css_js_cache_file'])) {
+            	$container->setParameter('pi_app_admin.page.refresh.css_js_cache_file', $config['page']['refresh']['css_js_cache_file']);
+            }                        
+            
             if (isset($config['page']['indexation_authorized_automatically']))
                 $container->setParameter('pi_app_admin.page.indexation_authorized_automatically', $config['page']['indexation_authorized_automatically']);
             if (isset($config['page']['switch_layout_mobile_authorized']))

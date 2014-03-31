@@ -197,7 +197,7 @@ class HandlerRequest
     		$this->seo_redirection_file_name = "seo_links.yml";
     	}
     	    	
-    	$this->is_prefix_locale                         = $this->container->getParameter("pi_app_admin.page.page_management_with_prefix_locale");
+    	$this->is_prefix_locale                         = $this->container->getParameter("pi_app_admin.page.route.with_prefix_locale");
     }    
     
     /**
