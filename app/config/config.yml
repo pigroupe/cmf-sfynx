@@ -506,6 +506,8 @@ pi_app_admin:
             force_private_response_for_all: false
             force_private_response_only_with_authentication: true     
             disable_after_post_request: true 
+        widget:
+            render_service_with_ajax: false            
         refresh:
             allpage: true
             allpage_containing_snippet: true

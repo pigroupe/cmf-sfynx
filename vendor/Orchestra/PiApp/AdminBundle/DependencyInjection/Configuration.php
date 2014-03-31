@@ -168,6 +168,13 @@ class Configuration implements ConfigurationInterface
                             ->booleanNode('force_private_response_only_with_authentication')->isRequired()->defaultValue(true)->end()
                             ->booleanNode('disable_after_post_request')->isRequired()->defaultValue(true)->end()
                         ->end()
+                    ->end()         
+
+                    ->arrayNode('widget')
+                    ->isRequired()
+                        ->children()
+                            ->booleanNode('render_service_with_ajax')->isRequired()->defaultValue(false)->end()
+                        ->end()
                     ->end()                    
                         
                 ->end()

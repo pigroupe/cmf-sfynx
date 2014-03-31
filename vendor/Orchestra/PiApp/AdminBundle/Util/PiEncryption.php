@@ -378,6 +378,8 @@ class PiEncryption implements PiEncryptionBuilderInterface
                                     link.className  = styles.join(' ');
                                     <?php if (in_array($balise, array('img', 'iframe', 'script'))) : ?>
                                     link.src       = decoded;
+                                    <?php elseif (in_array($balise, array('div'))) : ?>
+                                    	$(link).load( decoded );
                                     <?php else : ?>
                                     link.href       = decoded;
                                     <?php endif; ?>

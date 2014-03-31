@@ -327,8 +327,17 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         $source     .= $this->getScript('css', 'implode') . " \n";
         $source     .= " \n--> \n</style> \n";
         $source     .= "{% endblock %} \n";
+        // we set the widget script of the ajax render
+        $is_render_service_with_ajax = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
+        if($is_render_service_with_ajax) {
+            $source     .= "{% block global_script_divers_footer %} \n";
+            $source     .= " {{ parent() }} \n";
+            $source     .= "{{ obfuscateLinkJS('div','hiddenLinkWidget')|raw }}\n";
+            $source     .= "{% endblock %} \n";
+        }        
         // we set all initWidget
         $source        = $this->getScript('init', 'implode') . "\n" . $source;
+        
         //print_r($source);
         //print_r("<br /><br /><br />");
         //exit;
@@ -428,6 +437,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 			$clone_request->server->set('REDIRECT_URL', $options['REDIRECT_URL']);
 			$_SERVER['REDIRECT_URL'] = $options['REDIRECT_URL'];
 		}
+		if (isset($options['_POST_']) && (count($options['_POST_']) >= 1)) {
+			foreach($options['_POST_'] as $k => $v) {
+				$_POST[$k] = $v;
+				$clone_request->request->set($k, $v);
+				$clone_request->attributes->set($k, $v);
+			}
+		}		
 		// we initialize the request with new values.
 		$query      = $clone_request->query->all();
 		$request    = $clone_request->request->all();
