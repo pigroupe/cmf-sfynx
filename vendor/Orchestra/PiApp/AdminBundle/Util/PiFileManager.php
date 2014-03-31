@@ -161,6 +161,20 @@ class PiFileManager implements PiFileManagerBuilderInterface
     }
     
     /**
+     * Returns if a directory is empty.
+     *
+     * @param    string    $path  path
+     *
+     * @return array    array list of all files.
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */    
+    public static function isEmptyDir($dir){
+    	return (($files = @scandir($dir)) && count($files) <= 2);
+    }    
+    
+    /**
      * Returns the names of files contained in a directory.
      *
      * @param    string    $path  path

@@ -215,8 +215,9 @@ class HandlerRequest
    		$fileSeo  = $this->seo_redirection_repository . "/" . $this->seo_redirection_file_name;
         if ( $this->is_switch_redirection_seo_authorized ) {
         	// if all cache seo files are not created from the seo file, we create them.
-        	$all_cache_files = \PiApp\AdminBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' );
-        	if (file_exists($fileSeo) && is_array($all_cache_files) && (count($all_cache_files) === 0)) {
+            //$all_cache_files = \PiApp\AdminBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' ); // not fast enough
+        	$is_cache_reposiroty_empty = \PiApp\AdminBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
+        	if (file_exists($fileSeo) && $is_cache_reposiroty_empty) {
         		$this->container->get("pi_filecache")->getClient()->setPath($dossier);
         		$file_handle = fopen($fileSeo, "r");
         		while (!feof($file_handle)) {
