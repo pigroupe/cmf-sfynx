@@ -50,7 +50,7 @@ class PagesFixtures extends AbstractFixture implements OrderedFixtureInterface
 
         $field2 = new Page();
         $field2->setRouteName('error_404');
-        $field2->setUrl('error');
+        $field2->setUrl('404error');
         $field2->setLayout($this->getReference('layout-pi-error'));
         $field2->setUser($this->getReference('user-admin'));
         $field2->setMetaContentType(PageRepository::TYPE_TEXT_HTML);

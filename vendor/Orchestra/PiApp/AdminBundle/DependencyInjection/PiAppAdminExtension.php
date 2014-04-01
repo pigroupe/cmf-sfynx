@@ -101,7 +101,20 @@ class PiAppAdminExtension extends Extension
 
             if (isset($config['page']['widget']) && isset($config['page']['widget']['render_service_with_ajax'])) {
             	$container->setParameter('pi_app_admin.page.widget.render_service_with_ajax', $config['page']['widget']['render_service_with_ajax']);
-            }            
+            }      
+
+            if (isset($config['page']['scop']) && isset($config['page']['scop']['authorized'])) {
+            	$container->setParameter('pi_app_admin.page.scop.authorized', $config['page']['scop']['authorized']);
+            }
+            if (isset($config['page']['scop']) && isset($config['page']['scop']['globals'])) {
+            	$container->setParameter('pi_app_admin.page.scop.globals', $config['page']['scop']['globals']);
+            }  
+            if( $config['page']['scop']['browscap']['cache_dir'] === null ) {
+            	$config['page']['scop']['browscap']['cache_dir'] = $container->getParameter('kernel.cache_dir');
+            }
+            foreach ($config['page']['scop']['browscap'] as $k => $v) {
+            	$container->setParameter('pi_app_admin.page.scop.browscap.' . $k, $v);
+            }
                                                 
             if (isset($config['page']['refresh']) && isset($config['page']['refresh']['allpage'])) {
             	$container->setParameter('pi_app_admin.page.refresh.allpage', $config['page']['refresh']['allpage']);

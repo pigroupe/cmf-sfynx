@@ -128,7 +128,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 if (!$pageTrans) {
                     $page	= $this->setPageByRoute('error_404', true);
                     if (!$page) {
-                        throw new \InvalidArgumentException("We haven't set in the data fixtures the error page message in the $lang locale !");
+                        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("We haven't set in the data fixtures the error page message in the $lang locale !");
                     }
                     $response->setStatusCode(404);
                 }
@@ -220,6 +220,11 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             $keywords     = "";        
             $title       = "";
         }
+        // we return a 404 error if the meta title is a 404 type
+        $meta_title = $this->container->get('pi_app_admin.twig.extension.tool')->getTitlePageFunction($title);
+        if ($meta_title == '_error_404_') {
+        	throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('The product does not exist');
+        }        
         // we get the css file of the page.
         $stylesheet = $this->getPageById($id)->getPageCss();
         // we get the js file of the page.

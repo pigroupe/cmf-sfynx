@@ -72,7 +72,6 @@ class ExceptionListener
             } else {
                 $response->setStatusCode(500);
             }
-
             // set the new $response object to the $event
             $event->setResponse($response);
         }

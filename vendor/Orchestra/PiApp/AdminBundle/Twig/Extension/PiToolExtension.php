@@ -290,7 +290,7 @@ class PiToolExtension extends \Twig_Extension
     		$format = "PiAppTemplateBundle:Template\\Crop:default.html.twig";
     	}
     	if ($media instanceof \BootStrap\MediaBundle\Entity\Media) {            
-            $globals     = $this->container->get("twig")->getGlobals();
+            $globals     = $this->container->getParameter("pi_app_admin.page.scop.globals");
             if (!empty($type) && (in_array($type, array('input', 'script')))) {
                 $templateContent = $this->container->get('twig')->loadTemplate($format);
                 $crop_input = ($templateContent->hasBlock("crop_input")
@@ -484,10 +484,15 @@ class PiToolExtension extends \Twig_Extension
                     $result = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->getContentByField($lang, array('content_search' => array($sluggable_field_name =>$match[$sluggable_field_search]), 'field_result'=>$sluggable_title), false);
                     if (is_object($result)) {
                         $title = $result->getContent();
+                    } else {
+                    	// it allow to return a 404 exception.
+                    	$title = '_error_404_';
                     }
                 }
             }            
         } catch (\Exception $e) {
+            // it allow to return a 404 exception.
+            $title = '_error_404_';
         }
         
         return strip_tags($this->container->get('translator')->trans($title));
