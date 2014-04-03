@@ -435,67 +435,14 @@ class PiToolExtension extends \Twig_Extension
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function getTitlePageFunction($title)
+    public function getTitlePageFunction($lang, $title)
     {
         if (empty($title)) {
-            $title     = $this->container->getParameter('pi_app_admin.layout.meta.title');
+            $title  = $this->container->getParameter('pi_app_admin.layout.meta.title');
         }
-                
-        try {
-            $lang          = $this->container->get('request')->getLocale();
-            // probleme avec les esi => pas de valeur retourné
-            $pathInfo	  = $this->container->get('request')->getPathInfo();
-            $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
-            $route        = $match['_route'];
-            
-            if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])) {
-                $sluggable_entity         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['entity'];
-                $sluggable_field_search = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_search'];
-                $sluggable_title         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_title'];
-                $sluggable_resume         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_resume'];
-                $sluggable_keywords        = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_keywords'];
-                
-                if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name']) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'])) {
-                    $sluggable_field_name    = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'];
-                } else {    
-                    $sluggable_field_name    =   $sluggable_field_search;  
-                }
-                
-                $sluggable_title_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_title)));
-                $sluggable_resume_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_resume)));
-                $sluggable_keywords_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_keywords)));                    
-                
-                $method_title    = "get".implode('', $sluggable_title_tab);
-                $method_resume   = "get".implode('', $sluggable_resume_tab);
-                $method_keywords = "get".implode('', $sluggable_keywords_tab);    
-
-                if ( ($sluggable_field_search == 'id') && isset($match['id']) ) {
-                    $entity         = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->findOneByEntity($lang, $match['id'], 'object');
-                    if (is_object($entity) && method_exists($entity, $method_title)) {
-                        $title = $entity->$method_title();
-                    }
-                } elseif (array_key_exists($sluggable_field_search, $match)) {
-                    $result = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->getContentByField($lang, array('content_search' => array($sluggable_field_name =>$match[$sluggable_field_search]), 'field_result'=>$sluggable_title), false);
-                    if (is_object($result)) {
-                        $title = $result->getContent();
-                    } else {
-                    	// it allow to return a 404 exception.
-                    	$title = '_error_404_';
-                    }
-                }
-            }            
-        } catch (\Exception $e) {
-            // it allow to return a 404 exception.
-            $title = '_error_404_';
-        }
+        $options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang, $title);
         
-        return strip_tags($this->container->get('translator')->trans($title));
+        return $options['title'];
     }
     
     /**
@@ -503,98 +450,66 @@ class PiToolExtension extends \Twig_Extension
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function getMetaPageFunction(array $options)
+    public function getMetaPageFunction($lang, array $options)
     {
         // we get the param.
-        $lang               = $this->container->get('request')->getLocale();
+        if (empty($lang)) {
+            $lang            = $this->container->get('request')->getLocale();
+        }
         $Uri             = $this->container->get('request')->getUri();
         $BasePath        = $this->container->get('request')->getUriForPath('');
-        $author             = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.author'));
-        $copyright        = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.copyright'));
+        $author          = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.author'));
+        $copyright       = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.copyright'));
         $description     = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.description'));
-        $keywords         = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.keywords'));
-        $og_title_add        = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_title_add'));
-        $og_type        = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_type'));
+        $keywords        = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.keywords'));
+        $og_title_add    = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_title_add'));
+        $og_type         = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_type'));
         $og_image        = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_image'));
-        $og_site_name     = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_site_name'));
+        $og_site_name    = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_site_name'));
         // if the file doesn't exist, we call an exception
-        $og_image = strip_tags($this->container->get('translator')->trans($og_image));
-        $is_file_exist = realpath($this->container->get('kernel')->getRootDir(). '/../web/' . $og_image);
+        $og_image        = strip_tags($this->container->get('translator')->trans($og_image));
+        $is_file_exist   = realpath($this->container->get('kernel')->getRootDir(). '/../web/' . $og_image);
         if (!$is_file_exist) {
             throw ExtensionException::FileUnDefined('img',__CLASS__);
         }        
         $og_image = $this->container->get('templating.helper.assets')->getUrl($og_image);
-        // description management
+        //
+        if (isset($options['title']) && !empty($options['title'])) {
+        	$title = $options['title'];
+        }
+        if (isset($options['description']) && !empty($options['description'])) {
+        	$description = $options['description'];
+        }        
+        if (isset($options['keywords']) && !empty($options['keywords'])) {
+        	$keywords = $options['keywords'];
+        }        
+        // we get all info of a the current page.
+        $options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang, $title, $description, $keywords);
+        // we create the copyright link
+        if (isset($copyright) && !empty($copyright)) {
+        	$copyright = strip_tags($this->container->get('translator')->trans($copyright));
+        	$metas[] = "<link rel='copyright' href=\"".$copyright."\"/>";
+        }
+        // we create all meta tags.
         $metas[] = "    <meta charset='".$this->container->get('twig')->getCharset()."'/>";
         $metas[] = "    <meta http-equiv='Content-Type'/>";
         $metas[] = "    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'/>";
         $metas[] = "    <meta name='generator' content=\"Orchestra\"/>";
-        // we create all meta tags.
-        if (isset($copyright) && !empty($copyright)) {
-            $copyright = strip_tags($this->container->get('translator')->trans($copyright));
-            $metas[] = "<link rel='copyright' href=\"".$copyright."\"/>";
+        //
+        if (isset($author) && !empty($author)) {
+        	$author = strip_tags($this->container->get('translator')->trans($author));
+        	$metas[] = "    <meta name='author' content=\"".$author."\"/>";
         }
+        if (isset($options['description']) && !empty($options['description'])) {
+        	$metas[] = "    <meta name='description' content=\"".$options['description']."\"/>";
+        }
+        if (isset($options['keywords']) && !empty($options['keywords'])) {
+        	$metas[] = "    <meta name='keywords' content=\"".$options['keywords']."\"/>";
+        }        
         $metas[] = "    <meta property='og:url' content=\"{$Uri}\"/>";
-        try {
-            // title management
-            // probleme avec les esi => pas de valeur retourné
-            $pathInfo	  = $this->container->get('request')->getPathInfo();
-            $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
-            $route        = $match['_route'];
-            if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])) {
-                $sluggable_entity         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['entity'];
-                $sluggable_field_search = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_search'];
-                $sluggable_title         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_title'];
-                $sluggable_resume         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_resume'];
-                $sluggable_keywords        = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_keywords'];
-                $sluggable_title_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_title)));
-                $sluggable_resume_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_resume)));
-                $sluggable_keywords_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_keywords)));                    
-                $method_title         = "get".implode('', $sluggable_title_tab);
-                $method_resume         = "get".implode('', $sluggable_resume_tab);
-                $method_keywords     = "get".implode('', $sluggable_keywords_tab);                
-                if ( ($sluggable_field_search == 'id') && isset($match['id']) ) {
-                    $entity = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->findOneByEntity($lang, $match['id'], 'object');
-                    if (is_object($entity) && method_exists($entity, $method_title) && method_exists($entity, $method_resume) && method_exists($entity, $method_keywords)) {
-                        $og_title                 = str_replace(array('"',"’"), array("'","'"), $entity->$method_title());
-                        $new_meta                = "    <meta property='og:title' content=\"{$og_title_add}{$og_title}\"/>";
-                        $options['description'] = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_resume())));
-                        $options['keywords']    = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_keywords())));
-                    }
-                } elseif (array_key_exists($sluggable_field_search, $match)) {
-                    $meta_title                        = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->getContentByField($lang, array('content_search' => array($sluggable_field_search =>$match[$sluggable_field_search]), 'field_result'=>$sluggable_title), false);
-                    $meta_resume                    = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->getContentByField($lang, array('content_search' => array($sluggable_field_search =>$match[$sluggable_field_search]), 'field_result'=>$sluggable_resume), false);
-                    $meta_keywords                    = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->getContentByField($lang, array('content_search' => array($sluggable_field_search =>$match[$sluggable_field_search]), 'field_result'=>$sluggable_keywords), false);
-                    
-                    if(is_object($meta_title)){
-                        $og_title                     = str_replace(array('"',"’"), array("'","'"), $meta_title->getContent());
-                        $new_meta                    = "<meta property='og:title' content=\"{$og_title_add}{$og_title}\"/>";
-                    }
-                    if (is_object($meta_resume)) {
-                        $options['description']     = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($meta_resume->getContent())));
-                    }
-                    if (is_object($meta_keywords)) {
-                        $options['keywords']        = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($meta_keywords->getContent())));
-                    }
-                }
-            }
-            if (empty($new_meta) && isset($options['title']) && !empty($options['title'])) {
-                $options['title'] = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($options['title'])));
-                $metas[] = "    <meta property='og:title' content=\"{$og_title_add}{$options['title']}\"/>";
-            } elseif (!empty($new_meta)) {
-                $metas[] = $new_meta;
-            }
-        } catch (\Exception $e) {
-            if(isset($options['title']) && !empty($options['title'])){
-                $options['title'] = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($options['title'])));
-                $metas[]           = "    <meta property='og:title' content=\"{$og_title_add}{$options['title']}\"/>";
-            }            
+        //
+        if (isset($options['title']) && !empty($options['title'])) {
+        	$metas[] = "    <meta property='og:title' content=\"{$og_title_add}{$options['title']}\"/>";
         }
         if (isset($og_type) && !empty($og_type)) {
             $og_type = strip_tags($this->container->get('translator')->trans($og_type));
@@ -609,20 +524,6 @@ class PiToolExtension extends \Twig_Extension
             $og_site_name = str_replace('https://', '', $og_site_name);
             $og_site_name = str_replace('http://', '', $og_site_name);
             $metas[] = "    <meta property='og:site_name' content=\"{$og_site_name}\"/>";
-        }
-        if (isset($author) && !empty($author)) {
-            $author = strip_tags($this->container->get('translator')->trans($author));
-            $metas[] = "    <meta name='author' content=\"".$author."\"/>";
-        }
-        if (isset($options['description']) && !empty($options['description'])) {
-            $metas[] = "    <meta name='description' content=\"".$options['description']."\"/>";
-        } elseif (isset($description) && !empty($description)) {
-            $metas[] = "    <meta name='description' content=\"".strip_tags($this->container->get('translator')->trans($description))."\"/>";
-        }
-        if (isset($options['keywords']) && !empty($options['keywords'])) {
-            $metas[] = "    <meta name='keywords' content=\"".$options['keywords']."\"/>";
-        } elseif (isset($keywords) && !empty($keywords)) {
-            $metas[] = "    <meta name='keywords' content=\"".strip_tags($this->container->get('translator')->trans($keywords))."\"/>";
         }
         // mobile management
         //$metas[] = "<meta name='apple-mobile-web-app-capable' content='yes'/>";

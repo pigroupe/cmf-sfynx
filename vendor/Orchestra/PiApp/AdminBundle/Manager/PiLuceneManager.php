@@ -175,67 +175,30 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
         // we set the indexation of the locale translations of the page.
         $translationPage = $page->getTranslationByLocale($this->language);
         if ($translationPage instanceof \PiApp\AdminBundle\Entity\TranslationPage){
-            // probleme avec les esi => pas de valeur retourné
-            $pathInfo    = str_replace($this->container->get('request')->getUriForPath(''), '', $this->container->get('request')->headers->get('referer'));
-            $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
-            $route        = $match['_route'];
-            
-            if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])){
-                $sluggable_entity         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['entity'];
-                $sluggable_field_search = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_search'];
-                $sluggable_title         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_title'];
-                $sluggable_resume         = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_resume'];
-                $sluggable_keywords        = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_keywords'];
-                
-                if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name']) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'])) {
-                	$sluggable_field_name    = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'];
-                } else {
-                	$sluggable_field_name    =   $sluggable_field_search;
-                }                
-                
-                $sluggable_title_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_title)));
-                $sluggable_resume_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_resume)));
-                $sluggable_keywords_tab = array_map(function($value) {
-                    return ucwords($value);
-                }, array_values(explode('_', $sluggable_keywords)));                    
-                
-                $method_title         = "get".implode('', $sluggable_title_tab);
-                $method_resume         = "get".implode('', $sluggable_resume_tab);
-                $method_keywords     = "get".implode('', $sluggable_keywords_tab);            
-                
-                if (array_key_exists($sluggable_field_search, $match)){
-                    $entity    = $this->container->get('doctrine')->getManager()->getRepository($sluggable_entity)->getEntityByField($this->language, array('content_search' => array($sluggable_field_name =>$match[$sluggable_field_search])), 'object');
-                    if(is_object($entity) && method_exists($entity, $method_title)){
-                        $indexValues['Title']     = $entity->$method_title();
-                    }
-                    if(is_object($entity) && method_exists($entity, "getPublishedAt") && ($entity->getPublishedAt() instanceof \DateTime)){
-                        $indexValues['ModDate']     = $entity->getPublishedAt()->getTimestamp();
-                    } elseif (is_object($entity) && method_exists($entity, "getUpdatedAt") && ($entity->getUpdatedAt()  instanceof \DateTime)){
-                        $indexValues['ModDate']     = $entity->getUpdatedAt()->getTimestamp();
-                    }    
-                } else {
-                    $indexValues['ModDate']     = $translationPage->getPublishedAt()->getTimestamp();
-                    $indexValues['Title']     = $translationPage->getMetaTitle();
-                }
+            // if the page is sluggify, we get the entity associated
+            $pathInfo     = str_replace($this->container->get('request')->getUriForPath(''), '', $this->container->get('request')->headers->get('referer'));
+            $page_options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($this->language, '', '', '', $pathInfo);
+            if (isset($page_options['entity']) && !empty($page_options['entity'])) {
+                $entity                 = $page_options['entity'];
+                $indexValues['Title']   = $page_options['title'];
+                if(is_object($entity) && method_exists($entity, "getPublishedAt") && ($entity->getPublishedAt() instanceof \DateTime)){
+                    $indexValues['ModDate']     = $entity->getPublishedAt()->getTimestamp();
+                } elseif (is_object($entity) && method_exists($entity, "getUpdatedAt") && ($entity->getUpdatedAt()  instanceof \DateTime)){
+                    $indexValues['ModDate']     = $entity->getUpdatedAt()->getTimestamp();
+                } 
             } else {
-                $indexValues['ModDate']     = $translationPage->getPublishedAt()->getTimestamp();
-                $indexValues['Title']     = $translationPage->getMetaTitle();
+                $indexValues['ModDate'] = $translationPage->getPublishedAt()->getTimestamp();
+                $indexValues['Title']   = $translationPage->getMetaTitle();
             }
-
             $indexValues['Key']         = "page:{$page->getId()}:{$this->language}:{$pathInfo}";
-            $indexValues['Route']     = $page->getRouteName();
-            //$indexValues['Contents'] = $this->deleteTags($pageManager->render($this->language)->getContent());
-            $indexValues['Contents'] = $this->deleteTags(file_get_contents($this->container->get('request')->getUriForPath('') . $pathInfo));
-            $indexValues['Keywords'] = $translationPage->getMetaKeywords();
+            $indexValues['Route']       = $page->getRouteName();
+            //$indexValues['Contents']  = $this->deleteTags($pageManager->render($this->language)->getContent());
+            $indexValues['Contents']    = $this->deleteTags(file_get_contents($this->container->get('request')->getUriForPath('') . $pathInfo));
+            $indexValues['Keywords']    = $translationPage->getMetaKeywords();
             $indexValues['Subject']     = $translationPage->getMetaDescription();    
 
             self::$_index = Indexation::index(self::$_index, 'page', $indexValues, $this->language);
         }        
-        
         // Commit the index
         self::commit();
     }    

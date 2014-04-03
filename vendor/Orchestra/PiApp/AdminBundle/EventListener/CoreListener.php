@@ -144,37 +144,32 @@ abstract class CoreListener extends abstractListener
     private function _recursive($eventArgs, $entity, $all_lang)
     {
         // we set the persist of the Page entity
-        if ($entity instanceof \PiApp\AdminBundle\Entity\Page){
+        if ($entity instanceof \PiApp\AdminBundle\Entity\Page) {
             $type = 'page:';
-        }elseif ($entity instanceof \PiApp\AdminBundle\Entity\Widget){
+        } elseif ($entity instanceof \PiApp\AdminBundle\Entity\Widget) {
             $type = 'widget:';
-        }elseif ($entity instanceof \PiApp\AdminBundle\Entity\TranslationWidget){
+        } elseif ($entity instanceof \PiApp\AdminBundle\Entity\TranslationWidget) {
             $type = 'transwidget:';
-        }else
+        } else {
             return false;
-                
+        }
         $names = array();
-        foreach($all_lang as $key => $lang){
-            
+        foreach($all_lang as $key => $lang){            
             if (!method_exists($entity, 'getLayout') || ($entity->getLayout() instanceof \PiApp\AdminBundle\Entity\Layout) ) {
                 // we create the cache name
                 $name             = $type.$entity->getId().':'.$lang->getId();
-                $names[$name]     = $name;
-                
+                $names[$name]     = $name;                
                 // we refresh the cache
-                $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name, true);
-                
+                $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name, true);                
                 // we refresh the cache of all widgets of the page
-                if ( ($entity instanceof \PiApp\AdminBundle\Entity\Page) && (!is_null($entity->getId())) ){
+                if ( ($entity instanceof \PiApp\AdminBundle\Entity\Page) && (!is_null($entity->getId())) ) {
                     $this->_container()->get('pi_app_admin.manager.page')->setPageByRoute($entity->getRouteName());
                     $this->_container()->get('pi_app_admin.manager.page')->cacheRefresh();
-                }
-                
-                if ($entity instanceof \PiApp\AdminBundle\Entity\Widget){
-                    
+                }                
+                if ($entity instanceof \PiApp\AdminBundle\Entity\Widget) {                    
                     // we have to warm up all translations which are linked to it.
-                    if (!$entity->getTranslations()->isEmpty()){
-                        foreach($entity->getTranslations()->toArray() as $key => $translationWidget){
+                    if (!$entity->getTranslations()->isEmpty()) {
+                        foreach($entity->getTranslations()->toArray() as $key => $translationWidget) {
                             if ($translationWidget->getLangCode()->getId() == $lang->getId()){
                                 $name_trans            = 'transwidget:'.$translationWidget->getId().':'.$lang->getId();
                                 $names[$name_trans] = $name_trans;
@@ -183,43 +178,40 @@ abstract class CoreListener extends abstractListener
                                 $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name_trans, true);
                             }
                         }
-                    }
-                    
-                    if ( ($entity->getPlugin() == "gedmo") && ($entity->getAction() == "snippet") ){
+                    }                    
+                    if ( ($entity->getPlugin() == "gedmo") && ($entity->getAction() == "snippet") ) {
                         // we get all widgets which use the gedmo snippet
                         $all_widget_used_snippet = $this->getRepository('Widget')->getWidgetByOptions('gedmo', 'snippet', '<id>'.$entity->getId().'</id>')->getQuery()->getResult();
-                        
-                        if ( is_array($all_widget_used_snippet) ){
-                            foreach($all_widget_used_snippet as $k => $widget){
+                        if ( is_array($all_widget_used_snippet) ) {
+                            foreach($all_widget_used_snippet as $k => $widget) {
                                 // if the entity is linked to a page
-                                if ($widget->getBlock() instanceof \PiApp\AdminBundle\Entity\Block){
+                                if ($widget->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) {
                                     $names = array_merge($names, $this->_recursive($eventArgs, $widget->getBlock()->getPage(), $all_lang));
                                 }
                             }
                         }                    
-                    }
-                    
+                    }                    
                     // if the entity is linked to a page
-                    if ($entity->getBlock() instanceof \PiApp\AdminBundle\Entity\Block){
+                    if ($entity->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) {
                         $names = array_merge($names, $this->_recursive($eventArgs, $entity->getBlock()->getPage(), $all_lang));
                     }
-                }
-                
+                }                
                 // if the entity is a translation, we have to warm up the widget which is linked to it.
-                if ($entity instanceof \PiApp\AdminBundle\Entity\TranslationWidget
-                        && ($entity->getWidget() instanceof \PiApp\AdminBundle\Entity\Widget)){
-                        
+                if (
+                    $entity instanceof \PiApp\AdminBundle\Entity\TranslationWidget
+                    &&
+                    ($entity->getWidget() instanceof \PiApp\AdminBundle\Entity\Widget))
+                {
                         // if the widget of the TranslationWidget is a snippet,
                         // and if the language of the TranslationWidget has been changed or not,
                         // we have to warm up all pages which are used by the snippet 
-                        if (!($entity->getWidget()->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) ){                            
+                        if (!($entity->getWidget()->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) ) {                            
                             // We check the permission in config.
                             $is_refresh_snippet_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh.allpage_containing_snippet');
-                            if ($is_refresh_snippet_authorized){
+                            if ($is_refresh_snippet_authorized) {
                                 // we get all widgets which use the content snippet 
                                 $all_widget_used_snippet = $this->getRepository('Widget')->getWidgetByOptions('content', 'snippet', '<id>'.$entity->getWidget()->getId().'</id>')->getQuery()->getResult();
-                                
-                                if ( is_array($all_widget_used_snippet) ){
+                                if ( is_array($all_widget_used_snippet) ) {
                                     foreach($all_widget_used_snippet as $k => $widget){
                                         // if the entity is linked to a page
                                         if ($widget->getBlock() instanceof \PiApp\AdminBundle\Entity\Block){
@@ -228,9 +220,9 @@ abstract class CoreListener extends abstractListener
                                     }
                                 }
                             }
-                            
-                        }else
-                            $names = array_merge($names, $this->_recursive($eventArgs, $entity->getWidget(), $all_lang));                        
+                        } else {
+                            $names = array_merge($names, $this->_recursive($eventArgs, $entity->getWidget(), $all_lang));
+                        }                        
                 }
                 
             }

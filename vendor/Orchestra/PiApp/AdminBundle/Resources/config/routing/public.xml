@@ -42,7 +42,7 @@
         <requirement key="_method">get|post</requirement>
     </route>
     
-    <route id="public_esi_apply_widget" pattern="/esi-widget-page/{method}/{serviceName}/{id}/{lang}/{params}/{server}/{post}/{key}">
+    <route id="public_esi_apply_widget" pattern="/esi-widget-page/{method}/{serviceName}/{id}/{lang}/{params}/{server}/{key}">
         <default key="_controller">PiAppAdminBundle:Frontend:esipage</default>
         <requirement key="_method">get|post</requirement>
     </route>     

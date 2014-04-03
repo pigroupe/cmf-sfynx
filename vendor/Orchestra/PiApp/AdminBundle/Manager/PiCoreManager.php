@@ -144,13 +144,72 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         $this->script['init']  = array();
     }
     
+    protected function paramsEncode($params)
+    {
+    	$string    = json_encode($params, JSON_NUMERIC_CHECK  | JSON_UNESCAPED_UNICODE);
+    	return $this->_Encode($string);
+    }
+    
+    protected function _Encode($string, $complet = true)
+    {
+    	$string = str_replace('\\\\', '\\', $string);
+    	if ($complet) {
+    		$string = str_replace('\\', "@@", $string);
+    		$string = str_replace('@@@@@@@@', "@@", $string);
+    		$string = str_replace('@@@@', "@@", $string);
+    	}
+    
+    	return str_replace(':', '#', $string);
+    }
+    
+    protected function paramsDecode($params)
+    {
+    	$params    = $this->_Decode($params);
+    	$params = str_replace('\\', '\\\\', $params);
+    	$params = json_decode($params, true);
+    	if (is_array($params)){
+    		$this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+    		$name_key = array_map(function($key, $value) {
+    			return str_replace('\\\\', '\\', $value);
+    		}, array_keys($params),array_values($params));
+    		$params = array_combine(array_keys($params), $name_key);
+    	}
+    
+    	return $params;
+    }
+    
+    protected function _Decode($string)
+    {
+    	$string = str_replace("@@", '\\', $string);
+    	$string = str_replace('\\\\', '\\', $string);
+    	$string = str_replace('#', ':', $string);
+    	$string    = str_replace("$$$", "&", $string);
+    
+    	return $string;
+    }
+    
+    protected function recursive_map(array &$array, $curlevel=0)
+    {
+    	foreach ($array as $k=>$v) {
+    		if (is_array($v)) {
+    			$this->recursive_map($v, $curlevel+1);
+    		} else {
+    			$v = str_replace("@@@@", '\\', $v);
+    			$v = str_replace("@@", '\\', $v);
+    			$v = str_replace('\\\\', '\\', $v);
+    			$v = str_replace("$$$", "&", $v);
+    			$array[$k] =  mb_convert_encoding($v, "UTF-8", "HTML-ENTITIES");
+    		}
+    	}
+    }    
+    
     /**
-     * Cretae the Etag and returns the render source it.
+     * Create the Etag and returns the render source it.
      *
      * @param string    $tag
      * @param string    $id
      * @param string    $lang
-     * @param array        $params
+     * @param array     $params
      *
      * @return string    translation widget content
      * @access    public
@@ -160,78 +219,88 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      */
     public function run($tag, $id, $lang, $params = null)
     {
-        // We cretae and set the Etag value
-        if (!is_null($params)) {
-            // we sort an array by key in reverse order
-            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-            $params        = $this->paramsEncode($params);
-            $id            = $this->_Encode($id, false);
-            $this->setEtag("$tag:$id:$lang:$params");
-        } else {
-            $this->setEtag("$tag:$id:$lang");
-        }
+        // we create the tag value
+        $this->createEtag($tag, $id, $lang, $params);
         //print_r($this->Etag);
         // we return the render (cache or not)
         return $this->render($lang);
     }
-
-    protected function paramsEncode($params)
-    {
-        $string    = json_encode($params, JSON_NUMERIC_CHECK  | JSON_UNESCAPED_UNICODE);
-        return $this->_Encode($string);    
-    }
-
-    protected function _Encode($string, $complet = true)
-    {
-        $string = str_replace('\\\\', '\\', $string);
-        if ($complet) {
-            $string = str_replace('\\', "@@", $string);
-            $string = str_replace('@@@@@@@@', "@@", $string);
-            $string = str_replace('@@@@', "@@", $string);
-        }
-        
-        return str_replace(':', '#', $string);
-    }
-        
-    protected function paramsDecode($params)
-    {
-        $params    = $this->_Decode($params);
-        $params = str_replace('\\', '\\\\', $params);
-        $params = json_decode($params, true);        
-        if (is_array($params)){
-            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');        
-            $name_key = array_map(function($key, $value) {
-                return str_replace('\\\\', '\\', $value);
-            }, array_keys($params),array_values($params));        
-            $params = array_combine(array_keys($params), $name_key);    
-        }
-        
-        return $params;
-    }
     
-    protected function _Decode($string)
+    /**
+     * Create/update json file Etag with the tag value.
+     *
+     * @param string    $tag
+     * @param string    $id
+     * @param string    $lang
+     * @param array     $params
+     *
+     * @return boolean    true if the tag have been insert corectly in the json file.
+     * @access    public
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2012-04-19
+     */
+    public function setJsonFileEtag($tag, $id, $lang, $params = null)
     {
-        $string = str_replace("@@", '\\', $string);
-        $string = str_replace('\\\\', '\\', $string);
-        $string = str_replace('#', ':', $string);
-        $string    = str_replace("$$$", "&", $string);
-        
-        return $string;
-    }
-        
-    protected function recursive_map(array &$array, $curlevel=0)
+    	// we set the Etag.
+    	if (empty($this->Etag)) {
+            $this->createEtag($tag, $id, $lang, $params);
+    	}
+    	// we set the path
+    	$path  = $container->getParameter("kernel.cache_dir") . "/../Etag/";
+    	// we set the file name
+    	if (isset($params['widget-id']) && !empty($params['widget-id'])) {
+    		$path_json_file = $path . "widget/w-{$params['widget-id']}-{$lang}.json";
+    		if (!file_exists($path_json_file)) {
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag, 0777, LOCK_EX);
+    		}
+    	} elseif ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
+    	    //
+    		$path_json_file = $path . "page/p-{$id}-{$lang}.json";
+    		$path_json_file_tmp = $path . "page/tmp/" . md5($this->Etag) . ".json";
+    		if (!file_exists($path_json_file_tmp)) {
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag, 0777, LOCK_EX);
+    		    // we add new Etag in the history.
+    		    $path_json_file_history = $path . "page/p-{$id}-{$lang}-history.json";
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $params['page-url'].'|'.$this->Etag, 0777, FILE_APPEND);
+    		}
+    	} else {
+    		$path_json_file = $path . "etag-{$tag}-{$lang}.json";
+    		$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag, 0777, FILE_APPEND);
+    	}
+    
+    	return $result;
+    }    
+    
+    /**
+     * Cretae a Etag.
+     *
+     * @param string    $tag
+     * @param string    $id
+     * @param string    $lang
+     * @param array     $params
+     *
+     * @return string    Etag value
+     * @access    protected
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2012-04-19
+     */
+    protected function createEtag($tag, $id, $lang, $params = null)
     {
-        foreach ($array as $k=>$v) {
-            if (is_array($v)) {
-                $this->recursive_map($v, $curlevel+1);
-            } else {
-                $v = str_replace("@@@@", '\\', $v);
-                $v = str_replace("@@", '\\', $v);
-                $v = str_replace('\\\\', '\\', $v);
-                $v = str_replace("$$$", "&", $v);
-                $array[$k] =  mb_convert_encoding($v, "UTF-8", "HTML-ENTITIES");
-            }
+        // We cretae and set the Etag value
+        if (!is_null($params)) {
+            // we sort an array by key in reverse order
+            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+            $params = $this->paramsEncode($params);
+            $id     = $this->_Encode($id, false);
+            $this->setEtag("$tag:$id:$lang:$params");
+        } else {
+            $id     = $this->_Encode($id, false);
+            $this->setEtag("$tag:$id:$lang");
         }
+        
+        return $this->Etag;
     }    
     
     /**

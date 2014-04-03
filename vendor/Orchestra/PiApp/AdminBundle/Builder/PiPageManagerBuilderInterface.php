@@ -45,5 +45,6 @@ interface PiPageManagerBuilderInterface
     public function getChildrenHierarchyRub();
     public function getUrlByPage(\PiApp\AdminBundle\Entity\Page $page, $type = '');
     public function getUrlByType($type, $entity = null);
+    public function getPageMetaInfo($lang = '', $title = '', $description = '', $keywords = '');
     
 }

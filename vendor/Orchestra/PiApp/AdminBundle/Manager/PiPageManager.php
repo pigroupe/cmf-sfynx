@@ -134,10 +134,12 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 }
             }
             // We set the Etag value
-            $id		= $page->getId();
-            $lang_	= $this->language;
-            $params = $this->container->get('request')->getRequestUri();
-            $this->setEtag("page:$id:$lang_:$params");
+            $id	   = $page->getId();
+            $lang_ = $this->language;
+            $url_  = $this->container->get('request')->getRequestUri();
+            $this->createEtag('page', $id, $lang, array('page-url'=>$url_));
+            // we register the tag value in the json file if does not exist.
+            //$this->setJsonFileEtag('page', $id, $lang, array('url'=>$url_));
             // Create a Response with a Last-Modified header.
             $response = $this->configureCache($page, $response);
             // Check that the Response is not modified for the given Request.
@@ -152,27 +154,6 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 $response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
                 
                 return $response;
-                
-//                // we get instances of parser and dumper component yaml files.
-//                 $yaml   = new \Symfony\Component\Yaml\Parser();
-//                 //$dumper = new \Symfony\Component\Yaml\Dumper();
-//                 // we get config.yml content in array
-//                 $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
-//                 $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-//                 if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
-//                 	$is_esi_activate = true;
-//                 } else {
-//                 	$is_esi_activate = false;
-//                 }
-//                 //
-//                 $isMemCacheEnable = $this->container->getParameter("pi_app_admin.page.memcache_enable_only_page");
-//                 if ($is_esi_activate || $isMemCacheEnable) {
-//                 	$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
-//                 } else {             
-//                 	// We set the reponse
-//                 	$response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
-//                 }
-//                return $response;                
             }
         } else {
             return $this->redirectHomePublicPage();
@@ -204,34 +185,42 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         $init_pc_layout        = str_replace("\\", "\\\\", $init_pc_layout);
         $init_mobile_layout    = str_replace("\\", "\\\\", $this->getPageById($id)->getLayout()->getFileMobile());
         if (empty($init_pc_layout)) {
-            $init_pc_layout     = $this->container->getParameter('pi_app_admin.layout.init.pc.template');
+            $init_pc_layout    = $this->container->getParameter('pi_app_admin.layout.init.pc.template');
         }
         if (empty($init_mobile_layout)) {
             $init_mobile_layout = $this->container->getParameter('pi_app_admin.layout.init.mobile.template');
         }
         // we get the translation of the current page in terms of the lang value.
-        $pageTrans     = $this->getTranslationByPageId($id, $lang);    //if ($lang == 'fr') print_r($pageTrans->getLangCode()->getId());
+        $pageTrans       = $this->getTranslationByPageId($id, $lang);    //if ($lang == 'fr') print_r($pageTrans->getLangCode()->getId());
         if ($pageTrans instanceof TranslationPage){
-            $description = addslashes($pageTrans->getMetaDescription());
-            $keywords     = addslashes($pageTrans->getMetaKeywords());
-            $title         = addslashes($pageTrans->getMetaTitle());
+            $description = $pageTrans->getMetaDescription();
+            $keywords    = $pageTrans->getMetaKeywords();
+            $title       = $pageTrans->getMetaTitle();
         } else {
             $description = "";
-            $keywords     = "";        
+            $keywords    = "";        
             $title       = "";
         }
         // we return a 404 error if the meta title is a 404 type
-        $meta_title = $this->container->get('pi_app_admin.twig.extension.tool')->getTitlePageFunction($title);
+        $meta_title = $this->container->get('pi_app_admin.twig.extension.tool')->getTitlePageFunction($lang, $title);
         if ($meta_title == '_error_404_') {
         	throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('The product does not exist');
-        }        
+        }   
+        //
+        $meta_page = $this->container->get('pi_app_admin.twig.extension.tool')->getMetaPageFunction($lang, array(
+                'description' => $description,
+                'keywords'    => $keywords,
+                'title'       => $meta_title
+        ));
         // we get the css file of the page.
         $stylesheet = $this->getPageById($id)->getPageCss();
         // we get the js file of the page.
         $javascript  = $this->getPageById($id)->getPageJs();
         // we create the source page.
         $source  = "{% set layout_screen = app.request.attributes.get('orchestra-screen') %}\n";
-        $source .= "{% set is_switch_layout_mobile_authorized = getParameter('pi_app_admin.page.switch_layout_mobile_authorized') %}";
+        $source .= "{% set is_switch_layout_mobile_authorized = getParameter('pi_app_admin.page.switch_layout_mobile_authorized') %}\n";
+        $source .= "{% set is_esi_disable_after_post_request = getParameter('pi_app_admin.page.esi.disable_after_post_request') %}\n";
+        $source .= "{% set app_request_request_count = app.request.request.count() %}\n";
         $source .= "{% if layout_screen is empty or not is_switch_layout_mobile_authorized  %}\n";
         $source .= "{%     set layout_screen = 'layout' %}\n";
         $source .= "{% endif %}\n";
@@ -242,7 +231,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         $source .= "{% endif %}\n";
         $source .= "{% extends layout_nav %}\n";        
         // we set stylesheets
-        if ($stylesheet instanceof \Doctrine\ORM\PersistentCollection){
+        if ($stylesheet instanceof \Doctrine\ORM\PersistentCollection) {
             foreach($stylesheet as $s){
                 $source     .= "{% stylesheet '".$s->getUrl()."' %} \n";
             }
@@ -253,15 +242,16 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 $source     .= "{% javascript '".$s->getUrl()."' %} \n";
             }
         }
-        $source     .= "{% set meta_title = title_page('{$title}') %} \n";
+        //$source     .= "{% set meta_title = title_page(app.request.locale,'{$title}') %} \n";
         $source     .= "{% block global_title %}";
         $source     .= "{{ parent() }} \n";
-        $source     .= "{{ meta_title|striptags }} \n";
+        $source     .= "{{ '{$meta_title}'|striptags }} \n";
         $source     .= "{% endblock %} \n";
         $source     .= "{% set global_local_language = '".$this->language."' %} \n";
         $source     .= " \n";
         $source     .= "{% block global_meta %} \n";
-        $source     .= "    {{ metas_page({'description':\"{$description}\",'keywords':\"{$keywords}\",'title':\"{$title}\"})|raw }} \n";
+        $source     .= "    {$meta_page}";
+        //$source     .= "    {{ metas_page(app.request.locale, {'description':\"{$description}\",'keywords':\"{$keywords}\",'title':\"{$meta_title}\"})|raw }} \n";
         $source     .= "{{ parent() }}    \n";
         $source     .= "{% endblock %} \n";
         // we set all widgets of all blocks
@@ -442,13 +432,6 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 			$clone_request->server->set('REDIRECT_URL', $options['REDIRECT_URL']);
 			$_SERVER['REDIRECT_URL'] = $options['REDIRECT_URL'];
 		}
-		if (isset($options['_POST_']) && (count($options['_POST_']) >= 1)) {
-			foreach($options['_POST_'] as $k => $v) {
-				$_POST[$k] = $v;
-				$clone_request->request->set($k, $v);
-				$clone_request->attributes->set($k, $v);
-			}
-		}		
 		// we initialize the request with new values.
 		$query      = $clone_request->query->all();
 		$request    = $clone_request->request->all();
@@ -1017,7 +1000,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 // we create the cache name
                 $referer_url = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang_page, null, true);
                 $referer_url = str_replace($this->container->get('request')->getUriForPath(''), '', $referer_url);
-                $name_page    = 'page:'.$page->getId().':'.$lang_page.':/'.$referer_url;
+                $name_page = $this->createEtag('page', $page->getId(), $lang_page, array('page-url'=>$referer_url));
                 $name_page    = str_replace('//', '/', $name_page);
                 if (isset($this->widgets[$page->getId()]) && is_array($this->widgets[$page->getId()])) {
                     foreach ($this->widgets[$page->getId()] as $key_block=>$widgets) {
@@ -1668,6 +1651,106 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         }
 
         return $urls;
-    }    
+    }  
     
+    /**
+     * Return the meta info of a page.
+     * 
+     * @param string	$title
+     * @param string	$description
+     * @param string	$keywords
+     * @return array
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2014-04-03
+     */
+    public function getPageMetaInfo($lang = '', $title = '', $description = '', $keywords = '', $pathInfo = "")
+    {
+         // we set values.
+         $options['title']       = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($title)));
+         $options['description'] = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($description)));
+         $options['keywords']    = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($keywords)));
+         // we set sluggify values.
+         try {
+            if (empty($lang)) { 
+                $lang     = $this->container->get('request')->getLocale();
+            }
+            if (empty($pathInfo)) {
+                $pathInfo	  = $this->container->get('request')->getPathInfo();
+            }
+            $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
+            $route        = $match['_route'];
+            $em			  = $this->container->get('doctrine')->getManager();
+            if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])) {
+                $sluggable_entity       = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['entity'];
+                $sluggable_field_search = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_search'];
+                $sluggable_title        = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_title'];
+                $sluggable_resume       = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_resume'];
+                $sluggable_keywords     = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_keywords'];
+                //
+                if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name']) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'])) {
+                    $sluggable_field_name    = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'];
+                } else {    
+                    $sluggable_field_name    =   $sluggable_field_search;  
+                }
+                //
+                $sluggable_title_tab = array_map(function($value) {
+                    return ucwords($value);
+                }, array_values(explode('_', $sluggable_title)));
+                $sluggable_resume_tab = array_map(function($value) {
+                    return ucwords($value);
+                }, array_values(explode('_', $sluggable_resume)));
+                $sluggable_keywords_tab = array_map(function($value) {
+                    return ucwords($value);
+                }, array_values(explode('_', $sluggable_keywords)));                    
+                //
+                $method_title    = "get".implode('', $sluggable_title_tab);
+                $method_resume   = "get".implode('', $sluggable_resume_tab);
+                $method_keywords = "get".implode('', $sluggable_keywords_tab);
+                //
+                $query    = $em->getRepository($sluggable_entity)
+                ->createQueryBuilder('a')
+                ->select("a")
+                ->leftJoin('a.translations', 'trans')
+                ->where("(a.{$sluggable_field_name} = :field_name) OR ( trans.locale = :trans_locale AND trans.field = :trans_field AND trans.content = :trans_content)")
+                ->groupBy("a.id")
+                ->setParameters(array(
+                		'field_name'    => $match[$sluggable_field_search],
+                		'trans_locale'  => $lang,
+                		'trans_field'   => $sluggable_field_name,
+                		'trans_content' => $match[$sluggable_field_search]
+                ))->getQuery()
+                ;
+                $entity = $query->getOneOrNullResult();
+                if (is_object($entity)) {
+                	$entity->setTranslatableLocale($lang);
+                	$em->refresh($entity);
+                	//
+                	$title       = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_title())));
+                	$description = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_resume())));
+                	$keywords    = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_keywords())));
+                	if (!empty($title)) {
+                		$options['title'] = $title;
+                	}
+                	if (!empty($description)) {
+                		$options['description'] = $description;
+                	}
+                	if (!empty($keywords)) {
+                		$options['keywords'] = $keywords;
+                	}  
+                	$options['entity'] = $entity;
+                } else {
+                    // it allow to return a 404 exception.
+                	$options['title'] = '_error_404_';
+                } 
+            } 
+        } catch (\Exception $e) {
+            // it allow to return a 404 exception.
+            $options['title'] = '_error_404_';
+        }
+          
+        return $options;
+    }    
+   
 }

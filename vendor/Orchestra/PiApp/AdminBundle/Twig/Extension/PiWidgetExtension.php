@@ -956,14 +956,14 @@ class PiWidgetExtension extends \Twig_Extension
      */
     protected function runByExtension($serviceName, $tag, $id, $lang, $params = null)
     {
+        // we register the tag value of the widget.
+        //$pageManager = $this->container->get('pi_app_admin.manager.page');
+        //$pageManager->setJsonFileEtag($tag, $id, $lang, $params);
+        // we create the twig code of the service to rn.
         if (!is_null($params)) {
             krsort($params);
             $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);            
-            //$tmp = "$tag:$id:$lang:$json";
-            //print_r($tmp);
-            //print_r("<br /<br />");            
-            $set  = "{% set widget_render_params = $json %} \n";
-            $set .= " {{ getService('$serviceName').run('$tag', '$id', '$lang', widget_render_params)|raw }} \n";
+            $set = " {{ getService('$serviceName').run('$tag', '$id', '$lang', {$json})|raw }} \n";
         } else {
             $set = " {{ getService('$serviceName').run('$tag', '$id', '$lang')|raw }} \n";
         }    
@@ -1003,11 +1003,6 @@ class PiWidgetExtension extends \Twig_Extension
             } else {
             	$is_esi_activate = false;
             }    
-            // we disable esi if the method request is POST   
-            $is_esi_disable_after_post_request = $this->container->getParameter('pi_app_admin.page.esi.disable_after_post_request');
-            if ($is_esi_disable_after_post_request && (count($_POST) >= 1)) {
-            	$is_esi_activate = false;
-            } 
             //           
             $is_render_service_with_ajax = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
             //
@@ -1018,7 +1013,6 @@ class PiWidgetExtension extends \Twig_Extension
             	$esi_id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($id, $esi_key);
             	$esi_lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($lang, $esi_key);
             	$esi_json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $esi_key);
-            	$esi_post 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_POST, JSON_UNESCAPED_UNICODE), $esi_key);
             	// we get query string
             	if (null !== $qs = $this->container->get('request')->getQueryString()) {
             		$qs = '?'.$qs;
@@ -1043,23 +1037,24 @@ class PiWidgetExtension extends \Twig_Extension
             	        'lang'          =>$esi_lang,
             	        'params'        =>$esi_json,
             	        'key'           =>$esi_key,
-            	        'post'          =>$esi_post,
             	        'server'        =>$esi_server
             	));
             	//
-            	if($is_esi_activate) {
-            	    $set = "<esi:include src=\"{$url}{$qs}\" />";
+            	if ($is_esi_activate) {
+                    $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
+            	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+            	    $set .= "{% else %}\n";
+            	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+            	    $set .= "{% endif %}\n";
             	} elseif ($is_render_service_with_ajax) {
-            	    $set  = "{% set url = \"{$url}{$qs}\" %}";
-            	    $set .= "<span class=\"hiddenLinkWidget {{ url|obfuscateLink }}\" />";
+            	    $set .= "<span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
             	}          	
-             } else {
-            	$set  = "{% set widget_service_params = $json %} \n";
-            	$set .= " {{ getService('$serviceName').renderSource('$id', '$lang', widget_service_params)|raw }} \n";
+            } else {
+            	$set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             }            
         } else {
-            $set = " {{ getService('$serviceName').renderSource('$id', '$lang')|raw }} \n";
-        }
+            $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}')|raw }}\n";
+        }        
     
         return $set;
     } 
@@ -1107,11 +1102,6 @@ class PiWidgetExtension extends \Twig_Extension
             } else {
             	$is_esi_activate = false;
             }
-            // we disable esi if the method request is POST
-            $is_esi_disable_after_post_request = $this->container->getParameter('pi_app_admin.page.esi.disable_after_post_request');
-            if ($is_esi_disable_after_post_request && (count($_POST) >= 1)) {
-                $is_esi_activate = false;
-            }
             //
             $is_render_service_with_ajax = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
             //
@@ -1122,7 +1112,6 @@ class PiWidgetExtension extends \Twig_Extension
             	$esi_id 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($JQcontainer, $esi_key);
             	$esi_lang 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($method, $esi_key);
             	$esi_json 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $esi_key);
-            	$esi_post 		 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_POST, JSON_UNESCAPED_UNICODE), $esi_key);
                 // we get query string
             	if (null !== $qs = $this->container->get('request')->getQueryString()) {
             		$qs = '?'.$qs;
@@ -1148,22 +1137,23 @@ class PiWidgetExtension extends \Twig_Extension
             			'lang'          =>$esi_lang,
             			'params'        =>$esi_json,
             			'key'           =>$esi_key,
-            	        'post'          =>$esi_post,
             			'server'        =>$esi_server
             	));
             	//            	
                 if($is_esi_activate) {
-            	    $set = "<esi:include src=\"{$url}{$qs}\" />";
+                    $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
+            	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+            	    $set .= "{% else %}\n";
+            	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+            	    $set .= "{% endif %}\n";
             	} elseif ($is_render_service_with_ajax) {
-            	    $set  = "{% set url = \"{$url}{$qs}\" %}";
-            	    $set .= "<span class=\"hiddenLinkWidget {{ url|obfuscateLink }}\" />";
+            	    $set  = "<span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
             	}   
             } else {          
-            	$set  = "{% set widget_render_params = $json %} \n";
-            	$set .= " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('$JQcontainer', '$method', widget_render_params)|raw }} \n";
+            	$set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
             }
         } else {
-            $set  = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('$JQcontainer', '$method')|raw }} \n";
+            $set  = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}')|raw }}\n";
         }
     
         return $set;

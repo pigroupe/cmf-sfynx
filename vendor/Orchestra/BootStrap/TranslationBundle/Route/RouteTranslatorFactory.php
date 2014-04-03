@@ -281,17 +281,6 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
                     }                    
                     $requirements         = array('_method'=>'GET|POST');
                     
-//                     if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])){
-//                         $sluggable_field_search = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_search'];                        
-//                         $requirements             = array_merge(array($sluggable_field_search=>"(.*)"), $requirements);
-//                     }                    
-
-//                     if (preg_match_all('#{(?P<var>(.*))}#sU', $page->getUrl(), $matches_vars)){
-//                         foreach($matches_vars['var'] as $key => $var){
-//                             $requirements    = array_merge(array($var=>"(.*)"), $requirements);
-//                         }
-//                     }
-
                     if (isset($all_routes[ $route ])) {
                         $this->getDoctrineRoute()->addRoute($route, $all_routes[ $route ], $locales, $defaults, $requirements);
 //                        print_r($all_routes[ $route ]);print_r(' - ');print_r($requirements);
