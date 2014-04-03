@@ -242,31 +242,38 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      */
     public function setJsonFileEtag($tag, $id, $lang, $params = null)
     {
+        $result = false;
     	// we set the Etag.
     	if (empty($this->Etag)) {
             $this->createEtag($tag, $id, $lang, $params);
     	}
     	// we set the path
-    	$path  = $container->getParameter("kernel.cache_dir") . "/../Etag/";
+    	$path  = $this->container->getParameter("kernel.cache_dir") . "/../Etag/";
     	// we set the file name
     	if (isset($params['widget-id']) && !empty($params['widget-id'])) {
     		$path_json_file = $path . "widget/w-{$params['widget-id']}-{$lang}.json";
     		if (!file_exists($path_json_file)) {
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag, 0777, LOCK_EX);
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag."\n", 0777, LOCK_EX);
     		}
     	} elseif ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
-    	    //
     		$path_json_file = $path . "page/p-{$id}-{$lang}.json";
-    		$path_json_file_tmp = $path . "page/tmp/" . md5($this->Etag) . ".json";
-    		if (!file_exists($path_json_file_tmp)) {
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag, 0777, LOCK_EX);
+    		if (!file_exists($path_json_file)) {
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag."\n", 0777, LOCK_EX);
     		    // we add new Etag in the history.
     		    $path_json_file_history = $path . "page/p-{$id}-{$lang}-history.json";
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $params['page-url'].'|'.$this->Etag, 0777, FILE_APPEND);
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $params['page-url'].'|'.$this->Etag."\n", 0777, FILE_APPEND);
+    		}
+    		// we register the url if the page is sluggify
+    		$page_options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang);
+    		$path_json_file_tmp = $path . "page/tmp/" . md5($this->Etag) . ".json";
+    		if (!file_exists($path_json_file_tmp) && isset($page_options['entity']) && !empty($page_options['entity'])) {
+    			$path_json_file_sluggify = $path . "page/p-{$id}-{$lang}-sluggify.json";
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $params['page-url'].'|'.$this->Etag."\n", 0777, FILE_APPEND);
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $params['page-url'].'|'.$this->Etag."\n", 0777, LOCK_EX);
     		}
     	} else {
     		$path_json_file = $path . "etag-{$tag}-{$lang}.json";
-    		$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag, 0777, FILE_APPEND);
+    		$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag."\n", 0777, FILE_APPEND);
     	}
     
     	return $result;
@@ -983,5 +990,105 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     protected function setFlash($message, $type = "notice")
     {
         $this->container->get('request')->getSession()->getFlashBag()->add($type, $message);
-    }        
+    }
+
+    /**
+     * Return the meta info of a page.
+     *
+     * @param string	$title
+     * @param string	$description
+     * @param string	$keywords
+     * @return array
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2014-04-03
+     */
+    public function getPageMetaInfo($lang = '', $title = '', $description = '', $keywords = '', $pathInfo = "")
+    {
+    	// we set values.
+    	$options['title']       = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($title)));
+    	$options['description'] = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($description)));
+    	$options['keywords']    = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($keywords)));
+    	// we set sluggify values.
+    	try {
+    		if (empty($lang)) {
+    			$lang     = $this->container->get('request')->getLocale();
+    		}
+    		if (empty($pathInfo)) {
+    			$pathInfo	  = $this->container->get('request')->getPathInfo();
+    		}
+    		$match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
+    		$route        = $match['_route'];
+    		$em			  = $this->container->get('doctrine')->getManager();
+    		if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])) {
+    			$sluggable_entity       = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['entity'];
+    			$sluggable_field_search = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_search'];
+    			$sluggable_title        = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_title'];
+    			$sluggable_resume       = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_resume'];
+    			$sluggable_keywords     = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_keywords'];
+    			//
+    			if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name']) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'])) {
+    			$sluggable_field_name    = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'];
+    			} else {
+    					$sluggable_field_name    =   $sluggable_field_search;
+    			}
+    		    //
+    			$sluggable_title_tab = array_map(function($value) {
+    				return ucwords($value);
+    			}, array_values(explode('_', $sluggable_title)));
+    			$sluggable_resume_tab = array_map(function($value) {
+    				return ucwords($value);
+    			}, array_values(explode('_', $sluggable_resume)));
+    			$sluggable_keywords_tab = array_map(function($value) {
+    				return ucwords($value);
+    			}, array_values(explode('_', $sluggable_keywords)));
+    			//
+    			$method_title    = "get".implode('', $sluggable_title_tab);
+    			$method_resume   = "get".implode('', $sluggable_resume_tab);
+    			$method_keywords = "get".implode('', $sluggable_keywords_tab);
+    			//
+    			$query    = $em->getRepository($sluggable_entity)
+    			->createQueryBuilder('a')
+    			->select("a")
+    			->leftJoin('a.translations', 'trans')
+    			->where("(a.{$sluggable_field_name} = :field_name) OR ( trans.locale = :trans_locale AND trans.field = :trans_field AND trans.content = :trans_content)")
+    			->groupBy("a.id")
+    			->setParameters(array(
+    			'field_name'    => $match[$sluggable_field_search],
+    			'trans_locale'  => $lang,
+    			'trans_field'   => $sluggable_field_name,
+    			'trans_content' => $match[$sluggable_field_search]
+    			))->getQuery()
+    			;
+    			$entity = $query->getOneOrNullResult();
+    			if (is_object($entity)) {
+    				$entity->setTranslatableLocale($lang);
+    				$em->refresh($entity);
+    				//
+    				$title       = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_title())));
+    				$description = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_resume())));
+    			    $keywords    = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($entity->$method_keywords())));
+    				if (!empty($title)) {
+    					$options['title'] = $title;
+    			    }
+    				if (!empty($description)) {
+    				    $options['description'] = $description;
+    				}
+    				if (!empty($keywords)) {
+    				    $options['keywords'] = $keywords;
+    			    }
+    				$options['entity'] = $entity;
+    			} else {
+    				// it allow to return a 404 exception.
+    				$options['title'] = '_error_404_';
+    			}   
+			}
+		} catch (\Exception $e) {
+		    // it allow to return a 404 exception.
+			$options['title'] = '_error_404_';
+		}
+		
+		return $options;
+	}    			 		        
 }
