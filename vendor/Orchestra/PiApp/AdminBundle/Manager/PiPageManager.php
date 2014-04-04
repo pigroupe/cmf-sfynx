@@ -1044,6 +1044,17 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                     } catch (\Exception $e) {
                                     }
                                 }
+                                
+                            $path_json_file = $this->createJsonFileName('widget', $widget->getId(), $lang_page);
+                    		if (file_exists($path_json_file)) {
+                    		    $info = explode('|', file_get_contents($path_json_file));
+                    		    $this->cacheRefreshByname($info[1]);
+                    		    //print_r($info[1]);
+                    		    //print_r('<br />');print_r('<br />');
+                    		    
+                    		}
+                                
+                                
 //                                 // If the widget is a tree a "jqext"
 //                                 if ( ($widget->getPlugin() == 'content') && ($widget->getAction() == 'jqext') ) {
 //                                     $xmlConfig = $widget->getConfigXml();
