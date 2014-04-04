@@ -158,14 +158,50 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      * @since 2012-04-19
      */
-    public function run($tag, $id, $lang, $params = null)
+    public function run($tag, $id, $lang, $params = null, $isCreateJsonFile = false)
     {
         // we create the tag value
         $this->createEtag($tag, $id, $lang, $params);
+        // we register the tag value in the json file if does not exist.
+        if ($isCreateJsonFile) {
+            $this->setJsonFileEtag($tag, $id, $lang, $params);
+        }
         //print_r($this->Etag);
+        
         // we return the render (cache or not)
         return $this->render($lang);
     }
+
+    /**
+     * Cretae a Etag.
+     *
+     * @param string    $tag
+     * @param string    $id
+     * @param string    $lang
+     * @param array     $params
+     *
+     * @return string    Etag value
+     * @access    protected
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2012-04-19
+     */
+    protected function createEtag($tag, $id, $lang, $params = null)
+    {
+    	// We cretae and set the Etag value
+    	if (!is_null($params)) {
+    		// we sort an array by key in reverse order
+    		$this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+    		$params = $this->paramsEncode($params);
+    		$id     = $this->_Encode($id, false);
+    		$this->setEtag("$tag:$id:$lang:$params");
+    	} else {
+    		$id     = $this->_Encode($id, false);
+    		$this->setEtag("$tag:$id:$lang");
+    	}
+    
+    	return $this->Etag;
+    }    
     
     /**
      * Create/update json file Etag with the tag value.
@@ -194,62 +230,54 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     	if (isset($params['widget-id']) && !empty($params['widget-id'])) {
     		$path_json_file = $path . "widget/w-{$params['widget-id']}-{$lang}.json";
     		if (!file_exists($path_json_file)) {
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag."\n", 0777, LOCK_EX);
+    			$now = $this->setTimestampNow();
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     		}
     	} elseif ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
     		$path_json_file = $path . "page/p-{$id}-{$lang}.json";
     		if (!file_exists($path_json_file)) {
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag."\n", 0777, LOCK_EX);
+    			$now = $this->setTimestampNow();
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     		    // we add new Etag in the history.
     		    $path_json_file_history = $path . "page/p-{$id}-{$lang}-history.json";
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $params['page-url'].'|'.$this->Etag."\n", 0777, FILE_APPEND);
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
     		}
     		// we register the url if the page is sluggify
     		$is_sluggify_page   = $this->isSluggifyPage();
     		$path_json_file_tmp = $path . "page/tmp/" . md5($this->Etag) . ".json";
     		if ($is_sluggify_page && !file_exists($path_json_file_tmp)) {
+    			$now = $this->setTimestampNow();
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
     			$path_json_file_sluggify = $path . "page/p-{$id}-{$lang}-sluggify.json";
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $params['page-url'].'|'.$this->Etag."\n", 0777, FILE_APPEND);
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $params['page-url'].'|'.$this->Etag."\n", 0777, LOCK_EX);
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
+    		}
+    	} elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
+    	    $path_json_file_tmp = $path . "esi/tmp/" . md5($params['esi-url']) . ".json";
+    		if (!file_exists($path_json_file_tmp)) {
+    			$now = $this->setTimestampNow();
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
+    			$path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
     		}
     	} else {
-    		$path_json_file = $path . "etag-{$tag}-{$lang}.json";
-    		$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $this->Etag."\n", 0777, FILE_APPEND);
+	   		$path_json_file_tmp = $path . "tmp/" . md5($this->Etag) . ".json";
+    		if (!file_exists($path_json_file_tmp)) {
+    			$now = $this->setTimestampNow();
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    			$path_json_file = $path . "etag-{$tag}-{$lang}.json";
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
+    		}
     	}
     
     	return $result;
     }    
     
-    /**
-     * Cretae a Etag.
-     *
-     * @param string    $tag
-     * @param string    $id
-     * @param string    $lang
-     * @param array     $params
-     *
-     * @return string    Etag value
-     * @access    protected
-     *
-     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-04-19
-     */
-    protected function createEtag($tag, $id, $lang, $params = null)
+    protected function setTimestampNow()
     {
-        // We cretae and set the Etag value
-        if (!is_null($params)) {
-            // we sort an array by key in reverse order
-            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-            $params = $this->paramsEncode($params);
-            $id     = $this->_Encode($id, false);
-            $this->setEtag("$tag:$id:$lang:$params");
-        } else {
-            $id     = $this->_Encode($id, false);
-            $this->setEtag("$tag:$id:$lang");
-        }
-        
-        return $this->Etag;
-    }    
+    	$now = new \Datetime();
+    	 
+    	return $now->getTimestamp();
+    }
     
     protected function paramsEncode($params)
     {

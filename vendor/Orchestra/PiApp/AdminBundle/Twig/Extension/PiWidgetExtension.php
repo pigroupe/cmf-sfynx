@@ -966,7 +966,9 @@ class PiWidgetExtension extends \Twig_Extension
             $set = " {{ getService('$serviceName').run('$tag', '$id', '$lang', {$json})|raw }} \n";
         } else {
             $set = " {{ getService('$serviceName').run('$tag', '$id', '$lang')|raw }} \n";
-        }    
+        } 
+        // we register the tag value in the json file if does not exist.
+        $this->container->get('pi_app_admin.manager.page')->setJsonFileEtag($tag, $id, $lang, $params);
         
         return $set;
     }
@@ -1047,12 +1049,14 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
             	    $set .= "{% endif %}\n";
             	} elseif ($is_render_service_with_ajax) {
-            	    $set  = "{% if (app_request_request_count >= 1) %}\n";
+            	    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";
             	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             	    $set .= "{% else %}\n";
-            	    $set .= "<span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
+            	    $set .= "    <span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
             	    $set .= "{% endif %}\n";
-            	}          	
+            	}
+            	// we register the tag value in the json file if does not exist.
+            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $serviceName, $lang, array('esi-url'=>"{$url}{$qs}"));
             } else {
             	$set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             }            
@@ -1151,12 +1155,14 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
             	    $set .= "{% endif %}\n";
             	} elseif ($is_render_service_with_ajax) {
-            	    $set  = "{% if (app_request_request_count >= 1) %}\n";
+            	    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";
             	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             	    $set .= "{% else %}\n";
-            	    $set .= "<span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
+            	    $set .= "    <span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
             	    $set .= "{% endif %}\n";
             	}   
+            	// we register the tag value in the json file if does not exist.
+            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $JQcontainer, $lang, array('esi-url'=>"{$url}{$qs}"));
             } else {          
             	$set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
             }

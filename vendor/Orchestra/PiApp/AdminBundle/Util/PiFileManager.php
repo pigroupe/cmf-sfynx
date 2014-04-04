@@ -163,7 +163,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns if a directory is empty.
      *
-     * @param    string    $path  path
+     * @param    string    $dir  path
      *
      * @return array    array list of all files.
      * @access public
@@ -584,6 +584,41 @@ class PiFileManager implements PiFileManagerBuilderInterface
     	$fp = fopen($path,"w+");
     	fwrite($fp,$contents . $contenu,strlen($contents . $contenu));
     	fclose($fp);
+    }    
+    
+    /**
+     * Replace a particular line in a text file with less memory intensive.
+     *
+     * @param string    $path    path du fichier
+     * @param string    $contentToReplace    content à remplacer
+     * @param string    $replacementContent    content de remplacement
+     * @return void
+     * @access public
+     * @static
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     */
+    public static function replaceContent($path, $contentToReplace, $replacementContent)
+    {
+        $reading  = fopen($path, 'r');
+        $writing  = fopen($path.'.tmp', 'w');
+        $replaced = false;
+        //
+        while (!feof($reading)) {
+          $line = fgets($reading);
+          if (stristr($line, $contentToReplace)) {
+            $line     = $replacementContent;
+            $replaced = true;
+          }
+          fputs($writing, $line);
+        }
+        fclose($reading); fclose($writing);
+        // might as well not overwrite the file if we didn't replace anything
+        if ($replaced) {
+          rename($path.'.tmp', $path);
+        } else {
+          unlink($path.'.tmp');
+        }
     }    
     
     /**

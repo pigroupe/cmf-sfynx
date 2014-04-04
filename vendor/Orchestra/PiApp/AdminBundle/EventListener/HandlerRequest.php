@@ -193,8 +193,13 @@ class HandlerRequest
             $fileSeo  = $this->seo_redirection_repository . "/" . $this->seo_redirection_file_name;
         	// if all cache seo files are not created from the seo file, we create them.
             //$all_cache_files = \PiApp\AdminBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' ); // not fast enough
-        	$is_cache_reposiroty_empty = \PiApp\AdminBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
-        	if (file_exists($fileSeo) && $is_cache_reposiroty_empty) {
+        	//$is_cache_not_created = \PiApp\AdminBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
+            //if (file_exists($fileSeo) && $is_cache_not_created) {
+        	$path_tmp_file = $dossier.'tmp.file';
+        	if (file_exists($fileSeo) && !file_exists($path_tmp_file)) {
+        	    // we set the tmp file
+        	    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_tmp_file, "", 0777, LOCK_EX);
+        	    //
         		$this->container->get("pi_filecache")->getClient()->setPath($dossier);
         		$file_handle = fopen($fileSeo, "r");
         		while (!feof($file_handle)) {

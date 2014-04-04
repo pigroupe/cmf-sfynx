@@ -40,6 +40,8 @@ interface PiFileManagerBuilderInterface
     public static function delete($path);
     public static function create($path, $filecontent = '');
     public static function InsererContent($path, $filecontent);
+    public static function replaceContent($path, $contentToReplace, $replacementContent);
+    
     public static function readfileChunked ($filename, $retbytes=false);
     public static function getFile($file, $cacheTime, $mime=null, $name=null);
     public static function getMimeContentType($fileName);

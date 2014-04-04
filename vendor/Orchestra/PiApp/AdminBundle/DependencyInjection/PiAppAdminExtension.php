@@ -102,7 +102,10 @@ class PiAppAdminExtension extends Extension
             if (isset($config['page']['widget']) && isset($config['page']['widget']['render_service_with_ajax'])) {
             	$container->setParameter('pi_app_admin.page.widget.render_service_with_ajax', $config['page']['widget']['render_service_with_ajax']);
             }      
-
+            if (isset($config['page']['widget']) && isset($config['page']['widget']['ajax_disable_after_post_request'])) {
+            	$container->setParameter('pi_app_admin.page.widget.ajax_disable_after_post_request', $config['page']['widget']['ajax_disable_after_post_request']);
+            }
+            
             if (isset($config['page']['scop']) && isset($config['page']['scop']['authorized'])) {
             	$container->setParameter('pi_app_admin.page.scop.authorized', $config['page']['scop']['authorized']);
             }

@@ -220,6 +220,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         $source  = "{% set layout_screen = app.request.attributes.get('orchestra-screen') %}\n";
         $source .= "{% set is_switch_layout_mobile_authorized = getParameter('pi_app_admin.page.switch_layout_mobile_authorized') %}\n";
         $source .= "{% set is_esi_disable_after_post_request = getParameter('pi_app_admin.page.esi.disable_after_post_request') %}\n";
+        $source .= "{% set is_widget_ajax_disable_after_post_request = getParameter('pi_app_admin.page.widget.ajax_disable_after_post_request') %}\n";
         $source .= "{% set app_request_request_count = app.request.request.count() %}\n";
         $source .= "{% if layout_screen is empty or not is_switch_layout_mobile_authorized  %}\n";
         $source .= "{%     set layout_screen = 'layout' %}\n";
@@ -327,7 +328,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         if($is_render_service_with_ajax) {
             $source     .= "{% block global_script_divers_footer %} \n";
             $source     .= " {{ parent() }} \n";
-            $source     .= "{{ obfuscateLinkJS('div','hiddenLinkWidget')|raw }}\n";
+            $source     .= "{{ obfuscateLinkJS('ajax','hiddenLinkWidget')|raw }}\n";
             $source     .= "{% endblock %} \n";
         }        
         // we set all initWidget

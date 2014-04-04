@@ -45,6 +45,7 @@
 #            disable_after_post_request: true
 #        widget:
 #            render_service_with_ajax: false 
+#            ajax_disable_after_post_request: true          
 #        refresh:
 #            allpage: true
 #            allpage_containing_snippet: true

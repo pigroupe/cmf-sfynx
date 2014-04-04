@@ -181,6 +181,7 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                         ->children()
                             ->booleanNode('render_service_with_ajax')->isRequired()->defaultValue(false)->end()
+                            ->booleanNode('ajax_disable_after_post_request')->isRequired()->defaultValue(true)->end()
                         ->end()
                     ->end()    
 
