@@ -144,65 +144,6 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         $this->script['init']  = array();
     }
     
-    protected function paramsEncode($params)
-    {
-    	$string    = json_encode($params, JSON_NUMERIC_CHECK  | JSON_UNESCAPED_UNICODE);
-    	return $this->_Encode($string);
-    }
-    
-    protected function _Encode($string, $complet = true)
-    {
-    	$string = str_replace('\\\\', '\\', $string);
-    	if ($complet) {
-    		$string = str_replace('\\', "@@", $string);
-    		$string = str_replace('@@@@@@@@', "@@", $string);
-    		$string = str_replace('@@@@', "@@", $string);
-    	}
-    
-    	return str_replace(':', '#', $string);
-    }
-    
-    protected function paramsDecode($params)
-    {
-    	$params    = $this->_Decode($params);
-    	$params = str_replace('\\', '\\\\', $params);
-    	$params = json_decode($params, true);
-    	if (is_array($params)){
-    		$this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-    		$name_key = array_map(function($key, $value) {
-    			return str_replace('\\\\', '\\', $value);
-    		}, array_keys($params),array_values($params));
-    		$params = array_combine(array_keys($params), $name_key);
-    	}
-    
-    	return $params;
-    }
-    
-    protected function _Decode($string)
-    {
-    	$string = str_replace("@@", '\\', $string);
-    	$string = str_replace('\\\\', '\\', $string);
-    	$string = str_replace('#', ':', $string);
-    	$string    = str_replace("$$$", "&", $string);
-    
-    	return $string;
-    }
-    
-    protected function recursive_map(array &$array, $curlevel=0)
-    {
-    	foreach ($array as $k=>$v) {
-    		if (is_array($v)) {
-    			$this->recursive_map($v, $curlevel+1);
-    		} else {
-    			$v = str_replace("@@@@", '\\', $v);
-    			$v = str_replace("@@", '\\', $v);
-    			$v = str_replace('\\\\', '\\', $v);
-    			$v = str_replace("$$$", "&", $v);
-    			$array[$k] =  mb_convert_encoding($v, "UTF-8", "HTML-ENTITIES");
-    		}
-    	}
-    }    
-    
     /**
      * Create the Etag and returns the render source it.
      *
@@ -238,7 +179,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * @access    public
      *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-04-19
+     * @since 2014-04-03
      */
     public function setJsonFileEtag($tag, $id, $lang, $params = null)
     {
@@ -264,9 +205,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $params['page-url'].'|'.$this->Etag."\n", 0777, FILE_APPEND);
     		}
     		// we register the url if the page is sluggify
-    		$page_options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang);
+    		$is_sluggify_page   = $this->isSluggifyPage();
     		$path_json_file_tmp = $path . "page/tmp/" . md5($this->Etag) . ".json";
-    		if (!file_exists($path_json_file_tmp) && isset($page_options['entity']) && !empty($page_options['entity'])) {
+    		if ($is_sluggify_page && !file_exists($path_json_file_tmp)) {
     			$path_json_file_sluggify = $path . "page/p-{$id}-{$lang}-sluggify.json";
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $params['page-url'].'|'.$this->Etag."\n", 0777, FILE_APPEND);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $params['page-url'].'|'.$this->Etag."\n", 0777, LOCK_EX);
@@ -308,6 +249,65 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         }
         
         return $this->Etag;
+    }    
+    
+    protected function paramsEncode($params)
+    {
+    	$string    = json_encode($params, JSON_NUMERIC_CHECK  | JSON_UNESCAPED_UNICODE);
+    	return $this->_Encode($string);
+    }
+    
+    protected function _Encode($string, $complet = true)
+    {
+    	$string = str_replace('\\\\', '\\', $string);
+    	if ($complet) {
+    		$string = str_replace('\\', "@@", $string);
+    		$string = str_replace('@@@@@@@@', "@@", $string);
+    		$string = str_replace('@@@@', "@@", $string);
+    	}
+    
+    	return str_replace(':', '#', $string);
+    }
+    
+    protected function paramsDecode($params)
+    {
+    	$params = $this->_Decode($params);
+    	$params = str_replace('\\', '\\\\', $params);
+    	$params = json_decode($params, true);
+    	if (is_array($params)){
+    		$this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+    		$name_key = array_map(function($key, $value) {
+    			return str_replace('\\\\', '\\', $value);
+    		}, array_keys($params),array_values($params));
+    		$params = array_combine(array_keys($params), $name_key);
+    	}
+    
+    	return $params;
+    }
+    
+    protected function _Decode($string)
+    {
+    	$string = str_replace("@@", '\\', $string);
+    	$string = str_replace('\\\\', '\\', $string);
+    	$string = str_replace('#', ':', $string);
+    	$string = str_replace("$$$", "&", $string);
+    
+    	return $string;
+    }
+    
+    protected function recursive_map(array &$array, $curlevel=0)
+    {
+    	foreach ($array as $k=>$v) {
+    		if (is_array($v)) {
+    			$this->recursive_map($v, $curlevel+1);
+    		} else {
+    			$v = str_replace("@@@@", '\\', $v);
+    			$v = str_replace("@@", '\\', $v);
+    			$v = str_replace('\\\\', '\\', $v);
+    			$v = str_replace("$$$", "&", $v);
+    			$array[$k] =  mb_convert_encoding($v, "UTF-8", "HTML-ENTITIES");
+    		}
+    	}
     }    
     
     /**
@@ -994,10 +994,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
 
     /**
      * Return the meta info of a page.
-     *
+     * 
+     * @param string    $lang
      * @param string	$title
      * @param string	$description
      * @param string	$keywords
+     * @param string    $pathinfo
      * @return array
      * @access public
      *
@@ -1016,7 +1018,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     			$lang     = $this->container->get('request')->getLocale();
     		}
     		if (empty($pathInfo)) {
-    			$pathInfo	  = $this->container->get('request')->getPathInfo();
+    			$pathInfo = $this->container->get('request')->getPathInfo();
     		}
     		$match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
     		$route        = $match['_route'];
@@ -1029,9 +1031,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     			$sluggable_keywords     = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_keywords'];
     			//
     			if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name']) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'])) {
-    			$sluggable_field_name    = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'];
+    			$sluggable_field_name     = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['field_name'];
     			} else {
-    					$sluggable_field_name    =   $sluggable_field_search;
+    			    $sluggable_field_name =   $sluggable_field_search;
     			}
     		    //
     			$sluggable_title_tab = array_map(function($value) {
@@ -1048,17 +1050,17 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     			$method_resume   = "get".implode('', $sluggable_resume_tab);
     			$method_keywords = "get".implode('', $sluggable_keywords_tab);
     			//
-    			$query    = $em->getRepository($sluggable_entity)
+    			$query = $em->getRepository($sluggable_entity)
     			->createQueryBuilder('a')
     			->select("a")
     			->leftJoin('a.translations', 'trans')
     			->where("(a.{$sluggable_field_name} = :field_name) OR ( trans.locale = :trans_locale AND trans.field = :trans_field AND trans.content = :trans_content)")
     			->groupBy("a.id")
     			->setParameters(array(
-    			'field_name'    => $match[$sluggable_field_search],
-    			'trans_locale'  => $lang,
-    			'trans_field'   => $sluggable_field_name,
-    			'trans_content' => $match[$sluggable_field_search]
+        			'field_name'    => $match[$sluggable_field_search],
+        			'trans_locale'  => $lang,
+        			'trans_field'   => $sluggable_field_name,
+        			'trans_content' => $match[$sluggable_field_search]
     			))->getQuery()
     			;
     			$entity = $query->getOneOrNullResult();
@@ -1090,5 +1092,30 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
 		}
 		
 		return $options;
-	}    			 		        
+	}   
+
+	/**
+	 * Return true if the page is sluggify.
+	 *
+	 * @param string    $pathinfo
+	 * @return array
+	 * @access public
+	 *
+	 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+	 * @since 2014-04-03
+	 */	
+	public function isSluggifyPage($pathInfo = "") 
+	{
+	    if (empty($pathInfo)) {
+	    	$pathInfo = $this->container->get('request')->getPathInfo();
+	    }
+	    $match        = $this->container->get('be_simple_i18n_routing.router')->match($pathInfo);
+	    $route        = $match['_route'];
+	    $em			  = $this->container->get('doctrine')->getManager();
+	    if (isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])) {
+	        return true;
+	    } else {
+	        return false;
+	    }
+	}
 }

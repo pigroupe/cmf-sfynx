@@ -93,17 +93,13 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
     /**
      * Getting all locales of the CMF.
      *
-     * @param string $locale
      * @return array
      * @access public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getAllLocales($locale = '')
+    public function getAllLocales()
     {
-        if (empty($locale))    {
-        	$locale = $this->container->get('request')->getLocale();
-        }
         $return = true;
     	// we set the json file if does not exist
         if (!realpath($this->path_json_file)) {

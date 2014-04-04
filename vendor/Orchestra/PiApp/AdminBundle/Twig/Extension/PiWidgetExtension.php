@@ -1047,7 +1047,11 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
             	    $set .= "{% endif %}\n";
             	} elseif ($is_render_service_with_ajax) {
+            	    $set  = "{% if (app_request_request_count >= 1) %}\n";
+            	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+            	    $set .= "{% else %}\n";
             	    $set .= "<span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
+            	    $set .= "{% endif %}\n";
             	}          	
             } else {
             	$set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
@@ -1147,7 +1151,11 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
             	    $set .= "{% endif %}\n";
             	} elseif ($is_render_service_with_ajax) {
-            	    $set  = "<span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
+            	    $set  = "{% if (app_request_request_count >= 1) %}\n";
+            	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+            	    $set .= "{% else %}\n";
+            	    $set .= "<span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
+            	    $set .= "{% endif %}\n";
             	}   
             } else {          
             	$set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";

@@ -1475,7 +1475,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     		return $new_url;
     	}
     	
-    	return $this->getContainer()->get('router')->generate('home_page');;    
+    	return $this->getContainer()->get('bootstrap.RouteTranslator.factory')->getRoute('home_page', array('locale' => $locale));
     }
     
     /**
@@ -1517,15 +1517,15 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                     $entity = $this->getCurrentWidget();
                 }
                 if (is_int($entity)) {
-                    $entity    = $pageManager->getWidgetById($entity);
+                    $entity = $pageManager->getWidgetById($entity);
                 }
                 if ($entity instanceof Widget) {
-                    $Url['move_up']        = $this->container->get('router')->generate('admin_widget_move_ajax', array('id' => $entity->getId(), 'type' => 'up'));
-                    $Url['move_down']     = $this->container->get('router')->generate('admin_widget_move_ajax', array('id' => $entity->getId(), 'type' => 'down'));
-                    $Url['delete']         = $this->container->get('router')->generate('admin_widget_delete_ajax', array('id' => $entity->getId()));
-                    $Url['admin']         = $this->container->get('router')->generate('admin_widget_edit', array('id' => $entity->getId(), 'NoLayout' => true));
-                    $Url['edit']         = $this->container->get('router')->generate('admin_homepage');
-                    $Url['import']        = $this->container->get('router')->generate('public_importmanagement_widget', array('id_widget' => $entity->getId(), 'NoLayout' => true));
+                    $Url['move_up']   = $this->container->get('router')->generate('admin_widget_move_ajax', array('id' => $entity->getId(), 'type' => 'up'));
+                    $Url['move_down'] = $this->container->get('router')->generate('admin_widget_move_ajax', array('id' => $entity->getId(), 'type' => 'down'));
+                    $Url['delete']    = $this->container->get('router')->generate('admin_widget_delete_ajax', array('id' => $entity->getId()));
+                    $Url['admin']     = $this->container->get('router')->generate('admin_widget_edit', array('id' => $entity->getId(), 'NoLayout' => true));
+                    $Url['edit']      = $this->container->get('router')->generate('admin_homepage');
+                    $Url['import']    = $this->container->get('router')->generate('public_importmanagement_widget', array('id_widget' => $entity->getId(), 'NoLayout' => true));
                     try {
                         $xmlConfig    = $entity->getConfigXml();
                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
@@ -1541,10 +1541,10 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                         }
                         ////////////////// url management of all gedmo widget ///////////////////////////
                         if ( ($entity->getPlugin() == "gedmo") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller')) {
-                            $infos           = explode(':', $xmlConfig->widgets->gedmo->controller);
-                            $infos_entity    = $infos[0] . ':' . str_replace('\\\\', '\\', $infos[1]);
-                            $infos_method    = strtolower($infos[2]);
-                            $getAvailable    = "getAvailable" . ucfirst(strtolower($entity->getAction()));                            
+                            $infos        = explode(':', $xmlConfig->widgets->gedmo->controller);
+                            $infos_entity = $infos[0] . ':' . str_replace('\\\\', '\\', $infos[1]);
+                            $infos_method = strtolower($infos[2]);
+                            $getAvailable = "getAvailable" . ucfirst(strtolower($entity->getAction()));                            
                             try {
                                 $Lists    = \PiApp\AdminBundle\Util\PiWidget\PiGedmoManager::$getAvailable();
                             } catch (\Exception $e) {
@@ -1556,20 +1556,20 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 //                                 $params['category']    = $xmlConfig->widgets->gedmo->params->category;
                             $params['NoLayout']    = true;
                             if ( $xmlConfig->widgets->gedmo->get('params')) {
-                                $params    = array_merge($xmlConfig->widgets->gedmo->params->toArray(), $params);                            
+                                $params = array_merge($xmlConfig->widgets->gedmo->params->toArray(), $params);                            
                             }
                             //if (isset($Lists[$infos_entity][$infos_method]['edit']))
                             //    $Url['edit']         = $this->container->get('router')->generate($Lists[$infos_entity][$infos_method]['edit'], $params);
                             if (isset($Lists[$infos_entity][$infos_method]) && is_array($Lists[$infos_entity][$infos_method])) {
                                 foreach($Lists[$infos_entity][$infos_method] as $action => $route_name){
-                                    $Url[$action]    = $this->container->get('router')->generate($route_name, $params);
+                                    $Url[$action] = $this->container->get('router')->generate($route_name, $params);
                                 }
                             }
                         }
                         ////////////////// url management of translation content widget ///////////////////////////
                         if ( ($entity->getPlugin() == "content") && $xmlConfig->widgets->get('content') ) {
                             if ( $xmlConfig->widgets->content->get('snippet') && $xmlConfig->widgets->content->get('id') ) {
-                                $Url['edit']         = $this->container->get('router')->generate('admin_widget_edit', array('id' => $xmlConfig->widgets->content->get('id'), 'NoLayout' => true));
+                                $Url['edit'] = $this->container->get('router')->generate('admin_widget_edit', array('id' => $xmlConfig->widgets->content->get('id'), 'NoLayout' => true));
                             }
                         }
                         ////////////////// url management of all content widget ///////////////////////////
@@ -1584,17 +1584,16 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                             } catch (\Exception $e) {
                                 $Lists = null;
                             }                            
-                            $params['NoLayout']    = true;
+                            $params['NoLayout'] = true;
                             if ( $xmlConfig->widgets->content->get('params')) {
-                                $params    = array_merge($xmlConfig->widgets->content->params->toArray(), $params);                        
+                                $params = array_merge($xmlConfig->widgets->content->params->toArray(), $params);                        
                             }
                             if (isset($Lists[$infos][$infos_method]) && is_array($Lists[$infos][$infos_method])) {
                                 foreach($Lists[$infos][$infos_method] as $action => $route_name) {
-                                    $Url[$action]    = $this->container->get('router')->generate($route_name, $params);
+                                    $Url[$action] = $this->container->get('router')->generate($route_name, $params);
                                 }
                             }
                         }                        
-                        
                     } catch (\Exception $e) {
                     }
                 }

@@ -120,8 +120,8 @@ abstract class CoreListener extends abstractListener
                 $entity instanceof \PiApp\AdminBundle\Entity\TranslationWidget
             )
         ){
-            $all_lang    = $this->getRepository('Langue')->findByEnabled(true);
-            $names        = $this->_recursive($eventArgs, $entity, $all_lang);
+            $all_locales = $this->_container()->get('pi_app_admin.locale_manager')->getAllLocales();
+            $names = $this->_recursive($eventArgs, $entity, $all_locales);
         
 //              if ($names && is_array($names)){
 //                  krsort($names);
@@ -135,13 +135,14 @@ abstract class CoreListener extends abstractListener
      * We find all template names of a page and these nodes.
      *
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
-     *
+     * @param mixed    $entity
+     * @param array    $all_locales
      * @return void
      * @access private
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    private function _recursive($eventArgs, $entity, $all_lang)
+    private function _recursive($eventArgs, $entity, $all_locales)
     {
         // we set the persist of the Page entity
         if ($entity instanceof \PiApp\AdminBundle\Entity\Page) {
@@ -154,7 +155,7 @@ abstract class CoreListener extends abstractListener
             return false;
         }
         $names = array();
-        foreach($all_lang as $key => $lang){            
+        foreach($all_locales as $key => $lang){            
             if (!method_exists($entity, 'getLayout') || ($entity->getLayout() instanceof \PiApp\AdminBundle\Entity\Layout) ) {
                 // we create the cache name
                 $name             = $type.$entity->getId().':'.$lang->getId();
