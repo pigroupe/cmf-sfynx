@@ -204,13 +204,53 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     }    
     
     /**
+     * Create the json path name
+     *
+     * @param string    $type
+     * @param string    $id
+     * @param string    $lang
+     * @return string   path value
+     * @access    public
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2014-04-03
+     */    
+    public function createJsonFileName($type, $id, $lang) 
+    {
+        // we set the path
+        $path  = $this->container->getParameter("kernel.cache_dir") . "/../Etag/";
+        // we set the path
+        switch ($type) {
+            case ('esi') :
+                $path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
+                break;
+            case ('page') :
+                $path_json_file = $path . "page/p-{$id}-{$lang}.json";
+                break;
+            case ('page-sluggify') :
+                $path_json_file = $path . "page/p-{$id}-{$lang}-sluggify.json";
+                break;                
+            case ('widget') :
+                $path_json_file = $path . "widget/w-{$id}-{$lang}.json";
+                break;  
+            case ('default') :
+              	$path_json_file = $path . "etag-{$id}-{$lang}.json";
+               	break;                                  
+            default :
+                throw new \InvalidArgumentException("you have to config correctely the attibute type");
+                break;
+        }       
+        
+        return $path_json_file;
+    }
+    
+    /**
      * Create/update json file Etag with the tag value.
      *
      * @param string    $tag
      * @param string    $id
      * @param string    $lang
      * @param array     $params
-     *
      * @return boolean    true if the tag have been insert corectly in the json file.
      * @access    public
      *
@@ -221,20 +261,20 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     {
         $result = false;
     	// we set the Etag.
-    	if (empty($this->Etag)) {
-            $this->createEtag($tag, $id, $lang, $params);
-    	}
+        $this->createEtag($tag, $id, $lang, $params);
     	// we set the path
     	$path  = $this->container->getParameter("kernel.cache_dir") . "/../Etag/";
     	// we set the file name
     	if (isset($params['widget-id']) && !empty($params['widget-id'])) {
-    		$path_json_file = $path . "widget/w-{$params['widget-id']}-{$lang}.json";
+    		//$path_json_file = $path . "widget/w-{$params['widget-id']}-{$lang}.json";
+    		$path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
     		if (!file_exists($path_json_file)) {
     			$now = $this->setTimestampNow();
     		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     		}
     	} elseif ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
-    		$path_json_file = $path . "page/p-{$id}-{$lang}.json";
+    		//$path_json_file = $path . "page/p-{$id}-{$lang}.json";
+    	    $path_json_file = $this->createJsonFileName('page', $id, $lang);
     		if (!file_exists($path_json_file)) {
     			$now = $this->setTimestampNow();
     		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
@@ -248,7 +288,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     		if ($is_sluggify_page && !file_exists($path_json_file_tmp)) {
     			$now = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
-    			$path_json_file_sluggify = $path . "page/p-{$id}-{$lang}-sluggify.json";
+    			//$path_json_file_sluggify = $path . "page/p-{$id}-{$lang}-sluggify.json";
+    			$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
     		}
     	} elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
@@ -256,7 +297,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     		if (!file_exists($path_json_file_tmp)) {
     			$now = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
-    			$path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
+    			//$path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
+    			$path_json_file = $this->createJsonFileName('esi', $id, $lang);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
     		}
     	} else {
@@ -264,7 +306,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     		if (!file_exists($path_json_file_tmp)) {
     			$now = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
-    			$path_json_file = $path . "etag-{$tag}-{$lang}.json";
+    			//$path_json_file = $path . "etag-{$tag}-{$lang}.json";
+    			$path_json_file = $this->createJsonFileName('default', $tag, $lang);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
     		}
     	}

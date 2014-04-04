@@ -46,4 +46,10 @@ interface PiCoreManagerBuilderInterface
     public function setCurrentTransWidget(TranslationWidget $transWidget = null);
     public function parseTemplateParam($RenderResponseParam);
     public function getScript($script, $type = 'string');
+    
+    public function createJsonFileName($type, $id, $lang);
+    public function setJsonFileEtag($tag, $id, $lang, $params = null);
+    
+    public function getPageMetaInfo($lang = '', $title = '', $description = '', $keywords = '', $pathInfo = "");
+    public function isSluggifyPage($pathInfo = "");
 }
