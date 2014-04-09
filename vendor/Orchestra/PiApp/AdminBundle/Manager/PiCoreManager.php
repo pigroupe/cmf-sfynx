@@ -224,18 +224,30 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             case ('esi') :
                 $path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
                 break;
+            case ('esi-tmp') :
+              	$path_json_file = $path . "esi/tmp/" . md5($id) ."-{$lang}.json";
+               	break;                
             case ('page') :
                 $path_json_file = $path . "page/p-{$id}-{$lang}.json";
                 break;
             case ('page-sluggify') :
                 $path_json_file = $path . "page/p-{$id}-{$lang}-sluggify.json";
-                break;                
+                break; 
+            case ('page-sluggify-tmp') :
+              	$path_json_file = $path . "page/tmp/" . md5($id) ."-{$lang}.json";
+               	break;                
+            case ('page-history') :
+               	$path_json_file = $path . "page/p-{$id}-{$lang}-history.json";
+               	break;                               
             case ('widget') :
                 $path_json_file = $path . "widget/w-{$id}-{$lang}.json";
                 break;  
             case ('default') :
               	$path_json_file = $path . "etag-{$id}-{$lang}.json";
-               	break;                                  
+               	break;
+            case ('default-tmp') :
+            	$path_json_file = $path . "tmp/" . md5($id) ."-{$lang}.json";
+            	break;               	                                  
             default :
                 throw new \InvalidArgumentException("you have to config correctely the attibute type");
                 break;
@@ -265,54 +277,75 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     	// we set the path
     	$path  = $this->container->getParameter("kernel.cache_dir") . "/../Etag/";
     	// we set the file name
-    	if (isset($params['widget-id']) && !empty($params['widget-id'])) {
-    		//$path_json_file = $path . "widget/w-{$params['widget-id']}-{$lang}.json";
-    		$path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
-    		if (!file_exists($path_json_file)) {
-    			$now = $this->setTimestampNow();
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
-    		}
-    	} elseif ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
-    		//$path_json_file = $path . "page/p-{$id}-{$lang}.json";
-    	    $path_json_file = $this->createJsonFileName('page', $id, $lang);
-    		if (!file_exists($path_json_file)) {
-    			$now = $this->setTimestampNow();
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
-    		    // we add new Etag in the history.
-    		    $path_json_file_history = $path . "page/p-{$id}-{$lang}-history.json";
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
-    		}
+    	if ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
     		// we register the url if the page is sluggify
     		$is_sluggify_page   = $this->isSluggifyPage();
-    		$path_json_file_tmp = $path . "page/tmp/" . md5($this->Etag) . ".json";
+    		$path_json_file     = $this->createJsonFileName('page', $id, $lang);
+    		$path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $this->Etag, $lang);
     		if ($is_sluggify_page && !file_exists($path_json_file_tmp)) {
-    			$now = $this->setTimestampNow();
+    			$now    = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
-    			//$path_json_file_sluggify = $path . "page/p-{$id}-{$lang}-sluggify.json";
+    			// we add new Etag in the sluggify file.
     			$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
+    		} elseif (!$is_sluggify_page && !file_exists($path_json_file)) {
+    		    $now    = $this->setTimestampNow();
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    		    // we add new Etag in the history.
+    		    $path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);    		    
     		}
     	} elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
-    	    $path_json_file_tmp = $path . "esi/tmp/" . md5($params['esi-url']) . ".json";
+    	    $path_json_file_tmp = $this->createJsonFileName('esi-tmp', $params['esi-url'], $lang);
     		if (!file_exists($path_json_file_tmp)) {
-    			$now = $this->setTimestampNow();
+    			$now    = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
-    			//$path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
+    			// we add new ESI tag in the file.
     			$path_json_file = $this->createJsonFileName('esi', $id, $lang);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
     		}
+    	} elseif (isset($params['widget-id']) && !empty($params['widget-id'])) {
+    			$path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
+    			$now    = $this->setTimestampNow();
+    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     	} else {
-	   		$path_json_file_tmp = $path . "tmp/" . md5($this->Etag) . ".json";
+	   		$path_json_file_tmp = $this->createJsonFileName('default-tmp', $this->Etag, $lang);
     		if (!file_exists($path_json_file_tmp)) {
-    			$now = $this->setTimestampNow();
+    			$now    = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
-    			//$path_json_file = $path . "etag-{$tag}-{$lang}.json";
     			$path_json_file = $this->createJsonFileName('default', $tag, $lang);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
     		}
     	}
     
     	return $result;
+    }  
+
+    /**
+     * Refresh the cache by name
+     *
+     * @param string $name    the name of the cache file.
+     * @return string
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-04-03
+     */
+    public function cacheRefreshByname($name, $onlyDelete = true)
+    {
+    	$name = str_replace('\\\\', '\\', $name);
+    	// Delete the cache filename of the template.
+    	try {
+    		$this->container->get('pi_app_admin.caching')->invalidate($name);
+    	} catch (\Exception $e) {
+    	}
+    	// Loads and warms up a template by name.
+    	try {
+    		if (!$onlyDelete) {
+    			$this->container->get('pi_app_admin.caching')->warmup($name);
+    		}
+    	} catch (\Exception $e) {
+    	}
     }    
     
     protected function setTimestampNow()
@@ -406,7 +439,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      * @since 2012-04-18
      */
-    public function render($lang = ''){
+    public function render($lang = '')
+    {
         //     Initialize response
         $response = $this->getResponseByIdAndType('default', $this->Etag);        
         // Create a Response with a Last-Modified header.
@@ -507,33 +541,6 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         return $response;
     }
     
-    /**
-     * Refresh the cache by name
-     *
-     * @param string $name    the name of the cache file.
-     * @return string
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-03
-     */
-    public function cacheRefreshByname($name, $onlyDelete = true)
-    {
-        $name = str_replace('\\\\', '\\', $name);        
-        // Delete the cache filename of the template.
-        try {
-            $this->container->get('pi_app_admin.caching')->invalidate($name);
-        } catch (\Exception $e) {
-        }    
-        // Loads and warms up a template by name.
-        try {
-            if (!$onlyDelete) {
-        		$this->container->get('pi_app_admin.caching')->warmup($name);
-            }
-        } catch (\Exception $e) {
-        }
-    }    
-        
     /**
      * Sets the response to one tree.
      *

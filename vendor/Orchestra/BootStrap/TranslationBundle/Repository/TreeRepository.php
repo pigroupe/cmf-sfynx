@@ -172,26 +172,28 @@ class TreeRepository extends NestedTreeRepository
     /**
      * return query in cache
      *
-     * @param \Doctrine\ORM\Query $query
+     * @param \Doctrine\ORM\Query 	$query
+     * @param int					$time
+     * @param string 				$MODE	[MODE_GET, MODE_PUT , MODE_NORMAL , MODE_REFRESH]	
      * @return \Doctrine\ORM\Query
      * @access    public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function cacheQuery(Query $query)
+    public function cacheQuery(Query $query, $time = 3600, $MODE = \Doctrine\ORM\Cache::MODE_NORMAL, $setCacheble = true)
     {
     	if (!$query) {
-    		throw new \Gedmo\Exception\InvalidArgumentException(sprintf(
-    				'Failed to find Tree by id:[%s]',
-    				$id
-    		));
+    		throw new \Gedmo\Exception\InvalidArgumentException('Invalide query instance');
     	}
-    	// create single file from all input
-        $input_hash = sha1($query->getSQL());
-        $query->useResultCache(true, 3600, $input_hash); 
-    
+        // create single file from all input
+        $input_hash = sha1(serialize($query->getParameters()) . $query->getSQL());
+        $query->useResultCache(true, $time, $input_hash); 
+        $query->useQueryCache(true); 
+        $query->setCacheMode($MODE);
+        $query->setCacheable($setCacheble);
+        
     	return $query;
-    }    
+    }   
 
     /**
      * Loads all translations with all translatable
@@ -283,17 +285,16 @@ class TreeRepository extends NestedTreeRepository
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getAllTree($locale, $category = '', $result = "object", $INNER_JOIN = false, $enable = true, $node = null, $is_checkRoles = true)
+    public function getAllTree($locale, $category = '', $result = "object", $INNER_JOIN = false, $enable = true, $node = null, $is_checkRoles = true, $iscache = false)
     {
-        if (!is_null($node)){
+        if (!is_null($node)) {
             $query  = $this->childrenQueryBuilder($node);
-            if (!empty($category)){
+            if (!empty($category)) {
                 $query
                 ->andWhere('node.category = :category')
                 ->setParameter('category', $category);
             }
-            
-            if ($enable){
+            if ($enable) {
                 $query
                 ->andWhere('node.enabled = :enabled')
                 ->setParameter('enabled', 1);
@@ -301,32 +302,33 @@ class TreeRepository extends NestedTreeRepository
         } else {
             $meta     = $this->getClassMetadata();
             $config = $this->listener->getConfiguration($this->_em, $meta->name);
-            
             $query  = $this->_em->createQueryBuilder()
             ->select('node')
             ->from($config['useObjectClass'], 'node')
             ->orderBy('node.root, node.lft', 'ASC');
-            
-            if (!empty($category)){
+            if (!empty($category)) {
                 $query
                 ->where('node.category = :category')
                 ->setParameter('category', $category);
-                
-                if ($enable){
+                if ($enable) {
                     $query
                     ->andWhere('node.enabled = :enabled')
                     ->setParameter('enabled', 1);
                 }  
-            }elseif (empty($category) && $enable){
+            } elseif (empty($category) && $enable) {
                 $query
                 ->where('node.enabled = :enabled')
                 ->setParameter('enabled', 1);
             }
-                  
         }
-        
-        if ($is_checkRoles)
+        if ($is_checkRoles) {
             $query = $this->checkRoles($query);
+        }
+        if ($iscache) {
+        	$query = $this->cacheQuery($query->getQuery());
+        } else {
+        	$query = $query->getQuery();
+        }
         
         return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN);
     }   

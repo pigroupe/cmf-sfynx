@@ -58,6 +58,9 @@ class PostUpdateListener extends CoreListener
         // we set the PostUpdate block page management
         $this->_Create_Block_Page($eventArgs);
         
+        // We remove json file Etag of Page and Widget.
+        $this->_deleteJsonFileEtag($eventArgs, false);
+        
         // Method which will be called when we remove twig cached file of Page, Widget and translationWidget template.
         $this->_TwigCache($eventArgs);
         

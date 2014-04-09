@@ -534,7 +534,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
     public static function delete($path)
     {
         $dirpath = dirname($path);
-        if (@mkdir("$dirpath", 0777)) {}
+        if (@mkdir("$dirpath", 0777, true)) {}
         if (file_exists("$path"))
         {
             unlink($path);
@@ -557,8 +557,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
     public static function create($path, $filecontent = '')
     {
     	$dirpath = dirname($path);
-    	if(@mkdir("$dirpath", 0777)) {}
-    
+    	if(@mkdir("$dirpath", 0777, true)) {}    
     	if(!file_exists("$path")) {
     		$fp = fopen($path,"w+");
     		fwrite($fp,$filecontent,strlen($filecontent));
@@ -579,8 +578,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
      */
     public static function InsererContent($path, $filecontent)
     {
-    	$contents = file_get_contents($path);
-    	 
+    	$contents = file_get_contents($path);    	 
     	$fp = fopen($path,"w+");
     	fwrite($fp,$contents . $contenu,strlen($contents . $contenu));
     	fclose($fp);

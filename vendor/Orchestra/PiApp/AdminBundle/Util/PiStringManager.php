@@ -747,13 +747,18 @@ class PiStringManager implements PiStringManagerBuilderInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public static function withoutaccent($chaine, $e ='utf-8')
+    public static function withoutaccent($chaine, $e ='utf-8', $detect_encoding = false)
     {
-        if (version_compare(PHP_VERSION, '5.2.3', '>='))
+    	if ($detect_encoding) {
+    		$current_encoding = mb_detect_encoding($chaine, 'auto');
+    		$chaine = iconv($current_encoding, 'UTF-8', $chaine);
+    	}
+    	//
+        if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
             $str = htmlentities($chaine, ENT_NOQUOTES, $e, false);
-        else
+        } else {
             $str = htmlentities($chaine, ENT_NOQUOTES, $e);
-    
+        }    
         // NB : On ne peut pas utiliser strtr qui fonctionne mal avec utf8.
         $str = preg_replace('#\&([A-za-z])(?:acute|cedil|circ|grave|ring|tilde|uml)\;#', '\1', $str);
     

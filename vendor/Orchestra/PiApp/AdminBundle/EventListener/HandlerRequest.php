@@ -191,15 +191,18 @@ class HandlerRequest
             $dossier  = $this->seo_redirection_repository . "/old_urls/";
             \PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777);
             $fileSeo  = $this->seo_redirection_repository . "/" . $this->seo_redirection_file_name;
-        	// if all cache seo files are not created from the seo file, we create them.
-            //$all_cache_files = \PiApp\AdminBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' ); // not fast enough
+            
         	//$is_cache_not_created = \PiApp\AdminBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
             //if (file_exists($fileSeo) && $is_cache_not_created) {
-        	$path_tmp_file = $dossier.'tmp.file';
-        	if (file_exists($fileSeo) && !file_exists($path_tmp_file)) {
-        	    // we set the tmp file
-        	    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_tmp_file, "", 0777, LOCK_EX);
-        	    //
+            
+            //$path_tmp_file = $dossier.'tmp.file';
+            //if (file_exists($fileSeo) && !file_exists($path_tmp_file)) {
+            	// we set the tmp file
+            	//$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_tmp_file, "", 0777, LOCK_EX);
+
+            // if all cache seo files are not created from the seo file, we create them.
+            $all_cache_files = \PiApp\AdminBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' ); // more fast in linux but not in windows
+            if ( file_exists($fileSeo) && (count($all_cache_files) == 0) ) {
         		$this->container->get("pi_filecache")->getClient()->setPath($dossier);
         		$file_handle = fopen($fileSeo, "r");
         		while (!feof($file_handle)) {

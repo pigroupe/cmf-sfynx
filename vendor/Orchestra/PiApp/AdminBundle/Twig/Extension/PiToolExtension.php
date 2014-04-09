@@ -440,8 +440,8 @@ class PiToolExtension extends \Twig_Extension
         if (empty($title)) {
             $title  = $this->container->getParameter('pi_app_admin.layout.meta.title');
         }
-        $options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang, $title);
-        
+        $options 		  = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang, $title);
+        $options['title'] = str_replace(array('"',"'"), array("’","’"), $options['title']);
         return $options['title'];
     }
     
@@ -458,14 +458,14 @@ class PiToolExtension extends \Twig_Extension
         }
         $Uri             = $this->container->get('request')->getUri();
         $BasePath        = $this->container->get('request')->getUriForPath('');
-        $author          = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.author'));
-        $copyright       = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.copyright'));
-        $description     = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.description'));
-        $keywords        = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.keywords'));
-        $og_title_add    = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_title_add'));
-        $og_type         = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_type'));
-        $og_image        = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_image'));
-        $og_site_name    = str_replace(array('"',"’"), array("'","'"), $this->container->getParameter('pi_app_admin.layout.meta.og_site_name'));
+        $author          = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.author'));
+        $copyright       = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.copyright'));
+        $description     = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.description'));
+        $keywords        = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.keywords'));
+        $og_title_add    = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_title_add'));
+        $og_type         = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_type'));
+        $og_image        = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_image'));
+        $og_site_name    = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_site_name'));
         // if the file doesn't exist, we call an exception
         $og_image        = strip_tags($this->container->get('translator')->trans($og_image));
         $is_file_exist   = realpath($this->container->get('kernel')->getRootDir(). '/../web/' . $og_image);

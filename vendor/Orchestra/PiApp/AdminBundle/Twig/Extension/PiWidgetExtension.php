@@ -956,9 +956,6 @@ class PiWidgetExtension extends \Twig_Extension
      */
     protected function runByExtension($serviceName, $tag, $id, $lang, $params = null)
     {
-        // we register the tag value of the widget.
-        //$pageManager = $this->container->get('pi_app_admin.manager.page');
-        //$pageManager->setJsonFileEtag($tag, $id, $lang, $params);
         // we create the twig code of the service to rn.
         if (!is_null($params)) {
             krsort($params);
@@ -1056,7 +1053,11 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "{% endif %}\n";
             	}
             	// we register the tag value in the json file if does not exist.
-            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $serviceName, $lang, array('esi-url'=>"{$url}{$qs}"));
+            	if (isset($params['widget-id'])) {
+            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
+            	} else {
+            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $serviceName, $lang, array('esi-url'=>"{$url}{$qs}"));
+            	}
             } else {
             	$set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             }            
@@ -1162,7 +1163,12 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "{% endif %}\n";
             	}   
             	// we register the tag value in the json file if does not exist.
-            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $JQcontainer, $lang, array('esi-url'=>"{$url}{$qs}"));
+            	
+            	if (isset($params['widget-id'])) {
+            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
+            	} else {
+            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $JQcontainer, $lang, array('esi-url'=>"{$url}{$qs}"));
+            	}
             } else {          
             	$set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
             }

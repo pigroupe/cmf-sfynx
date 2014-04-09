@@ -50,6 +50,9 @@ class PostRemoveListener extends CoreListener
      */    
     public function postRemove(LifecycleEventArgs $eventArgs)
     {
+    	// We remove json file Etag of Page and Widget.
+    	$this->_deleteJsonFileEtag($eventArgs, true);
+    	
         // we set the postRemove heritage roles management
         $this->_Heritage_roles($eventArgs);
         

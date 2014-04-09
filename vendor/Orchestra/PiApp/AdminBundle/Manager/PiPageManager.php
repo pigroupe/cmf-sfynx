@@ -245,7 +245,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         //$source     .= "{% set meta_title = title_page(app.request.locale,'{$title}') %} \n";
         $source     .= "{% block global_title %}";
         $source     .= "{{ parent() }} \n";
-        $source     .= "{{ '{$meta_title}'|striptags }} \n";
+        $source     .= "{{ \"{$meta_title}\"|striptags }} \n";
         $source     .= "{% endblock %} \n";
         $source     .= "{% set global_local_language = '".$this->language."' %} \n";
         $source     .= " \n";
@@ -979,6 +979,128 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     }    
     
     /**
+     * Refresh all cache of a page.
+     *
+     * @param mixed    $page	entity page or the id of the page
+     * @param string   $lang
+     * @param string   $referer_url
+     * @return void
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2014-04-08
+     */
+    public function cacheRefreshPage($page, $lang, $referer_url = null)
+    {
+    	// we get the id of the page.
+    	if ($page instanceof \PiApp\AdminBundle\Entity\Page ) {
+    		$id = $page->getId();
+    	} else {
+    		$id = $page;
+    	}
+    	if (!is_null($referer_url)) {
+    		$name_page   = $this->createEtag('page', $id, $lang, array('page-url'=>$referer_url));
+    		$name_page   = str_replace('//', '/', $name_page);
+    		$this->cacheRefreshByname($name_page);
+    	}
+    	//print_r($name_page);
+    	//print_r('<br />');print_r('<br />');
+    	$path_json_file = $this->createJsonFileName('page', $id, $lang);
+    	if (file_exists($path_json_file)) {
+    		$info = explode('|', file_get_contents($path_json_file));
+    		if (isset($info[1])) {
+    			$this->cacheRefreshByname($info[1]);
+    			//print_r($info[1]);
+    			//print_r('<br />');print_r('<br />');
+    		}
+    	}
+    	$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
+    	if (file_exists($path_json_file_sluggify)) {
+        	$reading  = fopen($path_json_file_sluggify, 'r');
+        	while (!feof($reading)) {
+    			$info = explode('|', fgets($reading));
+    			if (isset($info[1])) {
+    				$this->cacheRefreshByname($info[1]);
+    				//print_r($info[1]);
+    				//print_r('<br />');print_r('<br />');
+    			}
+    		}
+    		fclose($reading);
+    	}
+    }
+    
+        
+    /**
+     * Refresh the cache of a widget.
+     *
+     * @param \PiApp\AdminBundle\Entity\Widget    $widget
+     * @param string   $lang
+     * @return void
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2014-04-08
+     */
+    public function cacheRefreshWidget(\PiApp\AdminBundle\Entity\Widget $widget, $lang)
+    {
+    	// we get the id of the widget.
+    	$id = $widget->getId();
+    	// we refesh only if the widget is in cash.
+    	$Etag_widget  = 'widget:'.$id.':'.$lang;
+    	// we refesh only if the widget is in cash.
+    	$this->cacheRefreshByname($Etag_widget);
+    	// we manage the "transwidget"
+    	$params_transwidget = json_encode(array('widget-id'=>$id), JSON_UNESCAPED_UNICODE);
+    	$widget_translations = $this->getWidgetManager()->setWidgetTranslations($widget);
+    	if (is_array($widget_translations)) {
+    		foreach ($widget_translations as $translang => $translationWidget) {
+	    		// we create the cache name of the transwidget
+    			$Etag_transwidget  = 'transwidget:'.$translationWidget->getId().':'.$translang.':'.$params_transwidget;
+		    	// we refresh the cache of the transwidget
+    			$this->cacheRefreshByname($Etag_transwidget);
+    		}
+    	}
+	   	// If the widget is a "content snippet"
+    	if ( ($widget->getPlugin() == 'content') && ($widget->getAction() == 'snippet') ) {
+    		$xmlConfig    = $widget->getConfigXml();
+    		// if the configXml field of the widget is configured correctly.
+    		try {
+	    		$xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+    			if ($xmlConfig->widgets->get('content')) {
+    				$id_snippet    = $xmlConfig->widgets->content->id;
+		    		// we create the cache name of the snippet
+    				$Etag_snippet  = 'transwidget:'.$id_snippet.':'.$lang.':'.$params_transwidget;
+		    		// we refresh the cache of the snippet
+    				$this->cacheRefreshByname($Etag_snippet);
+    			}
+    		} catch (\Exception $e) {
+    		}
+    	}
+    	// If the widget is a "gedmo snippet"
+    	if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'snippet') ) {
+    		$xmlConfig  = $widget->getConfigXml();
+    		$new_widget = null;
+    		// if the configXml field of the widget is configured correctly.
+    		try {
+    			$xmlConfig     = new \Zend_Config_Xml($xmlConfig);
+    			if ($xmlConfig->widgets->get('gedmo')) {
+    				$id = $xmlConfig->widgets->gedmo->id;
+    			}
+    		} catch (\Exception $e) {
+    		}
+    	}
+    	$path_json_file = $this->createJsonFileName('widget', $id, $lang);
+    	if (file_exists($path_json_file)) {
+    		$info = explode('|', file_get_contents($path_json_file));
+    		if (isset($info[1])) {
+    			$this->cacheRefreshByname($info[1]);
+    			//print_r($info[1]);
+    			//print_r('<br />');print_r('<br />');
+    		}
+    	}
+    }    
+    
+    /**
      * Refresh the cache of all elements of a page (TranslationPages, widgets, translationWidgets)
      *
      * @return string
@@ -997,398 +1119,356 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             foreach ($this->translations[$page->getId()] as $translation) {
                 // we get the lang page
                 $lang_page = $translation->getLangCode()->getId();
-                // we create the cache name
+                // we refresh all caches of the page
                 $referer_url = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($lang_page, null, true);
                 $referer_url = str_replace($this->container->get('request')->getUriForPath(''), '', $referer_url);
-                $name_page = $this->createEtag('page', $page->getId(), $lang_page, array('page-url'=>$referer_url));
-                $name_page    = str_replace('//', '/', $name_page);
+                $this->cacheRefreshPage($page, $lang_page, $referer_url);
+                // we refresh the cache of all widgets of the page                             
                 if (isset($this->widgets[$page->getId()]) && is_array($this->widgets[$page->getId()])) {
                     foreach ($this->widgets[$page->getId()] as $key_block=>$widgets) {
                         if (isset($this->widgets[$page->getId()][$key_block]) && is_array($this->widgets[$page->getId()][$key_block])) {
                             foreach ($this->widgets[$page->getId()][$key_block] as $key_widget => $widget) {
-//                                 print_r($this->container->get('request')->getLocale());
-//                                 print_r(' - id : ' . $widget->getId());
-//                                 print_r(' - plugin : ' . $widget->getPlugin());
-//                                 print_r(' - action : ' . $widget->getAction());
-//                                 print_r('<br />');                                
+//                              print_r($this->container->get('request')->getLocale());
+//                              print_r(' - id : ' . $widget->getId());
+//                              print_r(' - plugin : ' . $widget->getPlugin());
+//                              print_r(' - action : ' . $widget->getAction());
+//                              print_r('<br />');                                
                                 // we create the cache name of the widget
-                                $Etag_widget  = 'widget:'.$widget->getId().':'.$lang_page;
-                                // we refesh only if the widget is in cash.
-                                $this->cacheRefreshByname($Etag_widget);
-                                //print_r('<br />');print_r('<br />');
-                                
-                                $params_transwidget = json_encode(array('widget-id'=>$widget->getId()), JSON_UNESCAPED_UNICODE);
-                                // we manage the "transwidget"
-                                $widget_translations = $this->getWidgetManager()->setWidgetTranslations($widget);
-                                if (is_array($widget_translations)) {
-                                    foreach ($widget_translations as $translang => $translationWidget) {
-                                        // we create the cache name of the transwidget
-                                        $Etag_transwidget  = 'transwidget:'.$translationWidget->getId().':'.$translang.':'.$params_transwidget;
-                                        // we refresh the cache of the transwidget
-                                        $this->cacheRefreshByname($Etag_transwidget);
-                                    }
-                                }
-                                // If the widget is a "content snippet"
-                                if ( ($widget->getPlugin() == 'content') && ($widget->getAction() == 'snippet') ) {
-                                    $xmlConfig    = $widget->getConfigXml();
-                                    // if the configXml field of the widget is configured correctly.
-                                    try {
-                                        $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
-                                        if ($xmlConfig->widgets->get('content')) {
-                                            $id_snippet    = $xmlConfig->widgets->content->id;
-                                            // we create the cache name of the snippet
-                                            $Etag_snippet  = 'transwidget:'.$id_snippet.':'.$lang_page.':'.$params_transwidget;
-                                            // we refresh the cache of the snippet
-                                            $this->cacheRefreshByname($Etag_snippet);
-                                        }
-                                    } catch (\Exception $e) {
-                                    }
-                                }
-                                
-                            $path_json_file = $this->createJsonFileName('widget', $widget->getId(), $lang_page);
-                    		if (file_exists($path_json_file)) {
-                    		    $info = explode('|', file_get_contents($path_json_file));
-                    		    $this->cacheRefreshByname($info[1]);
-                    		    //print_r($info[1]);
-                    		    //print_r('<br />');print_r('<br />');
-                    		    
-                    		}
-                                
-                                
-//                                 // If the widget is a tree a "jqext"
-//                                 if ( ($widget->getPlugin() == 'content') && ($widget->getAction() == 'jqext') ) {
-//                                     $xmlConfig = $widget->getConfigXml();
-//                                     // if the configXml field of the widget is configured correctly.
-//                                     try {
-//                                         $xmlConfig = new \Zend_Config_Xml($xmlConfig);
-//                                         if ($xmlConfig->widgets->get('content') && $xmlConfig->widgets->content->get('controller') && $xmlConfig->widgets->content->get('params')) {
-//                                             $controller = $xmlConfig->widgets->content->controller;
-//                                             $params     = $xmlConfig->widgets->content->params->toArray();
-//                                             if ($xmlConfig->widgets->content->params->get('cachable')) {
-//                                                 $params['cachable'] = $xmlConfig->widgets->content->params->cachable;
-//                                             } else {
-//                                                 $params['cachable'] = 'true';
-//                                             }    
-//                                             $params['widget-id']        = $widget->getId();
-//                                             $params['widget-lifetime']  = $widget->getLifetime();
-//                                             $params['widget-cacheable'] = strval($widget->getCacheable());
-//                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
-//                                             $params['widget-public']    = strval($widget->getPublic());
-//                                             $values     = explode(':', $controller);
-//                                             $JQcontainer= strtoupper($values[0]);
-//                                             $JQservice  = strtolower($values[1]);                                
-//                                             // we sort an array by key in reverse order
-//                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-//                                             // we create de Etag cache
-//                                             //$params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-//                                             $params = $this->paramsEncode($params);
-//                                             $id     = $this->_Encode("$JQcontainer~$JQservice", false);
-//                                             $Etag_jqext = $widget->getAction() . ":$id:$lang_page:$params";                                
-//                                         	// we refesh only if the widget is in cash.
-//                                            	$this->cacheRefreshByname($Etag_jqext);
-//                                         }
-//                                     } catch (\Exception $e) {
-//                                     }
-//                                 }                           
-//                                 // If the widget is a "gedmo snippet"
-//                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'snippet') ) {
-//                                     $xmlConfig  = $widget->getConfigXml();
-//                                     $new_widget = null;                                    
-//                                     // if the configXml field of the widget is configured correctly.
-//                                     try {
-//                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
-//                                         if ($xmlConfig->widgets->get('gedmo')) {
-//                                             $id_snippet   = $xmlConfig->widgets->gedmo->id;
-//                                             // we create the cache name of the snippet
-//                                             $Etag_snippet = 'widget:'.$id_snippet.':'.$lang_page;                                            
-//                                             // we refresh the cache of the snippet
-//                                             $this->cacheRefreshByname($Etag_snippet);                                            
-//                                             // we allow to refresh the cache of the widget of the snippet
-//                                             $new_widget   = $this->getWidgetById($id_snippet);
-//                                         }
-//                                     } catch (\Exception $e) {
-//                                     }                                    
-//                                     if (!is_null($new_widget) && ($new_widget instanceof Widget) ) {
-//                                         $widget = $new_widget;
-//                                     }
-//                                 }        
-
-// //                                 print_r($this->container->get('request')->getLocale());
-// //                                 print_r(' - id : ' . $widget->getId());
-// //                                 print_r(' - plugin : ' . $widget->getPlugin());
-// //                                 print_r(' - action : ' . $widget->getAction());
-// //                                 print_r('<br />');                                
-                                
-//                                 // If the widget is a search lucene
-//                                 if ( ($widget->getPlugin() == 'search') && ($widget->getAction() == 'lucene') ) {
-//                                 	$xmlConfig            = $widget->getConfigXml();
-//                                 	// if the configXml field of the widget is configured correctly.
-//                                 	try {
-//                                 		$xmlConfig    = new \Zend_Config_Xml($xmlConfig);
-//                                 		if ($xmlConfig->widgets->get('search') && $xmlConfig->widgets->search->get('controller') && $xmlConfig->widgets->search->get('params')  ) {
-//                                 		    $controller    = $xmlConfig->widgets->search->controller;
-//                                             if ($xmlConfig->widgets->search->params->get('cachable')) {
-//                                                 $params['cachable'] = $xmlConfig->widgets->search->params->cachable;
-//                                             } else {
-//                                                 $params['cachable'] = 'true';
-//                                             }
-//                                             if ($xmlConfig->widgets->search->params->get('template')) {
-//                                                 $params['template'] = $xmlConfig->widgets->search->params->template;
-//                                             } else {
-//                                                 $params['template'] = "";
-//                                             }
-//                                             if ($xmlConfig->widgets->search->params->get('MaxResults')) {
-//                                                 $params['MaxResults'] = $xmlConfig->widgets->search->params->MaxResults;
-//                                             } else {
-//                                                 $params['MaxResults'] = 0;            
-//                                             }
-//                                             $params['widget-id']        = $widget->getId();
-//                                             $params['widget-lifetime']  = $widget->getLifetime();
-//                                             $params['widget-cacheable'] = strval($widget->getCacheable());
-//                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
-//                                             $params['widget-public']    = strval($widget->getPublic());
-//                                 		    if ($xmlConfig->widgets->search->params->get('lucene')) {            
-//                                                    $params      = array_merge($params, $xmlConfig->widgets->search->params->lucene->toArray());            
-//                                                    $values      = explode(':', $controller);
-//                                                    $JQcontainer = strtoupper($values[0]);
-//                                                    $JQservice   = strtolower($values[1]);
-//                                                    // we sort an array by key in reverse order
-//                                                    $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-//                                                    // we create de Etag cache
-//                                                    //$params            = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-//                                                    $params  = $this->paramsEncode($params);
-//                                                    $id      = $this->_Encode("$JQcontainer~$JQservice", false);
-//                                                    $Etag_searchlucene = $widget->getAction() . ":$id:$lang_page:$params";
-//                                                    // we refesh only if the widget is in cash.
-//                                                    $this->cacheRefreshByname($Etag_searchlucene);
-//                                             } 
-//                                 		}
-//                                 	} catch (\Exception $e) {
-//                                     }
-//                                 }
-                                                                
-//                                 // If the widget is a "listener"
-//                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'listener') ) {
-//                                     $xmlConfig            = $widget->getConfigXml();
-//                                     // if the configXml field of the widget is configured correctly.
-//                                     try {
-//                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
-//                                         if ($xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')) {
-//                                             $controller    = $xmlConfig->widgets->gedmo->controller;
-//                                             $params        = $xmlConfig->widgets->gedmo->params->toArray();
-//                                             //
-//                                             if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-//                                                 $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-//                                             } else {
-//                                                 $params['cachable'] = 'true';
-//                                             }
-//                                             $params['widget-id']        = $widget->getId();
-//                                             $params['widget-lifetime']  = $widget->getLifetime();
-//                                             $params['widget-cacheable'] = strval($widget->getCacheable());
-//                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
-//                                             $params['widget-public']    = strval($widget->getPublic());
-//                                             // we sort an array by key in reverse order
-//                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-//                                             // we create de Etag cache
-//                                             //$params        = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-//                                             $params = $this->paramsEncode($params);
-//                                             $id     = $this->_Encode($controller, false);
-//                                             $Etag_listener = $widget->getAction() . ":$id:$lang_page:$params";
-//                                             //print_r($Etag_listener);	                                            
-//                                             //print_r("<br/><br/>");
-//                                             // we refesh only if the widget is in cash.
-//                                            	$this->cacheRefreshByname($Etag_listener);
-//                                         }
-//                                     } catch (\Exception $e) {
-//                                     }                        
-//                                 }                            
-//                                 // If the widget is a "tree"
-//                                 if ( ($widget->getPlugin() == 'gedmo') && (($widget->getAction() == 'navigation') || ($widget->getAction() == 'organigram')) ) {
-//                                     $xmlConfig            = $widget->getConfigXml();
-//                                     // if the configXml field of the widget is configured correctly.
-//                                     try {
-//                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
-//                                         if ($xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')) {
-//                                             $values     = explode(':', $xmlConfig->widgets->gedmo->controller);
-//                                             $entity     = $values[0] . ':' . $values[1];
-//                                             $method     = strtolower($values[2]);
-//                                             $params        = array();
-//                                             //                                   
-//                                             if ($xmlConfig->widgets->gedmo->params->get('category')) {
-//                                                 $category = $xmlConfig->widgets->gedmo->params->category;
-//                                             } else {
-//                                                 $category = "";
-//                                             }
-//                                             if ($xmlConfig->widgets->gedmo->params->get('node')) {
-//                                                 $params['node'] = $xmlConfig->widgets->gedmo->params->node;
-//                                             } else {
-//                                                 $params['node'] = "";
-//                                             }
-//                                             if ($xmlConfig->widgets->gedmo->params->get('enabledonly')) {
-//                                                 $params['enabledonly'] = $xmlConfig->widgets->gedmo->params->enabledonly;
-//                                             } else {
-//                                                 $params['enabledonly'] = "true";
-//                                             }
-//                                             if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-//                                                 $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-//                                             } else {
-//                                                 $params['cachable'] = 'true';
-//                                             }
-//                                             if ($xmlConfig->widgets->gedmo->params->get('template')) {
-//                                                 $template = $xmlConfig->widgets->gedmo->params->template;
-//                                             } else {
-//                                                 $template = "";
-//                                             }
-//                                             $params['entity']    = $entity;
-//                                             $params['category']  = $category;
-//                                             $params['template']  = $template;
-//                                             $params['widget-id'] = $widget->getId();
-//                                             $params['widget-lifetime']  = $widget->getLifetime();
-//                                             $params['widget-cacheable'] = strval($widget->getCacheable());
-//                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
-//                                             $params['widget-public']    = strval($widget->getPublic());
-//                                             //
-//                                             if ($xmlConfig->widgets->gedmo->params->get('navigation')) {                                            
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass')) {
-//                                                     $params['separatorClass'] = $xmlConfig->widgets->gedmo->params->navigation->separatorClass;
-//                                                 } else {
-//                                                     $params['separatorClass'] = "";
-//                                                 }                                                
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorText')) {
-//                                                     $params['separatorText'] = $xmlConfig->widgets->gedmo->params->navigation->separatorText;
-//                                                 } else {
-//                                                     $params['separatorText'] = "";
-//                                                 }
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorFirst')) {
-//                                                     $params['separatorFirst'] = $xmlConfig->widgets->gedmo->params->navigation->separatorFirst;
-//                                                 } else {
-//                                                     $params['separatorFirst'] = "false";
-//                                                 }                                                
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorLast')) {
-//                                                     $params['separatorLast'] = $xmlConfig->widgets->gedmo->params->navigation->separatorLast;
-//                                                 } else {
-//                                                     $params['separatorLast'] = "false";
-//                                                 }
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('ulClass')) {
-//                                                     $params['ulClass'] = $xmlConfig->widgets->gedmo->params->navigation->ulClass;
-//                                                 } else {
-//                                                     $params['ulClass'] = "";
-//                                                 }
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('liClass')) {
-//                                                     $params['liClass'] = $xmlConfig->widgets->gedmo->params->navigation->liClass;
-//                                                 } else {
-//                                                     $params['liClass'] = "";
-//                                                 }
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('counter')) {
-//                                                     $params['counter'] = $xmlConfig->widgets->gedmo->params->navigation->counter;
-//                                                 } else {
-//                                                     $params['counter'] = "";
-//                                                 }
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('routeActifMenu')) {
-//                                                     $params['routeActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->routeActifMenu->toArray();
-//                                                 }
-//                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('lvlActifMenu')) {
-//                                                     $params['lvlActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->lvlActifMenu->toArray();
-//                                                 }
-//                                             } elseif ($xmlConfig->widgets->gedmo->params->get('organigram')) {                                            
-//                                                 if ($xmlConfig->widgets->gedmo->params->organigram->get('params'))
-//                                                     $params = array_merge($params, $xmlConfig->widgets->gedmo->params->organigram->params->toArray());
-                                            
-//                                                 if ($xmlConfig->widgets->gedmo->params->organigram->get('fields') && $xmlConfig->widgets->gedmo->params->organigram->fields->get('field'))
-//                                                 {
-//                                                     $params['fields'] = $xmlConfig->widgets->gedmo->params->organigram->fields->field->toArray();
-//                                                 }
-//                                             }                                        
-//                                             // we sort an array by key in reverse order
-//                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-//                                             // we create de Etag cache
-//                                             //$params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-//                                             $params     = $this->paramsEncode($params);
-//                                             $entity     = stripslashes($this->_Encode($entity, false));
-//                                             $id         = $this->_Encode("$entity~$method~$category", false);
-//                                             $Etag_tree  = $widget->getAction() . ":$id:$lang_page:$params";
-//                                             // we refesh only if the widget is in cash.
-//                                            	$this->cacheRefreshByname($Etag_tree);
-//                                            	//print_r($Etag_tree);
-//                                            	//print_r("<br/><br/>");
-//                                         }
-//                                     } catch (\Exception $e) {
-//                                     }
-//                                 }                                
-//                                 // If the widget is a "slider"
-//                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'slider') ) {
-//                                     $xmlConfig            = $widget->getConfigXml();
-//                                     // if the configXml field of the widget is configured correctly.
-//                                     try {
-//                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
-//                                         if ($xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')) {
-//                                             $values     = explode(':', $xmlConfig->widgets->gedmo->controller);
-//                                             $entity     = $values[0] . ':' . $values[1];
-//                                             $method     = strtolower($values[2]);
-//                                             $params     = array();
-//                                             //                             
-//                                             if ($xmlConfig->widgets->gedmo->params->get('category')) {
-//                                                 $category = $xmlConfig->widgets->gedmo->params->category;
-//                                             } else {
-//                                                 $category = "";
-//                                             }                                            
-//                                             if ($xmlConfig->widgets->gedmo->params->get('template')) {
-//                                                 $template = $xmlConfig->widgets->gedmo->params->template;
-//                                             } else {
-//                                                 $template = "";
-//                                             }          
-//                                             $params = array();
-//                                             if ($xmlConfig->widgets->gedmo->params->get('slider')) {                                        
-//                                                 $params = $xmlConfig->widgets->gedmo->params->slider->toArray();
-//                                                 $params['entity']    = $entity;
-//                                                 $params['category']  = $category;
-//                                                 $params['template']  = $template;
-//                                                 $params['widget-id'] = $widget->getId();
-//                                                 $params['widget-lifetime']  = $widget->getLifetime();
-//                                                 $params['widget-cacheable'] = strval($widget->getCacheable());
-//                                                 $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
-//                                                 $params['widget-public']    = strval($widget->getPublic());
-// 												//                                                
-//                                                 if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-//                                                     $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-//                                                 } else {
-//                                                     $params['cachable'] = 'true';
-//                                                 }                                           
-//                                                 if ($xmlConfig->widgets->gedmo->params->slider->get('params')) {
-//                                                     $params['params'] = $xmlConfig->widgets->gedmo->params->slider->params->toArray();
-//                                                 }
-//                                                 if (!isset($params['action']) || empty($params['action'])) {
-//                                                     $params['action']   = 'renderDefault';
-//                                                 }
-//                                                 if (!isset($params['menu']) || empty($params['menu'])) {
-//                                                     $params['menu']     = 'entity';
-//                                                 }
-//                                             }                                            
-//                                             // we sort an array by key in reverse order
-//                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
-//                                             // we create de Etag cache
-//                                             //$params      = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
-//                                             $params      = $this->paramsEncode($params);
-//                                             $entity      = stripslashes($this->_Encode($entity, false));
-//                                             $id          = $this->_Encode("$entity~$method~$category", false);
-//                                             $Etag_slider = $widget->getAction() . ":$id:$lang_page:$params";
-//                                             // we refesh only if the widget is in cash.
-//                                            	$this->cacheRefreshByname($Etag_slider);
-//                                         }
-//                                     } catch (\Exception $e) {
-//                                     }                            
-//                                 }                      
-
-                            }
+                            	$this->cacheRefreshWidget($widget, $lang_page);
+                            } // endForeach
                         }
-                    }
+                    } // endForeach
                 }
-                // we refesh only if the widget is in cash.
-               	$this->cacheRefreshByname($name_page);
-               	//print_r('<br />');print_r('<br />');
-            }
+            } // endForeach
         }
         //exit;
+        
+        
+        
+        //                                 // If the widget is a tree a "jqext"
+        //                                 if ( ($widget->getPlugin() == 'content') && ($widget->getAction() == 'jqext') ) {
+        //                                     $xmlConfig = $widget->getConfigXml();
+        //                                     // if the configXml field of the widget is configured correctly.
+        //                                     try {
+        //                                         $xmlConfig = new \Zend_Config_Xml($xmlConfig);
+        //                                         if ($xmlConfig->widgets->get('content') && $xmlConfig->widgets->content->get('controller') && $xmlConfig->widgets->content->get('params')) {
+        //                                             $controller = $xmlConfig->widgets->content->controller;
+        //                                             $params     = $xmlConfig->widgets->content->params->toArray();
+        //                                             if ($xmlConfig->widgets->content->params->get('cachable')) {
+        //                                                 $params['cachable'] = $xmlConfig->widgets->content->params->cachable;
+        //                                             } else {
+        //                                                 $params['cachable'] = 'true';
+        //                                             }
+        //                                             $params['widget-id']        = $widget->getId();
+        //                                             $params['widget-lifetime']  = $widget->getLifetime();
+        //                                             $params['widget-cacheable'] = strval($widget->getCacheable());
+        //                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+        //                                             $params['widget-public']    = strval($widget->getPublic());
+        //                                             $values     = explode(':', $controller);
+        //                                             $JQcontainer= strtoupper($values[0]);
+        //                                             $JQservice  = strtolower($values[1]);
+        //                                             // we sort an array by key in reverse order
+        //                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+        //                                             // we create de Etag cache
+        //                                             //$params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+        //                                             $params = $this->paramsEncode($params);
+        //                                             $id     = $this->_Encode("$JQcontainer~$JQservice", false);
+        //                                             $Etag_jqext = $widget->getAction() . ":$id:$lang_page:$params";
+        //                                         	// we refesh only if the widget is in cash.
+        //                                            	$this->cacheRefreshByname($Etag_jqext);
+        //                                         }
+        //                                     } catch (\Exception $e) {
+        //                                     }
+        //                                 }
+        //                                 // If the widget is a "gedmo snippet"
+        //                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'snippet') ) {
+        //                                     $xmlConfig  = $widget->getConfigXml();
+        //                                     $new_widget = null;
+        //                                     // if the configXml field of the widget is configured correctly.
+        //                                     try {
+        //                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+        //                                         if ($xmlConfig->widgets->get('gedmo')) {
+        //                                             $id_snippet   = $xmlConfig->widgets->gedmo->id;
+        //                                             // we create the cache name of the snippet
+        //                                             $Etag_snippet = 'widget:'.$id_snippet.':'.$lang_page;
+        //                                             // we refresh the cache of the snippet
+        //                                             $this->cacheRefreshByname($Etag_snippet);
+        //                                             // we allow to refresh the cache of the widget of the snippet
+        //                                             $new_widget   = $this->getWidgetById($id_snippet);
+        //                                         }
+        //                                     } catch (\Exception $e) {
+        //                                     }
+        //                                     if (!is_null($new_widget) && ($new_widget instanceof Widget) ) {
+        //                                         $widget = $new_widget;
+        //                                     }
+        //                                 }
+        
+        // //                                 print_r($this->container->get('request')->getLocale());
+        // //                                 print_r(' - id : ' . $widget->getId());
+        // //                                 print_r(' - plugin : ' . $widget->getPlugin());
+        // //                                 print_r(' - action : ' . $widget->getAction());
+        // //                                 print_r('<br />');
+        
+        //                                 // If the widget is a search lucene
+        //                                 if ( ($widget->getPlugin() == 'search') && ($widget->getAction() == 'lucene') ) {
+        //                                 	$xmlConfig            = $widget->getConfigXml();
+        //                                 	// if the configXml field of the widget is configured correctly.
+        //                                 	try {
+        //                                 		$xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+        //                                 		if ($xmlConfig->widgets->get('search') && $xmlConfig->widgets->search->get('controller') && $xmlConfig->widgets->search->get('params')  ) {
+        //                                 		    $controller    = $xmlConfig->widgets->search->controller;
+        //                                             if ($xmlConfig->widgets->search->params->get('cachable')) {
+        //                                                 $params['cachable'] = $xmlConfig->widgets->search->params->cachable;
+        //                                             } else {
+        //                                                 $params['cachable'] = 'true';
+        //                                             }
+        //                                             if ($xmlConfig->widgets->search->params->get('template')) {
+        //                                                 $params['template'] = $xmlConfig->widgets->search->params->template;
+        //                                             } else {
+        //                                                 $params['template'] = "";
+        //                                             }
+        //                                             if ($xmlConfig->widgets->search->params->get('MaxResults')) {
+        //                                                 $params['MaxResults'] = $xmlConfig->widgets->search->params->MaxResults;
+        //                                             } else {
+        //                                                 $params['MaxResults'] = 0;
+        //                                             }
+        //                                             $params['widget-id']        = $widget->getId();
+        //                                             $params['widget-lifetime']  = $widget->getLifetime();
+        //                                             $params['widget-cacheable'] = strval($widget->getCacheable());
+        //                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+        //                                             $params['widget-public']    = strval($widget->getPublic());
+        //                                 		    if ($xmlConfig->widgets->search->params->get('lucene')) {
+        //                                                    $params      = array_merge($params, $xmlConfig->widgets->search->params->lucene->toArray());
+        //                                                    $values      = explode(':', $controller);
+        //                                                    $JQcontainer = strtoupper($values[0]);
+        //                                                    $JQservice   = strtolower($values[1]);
+        //                                                    // we sort an array by key in reverse order
+        //                                                    $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+        //                                                    // we create de Etag cache
+        //                                                    //$params            = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+        //                                                    $params  = $this->paramsEncode($params);
+        //                                                    $id      = $this->_Encode("$JQcontainer~$JQservice", false);
+        //                                                    $Etag_searchlucene = $widget->getAction() . ":$id:$lang_page:$params";
+        //                                                    // we refesh only if the widget is in cash.
+        //                                                    $this->cacheRefreshByname($Etag_searchlucene);
+        //                                             }
+        //                                 		}
+        //                                 	} catch (\Exception $e) {
+        //                                     }
+        //                                 }
+        
+        //                                 // If the widget is a "listener"
+        //                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'listener') ) {
+        //                                     $xmlConfig            = $widget->getConfigXml();
+        //                                     // if the configXml field of the widget is configured correctly.
+        //                                     try {
+        //                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+        //                                         if ($xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')) {
+        //                                             $controller    = $xmlConfig->widgets->gedmo->controller;
+        //                                             $params        = $xmlConfig->widgets->gedmo->params->toArray();
+        //                                             //
+        //                                             if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+        //                                                 $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
+        //                                             } else {
+        //                                                 $params['cachable'] = 'true';
+        //                                             }
+        //                                             $params['widget-id']        = $widget->getId();
+        //                                             $params['widget-lifetime']  = $widget->getLifetime();
+        //                                             $params['widget-cacheable'] = strval($widget->getCacheable());
+        //                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+        //                                             $params['widget-public']    = strval($widget->getPublic());
+        //                                             // we sort an array by key in reverse order
+        //                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+        //                                             // we create de Etag cache
+        //                                             //$params        = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+        //                                             $params = $this->paramsEncode($params);
+        //                                             $id     = $this->_Encode($controller, false);
+        //                                             $Etag_listener = $widget->getAction() . ":$id:$lang_page:$params";
+        //                                             //print_r($Etag_listener);
+        //                                             //print_r("<br/><br/>");
+        //                                             // we refesh only if the widget is in cash.
+        //                                            	$this->cacheRefreshByname($Etag_listener);
+        //                                         }
+        //                                     } catch (\Exception $e) {
+        //                                     }
+        //                                 }
+        //                                 // If the widget is a "tree"
+        //                                 if ( ($widget->getPlugin() == 'gedmo') && (($widget->getAction() == 'navigation') || ($widget->getAction() == 'organigram')) ) {
+        //                                     $xmlConfig            = $widget->getConfigXml();
+        //                                     // if the configXml field of the widget is configured correctly.
+        //                                     try {
+        //                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+        //                                         if ($xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')) {
+        //                                             $values     = explode(':', $xmlConfig->widgets->gedmo->controller);
+        //                                             $entity     = $values[0] . ':' . $values[1];
+        //                                             $method     = strtolower($values[2]);
+        //                                             $params        = array();
+        //                                             //
+        //                                             if ($xmlConfig->widgets->gedmo->params->get('category')) {
+        //                                                 $category = $xmlConfig->widgets->gedmo->params->category;
+        //                                             } else {
+        //                                                 $category = "";
+        //                                             }
+        //                                             if ($xmlConfig->widgets->gedmo->params->get('node')) {
+        //                                                 $params['node'] = $xmlConfig->widgets->gedmo->params->node;
+        //                                             } else {
+        //                                                 $params['node'] = "";
+        //                                             }
+        //                                             if ($xmlConfig->widgets->gedmo->params->get('enabledonly')) {
+        //                                                 $params['enabledonly'] = $xmlConfig->widgets->gedmo->params->enabledonly;
+        //                                             } else {
+        //                                                 $params['enabledonly'] = "true";
+        //                                             }
+        //                                             if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+        //                                                 $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
+        //                                             } else {
+        //                                                 $params['cachable'] = 'true';
+        //                                             }
+        //                                             if ($xmlConfig->widgets->gedmo->params->get('template')) {
+        //                                                 $template = $xmlConfig->widgets->gedmo->params->template;
+        //                                             } else {
+        //                                                 $template = "";
+        //                                             }
+        //                                             $params['entity']    = $entity;
+        //                                             $params['category']  = $category;
+        //                                             $params['template']  = $template;
+        //                                             $params['widget-id'] = $widget->getId();
+        //                                             $params['widget-lifetime']  = $widget->getLifetime();
+        //                                             $params['widget-cacheable'] = strval($widget->getCacheable());
+        //                                             $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+        //                                             $params['widget-public']    = strval($widget->getPublic());
+        //                                             //
+        //                                             if ($xmlConfig->widgets->gedmo->params->get('navigation')) {
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass')) {
+        //                                                     $params['separatorClass'] = $xmlConfig->widgets->gedmo->params->navigation->separatorClass;
+        //                                                 } else {
+        //                                                     $params['separatorClass'] = "";
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorText')) {
+        //                                                     $params['separatorText'] = $xmlConfig->widgets->gedmo->params->navigation->separatorText;
+        //                                                 } else {
+        //                                                     $params['separatorText'] = "";
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorFirst')) {
+        //                                                     $params['separatorFirst'] = $xmlConfig->widgets->gedmo->params->navigation->separatorFirst;
+        //                                                 } else {
+        //                                                     $params['separatorFirst'] = "false";
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorLast')) {
+        //                                                     $params['separatorLast'] = $xmlConfig->widgets->gedmo->params->navigation->separatorLast;
+        //                                                 } else {
+        //                                                     $params['separatorLast'] = "false";
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('ulClass')) {
+        //                                                     $params['ulClass'] = $xmlConfig->widgets->gedmo->params->navigation->ulClass;
+        //                                                 } else {
+        //                                                     $params['ulClass'] = "";
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('liClass')) {
+        //                                                     $params['liClass'] = $xmlConfig->widgets->gedmo->params->navigation->liClass;
+        //                                                 } else {
+        //                                                     $params['liClass'] = "";
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('counter')) {
+        //                                                     $params['counter'] = $xmlConfig->widgets->gedmo->params->navigation->counter;
+        //                                                 } else {
+        //                                                     $params['counter'] = "";
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('routeActifMenu')) {
+        //                                                     $params['routeActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->routeActifMenu->toArray();
+        //                                                 }
+        //                                                 if ($xmlConfig->widgets->gedmo->params->navigation->get('lvlActifMenu')) {
+        //                                                     $params['lvlActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->lvlActifMenu->toArray();
+        //                                                 }
+        //                                             } elseif ($xmlConfig->widgets->gedmo->params->get('organigram')) {
+        //                                                 if ($xmlConfig->widgets->gedmo->params->organigram->get('params'))
+        	//                                                     $params = array_merge($params, $xmlConfig->widgets->gedmo->params->organigram->params->toArray());
+        
+        	//                                                 if ($xmlConfig->widgets->gedmo->params->organigram->get('fields') && $xmlConfig->widgets->gedmo->params->organigram->fields->get('field'))
+        		//                                                 {
+        		//                                                     $params['fields'] = $xmlConfig->widgets->gedmo->params->organigram->fields->field->toArray();
+        		//                                                 }
+        		//                                             }
+        		//                                             // we sort an array by key in reverse order
+        		//                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+        		//                                             // we create de Etag cache
+        		//                                             //$params     = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+        		//                                             $params     = $this->paramsEncode($params);
+        		//                                             $entity     = stripslashes($this->_Encode($entity, false));
+        		//                                             $id         = $this->_Encode("$entity~$method~$category", false);
+        		//                                             $Etag_tree  = $widget->getAction() . ":$id:$lang_page:$params";
+        		//                                             // we refesh only if the widget is in cash.
+        		//                                            	$this->cacheRefreshByname($Etag_tree);
+        		//                                            	//print_r($Etag_tree);
+        		//                                            	//print_r("<br/><br/>");
+        		//                                         }
+        		//                                     } catch (\Exception $e) {
+        		//                                     }
+        		//                                 }
+        		//                                 // If the widget is a "slider"
+        		//                                 if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'slider') ) {
+        		//                                     $xmlConfig            = $widget->getConfigXml();
+        		//                                     // if the configXml field of the widget is configured correctly.
+        		//                                     try {
+        		//                                         $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+        		//                                         if ($xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')) {
+        		//                                             $values     = explode(':', $xmlConfig->widgets->gedmo->controller);
+        		//                                             $entity     = $values[0] . ':' . $values[1];
+        		//                                             $method     = strtolower($values[2]);
+        		//                                             $params     = array();
+        		//                                             //
+        		//                                             if ($xmlConfig->widgets->gedmo->params->get('category')) {
+        		//                                                 $category = $xmlConfig->widgets->gedmo->params->category;
+        		//                                             } else {
+        		//                                                 $category = "";
+        		//                                             }
+        		//                                             if ($xmlConfig->widgets->gedmo->params->get('template')) {
+        		//                                                 $template = $xmlConfig->widgets->gedmo->params->template;
+        		//                                             } else {
+        		//                                                 $template = "";
+        		//                                             }
+        		//                                             $params = array();
+        		//                                             if ($xmlConfig->widgets->gedmo->params->get('slider')) {
+        		//                                                 $params = $xmlConfig->widgets->gedmo->params->slider->toArray();
+        		//                                                 $params['entity']    = $entity;
+        		//                                                 $params['category']  = $category;
+        		//                                                 $params['template']  = $template;
+        		//                                                 $params['widget-id'] = $widget->getId();
+        		//                                                 $params['widget-lifetime']  = $widget->getLifetime();
+        		//                                                 $params['widget-cacheable'] = strval($widget->getCacheable());
+        		//                                                 $params['widget-update']    = $widget->getUpdatedAt()->getTimestamp();
+        		//                                                 $params['widget-public']    = strval($widget->getPublic());
+        		// 												//
+        		//                                                 if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+        		//                                                     $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
+        		//                                                 } else {
+        		//                                                     $params['cachable'] = 'true';
+        		//                                                 }
+        		//                                                 if ($xmlConfig->widgets->gedmo->params->slider->get('params')) {
+        		//                                                     $params['params'] = $xmlConfig->widgets->gedmo->params->slider->params->toArray();
+        		//                                                 }
+        		//                                                 if (!isset($params['action']) || empty($params['action'])) {
+        		//                                                     $params['action']   = 'renderDefault';
+        		//                                                 }
+        		//                                                 if (!isset($params['menu']) || empty($params['menu'])) {
+        		//                                                     $params['menu']     = 'entity';
+        		//                                                 }
+        		//                                             }
+        		//                                             // we sort an array by key in reverse order
+        		//                                             $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+        		//                                             // we create de Etag cache
+        		//                                             //$params      = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+        		//                                             $params      = $this->paramsEncode($params);
+        		//                                             $entity      = stripslashes($this->_Encode($entity, false));
+        		//                                             $id          = $this->_Encode("$entity~$method~$category", false);
+        		//                                             $Etag_slider = $widget->getAction() . ":$id:$lang_page:$params";
+        		//                                             // we refesh only if the widget is in cash.
+        		//                                            	$this->cacheRefreshByname($Etag_slider);
+        		//                                         }
+        		//                                     } catch (\Exception $e) {
+        		//                                     }
+        		//                                 }
+        		        
     }
     
     /**

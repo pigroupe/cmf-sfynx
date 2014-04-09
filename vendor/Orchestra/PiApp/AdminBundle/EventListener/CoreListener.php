@@ -96,6 +96,99 @@ abstract class CoreListener extends abstractListener
     	if ($this->isUsernamePasswordToken() && ($entity instanceof \PiApp\AdminBundle\Entity\Langue)){
     		$this->_container()->get('pi_app_admin.locale_manager')->setJsonFileLocales();
     	}
+    } 
+
+    /**
+     * We remove json file Etag of Page and Widget.
+     *
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param boolean	$delete_cache_only
+     * @return void
+     * @access protected
+     * @final
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    final protected function _deleteJsonFileEtag($eventArgs, $delete_cache_only = false)
+    {
+    	$entity = $eventArgs->getEntity();
+    	if (	
+    		$this->isUsernamePasswordToken() 
+    		&& 
+	    	(
+	    		$entity instanceof \PiApp\AdminBundle\Entity\Page ||
+	    		$entity instanceof \PiApp\AdminBundle\Entity\TranslationPage ||
+	    		$entity instanceof \PiApp\AdminBundle\Entity\Widget
+	    	)
+    	) {
+    		if ($entity instanceof \PiApp\AdminBundle\Entity\TranslationPage) {
+    			$entity = $entity->getPage();
+    		}    		
+    		// we set the persist of the Page entity
+    		if ($entity instanceof \PiApp\AdminBundle\Entity\Page) {
+    			$type = 'page';
+    		} elseif ($entity instanceof \PiApp\AdminBundle\Entity\Widget) {
+    			$type = 'widget';
+    		} 
+    		$names = array();
+    		$all_locales = $this->_container()->get('pi_app_admin.locale_manager')->getAllLocales();
+    		foreach ($all_locales as $key => $lang) {
+    			// we delete the cache of the page or the widget
+    			$path_json_file = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName($type, $entity->getId(), $lang);
+    			if (file_exists($path_json_file)) {
+    				$info = explode('|', file_get_contents($path_json_file));
+	    			if (isset($info[1])) {
+	    				$this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($info[1]);
+	    				// we delete the json file cache
+	    				if (!$delete_cache_only) {
+	    					unlink($path_json_file);
+	    				}
+	    			}	    			
+    			}
+    			if ($type == 'page') {
+    				// we delete the cache of all sluggify urls of the page.
+	    			$path_json_file_sluggify = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName('page-sluggify', $entity->getId(), $lang);
+	    			if (file_exists($path_json_file_sluggify)) {
+	    				$reading  = fopen($path_json_file_sluggify, 'r');
+	    				while (!feof($reading)) {
+	    					$info = explode('|', fgets($reading));
+	    					if (isset($info[1])) {
+	    						$this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($info[1]);
+	    						$path_json_file_tmp = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName('page-sluggify-tmp', $info[1], $lang);
+	    						if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
+	    							unlink($path_json_file_tmp);
+	    						}
+	    					}
+	    				}
+	    				fclose($reading);
+	    				// we delete the json file cache
+	    				if (!$delete_cache_only) {
+	    					unlink($path_json_file_sluggify);
+	    				}
+	    			}    			
+	    			// we delete the cache of all esi tag urls of the page.
+	    			$path_json_file_esi = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName('esi', $entity->getId(), $lang);
+	    			if (file_exists($path_json_file_sluggify)) {
+	    				$reading  = fopen($path_json_file_sluggify, 'r');
+	    				while (!feof($reading)) {
+	    					$info = explode('|', fgets($reading));
+	    					if (isset($info[1])) {
+	    						$this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($info[1]);
+	    						$path_json_file_tmp = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName('esi-tmp', $info[1], $lang);
+	    						if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
+	    							unlink($path_json_file_tmp);
+	    						}
+	    					}
+	    				}
+	    				fclose($reading);
+	    				// we delete the json file cache
+	    				if (!$delete_cache_only) {
+	    					unlink($path_json_file_esi);
+	    				}
+	    			}	    			
+    			}
+    		}
+	    }
     }    
     
     /**
@@ -111,18 +204,22 @@ abstract class CoreListener extends abstractListener
      */
     final protected function _TwigCache($eventArgs)
     {
-        $entity        = $eventArgs->getEntity();
+        $entity = $eventArgs->getEntity();
         $is_refresh_authorized = $this->_container()->getParameter('pi_app_admin.page.refresh.allpage');        
-        if ($this->isUsernamePasswordToken() && $is_refresh_authorized &&
+        if (
+        	$this->isUsernamePasswordToken() 
+        	&& 
+        	$is_refresh_authorized 
+        	&&
             (
                 $entity instanceof \PiApp\AdminBundle\Entity\Page ||
+            	$entity instanceof \PiApp\AdminBundle\Entity\TranslationPage ||
                 $entity instanceof \PiApp\AdminBundle\Entity\Widget ||
                 $entity instanceof \PiApp\AdminBundle\Entity\TranslationWidget
             )
-        ){
+        ) {
             $all_locales = $this->_container()->get('pi_app_admin.locale_manager')->getAllLocales();
             $names = $this->_recursive($eventArgs, $entity, $all_locales);
-        
 //              if ($names && is_array($names)){
 //                  krsort($names);
 //                  print_r($names);
@@ -144,6 +241,9 @@ abstract class CoreListener extends abstractListener
      */    
     private function _recursive($eventArgs, $entity, $all_locales)
     {
+    	if ($entity instanceof \PiApp\AdminBundle\Entity\TranslationPage) {
+    		$entity = $entity->getPage();
+    	}
         // we set the persist of the Page entity
         if ($entity instanceof \PiApp\AdminBundle\Entity\Page) {
             $type = 'page:';
@@ -155,13 +255,8 @@ abstract class CoreListener extends abstractListener
             return false;
         }
         $names = array();
-        foreach($all_locales as $key => $lang){            
+        foreach ($all_locales as $key => $lang) {
             if (!method_exists($entity, 'getLayout') || ($entity->getLayout() instanceof \PiApp\AdminBundle\Entity\Layout) ) {
-                // we create the cache name
-                $name             = $type.$entity->getId().':'.$lang->getId();
-                $names[$name]     = $name;                
-                // we refresh the cache
-                $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name, true);                
                 // we refresh the cache of all widgets of the page
                 if ( ($entity instanceof \PiApp\AdminBundle\Entity\Page) && (!is_null($entity->getId())) ) {
                     $this->_container()->get('pi_app_admin.manager.page')->setPageByRoute($entity->getRouteName());
@@ -171,10 +266,9 @@ abstract class CoreListener extends abstractListener
                     // we have to warm up all translations which are linked to it.
                     if (!$entity->getTranslations()->isEmpty()) {
                         foreach($entity->getTranslations()->toArray() as $key => $translationWidget) {
-                            if ($translationWidget->getLangCode()->getId() == $lang->getId()){
-                                $name_trans            = 'transwidget:'.$translationWidget->getId().':'.$lang->getId();
-                                $names[$name_trans] = $name_trans;
-                                
+                            if ($translationWidget->getLangCode()->getId() == $lang){
+                                $name_trans            = 'transwidget:'.$translationWidget->getId().':'.$lang;
+                                $names[$name_trans] = $name_trans;                                
                                 // we refresh the cache
                                 $this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($name_trans, true);
                             }
@@ -187,14 +281,14 @@ abstract class CoreListener extends abstractListener
                             foreach($all_widget_used_snippet as $k => $widget) {
                                 // if the entity is linked to a page
                                 if ($widget->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) {
-                                    $names = array_merge($names, $this->_recursive($eventArgs, $widget->getBlock()->getPage(), $all_lang));
+                                    $names = array_merge($names, $this->_recursive($eventArgs, $widget->getBlock()->getPage(), $all_locales));
                                 }
                             }
                         }                    
                     }                    
                     // if the entity is linked to a page
                     if ($entity->getBlock() instanceof \PiApp\AdminBundle\Entity\Block) {
-                        $names = array_merge($names, $this->_recursive($eventArgs, $entity->getBlock()->getPage(), $all_lang));
+                        $names = array_merge($names, $this->_recursive($eventArgs, $entity->getBlock()->getPage(), $all_locales));
                     }
                 }                
                 // if the entity is a translation, we have to warm up the widget which is linked to it.
@@ -216,19 +310,20 @@ abstract class CoreListener extends abstractListener
                                     foreach($all_widget_used_snippet as $k => $widget){
                                         // if the entity is linked to a page
                                         if ($widget->getBlock() instanceof \PiApp\AdminBundle\Entity\Block){
-                                            $names = array_merge($names, $this->_recursive($eventArgs, $widget->getBlock()->getPage(), $all_lang));
+                                            $names = array_merge($names, $this->_recursive($eventArgs, $widget->getBlock()->getPage(), $all_locales));
                                         }                                    
                                     }
                                 }
                             }
                         } else {
-                            $names = array_merge($names, $this->_recursive($eventArgs, $entity->getWidget(), $all_lang));
+                            $names = array_merge($names, $this->_recursive($eventArgs, $entity->getWidget(), $all_locales));
                         }                        
                 }
                 
             }
             
         }
+        
         return $names;        
     }
     
