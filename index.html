@@ -21,7 +21,7 @@
       <div class="inner">
         <h1>Cmf-orchestra</h1>
         <h2>CMF PI-ORCHESTRA is not just to simplify the developper&#39;s work, and to speed up the creation and maintenance of your PHP web applications. It also allows you to create your own CMS. It&#39;s a CMF easy to use, build your own template (layout), add your own custom block with your own logic, build all the widget you need.</h2>
-        <a href="https://github.com/pigroupe/cmf-orchestra" class="button"><small>View project on</small>GitHub</a>
+        <a href="https://github.com/pigroupe/cmf-sfynx" class="button"><small>View project on</small>GitHub</a>
       </div>
     </header>
 
@@ -29,9 +29,9 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h1>
-<a name="cmf-pi-orchestra-bundles" class="anchor" href="#cmf-pi-orchestra-bundles"><span class="octicon octicon-link"></span></a>CMF PI-ORCHESTRA Bundles</h1>
+<a name="cmf-sfynx-bundles" class="anchor" href="#cmf-sfynx-bundles"><span class="octicon octicon-link"></span></a>CMF SFYNX Bundles</h1>
 
-<p>CMF PI-ORCHESTRA is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web 
+<p>SFYNX is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web 
 applications. It also allows you to create your own CMS. It's a CMF easy to use, build your own template (layout), add your own custom block
  with your own logic, build all the widget you need.</p>
 
@@ -41,6 +41,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <p><strong>For more information</strong> : </p>
 
 <ul>
+<li><a href="http://www.sfynx.fr">http://www.sfynx.fr</a></li>
 <li><a href="http://www.pi-groupe.fr">http://www.pi-groupe.fr</a></li>
 <li><a href="http://www.pi-groupe.net">http://www.pi-groupe.net</a></li>
 </ul><h2>
@@ -55,7 +56,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 * CacheBundle : A bundle which provides classes to cache handlers <span class="o">(</span>memcache, files<span class="o">)</span>.
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor<span class="sb">`</span>s utilities to backup and restore databases. 
 * MediaBundle : A bundle which overload the SonataMediaBundle.
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a <span class="nb">command </span>to generate Orchestra bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
+* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a <span class="nb">command </span>to generate Sfynx bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
 * TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
 * UserBundle : A bundle which overload the FOSUserBundle.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
@@ -133,7 +134,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
                 <span class="k">new</span> <span class="nx">PiApp\GedmoBundle\PiAppGedmoBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">PiApp\TemplateBundle\PiAppTemplateBundle</span><span class="p">(),</span>
 
-                <span class="c1">#override piOrchestra bundles</span>
+                <span class="c1">#override Sfynx bundles</span>
                 <span class="k">new</span> <span class="nx">OrApp\OrAdminBundle\OrAppOrAdminBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">OrApp\OrGedmoBundle\OrAppOrGedmoBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">OrApp\OrTemplateBundle\OrAppOrTemplateBundle</span><span class="p">(),</span>      
@@ -162,7 +163,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
         <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"php"</span><span class="p">:</span> <span class="s2">"&gt;=5.3.3"</span><span class="p">,</span>
             <span class="nt">"symfony/symfony"</span><span class="p">:</span> <span class="s2">"2.2.4"</span><span class="p">,</span>
-            <span class="nt">"doctrine/orm"</span><span class="p">:</span> <span class="s2">"2.3"</span><span class="p">,</span>
+            <span class="nt">"doctrine/orm"</span><span class="p">:</span> <span class="s2">"2.5.*@dev"</span><span class="p">,</span>
             <span class="nt">"doctrine/doctrine-bundle"</span><span class="p">:</span> <span class="s2">"1.2.0"</span><span class="p">,</span>
             <span class="nt">"twig/extensions"</span><span class="p">:</span> <span class="s2">"1.0.0"</span><span class="p">,</span>
             <span class="nt">"symfony/assetic-bundle"</span><span class="p">:</span> <span class="s2">"2.1.3"</span><span class="p">,</span>
@@ -236,8 +237,8 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
         <span class="nt">"autoload"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"psr-0"</span><span class="p">:</span> <span class="p">{</span>
                 <span class="nt">"OrApp"</span> <span class="p">:</span> <span class="s2">"src"</span><span class="p">,</span>
-                <span class="nt">"PiApp"</span><span class="p">:</span> <span class="s2">"vendor/Orchestra"</span><span class="p">,</span>
-                <span class="nt">"BootStrap"</span><span class="p">:</span> <span class="s2">"vendor/Orchestra"</span><span class="p">,</span>
+                <span class="nt">"PiApp"</span><span class="p">:</span> <span class="s2">"vendor/Sfynx"</span><span class="p">,</span>
+                <span class="nt">"BootStrap"</span><span class="p">:</span> <span class="s2">"vendor/Sfynx"</span><span class="p">,</span>
                 <span class="nt">"Zend_"</span><span class="p">:</span> <span class="s2">"vendor/Zend/library"</span>
             <span class="p">}</span>
         <span class="p">}</span>    
@@ -282,6 +283,25 @@ configured for Symfony.</p>
 <li>php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)</li>
 <li>php_curl.dll</li>
 <li>php_openssl.dll (enabled Socket transport “ssl” in PHP)</li>
+<li>activation d'envoi de mail
+
+<ul>
+<li>sous windows : 
+
+<ul>
+<li>SMTP = smtp-host-value</li>
+<li>smtp_port = smtp-port-value</li>
+</ul>
+</li>
+<li>sous linux :
+
+<ul>
+<li>sendmail_path = "var-bin-sendmail"<br>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul><p><strong>Doctrine</strong> : </p>
@@ -323,10 +343,7 @@ configured for Symfony.</p>
 
 <p>Then you must add the uploads/media folder to allow specific users to load :</p>
 
-<div class="highlight highlight-bash"><pre>mkdir app/cache/ Backup
-mkdir app/cache/ Indexation
-mkdir app/cache/ media
-chmod –R 0777 app / cache
+<div class="highlight highlight-bash"><pre>chmod –R 0777 app / cache
 chmod –R 0777 app / log
 chmod –R 0777 Orcehstra / BootStrap/TranslatorBundle/Resources/translations
 
@@ -408,6 +425,13 @@ to create a new project is to use it.</p>
 
 </pre></div>
 
+<p><strong>Type the following command to install assets of the bundles</strong></p>
+
+<div class="highlight highlight-bash"><pre>
+    php app/console assets:install web
+
+</pre></div>
+
 <p><strong>For more information</strong> : <a href="http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html">http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html</a></p>
 
 <h3>
@@ -425,16 +449,16 @@ to create a new project is to use it.</p>
         </section>
 
         <aside id="sidebar">
-          <a href="https://github.com/pigroupe/cmf-orchestra/zipball/master" class="button">
+          <a href="https://github.com/pigroupe/cmf-sfynx/zipball/master" class="button">
             <small>Download</small>
             .zip file
           </a>
-          <a href="https://github.com/pigroupe/cmf-orchestra/tarball/master" class="button">
+          <a href="https://github.com/pigroupe/cmf-sfynx/tarball/master" class="button">
             <small>Download</small>
             .tar.gz file
           </a>
 
-          <p class="repo-owner"><a href="https://github.com/pigroupe/cmf-orchestra"></a> is maintained by <a href="https://github.com/pigroupe">pigroupe</a>.</p>
+          <p class="repo-owner"><a href="https://github.com/pigroupe/cmf-sfynx"></a> is maintained by <a href="https://github.com/pigroupe">pigroupe</a>.</p>
 
           <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
         </aside>
