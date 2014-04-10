@@ -1,8 +1,8 @@
-﻿CMF ORCHESTRA Bundles
+﻿CMF SFYNX Bundles
 =====================
 
 
-CMF ORCHESTRA is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web 
+SFYNX is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web 
 applications. It also allows you to create your own CMS. It's a CMF easy to use, build your own template (layout), add your own custom block
  with your own logic, build all the widget you need.
 
@@ -19,7 +19,7 @@ The bundle has been split into 2 directories :
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 
 * MediaBundle : A bundle which overload the SonataMediaBundle.
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate Orchestra bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
+* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate Sfynx bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
 * TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
 * UserBundle : A bundle which overload the FOSUserBundle.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
@@ -98,7 +98,7 @@ Register all bundle in your `app/AppKernel.php` file:
                 new PiApp\GedmoBundle\PiAppGedmoBundle(),
                 new PiApp\TemplateBundle\PiAppTemplateBundle(),
                 
-                #override piOrchestra bundles
+                #override Sfynx bundles
                 new OrApp\OrAdminBundle\OrAppOrAdminBundle(),
                 new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
                 new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),      
@@ -127,7 +127,7 @@ Register all bundle in your `app/AppKernel.php` file:
         "require": {
             "php": ">=5.3.3",
             "symfony/symfony": "2.2.4",
-            "doctrine/orm": "2.3",
+            "doctrine/orm": "2.5.*@dev",
             "doctrine/doctrine-bundle": "1.2.0",
             "twig/extensions": "1.0.0",
             "symfony/assetic-bundle": "2.1.3",
@@ -201,8 +201,8 @@ Register all bundle in your `app/AppKernel.php` file:
         "autoload": {
             "psr-0": {
                 "OrApp" : "src",
-                "PiApp": "vendor/Orchestra",
-                "BootStrap": "vendor/Orchestra",
+                "PiApp": "vendor/Sfynx",
+                "BootStrap": "vendor/Sfynx",
                 "Zend_": "vendor/Zend/library"
             }
         }    

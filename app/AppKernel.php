@@ -63,7 +63,7 @@ class AppKernel extends Kernel
         		new PiApp\GedmoBundle\PiAppGedmoBundle(),
         		new PiApp\TemplateBundle\PiAppTemplateBundle(),
                 
-                #override PI bundles
+                #override Sfynx bundles
                 new OrApp\OrAdminBundle\OrAppOrAdminBundle(),
                 new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
                 new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),      

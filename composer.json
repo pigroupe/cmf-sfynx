@@ -86,8 +86,8 @@
     "autoload": {
         "psr-0": {
             "OrApp" : "src",
-            "PiApp": "vendor/Orchestra",
-            "BootStrap": "vendor/Orchestra",
+            "PiApp": "vendor/Sfynx",
+            "BootStrap": "vendor/Sfynx",
             "Zend_": "vendor/Zend/library"
         }
     }    

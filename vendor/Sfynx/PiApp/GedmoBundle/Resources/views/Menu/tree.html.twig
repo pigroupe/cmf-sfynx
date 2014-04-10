@@ -1,0 +1,21 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% initJquery 'ACCORDEON:nested' %}
+{% initJquery 'MENU:org-chart-page' %}
+
+{% javascript "bundles/piappadmin/js/jquery/multiselect/js/jquery.multiselect.filter.js" %}
+{% stylesheet "bundles/piappadmin/js/jquery/multiselect/css/jquery.multiselect.filter.css:prepend" %}
+{% stylesheet "bundles/piappadmin/js/jquery/multiselect/css/jquery.multiselect.css:prepend" %}
+
+{% extends app.request.attributes.get('sfynx-layout') %}
+
+{% block title %}
+	<h1><a href="{{ path('admin_redirection') }}">{{ "pi.home"|trans }}</a> > {{ 'pi.menu.title'|trans }}</h1>
+{% endblock %}
+
+{% block content %}
+
+    {{ parent() }}
+    
+	{% include 'PiAppGedmoBundle:Menu:tree_view.html.twig' with {'NoLayout':NoLayout, 'form_search':form_search, 'category': category, 'tree':tree} %}
+		
+{% endblock %}
