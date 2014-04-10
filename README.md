@@ -6,6 +6,11 @@ SFYNX is not just to simplify the developper's work, and to speed up the creatio
 applications. It also allows you to create your own CMS. It's a CMF easy to use, build your own template (layout), add your own custom block
  with your own logic, build all the widget you need.
 
+## Project PI-GROUPE Development
+**For more information** : 
+* http://www.sfynx.fr
+* http://www.pi-groupe.fr
+* http://www.pi-groupe.net
 
 ## Structure of the framework
 
