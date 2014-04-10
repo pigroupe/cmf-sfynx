@@ -449,6 +449,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 // 				$this->container->get('request')->attributes->set($k, $v);
 // 			}
 // 		}
+//      $request = Request::createFromGlobals();  =>  $request = new Request($_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER);
 		// we set the _route value
 		$this->container->get('request')->query->set('_route', $match['_route']);
 		$this->container->get('request')->attributes->set('_route', $match['_route']);

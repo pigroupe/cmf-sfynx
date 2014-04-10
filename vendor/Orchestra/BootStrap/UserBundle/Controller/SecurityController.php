@@ -59,6 +59,7 @@ class SecurityController extends ContainerAware
                 'last_username' => $lastUsername,
                 'error'         => $error,
                 'csrf_token' => $csrfToken,
+                'NoLayout'    => $this->container->get('request')->query->get('NoLayout')
         ));
     }
     

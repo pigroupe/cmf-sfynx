@@ -678,8 +678,12 @@ abstract class abstractController extends Controller
 	        $app_id			     = $this->container->getParameter('pi_app_admin.cookies.application_id');
 	        // Record the layout variable in cookies.
 	        if ($dateExpire && !empty($date_interval)) {
-	        	$dateExpire = new \DateTime("NOW");
-	        	$dateExpire->add(new \DateInterval($date_interval)); // we add 4 hour
+	        	if (is_numeric($date_interval)) {
+	        		$dateExpire = time() + intVal($date_interval);
+	        	} else {
+	        		$dateExpire = new \DateTime("NOW");
+	        		$dateExpire->add(new \DateInterval($date_interval));
+	        	}
 	        } else {
 	        	$dateExpire = 0;
 	        }
@@ -692,6 +696,7 @@ abstract class abstractController extends Controller
 	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-user-id', $userId, $dateExpire));
 	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-application-id', $applicationId, $dateExpire));
 	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-key', $key, $dateExpire));
+	        	// $response->headers->getCookies();
 	        }
 	        // set layout param
 	        $BEST_ROLE_NAME = $this->container->get('bootstrap.Role.factory')->getBestRoleUser();

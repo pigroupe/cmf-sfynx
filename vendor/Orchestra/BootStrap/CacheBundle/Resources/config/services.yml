@@ -1,5 +1,6 @@
 parameters:
     php_memcache.class: Memcache
+    php_memcached.class: Memcached
     pi_cache.factory.class: BootStrap\CacheBundle\Manager\CacheFactory
     
     pi_cache.client.memcache.class: BootStrap\CacheBundle\Manager\Client\MemcacheClient
@@ -39,7 +40,16 @@ services:
         class: %php_memcache.class%
         calls:
              - [ addServer, [ %session_memcache_host%, %session_memcache_port% ] ]
+             
+    pi_session.memcached:
+        class: %php_memcached.class%
+        calls:
+             - [ addServer, [ %session_memcache_host%, %session_memcache_port% ] ]             
                  
     pi_session.handler.memcache:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcacheSessionHandler
-        arguments: [@pi_session.memcache, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]
+        arguments: [@pi_session.memcache, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]        
+        
+    pi_session.handler.memcached:
+        class:     BootStrap\CacheBundle\Session\Storage\Handler\MemcacheSessionHandler
+        arguments: [@pi_session.memcached, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire%, locking: %session_memcache_locking%, spin_lock_wait: %session_memcache_spin_lock_wait% } ]

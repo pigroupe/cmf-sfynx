@@ -31,9 +31,10 @@ security:
                 #default_target_path: /home
             remember_me:
                 key: "%secret%"
-                lifetime: 86400 # 1 jour en secondes
+                lifetime: 31536000 # a year
                 path:     /
                 domain:   ~ # Prend la valeur par défaut du domaine courant depuis $_SERVER
+                remember_me_parameter: _remember_me
             logout:
                 path: /logout
                 target: /

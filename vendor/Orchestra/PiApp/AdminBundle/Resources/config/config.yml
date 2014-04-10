@@ -87,8 +87,8 @@
 #                    android: 3.9
 #                    ios: 5.9  
 #    cookies:
-#        date_expire: false
-#        date_interval: PT4H
+#        date_expire: true
+#        date_interval:  604800 # PT4H  604800
 #        application_id: orchestra
 #    permission:
 #        restriction_by_roles: false

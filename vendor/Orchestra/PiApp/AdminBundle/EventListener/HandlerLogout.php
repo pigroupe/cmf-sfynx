@@ -156,10 +156,18 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     public function Redirection()
     {
     	if (!empty($this->redirection)) {
-    		return new RedirectResponse($this->router->getRoute($this->redirection));
+    		$response = new RedirectResponse($this->router->getRoute($this->redirection));
     	} else {
-    		return new RedirectResponse($this->router->getRoute('home_page'));
+    		$response = new RedirectResponse($this->router->getRoute('home_page'));
     	}
+    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-user-id', '', time() - 3600));
+    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-application-id', '', time() - 3600));
+    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-key', '', time() - 3600));
+    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-layout', '', time() - 3600));
+    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-redirection', '', time() - 3600));
+    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', '', time() - 3600));
+    	
+    	return $response;
     }    
     
 }

@@ -21,11 +21,19 @@ framework:
     trusted_proxies: ~
     #trust_proxy_headers: false # Whether or not the Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP)
     session:
-        lifetime:       604800 #86400 
+        name: PHPSESSID
+        cookie_lifetime: 604800  # 604800 86400 
         # surcharge session handler with memcache
-        #handler_id:     pi_session.handler.memcache
-        #cookie_lifetime: 604800
-    #esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig         
+        #handler_id:     pi_session.handler.memcache 
+#        cookie_path:          ~
+#        cookie_domain:        ~
+#        cookie_secure:        true # true pour déterminer que les cookies soient envoyés seulement par des connexions sécurisée.
+#        cookie_httponly:      true # true pour ne pas permettre l'accès aux cookies par les langages de script, tels que Javascript. Ce paramétrage a pour effet de réduire le vol d'identité à travers les attaques de type XSS.
+#        gc_divisor:           ~
+#        gc_probability:       ~
+#        gc_maxlifetime:       ~
+        save_path:            %kernel.cache_dir%/sessions    
+    #esi: { enabled: true } # VARNISH::Pour utiliser les tags ESI dans les templates Twig         
     fragments:  ~ # { path: /_fragment }
 
 # Twig Configuration
@@ -549,8 +557,8 @@ pi_app_admin:
                     android: 3.9
                     ios: 5.9                     
     cookies:
-        date_expire: false
-        date_interval: PT4H
+        date_expire: true
+        date_interval:  604800 # PT4H  604800
         application_id: orchestra  
     permission:
         restriction_by_roles: false

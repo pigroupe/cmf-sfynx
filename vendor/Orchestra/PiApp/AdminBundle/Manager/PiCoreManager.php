@@ -1132,16 +1132,26 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     			->createQueryBuilder('a')
     			->select("a")
     			->leftJoin('a.translations', 'trans')
-    			->where("(a.{$sluggable_field_name} = :field_name) OR ( trans.locale = :trans_locale AND trans.field = :trans_field AND trans.content = :trans_content)")
+    			->where("( trans.locale = :trans_locale AND trans.field = :trans_field AND trans.content = :trans_content)")
     			->groupBy("a.id")
     			->setParameters(array(
-        			'field_name'    => $match[$sluggable_field_search],
-        			'trans_locale'  => $lang,
-        			'trans_field'   => $sluggable_field_name,
-        			'trans_content' => $match[$sluggable_field_search]
-    			))->getQuery()
-    			;
-    			$entity = $query->getOneOrNullResult();
+    					'trans_locale'  => $lang,
+    					'trans_field'   => $sluggable_field_name,
+    					'trans_content' => $match[$sluggable_field_search]
+    			));
+    			$entity = $query->getQuery()->getOneOrNullResult();
+    			if (!is_object($entity)) {
+    				$query = $em->getRepository($sluggable_entity)
+    				->createQueryBuilder('a')
+    				->select("a")
+    				->where("a.{$sluggable_field_name} = :field_name")
+    				->groupBy("a.id")
+    				->setParameters(array(
+    						'field_name'    => $match[$sluggable_field_search],
+    				));
+    				$entity = $query->getQuery()->getOneOrNullResult();
+    			}
+    			//    			
     			if (is_object($entity)) {
     				$entity->setTranslatableLocale($lang);
     				$em->refresh($entity);

@@ -23,8 +23,8 @@
 			<tr>
 				<th></th>
 				<td valign="top">
-	                {#<input type="checkbox" id="login-check" name="_login-check" value="on" class="checkbox-size"  />
-	                <label for="login-check">{{ 'security.login.remember_me'|trans([], 'FOSUserBundle') }}</label>#}
+	                <input type="checkbox" id="remember_me" name="_remember_me" checked />
+	                <label for="login-check">{{ 'security.login.remember_me'|trans([], 'FOSUserBundle') }}</label>
 	                <a href="{{ path('fos_user_resetting_request') }}" class="reset-pwd" title="">{{ 'resetting.request.submit'|trans([], 'FOSUserBundle') }}</a>
 	            </td>
 			</tr>

@@ -181,21 +181,26 @@ class HandlerLogin
         }
         // Record the layout variable in cookies.
         if ($this->date_expire && !empty($this->date_interval)) {
-            $dateExpire = new \DateTime("NOW");
-            $dateExpire->add(new \DateInterval($this->date_interval)); // we add 4 hour
+            if (is_numeric($this->date_interval)) {
+                $dateExpire = time() + intVal($this->date_interval);
+            } else {
+                $dateExpire = new \DateTime("NOW");
+                $dateExpire->add(new \DateInterval($this->date_interval));
+            }
         } else {
             $dateExpire = 0;
         }
         // Record all cookies in relation with ws.
         if ($this->application_id && !empty($this->application_id) && $this->container->hasParameter('ws.auth')) {
-        	$config_ws = $this->container->getParameter('ws.auth');
-        	$key       = $config_ws['handlers']['getpermisssion']['key'];
-        	$userId    = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($this->getUser()->getId(), $key);
-            $applicationId    = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($this->application_id, $key);
+        	$config_ws     = $this->container->getParameter('ws.auth');
+        	$key           = $config_ws['handlers']['getpermisssion']['key'];
+        	$userId        = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($this->getUser()->getId(), $key);
+            $applicationId = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($this->application_id, $key);
         	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-user-id', $userId, $dateExpire));
         	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-application-id', $applicationId, $dateExpire));
-        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-key', $key, $dateExpire));        	
-        }    
+        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-ws-key', $key, $dateExpire));
+        	// $response->headers->getCookies();        	
+        }   
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-layout', $this->layout, $dateExpire));
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('orchestra-redirection', $this->redirect, $dateExpire));
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $this->locale, $dateExpire));
