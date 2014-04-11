@@ -134,11 +134,6 @@ class PiSearchManager extends PiWidgetExtension
         // if the gedmo widget is defined correctly as a "lucene"
         if ( ($this->action == "lucene") && $xmlConfig->widgets->get('search') && $xmlConfig->widgets->search->get('controller') && $xmlConfig->widgets->search->get('params')  ) {
             $controller    = $xmlConfig->widgets->search->controller;
-            if ($xmlConfig->widgets->search->params->get('cachable')) {
-                $params['cachable'] = $xmlConfig->widgets->search->params->cachable;
-            } else {
-                $params['cachable'] = 'true';
-            }
             if ($xmlConfig->widgets->search->params->get('template')) {
                 $params['template'] = $xmlConfig->widgets->search->params->template;
             } else {
@@ -159,11 +154,17 @@ class PiSearchManager extends PiWidgetExtension
 //                    print_r($params);exit;                  
                    if ($this->isAvailableJqueryExtension($JQcontainer, $JQservice)) {
                        $params['widget-id']        = $options['widget-id'];
-                        $params['widget-lifetime']  = $options['widget-lifetime'];
-                        $params['widget-cacheable'] = $options['widget-cacheable'];
-                        $params['widget-update']    = $options['widget-update'];
-                        $params['widget-public']    = $options['widget-public'];
-                       if ($params['cachable'] == 'true') {
+                       $params['widget-lifetime']  = $options['widget-lifetime'];
+                       $params['widget-cacheable'] = $options['widget-cacheable'];
+                       $params['widget-update']    = $options['widget-update'];
+                       $params['widget-public']    = $options['widget-public'];
+                       $params['widget-ajax']      = $options['widget-ajax'];
+                       $params['cachable']         = $options['widget-cachetemplating'];
+                       if ($xmlConfig->widgets->search->params->get('cachable')) {
+                           $params['cachable'] = $xmlConfig->widgets->search->params->cachable;
+                       }                       
+                       if (($params['cachable'] == true) || ($params['cachable'] == 'true')) {
+                           $params['cachable'] = 'true';
                            return $this->runByExtension('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params);
                        } else {
                            return $this->runByjqueryExtension($JQcontainer, $JQservice, $lang, $params);

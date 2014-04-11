@@ -176,6 +176,7 @@ class PiUserManager extends PiWidgetExtension
                 $params['widget-cacheable'] = $options['widget-cacheable'];
                 $params['widget-update']    = $options['widget-update'];
                 $params['widget-public']    = $options['widget-public'];
+                $params['widget-ajax']      = $options['widget-ajax'];
                 
                 return $this->runByService('pi_app_admin.manager.authentication', "$this->entity~$this->method", $lang, $params);
             } else {

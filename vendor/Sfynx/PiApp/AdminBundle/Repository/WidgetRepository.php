@@ -28,6 +28,50 @@ use BootStrap\TranslationBundle\Repository\TranslationRepository;
  */
 class WidgetRepository extends TranslationRepository
 {
+    // Templating cache values
+    const CACHE_YES   = 1;
+    const CACHE_NO    = 0;
+    
+    // Ajax values
+    const AJAX_YES   = 1;
+    const AJAX_NO    = 0;    
+        
+    /**
+     * Return list of available cache values
+     *
+     * @return array
+     * @access public
+     * @static
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2011-12-28
+     */
+    public static function getAvailableCacheTemplating()
+    {
+    	return array(
+    			self::CACHE_YES  => 'pi.widget.cache.yes',
+    			self::CACHE_NO   => 'pi.widget.cache.no'
+    	);
+    }
+    
+    /**
+     * Return list of available ajax values
+     *
+     * @return array
+     * @access public
+     * @static
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2011-12-28
+     */
+    public static function getAvailableAjax()
+    {
+    	return array(
+    			self::AJAX_YES  => 'pi.widget.ajax.yes',
+    			self::AJAX_NO   => 'pi.widget.ajax.no'
+    	);
+    }    
+        
     /**
      * Return all widgets which use the options given in parameters.
      *

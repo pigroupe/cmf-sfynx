@@ -434,3 +434,13 @@ pi.snippet.translation.title: ترجمات مقتطف
 pi.widget.ajaxaction.widget_action_delete: هل أنت متأكد أنك تريد حذف القطعة؟
 pi.widget.ajaxaction.widget_action_move_up: هل أنت متأكد أنك تريد الارتقاء في القطعة؟
 pi.widget.ajaxaction.widget_action_move_down: هل أنت متأكد أنك تريد نقل إلى أسفل القطعة؟
+
+pi.widget.accordion_form.httpcache: HTTP ذاكرة التخزين المؤقت
+
+pi.widget.accordion_form.behavior: سلوك
+pi.widget.form.cachetemplating: المحتوى التخزين المؤقت
+pi.widget.cache.yes: تمكين ذاكرة التخزين المؤقت  
+pi.widget.cache.no: تعطيل ذاكرة التخزين المؤقت 
+pi.widget.form.ajax:  دعوة القطعة اياكس
+pi.widget.ajax.yes:  دعوة اياكس  
+pi.widget.ajax.no: دعوة عادي

@@ -285,13 +285,14 @@ class PiGedmoManager extends PiWidgetExtension
             $params['widget-cacheable'] = $options['widget-cacheable'];
             $params['widget-update']    = $options['widget-update'];
             $params['widget-public']    = $options['widget-public'];
+            $params['widget-ajax']      = $options['widget-ajax'];
+            $params['cachable']         = $options['widget-cachetemplating'];
             if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
                 $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-            } else {
-                $params['cachable'] = 'true';
-            }          
+            }         
             if ($this->isAvailableAction($controller)) {
-                if ($params['cachable'] == 'true') {
+                if (($params['cachable'] == true) || ($params['cachable'] == 'true')) {
+                    $params['cachable'] = 'true';
                     return $this->runByExtension('pi_app_admin.manager.listener', $this->action, $controller, $lang, $params);
                 } else {
                     return $this->runByService('pi_app_admin.manager.listener', $controller, $lang, $params);
@@ -383,11 +384,6 @@ class PiGedmoManager extends PiWidgetExtension
                 } else {
                     $params['enabledonly'] = "true";    
                 }
-                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-                    $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-                } else {
-                    $params['cachable'] = 'true';
-                }
                 if ($xmlConfig->widgets->gedmo->params->get('template')) {
                     $template = $xmlConfig->widgets->gedmo->params->template;
                 } else {
@@ -401,6 +397,11 @@ class PiGedmoManager extends PiWidgetExtension
                 $params['widget-cacheable'] = $options['widget-cacheable'];
                 $params['widget-update']    = $options['widget-update'];
                 $params['widget-public']    = $options['widget-public'];
+                $params['widget-ajax']      = $options['widget-ajax'];
+                $params['cachable']         = $options['widget-cachetemplating'];
+                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+                	$params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
+                }
                 if ($xmlConfig->widgets->gedmo->params->get('navigation')) {
                     if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass')) {
                         $params['separatorClass'] = $xmlConfig->widgets->gedmo->params->navigation->separatorClass;
@@ -443,7 +444,8 @@ class PiGedmoManager extends PiWidgetExtension
                     if ($xmlConfig->widgets->gedmo->params->navigation->get('lvlActifMenu')) {
                         $params['lvlActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->lvlActifMenu->toArray();
                     }
-                    if ($params['cachable'] == 'true') {
+                    if (($params['cachable'] == true) || ($params['cachable'] == 'true')) {
+                        $params['cachable'] = 'true';
                         return $this->runByExtension('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
                     } else {
                         return $this->runByService('pi_app_admin.manager.tree', "$this->entity~$this->method~$category", $lang, $params);
@@ -590,11 +592,6 @@ class PiGedmoManager extends PiWidgetExtension
                 } else {
                     $params['enabledonly'] = "true";
                 }
-                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-                    $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-                } else {
-                    $params['cachable'] = 'true';
-                }
                 if ($xmlConfig->widgets->gedmo->params->get('template')) {
                     $template = $xmlConfig->widgets->gedmo->params->template;
                 } else {
@@ -608,6 +605,11 @@ class PiGedmoManager extends PiWidgetExtension
                 $params['widget-cacheable'] = $options['widget-cacheable'];
                 $params['widget-update']    = $options['widget-update'];
                 $params['widget-public']    = $options['widget-public'];
+                $params['widget-ajax']      = $options['widget-ajax'];
+                $params['cachable']         = $options['widget-cachetemplating'];
+                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+                	$params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
+                }
                 if ($xmlConfig->widgets->gedmo->params->get('organigram')) {
                     if ($xmlConfig->widgets->gedmo->params->organigram->get('params')) {
                         $params = array_merge($params, $xmlConfig->widgets->gedmo->params->organigram->params->toArray());
@@ -615,7 +617,8 @@ class PiGedmoManager extends PiWidgetExtension
                     if ($xmlConfig->widgets->gedmo->params->organigram->get('fields') && $xmlConfig->widgets->gedmo->params->organigram->fields->get('field')) {
                         $params['fields'] = $xmlConfig->widgets->gedmo->params->organigram->fields->field->toArray();
                     }
-                    if ($params['cachable'] == 'true') {
+                    if (($params['cachable'] == true) || ($params['cachable'] == 'true')) {
+                        $params['cachable'] = 'true';
                         return $this->runByExtension('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
                     } else {
                         return $this->runByjqueryExtension("MENU", "$this->entity~$this->method~$category", $lang, $params);
@@ -723,10 +726,10 @@ class PiGedmoManager extends PiWidgetExtension
                     $params['widget-cacheable'] = $options['widget-cacheable'];
                     $params['widget-update']    = $options['widget-update'];
                     $params['widget-public']    = $options['widget-public'];
+                    $params['widget-ajax']      = $options['widget-ajax'];
+                    $params['cachable']         = $options['widget-cachetemplating'];
                     if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
                         $params['cachable'] = $xmlConfig->widgets->gedmo->params->cachable;
-                    } else {
-                        $params['cachable'] = 'true';                    
                     }
                     if ($xmlConfig->widgets->gedmo->params->slider->get('params')) {
                         $params['params'] = $xmlConfig->widgets->gedmo->params->slider->params->toArray();
@@ -737,7 +740,8 @@ class PiGedmoManager extends PiWidgetExtension
                     if (!isset($params['menu']) || empty($params['menu'])) {
                         $params['menu']     = 'entity';
                     }
-                    if ($params['cachable'] == 'true') {
+                    if (($params['cachable'] == true) || ($params['cachable'] == 'true')) {
+                        $params['cachable'] = 'true';
                         return $this->runByExtension('pi_app_admin.manager.slider', $this->action, $this->entity."~".$this->method."~".$category, $lang, $params);
                     } else {
                         return $this->runByService('pi_app_admin.manager.slider', $this->entity."~".$this->method."~".$category, $lang, $params);

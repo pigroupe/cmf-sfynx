@@ -94,6 +94,20 @@ class Widget
     protected $lifetime;    
     
     /**
+     * @var boolean $public
+     *
+     * @ORM\Column(name="is_templating_cache", type="integer", nullable=false)
+     */
+    protected $cacheTemplating = 0; 
+
+    /**
+     * @var boolean $public
+     *
+     * @ORM\Column(name="is_ajax", type="integer", nullable=false)
+     */
+    protected $ajax = 0;    
+    
+    /**
      * @var string $configCssClass
      *
      * @ORM\Column(name="config_css_class", type="string", nullable=true)
@@ -289,6 +303,46 @@ class Widget
     {
         return $this->cacheable;
     }
+    
+    /**
+     * Set cacheTemplating
+     *
+     * @param boolean $cacheTemplating
+     */
+    public function setCacheTemplating($cacheTemplating)
+    {
+    	$this->cacheTemplating = $cacheTemplating;
+    }
+    
+    /**
+     * Get cacheTemplating
+     *
+     * @return boolean
+     */
+    public function getCacheTemplating()
+    {
+    	return $this->cacheTemplating;
+    }   
+
+    /**
+     * Set ajax
+     *
+     * @param boolean $ajax
+     */
+    public function setAjax($ajax)
+    {
+    	$this->ajax = $ajax;
+    }
+    
+    /**
+     * Get ajax
+     *
+     * @return boolean
+     */
+    public function getAjax()
+    {
+    	return $this->ajax;
+    }    
     
     /**
      * Set public

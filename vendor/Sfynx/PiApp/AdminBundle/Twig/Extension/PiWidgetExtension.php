@@ -1005,7 +1005,7 @@ class PiWidgetExtension extends \Twig_Extension
             //           
             $is_render_service_with_ajax = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
             //
-            if ($is_esi_activate || $is_render_service_with_ajax) {
+            if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
             	$esi_key 		 = '9eu9ghv9';
             	$esi_method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('renderSource', $esi_key);
             	$esi_serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($serviceName, $esi_key);
@@ -1045,7 +1045,7 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "{% else %}\n";
             	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
             	    $set .= "{% endif %}\n";
-            	} elseif ($is_render_service_with_ajax) {
+            	} elseif ( $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) ) {
             	    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";
             	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             	    $set .= "{% else %}\n";
@@ -1114,7 +1114,7 @@ class PiWidgetExtension extends \Twig_Extension
             //
             $is_render_service_with_ajax = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
             //
-            if ($is_esi_activate || $is_render_service_with_ajax) {
+            if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
             	$esi_key 		 = '9eu9ghv9';
             	$esi_method 	 = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('FactoryFunction', $esi_key);
             	$esi_serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter("pi_app_admin.twig.extension.jquery", $esi_key);
@@ -1155,7 +1155,7 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "{% else %}\n";
             	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
             	    $set .= "{% endif %}\n";
-            	} elseif ($is_render_service_with_ajax) {
+            	} elseif ( $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) ) {
             	    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";
             	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             	    $set .= "{% else %}\n";

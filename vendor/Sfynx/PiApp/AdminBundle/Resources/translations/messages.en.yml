@@ -434,3 +434,13 @@ pi.snippet.translation.title: Translation Snippet
 pi.widget.ajaxaction.widget_action_delete: Are you sure you want to delete the widget?
 pi.widget.ajaxaction.widget_action_move_up: Are you sure you want to move up the Widget?
 pi.widget.ajaxaction.widget_action_move_down: Are you sure you want to move down the Widget?
+
+pi.widget.accordion_form.httpcache: HTTP cache
+
+pi.widget.accordion_form.behavior: Behavior
+pi.widget.form.cachetemplating: Caching content
+pi.widget.cache.yes: Enable Cache 
+pi.widget.cache.no: Disable Cache 
+pi.widget.form.ajax: Call ajax widget
+pi.widget.ajax.yes: Call ajax 
+pi.widget.ajax.no: Normal Call

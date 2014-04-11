@@ -51,30 +51,50 @@ class WidgetType extends AbstractType
 
         $builder
             ->add('cacheable', 'checkbox', array(
-                    'label'     => 'Static Content?',
+                    'label'     => 'pi.page.form.cacheable',
                     'required'  => false,
-                    'help_block' => 'Returns a 304 "not modified" status, when the template has not changed since last visit',
+                    'help_block' => 'pi.page.form.field.cacheable',
                     "label_attr" => array(
  						"class"=>"widget_esi",
  					)
             ))
             ->add('public', 'checkbox', array(
-                    'label'     => 'Visitor-independant content?',
+                    'label'     => 'pi.page.form.public',
                     'required'  => false,
-                    'help_block' => 'Allows proxies to cache the same content for different visitors',
+                    'help_block' => 'pi.page.form.field.public',
                     "label_attr" => array(
                     		"class"=>"widget_esi",
                     )
             ))
             ->add('lifetime', 'number', array(
-                    'label'     => 'Cache Lifetime',
+                    'label'     => 'pi.page.form.lifetime',
                     'required'  => false,
-                    'help_block' => 'Does a full content caching during the specified lifetime. Leave empty for no cache',
+                    'help_block' => 'pi.page.form.field.lifetime',
                     "label_attr" => array(
                     		"class"=>"widget_esi",
                     ),
                     'data'        => '84600',
             ))
+            ->add('cacheTemplating', 'choice', array(
+            		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableCacheTemplating(),
+            		'label'    => 'pi.widget.form.cachetemplating',
+            		'required'  => true,
+            		'multiple'    => false,
+            		'expanded' => true,
+                    "label_attr" => array(
+                    		"class"=>"widget_behavior",
+                    ),
+            ))
+            ->add('ajax', 'choice', array(
+            		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableAjax(),
+            		'label'    => 'pi.widget.form.ajax',
+            		'required'  => true,
+            		'multiple'    => false,
+            		'expanded' => true,
+                    "label_attr" => array(
+                    		"class"=>"widget_behavior",
+                    ),
+            ))                        
         ;
     }
 
