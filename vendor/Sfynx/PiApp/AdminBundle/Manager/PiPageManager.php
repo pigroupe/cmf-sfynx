@@ -1010,6 +1010,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     	if (file_exists($path_json_file)) {
     		$info = explode('|', file_get_contents($path_json_file));
     		if (isset($info[1])) {
+    		    $info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     			$this->cacheRefreshByname($info[1]);
     			//print_r($info[1]);
     			//print_r('<br />');print_r('<br />');
@@ -1021,6 +1022,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         	while (!feof($reading)) {
     			$info = explode('|', fgets($reading));
     			if (isset($info[1])) {
+    			    $info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     				$this->cacheRefreshByname($info[1]);
     				//print_r($info[1]);
     				//print_r('<br />');print_r('<br />');
@@ -1094,6 +1096,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     	if (file_exists($path_json_file)) {
     		$info = explode('|', file_get_contents($path_json_file));
     		if (isset($info[1])) {
+    		    $info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     			$this->cacheRefreshByname($info[1]);
     			//print_r($info[1]);
     			//print_r('<br />');print_r('<br />');
