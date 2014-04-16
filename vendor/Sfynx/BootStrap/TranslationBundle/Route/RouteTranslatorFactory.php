@@ -279,7 +279,8 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
                     } else {
                         $defaults        = json_decode($all_routes[ $route ]['defaults'], true);
                     }                    
-                    $requirements         = array('_method'=>'GET|POST');
+                    //$requirements         = array('_method'=>'GET|POST');
+                    $requirements        = json_decode($all_routes[ $route ]['requirements'], true);
                     if (isset($all_routes[ $route ])) {
                         $this->getDoctrineRoute()->addRoute($route, $all_routes[ $route ], $locales, $defaults, $requirements);
 //                        print_r($all_routes[ $route ]);print_r(' - ');print_r($requirements);

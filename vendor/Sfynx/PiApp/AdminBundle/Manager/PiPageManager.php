@@ -203,7 +203,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         // we return a 404 error if the meta title is a 404 type
         $meta_title = $this->container->get('pi_app_admin.twig.extension.tool')->getTitlePageFunction($lang, $title);
         if ($meta_title == '_error_404_') {
-        	throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('The product does not exist');
+        	throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('The page does not exist');
         }   
         //
         $meta_page = $this->container->get('pi_app_admin.twig.extension.tool')->getMetaPageFunction($lang, array(
