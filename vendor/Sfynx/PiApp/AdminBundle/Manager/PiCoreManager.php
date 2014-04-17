@@ -1073,6 +1073,18 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Return the meta info of a page.
      * 
+     * <code>
+     * $GLOBALS['ROUTE']['SLUGGABLE']['my_page_route_name'] = array(
+     *     'entity'         => 'PiAppGedmoBundle:Article',
+     *     'field_name'     => 'slug'
+     *     'field_search'   => 'slug',   // if like 'slug_id'  then add 'delimiter' config
+     *     //'delimiter'      => '_'
+     *     'field_title'    => 'title',
+     *     'field_resume'   => 'meta_description',
+     *     'field_keywords' => 'meta_keywords',
+     * );     
+     * </code>
+     *
      * @param string    $lang
      * @param string	$title
      * @param string	$description
@@ -1114,6 +1126,23 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     			    $sluggable_field_name =   $sluggable_field_search;
     			}
     		    //
+                if (!empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['delimiter'])) {
+                    $delimiter = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['delimiter'];
+                    $composer  = explode('_', $sluggable_field_search);
+                    //$output = preg_split( "/ (_|-) /", $input );
+                    $trans_content = '';
+                    $i=0;
+                    foreach($composer as $id) {
+                        if($i != 0)
+                            $trans_content  .= $delimiter . $match[$id];
+                        else 
+                            $trans_content  .= $match[$id];
+                        $i++;
+                    }
+                } else {
+                    $trans_content =   $match[$sluggable_field_search];
+                }
+                //
     			$sluggable_title_tab = array_map(function($value) {
     				return ucwords($value);
     			}, array_values(explode('_', $sluggable_title)));
@@ -1137,7 +1166,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     			->setParameters(array(
     					'trans_locale'  => $lang,
     					'trans_field'   => $sluggable_field_name,
-    					'trans_content' => $match[$sluggable_field_search]
+    					'trans_content' => $trans_content
     			));
     			$entity = $query->getQuery()->getOneOrNullResult();
     			if (!is_object($entity)) {
@@ -1147,7 +1176,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     				->where("a.{$sluggable_field_name} = :field_name")
     				->groupBy("a.id")
     				->setParameters(array(
-    						'field_name'    => $match[$sluggable_field_search],
+    						'field_name'    => $trans_content
     				));
     				$entity = $query->getQuery()->getOneOrNullResult();
     			}
