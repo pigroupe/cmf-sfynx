@@ -279,8 +279,11 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
                     } else {
                         $defaults        = json_decode($all_routes[ $route ]['defaults'], true);
                     }                    
-                    //$requirements         = array('_method'=>'GET|POST');
-                    $requirements        = json_decode($all_routes[ $route ]['requirements'], true);
+                    if (isset($all_routes[ $route ]) && !empty($all_routes[ $route ]['requirements'])) {
+                        $requirements    = json_decode($all_routes[ $route ]['requirements'], true);
+                    } else {
+                        $requirements    = array('_method'=>'GET|POST');
+                    } 
                     if (
                         isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]) 
                         && 
