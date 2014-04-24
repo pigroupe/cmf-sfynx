@@ -42,22 +42,18 @@ abstract class abstractController extends Controller
     public function enabledajaxAction()
     {
         $request = $this->container->get('request');
-        $em         = $this->getDoctrine()->getManager();
-        
+        $em      = $this->getDoctrine()->getManager();        
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
-            $new_data    = null;            
-                       
+            $new_data    = null;                                   
             foreach ($data as $key => $value) {
                 $values     = explode('_', $value);
-                $id            = $values[2];
-                $position    = $values[0];    
-
+                $id         = $values[2];
+                $position   = $values[0];  
                 $new_data[$key] = array('position'=>$position, 'id'=>$id);
                 $new_pos[$key]  = $position;
             }
             array_multisort($new_pos, SORT_ASC, $new_data);
-            
             krsort($new_data);
             foreach ($new_data as $key => $value) {
                 $entity = $em->getRepository($this->_entityName)->find($value['id']);
@@ -77,18 +73,16 @@ abstract class abstractController extends Controller
                 $em->flush();
             }
             $em->clear();
-
             // we disable all flash message
-            $this->container->get('session')->getFlashBag()->clear();
-            
+            $this->container->get('session')->getFlashBag()->clear();            
             $tab= array();
             $tab['id'] = '-1';
             $tab['error'] = '';
             $tab['fieldErrors'] = '';
-            $tab['data'] = '';
-             
+            $tab['data'] = '';             
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
+            
             return $response;            
         } else {
             throw ControllerException::callAjaxOnlySupported('enabledajax');
@@ -106,22 +100,18 @@ abstract class abstractController extends Controller
     public function disableajaxAction()
     {
         $request = $this->container->get('request');
-        $em         = $this->getDoctrine()->getManager();
-        
+        $em      = $this->getDoctrine()->getManager();        
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
             $new_data    = null;
-            
             foreach ($data as $key => $value) {
                 $values     = explode('_', $value);
-                $id            = $values[2];
-                $position    = $values[0];    
-
+                $id         = $values[2];
+                $position   = $values[0];    
                 $new_data[$key] = array('position'=>$position, 'id'=>$id);
                 $new_pos[$key]  = $position;
             }
             array_multisort($new_pos, SORT_ASC, $new_data);
-            
             foreach ($new_data as $key => $value) {
                 $entity = $em->getRepository($this->_entityName)->find($value['id']);
                 if (method_exists($entity, 'setEnabled')) {
@@ -162,22 +152,18 @@ abstract class abstractController extends Controller
     public function deletajaxAction()
     {
         $request = $this->container->get('request');
-        $em      = $this->getDoctrine()->getManager();
-         
+        $em      = $this->getDoctrine()->getManager();         
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
             $new_data    = null;
-            
             foreach ($data as $key => $value) {
                 $values     = explode('_', $value);
-                $id            = $values[2];
-                $position    = $values[0];    
-
+                $id         = $values[2];
+                $position   = $values[0];    
                 $new_data[$key] = array('position'=>$position, 'id'=>$id);
                 $new_pos[$key]  = $position;
             }
             array_multisort($new_pos, SORT_ASC, $new_data);
-            
             foreach ($new_data as $key => $value) {
                 $entity = $em->getRepository($this->_entityName)->find($value['id']);
                 $em->remove($entity);
@@ -212,22 +198,18 @@ abstract class abstractController extends Controller
     public function archiveajaxAction()
     {
         $request = $this->container->get('request');
-        $em         = $this->getDoctrine()->getManager();
-         
+        $em      = $this->getDoctrine()->getManager();         
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
             $new_data    = null;
-    
             foreach ($data as $key => $value) {
                 $values     = explode('_', $value);
-                $id            = $values[2];
-                $position    = $values[0];
-    
+                $id         = $values[2];
+                $position   = $values[0];
                 $new_data[$key] = array('position'=>$position, 'id'=>$id);
                 $new_pos[$key]  = $position;
             }
             array_multisort($new_pos, SORT_ASC, $new_data);
-    
             foreach ($new_data as $key => $value) {
                 $entity = $em->getRepository($this->_entityName)->find($value['id']);
                 if (method_exists($entity, 'setArchived')) {
@@ -274,8 +256,7 @@ abstract class abstractController extends Controller
     public function positionajaxAction()
     {
         $request = $this->container->get('request');
-        $em         = $this->getDoctrine()->getManager();
-         
+        $em      = $this->getDoctrine()->getManager();         
         if ($request->isXmlHttpRequest()) {
             $old_position     = $request->get('fromPosition', null);
             $new_position     = $request->get('toPosition', null);
@@ -283,7 +264,6 @@ abstract class abstractController extends Controller
             $data             = $request->get('id', null);
             $values           = explode('_', $data);
             $id               = $values[2];
-               
             if (!is_null($id)){
                 if ( ($new_position == "NaN") || is_null($new_position) || empty($new_position) )    $new_position     = 1;
                 $entity = $em->getRepository($this->_entityName)->find($id);
@@ -310,6 +290,66 @@ abstract class abstractController extends Controller
             throw ControllerException::callAjaxOnlySupported('positionajax');
         }
     } 
+    
+    /**
+     * Deletes a entity.
+     * 
+     * @param string    $type    ['widget', 'page']
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access    public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function deletetwigcacheajaxAction($type)
+    {
+    	$request = $this->container->get('request');
+    	$em      = $this->getDoctrine()->getManager();    	 
+    	if ($request->isXmlHttpRequest()) {
+    		$data        = $request->get('data', null);
+    		$new_data    = null;
+    		foreach ($data as $key => $value) {
+    			$values     = explode('_', $value);
+    			$id         = $values[2];
+    			$position   = $values[0];
+    			$new_data[$key] = array('position'=>$position, 'id'=>$id);
+    			$new_pos[$key]  = $position;
+    		}
+    		array_multisort($new_pos, SORT_ASC, $new_data);
+    		// get all locales
+    		$all_locales = $this->container->get('pi_app_admin.locale_manager')->getAllLocales();
+            //
+    		foreach ($new_data as $key => $value) {
+    		    if ($type == "widget") {
+    			    $entity = $em->getRepository("PiAppAdminBundle:Widget")->find($value['id']);
+    		    } elseif ($type == "page") {
+    		        $entity = $value['id'];
+    		    } else {
+    		        throw ControllerException::callAjaxOnlySupported('deleteajax');
+    		    }
+    			foreach ($all_locales as $lang_page) {
+    			    if ($type == "widget") {
+    			    	$this->container->get('pi_app_admin.manager.page')->cacheRefreshWidget($entity, $lang_page);
+    			    } elseif ($type == "page") {
+    			    	$this->container->get('pi_app_admin.manager.page')->cacheRefreshPage($entity, $lang_page);
+    			    }
+    			}
+    		}
+    		// we disable all flash message
+    		$this->container->get('session')->getFlashBag()->clear();
+    		// we encode results
+    		$tab= array();
+    		$tab['id'] = '-1';
+    		$tab['error'] = '';
+    		$tab['fieldErrors'] = '';
+    		$tab['data'] = '';
+    		$response = new Response(json_encode($tab));
+    		$response->headers->set('Content-Type', 'application/json');
+    
+    		return $response;
+    	} else {
+    		throw ControllerException::callAjaxOnlySupported('deleteajax');
+    	}
+    }    
     
     /**
      * get entities in ajax request for select form.
@@ -591,7 +631,8 @@ abstract class abstractController extends Controller
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function getErrorMessages(\Symfony\Component\Form\Form $form, $type = 'array', $delimiter = "<br />") {
+    protected function getErrorMessages(\Symfony\Component\Form\Form $form, $type = 'array', $delimiter = "<br />")
+    {
     	$errors = array();
     	foreach ($form->getErrors() as $key => $error) {
     		if($error->getMessagePluralization() !== null) {
@@ -623,7 +664,8 @@ abstract class abstractController extends Controller
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function setFlashErrorMessages(\Symfony\Component\Form\Form $form) {
+    protected function setFlashErrorMessages(\Symfony\Component\Form\Form $form)
+    {
     	return $this->container->get('request')->getSession()->getFlashBag()->add('errorform', $this->getErrorMessages($form, 'string' ));
     }    
     
@@ -636,7 +678,8 @@ abstract class abstractController extends Controller
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function setFlashMessages($messages, $param = 'notice') {
+    protected function setFlashMessages($messages, $param = 'notice')
+    {
     	return $this->container->get('request')->getSession()->getFlashBag()->add($param, $messages);
     }    
         
@@ -863,7 +906,6 @@ abstract class abstractController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('BootStrapUserBundle:User')->find($userId);
-        
         if ($entity instanceof \BootStrap\UserBundle\Entity\User) {
             return true;
         } else {
@@ -885,7 +927,6 @@ abstract class abstractController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('BootStrapUserBundle:User')->find($userId);
-        
         if ($entity instanceof \BootStrap\UserBundle\Entity\User) {
         	$all_applications =  $entity->getApplicationTokens();
         	if (!is_null($all_applications)) {
@@ -917,7 +958,6 @@ abstract class abstractController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('BootStrapUserBundle:User')->find($userId);
-        
         if ($entity instanceof \BootStrap\UserBundle\Entity\User) {
         	$entity->setApplicationTokens(array(strtoupper($application.'::'.$token)));
         	$em->persist($entity);
@@ -928,7 +968,8 @@ abstract class abstractController extends Controller
         }
     }    
     
-    public function getContainer(){
+    public function getContainer()
+    {
         return $this->container;
     }
 }

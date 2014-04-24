@@ -291,6 +291,9 @@ class PiAppAdminExtension extends Extension
                     $container->setParameter('pi_app_admin.layout.meta.description', $config['layout']['meta_head']['description']);
                 if (isset($config['layout']['meta_head']['keywords']))
                     $container->setParameter('pi_app_admin.layout.meta.keywords', $config['layout']['meta_head']['keywords']);
+                if (isset($config['layout']['meta_head']['additions'])) {
+                	$container->setParameter('pi_app_admin.layout.meta.additions', $config['layout']['meta_head']['additions']);
+                }                
             }
             
         }          

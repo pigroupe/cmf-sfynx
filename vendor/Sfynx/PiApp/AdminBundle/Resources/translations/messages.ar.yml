@@ -92,7 +92,7 @@ pi.grid.action.row_delete: احذف
 pi.grid.action.row_deleted: حذف
 pi.grid.action.row_archive: الأرشيف
 pi.grid.action.row_archived: المؤرشفة
-pi.grid.action.select:  مجموعه
+pi.grid.action.row_deletcache: مخبأ واضحة
 pi.grid.action.select_all: اختر كل
 pi.grid.action.select_none: ألغ  كل
 

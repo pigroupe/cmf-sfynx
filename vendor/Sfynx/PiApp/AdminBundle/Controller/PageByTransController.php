@@ -102,6 +102,21 @@ class PageByTransController extends abstractController
     public function deleteajaxAction()
     {
         return parent::deletajaxAction();
+    }  
+
+    /**
+     * Delete twig cache Page
+     *
+     * @Route("/admin/pagebytrans/deletetwigcache", name="admin_pagebytrans_deletetwigcache_ajax")
+     * @Secure(roles="ROLE_USER")
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access  public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function deletetwigcacheajaxAction($type = 'page')
+    {
+    	return parent::deletetwigcacheajaxAction($type);
     }    
     
     /**

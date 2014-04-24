@@ -31,6 +31,22 @@
 #            og_type: website
 #            og_image: bundles/piappadmin/images/logo/logo-orchestra-white.png
 #            og_site_name: http://pigroupe.github.io/cmf-orchestra/
+#            additions:
+#                 ### robot management
+#                 1: "<meta name='robots' content='ALL'/>" # to start referencement
+#                 #1: "<meta name='robots' content='noodp'/>" # referencement without DMOZ description
+#                 #1: "<meta name='robots' content='noindex, nofollow'/>"   # to stop referencement
+#                 
+#                 ### mobile management
+#                 #2: "<meta name='apple-mobile-web-app-capable' content='yes'/>"
+#                 #3: "<meta name='apple-mobile-web-app-status-bar-style' content='black'/>"
+#                 #4: "<meta name='viewport' id='viewport'  content='target-densitydpi=device-dpi, user-scalable=no' />"
+#                 #5: "<meta name='viewport' content='initial-scale=1.0; user-scalable=0; minimum-scale=1.0; maximum-scale=1.0;' />"
+#                 #6: "<!-- Mobile viewport optimized: h5bp.com/viewport -->"
+#                 #7: "<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>"
+#                 
+#                 ### Empécher Microsoft de générer des "smart tags" sur notre page web.
+#                 #8: "<meta name='MSSmartTagsPreventParsing' content='TRUE'/>"
 #    translation:
 #        defaultlocale_setting: true
 #    page:

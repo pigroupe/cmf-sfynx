@@ -92,9 +92,9 @@ pi.grid.action.row_delete: Supprimer
 pi.grid.action.row_deleted: Supprimé
 pi.grid.action.row_archive: Archiver
 pi.grid.action.row_archived: Archivé
-pi.grid.action.select: Sélection
-pi.grid.action.select_all: Tout selectionner
-pi.grid.action.select_none: Tout déselectionner
+pi.grid.action.row_deletcache: Vider cache
+pi.grid.action.select_all: Sélectionner
+pi.grid.action.select_none: Désélectionner
 
 pi.grid.action.enabled_paiementstatus.sButtonText: Activer Paiement
 pi.grid.action.enabled_paiementstatus.questionTitle: Activation de paiement d'un adhérent

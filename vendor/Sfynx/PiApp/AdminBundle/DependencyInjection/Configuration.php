@@ -582,6 +582,10 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('og_site_name')
                                     ->defaultValue('')
                                     ->cannotBeEmpty()
+                                    ->end()     
+
+                                ->arrayNode('additions')
+                                    ->prototype('scalar')->end()
                                     ->end()                                    
                             
                             ->end()

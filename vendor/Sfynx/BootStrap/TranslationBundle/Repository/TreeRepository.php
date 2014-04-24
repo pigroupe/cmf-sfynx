@@ -330,7 +330,7 @@ class TreeRepository extends NestedTreeRepository
         	$query = $query->getQuery();
         }
         
-        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN);
+        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN);
     }   
     
     /**

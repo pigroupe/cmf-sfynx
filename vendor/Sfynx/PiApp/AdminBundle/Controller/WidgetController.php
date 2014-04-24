@@ -110,6 +110,21 @@ class WidgetController extends abstractController
     {
         return parent::positionajaxAction();
     }    
+    
+    /**
+     * Delete twig cache Widget
+     *
+     * @Route("/admin/widget/deletetwigcache", name="admin_widget_deletetwigcache_ajax")
+     * @Secure(roles="ROLE_USER")
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access  public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function deletetwigcacheajaxAction($type = 'widget')
+    {
+    	return parent::deletetwigcacheajaxAction($type);
+    }    
 
     /**
      * Finds and displays a Widget entity.

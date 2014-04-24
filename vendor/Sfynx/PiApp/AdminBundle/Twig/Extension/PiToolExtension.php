@@ -466,6 +466,7 @@ class PiToolExtension extends \Twig_Extension
         $og_type         = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_type'));
         $og_image        = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_image'));
         $og_site_name    = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_site_name'));
+        $additions       = $this->container->getParameter('pi_app_admin.layout.meta.additions');
         // if the file doesn't exist, we call an exception
         $og_image        = strip_tags($this->container->get('translator')->trans($og_image));
         $is_file_exist   = realpath($this->container->get('kernel')->getRootDir(). '/../web/' . $og_image);
@@ -525,20 +526,10 @@ class PiToolExtension extends \Twig_Extension
             $og_site_name = str_replace('http://', '', $og_site_name);
             $metas[] = "    <meta property='og:site_name' content=\"{$og_site_name}\"/>";
         }
-        // mobile management
-        //$metas[] = "<meta name='apple-mobile-web-app-capable' content='yes'/>";
-        //$metas[] = "<meta name='apple-mobile-web-app-status-bar-style' content='black'/>";
-        //$metas[] = "<meta name='viewport'    id='viewport'  content='target-densitydpi=device-dpi, user-scalable=no' />";
-        //$metas[] = "<meta name='viewport' content='initial-scale=1.0; user-scalable=0; minimum-scale=1.0; maximum-scale=1.0;' />";
-        $metas[] = "<!-- Mobile viewport optimized: h5bp.com/viewport -->";
-        $metas[] = "<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>";
-        //Empécher Microsoft de générer des "smart tags" sur notre page web.
-        //$metas[] = "meta name='MSSmartTagsPreventParsing' content='TRUE'/>";
-        // robot management
-       // $metas[] = "    <meta name='robots' content='ALL'/>";
-        $metas[] = "    <meta name='robots' content='noindex, nofollow'/>";
-       // $metas[] = "    <meta name='robots' content='noodp'/>";
-        //$metas[] = "    <base href='/'>";
+        // additions management
+        foreach ($additions as $k => $values) {
+            $metas[] = $values;
+        }
                 
         return implode(" \n", $metas);
     }

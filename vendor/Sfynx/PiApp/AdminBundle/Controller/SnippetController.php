@@ -61,7 +61,7 @@ class SnippetController extends abstractController
     /**
      * Enabled Widget entities.
      *
-     * @Route("/admin/widget/enabled", name="admin_snippet_enabledentity_ajax")
+     * @Route("/admin/snippet/enabled", name="admin_snippet_enabledentity_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
@@ -76,7 +76,7 @@ class SnippetController extends abstractController
     /**
      * Disable Widget  entities.
      *
-     * @Route("/admin/widget/disable", name="admin_snippet_disablentity_ajax")
+     * @Route("/admin/snippet/disable", name="admin_snippet_disablentity_ajax")
      * @Secure(roles="ROLE_USER")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
@@ -87,6 +87,21 @@ class SnippetController extends abstractController
     {
         return parent::disableajaxAction();
     }
+    
+    /**
+     * Delete twig cache Widget
+     *
+     * @Route("/admin/snippet/deletetwigcache", name="admin_snippet_deletetwigcache_ajax")
+     * @Secure(roles="ROLE_USER")
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @access  public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function deletetwigcacheajaxAction($type = 'widget')
+    {
+        return parent::deletetwigcacheajaxAction($type);
+    }    
 
     /**
      * Finds and displays a Widget entity.
