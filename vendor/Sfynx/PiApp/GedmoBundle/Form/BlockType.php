@@ -295,7 +295,7 @@ class BlockType extends AbstractType
             		'multiple' => false,
 					'required'  => false,
              		'constraints' => array(
-             				new Constraints\NotBlank(),
+             				//new Constraints\NotBlank(),
              		),
             		"label_attr" => array(
             				"class"=> 'bg_image_collection',
@@ -363,7 +363,7 @@ class BlockType extends AbstractType
             		'multiple' => false,
 					'required'  => false,
              		'constraints' => array(
-             				new Constraints\NotBlank(),
+             				//new Constraints\NotBlank(),
              		),
             		"label_attr" => array(
             				"class"=> 'bg_image_collection',
