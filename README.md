@@ -39,6 +39,15 @@ The bundle has been split into 2 directories :
 * TemplateBundle :  A bundle which is used to stock all template of layout and others.
 ```
 
+## Documentation
+ 
+* [Example of encrypt usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/PiApp/AdminBundle/Resources/doc/index.rst)
+* [Example of encrypt usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/BootStrap/WsBundle/Resources/doc/index.rst)
+
+
+## License
+**This bundle is under the MIT license. See the complete license in the bundle**
+
 ## Dependencies
 
 Register all bundle in your `app/AppKernel.php` file:
@@ -249,6 +258,7 @@ Execute the `check.php` script from the command line:
     - php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)
     - php_curl.dll
     - php_openssl.dll (enabled Socket transport “ssl” in PHP)
+    - php-mcrypt
     - activation d'envoi de mail
          - sous windows : 
               - SMTP = smtp-host-value

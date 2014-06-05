@@ -6,6 +6,11 @@ SFYNX is not just to simplify the developper's work, and to speed up the creatio
 applications. It also allows you to create your own CMS. It's a CMF easy to use, build your own template (layout), add your own custom block
  with your own logic, build all the widget you need.
 
+## Project PI-GROUPE Development
+**For more information** : 
+* http://www.sfynx.fr
+* http://www.pi-groupe.fr
+* http://www.pi-groupe.net
 
 ## Structure of the framework
 
@@ -33,6 +38,15 @@ The bundle has been split into 2 directories :
 * GedmoBundle : A bundle which is used to create a project with the CMF.
 * TemplateBundle :  A bundle which is used to stock all template of layout and others.
 ```
+
+## Documentation
+ 
+* [Example of encrypt usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/PiApp/AdminBundle/Resources/doc/index.rst)
+* [Example of encrypt usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/BootStrap/WsBundle/Resources/doc/index.rst)
+
+
+## License
+**This bundle is under the MIT license. See the complete license in the bundle**
 
 ## Dependencies
 
@@ -244,6 +258,7 @@ Execute the `check.php` script from the command line:
     - php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)
     - php_curl.dll
     - php_openssl.dll (enabled Socket transport “ssl” in PHP)
+    - php-mcrypt
     - activation d'envoi de mail
          - sous windows : 
               - SMTP = smtp-host-value
