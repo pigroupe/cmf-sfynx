@@ -18,6 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use BootStrap\TranslationBundle\Model\AbstractDefault;
 
+// importing @Encrypted annotation
+use PiApp\AdminBundle\EventSubscriber\Encryptors\Annotation\Aesencrypted;
+
 /**
  * BootStrap\TranslatorBundle\Entity\Word
  *
@@ -70,6 +73,7 @@ class Word extends AbstractDefault
      *
      * @Gedmo\Translatable
      * @ORM\Column(name="label", type="string", length=255, nullable=true)
+     * @Aesencrypted
      */
     protected $label;
 
@@ -77,6 +81,7 @@ class Word extends AbstractDefault
      * @var string
      *
      * @ORM\Column(name="keyword", type="string", length=128, nullable=false, unique=true)
+     * @Aesencrypted
      * @Assert\NotBlank()
      */
     protected $keyword;

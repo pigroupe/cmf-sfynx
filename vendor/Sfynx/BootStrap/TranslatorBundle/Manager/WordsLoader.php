@@ -83,9 +83,8 @@ class WordsLoader implements LoaderInterface
                                 continue;
                             }                            
                             list($format, $file) = $data;
-                            
-                              // merge catalogues
-                              $loader = $this->loadFile($file, $format, $locale, $domain);
+                            // merge catalogues
+                            $loader = $this->loadFile($file, $format, $locale, $domain);
                             $catalogue->addCatalogue($loader);
                         }
                     }
@@ -154,24 +153,37 @@ class WordsLoader implements LoaderInterface
      */
     public function wordsTranslation()
     {
-        $entityManager     = $this->container->get('doctrine')->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $entityManager = $this->container->get('doctrine')->getManager();
+        $locale        = $this->container->get('request')->getLocale();
 
-        $foundBundle    = $this->container->get('kernel')->getBundle('BootStrapTranslatorBundle');
-        $basePath        = $foundBundle->getPath() . "/Resources/translations/";
-        $dir             = \PiApp\AdminBundle\Util\PiFileManager::mkdirr($basePath);
+        $foundBundle   = $this->container->get('kernel')->getBundle('BootStrapTranslatorBundle');
+        $basePath      = $foundBundle->getPath() . "/Resources/translations/";
+        $dir           = \PiApp\AdminBundle\Util\PiFileManager::mkdirr($basePath);
 
-        $languages         = $entityManager->getRepository("PiAppAdminBundle:Langue")->findAllByEntity($locale, 'object', false);
-         
         $array = array();
-        foreach($languages as $language){
-            $filename     = $basePath."messages.".$language->getId().".yml";
-            $Words         = $entityManager->getRepository("BootStrapTranslatorBundle:Word")->findAllByEntity($language->getId(), 'object', false);
-            foreach ($Words as $word){
-                $array["{$word->getKeyword()}"] = $word->translate($language->getId())->getLabel()? $word->translate($language->getId())->getLabel():' ';
+        if (!isset($_GET['_end_wordsloader_'])) {
+            $_GET['_end_wordsloader_'] = false;
+            // we create qury
+            $Words     = $entityManager->getRepository("BootStrapTranslatorBundle:Word")->createQueryBuilder('a')
+            ->select('a')
+            ->where('a.archived = 0')
+            ->getQuery()
+            ->getResult();
+            // we create for all languages
+            $all_locales = $this->container->get('pi_app_admin.locale_manager')->getAllLocales();
+            foreach ($all_locales as $key => $lang) {
+                $filename  = $basePath."messages.".$lang.".yml";
+                foreach ($Words as $word) {
+                    if ($lang != $locale) {
+                        $word->setTranslatableLocale($lang);
+                        $entityManager->refresh($word);
+                    }
+                    $array["{$word->getKeyword()}"] = $word->translate($lang)->getLabel() ? $word->translate($lang)->getLabel():' ';
+                }
+                $yaml = \Symfony\Component\Yaml\Yaml::dump($array, 2);
+                file_put_contents($filename, $yaml);
+                $array = array();
             }
-            $yaml = \Symfony\Component\Yaml\Yaml::dump($array, 2);
-            file_put_contents($filename, $yaml);
         }
         
         $basePath_cache_translations         = realpath($this->container->getParameter("kernel.cache_dir"). '/translations/');

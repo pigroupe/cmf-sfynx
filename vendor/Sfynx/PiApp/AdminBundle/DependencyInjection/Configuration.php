@@ -45,6 +45,7 @@ class Configuration implements ConfigurationInterface
         $this->addMailConfig($rootNode);
         $this->addCookiesConfig($rootNode);
         $this->addPermissionConfig($rootNode);
+        $this->addEncryptConfig($rootNode);
 
         return $treeBuilder;
     }
@@ -393,6 +394,7 @@ class Configuration implements ConfigurationInterface
     	$rootNode
 	    	->children()
 		    	->arrayNode('permission')
+		    	    ->addDefaultsIfNotSet()
 			    	->children()
 			    	
 			    		->booleanNode('restriction_by_roles')->isRequired()->defaultValue(false)->end()
@@ -417,7 +419,32 @@ class Configuration implements ConfigurationInterface
 			    	->end()
 		    	->end()
 	    	->end();
-    }    
+    }
+
+    /**
+     * Socloz config
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     * @return void
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function addEncryptConfig(ArrayNodeDefinition $rootNode) {
+    	$rootNode
+        	->children()
+        	        
+            	        ->arrayNode('encrypters')
+            	        ->prototype('array')
+                	        ->children()
+                	            ->scalarNode('encryptor_annotation_name')->isRequired()->end()
+                	            ->scalarNode('encryptor_class')->isRequired()->end()
+                	            ->arrayNode('encryptor_options')->prototype('scalar')->end()->end()                	            
+                	        ->end()
+            	        ->end()
+            	        ->end()    
+        	        
+        	->end();
+    }  
     
     /**
      * Layout config
@@ -582,11 +609,12 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('og_site_name')
                                     ->defaultValue('')
                                     ->cannotBeEmpty()
-                                    ->end()     
+                                    ->end() 
 
                                 ->arrayNode('additions')
                                     ->prototype('scalar')->end()
                                     ->end()                                    
+                                      
                             
                             ->end()
                         ->end()                        
@@ -596,6 +624,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end();
-    }    
-        
+    }  
+
 }

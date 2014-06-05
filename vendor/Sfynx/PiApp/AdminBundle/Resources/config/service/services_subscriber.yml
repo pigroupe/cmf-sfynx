@@ -1,0 +1,16 @@
+parameters:
+    piapp.admin.subscriber.encrypters.class: PiApp\AdminBundle\EventSubscriber\EncryptSubscriber
+
+services:
+    #               
+    # Doctrine encryption events Configuration
+    #        
+    pi_app_admin.encrypt_subscriber:
+        class: %piapp.admin.subscriber.encrypters.class%
+        public: false
+        arguments: [@annotation_reader, %pi_app_admin.encrypters%, @service_container]
+        properties:
+            locale: %locale%
+            interfaceclass: PiApp\AdminBundle\Builder\PiEncryptorInterface
+        tags:
+            - { name: doctrine.event_subscriber, connexion: default, priority: 1 }            

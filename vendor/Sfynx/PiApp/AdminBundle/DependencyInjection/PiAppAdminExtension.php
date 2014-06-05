@@ -41,6 +41,7 @@ class PiAppAdminExtension extends Extension
         $loaderYaml->load('services.yml');
         $loaderYaml->load("services_form_validator.yml");
         $loaderYaml->load('services_listener.yml');
+        $loaderYaml->load('services_subscriber.yml');
         
         //         $PROXY_HOST = "proxy.example.com"; // Proxy server address
         //         $PROXY_PORT = "1234";    // Proxy server port
@@ -147,7 +148,14 @@ class PiAppAdminExtension extends Extension
             if (isset($config['page']['seo_redirection']) && isset($config['page']['seo_redirection']['seo_file_name'])) {
             	$container->setParameter('pi_app_admin.page.seo_redirection.seo_file_name', $config['page']['seo_redirection']['seo_file_name']);
             }                                
-        }    
+        }
+
+        /**
+         * Encryptor config parameter
+         */
+        if (isset($config['encrypters'])) {
+            $container->setParameter('pi_app_admin.encrypters', $config['encrypters']);        
+        }
 
         /**
          * Cookies config parameter
@@ -293,7 +301,7 @@ class PiAppAdminExtension extends Extension
                     $container->setParameter('pi_app_admin.layout.meta.keywords', $config['layout']['meta_head']['keywords']);
                 if (isset($config['layout']['meta_head']['additions'])) {
                 	$container->setParameter('pi_app_admin.layout.meta.additions', $config['layout']['meta_head']['additions']);
-                }                
+                }
             }
             
         }          

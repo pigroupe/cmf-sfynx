@@ -115,6 +115,22 @@
 #        prohibition:
 #            preupdate: true
 #            preremove: true
+#    encrypters:
+#        encrypter_expert:
+#            encryptor_annotation_name: PiApp\AdminBundle\EventSubscriber\Encryptors\Annotation\Expertencrypted
+#            encryptor_class: PiApp\AdminBundle\EventSubscriber\Encryptors\ExpertEncryptor #  If you want, you can use your own Encryptor. Encryptor must implements EncryptorInterface interface
+#            encryptor_options:
+#                secret_key: "@kernel.secret" #The secret that is used to encrypt data. By default, it will use the kernel secret.
+#                algorithm: "rijndael-128" #Encryption algorithm
+#                mode: "cbc" #Encryption mode
+#                random_initialization_vector: true #If you set it to false, it will use a blank string as initialization vector.
+#                base64: true #Encode the encrypted data with the base64 algorithm.
+#                base64_url_safe: true #Replace "+" and "/" characters by "-" and "_" 
+#        encrypter_aes:
+#            encryptor_annotation_name: PiApp\AdminBundle\EventSubscriber\Encryptors\Annotation\Aesencrypted
+#            encryptor_class: PiApp\AdminBundle\EventSubscriber\Encryptors\AESEncryptor
+#            encryptor_options:      
+#                secret_key: "@kernel.secret"
 #    form:
 #        show_legend: true
 #        show_child_legend: false
