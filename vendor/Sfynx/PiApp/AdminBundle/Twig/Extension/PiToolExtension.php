@@ -284,7 +284,7 @@ class PiToolExtension extends \Twig_Extension
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getPictureCropFunction($media, $format = "PiAppTemplateBundle:Template\\Crop:default.html.twig", $nameForm = "", $type = '')
+    public function getPictureCropFunction($media, $format = "PiAppTemplateBundle:Template\\Crop:default.html.twig", $nameForm = "", $type = '', $count="")
     {
     	if ($format == "default") {
     		$format = "PiAppTemplateBundle:Template\\Crop:default.html.twig";
@@ -296,6 +296,7 @@ class PiToolExtension extends \Twig_Extension
                 $crop_input = ($templateContent->hasBlock("crop_input")
                       ? $templateContent->renderBlock("crop_input", array(
                           "media"=>$media,
+                          "count"=>$count,
                           "nameForm"=>$nameForm,
                           "globals" => $globals
                       ))
@@ -303,6 +304,7 @@ class PiToolExtension extends \Twig_Extension
                 $crop_script = ($templateContent->hasBlock("crop_script")
                       ? $templateContent->renderBlock("crop_script", array(
                           "media" =>$media,
+                          "count"=>$count,
                           "nameForm" =>$nameForm,
                           "globals" => $globals
                       ))
@@ -326,7 +328,7 @@ class PiToolExtension extends \Twig_Extension
                 return $response->getContent();
             }
     	}
-    }  
+    }   
 
     /**
      * show a crop picture.
