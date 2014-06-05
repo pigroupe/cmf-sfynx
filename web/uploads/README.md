@@ -41,8 +41,8 @@ The bundle has been split into 2 directories :
 
 ## Documentation
  
-* [Example of CMF usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/PiApp/AdminBundle/Resources/doc/index.rst)
-* [Example of SSO usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/BootStrap/WsBundle/Resources/doc/index.rst)
+* [Example of CMF usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/PiApp/AdminBundle/Resources/doc/index.md)
+* [Example of SSO usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/BootStrap/WsBundle/Resources/doc/index.md)
 
 
 ## License
