@@ -633,12 +633,12 @@ boot_strap_ws:
 #                url: http://www.sfynx22.local/setCookies.php              
         handlers:
             getpermisssion:
-                key: 0A1TG4GO
+                key: %ws_key%
                 method: GET
                 api: http://www.sfynx22.local/ws/auth/get/permisssion
                 format: json
             validatetoken:
-                key: 0A1TG4GO
+                key: %ws_key%
                 method: GET
                 api: http://www.sfynx22.local/ws/auth/validate/token
                 format: json            
