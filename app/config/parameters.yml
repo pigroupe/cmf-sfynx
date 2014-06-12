@@ -12,7 +12,7 @@ parameters:
     mailer_password:   ~
 
     locale:            en_GB
-    secret:            5b5a0ff57bd45284dafe7f104fc7d8e15
+    secret:            ~
     
     # memcache params
     session_memcache_host: 127.0.0.1 # 127.0.0.1

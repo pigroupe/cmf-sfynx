@@ -5,7 +5,7 @@
     "description": "The \"Symfony Standard Edition\" distribution",
     "repositories": [
     {
-        "type":"vcs",
+        "type":"git",
         "url":"https://github.com/vincecore/BeSimpleI18nRoutingBundle.git"
     }
     ],
