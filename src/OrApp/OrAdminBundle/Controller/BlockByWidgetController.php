@@ -12,21 +12,6 @@
  */
 namespace OrApp\OrAdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BootStrap\TranslationBundle\Controller\abstractController;
-use PiApp\AdminBundle\Exception\ControllerException;
-
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-
-use PiApp\AdminBundle\Entity\Block;
-use PiApp\AdminBundle\Form\BlockByWidgetType;
-
 use PiApp\AdminBundle\Controller\BlockByWidgetController as baseBlockByWidgetController;
 
 /**
