@@ -466,7 +466,6 @@ knp_menu:
 ewz_recaptcha:
     public_key:   6LcpsucSAAAAAMymbppD7z2W917CVN6Tv6kp8qZr
     private_key:  6LcpsucSAAAAAOpXuESiygvlqVi2afdtSeW4U8sf
-    secure:       false
     locale_key:   locale  
                 
 #
