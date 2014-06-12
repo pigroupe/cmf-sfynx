@@ -37,13 +37,6 @@ class BootStrapAclManagerBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        //print_r('PiApptest1');
-        
-        // app/config/security.php
-        # any name configured in doctrine.dbal section
-        # $container->loadFromExtension('security', 'acl', array(
-        #        'connection' => 'default',
-        # ));        
     }
     
     /**
@@ -51,7 +44,6 @@ class BootStrapAclManagerBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('PiApptest2');
     }
     
     /**

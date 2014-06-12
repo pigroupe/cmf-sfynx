@@ -29,8 +29,5 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
     {
         $definition = $container->getDefinition('pi_app_admin.user.login_handler');
         $definition->setClass('OrApp\OrAdminBundle\EventListener\HandlerLogin');    
-
-        //http://blog.nicolashachet.com/niveaux/confirme/surcharger-vos-entites-doctrine-en-symfony-2-exemple-avec-le-fosuserbundle/
-        //http://symfony.com/doc/master/cookbook/bundles/override.html#entities-entity-mapping
     }
 }

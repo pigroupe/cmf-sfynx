@@ -41,8 +41,6 @@ class BootStrapTranslationBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        //print_r('PiApptest1');
-        
         // we add all route pages.
         $container->addCompilerPass(new AddDependencyRoute());        
     }
@@ -52,7 +50,6 @@ class BootStrapTranslationBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('PiApptest2');
     }    
     
     /**

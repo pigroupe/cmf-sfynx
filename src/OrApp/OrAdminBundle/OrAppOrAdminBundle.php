@@ -38,7 +38,6 @@ class OrAppOrAdminBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('PiApptest2');
     }    
     
     /**

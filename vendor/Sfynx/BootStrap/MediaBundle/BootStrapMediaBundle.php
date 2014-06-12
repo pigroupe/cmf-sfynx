@@ -72,7 +72,6 @@ class BootStrapMediaBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('PiApptest2');
     }    
     
     /**

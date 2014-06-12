@@ -28,13 +28,6 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        //$definition = $container->getDefinition('sonata.media.form.type.media');
-        //$definition->setClass('BootStrap\MediaBundle\Form\Type\MediaType');
-        
-        //http://blog.nicolashachet.com/niveaux/confirme/surcharger-vos-entites-doctrine-en-symfony-2-exemple-avec-le-fosuserbundle/
-        //http://symfony.com/doc/master/cookbook/bundles/override.html#entities-entity-mapping
-        
-        
         $definition = $container->getDefinition('piapp_gedmobundle_mediatype_file');
         $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
         $definition->setArguments(array(

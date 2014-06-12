@@ -39,7 +39,6 @@ class PiAppAdminBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        //print_r('MyApptest1');
         
         $container->addCompilerPass(new PiTwigEnvironmentPass());
     }
@@ -49,7 +48,6 @@ class PiAppAdminBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('MyApptest2');
     }
     
     /**

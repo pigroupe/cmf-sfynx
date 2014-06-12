@@ -38,8 +38,6 @@ class BootStrapTranslatorBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        //print_r('MyApptest1');
-    
     }
     
     /**
@@ -47,7 +45,6 @@ class BootStrapTranslatorBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('MyApptest2');
     }
     
     /**

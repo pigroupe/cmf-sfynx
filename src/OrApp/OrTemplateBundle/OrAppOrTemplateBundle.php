@@ -37,7 +37,6 @@ class OrAppOrTemplateBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('PiApptest2');
     }    
     
     /**

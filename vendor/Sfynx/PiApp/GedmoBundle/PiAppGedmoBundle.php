@@ -219,7 +219,6 @@ class PiAppGedmoBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        //print_r('PiApptest1');
     }
     
     /**
@@ -227,7 +226,6 @@ class PiAppGedmoBundle extends Bundle
      */
     public function boot()
     {
-        //print_r('PiApptest2');
     }    
     
     /**
