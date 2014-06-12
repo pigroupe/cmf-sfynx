@@ -12,13 +12,9 @@
  */
 namespace OrApp\OrGedmoBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use \PiApp\GedmoBundle\Form\MediaType as PiMediaType;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of the MediaType form.
