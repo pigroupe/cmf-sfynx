@@ -22,7 +22,7 @@ framework:
     #trust_proxy_headers: false # Whether or not the Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP) 
     session:
         name: PHPSESSID
-        cookie_lifetime: 604800  # 604800 86400 
+        cookie_lifetime: %pi_cookie_lifetime% # 604800 86400 
         # surcharge session handler with memcache
         #handler_id:     pi_session.handler.memcache 
 #        cookie_path:          ~
@@ -575,7 +575,7 @@ pi_app_admin:
                     ios: 5.9      
     cookies:
         date_expire: true
-        date_interval:  604800 # PT4H  604800
+        date_interval:  %pi_cookie_lifetime% # PT4H  604800
         application_id: sfynx
     permission:
         restriction_by_roles: false

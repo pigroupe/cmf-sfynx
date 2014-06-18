@@ -347,8 +347,8 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
             $translationMeta = $this->getClassMetadata(); // table inheritance support
             $qb = $this->_em->createQueryBuilder();
             $qb->select('trans.content, trans.field, trans.locale')
-            ->from($translationMeta->rootEntityName, 'trans')
-            ->where('trans.object_id = :entityId')
+            ->from($translationMeta->associationMappings['translations']['targetEntity'], 'trans')
+            ->where('trans.object = :entityId')
             ->orderBy('trans.locale');
             $q = $qb->getQuery();
             $data = $q->execute(
@@ -358,7 +358,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
     
             if ($data && is_array($data) && count($data)) {
                 foreach ($data as $row) {
-                    $result[$row['locale']][$row['field']] = $row['content'];
+                    $result[$row['locale']][$row['field']][] = $row['content'];
                 }
             }
         }
@@ -380,10 +380,11 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         $result = array();
         if ($id) {
             $translationMeta = $this->getClassMetadata(); // table inheritance support
+            // $this->_entityTranslationName
             $qb = $this->_em->createQueryBuilder();
             $qb->select('trans.content, trans.field, trans.locale')
-            ->from($translationMeta->rootEntityName, 'trans')
-            ->where('trans.object_id = :entityId')
+            ->from($translationMeta->associationMappings['translations']['targetEntity'], 'trans')
+            ->where('trans.object = :entityId')
             ->orderBy('trans.locale');
             $q = $qb->getQuery();
             $data = $q->execute(
@@ -401,8 +402,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
     }    
         
     /**
-     * Makes additional translation of $entity $field into $locale
-     * using $value
+     * Makes additional translation of $entity $field into $locale using $value
      *
      * @param object $entity
      * @param string $field
@@ -430,10 +430,10 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
             $objectClass = $meta->name;
             $class = $listener->getTranslationClass($ea, $meta->name);
             $transMeta = $this->_em->getClassMetadata($class);
-            $trans = $this->findOneBy(compact('locale', 'field', 'object_id'));
+            $trans = $this->findOneBy(compact('locale', 'field', 'object'));
             if (!$trans) {
                 $trans = new $class();
-                $transMeta->getReflectionProperty('object_id')->setValue($trans, $entity->getId());
+                $transMeta->getReflectionProperty('object')->setValue($trans, $entity->getId());
                 $transMeta->getReflectionProperty('field')->setValue($trans, $field);
                 $transMeta->getReflectionProperty('locale')->setValue($trans, $locale);
             }

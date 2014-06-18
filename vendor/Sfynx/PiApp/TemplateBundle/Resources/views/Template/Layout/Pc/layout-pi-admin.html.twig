@@ -255,7 +255,7 @@
 					<li {{ in_paths("admin_langue", 'class="sub_show"')|raw }}		><a href="{{ path("admin_langue") }}" >{{ 'pi.dashboard.menu3.language'|trans }}</a></li>
 					<li {{ in_paths("admin_tag", 'class="sub_show"')|raw }}			><a href="{{ path("admin_tag") }}" >{{ 'pi.dashboard.menu3.tag'|trans }}</a></li>
 					<li {{ in_paths("admin_keyword", 'class="sub_show"')|raw }}		><a href="{{ path("admin_keyword") }}" >{{ 'pi.dashboard.menu3.keyword'|trans }}</a></li>
-					<li {{ in_paths("admin_word", 'class="sub_show"')|raw }}		><a href="{{ path("admin_word") }}" >{{ 'pi.dashboard.menu3.word'|trans }}</a></li>
+					<li {{ in_paths("admin_word", 'class="sub_show"')|raw }}		><a href="{{ path("admin_word", { '_token': csrf_token('listword') }) }}" >{{ 'pi.dashboard.menu3.word'|trans }}</a></li>
 					<li {{ in_paths("admin_gedmo_category", 'class="sub_show"')|raw }}			><a href="{{ path("admin_gedmo_category") }}" >{{ 'pi.dashboard.menu3.category'|trans }}</a></li>	
 				</ul>
 			</div>

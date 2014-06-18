@@ -27,6 +27,10 @@ use Doctrine\DBAL\Types\StringType;
 
 /**
  * Doctrine event subscriber which encrypt/decrypt entities
+ * 
+ * @category   Admin_EventSubscriber
+ * @package    Encryptor 
+ * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class EncryptSubscriber extends MappedEventSubscriber
 {
@@ -45,41 +49,49 @@ class EncryptSubscriber extends MappedEventSubscriber
     public $locale = 'en_GB';
     
     /**
-     * is_defaultlocale_setting
-     * @var BooleanType
-     */    
-    public $is_defaultlocale_setting;
-        
-    /**
      * Encryptor interface namespace
      * @var String
      */
-
-    public $interfaceclass = 'PiApp\AdminBundle\Builder\PiEncryptorInterface';
-
+    
+    public $interfaceclass = 'PiApp\AdminBundle\Builder\PiEncryptorInterface';    
+    
+    /**
+     * Sets autorization of load process
+     *
+     * @var string
+     */
+    public $_load_enabled = false;    
+    
+    /**
+     * Sets autorization of update process
+     * 
+     * @var string
+     */
+    public $_update_enabled = false;
+    
     /**
      * Options
      * @var Array
      */
-    private $options;
+    protected $options;
     
     /**
      * Encryptor
      * @var EncryptorInterface
      */
-    private $encryptor;    
+    protected $encryptor;    
 
     /**
      * Annotation reader
-     * @var Doctrine\Common\Annotations\Reader
+     * @var \Doctrine\Common\Annotations\Reader
      */
-    private $annReader;
+    protected $annReader;
     
     /**
      * Registr to avoid multi decode operations for one entity
      * @var array
      */
-    private $decodedRegistry = array();    
+    protected $decodedRegistry = array();    
 
     /**
      * Initialization of subscriber
@@ -101,61 +113,67 @@ class EncryptSubscriber extends MappedEventSubscriber
      * restrictions
      * @param LifecycleEventArgs $args 
      * @return void
+     * @access public
+     * 
+     * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function preUpdate(PreUpdateEventArgs $args) {
-        $entity = $args->getEntity();
-        $em     = $args->getEntityManager();
-        $reflectionClass = new ReflectionClass($args->getEntity());
-        $properties      = $reflectionClass->getProperties();
-        foreach ($properties as $refProperty) {
-            foreach ($this->options as $key => $encrypter) {
-                if (
-                    isset($encrypter['encryptor_annotation_name'])
-                    &&
-                    isset($encrypter['encryptor_class'])
-                    &&
-                    isset($encrypter['encryptor_options'])
-                ) {
-                    $this->encryptor = $this->getEncryptorService($key);
-                    if ($this->annReader->getPropertyAnnotation($refProperty, $encrypter['encryptor_annotation_name'])) {
-                    	// we have annotation and if it decrypt operation, we must avoid duble decryption
-                    	$propName = $refProperty->getName();
-                    	// we encrypt the field
-                		if ($refProperty->isPublic()) {
-                			$entity->$propName = $this->encryptor->encrypt($refProperty->getValue());
-                		} else {
-                    		$methodName = self::capitalize($propName);
-                            if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
-                                // we get the locale value
-                                $locale = false;                                
-                                $om     = $args->getObjectManager();
-                                $object = $args->getObject();
-                                $meta   = $om->getClassMetadata(get_class($object));
-                                $config = $this->getConfiguration($om, $meta->name);
-                                if (isset($config['fields'])) {
-                                	$locale = $this->getTranslatableLocale($object, $meta);
+        if ($this->_update_enabled == true) {
+            $entity = $args->getEntity();
+            $em     = $args->getEntityManager();
+            $reflectionClass = new ReflectionClass($args->getEntity());
+            $properties      = $reflectionClass->getProperties();
+            $className = get_class($entity);
+            foreach ($properties as $refProperty) {
+                foreach ($this->options as $key => $encrypter) {
+                    if (
+                        isset($encrypter['encryptor_annotation_name'])
+                        &&
+                        isset($encrypter['encryptor_class'])
+                        &&
+                        isset($encrypter['encryptor_options'])
+                    ) {
+                        $this->encryptor = $this->getEncryptorService($key);
+                        if ($this->annReader->getPropertyAnnotation($refProperty, $encrypter['encryptor_annotation_name'])) {
+                        	// we have annotation and if it decrypt operation, we must avoid duble decryption
+                        	$propName = $refProperty->getName();
+                        	// we encrypt the field
+                    		if ($refProperty->isPublic()) {
+                    			$entity->$propName = $this->encryptor->encrypt($refProperty->getValue());
+                    		} else {
+                        		$methodName = self::capitalize($propName);
+                                if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
+                                    // we get the locale value
+                                    $locale = false;                                
+                                    $om     = $args->getObjectManager();
+                                    $object = $args->getObject();
+                                    $meta   = $om->getClassMetadata(get_class($object));
+                                    $config = $this->getConfiguration($om, $meta->name);
+                                    if (isset($config['fields'])) {
+                                    	$locale = $this->getTranslatableLocale($object, $meta);
+                                    }
+                                    // we set the encrypt value
+                                    $currentPropValue        = $entity->$getter();
+                                    if (!empty($currentPropValue)) {
+                                    	$currentPropValue        = $this->encryptor->encrypt($currentPropValue);
+                                    }
+                                    // we set locale value
+                                    if (
+                                        $locale
+                                    ) {
+                                    	if ($locale == $this->locale) {
+                                    		$entity->$setter($currentPropValue);
+                                    	}
+                                   	    $entity->translate($locale)->$setter($currentPropValue);
+                                    }      
+                                } else {
+                                    throw new \RuntimeException(sprintf("Property %s isn't public and doesn't has getter/setter"));
                                 }
-                                // we set the encrypt value
-                                $currentPropValue        = $entity->$getter();
-                                if (!empty($currentPropValue)) {
-                                	$currentPropValue        = $this->encryptor->encrypt($currentPropValue);
-                                }
-                                // we set locale value
-                                if (
-                                    $locale
-                                ) {
-                                	if ($locale == $this->locale) {
-                                		$entity->$setter($currentPropValue);
-                                	}
-                                	$entity->translate($locale)->$setter($currentPropValue);
-                                }                                                               
-                            } else {
-                                throw new \RuntimeException(sprintf("Property %s isn't public and doesn't has getter/setter"));
-                            }
-                		}  
+                    		}  
+                        }
+                    } else {
+                    	throw new \RuntimeException(sprintf("encrypter is not correctly configured"));
                     }
-                } else {
-                	throw new \RuntimeException(sprintf("encrypter is not correctly configured"));
                 }
             }
         }
@@ -196,7 +214,7 @@ class EncryptSubscriber extends MappedEventSubscriber
      * @param string $word
      * @return string
      */
-    public static function capitalize($word) {
+    protected static function capitalize($word) {
         if (is_array($word)) {
             $word = $word[0];
         }
@@ -209,89 +227,104 @@ class EncryptSubscriber extends MappedEventSubscriber
      * @param LifecycleEventArgs $args 
      * @param Boolean $isEncryptOperation If true - encrypt, false - decrypt entity 
      * @return void
+     * @access protected
+     * 
+     * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    private function processFields(LifecycleEventArgs $args, $isEncryptOperation = true) {
-        $entity = $args->getEntity();
-        $em     = $args->getEntityManager();
-        $className = get_class($entity);
-        $metadata = $em->getClassMetadata($className);        
-        $encryptorMethod = $isEncryptOperation ? 'encrypt' : 'decrypt';
-        $reflectionClass = new ReflectionClass($entity);
-        $properties      = $reflectionClass->getProperties();
-        foreach ($properties as $refProperty) {            
-            foreach ($this->options as $key => $encrypter) {
-            	if (
-            	    isset($encrypter['encryptor_annotation_name'])
-            	    &&
-            	    isset($encrypter['encryptor_class'])
-            	    &&
-            	    isset($encrypter['encryptor_options'])
-            	) {
-            		$this->encryptor = $this->getEncryptorService($key);
-                	if ($this->annReader->getPropertyAnnotation($refProperty, $encrypter['encryptor_annotation_name'])) {
-                        // we have annotation and if it decrypt operation, we must avoid duble decryption
-                        $propName = $refProperty->getName();
-                        if ($refProperty->isPublic()) {
-                            $entity->$propName = $this->encryptor->$encryptorMethod($refProperty->getValue());
-                        } else {
-                            $methodName = self::capitalize($propName);
-                            if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
-                                if ($isEncryptOperation) {
-                                    // we get the locale value
-                                    if (isset($_GET['_locale'])) {
-                                    	$locale = $_GET['_locale'];
+    protected function processFields(LifecycleEventArgs $args, $isEncryptOperation = true) {
+        if ($this->_load_enabled == true) {
+            $entity = $args->getEntity();
+            $em     = $args->getEntityManager();
+            $className = get_class($entity);
+            $metadata = $em->getClassMetadata($className);        
+            $encryptorMethod = $isEncryptOperation ? 'encrypt' : 'decrypt';
+            $reflectionClass = new ReflectionClass($entity);
+            $properties      = $reflectionClass->getProperties();
+            foreach ($properties as $refProperty) {            
+                foreach ($this->options as $key => $encrypter) {
+                	if (
+                	    isset($encrypter['encryptor_annotation_name'])
+                	    &&
+                	    isset($encrypter['encryptor_class'])
+                	    &&
+                	    isset($encrypter['encryptor_options'])
+                	) {
+                		$this->encryptor = $this->getEncryptorService($key);
+                    	if ($this->annReader->getPropertyAnnotation($refProperty, $encrypter['encryptor_annotation_name'])) {
+                            // we have annotation and if it decrypt operation, we must avoid duble decryption
+                            $propName = $refProperty->getName();
+                            if ($refProperty->isPublic()) {
+                                $entity->$propName = $this->encryptor->$encryptorMethod($refProperty->getValue());
+                            } else {
+                                $methodName = self::capitalize($propName);
+                                if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
+                                    if ($isEncryptOperation) {
+                                        // we get the locale value
+                                        if (isset($_GET['_locale'])) {
+                                        	$locale = $_GET['_locale'];
+                                        } else {
+                                        	$locale = $this->locale;
+                                        }
+                                        // we set the encrypt value
+                                        $currentPropValue        = $entity->$getter();
+                                        if (!empty($currentPropValue)) {
+                                        	$currentPropValue        = $this->encryptor->$encryptorMethod($currentPropValue);
+                                        }
+                                        // we set locale value
+                                        $entity->$setter($currentPropValue);
+                                        // we set translatable locale value
+                                        $entity->translate($locale)->$setter($currentPropValue);
                                     } else {
-                                    	$locale = $this->locale;
-                                    }
-                                    // we set the encrypt value
-                                    $currentPropValue        = $entity->$getter();
-                                    if (!empty($currentPropValue)) {
-                                    	$currentPropValue        = $this->encryptor->$encryptorMethod($currentPropValue);
-                                    }
-                                    // we set locale value
-                                    $entity->$setter($currentPropValue);
-                                    // we set translatable locale value
-                                    $entity->translate($locale)->$setter($currentPropValue);
-                                } else {
-                                    // we get the locale value
-                                    $locale = $entity->getTranslatableLocale(); 
-                                    if (isset($_GET['_encrypt_subscriber_not_force_locale']) && ($_GET['_encrypt_subscriber_not_force_locale'] == true)) {
-                                    } else {
+                                        // we get the locale value
+                                        $locale = $entity->getTranslatableLocale();
+                                        //
                                         if (!empty($locale) && !is_null($locale)) {
                                         } elseif (isset($_GET['_locale'])) {
                                         	$locale = $_GET['_locale'];
                                         } else {
                                         	$locale = $this->locale;
                                         }
-                                    }
-                                    if (!empty($locale) && !is_null($locale)) {
-                                        if (!$this->hasInDecodedRegistry($className, $entity->getId(), $locale, $methodName)) {
-                                            // we set encrypt value
-                                            $currentPropValue        = $entity->$getter();
-                                            $currentPropValue_locale = $entity->translate($locale)->$getter();                                        
-                                            if (!empty($currentPropValue)) {
-                                                $currentPropValue        = $this->encryptor->$encryptorMethod($currentPropValue);
+                                        //
+                                        if (!$this->annReader->getPropertyAnnotation($refProperty, 'Gedmo\Mapping\Annotation\Translatable')) {
+                                            if (!$this->hasInDecodedRegistry($className, $entity->getId(), $locale, $methodName)) {
+                                                $currentPropValue        = $entity->$getter();
+                                                if (!empty($currentPropValue)) {
+                                                	$currentPropValue        = $this->encryptor->$encryptorMethod($currentPropValue);
+                                                }
+                                                $entity->$setter($currentPropValue);
+                                                $this->addToDecodedRegistry($className, $entity->getId(), $locale, $methodName, $currentPropValue);
+                                                //print_r($this->decodedRegistry);
                                             }
-                                            if (!empty($currentPropValue_locale)) {
-                                                $currentPropValue_locale = $this->encryptor->$encryptorMethod($currentPropValue_locale);
+                                        } else{
+                                            $locales        = $this->container->get('pi_app_admin.locale_manager')->getAllLocales(true);
+                                            foreach( $locales as $key => $lang) {
+                                                if ($lang['enabled'] == 1) {
+                                                    if (!$this->hasInDecodedRegistry($className, $entity->getId(), $lang['id'], $methodName)) {
+                                                        $currentPropValue_locale = $entity->translate($lang['id'])->$getter();
+                                                        if (!empty($currentPropValue_locale)) {
+                                                        	$currentPropValue_locale = $this->encryptor->$encryptorMethod($currentPropValue_locale);
+                                                        } 
+                                                        if ($locale ==  $lang['id']) {
+                                                            $entity->$setter($currentPropValue_locale);
+                                                        }
+                                                        $entity->translate( $lang['id'])->$setter($currentPropValue_locale);
+                                                        $this->addToDecodedRegistry($className, $entity->getId(), $lang['id'], $methodName, $currentPropValue_locale);
+                                                        //print_r($this->decodedRegistry);
+                                                    }
+                                                }
                                             }
-                                            $entity->$setter($currentPropValue);
-                                            $entity->translate($locale)->$setter($currentPropValue_locale);
-                                            // we add to registry        
-                                            $this->addToDecodedRegistry($className, $entity->getId(), $locale, $methodName, $currentPropValue_locale);
-                                            //print_r($this->decodedRegistry);
                                         }
                                     }
+                                } else {
+                                    throw new \RuntimeException(sprintf("Property %s isn't public and doesn't has getter/setter"));
                                 }
-                            } else {
-                                throw new \RuntimeException(sprintf("Property %s isn't public and doesn't has getter/setter"));
                             }
                         }
-                    }
-            	} else {
-            		throw new \RuntimeException(sprintf("encrypter %s is not correctly configured", $key));
-            	}
-            } 
+                	} else {
+                		throw new \RuntimeException(sprintf("encrypter %s is not correctly configured", $key));
+                	}
+                } 
+            }
         }
     }
 
@@ -301,8 +334,11 @@ class EncryptSubscriber extends MappedEventSubscriber
      * @param string $secretKey Secret key for encryptor
      * @return EncryptorInterface
      * @throws \RuntimeException
+     * @access protected
+     * 
+     * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    private function encryptorFactory($classFullName, $encryptor_options) {
+    protected function encryptorFactory($classFullName, $encryptor_options) {
     	$refClass = new \ReflectionClass($classFullName);
     	if ($refClass->implementsInterface($this->interfaceclass)) {
     		return new $classFullName($encryptor_options);
@@ -311,7 +347,7 @@ class EncryptSubscriber extends MappedEventSubscriber
     	}
     }
     
-    private function getEncryptorService($encrypter_name) {
+    protected function getEncryptorService($encrypter_name) {
     	$encryptorClass    = isset($this->options[$encrypter_name]['encryptor_class']) ? (string) $this->options[$encrypter_name]['encryptor_class'] : '';
     	$encryptor_options = isset($this->options[$encrypter_name]['encryptor_options']) ? (array) $this->options[$encrypter_name]['encryptor_options'] : null;
     	return $this->encryptorFactory($encryptorClass, $encryptor_options);
@@ -348,8 +384,9 @@ class EncryptSubscriber extends MappedEventSubscriber
      * @throws \Gedmo\Exception\RuntimeException - if language or locale property is not
      *         found in entity
      * @return string
+     * @access protected
      */
-    public function getTranslatableLocale($object, $meta)
+    protected function getTranslatableLocale($object, $meta)
     {
     	$locale = $this->locale;
     	if (isset(self::$configurations[$this->name][$meta->name]['locale'])) {
@@ -376,7 +413,7 @@ class EncryptSubscriber extends MappedEventSubscriber
      * @param LifecycleEventArgs $args 
      * @return boolean
      */
-    private function hasInDecodedRegistry($className, $id, $locale, $methodeName) {
+    protected function hasInDecodedRegistry($className, $id, $locale, $methodeName) {
     	return isset($this->decodedRegistry[$className][$id][$locale][$methodeName]);
     }
     
@@ -385,7 +422,7 @@ class EncryptSubscriber extends MappedEventSubscriber
      * @param LifecycleEventArgs $args 
      * @return void
      */
-    private function addToDecodedRegistry($className, $id, $locale, $methodeName, $currentPropValue) {
+    protected function addToDecodedRegistry($className, $id, $locale, $methodeName, $currentPropValue) {
     	$this->decodedRegistry[$className][$id][$locale][$methodeName] = $currentPropValue;
     }    
 

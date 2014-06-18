@@ -54,7 +54,7 @@ class PiRestManager implements PiRestManagerInterface
    /**
     * Sets the url
     *
-    * @param string    $slug
+    * @param string    $pUrl
     * @return \PiApp\AdminBundle\Util\PiRestManager
     * @access public
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

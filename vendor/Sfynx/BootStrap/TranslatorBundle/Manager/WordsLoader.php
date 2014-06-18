@@ -170,6 +170,7 @@ class WordsLoader implements LoaderInterface
             ->getQuery()
             ->getResult();
             // we create for all languages
+            $this->container->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
             $all_locales = $this->container->get('pi_app_admin.locale_manager')->getAllLocales();
             foreach ($all_locales as $key => $lang) {
                 $filename  = $basePath."messages.".$lang.".yml";

@@ -7,7 +7,7 @@ services:
     #        
     pi_app_admin.encrypt_subscriber:
         class: %piapp.admin.subscriber.encrypters.class%
-        public: false
+        public: true
         arguments: [@annotation_reader, %pi_app_admin.encrypters%, @service_container]
         properties:
             locale: %locale%

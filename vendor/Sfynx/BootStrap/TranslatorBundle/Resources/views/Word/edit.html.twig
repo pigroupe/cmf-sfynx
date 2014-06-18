@@ -26,7 +26,7 @@
 			    <li>
 			    	<!-- <button id="add_tab" class="button-ui-add-tab">{{ 'pi.grid.action.add-tab'|trans }}</button> -->
 			    	<button type="submit" class="button-ui-save">{{ 'pi.grid.action.save'|trans }}</button>
-		            <a href="{{ path('admin_word', { 'NoLayout': NoLayout }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+		            <a href="{{ path('admin_word', { 'NoLayout': NoLayout,  '_token': csrf_token('listword') }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
                     {% if NoLayout == false and is_granted('ROLE_ADMIN') %} 
 		            <a data-id="delete-form" class="button-ui-delete">{{ 'pi.grid.action.delete'|trans }}</a> 
 				    {% endif %}

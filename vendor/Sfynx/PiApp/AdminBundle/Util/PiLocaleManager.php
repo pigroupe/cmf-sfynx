@@ -92,13 +92,14 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
     
     /**
      * Getting all locales of the CMF.
-     *
+     * 
+     * @param boolean $all
      * @return array
      * @access public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getAllLocales()
+    public function getAllLocales($all = false)
     {
         $return = true;
     	// we set the json file if does not exist
@@ -110,7 +111,11 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
             // we get all locale values
             $entities     = json_decode(file_get_contents($this->path_json_file), true);
             foreach($entities as $locale){
-            	$locales[] = $locale['id'];
+                if ($all) {
+                    $locales[] = $locale;
+                } else {
+            	    $locales[] = $locale['id'];
+                }
             }     
         }   
     	

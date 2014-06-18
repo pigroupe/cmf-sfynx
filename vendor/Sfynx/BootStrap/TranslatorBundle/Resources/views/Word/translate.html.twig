@@ -38,31 +38,31 @@
 	    </thead>
 	    <tbody>
 	    {% set num_line = 0 %}
-	    {% for lang, langLabel in langs %}
-				<tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ source.position }}_row_{{ source.id }}'  >
-					<td><a href="{{ path('admin_word_show', { 'id': source.id, 'NoLayout': NoLayout }) }}" title="">{{ source.id }}</a></td>	
+	    {% for lang in langs %}
+				<tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_row_{{ entity.id }}'  >
+					<td><a href="{{ path('admin_word_show', { 'id': entity.id, 'NoLayout': NoLayout }) }}" title="">{{ entity.id }}</a></td>	
 					<td>
-						{% if lang == locale %}<b>{% endif %}{{ langLabel|limite("0", 55) }}{% if lang == locale %}</b> (source){% endif %}
+						{% if lang.id == app.request.locale %}<b>{% endif %}{{ lang.label }}{% if lang.id == app.request.locale %}</b> (source){% endif %}
 					</td>	
 					<td>
-						{{ source.keyword|limite("0", 55) }}
+						{{ entity.keyword|striptags }}
 					</td>
 					<td>
-						{% if entities[lang] is defined %}
-							{{ entities[lang].content|striptags|limite("0", 55) }}
+						{% if entity.translate(lang.id).getLabel() != "" %}
+						     {{ entity.translate(lang.id).getLabel()|striptags }}
 						{% else %}
-							{{ ' n/a '|limite("0", 55) }}
+							{{ ' n/a ' }}
 						{% endif %}
 					</td>	
 					<td>
-						{% if entities[lang] is defined %}
-							{{ 'Publié'|limite("0", 55) }}
+						{% if entity.translate(lang.id).getLabel() != "" %}
+							{{ 'Publié' }}
 						{% else %}
-							{{ 'Non traduit'|limite("0", 55) }}
+							{{ 'Non traduit' }}
 						{% endif %}
 					</td>				
 					<td>
-						<a href="{{ path('admin_word_edit_translate', { 'id': source.id, 'lang': lang, 'NoLayout': NoLayout }) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="icon-1 info-tooltip" >&nbsp;</a>
+						<a href="{{ path('admin_word_edit_translate', { 'id': entity.id, 'lang': lang.id, 'NoLayout': NoLayout }) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="icon-1 info-tooltip" >&nbsp;</a>
 					</td>	
 				</tr>	
 			{% if num_line == 0 %} 

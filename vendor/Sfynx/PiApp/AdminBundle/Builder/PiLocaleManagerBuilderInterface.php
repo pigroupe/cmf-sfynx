@@ -23,4 +23,5 @@ namespace PiApp\AdminBundle\Builder;
 interface PiLocaleManagerBuilderInterface
 {
     public function parseDefaultLanguage($deflang = "fr");
+    public function getAllLocales($all = false);
 }

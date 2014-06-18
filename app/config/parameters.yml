@@ -20,7 +20,10 @@ parameters:
     session_memcache_prefix: "session_"
     session_memcache_expire: 604800 
     session_memcache_locking: true      
-    session_memcache_spin_lock_wait: 150000     
+    session_memcache_spin_lock_wait: 150000    
+    
+    #pi_app_admin 
+    pi_cookie_lifetime: 604800     
 
     #boot_strap_ws
     ws_key: 0A1TG4GO

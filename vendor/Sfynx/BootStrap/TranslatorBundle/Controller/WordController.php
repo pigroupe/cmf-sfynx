@@ -113,9 +113,12 @@ class WordController extends abstractController
     public function indexAction()
     {
         $em         = $this->getDoctrine()->getManager();
-        $locale        = $this->container->get('request')->getLocale();
+        $locale     = $this->container->get('request')->getLocale();
+        
+        $this->checkCsrf('listword'); // name of the generated token, must be equal to the one from Twig
 
-        $entities     = $em->getRepository("BootStrapTranslatorBundle:Word")->setContainer($this->container)->findAllByEntity($locale, 'object');        
+        $this->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
+        $entities   = $em->getRepository("BootStrapTranslatorBundle:Word")->setContainer($this->container)->findAllByEntity($locale, 'object');        
         
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)     $template = "index.html.twig"; else $template = "index.html.twig";
@@ -139,11 +142,13 @@ class WordController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
+
+        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        if (!$NoLayout)     $template = "show.html.twig"; else $template = "show.html.twig";
+        
+        $this->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
         $entity = $em->getRepository("BootStrapTranslatorBundle:Word")->findOneByEntity($locale, $id, 'object');
         
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)     $template = "show.html.twig"; else $template = "show.html.twig";        
-
         if (!$entity) {
             throw ControllerException::NotFoundException('Word');
         }
@@ -200,7 +205,8 @@ class WordController extends abstractController
         
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new.html.twig";        
-    
+
+        $this->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
         $entity  = new Word();
         $request = $this->getRequest();
         $form    = $this->createForm(new WordType($em, $locale, $this->container), $entity, array('show_legend' => false));
@@ -234,11 +240,12 @@ class WordController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("BootStrapTranslatorBundle:Word")->findOneByEntity($locale, $id, 'object');
         
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)    $template = "edit.html.twig";  else    $template = "edit.html.twig";        
 
+        $this->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
+        $entity = $em->getRepository("BootStrapTranslatorBundle:Word")->findOneByEntity($locale, $id, 'object');
         if (!$entity) {
             $entity = $em->getRepository("BootStrapTranslatorBundle:Word")->find($id);
             $entity->addTranslation(new WordTranslation($locale));            
@@ -275,20 +282,18 @@ class WordController extends abstractController
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)    $template = "edit.html.twig";  else    $template = "edit.html.twig";        
 
+        $this->get('pi_app_admin.encrypt_subscriber')->_update_enabled = true;
         if (!$entity) {
             $entity = $em->getRepository("BootStrapTranslatorBundle:Word")->find($id);
         }
-
         $editForm   = $this->createForm(new WordType($em, $locale, $this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-
         $editForm->bind($this->getRequest(), $entity);
+        
         if ($editForm->isValid()) {
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
             $em->flush();
-                        
-            
             
             return $this->redirect($this->generateUrl('admin_word_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         }
@@ -312,27 +317,19 @@ class WordController extends abstractController
      */
     public function translateAction($id)
     {
-        $em                 = $this->getDoctrine()->getManager();
-        $locale                = $this->container->get('request')->getLocale();
-        $NoLayout           = $this->container->get('request')->query->get('NoLayout');
-        $entity             = $em->getRepository("BootStrapTranslatorBundle:Word")->findOneByEntity($locale, $id, 'object');
-        $locales             = $em->getRepository("PiAppAdminBundle:Langue")->findAllByEntity($locale, 'object');        
-        $translations         = $em->getRepository("BootStrapTranslatorBundle:Word")->getTranslationsByObjectId($id);
-
-        $entities = array();
-        foreach($locales as $lang){
-            $langs[$lang->getId()] = $lang->getLabel();
-        }
-        foreach($translations as $trans){
-            $entities[$trans->getLocale()] = $trans;
-        }
+        $em             = $this->getDoctrine()->getManager();
+        $NoLayout       = $this->container->get('request')->query->get('NoLayout');
+        
+        $locale         = $this->container->get('request')->getLocale();
+        $locales        = $this->container->get('pi_app_admin.locale_manager')->getAllLocales(true);
+        
+        $this->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
+        $entity         = $em->getRepository("BootStrapTranslatorBundle:Word")->findOneByEntity($locale, $id, 'object');
 
         return $this->render("BootStrapTranslatorBundle:Word:translate.html.twig", array(
-            'entities'     => $entities,
-            'source'     =>$entity,
-            'locale'    => $locale,
-            'langs'     => $langs,
-            'NoLayout'     => $NoLayout,
+            'entity'    => $entity,
+            'langs'     => $locales,
+            'NoLayout'  => $NoLayout,
         ));
     }
     
@@ -348,18 +345,23 @@ class WordController extends abstractController
     public function editTranslateAction($id, $lang)
     {
         $em         = $this->getDoctrine()->getManager();
+        $locale        = $this->container->get('request')->getLocale();
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         $request    = $this->getRequest();
         
+        $this->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
         $entity     = $em->getRepository("BootStrapTranslatorBundle:Word")->findOneByEntity($lang, $id, 'object');
-        $entity->setTranslatableLocale($lang);
-        $em->refresh($entity);
-        
+        if ($lang != $locale) {
+            $entity->setTranslatableLocale($lang);
+            $em->refresh($entity);
+        }
         if (!$entity) {
             $entity = $em->getRepository("BootStrapTranslatorBundle:Word")->find($id);
             $entity->addTranslation(new WordTranslation($lang));            
         }
         $editForm   = $this->createForm(new WordTranslateType($em, $lang, $this->container), $entity, array('show_legend' => false));
+        
+        //exit;
 
         return $this->render("BootStrapTranslatorBundle:Word:editTranslate.html.twig", array(
             'entity'      => $entity,
@@ -384,14 +386,14 @@ class WordController extends abstractController
         $entity     = $em->getRepository("BootStrapTranslatorBundle:Word")->findOneByEntity($lang, $id, "object"); 
         $NoLayout     = $this->container->get('request')->query->get('NoLayout');
 
+        $this->get('pi_app_admin.encrypt_subscriber')->_update_enabled = true;
         if (!$entity) {
             $entity = $em->getRepository("BootStrapTranslatorBundle:Word")->find($id);
         }
-
         $editForm   = $this->createForm(new WordTranslateType($em, $lang, $this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-        
         $editForm->bind($this->getRequest(), $entity);
+        
         if ($editForm->isValid()) {
             $entity->setTranslatableLocale($lang);
             $em->persist($entity);
@@ -507,6 +509,7 @@ class WordController extends abstractController
             $entity->setkeyword($cle);
             $entity->setLabel($valeur);
             $entity->setCategory(${"category_".$locale}[$cle]);
+            $this->get('pi_app_admin.encrypt_subscriber')->_load_enabled = true;
             $em->persist($entity);
         }
         $em->flush();

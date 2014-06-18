@@ -51,7 +51,7 @@
 					{{ entity.keyword|striptags|limite("0", 55) }}
 				</td>
 				<td>
-					{{ entity.label|striptags|limite("0", 55) }}
+					{{ entity.translate(app.request.locale).getLabel()|striptags|limite("0", 55) }}
 	            </td>	
 	            <td class="enabled" width="20px">{{ entity.enabled}}</td>
 				<td width="171px">

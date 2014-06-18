@@ -620,6 +620,34 @@ abstract class abstractController extends Controller
         }
         
         return $result;
+    } 
+
+    /**
+     * Check the validity of a token.
+     *
+     * <code>
+     * in twig
+     *     <a href="{{ path('admin_word', { 'NoLayout': NoLayout,  '_token': csrf_token('listword')  }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+     * in Controller action with admin_word routename    
+     *     $this->checkCsrf('listword'); // name of the generated token, must be equal to the one from Twig
+     * </code>
+     * 
+     * @param \Symfony\Component\Form\Form $form
+     * @return array	The list of all the errors
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */    
+    protected function checkCsrf($name, $query = '_token')
+    {
+    	$request = $this->getRequest();
+    	$csrfProvider = $this->get('form.csrf_provider');
+    	
+    	if (!$csrfProvider->isCsrfTokenValid($name, $request->query->get($query))) {
+    		throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('CSRF token is invalid.');
+    	}
+    
+    	return true;
     }    
 
     /**
