@@ -476,12 +476,15 @@ abstract class abstractController extends Controller
      * @param string $type        ["select","count"]
      * @param string $table
      * @param string $aColumns
+     * @param string $table
+     * @param array  $dateSearch
+     * @param array  $cacheQuery_hash
      * @return array
      * @access protected
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function createAjaxQuery($type, $aColumns, $qb = null, $tablecode = 'u', $table = null, $dateSearch = null)
+    public function createAjaxQuery($type, $aColumns, $qb = null, $tablecode = 'u', $table = null, $dateSearch = null, $cacheQuery_hash = null)
     {
         $request = $this->container->get('request');
         $locale = $this->container->get('request')->getLocale();
@@ -606,21 +609,45 @@ abstract class abstractController extends Controller
             $iDisplayLength = $request->get('iDisplayLength', 25);
             $qb->setFirstResult($iDisplayStart);
             $qb->setMaxResults($iDisplayLength);
-            $qb->setParameters($array_params);
-            //$query_sql = $qb->getQuery()->getSql();
-            //var_dump($query_sql);
-            //exit;            
-            $result = $em->getRepository("BootStrapUserBundle:User")->setTranslatableHints($qb->getQuery(), $locale, false, true)->getResult();
-        } else {
-            $qb->setParameters($array_params);
-            //$query_sql = $qb->getQuery()->getSql();
-            //var_dump($query_sql);
-            //exit;
-        	$result = count($em->getRepository("BootStrapUserBundle:User")->setTranslatableHints($qb->getQuery(), $locale, false, true)->getResult());
         }
+        $qb->setParameters($array_params);
+        //$query_sql = $qb->getQuery()->getSql();
+        //var_dump($query_sql);
+        //exit;
+        if (is_null($cacheQuery_hash)) {
+        	$result = $em->getRepository("BootStrapUserBundle:User")->setTranslatableHints($qb->getQuery(), $locale, false, true)->getResult();
+        } elseif (is_array($cacheQuery_hash)) {
+        	// we define all options
+        	if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
+        	if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = \Doctrine\ORM\Cache::MODE_NORMAL;
+        	if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
+        	if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
+        	// we set the query
+        	$qb  = $em->getRepository("BootStrapUserBundle:User")->cacheQuery($qb->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['input_hash']);
+        	$result = $em->getRepository("BootStrapUserBundle:User")->setTranslatableHints($qb, $locale, false, true)->getResult();
+        }
+        if ($type == 'count') {
+            $result = count($result);
+        } 
         
         return $result;
-    } 
+    }
+
+    /**
+     * Delete the query cache of a id hash.
+     *
+     * @param string $input_hash
+     * @return array
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function deleteCacheQuery($input_hash)
+    {
+    	$em     = $this->getDoctrine()->getManager();
+    	$cacheDriver = $em->getConfiguration()->getResultCacheImpl();
+    	$cacheDriver->delete($input_hash);
+    }    
 
     /**
      * Check the validity of a token.

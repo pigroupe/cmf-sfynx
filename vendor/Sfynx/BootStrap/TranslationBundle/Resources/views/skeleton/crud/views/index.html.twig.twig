@@ -117,18 +117,36 @@
 
 	{{ "{% set options_gridtabale = {'grid-name': 'grid_"~ entity|lower|replace({"\\": '_'}) ~"', 'grid-type':'simple', 
 	        'grid-server-side': isServerSide,
+	        'grid-state-save' : 'false',
 			'grid-paginate':'true',
+			'grid-paginate-top': 'true',
 			'grid-LengthMenu':25,
-			'grid-filters-select': ['0','1'],
+	        'grid-row-select':'multi',
+			'grid-filter-date': {
+				'0': {'column' : 2, 'title-start': 'date min crea. ', 'title-end': 'date max crea.', 'right':'730', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minc', 'idMax':'maxc'},
+				'1': {'column' : 3, 'title-start': 'date min mod. ', 'title-end': 'date max mod.', 'right':'550', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minu', 'idMax':'maxu'},
+                '2': {'column' : 4, 'title-start': 'date min pub. ', 'title-end': 'date max pub.', 'right':'370', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minp', 'idMax':'maxp'},
+                '3': {'column' : 5, 'title-start': 'date min arc. ', 'title-end': 'date max arc.', 'right':'190', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'mina', 'idMax':'maxa'},
+            },			
+			'grid-filters-select': ['0','1','2','3','4','5','6'],
 			'grid-filters-active':'true',
-			'grid-state-save' : 'false',
 			'grid-filters': { 
 					"~ is_position ~"
 					'"~ value_id_position ~"':'Identifiant',
 				},
+		    'grid-filters-tfoot-up':'true',
 			'grid-sorting': { 
 					'0':'asc',
 				},
+            'grid-columns': { 
+					'0': { "bSortable": true },
+					'1': { "bSortable": true },
+					'2': { "bSortable": true },
+					'3': { "bSortable": true },
+					'4': { "bSortable": true },
+					'5': { "bSortable": true },
+					'6': { "bSortable": false },
+				},					
 			'grid-visible': {
 				'0':'true',
 				'1':'false',

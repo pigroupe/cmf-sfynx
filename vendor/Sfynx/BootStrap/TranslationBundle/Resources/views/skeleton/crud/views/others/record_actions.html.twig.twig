@@ -1,7 +1,7 @@
 
 		<ul class="ui-widget-header ui-footer">
 			<li>
-		        <a href="{{ "{{ path('"~ route_name_prefix ~"', { 'NoLayout': NoLayout, 'category':category }) }}" }}" class="button-ui-back-list">{{ "{{ 'pi.grid.action.back-to-the-list'|trans }}" }}</a>      
+		        <a href="{{ "{{ path('"~ route_name_prefix ~"', { 'NoLayout': NoLayout, 'category':category, '_token': csrf_token('"~ route_name_prefix ~"_csrf') }) }}" }}" class="button-ui-back-list">{{ "{{ 'pi.grid.action.back-to-the-list'|trans }}" }}</a>      
 			</li>
 		{% if ('edit' in actions) and (not hide_edit) %}
 			<li>

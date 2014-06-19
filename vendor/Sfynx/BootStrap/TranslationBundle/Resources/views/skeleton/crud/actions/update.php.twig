@@ -10,26 +10,26 @@
      */
     public function updateAction($id)
     {
-        $em         = $this->getDoctrine()->getManager();
-        $locale        = $this->container->get('request')->getLocale();
-        $entity     = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($locale, $id, "object"); 
-        
-        $category   = $this->container->get('request')->query->get('category');
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "edit.html.twig";  else    $template = "edit.html.twig";        
-
+        $em       = $this->getDoctrine()->getManager();
+        $locale   = $this->container->get('request')->getLocale();
+        $category = $this->container->get('request')->query->get('category');
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        if (!$NoLayout)    $template = "edit.html.twig";  else    $template = "edit.html.twig";
+        //
+        $entity   = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($locale, $id, "object"); 
         if (!$entity) {
             $entity = $em->getRepository("{{ bundle }}:{{ entity }}")->find($id);
         }
-
         $editForm   = $this->createForm(new {{ entity_class }}Type($em, $this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-
         $editForm->bind($this->getRequest(), $entity);
         if ($editForm->isValid()) {
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
             $em->flush();
+            // to delete cache list query
+            $this->deleteCacheQuery('hash_{{ route_name_prefix }}');
+            $this->deleteCacheQuery('hash_{{ route_name_prefix }}_count');             
 
             return $this->redirect($this->generateUrl('{{ route_name_prefix }}_edit', array('id' => $id, 'NoLayout' => $NoLayout, 'category' => $category)));
         } else {

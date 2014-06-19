@@ -15,7 +15,11 @@
         if (empty($lang)) {
             $lang   = $this->container->get('request')->getLocale();
         }
-        $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->getAllByCategory($category, $MaxResults, $order)->getQuery();
+        // we create query
+        $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->getAllByCategory($category, $MaxResults, $order);
+        // we return query in cache
+        $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->cacheQuery($query->getQuery(), 3600, \Doctrine\ORM\Cache::MODE_NORMAL, true);
+        // we load all translations with all translatable fields from the given entity
         $entities   = $em->getRepository("{{ bundle }}:{{ entity }}")->findTranslationsByQuery($lang, $query, 'object', false);                   
 
         return $this->render("{{ bundle }}:{{ entity }}:$template", array(

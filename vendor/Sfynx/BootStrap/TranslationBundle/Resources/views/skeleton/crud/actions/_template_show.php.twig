@@ -21,9 +21,6 @@
         if (!$entity) {
             throw ControllerException::NotFoundException('{{ entity }}');
         }
-        if (method_exists($entity, "getTemplate") && $entity->getTemplate() != "") {
-            $template = $entity->getTemplate();         
-        }
         // we set the result to the $lang language value
         $entity->setTranslatableLocale(lang);
         $em->refresh($entity);

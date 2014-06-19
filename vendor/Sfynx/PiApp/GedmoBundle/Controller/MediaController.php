@@ -228,11 +228,15 @@ class MediaController extends abstractController
            $result    = $this->createAjaxQuery('select',$aColumns, $q1, 'a', null, array(
                             0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
                             1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
-                      )
+                      ), array(
+                            'input_hash' => 'hash_list_gedmomedia'
+                      )                      
            );
            $total    = $this->createAjaxQuery('count',$aColumns, $q2, 'a', null, array(
                             0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
                             1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
+                      ), array(
+                            'input_hash' => 'hash_list_gedmomedia_count'
                       )
            );
         
@@ -320,10 +324,10 @@ class MediaController extends abstractController
         }
         
         return $this->render("PiAppGedmoBundle:Media:$template", array(
-        'isServerSide' => $is_Server_side,
-        'entities' => $entities,
-        'NoLayout'    => $NoLayout,
-        'category' => $category,
+            'isServerSide' => $is_Server_side,
+            'entities' => $entities,
+            'NoLayout'    => $NoLayout,
+            'category' => $category,
         ));
     }
     
@@ -431,6 +435,9 @@ class MediaController extends abstractController
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
             $em->flush();
+            // to delete cache list query
+            $this->deleteCacheQuery('hash_list_gedmomedia');
+            $this->deleteCacheQuery('hash_list_gedmomedia_count');
             
             return $this->redirect($this->generateUrl('admin_gedmo_media_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout, 'category' => $category)));
         }
@@ -521,6 +528,9 @@ class MediaController extends abstractController
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
             $em->flush();
+            // to delete cache list query
+            $this->deleteCacheQuery('hash_list_gedmomedia');
+            $this->deleteCacheQuery('hash_list_gedmomedia_count');
 
             return $this->redirect($this->generateUrl('admin_gedmo_media_edit', array('id' => $id, 'NoLayout' => $NoLayout, 'category' => $category, 'status' => $status)));
         }
@@ -558,14 +568,15 @@ class MediaController extends abstractController
 
         if ($form->isValid()) {
             $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($locale, $id, 'object');
-
             if (!$entity) {
                 throw ControllerException::NotFoundException('Media');
             }
-
             try {
                 $em->remove($entity);
-                $em->flush();
+                $em->flush();                
+                // to delete cache list query
+                $this->deleteCacheQuery('hash_list_gedmomedia');
+                $this->deleteCacheQuery('hash_list_gedmomedia_count');
             } catch (\Exception $e) {
                 $this->container->get('request')->getSession()->getFlashBag()->clear();
                 $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');

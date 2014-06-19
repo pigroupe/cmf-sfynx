@@ -175,25 +175,29 @@ class TreeRepository extends NestedTreeRepository
      * @param \Doctrine\ORM\Query 	$query
      * @param int					$time
      * @param string 				$MODE	[MODE_GET, MODE_PUT , MODE_NORMAL , MODE_REFRESH]	
+     * @param boolean               $setCacheable
+     * @param string                $input_hash
      * @return \Doctrine\ORM\Query
      * @access    public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function cacheQuery(Query $query, $time = 3600, $MODE = \Doctrine\ORM\Cache::MODE_NORMAL, $setCacheble = true)
+    public function cacheQuery(Query $query, $time = 3600, $MODE = \Doctrine\ORM\Cache::MODE_NORMAL, $setCacheable = true, $input_hash = '')
     {
     	if (!$query) {
     		throw new \Gedmo\Exception\InvalidArgumentException('Invalide query instance');
     	}
         // create single file from all input
-        $input_hash = sha1(serialize($query->getParameters()) . $query->getSQL());
+        if (empty($input_hash)) {
+            $input_hash = sha1(serialize($query->getParameters()) . $query->getSQL());
+        }
         $query->useResultCache(true, $time, $input_hash); 
         $query->useQueryCache(true); 
         $query->setCacheMode($MODE);
-        $query->setCacheable($setCacheble);
+        $query->setCacheable($setCacheable);
         
     	return $query;
-    }   
+    }
 
     /**
      * Loads all translations with all translatable
