@@ -154,7 +154,10 @@ class MediaController extends abstractController
   		// we set type value
   		$this->type = $type;
     		
-   		return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true);
+   		return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true, array(
+              'time'      => 3600,  
+              'namespace' => 'hash_list_gedmomedia'
+        ));
     }   
 
     /**
@@ -229,14 +232,16 @@ class MediaController extends abstractController
                             0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
                             1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
                       ), array(
-                            'input_hash' => 'hash_list_gedmomedia'
+                            'time'      => 3600,  
+                            'namespace' => 'hash_list_gedmomedia'
                       )                      
            );
            $total    = $this->createAjaxQuery('count',$aColumns, $q2, 'a', null, array(
                             0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
                             1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
                       ), array(
-                            'input_hash' => 'hash_list_gedmomedia_count'
+                            'time'      => 3600,
+                            'namespace' => 'hash_list_gedmomedia'
                       )
            );
         
@@ -318,7 +323,8 @@ class MediaController extends abstractController
             return $response;
         }
         if (!$is_Server_side) {
-           $entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
+           $query      = $em->getRepository("PiAppGedmoBundle:Media")->cacheQuery($query->getQuery(), 3600, \Doctrine\ORM\Cache::MODE_NORMAL, true, 'hash_list_gedmomedia');
+           $entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query, 'object', false);
         } else {
            $entities   = null;
         }
@@ -436,8 +442,7 @@ class MediaController extends abstractController
             $em->persist($entity);
             $em->flush();
             // to delete cache list query
-            $this->deleteCacheQuery('hash_list_gedmomedia');
-            $this->deleteCacheQuery('hash_list_gedmomedia_count');
+            $this->deleteAllCacheQuery('hash_list_gedmomedia');
             
             return $this->redirect($this->generateUrl('admin_gedmo_media_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout, 'category' => $category)));
         }
@@ -529,8 +534,7 @@ class MediaController extends abstractController
             $em->persist($entity);
             $em->flush();
             // to delete cache list query
-            $this->deleteCacheQuery('hash_list_gedmomedia');
-            $this->deleteCacheQuery('hash_list_gedmomedia_count');
+            $this->deleteAllCacheQuery('hash_list_gedmomedia');
 
             return $this->redirect($this->generateUrl('admin_gedmo_media_edit', array('id' => $id, 'NoLayout' => $NoLayout, 'category' => $category, 'status' => $status)));
         }
@@ -575,8 +579,7 @@ class MediaController extends abstractController
                 $em->remove($entity);
                 $em->flush();                
                 // to delete cache list query
-                $this->deleteCacheQuery('hash_list_gedmomedia');
-                $this->deleteCacheQuery('hash_list_gedmomedia_count');
+                $this->deleteAllCacheQuery('hash_list_gedmomedia');
             } catch (\Exception $e) {
                 $this->container->get('request')->getSession()->getFlashBag()->clear();
                 $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
@@ -637,9 +640,9 @@ class MediaController extends abstractController
         $em         = $this->getDoctrine()->getManager();
 
         if (empty($lang))
-            $lang    = $this->container->get('request')->getLocale();
+            $lang   = $this->container->get('request')->getLocale();
         
-        $query        = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory($category, $MaxResults, '', $order)->getQuery();
+        $query      = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory($category, $MaxResults, '', $order)->getQuery();
         $entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($lang, $query, 'object', false);                   
 
         return $this->render("PiAppGedmoBundle:Media:$template", array(

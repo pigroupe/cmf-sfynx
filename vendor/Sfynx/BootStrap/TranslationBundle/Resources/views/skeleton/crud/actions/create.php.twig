@@ -25,8 +25,7 @@
             $em->persist($entity);
             $em->flush();
             // to delete cache list query
-            $this->deleteCacheQuery('hash_{{ route_name_prefix }}');
-            $this->deleteCacheQuery('hash_{{ route_name_prefix }}_count');            
+            $this->deleteAllCacheQuery('hash_{{ route_name_prefix }}');
 
             {% if 'edit' in actions -%}
                 return $this->redirect($this->generateUrl('{{ route_name_prefix }}_edit', array('id' => $entity->getId(), 'NoLayout' => $NoLayout, 'category' => $category)));

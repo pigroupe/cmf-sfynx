@@ -1,3 +1,5 @@
+
+
     /**
      * Enabled {{ entity }} entities.
      *
@@ -10,35 +12,32 @@
      */
     public function selectajaxAction()
     {
-    	$request = $this->container->get('request');
-    	$em		 = $this->getDoctrine()->getEntityManager();
-    	$locale = $this->container->get('request')->getLocale();
-    
+	  	$request = $this->container->get('request');
+	   	$em		 = $this->getDoctrine()->getManager();
+	   	$locale  = $this->container->get('request')->getLocale();
     	if ($request->isXmlHttpRequest()) {
-    		$query                = $em->getRepository("{{ bundle }}:{{ entity }}")->getAllByCategory('', null, '', '', false);
-    		$entities   = $em->getRepository("{{ bundle }}:{{ entity }}")->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
-    		$tab = array();
-    		foreach ($entities as $obj) {
-    			$content = $obj->getId();
-    			if ( method_exists($obj, 'getTitle') ) {
-    			    $title = $obj->translate($locale)->getTitle();
-    			    if ($title) {
-    				    $content .=  " - " .$title;
-    			    }
-    			}
-    			if ( method_exists($obj, 'getMedia') && ($obj->getMedia() instanceof \PiApp\GedmoBundle\Entity\Media)) {
-    				$content .= " <img width='100px' src=\"{{ media_url('".$obj->getMedia()->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
-    			}
-    			$tab[] = array(
-    					'id' => $obj->getId(),
-    					'text' =>$this->container->get('twig')->render($content, array())
-    			);
-    		}
-    		$response = new Response(json_encode($tab));
-    		$response->headers->set('Content-Type', 'application/json');
-    
-    		return $response;
-    	} else {
-    		throw ControllerException::callAjaxOnlySupported(' selectajax');
-    	}
+	    	$pagination = $this->container->get('request')->get('pagination', null);
+	    	$keyword    = $this->container->get('request')->get('keyword', '');
+	    	$MaxResults = $this->container->get('request')->get('max', 10);
+	    	// we set query    
+	    	$query  = $em->getRepository("{{ bundle }}:{{ entity }}")->getAllByCategory('', null, '', '', false);
+	    	$query
+	    	->leftJoin('a.translations', 'trans');
+	   		//
+	  		$keyword = array(
+				0 => array(
+					'field_name' => 'title',
+	   				'field_value' => $keyword,
+					'field_trans' => true,
+					'field_trans_name' => 'trans',
+				),
+	   		);
+	    		
+	   		return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true, array(
+	              'time'      => 3600,  
+	              'namespace' => 'hash_{{ route_name_prefix }}'
+	        )); 
+        } else {
+    		throw ControllerException::callAjaxOnlySupported('selectajax');
+    	}   	
     }  

@@ -198,28 +198,29 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param int					$time
      * @param string 				$MODE	[MODE_GET, MODE_PUT , MODE_NORMAL , MODE_REFRESH]	
      * @param boolean               $setCacheable
+     * @param string                $namespace
      * @param string                $input_hash
      * @return \Doctrine\ORM\Query
      * @access    public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function cacheQuery(Query $query, $time = 3600, $MODE = \Doctrine\ORM\Cache::MODE_NORMAL, $setCacheable = true, $input_hash = '')
+    public function cacheQuery(Query $query, $time = 3600, $MODE = \Doctrine\ORM\Cache::MODE_NORMAL, $setCacheable = true, $namespace = '', $input_hash = '')
     {
     	if (!$query) {
     		throw new \Gedmo\Exception\InvalidArgumentException('Invalide query instance');
     	}
         // create single file from all input
         if (empty($input_hash)) {
-            $input_hash = sha1(serialize($query->getParameters()) . $query->getSQL());
+            $input_hash = $namespace . sha1(serialize($query->getParameters()) . $query->getSQL());
         }
-        $query->useResultCache(true, $time, $input_hash); 
+        $query->useResultCache(true, $time, (string) $input_hash); 
         $query->useQueryCache(true); 
         $query->setCacheMode($MODE);
         $query->setCacheable($setCacheable);
         
     	return $query;
-    }  
+    } 
 
     /**
      * Loads all translations with all translatable

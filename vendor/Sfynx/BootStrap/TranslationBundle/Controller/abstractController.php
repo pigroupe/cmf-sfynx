@@ -359,7 +359,7 @@ abstract class abstractController extends Controller
      * @access  protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function selectajaxQuery($pagination, $MaxResults, $keywords = null, $query = null, $locale = '', $only_enabled  = true)
+    protected function selectajaxQuery($pagination, $MaxResults, $keywords = null, $query = null, $locale = '', $only_enabled  = true, $cacheQuery_hash = null)
     {
     	$request = $this->container->get('request');
     	$em		 = $this->getDoctrine()->getManager();
@@ -433,8 +433,21 @@ abstract class abstractController extends Controller
     			//$query_sql = $query->getQuery()->getSql();
     			//var_dump($query_sql);
     		}
+    		//
+    		if (is_null($cacheQuery_hash)) {
+    			$query = $query->getQuery();
+    		} elseif (is_array($cacheQuery_hash)) {
+    			// we define all options
+    			if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
+    			if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = \Doctrine\ORM\Cache::MODE_NORMAL;
+    			if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
+    			if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
+    			if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
+    			// we set the query result
+    			$query     = $em->getRepository($this->_entityName)->cacheQuery($query->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
+    		}    		
     		// result
-    		$entities = $em->getRepository($this->_entityName)->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
+    		$entities = $em->getRepository($this->_entityName)->findTranslationsByQuery($locale, $query, 'object', false);
     		$tab      = $this->renderselectajaxQuery($entities, $locale);
     		// response
     		$response = new Response(json_encode($tab));
@@ -489,6 +502,7 @@ abstract class abstractController extends Controller
         $request = $this->container->get('request');
         $locale = $this->container->get('request')->getLocale();
         $em     = $this->getDoctrine()->getManager();
+        $cacheDriver = $em->getConfiguration()->getResultCacheImpl();
         
         if (is_null($qb)) {
             $qb     = $em->createQueryBuilder();
@@ -615,17 +629,18 @@ abstract class abstractController extends Controller
         //var_dump($query_sql);
         //exit;
         if (is_null($cacheQuery_hash)) {
-        	$result = $em->getRepository("BootStrapUserBundle:User")->setTranslatableHints($qb->getQuery(), $locale, false, true)->getResult();
+        	$qb = $qb->getQuery();
         } elseif (is_array($cacheQuery_hash)) {
         	// we define all options
         	if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
         	if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = \Doctrine\ORM\Cache::MODE_NORMAL;
         	if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
         	if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
-        	// we set the query
-        	$qb  = $em->getRepository("BootStrapUserBundle:User")->cacheQuery($qb->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['input_hash']);
-        	$result = $em->getRepository("BootStrapUserBundle:User")->setTranslatableHints($qb, $locale, false, true)->getResult();
+        	if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
+        	// we set the query result
+        	$qb     = $em->getRepository($this->_entityName)->cacheQuery($qb->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
         }
+        $result = $em->getRepository($this->_entityName)->setTranslatableHints($qb, $locale, false, true)->getResult();
         if ($type == 'count') {
             $result = count($result);
         } 
@@ -647,6 +662,23 @@ abstract class abstractController extends Controller
     	$em     = $this->getDoctrine()->getManager();
     	$cacheDriver = $em->getConfiguration()->getResultCacheImpl();
     	$cacheDriver->delete($input_hash);
+    }    
+    
+    /**
+     * Delete all query cache ids of a namespace.
+     *
+     * @param string $namespace
+     * @return array
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function deleteAllCacheQuery($namespace = '')
+    {
+    	$em     = $this->getDoctrine()->getManager();
+    	$cacheDriver = $em->getConfiguration()->getResultCacheImpl();
+    	$cacheDriver->setNamespace($namespace);
+    	$cacheDriver->deleteAll();
     }    
 
     /**

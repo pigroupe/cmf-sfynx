@@ -28,8 +28,7 @@
                 $em->remove($entity);
                 $em->flush();
                 // to delete cache list query
-                $this->deleteCacheQuery('hash_{{ route_name_prefix }}');
-                $this->deleteCacheQuery('hash_{{ route_name_prefix }}_count');                 
+                $this->deleteAllCacheQuery('hash_{{ route_name_prefix }}');
             } catch (\Exception $e) {
                 $this->container->get('request')->getSession()->getFlashBag()->clear();
                 $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
