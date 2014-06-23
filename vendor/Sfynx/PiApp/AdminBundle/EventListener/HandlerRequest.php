@@ -250,6 +250,7 @@ class HandlerRequest
      */
     protected function isNoScope()
     {
+        $locale        = $this->request->getLocale();
         if ( $this->is_scop_authorized ) {
             // we set libs.
             \PiApp\AdminBundle\Util\PiFileManager::mkdirr($this->scop_browscap_cache_dir, 0777);
