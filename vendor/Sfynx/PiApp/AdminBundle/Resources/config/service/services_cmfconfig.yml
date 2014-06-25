@@ -1,0 +1,18 @@
+parameters:
+    pi_app_admin.config.form : 
+        snippet: 'pi_app_admin.formbuilder_manager.model.snippet'
+        breadcrumb: 'pi_app_admin.formbuilder_manager.model.breadcrumb'
+        connexion: 'pi_app_admin.formbuilder_manager.model.connexion'
+        reset: 'pi_app_admin.formbuilder_manager.model.reset'
+
+services:
+    #
+    # configuration of the class manager allowed for the Memcache
+    #       
+    pi_app_admin.cmfconfig:
+      class: %piapp.manager.config.class%
+      arguments: ['@service_container']
+      tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
+      calls:
+        - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_admin.config.form% ] ]

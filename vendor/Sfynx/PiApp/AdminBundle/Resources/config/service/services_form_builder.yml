@@ -1,0 +1,25 @@
+parameters:
+    piapp.manager.formbuilder.model.snippet.class: PiApp\AdminBundle\Manager\FormBuilder\PiModelWidgetSnippet   
+    piapp.manager.formbuilder.model.breadcrumb.class: PiApp\AdminBundle\Manager\FormBuilder\PiModelWidgetBreadcrumb   
+    piapp.manager.formbuilder.model.connexion.class: PiApp\AdminBundle\Manager\FormBuilder\PiModelWidgetConnexion
+    piapp.manager.formbuilder.model.reset.class: PiApp\AdminBundle\Manager\FormBuilder\PiModelWidgetReset
+    
+services:
+    #
+    # configuration of the FORM BUILDER classes
+    #
+    pi_app_admin.formbuilder_manager.model.snippet:
+        class: %piapp.manager.formbuilder.model.snippet.class%
+        arguments: ['@service_container']                
+        
+    pi_app_admin.formbuilder_manager.model.breadcrumb:
+        class: %piapp.manager.formbuilder.model.breadcrumb.class%
+        arguments: ['@service_container']  
+        
+    pi_app_admin.formbuilder_manager.model.connexion:
+        class: %piapp.manager.formbuilder.model.connexion.class%
+        arguments: ['@service_container']             
+
+    pi_app_admin.formbuilder_manager.model.reset:
+        class: %piapp.manager.formbuilder.model.reset.class%
+        arguments: ['@service_container'] 

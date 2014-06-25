@@ -73,6 +73,11 @@ class ExtensionException extends \Exception
         return new self(sprintf('Method %s widget not defined in the util widget extension class !', $method));
     }   
     
+    public static function ConfigWidgetUnDefined($container, $type)
+    {
+    	return new self(sprintf('The %s type of the %s container is not defined correctly or already defined !', $type, $container));
+    }    
+    
     public static function MediaUnDefined($entity)
     {
         return new self(sprintf('Entity %s is not \BootStrap\MediaBundle\Entity\Media entity !', get_class($entity)));

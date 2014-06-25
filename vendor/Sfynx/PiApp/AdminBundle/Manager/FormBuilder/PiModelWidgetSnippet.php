@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\GedmoBundle\Manager\FormBuilder;  
+namespace PiApp\AdminBundle\Manager\FormBuilder;  
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -170,52 +170,52 @@ class PiModelWidgetSnippet extends PiFormBuilderManager
                     var  insert_content_form  = $(".insert_collection");
     
                     create_content_form.parents('.clearfix').hide();
-                    $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").attr("required", "required");
-                    $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").removeAttr("required");
-                    $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_plugin").removeAttr("required");
-                    $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_action").removeAttr("required");
-                    $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configXml").removeAttr("required");
+                    $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").attr("required", "required");
+                    $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").removeAttr("required");
+                    $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_plugin").removeAttr("required");
+                    $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_action").removeAttr("required");
+                    $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configXml").removeAttr("required");
 
-                    $("input[id='piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_choice_0']").change(function () {
+                    $("input[id='piappadminbundlemanagerformbuilderpimodelwidgetsnippet_choice_0']").change(function () {
                         if ($(this).is(':checked')){
                             create_content_form.parents('.clearfix').hide();
                             insert_content_form.parents('.clearfix').show();
     
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_plugin").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_action").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configXml").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_plugin").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_action").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configXml").removeAttr("required");
                         } else {
                             create_content_form.parents('.clearfix').show();
                             insert_content_form.parents('.clearfix').hide();
     
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_plugin").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_action").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configXml").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_plugin").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_action").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configXml").attr("required", "required");
                         }
                        });
-                    $("input[id='piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_choice_1']").change(function () {
+                    $("input[id='piappadminbundlemanagerformbuilderpimodelwidgetsnippet_choice_1']").change(function () {
                         if ($(this).is(':checked')){
                             create_content_form.parents('.clearfix').show();
                             insert_content_form.parents('.clearfix').hide();
     
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_plugin").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_action").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configXml").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_plugin").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_action").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configXml").attr("required", "required");
                         } else {
                             create_content_form.parents('.clearfix').hide();
                             insert_content_form.parents('.clearfix').show();
     
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").attr("required", "required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_plugin").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_action").removeAttr("required");
-                            $("#piappgedmobundlemanagerformbuilderpimodelwidgetsnippet_configXml").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_id_snippet").attr("required", "required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configCssClass").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_plugin").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_action").removeAttr("required");
+                            $("#piappadminbundlemanagerformbuilderpimodelwidgetsnippet_configXml").removeAttr("required");
                         }
                        });
                                           

@@ -1,4 +1,5 @@
 parameters:
+    piapp.manager.config.class: PiApp\AdminBundle\Util\PiConfigManager
     piapp.manager.array.class: PiApp\AdminBundle\Util\PiArrayManager
     piapp.manager.string.class: PiApp\AdminBundle\Util\PiStringManager
     piapp.manager.stringcut.class: PiApp\AdminBundle\Util\PiStringCutManager

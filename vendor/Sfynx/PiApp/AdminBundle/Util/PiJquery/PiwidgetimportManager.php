@@ -365,25 +365,25 @@ class PiwidgetimportManager extends PiJqueryExtension
         $array_col_2 = null;
         $array_col_3 = null;
         $i =1;
-        foreach($result as $key => $value){
-            if ($i <= $number_col_1){
-                $array_col_1[$key] = $value;
+        if (!is_null($result)) {
+            foreach($result as $key => $value){
+                if ($i <= $number_col_1){
+                    $array_col_1[$key] = $value;
+                }
+                if (($i > $number_col_1) && ($i <= ($number_col_1 + $number_col_2)) ){
+                    $array_col_2[$key] = $value;
+                }
+                if ($i > ($number_col_1 + $number_col_2)){
+                    $array_col_3[$key] = $value;
+                }            
+                $i++;
             }
-            if (($i > $number_col_1) && ($i <= ($number_col_1 + $number_col_2)) ){
-                $array_col_2[$key] = $value;
-            }
-            if ($i > ($number_col_1 + $number_col_2)){
-                $array_col_3[$key] = $value;
-            }            
-            $i++;
         }
-        
         $response        = $this->container->get('templating')->renderResponse("PiAppTemplateBundle:Template\\Widgetimport:$template", array(
                 'form_col_1'    => $array_col_1,
                 'form_col_2'    => $array_col_2,
                 'form_col_3'    => $array_col_3,
         ));        
-                
         // We open the buffer.
         ob_start ();
         ?>                

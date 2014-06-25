@@ -5,12 +5,12 @@
  * @category   Admin_Managers
  * @package    Page
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-10-05
+ * @since 2013-03-10
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\GedmoBundle\Manager\FormBuilder;  
+namespace PiApp\AdminBundle\Manager\FormBuilder;  
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,7 +26,7 @@ use PiApp\AdminBundle\Twig\Extension\PiWidgetExtension;
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
 */
-class PiModelWidgetReset extends PiFormBuilderManager
+class PiModelWidgetBreadcrumb extends PiFormBuilderManager
 {
     /**
      * Type form name.
@@ -52,9 +52,9 @@ class PiModelWidgetReset extends PiFormBuilderManager
      */
     public function __construct(ContainerInterface $containerService)
     {
-        parent::__construct($containerService, 'WIDGET', 'reset', $this::FORM_TYPE_NAME, $this::FORM_DECORATOR, $this::FORM_NAME);
+        parent::__construct($containerService, 'WIDGET', 'breadcrumb', $this::FORM_TYPE_NAME, $this::FORM_DECORATOR, $this::FORM_NAME);
     }
-
+    
     /**
      * Return list of available content types for all type pages.
      *
@@ -68,8 +68,8 @@ class PiModelWidgetReset extends PiFormBuilderManager
     public static function getContents()
     {
         return array(
-                PiFormBuilderManager::CONTENT_RENDER_TITLE    => "Reset",
-                PiFormBuilderManager::CONTENT_RENDER_DESC   => "Formulaire de reset",
+                PiFormBuilderManager::CONTENT_RENDER_TITLE    => "Breadcrumb",
+                PiFormBuilderManager::CONTENT_RENDER_DESC   => "Séléctionner un lien",
         );
     }
 
@@ -83,10 +83,42 @@ class PiModelWidgetReset extends PiFormBuilderManager
      */    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
+        $nodes         = $this->_em->getRepository("PiAppGedmoBundle:Menu")->getAllTree($this->_locale, '', 'object', false, false, null);
+        
+        $result     = array();
+        $_boucle     = array();
+        if (is_array($nodes)) {
+            foreach ($nodes as $key => $node) {
+                try {
+                    $nodes_parent    = $this->_em->getRepository("PiAppGedmoBundle:Menu")->getPath($node);
+                    foreach($nodes_parent as $key => $parent){
+                        $_boucle[]     = $parent->getTitle();
+                    }
+                     
+                    $result[ $node->getId() ] = implode(" > ", $_boucle);
+                    $_boucle = array();
+                } catch (\Exception $e) {
+                }
+            }
+        }
+
         $builder
+            ->add('id_menu', 'choice', array(
+                    'choices'   => $result,
+                    'multiple'    => false,
+                    'required'  => true,
+                    'empty_value' => 'pi.form.label.select.choose.block',
+                    "attr" => array(
+                            "class"=>"pi_simpleselect",
+                    ),
+                    "label_attr" => array(
+                            "class"=>"insert_collection",
+                    ),    
+                    'label'     => 'Liste des liens menu',
+            ))
             ->add('template', 'choice', array(
                     'choices'   => array(
-                            'reset_content.html.twig'                => 'Reset default',
+                            'organigram-breadcrumb.html.twig'            => 'Default',
                     ),
                     'multiple'    => false,
                     'required'  => true,
@@ -94,11 +126,7 @@ class PiModelWidgetReset extends PiFormBuilderManager
                     "attr" => array(
                             "class"=>"pi_simpleselect",
                     ),
-            ))
-            ->add('path_url_redirection', 'text', array(
-                    'required'  => false,
-                    'label'    => "Route",
-            ))                        
+            ))            
             ;
     }
     
@@ -142,15 +170,22 @@ class PiModelWidgetReset extends PiFormBuilderManager
     {
         return
         array(
-                'plugin'    => 'user',
-                'action'    => 'connexion',
+                'plugin'    => 'gedmo',
+                'action'    => 'organigram',
                 'xml'         => Array (
                         "widgets"     => Array (
-                                "user"        => Array (
-                                        "controller"    => 'BootStrapUserBundle:User:_reset_default',
+                                "gedmo"        => Array (
+                                        "controller"    => 'PiAppGedmoBundle:Menu:org-tree-breadcrumb',
                                         "params"        => Array (
-                                                "template"             => "PiAppTemplateBundle:Template\\Login\\Resetting:" . $data['template'],
-                                                "path_url_redirection"=> $data['path_url_redirection'],
+                                                "node"         => $data['id_menu'],
+                                                "template"    => $data['template'],
+                                                "cachable"    => "true",
+                                                "organigram"=> Array(
+                                                            "params"        => Array (
+                                                                    "action"=> "renderDefault",
+                                                                    "menu"    => "breadcrumb",
+                                                            )
+                                                )
                                         )
                                 )
                         )
