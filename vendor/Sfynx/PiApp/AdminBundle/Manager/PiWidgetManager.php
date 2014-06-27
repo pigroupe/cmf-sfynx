@@ -166,8 +166,9 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         $update    = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
         $public    = strval($this->getCurrentWidget()->getPublic());
         $cachetemplating    = strval($this->getCurrentWidget()->getCacheTemplating());
+        $sluggify  = strval($this->getCurrentWidget()->getSluggify());
         $ajax      = strval($this->getCurrentWidget()->getAjax());
-        $source   .= "     {% set options = {'widget-id': '$id', 'widget-lang': '$lang', 'widget-lifetime': '$lifetime', 'widget-cacheable': '$cacheable', 'widget-update': '$update', 'widget-public': '$public', 'widget-cachetemplating': '$cachetemplating', 'widget-ajax': '$ajax'} %} \n";
+        $source   .= "     {% set options = {'widget-id': '$id', 'widget-lang': '$lang', 'widget-lifetime': '$lifetime', 'widget-cacheable': '$cacheable', 'widget-update': '$update', 'widget-public': '$public', 'widget-cachetemplating': '$cachetemplating', 'widget-ajax': '$ajax', 'widget-sluggify': '$sluggify'} %} \n";
         $source   .= "     {{ renderWidget('".strtoupper($container)."', '".strtolower($NameAction)."', options )|raw }} \n";
         $source   .= " </div> \n";
         

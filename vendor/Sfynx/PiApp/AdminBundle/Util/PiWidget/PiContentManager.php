@@ -118,10 +118,11 @@ class PiContentManager extends PiWidgetExtension
         $lang                       = $options['widget-lang'];
         $params['widget-id']        = $options['widget-id'];
         $params['widget-lifetime']  = $options['widget-lifetime'];
-        $params['widget-cacheable'] = $options['widget-cacheable'];
+        $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
         $params['widget-update']    = $options['widget-update'];
         $params['widget-public']    = $options['widget-public'];
-        $params['widget-ajax']      = $options['widget-ajax'];
+        $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
+        $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
         // if the gedmo widget is defined correctly as a "text"
         if ( ($this->action == "text" ) && $this->getTranslationWidget()) {
             return $this->runByExtension('pi_app_admin.manager.transwidget', 'transwidget', $this->getTranslationWidget()->getId(), $lang, $params);
@@ -264,10 +265,11 @@ class PiContentManager extends PiWidgetExtension
                     $TranslationWidget = $this->getRepository()->getRepository('TranslationWidget')->getTranslationById((int) $idWidget, $lang);
                     $params['widget-id']        = $options['widget-id'];
                     $params['widget-lifetime']  = $options['widget-lifetime'];
-                    $params['widget-cacheable'] = $options['widget-cacheable'];
+                    $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
                     $params['widget-update']    = $options['widget-update'];
                     $params['widget-public']    = $options['widget-public'];
-                    $params['widget-ajax']      = $options['widget-ajax'];
+                    $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
+                    $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
                     
                     return $this->runByExtension('pi_app_admin.manager.transwidget', 'transwidget', $TranslationWidget->getId(), $lang, $params);
                 } catch (\Exception $e) {
@@ -346,16 +348,16 @@ class PiContentManager extends PiWidgetExtension
             if ($this->isAvailableJqueryExtension($JQcontainer, $JQservice)) {
                 $params['widget-id']        = $options['widget-id'];
                 $params['widget-lifetime']  = $options['widget-lifetime'];
-                $params['widget-cacheable'] = $options['widget-cacheable'];
+                $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
                 $params['widget-update']    = $options['widget-update'];
                 $params['widget-public']    = $options['widget-public'];
-                $params['widget-ajax']      = $options['widget-ajax'];
-                $params['cachable']         = $options['widget-cachetemplating'];
-                if ($xmlConfig->widgets->content->params->get('cachable')) {
-                	$params['cachable'] = $xmlConfig->widgets->content->params->cachable;
+                $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
+                $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
+                $params['cachable']         = ((int) $options['widget-cachetemplating']) ? true : false;
+                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+                	$params['cachable'] = ($xmlConfig->widgets->content->params->cachable === 'true') ? true : false;
                 }                
-                if (($params['cachable'] == true) || ($params['cachable'] == 'true')) {
-                    $params['cachable'] = 'true';
+                if ($params['cachable']) {
                     return $this->runByExtension('pi_app_admin.manager.jqext', $this->action, "$JQcontainer~$JQservice", $lang, $params);
                 } else {
                     return $this->runByjqueryExtension($JQcontainer, $JQservice, $lang, $params);

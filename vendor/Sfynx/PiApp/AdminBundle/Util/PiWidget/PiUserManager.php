@@ -173,10 +173,11 @@ class PiUserManager extends PiWidgetExtension
                 }
                 $params['widget-id']        = $options['widget-id'];
                 $params['widget-lifetime']  = $options['widget-lifetime'];
-                $params['widget-cacheable'] = $options['widget-cacheable'];
+                $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
                 $params['widget-update']    = $options['widget-update'];
                 $params['widget-public']    = $options['widget-public'];
-                $params['widget-ajax']      = $options['widget-ajax'];
+                $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
+                $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
                 
                 return $this->runByService('pi_app_admin.manager.authentication', "$this->entity~$this->method", $lang, $params);
             } else {

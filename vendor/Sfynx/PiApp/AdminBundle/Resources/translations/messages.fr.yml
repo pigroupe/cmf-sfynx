@@ -437,11 +437,13 @@ pi.widget.ajaxaction.widget_action_move_up : Êtes-vous sûr de vouloir déplace
 pi.widget.ajaxaction.widget_action_move_down : Êtes-vous sûr de vouloir déplacer vers le bas le Widget ?
 
 pi.widget.accordion_form.httpcache: Cache HTTP
-
 pi.widget.accordion_form.behavior: Comportement
-pi.widget.form.cachetemplating: Mise en cache du contenu
-pi.widget.cache.yes : Activer Cache
-pi.widget.cache.no : Désactiver Cache
+pi.widget.form.sluggify: Sluggification du cache widget
+pi.widget.sluggify.yes : Activer
+pi.widget.sluggify.no : Désactiver
+pi.widget.form.cachetemplating: Mise en cache Twig
+pi.widget.cache.yes : Activer
+pi.widget.cache.no : Désactiver
 pi.widget.form.ajax: Appel ajax du widget
-pi.widget.ajax.yes: Appel ajax
-pi.widget.ajax.no: Appel normal
+pi.widget.ajax.yes: Activer
+pi.widget.ajax.no: Désactiver

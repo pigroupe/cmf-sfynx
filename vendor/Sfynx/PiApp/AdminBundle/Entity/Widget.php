@@ -108,6 +108,13 @@ class Widget
     protected $ajax = 0;    
     
     /**
+     * @var boolean $sluggify
+     *
+     * @ORM\Column(name="is_sluggify", type="integer", nullable=false)
+     */
+    protected $sluggify = 0;    
+    
+    /**
      * @var string $configCssClass
      *
      * @ORM\Column(name="config_css_class", type="string", nullable=true)
@@ -342,6 +349,26 @@ class Widget
     public function getAjax()
     {
     	return $this->ajax;
+    }  
+
+    /**
+     * Set sluggify
+     *
+     * @param boolean $sluggify
+     */
+    public function setSluggify($sluggify)
+    {
+    	$this->sluggify = $sluggify;
+    }
+    
+    /**
+     * Get sluggify
+     *
+     * @return boolean
+     */
+    public function getSluggify()
+    {
+    	return $this->sluggify;
     }    
     
     /**

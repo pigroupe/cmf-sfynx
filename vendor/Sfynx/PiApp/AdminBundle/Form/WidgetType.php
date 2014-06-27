@@ -75,6 +75,16 @@ class WidgetType extends AbstractType
                     ),
                     'data'        => '84600',
             ))
+            ->add('sluggify', 'choice', array(
+            		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableSluggify(),
+            		'label'    => 'pi.widget.form.sluggify',
+            		'required'  => true,
+            		'multiple'    => false,
+            		'expanded' => true,
+            		"label_attr" => array(
+            				"class"=>"widget_behavior",
+            		),
+            ))            
             ->add('cacheTemplating', 'choice', array(
             		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableCacheTemplating(),
             		'label'    => 'pi.widget.form.cachetemplating',

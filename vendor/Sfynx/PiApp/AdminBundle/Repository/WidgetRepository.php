@@ -35,6 +35,10 @@ class WidgetRepository extends TranslationRepository
     // Ajax values
     const AJAX_YES   = 1;
     const AJAX_NO    = 0;    
+    
+    // Sluggify values
+    const SLUGGIFY_YES   = 1;
+    const SLUGGIFY_NO    = 0;    
         
     /**
      * Return list of available cache values
@@ -69,6 +73,24 @@ class WidgetRepository extends TranslationRepository
     	return array(
     			self::AJAX_YES  => 'pi.widget.ajax.yes',
     			self::AJAX_NO   => 'pi.widget.ajax.no'
+    	);
+    }  
+
+    /**
+     * Return list of available ajax values
+     *
+     * @return array
+     * @access public
+     * @static
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2011-12-28
+     */
+    public static function getAvailableSluggify()
+    {
+    	return array(
+    			self::SLUGGIFY_YES  => 'pi.widget.sluggify.yes',
+    			self::SLUGGIFY_NO   => 'pi.widget.sluggify.no'
     	);
     }    
         
