@@ -437,12 +437,12 @@ pi.widget.ajaxaction.widget_action_move_down: Are you sure you want to move down
 
 pi.widget.accordion_form.httpcache: HTTP cache
 pi.widget.accordion_form.behavior: Behavior
-pi.widget.form.sluggify: Sluggification of the cache widget
+pi.widget.form.sluggify: Distinct twig cache by url
 pi.widget.sluggify.yes : Enable
 pi.widget.sluggify.no : Disable
-pi.widget.form.cachetemplating: Cache Twig
-pi.widget.cache.yes: Enable 
+pi.widget.form.cachetemplating: Twig cache
+pi.widget.cache.yes: Enable
 pi.widget.cache.no: Disable 
 pi.widget.form.ajax: Call ajax widget
 pi.widget.ajax.yes: Enable 
-pi.widget.ajax.no: Disable 
+pi.widget.ajax.no: Disable

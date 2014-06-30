@@ -1030,8 +1030,21 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     		}
     		fclose($reading);
     	}
-    }
-    
+    	$path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
+    	if (file_exists($path_json_file_history)) {
+    		$reading  = fopen($path_json_file_history, 'r');
+    		while (!feof($reading)) {
+    			$info = explode('|', fgets($reading));
+    			if (isset($info[1])) {
+    				$info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+    				$this->cacheRefreshByname($info[1]);
+    				//print_r($info[1]);
+    				//print_r('<br />');print_r('<br />');
+    			}
+    		}
+    		fclose($reading);
+    	}    	
+    }   
         
     /**
      * Refresh the cache of a widget.

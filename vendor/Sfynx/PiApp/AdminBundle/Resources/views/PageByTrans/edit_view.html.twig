@@ -42,7 +42,6 @@
 		});
 		
 		$("input[id$='_secure']").change(function () {
-			console.log($(this).parent());
 			if($(this).is(':checked')){
 				$("select[id$='_heritage']").each(function(index) {
 					$(this).parents('.no-accordion').find(allListElements[index]).show();

@@ -3,7 +3,7 @@
  * This file is part of the <Admin> project.
  *
  * @category   Admin_Managers
- * @package    Page
+ * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-23
  *
@@ -28,7 +28,7 @@ use PiApp\AdminBundle\Entity\TranslationWidget;
  * Description of the Page manager
  *
  * @category   Admin_Managers
- * @package    Page
+ * @package    Manager
  * @abstract
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -238,7 +238,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
                	break;                
             case ('page-history') :
                	$path_json_file = $path . "page/p-{$id}-{$lang}-history.json";
-               	break;                               
+               	break;     
+            case ('page-history-tmp') :
+          		$path_json_file = $path . "page/tmp/" . md5($id) ."-{$lang}.json";
+           		break;
             case ('widget') :
                 $path_json_file = $path . "widget/w-{$id}-{$lang}.json";
                 break;  
@@ -272,33 +275,41 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     public function setJsonFileEtag($tag, $id, $lang, $params = null)
     {
         $result = false;
+        // we set the time
+        $now    = $this->setTimestampNow();
     	// we set the Etag.
         $this->createEtag($tag, $id, $lang, $params);
     	// we set the path
-    	$path  = $this->container->getParameter("kernel.cache_dir") . "/../Etag/";
+    	$path   = $this->container->getParameter("kernel.cache_dir") . "/../Etag/";
     	// we set the file name
     	if ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
-    		// we register the url if the page is sluggify
-    		$is_sluggify_page   = $this->isSluggifyPage();
-    		$path_json_file     = $this->createJsonFileName('page', $id, $lang);
-    		$path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $this->Etag, $lang);
-    		if ($is_sluggify_page && !file_exists($path_json_file_tmp)) {
-    			$now    = $this->setTimestampNow();
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
-    			// we add new Etag in the sluggify file.
-    			$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
-    		} elseif (!$is_sluggify_page && !file_exists($path_json_file)) {
-    		    $now    = $this->setTimestampNow();
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
-    		    // we add new Etag in the history.
-    		    $path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);    		    
+    		// if the page is sluggify    		
+    		if ($this->isSluggifyPage()) {    		
+    			$path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $this->Etag, $lang);
+    			if (!file_exists($path_json_file_tmp)) {
+	    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
+	    			// we add new Etag in the sluggify file.
+	    			$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
+	    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
+    			}
+    		// if the page has queries
+    		} elseif ($this->isQueryStringPage()) {	
+    			$path_json_file_tmp = $this->createJsonFileName('page-history-tmp', $this->Etag, $lang);
+    			if (!file_exists($path_json_file_tmp)) {
+	    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
+	    			// we add new Etag in the history.
+    		    	$path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
+    		    	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);    		    
+    			}
+    		} else {
+    			$path_json_file   = $this->createJsonFileName('page', $id, $lang);
+    			if (!file_exists($path_json_file)) {
+    		    	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    			}
     		}
     	} elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
     	    $path_json_file_tmp = $this->createJsonFileName('esi-tmp', $params['esi-url'], $lang);
     		if (!file_exists($path_json_file_tmp)) {
-    			$now    = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
     			// we add new ESI tag in the file.
     			$path_json_file = $this->createJsonFileName('esi', $id, $lang);
@@ -306,12 +317,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     		}
     	} elseif (isset($params['widget-id']) && !empty($params['widget-id'])) {
     			$path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
-    			$now    = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     	} else {
 	   		$path_json_file_tmp = $this->createJsonFileName('default-tmp', $this->Etag, $lang);
     		if (!file_exists($path_json_file_tmp)) {
-    			$now    = $this->setTimestampNow();
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     			$path_json_file = $this->createJsonFileName('default', $tag, $lang);
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
@@ -319,7 +328,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     	}
     
     	return $result;
-    }  
+    }   
 
     /**
      * Refresh the cache by name
@@ -1142,7 +1151,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
                 } else {
                     $trans_content =   $match[$sluggable_field_search];
                 }
-                //
+                //                
     			$sluggable_title_tab = array_map(function($value) {
     				return ucwords($value);
     			}, array_values(explode('_', $sluggable_title)));
@@ -1235,4 +1244,23 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
 	        return false;
 	    }
 	}
+	
+	/**
+	 * Return true if the page has a query string.
+	 *
+	 * @return boolean
+	 * @access public
+	 *
+	 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+	 * @since 2014-04-03
+	 */
+	public function isQueryStringPage()
+	{
+		// we get query string
+		if (null !== $qs = $this->container->get('request')->getQueryString()) {
+			return true;
+		} else {
+			return false;
+		}
+	}	
 }

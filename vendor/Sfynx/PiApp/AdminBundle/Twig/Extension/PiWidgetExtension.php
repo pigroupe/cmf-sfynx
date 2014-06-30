@@ -958,6 +958,9 @@ class PiWidgetExtension extends \Twig_Extension
     {
         // we create the twig code of the service to rn.
         if (!is_null($params)) {
+            if (isset($params['widget-sluggify']) && ($params['widget-sluggify'] == true)) {
+            	$params['widget-sluggify-url']    = $this->container->get('request')->getUri();
+            }            
             krsort($params);
             $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);            
             $set = " {{ getService('$serviceName').run('$tag', '$id', '$lang', {$json})|raw }} \n";
@@ -1162,8 +1165,7 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "    <span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
             	    $set .= "{% endif %}\n";
             	}   
-            	// we register the tag value in the json file if does not exist.
-            	
+            	// we register the tag value in the json file if does not exist.            	
             	if (isset($params['widget-id'])) {
             		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
             	} else {

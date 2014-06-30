@@ -72,8 +72,17 @@ class WidgetType extends AbstractType
                     'help_block' => 'pi.page.form.field.lifetime',
                     "label_attr" => array(
                     		"class"=>"widget_esi",
-                    ),
-                    'data'        => '84600',
+                    )
+            ))
+            ->add('cacheTemplating', 'choice', array(
+            		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableCacheTemplating(),
+            		'label'    => 'pi.widget.form.cachetemplating',
+            		'required'  => true,
+            		'multiple'    => false,
+            		'expanded' => true,
+            		"label_attr" => array(
+            				"class"=>"widget_behavior widget_cachetemplating",
+            		),
             ))
             ->add('sluggify', 'choice', array(
             		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableSluggify(),
@@ -82,19 +91,9 @@ class WidgetType extends AbstractType
             		'multiple'    => false,
             		'expanded' => true,
             		"label_attr" => array(
-            				"class"=>"widget_behavior",
+            				"class"=>"widget_behavior widget_sluggify",
             		),
             ))            
-            ->add('cacheTemplating', 'choice', array(
-            		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableCacheTemplating(),
-            		'label'    => 'pi.widget.form.cachetemplating',
-            		'required'  => true,
-            		'multiple'    => false,
-            		'expanded' => true,
-                    "label_attr" => array(
-                    		"class"=>"widget_behavior",
-                    ),
-            ))
             ->add('ajax', 'choice', array(
             		'choices'   => \PiApp\AdminBundle\Repository\WidgetRepository::getAvailableAjax(),
             		'label'    => 'pi.widget.form.ajax',
@@ -102,7 +101,7 @@ class WidgetType extends AbstractType
             		'multiple'    => false,
             		'expanded' => true,
                     "label_attr" => array(
-                    		"class"=>"widget_behavior",
+                    		"class"=>"widget_behavior widget_ajax",
                     ),
             ))                        
         ;

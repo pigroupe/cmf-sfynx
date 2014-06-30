@@ -437,7 +437,7 @@ pi.widget.ajaxaction.widget_action_move_down: هل أنت متأكد أنك تر
 
 pi.widget.accordion_form.httpcache: HTTP ذاكرة التخزين المؤقت
 pi.widget.accordion_form.behavior: سلوك
-pi.widget.form.sluggify: من القطعة مخبأ 
+pi.widget.form.sluggify: مخبأ متميزة من خلال رابط
 pi.widget.sluggify.yes :  تمكين
 pi.widget.sluggify.no :  تعطيل
 pi.widget.form.cachetemplating: المحتوى التخزين المؤقت

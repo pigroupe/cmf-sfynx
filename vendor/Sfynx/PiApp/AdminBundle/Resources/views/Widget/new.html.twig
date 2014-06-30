@@ -38,6 +38,27 @@
 	//<![CDATA[
 			j_prototype_bytabs.ftc_accordion_form("widget_httpcache", "{{ "pi.widget.accordion_form.httpcache"|trans }}", ".myform");
 			j_prototype_bytabs.ftc_accordion_form("widget_behavior", "{{ "pi.widget.accordion_form.behavior"|trans }}", ".myform");
+
+            jQuery(document).ready(function(){        
+                var  widget_sluggify_content_form  = $(".widget_sluggify");
+                var  widget_cachetemplating_content_form  = $(".widget_cachetemplating");
+                var  widget_ajax_content_form  = $(".widget_ajax");
+	            if ($("input[id='piapp_adminbundle_widgettype_cacheTemplating_0']").is(':checked')) {
+	            	widget_sluggify_content_form.parents('.clearfix').show();
+	            	widget_ajax_content_form.parents('.clearfix').hide();
+	            } else {
+	            	widget_sluggify_content_form.parents('.clearfix').hide();
+                	widget_ajax_content_form.parents('.clearfix').show();
+		        }
+                $("input[id='piapp_adminbundle_widgettype_cacheTemplating_0']").live('ifChecked', function(event) {
+                	widget_sluggify_content_form.parents('.clearfix').show();
+                	widget_ajax_content_form.parents('.clearfix').hide();
+        		});
+                $("input[id='piapp_adminbundle_widgettype_cacheTemplating_0']").live('ifUnchecked', function(event) {
+                	widget_sluggify_content_form.parents('.clearfix').hide();
+                	widget_ajax_content_form.parents('.clearfix').show();
+        		});                                     
+            });				
 	//]]>
 	</script>	
 
