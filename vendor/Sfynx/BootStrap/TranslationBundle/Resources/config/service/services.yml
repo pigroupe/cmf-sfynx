@@ -1,24 +1,11 @@
 parameters:
     bootstrap.EntitiesContainer.listener.class: BootStrap\TranslationBundle\EventListener\EntitiesContainer
-
-    bootstrap.translation.event_subscriber.position.class: BootStrap\TranslationBundle\EventSubscriber\EventSubscriberPosition
-    
     bootstrap.RouteTranslator.factory.class: BootStrap\TranslationBundle\Route\RouteTranslatorFactory
     bootstrap.route_loader.class: BootStrap\TranslationBundle\Route\RouteLoader
     bootstrap.route_cache.class: BootStrap\TranslationBundle\Route\CacheRoute
-
     bootstrap.Role.factory.class: BootStrap\TranslationBundle\Role\RoleFactory
     
 services:
-    #
-    # configuration of the event subscriber of entities
-    #         
-    bootstrap_translation.event_subscriber.position:
-        class: %bootstrap.translation.event_subscriber.position.class%
-        arguments: [@service_container]
-        tags:
-            - { name: doctrine.event_subscriber }  
-            
     #
     # configuration of the persist Entities container
     # 

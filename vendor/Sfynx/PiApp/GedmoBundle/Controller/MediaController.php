@@ -323,7 +323,7 @@ class MediaController extends abstractController
             return $response;
         }
         if (!$is_Server_side) {
-           $query      = $em->getRepository("PiAppGedmoBundle:Media")->cacheQuery($query->getQuery(), 3600, \Doctrine\ORM\Cache::MODE_NORMAL, true, 'hash_list_gedmomedia');
+           $query      = $em->getRepository("PiAppGedmoBundle:Media")->cacheQuery($query->getQuery(), 3600, 3 /*\Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_list_gedmomedia');
            $entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query, 'object', false);
         } else {
            $entities   = null;

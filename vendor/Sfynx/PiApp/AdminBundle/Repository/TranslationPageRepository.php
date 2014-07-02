@@ -77,7 +77,7 @@ class TranslationPageRepository extends TranslationRepository
                 self::STATUS_REVIEWED   => 'pi.page.' . self::STATUS_REVIEWED,
                 self::STATUS_PUBLISH    => 'pi.page.' . self::STATUS_PUBLISH,
                 self::STATUS_HIDDEN     => 'pi.page.' . self::STATUS_HIDDEN,
-                self::STATUS_TRASH        => 'pi.page.' . self::STATUS_TRASH,
+                self::STATUS_TRASH      => 'pi.page.' . self::STATUS_TRASH,
                 self::STATUT_REFUSED    => 'pi.page.' . self::STATUT_REFUSED,
         );
     }

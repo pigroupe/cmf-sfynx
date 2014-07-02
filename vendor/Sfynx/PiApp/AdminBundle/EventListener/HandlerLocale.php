@@ -83,7 +83,7 @@ class HandlerLocale
            $_GET['_locale'] = $this->request->cookies->get('_locale');
        } else {
            $this->request->setLocale($this->defaultLocale);
-           $_GET['_locale'] = $this->defaultLocale;
+           $_GET['_locale'] = $this->defaultLocale;       
        }
    }
 

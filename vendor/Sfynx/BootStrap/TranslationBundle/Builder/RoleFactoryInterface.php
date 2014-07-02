@@ -22,6 +22,7 @@ namespace BootStrap\TranslationBundle\Builder;
  */
 interface RoleFactoryInterface
 {
+    public function isJsonFileExisted();
     public function getAllUserRoles();
     public function getBestRoleUser();
     public function getBestRoles($ROLES);

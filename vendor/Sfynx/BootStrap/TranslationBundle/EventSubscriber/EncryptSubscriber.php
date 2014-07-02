@@ -1,16 +1,16 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Translation> project.
  *
- * @category   Admin_EventSubscriber
+ * @category   BootStrap_EventSubscriber
  * @package    Encryptor
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-27
+ * @since 2014-06-27
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\AdminBundle\EventSubscriber;
+namespace BootStrap\TranslationBundle\EventSubscriber;
 
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
@@ -20,7 +20,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Common\Annotations\Reader;
 use \Doctrine\ORM\EntityManager;
 use \ReflectionClass;
-use PiApp\AdminBundle\Builder\PiEncryptorInterface;
+use BootStrap\TranslationBundle\Builder\PiEncryptorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\StringType;
@@ -28,7 +28,7 @@ use Doctrine\DBAL\Types\StringType;
 /**
  * Doctrine event subscriber which encrypt/decrypt entities
  * 
- * @category   Admin_EventSubscriber
+ * @category   BootStrap_EventSubscriber
  * @package    Encryptor 
  * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
@@ -53,7 +53,7 @@ class EncryptSubscriber extends MappedEventSubscriber
      * @var String
      */
     
-    public $interfaceclass = 'PiApp\AdminBundle\Builder\PiEncryptorInterface';    
+    public $interfaceclass = 'BootStrap\TranslationBundle\Builder\PiEncryptorInterface';    
     
     /**
      * Sets autorization of load process
@@ -105,7 +105,19 @@ class EncryptSubscriber extends MappedEventSubscriber
         $this->annReader = $annReader;
         $this->options   = $options;
         $this->container = $container;
-    }
+    }    
+
+    /**
+     * Realization of EventSubscriber interface method.
+     * @return Array Return all events which this subscriber is listening
+     */
+    public function getSubscribedEvents() {
+    	return array(
+    			Events::prePersist,
+    			Events::preUpdate,
+    			Events::postLoad,
+    	);
+    }    
 
     /**
      * Listen a preUpdate lifecycle event. Checking and encrypt entities fields
@@ -195,18 +207,6 @@ class EncryptSubscriber extends MappedEventSubscriber
      */
     public function postLoad(LifecycleEventArgs $args) {
         $this->processFields($args, false);
-    }
-
-    /**
-     * Realization of EventSubscriber interface method.
-     * @return Array Return all events which this subscriber is listening
-     */
-    public function getSubscribedEvents() {
-        return array(
-            Events::prePersist,
-            Events::preUpdate,
-            Events::postLoad,
-        );
     }
 
     /**

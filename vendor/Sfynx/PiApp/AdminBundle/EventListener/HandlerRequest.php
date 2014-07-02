@@ -76,7 +76,11 @@ class HandlerRequest
         //    return;
         //}        
     	//print_r('priority 2');
-        // set request
+    	// Set the heritage.json file if does not exist
+    	if (!$this->container->get('bootstrap.Role.factory')->isJsonFileExisted()) {
+            $this->container->get('bootstrap.Role.factory')->setJsonFileRoles();
+    	}
+        // Set request
     	$this->request = $event->getRequest($event);
         $locale        = $this->request->getLocale();
         // Sets parameter template values.

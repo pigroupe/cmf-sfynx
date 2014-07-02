@@ -260,10 +260,10 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         $all_routes = array();
         $results    = $this->getDoctrineRoute()->getConnection()->fetchAll("SELECT id,route,locales,defaults,requirements FROM pi_routing");
         foreach ($results as $key => $values) {
-            $all_routes[ $values['route'] ]['id']           = $values['id'];
-            $all_routes[ $values['route'] ]['locales']      = $values['locales'];
-            $all_routes[ $values['route'] ]['defaults']     = $values['defaults'];
-            $all_routes[ $values['route'] ]['requirements'] = $values['requirements'];
+            $all_routes[ $values['route'] ]['id']                = $values['id'];
+            $all_routes[ $values['route'] ]['locales']         = $values['locales'];
+            $all_routes[ $values['route'] ]['defaults']        = $values['defaults'];
+            $all_routes[ $values['route'] ]['requirements']    = $values['requirements'];
         }
         //
         $all_pages     = $this->getEntityManager()->getRepository('PiAppAdminBundle:Page')->getAllPageHtml()->getQuery()->getResult();
@@ -292,7 +292,7 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
                         isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['requirement']) 
                     ){
                          $requirements = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['requirement'];                        
-                    }
+                    }                   
                     if (isset($all_routes[ $route ])) {
                         $this->getDoctrineRoute()->addRoute($route, $all_routes[ $route ], $locales, $defaults, $requirements);
 //                        print_r($all_routes[ $route ]);print_r(' - ');print_r($requirements);

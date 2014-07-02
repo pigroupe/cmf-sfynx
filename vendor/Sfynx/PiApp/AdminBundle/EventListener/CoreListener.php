@@ -54,25 +54,13 @@ abstract class CoreListener extends abstractListener
     final protected function _Heritage_roles(LifecycleEventArgs $eventArgs)
     {
         $entity         = $eventArgs->getEntity();
-        $entityManager  = $eventArgs->getEntityManager();
-        
+        $entityManager  = $eventArgs->getEntityManager();        
         // If  autentication user, we set the persist of the Page entity
         if ($this->isUsernamePasswordToken() && ($entity instanceof \BootStrap\UserBundle\Entity\Role)){
             // we register the hierarchy roles in the heritage.jon file in the cache
             if ($this->_container()->get('bootstrap.Role.factory')->setJsonFileRoles()) {
                 $this->setFlash('pi.session.flash.rolecache.created');
             }
-            $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php");
-            $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php.meta");
-            $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.xml");
-            $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainerCompiler.log");
-            $path_files[] = realpath($this->_container()->getParameter("kernel.cache_dir") . "/appProdProjectContainer.php");
-            
-            $path_files = array_unique($path_files);
-            foreach($path_files as $key=>$file){
-                if (!empty($file))
-                    unlink($file);
-            }            
         }
     }  
 

@@ -439,7 +439,7 @@ abstract class abstractController extends Controller
     		} elseif (is_array($cacheQuery_hash)) {
     			// we define all options
     			if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
-    			if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = \Doctrine\ORM\Cache::MODE_NORMAL;
+    			if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = 3; // \Doctrine\ORM\Cache::MODE_NORMAL;
     			if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
     			if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
     			if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
@@ -633,7 +633,7 @@ abstract class abstractController extends Controller
         } elseif (is_array($cacheQuery_hash)) {
         	// we define all options
         	if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
-        	if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = \Doctrine\ORM\Cache::MODE_NORMAL;
+        	if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = 3; // \Doctrine\ORM\Cache::MODE_NORMAL;
         	if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
         	if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
         	if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';

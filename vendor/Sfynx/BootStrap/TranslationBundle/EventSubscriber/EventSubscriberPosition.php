@@ -14,8 +14,10 @@ namespace BootStrap\TranslationBundle\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\EventArgs;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use \ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use BootStrap\TranslationBundle\EventListener\abstractListener;
@@ -30,6 +32,37 @@ use BootStrap\TranslationBundle\EventListener\abstractListener;
  */
 class EventSubscriberPosition  extends abstractListener implements EventSubscriber
 {
+    /**
+     * Annotation reader
+     * @var \Doctrine\Common\Annotations\Reader
+     */
+    protected $annReader;
+    
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;    
+    
+    /**
+     * Encryptor interface namespace
+     * @var String
+     */    
+    public $annotationclass = 'BootStrap\TranslationBundle\Annotation\Positioned';    
+    
+    /**
+     * Initialization of subscriber
+     * @param string $encryptorClass  The encryptor class.  This can be empty if
+     * a service is being provided.
+     * @param string $secretKey The secret key.
+     * @param EncryptorInterface|NULL $service (Optional)  An EncryptorInterface.
+     * This allows for the use of dependency injection for the encrypters.
+     */
+    public function __construct(Reader $annReader, ContainerInterface $container) {
+        parent::__construct($container);
+    	$this->annReader = $annReader;
+    	$this->container = $container;
+    }
+        
     /**
      * @return array
      * 
@@ -101,93 +134,66 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
      */
     public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
-        $entity            = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
-        
-        $result                  = $this->getSortableOrders($eventArgs);
-        $sort_position_by_and    = $result['sort_position_by_and'];
-        $sort_position_by_where  = $result['sort_position_by_where'];   
-
-        $_is_change_position = false;
-        $entity_name   = get_class($entity);
-        if (isset($GLOBALS['ENTITIES']['POSITION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name])) {
-        	if (is_array($GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name])) {
-        		$route = $this->_container()->get('request')->get('_route');
-        		if ((empty($route) || ($route == "_internal"))) {
-        			$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
-        		}
-        		if (in_array($route, $GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name])) {
-        			$_is_change_position = true;
-        		}
-        	} elseif ($GLOBALS['ENTITIES']['POSITION_PREUPDATE'][$entity_name] == true) {
-        		$_is_change_position =  true;
-        	}
-        }        
-
-        if ( $_is_change_position && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
+        $entity          = $eventArgs->getEntity();
+        if ( $this->isChangePosition($eventArgs, 'POSITION_PREUPDATE') && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
         {
-            $entity_table     = $this->getOwningTable($eventArgs, $entity);
-        
+            $result                  = $this->getSortableOrders($eventArgs);
+            $sort_position_by_and    = $result['sort_position_by_and'];
+            $sort_position_by_where  = $result['sort_position_by_where'];
+            //
+            $entity_table     = $this->getOwningTable($eventArgs, $entity);        
             if ($eventArgs->hasChangedField('position')){
-                $old_position     = $eventArgs->getOldValue('position');
-                $new_position    = $entity->getPosition();
-                 
+                $old_position = $eventArgs->getOldValue('position');
+                $new_position = $entity->getPosition();                 
                 // if the position has not been given
                 if (is_null($new_position) || empty($new_position) || ($old_position <=0) ){
                     // we select the max value of the table.
                     $query_max     = "SELECT position FROM $entity_table mytable $sort_position_by_where ORDER BY mytable.position DESC LIMIT 1";
-                    $max         = $this->_connexion($eventArgs)->fetchColumn($query_max);
-        
+                    $max         = $this->_connexion($eventArgs)->fetchColumn($query_max);        
                     // we set the position value to max
                     $entity->setPosition($max+1);
                 }
                 // If a field in the table has been moved to the back
                 elseif ($old_position > $new_position){
                     // Is incremented by 1 every table field whose position is greater or equal than the new position and strictly smaller that the old position .
-                    $query             = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE ( (mytable.position >= ?) AND (mytable.position <= ?) AND (mytable.id != ?) $sort_position_by_and )";
-                    $result = $this->_connexion($eventArgs)->executeUpdate($query, array($new_position, $old_position-1, $entity->getId()));
-        
+                    $query  = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE ( (mytable.position >= ?) AND (mytable.position <= ?) AND (mytable.id != ?) $sort_position_by_and )";
+                    $result = $this->_connexion($eventArgs)->executeUpdate($query, array($new_position, $old_position-1, $entity->getId()));        
                     // We change the position of the entity.
                     $query  = "UPDATE $entity_table mytable SET mytable.position=? WHERE (mytable.id = ?) $sort_position_by_and ";
                     $result = $this->_connexion($eventArgs)->executeUpdate($query, array($new_position, $entity->getId()));
                     // If a field in the table has been moved to the forward
                 }elseif ($old_position < $new_position){
                     // Is conversely incremented by 1 every table field whose position is strictly greater than the old position and  smaller or equal that the new position .
-                    $query             = "UPDATE $entity_table mytable SET mytable.position = mytable.position - 1 WHERE ( (mytable.position >= ?) AND (mytable.position <= ?) AND (mytable.id != ?) $sort_position_by_and )";
-                    $result = $this->_connexion($eventArgs)->executeUpdate($query, array($old_position+1, $new_position, $entity->getId()));
-        
+                    $query  = "UPDATE $entity_table mytable SET mytable.position = mytable.position - 1 WHERE ( (mytable.position >= ?) AND (mytable.position <= ?) AND (mytable.id != ?) $sort_position_by_and )";
+                    $result = $this->_connexion($eventArgs)->executeUpdate($query, array($old_position+1, $new_position, $entity->getId()));        
                     // We change the position of the entity.
                     $query  = "UPDATE $entity_table mytable SET mytable.position=? WHERE (mytable.id = ?) $sort_position_by_and ";
                     $result = $this->_connexion($eventArgs)->executeUpdate($query, array($new_position, $entity->getId()));
                 }
             } else {
-                $old_position    = $entity->getPosition();
-                 
+                $old_position = $entity->getPosition();                 
                 // we select all rows that have the same position of the entity.
-                $query     = "SELECT id, position FROM $entity_table mytable WHERE (mytable.position = '{$old_position}') AND (mytable.id != '{$entity->getId()}') $sort_position_by_and ORDER BY mytable.position";
-                $entities_with_position     = $this->_connexion($eventArgs)->fetchAll($query);
-                 
+                $query = "SELECT id, position FROM $entity_table mytable WHERE (mytable.position = '{$old_position}') AND (mytable.id != '{$entity->getId()}') $sort_position_by_and ORDER BY mytable.position";
+                $entities_with_position     = $this->_connexion($eventArgs)->fetchAll($query);                 
                 // If there are other fields with the same position as the entity.
                 if (count($entities_with_position) >= 1){
                     // we select all rows that have a position above.
                     $query     = "SELECT id, position FROM $entity_table mytable WHERE (mytable.position > '{$old_position}')  $sort_position_by_and ORDER BY mytable.position";
                     $entities_with_sup_position    = $this->_connexion($eventArgs)->fetchAll($query);
-                    $count_pos    = 1;
-                        
+                    $count_pos = 1;                        
                     foreach($entities_with_position as $key => $entity_){
-                        $new_pos    = $old_position + $count_pos;
-                        $query         = "UPDATE $entity_table mytable SET mytable.position = ? WHERE (mytable.id = ?) $sort_position_by_and ";
-                        $result     = $this->_connexion($eventArgs)->executeUpdate($query, array($new_pos, $entity_['id']));
+                        $new_pos = $old_position + $count_pos;
+                        $query   = "UPDATE $entity_table mytable SET mytable.position = ? WHERE (mytable.id = ?) $sort_position_by_and ";
+                        $result  = $this->_connexion($eventArgs)->executeUpdate($query, array($new_pos, $entity_['id']));
                         $count_pos++;
-                    }
-                        
+                    }                        
                     // Incrementing the entity below the other.
                     if (count($entities_with_sup_position) >= 1){
                         // is incremented by 1 every other fields with a position above.
                         foreach($entities_with_sup_position as $key => $entity_){
-                            $new_pos    = $old_position + $count_pos;
-                            $query         = "UPDATE $entity_table mytable SET mytable.position = ? WHERE (mytable.id = ?) $sort_position_by_and ";
-                            $result     = $this->_connexion($eventArgs)->executeUpdate($query, array($new_pos, $entity_['id']));
+                            $new_pos = $old_position + $count_pos;
+                            $query   = "UPDATE $entity_table mytable SET mytable.position = ? WHERE (mytable.id = ?) $sort_position_by_and ";
+                            $result  = $this->_connexion($eventArgs)->executeUpdate($query, array($new_pos, $entity_['id']));
                             $count_pos++;
                         }
                     }
@@ -205,31 +211,13 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
      */
     public function preRemove(EventArgs $eventArgs)
     {
-        $entity            = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
-        
-        $result                    = $this->getSortableOrders($eventArgs);
-        $sort_position_by_and    = $result['sort_position_by_and'];
-        $sort_position_by_where    = $result['sort_position_by_where']; 
-
-        $_is_change_position = false;
-        $entity_name   = get_class($entity);
-        if (isset($GLOBALS['ENTITIES']['POSITION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name])) {
-        	if (is_array($GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name])) {
-        		$route = $this->_container()->get('request')->get('_route');
-        		if ((empty($route) || ($route == "_internal"))) {
-        			$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
-        		}
-        		if (in_array($route, $GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name])) {
-        			$_is_change_position = true;
-        		}
-        	} elseif ($GLOBALS['ENTITIES']['POSITION_PREREMOVE'][$entity_name] == true) {
-        		$_is_change_position =  true;
-        	}
-        }        
-        
-        if ( $_is_change_position && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
+        $entity  = $eventArgs->getEntity();
+        if ( $this->isChangePosition($eventArgs, 'POSITION_PREREMOVE') && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
         {
+            $result                 = $this->getSortableOrders($eventArgs);
+            $sort_position_by_and   = $result['sort_position_by_and'];
+            $sort_position_by_where = $result['sort_position_by_where'];
+            //
             $entity_table    = $this->getOwningTable($eventArgs, $entity);
             $remove_position = $entity->getPosition();            
             // Is conversely incremented by 1 every table field whose position is greater than the remove position.
@@ -246,41 +234,23 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
      */
     public function prePersist(EventArgs $eventArgs)
     {
-        $entity        = $eventArgs->getEntity();
-        $entityManager = $eventArgs->getEntityManager();
-        
-        $result                 = $this->getSortableOrders($eventArgs);
-        $sort_position_by_and   = $result['sort_position_by_and'];
-        $sort_position_by_where = $result['sort_position_by_where'];   
-        
-        $_is_change_position = false;
-        $entity_name   = get_class($entity);
-        if (isset($GLOBALS['ENTITIES']['POSITION_PREPERSIST']) && isset($GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name])) {
-        	if (is_array($GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name])) {
-        		$route = $this->_container()->get('request')->get('_route');
-        		if ((empty($route) || ($route == "_internal"))) {
-        			$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
-        		}
-        		if (in_array($route, $GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name])) {
-        			$_is_change_position = true;
-        		}
-        	} elseif ($GLOBALS['ENTITIES']['POSITION_PREPERSIST'][$entity_name] == true) {
-        		$_is_change_position =  true;
-        	}
-        }
-        
-        if ( $_is_change_position && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
+        $entity          = $eventArgs->getEntity();
+        if ( $this->isChangePosition($eventArgs, 'POSITION_PREPERSIST') && $this->isUsernamePasswordToken() && method_exists($entity, 'setPosition') && method_exists($entity, 'getPosition') )
         {
+            $result                 = $this->getSortableOrders($eventArgs);
+            $sort_position_by_and   = $result['sort_position_by_and'];
+            $sort_position_by_where = $result['sort_position_by_where'];
+            //
             $entity_table   = $this->getOwningTable($eventArgs, $entity);
             $new_position    = $entity->getPosition();
             // if the position has not been given
             if (is_null($new_position) || empty($new_position) ) {
                 if (!isset($_GET['_subscriber_position_max'][ get_class($entity) ]) || empty($_GET['_subscriber_position_max'][ get_class($entity) ])) {
                 	// we select the max value of the table.
-                	$query_max     = "SELECT position FROM $entity_table mytable $sort_position_by_where ORDER BY mytable.position DESC LIMIT 1";
-                	$new_max         = intVal($this->_connexion($eventArgs)->fetchColumn($query_max)) + 1;
+                	$query_max = "SELECT position FROM $entity_table mytable $sort_position_by_where ORDER BY mytable.position DESC LIMIT 1";
+                	$new_max   = intVal($this->_connexion($eventArgs)->fetchColumn($query_max)) + 1;
                 } else {
-                	$new_max = intVal($_GET['_subscriber_position_max'][ get_class($entity) ]) + 1;
+                	$new_max   = intVal($_GET['_subscriber_position_max'][ get_class($entity) ]) + 1;
                 }
                 // we set the position value.
                 $entity->setPosition($new_max);
@@ -292,18 +262,18 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
                     // we set the position value to 1.
                     $entity->setPosition(1);                    
                     // Is incremented by 1 every table field whose position is greater or equal to 1.
-                    $query     = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE (mytable.position >= '1') $sort_position_by_and";
+                    $query  = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE (mytable.position >= '1') $sort_position_by_and";
                     $result = $this->_connexion($eventArgs)->executeUpdate($query, array());
                 } else {
                     // we select all rows that have the same position of the entity.
-                    $query     = "SELECT id FROM $entity_table mytable WHERE (mytable.position = '{$new_position}') $sort_position_by_and ORDER BY mytable.position";
-                    $rows     = $this->_connexion($eventArgs)->fetchAll($query);                    
+                    $query  = "SELECT id FROM $entity_table mytable WHERE (mytable.position = '{$new_position}') $sort_position_by_and ORDER BY mytable.position";
+                    $rows   = $this->_connexion($eventArgs)->fetchAll($query);                    
                     // If a field in the table has the same position as the new position
                     if (count($rows) >= 1){
                         // Is incremented by 1 every table field whose position is greater than the new position.
-                        $query     = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE (mytable.position >= ?) $sort_position_by_and";
+                        $query  = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE (mytable.position >= ?) $sort_position_by_and";
                         $result = $this->_connexion($eventArgs)->executeUpdate($query, array($new_position));
-                        //$query             = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE ( (mytable.position > '{$new_position}') AND ( EXISTS (SELECT position FROM $entity_table a WHERE a.position =  mytable.position - 1) AND (mytable.position = (SELECT position FROM $entity_table a WHERE a.position =  mytable.position - 1 LIMIT 1) + 1) ) AND (mytable.id != ?) )";
+                        //$query = "UPDATE $entity_table mytable SET mytable.position = mytable.position + 1 WHERE ( (mytable.position > '{$new_position}') AND ( EXISTS (SELECT position FROM $entity_table a WHERE a.position =  mytable.position - 1) AND (mytable.position = (SELECT position FROM $entity_table a WHERE a.position =  mytable.position - 1 LIMIT 1) + 1) ) AND (mytable.id != ?) )";
                     }
                 }                
             }
@@ -389,6 +359,74 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
         }          
         
         return $results;
+    }
+    
+    /**
+     * Capitalize string
+     * @param string $word
+     * @return string
+     */
+    protected static function capitalize($word) 
+    {
+    	if (is_array($word)) {
+    		$word = $word[0];
+    	}
+    
+    	return str_replace(' ', '', ucwords(str_replace(array('-', '_'), ' ', $word)));
+    } 
+
+    /**
+     * @param \Doctrine\Common\EventArgs $args
+     * @return boolean
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */    
+    protected function isChangePosition ($eventArgs, $type)
+    { 
+        $entity          = $eventArgs->getEntity();
+        $entityManager   = $eventArgs->getEntityManager();
+        $entity_name     = get_class($entity);
+        $metadata        = $entityManager->getClassMetadata($entity_name);
+        $reflectionClass = new ReflectionClass($entity);
+        $properties      = $reflectionClass->getProperties();
+        //
+        $_is_change_position = false;
+        if (isset($GLOBALS['ENTITIES'][$type]) && isset($GLOBALS['ENTITIES'][$type][$entity_name])) {
+        	if (is_array($GLOBALS['ENTITIES'][$type][$entity_name])) {
+        		$route = $this->_container()->get('request')->get('_route');
+        		if ((empty($route) || ($route == "_internal"))) {
+        			$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+        		}
+        		if (in_array($route, $GLOBALS['ENTITIES'][$type][$entity_name])) {
+        			$_is_change_position = true;
+        		}
+        	} elseif ($GLOBALS['ENTITIES'][$type][$entity_name] == true) {
+        		$_is_change_position =  true;
+        	}
+        } else {
+        	foreach ($properties as $refProperty) {
+        		//print_r($this->annReader->getPropertyAnnotations($refProperty));
+        		if ($this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass)) {
+        			// we have annotation and if it decrypt operation, we must avoid duble decryption
+        			$propName = $refProperty->getName();
+        			$methodName = self::capitalize($propName);
+        			if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
+        				// we get the route name
+        				$route = $this->_container()->get('request')->get('_route');
+        				if ((empty($route) || ($route == "_internal"))) {
+        					$route = $this->_container()->get('bootstrap.RouteTranslator.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+        				}
+        				//
+        				$properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);
+        				if (($properties->routes == true) || (is_array($properties->routes) && in_array($route, $properties->routes))) {
+        				    $_is_change_position = true;
+        			    }
+        			}
+        		}
+        	}
+        }  
+
+        return $_is_change_position;
     }
     
 }

@@ -1000,13 +1000,14 @@ class PiWidgetExtension extends \Twig_Extension
             // we get config.yml content in array
             $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
             $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
-            	$is_esi_activate = true;
+            if (isset($parsed_yaml_file['framework']['esi']['enabled'])) {
+            	$is_esi_activate = ((int) $parsed_yaml_file['framework']['esi']['enabled']) ? true : false;
             } else {
             	$is_esi_activate = false;
-            }    
+            }      
             //           
-            $is_render_service_with_ajax = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
+            $is_render_service_with_ajax   = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
+            $is_render_service_for_varnish = $this->container->getParameter('pi_app_admin.page.esi.force_widget_tag_esi_for_varnish');
             //
             if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
             	$esi_key 		 = '9eu9ghv9';
@@ -1046,7 +1047,11 @@ class PiWidgetExtension extends \Twig_Extension
                     $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
             	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             	    $set .= "{% else %}\n";
-            	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+            	    if ($is_render_service_for_varnish) {            	    
+            	    	$set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+            	    } else {
+            	    	$set .= " {{ render_esi(\"{$url}{$qs}\")|raw }} \n";
+            	    }
             	    $set .= "{% endif %}\n";
             	} elseif ( $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) ) {
             	    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";
@@ -1109,13 +1114,14 @@ class PiWidgetExtension extends \Twig_Extension
             // we get config.yml content in array
             $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
             $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
-            	$is_esi_activate = true;
+            if (isset($parsed_yaml_file['framework']['esi']['enabled'])) {
+            	$is_esi_activate = ((int) $parsed_yaml_file['framework']['esi']['enabled']) ? true : false;
             } else {
             	$is_esi_activate = false;
-            }
+            }   
             //
-            $is_render_service_with_ajax = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
+            $is_render_service_with_ajax   = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
+            $is_render_service_for_varnish = $this->container->getParameter('pi_app_admin.page.esi.force_widget_tag_esi_for_varnish');
             //
             if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
             	$esi_key 		 = '9eu9ghv9';
@@ -1156,7 +1162,11 @@ class PiWidgetExtension extends \Twig_Extension
                     $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
             	    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
             	    $set .= "{% else %}\n";
-            	    $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+                    if ($is_render_service_for_varnish) {            	    
+            	    	$set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+            	    } else {
+            	    	$set .= " {{ render_esi(\"{$url}{$qs}\")|raw }} \n";
+            	    }
             	    $set .= "{% endif %}\n";
             	} elseif ( $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) ) {
             	    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";

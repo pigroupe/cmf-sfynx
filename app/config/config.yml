@@ -33,8 +33,8 @@ framework:
 #        gc_probability:       ~
 #        gc_maxlifetime:       ~
         save_path:            %kernel.cache_dir%/sessions               
-    #esi: { enabled: true } # VARNISH::Pour utiliser les tags ESI dans les templates Twig         
-    fragments:   ~ # { path: /_fragment }
+    esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig         
+    fragments:  { path: /_proxy  } # Pour utiliser les tags ESI dans les templates Twig 
     
 # Twig Configuration
 twig:
@@ -527,8 +527,9 @@ pi_app_admin:
             with_prefix_locale: true
             single_slug: false
         esi:
+            force_widget_tag_esi_for_varnish: false
             force_private_response_for_all: false
-            force_private_response_only_with_authentication: true
+            force_private_response_only_with_authentication: false
             disable_after_post_request: true
         widget:
             render_service_with_ajax: false

@@ -116,7 +116,7 @@
         }
         
         if (!$is_Server_side) {
-            $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->cacheQuery($query->getQuery(), 3600, \Doctrine\ORM\Cache::MODE_NORMAL, true, 'hash_{{ route_name_prefix }}');
+            $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->cacheQuery($query->getQuery(), 3600, 3 /* \Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_{{ route_name_prefix }}');
             $entities   = $em->getRepository("{{ bundle }}:{{ entity }}")->findTranslationsByQuery($locale, $query, 'object', false, true);
         } else {
             $entities   = null;

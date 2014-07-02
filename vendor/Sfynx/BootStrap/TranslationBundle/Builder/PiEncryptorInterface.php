@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Translation> project.
  *
- * @category   Admin_Builders
+ * @category   BootStrap_Builders
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -11,12 +11,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\AdminBundle\Builder;
+namespace BootStrap\TranslationBundle\Builder;
 
 /**
  * PiEncryptorInterface interface.
  *
- * @category   Admin_Builders
+ * @category   BootStrap_Builders
  * @package    Builder
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

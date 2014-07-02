@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Translation> project.
  *
- * @category   Admin_EventSubscriber
+ * @category   BootStrap_annotation
  * @package    Encryptor
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -11,14 +11,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\AdminBundle\EventSubscriber\Encryptors\Annotation;
+namespace BootStrap\TranslationBundle\Annotation\Encryptors;
 
 /**
- * The Encrypted class handles the @Encrypted annotation.
+ * The Encrypted class handles the @Expertencrypted annotation.
  *
- * @author Victor Melnik <melnikvictorl@gmail.com>
+ * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @Annotation
  */
-class Aesencrypted {
+class Expertencrypted {
     // some parameters will be added
 }

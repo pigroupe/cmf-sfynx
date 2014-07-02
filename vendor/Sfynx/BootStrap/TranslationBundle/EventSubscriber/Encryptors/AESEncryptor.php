@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Translation> project.
  *
- * @category   Admin_EventSubscriber
+ * @category   BootStrap_EventSubscriber
  * @package    Encryptor
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -11,14 +11,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\AdminBundle\EventSubscriber\Encryptors;
+namespace BootStrap\TranslationBundle\EventSubscriber\Encryptors;
 
-use PiApp\AdminBundle\Builder\PiEncryptorInterface;
+use BootStrap\TranslationBundle\Builder\PiEncryptorInterface;
 
 /**
  * Class for AES encryption
  *
- * @category   Admin_EventSubscriber
+ * @category   BootStrap_EventSubscriber
  * @package    Encryptor
  * @abstract
  *

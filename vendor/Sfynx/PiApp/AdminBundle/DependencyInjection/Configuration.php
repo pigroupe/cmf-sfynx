@@ -172,6 +172,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('esi')
                     ->isRequired()
                         ->children()
+                            ->booleanNode('force_widget_tag_esi_for_varnish')->isRequired()->defaultValue(false)->end()
                             ->booleanNode('force_private_response_for_all')->isRequired()->defaultValue(false)->end()
                             ->booleanNode('force_private_response_only_with_authentication')->isRequired()->defaultValue(true)->end()
                             ->booleanNode('disable_after_post_request')->isRequired()->defaultValue(true)->end()

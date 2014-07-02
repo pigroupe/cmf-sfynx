@@ -1,0 +1,28 @@
+parameters:
+    bootstrap.subscriber.encrypters.class: BootStrap\TranslationBundle\EventSubscriber\EncryptSubscriber
+    bootstrap.subscriber.position.class: BootStrap\TranslationBundle\EventSubscriber\EventSubscriberPosition
+
+services:
+    #               
+    # Doctrine encryption events Configuration
+    #        
+    bootstrap.encrypt_subscriber:
+        class: %bootstrap.subscriber.encrypters.class%
+        public: true
+        arguments: [@annotation_reader, %pi_app_admin.encrypters%, @service_container]
+        properties:
+            locale: %locale%
+            interfaceclass: BootStrap\TranslationBundle\Builder\PiEncryptorInterface
+        tags:
+            - { name: doctrine.event_subscriber, connexion: default, priority: 1 }  
+            
+    #
+    # configuration of the event subscriber of position
+    #         
+    bootstrap.position_subscriber:
+        class: %bootstrap.subscriber.position.class%
+        arguments: [@annotation_reader, @service_container]
+        properties:
+            annotationclass: BootStrap\TranslationBundle\Annotation\Positioned        
+        tags:
+            - { name: doctrine.event_subscriber, connexion: default, priority: 1  }                       

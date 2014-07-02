@@ -31,7 +31,7 @@
         $query->setFirstResult(($page-1)*$MaxResults);
         $query->setMaxResults($MaxResults);
         // we return query in cache
-        $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->cacheQuery($query->getQuery(), 3600, \Doctrine\ORM\Cache::MODE_NORMAL, true, 'hash_{{ route_name_prefix }}');
+        $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->cacheQuery($query->getQuery(), 3600, 3 /* \Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_{{ route_name_prefix }}');
         // we load all translations with all translatable fields from the given entity
         $entities   = $em->getRepository("{{ bundle }}:{{ entity }}")->findTranslationsByQuery($lang, $query, 'object', false);
          

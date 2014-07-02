@@ -43,7 +43,6 @@ class PiAppAdminExtension extends Extension
         $loaderYaml->load("services_form_builder.yml");
         $loaderYaml->load("services_form_validator.yml");
         $loaderYaml->load('services_listener.yml');
-        $loaderYaml->load('services_subscriber.yml');
         
         //         $PROXY_HOST = "proxy.example.com"; // Proxy server address
         //         $PROXY_PORT = "1234";    // Proxy server port
@@ -92,6 +91,9 @@ class PiAppAdminExtension extends Extension
             	$container->setParameter('pi_app_admin.page.route.single_slug', $config['page']['route']['single_slug']);
             }
             
+            if (isset($config['page']['esi']) && isset($config['page']['esi']['force_widget_tag_esi_for_varnish'])) {
+            	$container->setParameter('pi_app_admin.page.esi.force_widget_tag_esi_for_varnish', $config['page']['esi']['force_widget_tag_esi_for_varnish']);
+            }
             if (isset($config['page']['esi']) && isset($config['page']['esi']['force_private_response_for_all'])) {
             	$container->setParameter('pi_app_admin.page.esi.force_private_response_for_all', $config['page']['esi']['force_private_response_for_all']);
             } 

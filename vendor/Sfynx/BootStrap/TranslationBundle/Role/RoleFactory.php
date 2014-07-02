@@ -66,6 +66,19 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
             return null;
         }
     }   
+    
+    /**
+     * Return false if the json file does not existe
+     *
+     * @return boolean
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function isJsonFileExisted()
+    {
+        return realpath($this->path_json_file);
+    }    
 
     /**
      * Create the json heritage file with all roles information.
@@ -80,6 +93,18 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
     	// we register the hierarchy roles in the heritage.jon file in the cache
     	$em         = $this->getContainer()->get('doctrine')->getManager();
         $roles      = $em->getRepository('BootStrapUserBundle:role')->getAllHeritageRoles();
+        // we delete cache files
+        $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php");
+        $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php.meta");
+        $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.xml");
+        $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainerCompiler.log");
+        $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appProdProjectContainer.php");
+        $path_files = array_unique($path_files);
+        foreach ($path_files as $key=>$file) {
+        	if (!empty($file)) {
+        		unlink($file);
+        	}
+        }
         
         return file_put_contents($this->path_json_file, json_encode(array('HERITAGE_ROLES'=>$roles), JSON_UNESCAPED_UNICODE));  
     }    

@@ -373,7 +373,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 		// Allows proxies to cache the same content for different visitors.
 		if (isset($options['public']) && $options['public']) {
 			$response->setPublic();
-		}
+		} 
 		if (isset($options['lifetime']) && $options['lifetime']) {
 			$response->setSharedMaxAge($options['lifetime']);
 			$response->setMaxAge($options['lifetime']);
@@ -384,7 +384,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 		    &&
 		    isset($options['update']) && $options['update']
 		) {
-			$response->setLastModified(date('yyyy-MM-dd H:i:s', $options['update']));
+			$response->setLastModified(new \DateTime(date('Y-m-d H:i:s', $options['update'])));
 		} else {
 			$response->setLastModified(new \DateTime());
 		}

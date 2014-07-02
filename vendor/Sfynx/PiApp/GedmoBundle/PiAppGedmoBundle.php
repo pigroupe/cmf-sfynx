@@ -16,16 +16,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 
 /**************************  MATRIX FORM BUILDER ***************************/
-$GLOBALS['FORM']['WIDGET'] = array(
-        'snippet'            => 'pi_app_admin.formbuilder_manager.model.snippet',
-        'block'                => 'pi_app_admin.formbuilder_manager.model.block',
-        'content'            => 'pi_app_admin.formbuilder_manager.model.content',
-        'contact'            => 'pi_app_admin.formbuilder_manager.model.contact',
-        'breadcrumb'        => 'pi_app_admin.formbuilder_manager.model.breadcrumb',
-        'connexion'            => 'pi_app_admin.formbuilder_manager.model.connexion',
-        'reset'            => 'pi_app_admin.formbuilder_manager.model.reset',
-        //'slide'                => 'pi_app_admin.formbuilder_manager.model.slide',
-);
+// $GLOBALS['FORM']['WIDGET'] = array(
+//         'snippet'            => 'pi_app_admin.formbuilder_manager.model.snippet',
+//         'block'                => 'pi_app_admin.formbuilder_manager.model.block',
+//         'content'            => 'pi_app_admin.formbuilder_manager.model.content',
+//         'contact'            => 'pi_app_admin.formbuilder_manager.model.contact',
+//         'breadcrumb'        => 'pi_app_admin.formbuilder_manager.model.breadcrumb',
+//         'connexion'            => 'pi_app_admin.formbuilder_manager.model.connexion',
+//         'reset'            => 'pi_app_admin.formbuilder_manager.model.reset',
+//         //'slide'                => 'pi_app_admin.formbuilder_manager.model.slide',
+// );
 
 /**************************  MATRIX SLUGGABLE ROUTE ***************************/
 $GLOBALS['ROUTE']['SLUGGABLE'] = array(

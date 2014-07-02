@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use BootStrap\TranslationBundle\Model\AbstractDefault;
+use BootStrap\TranslationBundle\Annotation as PI;
 
 /**
  * PiApp\GedmoBundle\Entity\Slider
@@ -151,7 +152,7 @@ class Slider extends AbstractDefault
      * @var string $slug
      *
      * @Gedmo\Translatable
-     * @Gedmo\Slug(separator="-", fields={"id", "title"})
+     * @Gedmo\Slug(separator="-", fields={"title", "id"})
      * @ORM\Column(name="slug", length=128, unique=false, nullable=true)
      */
     protected $slug;   
@@ -170,7 +171,13 @@ class Slider extends AbstractDefault
      * @Gedmo\Translatable
      * @ORM\Column(name="meta_description", type="text", nullable=true)
      */
-    protected $meta_description;    
+    protected $meta_description;   
+
+    /**
+     * @ORM\Column(name="position", type="integer",  nullable=true)
+     * @PI\Positioned()
+     */
+    protected $position;    
 
     //
     // * @Assert\File(
