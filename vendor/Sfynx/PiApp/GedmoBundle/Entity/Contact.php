@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use BootStrap\TranslationBundle\Model\AbstractDefault;
+use BootStrap\TranslationBundle\Annotation as PI;
 
 /**
  * PiApp\GedmoBundle\Entity\Contact
@@ -265,6 +266,12 @@ class Contact extends AbstractDefault
      * @ORM\Column(name="coordinates", type="string", length=255, nullable = true)
      */
     protected $coordinates ;    
+    
+    /**
+     * @ORM\Column(name="position", type="integer",  nullable=true)
+     * @PI\Positioned(SortableOrders = {"type":"relationship","field":"category","columnName":"category"})
+     */
+    protected $position;    
 
     /**
      * Constructor

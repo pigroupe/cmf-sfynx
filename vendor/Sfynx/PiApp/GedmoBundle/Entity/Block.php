@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use BootStrap\TranslationBundle\Model\AbstractDefault;
+use BootStrap\TranslationBundle\Annotation as PI;
 
 /**
  * PiApp\GedmoBundle\Entity\Block
@@ -143,7 +144,13 @@ class Block extends AbstractDefault
      * @ORM\ManyToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , inversedBy="block2");
      * @ORM\JoinColumn(name="media1_id", referencedColumnName="id", nullable=true)
      */
-    protected $media1;    
+    protected $media1;   
+
+    /**
+     * @ORM\Column(name="position", type="integer",  nullable=true)
+     * @PI\Positioned(SortableOrders = {"type":"relationship","field":"category","columnName":"category"})
+     */
+    protected $position;    
     
     /**
      * Constructor

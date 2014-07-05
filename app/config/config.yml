@@ -527,9 +527,9 @@ pi_app_admin:
             with_prefix_locale: true
             single_slug: false
         esi:
-            force_widget_tag_esi_for_varnish: false
-            force_private_response_for_all: false
-            force_private_response_only_with_authentication: false
+            force_widget_tag_esi_for_varnish: false # true to remplace render_esi function to the esi tag used by varnish
+            force_private_response_for_all: false # true if you want that all responses will have a private Cache-control without max-age
+            force_private_response_only_with_authentication: false # true if you want that all responses will have a private Cache-control without max-age after authentification
             disable_after_post_request: true
         widget:
             render_service_with_ajax: false

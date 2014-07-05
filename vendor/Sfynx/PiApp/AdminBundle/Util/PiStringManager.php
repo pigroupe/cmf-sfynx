@@ -791,6 +791,22 @@ class PiStringManager implements PiStringManagerBuilderInterface
     }
     
     /**
+     * Capitalize string
+     * @param string $word
+     * @return string
+     * @static
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public static function capitalize($word) {
+    	if (is_array($word)) {
+    		$word = $word[0];
+    	}
+    
+    	return str_replace(' ', '', ucwords(str_replace(array('-', '_'), ' ', $word)));
+    }    
+    
+    /**
      * This function return an array filtering with a letter
      *
      * @param string $fst

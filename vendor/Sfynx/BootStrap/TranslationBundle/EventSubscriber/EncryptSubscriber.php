@@ -153,7 +153,7 @@ class EncryptSubscriber extends MappedEventSubscriber
                     		if ($refProperty->isPublic()) {
                     			$entity->$propName = $this->encryptor->encrypt($refProperty->getValue());
                     		} else {
-                        		$methodName = self::capitalize($propName);
+                        		$methodName = \PiApp\AdminBundle\Util\PiStringManager::capitalize($propName);
                                 if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
                                     // we get the locale value
                                     $locale = false;                                
@@ -210,19 +210,6 @@ class EncryptSubscriber extends MappedEventSubscriber
     }
 
     /**
-     * Capitalize string
-     * @param string $word
-     * @return string
-     */
-    protected static function capitalize($word) {
-        if (is_array($word)) {
-            $word = $word[0];
-        }
-
-        return str_replace(' ', '', ucwords(str_replace(array('-', '_'), ' ', $word)));
-    }
-
-    /**
      * Process (encrypt/decrypt) entities fields
      * @param LifecycleEventArgs $args 
      * @param Boolean $isEncryptOperation If true - encrypt, false - decrypt entity 
@@ -256,7 +243,7 @@ class EncryptSubscriber extends MappedEventSubscriber
                             if ($refProperty->isPublic()) {
                                 $entity->$propName = $this->encryptor->$encryptorMethod($refProperty->getValue());
                             } else {
-                                $methodName = self::capitalize($propName);
+                                $methodName = \PiApp\AdminBundle\Util\PiStringManager::capitalize($propName);
                                 if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
                                     if ($isEncryptOperation) {
                                         // we get the locale value

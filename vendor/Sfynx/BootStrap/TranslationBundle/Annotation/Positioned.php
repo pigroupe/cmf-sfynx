@@ -21,6 +21,6 @@ namespace BootStrap\TranslationBundle\Annotation;
  */
 class Positioned {
     public $routes = true;
-    public $SortableOrders = '';
+    public $SortableOrders = array();
     // some parameters will be added
 }

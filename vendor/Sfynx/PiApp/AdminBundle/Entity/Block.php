@@ -15,6 +15,7 @@ namespace PiApp\AdminBundle\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use BootStrap\TranslationBundle\Annotation as PI;
 
 /**
  * PiApp\AdminBundle\Entity\Block
@@ -114,9 +115,8 @@ class Block
     protected $archived = false;
     
     /**
-     * @var integer $position
-     *
-     * @ORM\Column(name="position", type="integer", nullable=true)
+     * @ORM\Column(name="position", type="integer",  nullable=true)
+     * @PI\Positioned(SortableOrders = {"type":"relationship","field":"page","columnName":"page_id"})
      */
     protected $position;    
     

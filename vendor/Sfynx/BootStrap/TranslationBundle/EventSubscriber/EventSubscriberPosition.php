@@ -291,89 +291,53 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
      */    
     private function getSortableOrders($eventArgs)
     {
-        $entity            = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
-                
+        $entity          = $eventArgs->getEntity();
+        $entityManager   = $eventArgs->getEntityManager();
+        $entity_name     = get_class($entity);
+        $metadata        = $entityManager->getClassMetadata($entity_name);
+        $reflectionClass = new ReflectionClass($entity);
+        $properties      = $reflectionClass->getProperties();
+        // initialize sort values;
         $results['sort_position_by_and']    = " ";
         $results['sort_position_by_where']    = " ";
-         
-        if (($entity instanceof \PiApp\AdminBundle\Entity\Block) && method_exists($entity, 'getPage')){
-            $Page    = $entity->getPage();
-            if ($Page instanceof \PiApp\AdminBundle\Entity\Page){
-                $results['sort_position_by_and']     = " AND (mytable.page_id  = '{$Page->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.page_id  = '{$Page->getId()}')";
-            }
-        }
-        if (($entity instanceof \PiApp\AdminBundle\Entity\Widget) && method_exists($entity, 'getBlock')){
-            $Block    = $entity->getBlock();
-            if ($Block instanceof \PiApp\AdminBundle\Entity\Block){
-                $results['sort_position_by_and']     = " AND (mytable.block_id  = '{$Block->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.block_id  = '{$Block->getId()}')";
-            }
-        }
-
-        
-        
-        
-        if (($entity instanceof \PiApp\GedmoBundle\Entity\Media) && method_exists($entity, 'getCategory')){
-            $category    = $entity->getCategory();
-            if ($category instanceof \PiApp\GedmoBundle\Entity\Category){
-                $results['sort_position_by_and']     = " AND (mytable.category  = '{$category->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.category  = '{$category->getId()}')";
-            }
-        }  
-        if (($entity instanceof \PiApp\GedmoBundle\Entity\Block) && method_exists($entity, 'getCategory')){
-            $category    = $entity->getCategory();
-            if ($category instanceof \PiApp\GedmoBundle\Entity\Category){
-                $results['sort_position_by_and']     = " AND (mytable.category  = '{$category->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.category  = '{$category->getId()}')";
-            }
-        }        
-        if (($entity instanceof \PiApp\GedmoBundle\Entity\Content) && method_exists($entity, 'getCategory')){
-            $category    = $entity->getCategory();
-            if ($category instanceof \PiApp\GedmoBundle\Entity\Category){
-                $results['sort_position_by_and']     = " AND (mytable.category  = '{$category->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.category  = '{$category->getId()}')";
-            }
-        }
-        if (($entity instanceof \PiApp\GedmoBundle\Entity\Contact) && method_exists($entity, 'getCategory')){
-            $category    = $entity->getCategory();
-            if ($category instanceof \PiApp\GedmoBundle\Entity\Category){
-                $results['sort_position_by_and']     = " AND (mytable.category  = '{$category->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.category  = '{$category->getId()}')";
-            }
-        }
-        if (($entity instanceof \PiApp\GedmoBundle\Entity\Slider) && method_exists($entity, 'getCategory')){
-            $category    = $entity->getCategory();
-            if ($category instanceof \PiApp\GedmoBundle\Entity\Category){
-                $results['sort_position_by_and']     = " AND (mytable.category  = '{$category->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.category  = '{$category->getId()}')";
-            }
-        }
-        if (($entity instanceof \PiApp\GedmoBundle\Entity\Menu) && method_exists($entity, 'getCategory')){
-            $category    = $entity->getCategory();
-            if ($category instanceof \PiApp\GedmoBundle\Entity\Category){
-                $results['sort_position_by_and']     = " AND (mytable.category  = '{$category->getId()}')";
-                $results['sort_position_by_where']    = " WHERE (mytable.category  = '{$category->getId()}')";
-            }
-        }          
+        //
+       	foreach ($properties as $refProperty) {
+    		if ($this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass)) {
+    			// we have annotation and if it decrypt operation, we must avoid duble decryption
+    			$propName = $refProperty->getName();
+    			$methodName = \PiApp\AdminBundle\Util\PiStringManager::capitalize($propName);
+    			if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
+    				$properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);
+    				if (is_array($properties->SortableOrders) && isset($properties->SortableOrders['field']) && isset($properties->SortableOrders['type'])) {
+    				    $field      = $properties->SortableOrders['field'];    
+    				    $columnName = $properties->SortableOrders['columnName'];
+    				    $methode    = 'get' . \PiApp\AdminBundle\Util\PiStringManager::capitalize($field);
+    				    $type       = $properties->SortableOrders['type'];
+        				if (method_exists($entity, $methode) && ($type == 'relationship')) {        				    
+        				    $results['sort_position_by_and']   = " AND (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
+        				    $results['sort_position_by_where'] = " WHERE (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
+        				} elseif (method_exists($entity, $methode)) {        		
+        				    $results['sort_position_by_and']   = " AND (mytable.{$columnName} = '{$entity->$methode()}')";
+        				    $results['sort_position_by_where'] = " WHERE (mytable.{$columnName} = '{$entity->$methode()}')";
+        				}        				
+    				}
+        		}
+    		}
+   		}         
+   		
+//    Exemple :   	
+//   		@PI\Positioned(SortableOrders = {"type":"relationship","field":"page","columnName":"page_id"})
+//    is like this :	
+//         if (($entity instanceof \PiApp\AdminBundle\Entity\Block) && method_exists($entity, 'getPage')){
+//             $Page    = $entity->getPage();
+//             if ($Page instanceof \PiApp\AdminBundle\Entity\Page){
+//                 $results['sort_position_by_and']     = " AND (mytable.page_id  = '{$Page->getId()}')";
+//                 $results['sort_position_by_where']    = " WHERE (mytable.page_id  = '{$Page->getId()}')";
+//             }
+//         }
         
         return $results;
     }
-    
-    /**
-     * Capitalize string
-     * @param string $word
-     * @return string
-     */
-    protected static function capitalize($word) 
-    {
-    	if (is_array($word)) {
-    		$word = $word[0];
-    	}
-    
-    	return str_replace(' ', '', ucwords(str_replace(array('-', '_'), ' ', $word)));
-    } 
 
     /**
      * @param \Doctrine\Common\EventArgs $args
@@ -409,7 +373,7 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
         		if ($this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass)) {
         			// we have annotation and if it decrypt operation, we must avoid duble decryption
         			$propName = $refProperty->getName();
-        			$methodName = self::capitalize($propName);
+        			$methodName = \PiApp\AdminBundle\Util\PiStringManager::capitalize($propName);
         			if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
         				// we get the route name
         				$route = $this->_container()->get('request')->get('_route');
@@ -418,7 +382,7 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
         				}
         				//
         				$properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);
-        				if (($properties->routes == true) || (is_array($properties->routes) && in_array($route, $properties->routes))) {
+        				if (($properties->routes === true) || (is_array($properties->routes) && in_array($route, $properties->routes))) {
         				    $_is_change_position = true;
         			    }
         			}

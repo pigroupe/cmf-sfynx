@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use PiApp\AdminBundle\Twig\Extension\PiWidgetExtension;
+use BootStrap\TranslationBundle\Annotation as PI;
 
 /**
  * PiApp\AdminBundle\Entity\Widget
@@ -77,21 +78,21 @@ class Widget
      *
      * @ORM\Column(name="is_cacheable", type="boolean", nullable=true)
      */
-    protected $cacheable;
+    protected $cacheable = false;
     
     /**
      * @var boolean $public
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=true)
      */
-    protected $public;
+    protected $public = false;
     
     /**
      * @var integer $lifetime
      *
      * @ORM\Column(name="lifetime", type="integer", nullable=true)
      */
-    protected $lifetime = 84600;    
+    protected $lifetime = 0;    
     
     /**
      * @var boolean $public
@@ -164,11 +165,10 @@ class Widget
     protected $archived = false;
         
     /**
-     * @var integer $position
-     * 
-     * @ORM\Column(name="position", type="integer", nullable=true)
+     * @ORM\Column(name="position", type="integer",  nullable=true)
+     * @PI\Positioned(SortableOrders = {"type":"relationship","field":"block","columnName":"block_id"})
      */
-    protected $position;
+    protected $position;    
     
 
     public function __construct()

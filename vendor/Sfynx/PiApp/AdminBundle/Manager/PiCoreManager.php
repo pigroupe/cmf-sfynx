@@ -487,6 +487,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     
     /**
      * Configure the caching settings of the response
+     * 
+     * Responses with neither a freshness lifetime (Expires, max-age) nor cache
+     * validator (Last-Modified, ETag) are considered uncacheable.
      *
      * @param object $object
      * @param Response $response

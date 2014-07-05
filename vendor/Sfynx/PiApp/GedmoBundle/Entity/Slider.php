@@ -175,7 +175,7 @@ class Slider extends AbstractDefault
 
     /**
      * @ORM\Column(name="position", type="integer",  nullable=true)
-     * @PI\Positioned()
+     * @PI\Positioned(SortableOrders = {"type":"relationship","field":"category","columnName":"category"})
      */
     protected $position;    
 
