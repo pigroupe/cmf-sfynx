@@ -55,7 +55,7 @@ class WidgetType extends AbstractType
                     'required'  => false,
                     'help_block' => 'pi.page.form.field.cacheable',
                     "label_attr" => array(
- 						"class"=>"widget_esi",
+ 						"class"=>"widget_httpcache",
  					)
             ))
             ->add('public', 'checkbox', array(
@@ -63,7 +63,7 @@ class WidgetType extends AbstractType
                     'required'  => false,
                     'help_block' => 'pi.page.form.field.public',
                     "label_attr" => array(
-                    		"class"=>"widget_esi",
+                    		"class"=>"widget_httpcache",
                     )
             ))
             ->add('lifetime', 'number', array(
@@ -71,7 +71,7 @@ class WidgetType extends AbstractType
                     'required'  => false,
                     'help_block' => 'pi.page.form.field.lifetime',
                     "label_attr" => array(
-                    		"class"=>"widget_esi",
+                    		"class"=>"widget_httpcache",
                     )
             ))
             ->add('cacheTemplating', 'choice', array(

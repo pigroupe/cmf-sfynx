@@ -153,7 +153,27 @@ abstract class CoreListener extends abstractListener
 	    				if (!$delete_cache_only) {
 	    					unlink($path_json_file_sluggify);
 	    				}
-	    			}    			
+	    			}    
+	    			// we delete the cache of all history urls of the page.
+	    			$path_json_file_sluggify = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName('page-history', $entity->getId(), $lang);
+	    			if (file_exists($path_json_file_sluggify)) {
+	    				$reading  = fopen($path_json_file_sluggify, 'r');
+	    				while (!feof($reading)) {
+	    					$info = explode('|', fgets($reading));
+	    					if (isset($info[1])) {
+	    						$this->_container()->get('pi_app_admin.manager.page')->cacheRefreshByname($info[1]);
+	    						$path_json_file_tmp = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName('page-history-tmp', $info[1], $lang);
+	    						if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
+	    							unlink($path_json_file_tmp);
+	    						}
+	    					}
+	    				}
+	    				fclose($reading);
+	    				// we delete the json file cache
+	    				if (!$delete_cache_only) {
+	    					unlink($path_json_file_sluggify);
+	    				}
+	    			}	    						
 	    			// we delete the cache of all esi tag urls of the page.
 	    			$path_json_file_esi = $this->_container()->get('pi_app_admin.manager.page')->createJsonFileName('esi', $entity->getId(), $lang);
 	    			if (file_exists($path_json_file_sluggify)) {

@@ -405,7 +405,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 		}
 	
 		return $response;
-	}	
+	}
 	
 	/**
 	 * Initialize the request with a new uri.

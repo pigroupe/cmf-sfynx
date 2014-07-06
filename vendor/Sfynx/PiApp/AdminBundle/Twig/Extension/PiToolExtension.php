@@ -159,7 +159,10 @@ class PiToolExtension extends \Twig_Extension
                 'picture_crop'                => new \Twig_Function_Method($this, 'getPictureCropFunction'),
         		
         		// cryptage
-        		'obfuscateLinkJS'     		=> new \Twig_Function_Method($this, 'obfuscateLinkFunction'),                
+        		'obfuscateLinkJS'     		=> new \Twig_Function_Method($this, 'obfuscateLinkFunction'),
+
+                // render service
+                'render_cache'     		    => new \Twig_Function_Method($this, 'renderCacheFunction'),
         );
     }   
      
@@ -167,6 +170,26 @@ class PiToolExtension extends \Twig_Extension
     /**
      * Functions
      */
+    
+    /**
+     * Put result content in cache with ttl.
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function renderCacheFunction($key, $ttl, $serviceName, $method, $id, $lang, $params)
+    {
+    	$dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
+    	\PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+    	$this->container->get("pi_filecache")->getClient()->setPath($dossier);
+    	$value = $this->container->get("pi_filecache")->get($key);
+    	if ( !$value ) {
+    		$value = $this->container->get($serviceName)->$method($id, $lang, $params);
+    		$this->container->get("pi_filecache")->getClient()->setPath($dossier); // IMPORTANT if in the method of the service the path is overwrite.
+    		$this->container->get("pi_filecache")->set($key, $value, $ttl);
+    	}
+    	 
+    	return $value;
+    }    
     
     /**
      * this function cleans up the filename

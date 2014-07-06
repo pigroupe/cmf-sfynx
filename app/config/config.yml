@@ -33,7 +33,7 @@ framework:
 #        gc_probability:       ~
 #        gc_maxlifetime:       ~
         save_path:            %kernel.cache_dir%/sessions               
-    esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig         
+    esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php        
     fragments:  { path: /_proxy  } # Pour utiliser les tags ESI dans les templates Twig 
     
 # Twig Configuration
@@ -527,11 +527,13 @@ pi_app_admin:
             with_prefix_locale: true
             single_slug: false
         esi:
+            encrypt_key: %esi_key%
             force_widget_tag_esi_for_varnish: false # true to remplace render_esi function to the esi tag used by varnish
             force_private_response_for_all: false # true if you want that all responses will have a private Cache-control without max-age
             force_private_response_only_with_authentication: false # true if you want that all responses will have a private Cache-control without max-age after authentification
             disable_after_post_request: true
         widget:
+            render_service_with_ttl: false
             render_service_with_ajax: false
             ajax_disable_after_post_request: true
         refresh:

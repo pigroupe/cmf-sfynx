@@ -91,6 +91,9 @@ class PiAppAdminExtension extends Extension
             	$container->setParameter('pi_app_admin.page.route.single_slug', $config['page']['route']['single_slug']);
             }
             
+            if (isset($config['page']['esi']) && isset($config['page']['esi']['encrypt_key'])) {
+            	$container->setParameter('pi_app_admin.page.esi.encrypt_key', $config['page']['esi']['encrypt_key']);
+            }
             if (isset($config['page']['esi']) && isset($config['page']['esi']['force_widget_tag_esi_for_varnish'])) {
             	$container->setParameter('pi_app_admin.page.esi.force_widget_tag_esi_for_varnish', $config['page']['esi']['force_widget_tag_esi_for_varnish']);
             }
@@ -104,6 +107,9 @@ class PiAppAdminExtension extends Extension
             	$container->setParameter('pi_app_admin.page.esi.disable_after_post_request', $config['page']['esi']['disable_after_post_request']);
             }       
 
+            if (isset($config['page']['widget']) && isset($config['page']['widget']['render_service_with_ttl'])) {
+            	$container->setParameter('pi_app_admin.page.widget.render_service_with_ttl', $config['page']['widget']['render_service_with_ttl']);
+            }
             if (isset($config['page']['widget']) && isset($config['page']['widget']['render_service_with_ajax'])) {
             	$container->setParameter('pi_app_admin.page.widget.render_service_with_ajax', $config['page']['widget']['render_service_with_ajax']);
             }      

@@ -36,7 +36,7 @@ if(preg_match("/app_dev.php/",$_SERVER['REQUEST_URI']) || preg_match("/app.php/"
 } else {
     $kernel = new AppKernel('prod', false);
     $kernel->loadClassCache();
-	$kernel = new AppCache($kernel);
+	$kernel = new AppCache($kernel); // si Appcache activé, activer alors aussi Esi dans config.yml
     Request::enableHttpMethodParameterOverride();
     $request = Request::createFromGlobals();
     $response = $kernel->handle($request);

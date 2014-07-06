@@ -27,3 +27,6 @@ parameters:
 
     #boot_strap_ws
     ws_key: 0A1TG4GO
+    
+    #esi key
+    esi_key: 9eu9ghv9 

@@ -276,6 +276,7 @@ class PiEncryption implements PiEncryptionBuilderInterface
     		$char = chr(ord($char)+ord($keychar));
     		$result.=$char;
     	}
+    	
     	return strtr(base64_encode($result), '+/=', '-_,');
     }
     
@@ -300,6 +301,7 @@ class PiEncryption implements PiEncryptionBuilderInterface
     		$char = chr(ord($char)-ord($keychar));
     		$result.=$char;
     	}
+    	
     	return $result;
     }
     
@@ -321,6 +323,7 @@ class PiEncryption implements PiEncryptionBuilderInterface
     		$cl = $cc - ($ch * 16);
     		$output .= $_base16[$ch] . $_base16[$cl];
     	}
+    	
     	return $output;
     }
     
