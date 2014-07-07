@@ -313,7 +313,7 @@ class EventSubscriberPosition  extends abstractListener implements EventSubscrib
     				    $columnName = $properties->SortableOrders['columnName'];
     				    $methode    = 'get' . \PiApp\AdminBundle\Util\PiStringManager::capitalize($field);
     				    $type       = $properties->SortableOrders['type'];
-        				if (method_exists($entity, $methode) && ($type == 'relationship')) {        				    
+    				    if (method_exists($entity, $methode) && ($type == 'relationship') && !is_null($entity->$methode())) {        				    
         				    $results['sort_position_by_and']   = " AND (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
         				    $results['sort_position_by_where'] = " WHERE (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
         				} elseif (method_exists($entity, $methode)) {        		

@@ -231,20 +231,26 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
                 $path_json_file = $path . "page/p-{$id}-{$lang}.json";
                 break;
             case ('page-sluggify') :
-                $path_json_file = $path . "page/p-{$id}-{$lang}-sluggify.json";
+                $path_json_file = $path . "page/s-{$id}-{$lang}-sluggify.json";
                 break; 
             case ('page-sluggify-tmp') :
-              	$path_json_file = $path . "page/tmp/" . md5($id) ."-{$lang}.json";
+              	$path_json_file = $path . "page/tmp/s-" . md5($id) ."-{$lang}.json";
                	break;                
             case ('page-history') :
-               	$path_json_file = $path . "page/p-{$id}-{$lang}-history.json";
+               	$path_json_file = $path . "page/h-{$id}-{$lang}-history.json";
                	break;     
             case ('page-history-tmp') :
-          		$path_json_file = $path . "page/tmp/" . md5($id) ."-{$lang}.json";
+          		$path_json_file = $path . "page/tmp/h-" . md5($id) ."-{$lang}.json";
            		break;
             case ('widget') :
                 $path_json_file = $path . "widget/w-{$id}-{$lang}.json";
                 break;  
+            case ('widget-history') :
+            	$path_json_file = $path . "widget/h-{$id}-{$lang}-history.json";
+            	break;
+            case ('widget-history-tmp') :
+            	$path_json_file = $path . "widget/tmp/" . md5($id) ."-{$lang}.json";
+            	break;                
             case ('default') :
               	$path_json_file = $path . "etag-{$id}-{$lang}.json";
                	break;
@@ -316,8 +322,18 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
     		}
     	} elseif (isset($params['widget-id']) && !empty($params['widget-id'])) {
-    			$path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    	    if (isset($params['widget-sluggify-url'])) {
+    	        $path_json_file_tmp = $this->createJsonFileName('widget-history-tmp', $this->Etag, $lang);
+    	        if (!file_exists($path_json_file_tmp)) {
+    	        	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    	        	// we add new Etag in the history.
+    	        	$path_json_file_history = $this->createJsonFileName('widget-history', $params['widget-id'], $lang);
+    	        	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
+    	        }
+    	    } else {
+    		    $path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
+    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    	    }
     	} else {
 	   		$path_json_file_tmp = $this->createJsonFileName('default-tmp', $this->Etag, $lang);
     		if (!file_exists($path_json_file_tmp)) {
