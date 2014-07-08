@@ -40,6 +40,33 @@ use PiApp\AdminBundle\Entity\TranslationPage;
 class FrontendController extends BaseController
 {
     /**
+     * Main default page
+     *
+     * @Secure(roles="ROLE_USER")
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-01-24
+     */
+    public function indexAction()
+    {
+    	return $this->render('PiAppAdminBundle:Frontend:index.html.twig', array());
+    }    
+    
+    /**
+     * Licence page
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-01-24
+     */
+    public function licenceAction()
+    {
+    	return $this->render('PiAppAdminBundle:Frontend:licence.html.twig', array());
+    }    
+    
+    /**
      * Parse a file and returns the contents
      *
      * @param string    $file         file name consists of: web_bundle_piappadmin_css_screen__css for express this path : web/bundle/piappadmin/css/screen.css
@@ -350,31 +377,6 @@ class FrontendController extends BaseController
         ));        
     }   
 
-    /**
-     * Main default page
-     *
-     * @Secure(roles="ROLE_USER")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
-     */    
-    public function indexAction()
-    {
-        $em            = $this->getDoctrine()->getManager();
-
-        return $this->render('PiAppAdminBundle:Frontend:index.html.twig', array());
-
-        //         $message = \Swift_Message::newInstance()
-        //         ->setSubject('Hello Email')
-        //         ->setFrom('send@example.com')
-        //         ->setTo('etienne_delongeaux@hotmail.com')
-        //         ->setBody('codicydblciudycdcpi')
-        //         ;
-        //         //print_r(get_class($this->get('mailer')));exit;
-        //         $this->get('mailer')->send($message);        
-    }  
-    
     /**
      * 
      * @Secure(roles="ROLE_USER")

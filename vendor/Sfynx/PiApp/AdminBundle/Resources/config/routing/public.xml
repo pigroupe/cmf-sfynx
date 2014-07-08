@@ -16,6 +16,10 @@
         <default key="_controller">PiAppAdminBundle:Frontend:index</default>
     </route>
     
+    <route id="admin_licence" pattern="/licence" >
+        <default key="_controller">PiAppAdminBundle:Frontend:licence</default>
+    </route>    
+    
     <route id="public_copy_page" pattern="/copy-page">
         <default key="_controller">PiAppAdminBundle:Frontend:copypage</default>
         <requirement key="_method">get|post</requirement>
