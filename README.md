@@ -47,7 +47,7 @@ The bundle has been split into 2 directories :
 
 ## License
 **Copyright © 20012-2014, contact@pi-groupe.fr.**
-**This bundle is under the [GLU license](https://github.com/pigroupe/cmf-sfynx/LICENCE).**
+**This bundle is under the [GLU license](https://github.com/pigroupe/cmf-sfynx/blob/master/LICENSE).**
 
 SFYNX is a free software distributed under the GPL license. This license guarantees the following freedoms:
 
