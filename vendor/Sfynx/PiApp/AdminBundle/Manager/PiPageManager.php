@@ -1185,7 +1185,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2014-06-07
      */
-    public function cacheDelete($entity)
+    public function cacheDelete($entity, $delete_cache_only)
     {
         if (
     		$entity instanceof \PiApp\AdminBundle\Entity\Page ||

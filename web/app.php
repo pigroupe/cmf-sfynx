@@ -31,6 +31,9 @@ $loader->register(true);
 //          )
 //         );
 
+require_once __DIR__.'/../app/AppKernel.php';
+require_once __DIR__.'/../app/AppCache.php';
+
 if(preg_match("/app_dev.php/",$_SERVER['REQUEST_URI']) || preg_match("/app.php/",$_SERVER['REQUEST_URI'] )) {
     header('Location: /');
 } else {

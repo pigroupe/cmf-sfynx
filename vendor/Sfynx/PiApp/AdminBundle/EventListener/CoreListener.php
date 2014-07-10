@@ -109,7 +109,7 @@ abstract class CoreListener extends abstractListener
 	    		$entity instanceof \PiApp\AdminBundle\Entity\Widget
 	    	)
     	) {
-    	    $this->_container()->get('pi_app_admin.manager.page')->cacheDelete($entity);
+    	    $this->_container()->get('pi_app_admin.manager.page')->cacheDelete($entity, $delete_cache_only);
 	    }
     }    
     
