@@ -137,6 +137,7 @@ class BootStrapUserBundle extends Bundle
                         array('path' => '^/user/resseting/check-email$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
                         array('path' => '^/user/resseting/reset/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
                         # -> custom access control for the admin area of the URL
+                        array('path' => '^/client/', 'role' => 'ROLE_CUSTOMER', 'requires_channel' => self::HTTP_TYPE),
                         array('path' => '^/provider/', 'role' => 'ROLE_PROVIDER', 'requires_channel' => self::HTTP_TYPE),
                         array('path' => '^/admin/', 'role' => 'ROLE_EDITOR', 'requires_channel' => self::HTTP_TYPE),
                         array('path' => '^/adminsonata/', 'role' => 'ROLE_SUPER_ADMIN', 'requires_channel' => self::HTTP_TYPE),

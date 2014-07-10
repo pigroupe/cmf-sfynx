@@ -65,7 +65,7 @@ class LangueController extends abstractController
      * Enabled Langue entities.
      *
      * @Route("/admin/langue/enabled", name="admin_langue_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -107,7 +107,7 @@ class LangueController extends abstractController
      * Disable Langue  entities.
      *
      * @Route("/admin/langue/disable", name="admin_langue_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -181,7 +181,7 @@ class LangueController extends abstractController
     /**
      * Displays a form to create a new Langue entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -202,7 +202,7 @@ class LangueController extends abstractController
     /**
      * Creates a new Langue entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -236,7 +236,7 @@ class LangueController extends abstractController
     /**
      * Displays a form to edit an existing Langue entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -266,7 +266,7 @@ class LangueController extends abstractController
     /**
      * Edits an existing Langue entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

@@ -66,7 +66,7 @@ class TranslationWidgetController extends abstractController
      * Enabled TranslationWidget entities.
      *
      * @Route("/admin/translationwidget/enabled", name="admin_translationwidget_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -81,7 +81,7 @@ class TranslationWidgetController extends abstractController
      * Disable TranslationWidget  entities.
      *
      * @Route("/admin/translationwidget/disable", name="admin_translationwidget_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -123,7 +123,7 @@ class TranslationWidgetController extends abstractController
     /**
      * Displays a form to create a new TranslationWidget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -143,7 +143,7 @@ class TranslationWidgetController extends abstractController
     /**
      * Creates a new TranslationWidget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -174,7 +174,7 @@ class TranslationWidgetController extends abstractController
     /**
      * Displays a form to edit an existing TranslationWidget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -203,7 +203,7 @@ class TranslationWidgetController extends abstractController
     /**
      * Edits an existing TranslationWidget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

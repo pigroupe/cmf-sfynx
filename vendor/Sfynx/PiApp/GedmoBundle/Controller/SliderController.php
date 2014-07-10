@@ -45,7 +45,7 @@ class SliderController extends abstractController
      * Enabled Slider entities.
      *
      * @Route("/admin/gedmo/slider/enabled", name="admin_gedmo_slider_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -60,7 +60,7 @@ class SliderController extends abstractController
      * Disable Slider  entities.
      *
      * @Route("/admin/gedmo/slider/disable", name="admin_gedmo_slider_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -75,7 +75,7 @@ class SliderController extends abstractController
      * Position Slider entities.
      *
      * @Route("/admin/gedmo/slider/position", name="admin_gedmo_slider_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -90,7 +90,7 @@ class SliderController extends abstractController
      * Delete Slider entities.
      *
      * @Route("/admin/gedmo/slider/delete", name="admin_gedmo_slider_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -105,7 +105,7 @@ class SliderController extends abstractController
      * Archive a Slider entity.
      *
      * @Route("/admin/gedmo/slider/archive", name="admin_gedmo_slider_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -180,7 +180,7 @@ class SliderController extends abstractController
     /**
      * Displays a form to create a new Slider entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -212,7 +212,7 @@ class SliderController extends abstractController
     /**
      * Creates a new Slider entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
      */
@@ -249,7 +249,7 @@ class SliderController extends abstractController
     /**
      * Displays a form to edit an existing Slider entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -283,7 +283,7 @@ class SliderController extends abstractController
     /**
      * Edits an existing Slider entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
      */
@@ -325,7 +325,7 @@ class SliderController extends abstractController
     /**
      * Deletes a Slider entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
      */

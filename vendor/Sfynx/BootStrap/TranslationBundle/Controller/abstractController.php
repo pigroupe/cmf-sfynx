@@ -41,6 +41,9 @@ abstract class abstractController extends Controller
      */
     public function enabledajaxAction()
     {
+        // csrf control
+        $this->checkCsrf('grid-action');
+        //
         $request = $this->container->get('request');
         $em      = $this->getDoctrine()->getManager();        
         if ($request->isXmlHttpRequest()) {
@@ -99,6 +102,9 @@ abstract class abstractController extends Controller
      */
     public function disableajaxAction()
     {
+        // csrf control
+        $this->checkCsrf('grid-action');
+        //
         $request = $this->container->get('request');
         $em      = $this->getDoctrine()->getManager();        
         if ($request->isXmlHttpRequest()) {
@@ -151,6 +157,9 @@ abstract class abstractController extends Controller
      */
     public function deletajaxAction()
     {
+        // csrf control
+        $this->checkCsrf('grid-action');
+        //
         $request = $this->container->get('request');
         $em      = $this->getDoctrine()->getManager();         
         if ($request->isXmlHttpRequest()) {
@@ -197,6 +206,9 @@ abstract class abstractController extends Controller
      */
     public function archiveajaxAction()
     {
+        // csrf control
+        $this->checkCsrf('grid-action');
+        //
         $request = $this->container->get('request');
         $em      = $this->getDoctrine()->getManager();         
         if ($request->isXmlHttpRequest()) {
@@ -255,6 +267,9 @@ abstract class abstractController extends Controller
      */
     public function positionajaxAction()
     {
+        // csrf control
+        $this->checkCsrf('grid-action');
+        //
         $request = $this->container->get('request');
         $em      = $this->getDoctrine()->getManager();         
         if ($request->isXmlHttpRequest()) {

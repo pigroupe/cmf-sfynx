@@ -70,7 +70,7 @@ class WidgetController extends abstractController
      * Enabled Widget entities.
      *
      * @Route("/admin/widget/enabled", name="admin_widget_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -85,7 +85,7 @@ class WidgetController extends abstractController
      * Disable Widget  entities.
      *
      * @Route("/admin/widget/disable", name="admin_widget_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -100,7 +100,7 @@ class WidgetController extends abstractController
      * Position entities.
      *
      * @Route("/admin/widget/position", name="admin_widget_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -115,7 +115,7 @@ class WidgetController extends abstractController
      * Delete twig cache Widget
      *
      * @Route("/admin/widget/deletetwigcache", name="admin_widget_deletetwigcache_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -158,7 +158,7 @@ class WidgetController extends abstractController
     /**
      * Displays a form to create a new Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -181,7 +181,7 @@ class WidgetController extends abstractController
     /**
      * Creates a new Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -220,7 +220,7 @@ class WidgetController extends abstractController
     /**
      * Displays a form to edit an existing Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -255,7 +255,7 @@ class WidgetController extends abstractController
     /**
      * Edits an existing Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -347,7 +347,7 @@ class WidgetController extends abstractController
     /**
      * Deletes a Widget entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -384,7 +384,7 @@ class WidgetController extends abstractController
     /**
      * Move widget action
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -440,7 +440,7 @@ class WidgetController extends abstractController
     /**
      * Move up/down widget action
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

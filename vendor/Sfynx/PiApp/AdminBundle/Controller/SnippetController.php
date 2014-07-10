@@ -62,7 +62,7 @@ class SnippetController extends abstractController
      * Enabled Widget entities.
      *
      * @Route("/admin/snippet/enabled", name="admin_snippet_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -77,7 +77,7 @@ class SnippetController extends abstractController
      * Disable Widget  entities.
      *
      * @Route("/admin/snippet/disable", name="admin_snippet_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -92,7 +92,7 @@ class SnippetController extends abstractController
      * Delete twig cache Widget
      *
      * @Route("/admin/snippet/deletetwigcache", name="admin_snippet_deletetwigcache_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -133,7 +133,7 @@ class SnippetController extends abstractController
     /**
      * Displays a form to create a new Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -153,7 +153,7 @@ class SnippetController extends abstractController
     /**
      * Creates a new Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -189,7 +189,7 @@ class SnippetController extends abstractController
     /**
      * Displays a form to edit an existing Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -218,7 +218,7 @@ class SnippetController extends abstractController
     /**
      * Edits an existing Widget entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

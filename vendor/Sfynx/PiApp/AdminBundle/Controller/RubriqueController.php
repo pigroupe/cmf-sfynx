@@ -64,7 +64,7 @@ class RubriqueController extends abstractController
      * Enabled Rubrique entities.
      *
      * @Route("/admin/rubrique/enabled", name="admin_rubrique_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -79,7 +79,7 @@ class RubriqueController extends abstractController
      * Disable Rubrique  entities.
      *
      * @Route("/admin/rubrique/disable", name="admin_rubrique_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -121,7 +121,7 @@ class RubriqueController extends abstractController
     /**
      * Displays a form to create a new Rubrique entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -152,7 +152,7 @@ class RubriqueController extends abstractController
     /**
      * Creates a new Rubrique entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -185,7 +185,7 @@ class RubriqueController extends abstractController
     /**
      * Displays a form to edit an existing Rubrique entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -215,7 +215,7 @@ class RubriqueController extends abstractController
     /**
      * Edits an existing Rubrique entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -299,7 +299,7 @@ class RubriqueController extends abstractController
     /**
      * Create a tree of the tree
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @param string $category
      * @access    public
      *
@@ -372,7 +372,7 @@ class RubriqueController extends abstractController
     /**
      * Move the node up in the same level
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @param int $id
      * @access    public
      *
@@ -411,7 +411,7 @@ class RubriqueController extends abstractController
     /**
      * Move the node down in the same level
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @param int $id
      * @access    public
      *
@@ -450,7 +450,7 @@ class RubriqueController extends abstractController
     /**
      * Removes given $node from the tree and reparents its descendants
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @param int $id
      * @access    public
      *

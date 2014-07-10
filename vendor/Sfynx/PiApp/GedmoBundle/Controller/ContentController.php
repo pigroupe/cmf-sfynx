@@ -45,7 +45,7 @@ class ContentController extends abstractController
      * Enabled content entities.
      *
      * @Route("/admin/gedmo/content/enabled", name="admin_gedmo_content_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -60,7 +60,7 @@ class ContentController extends abstractController
      * Disable content  entities.
      *
      * @Route("/admin/gedmo/content/disable", name="admin_gedmo_content_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -75,7 +75,7 @@ class ContentController extends abstractController
      * Position content entities.
      *
      * @Route("/admin/gedmo/content/position", name="admin_gedmo_content_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -90,7 +90,7 @@ class ContentController extends abstractController
      * Delete Content entities.
      *
      * @Route("/admin/gedmo/content/delete", name="admin_gedmo_content_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -105,7 +105,7 @@ class ContentController extends abstractController
      * Archive a Content entity.
      *
      * @Route("/admin/gedmo/content/archive", name="admin_gedmo_content_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -182,7 +182,7 @@ class ContentController extends abstractController
     /**
      * Displays a form to create a new Content entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @Template()
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
@@ -209,7 +209,7 @@ class ContentController extends abstractController
     /**
      * Creates a new Content entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @Template()
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
@@ -248,7 +248,7 @@ class ContentController extends abstractController
     /**
      * Displays a form to edit an existing Content entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @Template()
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
@@ -283,7 +283,7 @@ class ContentController extends abstractController
     /**
      * Edits an existing Content entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @Template()
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   

@@ -66,7 +66,7 @@ class CommentController extends abstractController
      * Enabled Comment entities.
      *
      * @Route("/admin/pagecomment/enabled", name="admin_page_comment_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -81,7 +81,7 @@ class CommentController extends abstractController
      * Disable Comment  entities.
      *
      * @Route("/admin/pagecomment/disable", name="admin_page_comment_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -96,7 +96,7 @@ class CommentController extends abstractController
      * Position entities.
      *
      * @Route("/admin/pagecomment/position", name="admin_page_comment_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -138,7 +138,7 @@ class CommentController extends abstractController
     /**
      * Displays a form to create a new Comment entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -158,7 +158,7 @@ class CommentController extends abstractController
     /**
      * Creates a new Comment entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -189,7 +189,7 @@ class CommentController extends abstractController
     /**
      * Displays a form to edit an existing Comment entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -218,7 +218,7 @@ class CommentController extends abstractController
     /**
      * Edits an existing Comment entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

@@ -4,7 +4,7 @@
      * Disable {{ entity }} entities.
      * 
      * @Route("/admin/gedmo/{{ entity|lower|replace({"\\": ''}) }}/disable", name="admin_gedmo_{{ entity|lower|replace({"\\": '_'}) }}_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public

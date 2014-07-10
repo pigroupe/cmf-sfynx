@@ -68,7 +68,7 @@ class OrganigramController extends abstractController
      * Enabled Organigram entities.
      *
      * @Route("/admin/gedmo/organigram/enabled", name="admin_gedmo_organigram_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -83,7 +83,7 @@ class OrganigramController extends abstractController
      * Disable Organigram  entities.
      *
      * @Route("/admin/gedmo/organigram/disable", name="admin_gedmo_organigram_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -98,7 +98,7 @@ class OrganigramController extends abstractController
      * Position Organigram entities.
      *
      * @Route("/admin/gedmo/organigram/position", name="admin_gedmo_organigram_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -113,7 +113,7 @@ class OrganigramController extends abstractController
      * Delete Organigram entities.
      *
      * @Route("/admin/gedmo/organigram/delete", name="admin_gedmo_organigram_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -128,7 +128,7 @@ class OrganigramController extends abstractController
      * Archive a Organigram entity.
      *
      * @Route("/admin/gedmo/organigram/archive", name="admin_gedmo_organigram_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -174,7 +174,7 @@ class OrganigramController extends abstractController
     /**
      * Displays a form to create a new Organigram entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -208,7 +208,7 @@ class OrganigramController extends abstractController
     /**
      * Creates a new Organigram entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
      */
@@ -247,7 +247,7 @@ class OrganigramController extends abstractController
     /**
      * Displays a form to edit an existing Organigram entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -282,7 +282,7 @@ class OrganigramController extends abstractController
     /**
      * Edits an existing Organigram entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
      */
@@ -325,7 +325,7 @@ class OrganigramController extends abstractController
     /**
      * Deletes a Organigram entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
      */
@@ -371,7 +371,7 @@ class OrganigramController extends abstractController
     /**
      * Create a tree of the tree
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @param string $category
      * @access    public
      * 
@@ -474,7 +474,7 @@ class OrganigramController extends abstractController
        /**
         * Move the node up in the same level
         *
-        * @Secure(roles="ROLE_USER")
+        * @Secure(roles="ROLE_EDITOR")
         * @param int $id
         * @param string $category
         * @access    public
@@ -496,7 +496,7 @@ class OrganigramController extends abstractController
     /**
      * Move the node down in the same level
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
         * @param int $id
         * @param string $category
         * @access    public
@@ -518,7 +518,7 @@ class OrganigramController extends abstractController
     /**
      * Removes given $node from the tree and reparents its descendants
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
         * @param int $id
         * @param string $category
         * @access    public

@@ -45,7 +45,7 @@ class MediaController extends abstractController
      * Enabled Media entities.
      *
      * @Route("/content/gedmo/media/enabled", name="admin_gedmo_media_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -60,7 +60,7 @@ class MediaController extends abstractController
      * Disable Media entities.
      * 
      * @Route("/content/gedmo/media/disable", name="admin_gedmo_media_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -75,7 +75,7 @@ class MediaController extends abstractController
      * Position Media entities.
      *
      * @Route("/content/gedmo/media/position", name="admin_gedmo_media_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -90,7 +90,7 @@ class MediaController extends abstractController
      * Delete Media entities.
      *
      * @Route("/content/gedmo/media/delete", name="admin_gedmo_media_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -105,7 +105,7 @@ class MediaController extends abstractController
      * Archive a Media entity.
      *
      * @Route("/content/gedmo/media/archive", name="admin_gedmo_media_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -120,7 +120,7 @@ class MediaController extends abstractController
      * get entities in ajax request for select form.
      *
      * @Route("/content/gedmo/media/select/{type}", name="admin_gedmo_media_selectentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -376,7 +376,7 @@ class MediaController extends abstractController
     /**
      * Displays a form to create a new Media entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -412,7 +412,7 @@ class MediaController extends abstractController
     /**
      * Creates a new Media entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -459,7 +459,7 @@ class MediaController extends abstractController
     /**
      * Displays a form to edit an existing Media entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -501,7 +501,7 @@ class MediaController extends abstractController
     /**
      * Edits an existing Media entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -551,7 +551,7 @@ class MediaController extends abstractController
     /**
      * Deletes a Media entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *     
      * @access    public

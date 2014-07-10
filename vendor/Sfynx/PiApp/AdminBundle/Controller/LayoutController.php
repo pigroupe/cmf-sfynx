@@ -63,7 +63,7 @@ class LayoutController extends abstractController
      * Enabled Layout entities.
      *
      * @Route("/admin/layout/enabled", name="admin_layout_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -78,7 +78,7 @@ class LayoutController extends abstractController
      * Disable Layout entities.
      *
      * @Route("/admin/layout/disable", name="admin_layout_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -93,7 +93,7 @@ class LayoutController extends abstractController
      * Delete Layout entities.
      *
      * @Route("/admin/layout/delete", name="admin_layout_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -135,7 +135,7 @@ class LayoutController extends abstractController
     /**
      * Displays a form to create a new Layout entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -155,7 +155,7 @@ class LayoutController extends abstractController
     /**
      * Creates a new Layout entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -186,7 +186,7 @@ class LayoutController extends abstractController
     /**
      * Displays a form to edit an existing Layout entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -215,7 +215,7 @@ class LayoutController extends abstractController
     /**
      * Edits an existing Layout entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

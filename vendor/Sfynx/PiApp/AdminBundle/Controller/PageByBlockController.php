@@ -64,7 +64,7 @@ class PageByBlockController extends abstractController
      * Enabled Page entities.
      *
      * @Route("/admin/pagebyblock/enabled", name="admin_pagebyblock_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -79,7 +79,7 @@ class PageByBlockController extends abstractController
      * Disable Page  entities.
      *
      * @Route("/admin/pagebyblock/disable", name="admin_pagebyblock_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -122,7 +122,7 @@ class PageByBlockController extends abstractController
     /**
      * Displays a form to create a new Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -148,7 +148,7 @@ class PageByBlockController extends abstractController
     /**
      * Creates a new Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -191,7 +191,7 @@ class PageByBlockController extends abstractController
     /**
      * Displays a form to edit an existing Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -220,7 +220,7 @@ class PageByBlockController extends abstractController
     /**
      * Edits an existing Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

@@ -45,7 +45,7 @@ class BlockController extends abstractController
      * Enabled Block entities.
      *
      * @Route("/admin/gedmo/block/enabled", name="admin_gedmo_block_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -60,7 +60,7 @@ class BlockController extends abstractController
      * Disable Block entities.
      * 
      * @Route("/admin/gedmo/block/disable", name="admin_gedmo_block_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -75,7 +75,7 @@ class BlockController extends abstractController
      * Position Block entities.
      *
      * @Route("/admin/gedmo/block/position", name="admin_gedmo_block_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -90,7 +90,7 @@ class BlockController extends abstractController
      * Delete Block entities.
      *
      * @Route("/admin/gedmo/block/delete", name="admin_gedmo_block_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -105,7 +105,7 @@ class BlockController extends abstractController
      * Archive a Block entity.
      *
      * @Route("/admin/gedmo/block/archive", name="admin_gedmo_block_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -182,7 +182,7 @@ class BlockController extends abstractController
     /**
      * Displays a form to create a new Block entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -216,7 +216,7 @@ class BlockController extends abstractController
     /**
      * Creates a new Block entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -254,7 +254,7 @@ class BlockController extends abstractController
     /**
      * Displays a form to edit an existing Block entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -288,7 +288,7 @@ class BlockController extends abstractController
     /**
      * Edits an existing Block entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -330,7 +330,7 @@ class BlockController extends abstractController
     /**
      * Deletes a Block entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *     
      * @access    public

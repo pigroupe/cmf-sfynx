@@ -64,7 +64,7 @@ class PageCssJsController extends abstractController
      * Enabled Page entities.
      *
      * @Route("/admin/pagecssjs/enabled", name="admin_pagecssjs_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -79,7 +79,7 @@ class PageCssJsController extends abstractController
      * Disable Page  entities.
      *
      * @Route("/admin/pagecssjs/disable", name="admin_pagecssjs_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -120,7 +120,7 @@ class PageCssJsController extends abstractController
     /**
      * Displays a form to create a new Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -141,7 +141,7 @@ class PageCssJsController extends abstractController
     /**
      * Creates a new Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -181,7 +181,7 @@ class PageCssJsController extends abstractController
     /**
      * Displays a form to edit an existing Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -210,7 +210,7 @@ class PageCssJsController extends abstractController
     /**
      * Edits an existing Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

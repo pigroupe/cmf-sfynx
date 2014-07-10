@@ -45,7 +45,7 @@ class CategoryController extends abstractController
      * Enabled Category entities.
      *
      * @Route("/admin/gedmo/category/enabled", name="admin_gedmo_category_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -60,7 +60,7 @@ class CategoryController extends abstractController
      * Disable Category entities.
      * 
      * @Route("/admin/gedmo/category/disable", name="admin_gedmo_category_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -75,7 +75,7 @@ class CategoryController extends abstractController
      * Position Category entities.
      *
      * @Route("/admin/gedmo/category/position", name="admin_gedmo_category_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -90,7 +90,7 @@ class CategoryController extends abstractController
      * Delete Category entities.
      *
      * @Route("/admin/gedmo/category/delete", name="admin_gedmo_category_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -105,7 +105,7 @@ class CategoryController extends abstractController
      * Archive a Category entity.
      *
      * @Route("/admin/gedmo/category/archive", name="admin_gedmo_category_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -180,7 +180,7 @@ class CategoryController extends abstractController
     /**
      * Displays a form to create a new Category entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -205,7 +205,7 @@ class CategoryController extends abstractController
     /**
      * Creates a new Category entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -243,7 +243,7 @@ class CategoryController extends abstractController
     /**
      * Displays a form to edit an existing Category entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -277,7 +277,7 @@ class CategoryController extends abstractController
     /**
      * Edits an existing Category entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -319,7 +319,7 @@ class CategoryController extends abstractController
     /**
      * Deletes a Category entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *     
      * @access    public

@@ -62,7 +62,7 @@ class KeyWordController extends abstractController
      * Enabled KeyWord entities.
      *
      * @Route("/admin/keyWord/enabled", name="admin_keyword_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -77,7 +77,7 @@ class KeyWordController extends abstractController
      * Disable KeyWord  entities.
      *
      * @Route("/admin/keyWord/disable", name="admin_keyword_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -118,7 +118,7 @@ class KeyWordController extends abstractController
     /**
      * Displays a form to create a new KeyWord entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -139,7 +139,7 @@ class KeyWordController extends abstractController
     /**
      * Creates a new KeyWord entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -171,7 +171,7 @@ class KeyWordController extends abstractController
     /**
      * Displays a form to edit an existing KeyWord entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -199,7 +199,7 @@ class KeyWordController extends abstractController
     /**
      * Edits an existing KeyWord entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

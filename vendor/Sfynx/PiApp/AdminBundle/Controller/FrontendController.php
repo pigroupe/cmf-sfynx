@@ -42,7 +42,7 @@ class FrontendController extends BaseController
     /**
      * Main default page
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -143,7 +143,7 @@ class FrontendController extends BaseController
     /**
      * Redirection function
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -201,7 +201,7 @@ class FrontendController extends BaseController
     /**
      * Copy the referer page.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -231,7 +231,7 @@ class FrontendController extends BaseController
     /**
      * Refresh a page with all these languages
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -262,7 +262,7 @@ class FrontendController extends BaseController
     /**
      * Indexation mamanger of a page (archiving or delete)
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -298,7 +298,7 @@ class FrontendController extends BaseController
     /**
      * Admin Ajax action management of all blocks and widgets of a page
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -359,7 +359,7 @@ class FrontendController extends BaseController
     /**
      * Import action of all widgets
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -379,7 +379,7 @@ class FrontendController extends BaseController
 
     /**
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return json
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

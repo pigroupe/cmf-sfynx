@@ -45,7 +45,7 @@ class ContactController extends abstractController
      * Enabled Contact entities.
      *
      * @Route("/admin/gedmo/contact/enabled", name="admin_gedmo_contact_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -60,7 +60,7 @@ class ContactController extends abstractController
      * Disable Contact entities.
      * 
      * @Route("/admin/gedmo/contact/disable", name="admin_gedmo_contact_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -75,7 +75,7 @@ class ContactController extends abstractController
      * Change the position of a Contact entity.
      *
      * @Route("/admin/gedmo/contact/position", name="admin_gedmo_contact_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -90,7 +90,7 @@ class ContactController extends abstractController
      * Delete a Contact entity.
      *
      * @Route("/admin/gedmo/contact/delete", name="admin_gedmo_contact_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -105,7 +105,7 @@ class ContactController extends abstractController
      * Archive a Contact entity.
      *
      * @Route("/admin/gedmo/contact/archive", name="admin_gedmo_contact_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -175,7 +175,7 @@ class ContactController extends abstractController
     /**
      * Displays a form to create a new Contact entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -207,7 +207,7 @@ class ContactController extends abstractController
     /**
      * Creates a new Contact entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -245,7 +245,7 @@ class ContactController extends abstractController
     /**
      * Displays a form to edit an existing Contact entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -279,7 +279,7 @@ class ContactController extends abstractController
     /**
      * Edits an existing Contact entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -321,7 +321,7 @@ class ContactController extends abstractController
     /**
      * Deletes a Contact entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *     
      * @access    public

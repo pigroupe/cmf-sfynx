@@ -224,7 +224,8 @@ class PiGridTableManager extends PiJqueryExtension
         if (!$root_file) {
         	$locale = "en-GB";
         }
-
+        // set the csrf token        
+        $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('grid-action');
         // We open the buffer.
         ob_start ();
         ?>
@@ -665,7 +666,7 @@ class PiGridTableManager extends PiJqueryExtension
                             enabled = new $.fn.dataTable.Editor( {
                                 "domTable": "#<?php echo $options['grid-name']; ?>",
                                 //"display": "envelope",
-                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>",
+                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>?_token=<?php echo $csrfToken; ?>",
                                 "events": {
                                     "onPreSubmit": function (data) {
                                     },
@@ -682,7 +683,7 @@ class PiGridTableManager extends PiJqueryExtension
                             disablerow = new $.fn.dataTable.Editor( {
                                 "domTable": "#<?php echo $options['grid-name']; ?>",
                                 //"display": "envelope",
-                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>",
+                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>?_token=<?php echo $csrfToken; ?>",
                                 "events": {
                                     "onPreSubmit": function (data) {
                                     },
@@ -699,21 +700,21 @@ class PiGridTableManager extends PiJqueryExtension
                             deleterow = new $.fn.dataTable.Editor( {
                                 "domTable": "#<?php echo $options['grid-name']; ?>",
                                 //"display": "envelope",
-                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>"
+                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>?_token=<?php echo $csrfToken; ?>"
                             } );
                             <?php elseif ( ($actionName == "rows_archive") && isset($params['route']) && !empty($params['route']) ): ?>
                             // Set up archive row
                             archiverow = new $.fn.dataTable.Editor( {
                                 "domTable": "#<?php echo $options['grid-name']; ?>",
                                 //"display": "envelope",
-                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>"
+                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>?_token=<?php echo $csrfToken; ?>"
                             } );                            
                             <?php elseif ( !empty($actionName) && (strstr($actionName, 'rows_default_') != "") && isset($params['route']) && !empty($params['route']) ): ?>
                             // Set up archive row
                             defaultrow_<?php echo $actionName; ?> = new $.fn.dataTable.Editor( {
                                 "domTable": "#<?php echo $options['grid-name']; ?>",
                                 //"display": "envelope",fnServerData
-                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>"
+                                "ajaxUrl": "<?php echo $this->container->get('router')->generate($params['route']) ?>?_token=<?php echo $csrfToken; ?>"
                             } );                            
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -1175,7 +1176,7 @@ class PiGridTableManager extends PiJqueryExtension
                                                         $("button.save").click(function(event, dataObject) {  
                                                             event.preventDefault(); 
                                                             $.ajax( {
-                                                               "url": "<?php echo $this->container->get('router')->generate($params['route']) ?>",
+                                                               "url": "<?php echo $this->container->get('router')->generate($params['route']) ?>?_token=<?php echo $csrfToken; ?>",
                                                                "data": { "data": data_id },
                                                                "dataType": "json",
                                                                "type": "post",
@@ -1257,7 +1258,7 @@ class PiGridTableManager extends PiJqueryExtension
                     
                         <?php if ( ($actionName == "rows_position") && isset($params['route']) && !empty($params['route']) ) : ?>
                             <?php echo $options['grid-name']; ?>oTable.rowReordering({ 
-                                  sURL:"<?php echo $this->container->get('router')->generate($params['route']) ?>",
+                                  sURL:"<?php echo $this->container->get('router')->generate($params['route']) ?>?_token=<?php echo $csrfToken; ?>",
                                   sRequestType: "GET",
                                   <?php if (isset($options['grid-actions']['rows_grouping'])) : ?>
                                   bGroupingUsed: true,

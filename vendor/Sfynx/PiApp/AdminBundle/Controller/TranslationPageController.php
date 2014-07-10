@@ -66,7 +66,7 @@ class TranslationPageController extends abstractController
      * Enabled TranslationPage entities.
      *
      * @Route("/admin/translationpage/enabled", name="admin_translationpage_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -81,7 +81,7 @@ class TranslationPageController extends abstractController
      * Disable TranslationPage  entities.
      *
      * @Route("/admin/translationpage/disable", name="admin_translationpage_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -122,7 +122,7 @@ class TranslationPageController extends abstractController
     /**
      * Displays a form to create a new TranslationPage entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -143,7 +143,7 @@ class TranslationPageController extends abstractController
     /**
      * Creates a new TranslationPage entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -175,7 +175,7 @@ class TranslationPageController extends abstractController
     /**
      * Displays a form to edit an existing TranslationPage entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -204,7 +204,7 @@ class TranslationPageController extends abstractController
     /**
      * Edits an existing TranslationPage entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

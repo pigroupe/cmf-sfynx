@@ -64,7 +64,7 @@ class TagController extends abstractController
      * Enabled Tag entities.
      *
      * @Route("/admin/tag/enabled", name="admin_tag_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -79,7 +79,7 @@ class TagController extends abstractController
      * Disable Tag  entities.
      *
      * @Route("/admin/tag/disable", name="admin_tag_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -94,7 +94,7 @@ class TagController extends abstractController
      * get entities in ajax request for select form.
      *
      * @Route("/admin/content/tag/select", name="admin_content_tag_selectentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -181,7 +181,7 @@ class TagController extends abstractController
     /**
      * Displays a form to create a new Tag entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -204,7 +204,7 @@ class TagController extends abstractController
     /**
      * Creates a new Tag entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -237,7 +237,7 @@ class TagController extends abstractController
     /**
      * Displays a form to edit an existing Tag entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -267,7 +267,7 @@ class TagController extends abstractController
     /**
      * Edits an existing Tag entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

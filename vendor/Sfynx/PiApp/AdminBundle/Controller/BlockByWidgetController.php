@@ -43,7 +43,7 @@ class BlockByWidgetController extends abstractController
      * Enabled Block entities.
      *
      * @Route("/admin/block/enabled", name="admin_page_block_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -58,7 +58,7 @@ class BlockByWidgetController extends abstractController
      * Disable Block  entities.
      *
      * @Route("/admin/block/disable", name="admin_page_block_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -73,7 +73,7 @@ class BlockByWidgetController extends abstractController
      * Position entities.
      *
      * @Route("/admin/block/position", name="admin_page_block_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -141,7 +141,7 @@ class BlockByWidgetController extends abstractController
     /**
      * Displays a form to create a new Block entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -163,7 +163,7 @@ class BlockByWidgetController extends abstractController
     /**
      * Creates a new Block entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -199,7 +199,7 @@ class BlockByWidgetController extends abstractController
     /**
      * Displays a form to edit an existing Block entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -234,7 +234,7 @@ class BlockByWidgetController extends abstractController
     /**
      * Edits an existing Block entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public

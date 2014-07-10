@@ -46,7 +46,7 @@ class WordController extends abstractController
      * Enabled Word entities.
      *
      * @Route("/bootstrap/translator/enabled", name="bootstrap_translator_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -61,7 +61,7 @@ class WordController extends abstractController
      * Disable Word entities.
      * 
      * @Route("/bootstrap/translator/disable", name="bootstrap_translator_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -76,7 +76,7 @@ class WordController extends abstractController
      * Change the position of a Word entity.
      *
      * @Route("/bootstrap/translator/position", name="bootstrap_translator_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -91,7 +91,7 @@ class WordController extends abstractController
      * Delete a Word entity.
      *
      * @Route("/bootstrap/translator/delete", name="bootstrap_translator_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -166,7 +166,7 @@ class WordController extends abstractController
     /**
      * Displays a form to create a new Word entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -192,7 +192,7 @@ class WordController extends abstractController
     /**
      * Creates a new Word entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -230,7 +230,7 @@ class WordController extends abstractController
     /**
      * Displays a form to edit an existing Word entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -267,7 +267,7 @@ class WordController extends abstractController
     /**
      * Edits an existing Word entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -336,7 +336,7 @@ class WordController extends abstractController
     /**
      * Displays a form to edit an existing Word entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -374,7 +374,7 @@ class WordController extends abstractController
     /**
      * Edits an existing Word entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public
@@ -416,7 +416,7 @@ class WordController extends abstractController
     /**
      * Deletes a Word entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *     
      * @access    public
@@ -460,7 +460,7 @@ class WordController extends abstractController
      * Sync word entity from file.
      * 
      * @Route("/bootstrap/translator/sync", name="bootstrap_translator_sync")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access    public

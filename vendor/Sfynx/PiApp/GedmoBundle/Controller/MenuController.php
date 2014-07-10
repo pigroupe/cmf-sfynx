@@ -46,7 +46,7 @@ class MenuController extends abstractController
      * Enabled Menu entities.
      *
      * @Route("/admin/gedmo/menu/enabled", name="admin_gedmo_menu_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -61,7 +61,7 @@ class MenuController extends abstractController
      * Disable Menu  entities.
      *
      * @Route("/admin/gedmo/menu/disable", name="admin_gedmo_menu_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -76,7 +76,7 @@ class MenuController extends abstractController
      * Position Menu entities.
      *
      * @Route("/admin/gedmo/menu/position", name="admin_gedmo_menu_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -91,7 +91,7 @@ class MenuController extends abstractController
      * Delete Menu entities.
      *
      * @Route("/admin/gedmo/menu/delete", name="admin_gedmo_menu_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -106,7 +106,7 @@ class MenuController extends abstractController
      * Archive a Menu entity.
      *
      * @Route("/admin/gedmo/menu/archive", name="admin_gedmo_menu_archiveentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -174,7 +174,7 @@ class MenuController extends abstractController
     /**
      * Displays a form to create a new Menu entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -208,7 +208,7 @@ class MenuController extends abstractController
     /**
      * Creates a new Menu entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
      */
@@ -244,7 +244,7 @@ class MenuController extends abstractController
     /**
      * Displays a form to edit an existing Menu entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -279,7 +279,7 @@ class MenuController extends abstractController
     /**
      * Edits an existing Menu entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
      */
@@ -322,7 +322,7 @@ class MenuController extends abstractController
     /**
      * Deletes a Menu entity.
      *
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
      */
@@ -366,7 +366,7 @@ class MenuController extends abstractController
     }    
     
     /**
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -389,7 +389,7 @@ class MenuController extends abstractController
     /**
      * Create a tree of the tree
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @param string $category
      * @access    public
      * 
@@ -494,7 +494,7 @@ class MenuController extends abstractController
     /**
      * Move the node up in the same level
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
         * @param int $id
         * @param string $category
         * @access    public
@@ -534,7 +534,7 @@ class MenuController extends abstractController
     /**
      * Move the node down in the same level
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
         * @param int $id
         * @param string $category
         * @access    public
@@ -574,7 +574,7 @@ class MenuController extends abstractController
     /**
      * Removes given $node from the tree and reparents its descendants
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
         * @param int $id
         * @param string $category
         * @access    public

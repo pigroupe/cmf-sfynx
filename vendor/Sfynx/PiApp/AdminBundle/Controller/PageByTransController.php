@@ -63,7 +63,7 @@ class PageByTransController extends abstractController
      * Enabled Page entities.
      *
      * @Route("/admin/pagebytrans/enabled", name="admin_pagebytrans_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -78,7 +78,7 @@ class PageByTransController extends abstractController
      * Disable Page  entities.
      *
      * @Route("/admin/pagebytrans/disable", name="admin_pagebytrans_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access  public
@@ -93,7 +93,7 @@ class PageByTransController extends abstractController
      * Delete Page entities.
      *
      * @Route("/admin/pagebytrans/delete", name="admin_pagebytrans_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -108,7 +108,7 @@ class PageByTransController extends abstractController
      * Delete twig cache Page
      *
      * @Route("/admin/pagebytrans/deletetwigcache", name="admin_pagebytrans_deletetwigcache_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public
@@ -191,7 +191,7 @@ class PageByTransController extends abstractController
     /**
      * Displays a form to create a new Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -225,7 +225,7 @@ class PageByTransController extends abstractController
     /**
      * Creates a new Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -275,7 +275,7 @@ class PageByTransController extends abstractController
     /**
      * Displays a form to edit an existing Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -312,7 +312,7 @@ class PageByTransController extends abstractController
     /**
      * Edits an existing Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -382,7 +382,7 @@ class PageByTransController extends abstractController
     /**
      * Deletes a Page entity.
      * 
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * 
      * @access    public
