@@ -25,7 +25,7 @@ services:
     gedmo.listener.translatable:
         class: Gedmo\Translatable\TranslatableListener
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_subscriber, connection: default, priority: -10 } # It is important because slug must be generated first before the creation of it`s translation.
             # ODM MongoDb subscriber, where **default** is manager name
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:
@@ -45,7 +45,7 @@ services:
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_subscriber, connection: default, priority: -11 }   # It is important because slug must be generated first before the creation of it`s translation.
             # ODM MongoDb subscriber, where **default** is manager name
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:

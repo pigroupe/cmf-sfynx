@@ -1,24 +1,33 @@
                     {% block crop_input %}
-                    <input type="hidden" id="x_{{media.id}}" name="x_{{media.id}}" value="0" />
-                    <input type="hidden" id="y_{{media.id}}" name="y_{{media.id}}" value="0"/>
-                    <input type="hidden" id="w_{{media.id}}" name="w_{{media.id}}" value="{{ globals.slider_width }}" />
-                    <input type="hidden" id="h_{{media.id}}" name="h_{{media.id}}" value="{{ globals.slider_height }}"/>
-
-                    <input type="hidden" id="img_crop[{{media.id}}]" name="img_crop[{{media.id}}]" value="0" />
-                    <input type="hidden" id="img_name_{{media.id}}" name="img_name_{{media.id}}" value="slider"/>
-                    <input type="hidden" id="img_title_{{media.id}}" name="img_title_{{media.id}}" value="{{ media.title|slugify }}"/>
-                    <input type="hidden" id="img_width_{{media.id}}" name="img_width_{{media.id}}" value="{{ globals.slider_width }}" />
-                    <input type="hidden" id="img_height_{{media.id}}" name="img_height_{{media.id}}" value="{{ globals.slider_height }}" />
-                    <input type="hidden" id="img_quality_{{media.id}}" name="img_quality_{{media.id}}" value="{{ globals.slider_quality }}" />
-
-                    <select id="format_crop_{{media.id}}" style="margin-top: 10px; margin-bottom: 10px;">
-                        <option value="slider">slider ({{ globals.slider_width }}x{{ globals.slider_height }})</option>
-                        <option value="mosaique">mosaique ({{ globals.mosaique_width }}x{{ globals.globals.mosaique_height }})</option>
-                        <option value="sous_rubrique">sous_rubrique ({{ globals.sous_rubrique_width }}x{{ globals.sous_rubrique_height }})</option>
-                        <option value="rubrique_miniature">rubrique_miniature ({{ globals.rubrique_miniature_width }}x{{ globals.rubrique_miniature_height }})</option>
-                        <option value="image_principale">image_principale ({{ globals.image_principale_width }}x{{ globals.image_principale_height }})</option>
-                        <option value="contenu_lie">contenu_lie ({{ globals.contenu_lie_width }}x{{ globals.contenu_lie_height }})</option>
-                    </select></br></br>
+	                    <input type="hidden" id="x_{{media.id}}" name="x_{{media.id}}" value="0" />
+	                    <input type="hidden" id="y_{{media.id}}" name="y_{{media.id}}" value="0"/>
+	                    <input type="hidden" id="w_{{media.id}}" name="w_{{media.id}}" value="{{ globals.slider_width }}" />
+	                    <input type="hidden" id="h_{{media.id}}" name="h_{{media.id}}" value="{{ globals.slider_height }}"/>
+	
+	                    <input type="hidden" id="img_crop[{{media.id}}]" name="img_crop[{{media.id}}]" value="0" />
+	                    <input type="hidden" id="img_name_{{media.id}}" name="img_name_{{media.id}}" value="slider"/>
+	                    <input type="hidden" id="img_title_{{media.id}}" name="img_title_{{media.id}}" value="{{ media.title|slugify }}"/>
+	                    <input type="hidden" id="img_width_{{media.id}}" name="img_width_{{media.id}}" value="{{ globals.slider_width }}" />
+	                    <input type="hidden" id="img_height_{{media.id}}" name="img_height_{{media.id}}" value="{{ globals.slider_height }}" />
+	                    <input type="hidden" id="img_quality_{{media.id}}" name="img_quality_{{media.id}}" value="{{ globals.slider_quality }}" />
+	
+	                    {% if class != "" %}
+                    	<div>
+                    		<div class="symfony-form-errors" title="Alert Errors"></div>
+                    		<div class="clearfix ">
+                    			<label class="{{ class }}"></label>
+                    			<div class="input">
+	                    {% endif %}
+			                    <select id="format_crop_{{media.id}}" style="margin-top: 10px; margin-bottom: 10px;">
+			                        <option value="slider">slider ({{ globals.slider_width }}x{{ globals.slider_height }})</option>
+			                        <option value="mosaique">mosaique ({{ globals.mosaique_width }}x{{ globals.globals.mosaique_height }})</option>
+			                        <option value="image_principale">image_principale ({{ globals.image_principale_width }}x{{ globals.image_principale_height }})</option>
+			                    </select></br></br>
+	                    {% if class != "" %}
+	                    		</div>
+                    		</div>
+                    	</div>
+	                    {% endif %}
                     {% endblock %}
                     
                     
@@ -26,17 +35,14 @@
                     {{ picture_form(media, nameForm,  'reference', 'display: block; text-align:left;','cropbox_'~media.id, 'default_crop_'~media.id)|raw}}
                     {{ picture_form(media, nameForm,  'slider', 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
                     {{ picture_form(media, nameForm,  'mosaique', 'display: block; text-align:left;', '','img_crop_'~media.id)|raw }}
-                    {{ picture_form(media, nameForm,  'sous_rubrique', 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
-                    {{ picture_form(media, nameForm,  'rubrique_miniature', 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
                     {{ picture_form(media, nameForm,  'image_principale', 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
-                    {{ picture_form(media, nameForm,  'contenu_lie', 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}                    
                     
 				    <script type="text/javascript">
 				    //<![CDATA[
                     $(document).ready(function(){
 				        	function updateTaille()
 						    {
-						        $('#img_crop[{{media.id}}]').val('1');
+						        document.getElementById("img_crop[{{media.id}}]").value = "1";
 						    }
 						
 						    function updateCoords(c)
@@ -57,25 +63,10 @@
 							cropTab['mosaique_ratio']={{ globals.mosaique_ratio }};
 							cropTab['mosaique_quality']={{ globals.mosaique_quality }};
 						
-							cropTab['sous_rubrique_width']={{ globals.sous_rubrique_width }};
-							cropTab['sous_rubrique_height']={{ globals.sous_rubrique_height }};
-							cropTab['sous_rubrique_ratio']={{ globals.sous_rubrique_ratio }};
-							cropTab['sous_rubrique_quality']={{ globals.sous_rubrique_quality }};
-						
-							cropTab['rubrique_miniature_width']={{ globals.rubrique_miniature_width }};
-							cropTab['rubrique_miniature_height']={{ globals.rubrique_miniature_height }};
-							cropTab['rubrique_miniature_ratio']={{ globals.rubrique_miniature_ratio }};
-							cropTab['rubrique_miniature_quality']={{ globals.rubrique_miniature_quality }};
-						
 							cropTab['image_principale_width']={{ globals.image_principale_width }};
 							cropTab['image_principale_height']={{ globals.image_principale_height }};
 							cropTab['image_principale_ratio']={{ globals.image_principale_ratio }};
 							cropTab['image_principale_quality']={{ globals.image_principale_quality }};
-						
-							cropTab['contenu_lie_width']={{ globals.contenu_lie_width }};
-							cropTab['contenu_lie_height']={{ globals.contenu_lie_height }};
-							cropTab['contenu_lie_ratio']={{ globals.contenu_lie_ratio }};
-							cropTab['contenu_lie_quality']={{ globals.contenu_lie_quality }};
 						
                             $(".img_crop_{{media.id}}").hide();
                             $("#picture_{{media.id}}_slider").show();

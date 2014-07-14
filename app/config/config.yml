@@ -616,6 +616,25 @@ pi_app_admin:
         grid_index_css: style-grid-7.css             
         grid_show_css: style-grid-7.css
         theme_css: smoothness # {'sfynx', 'aristo', 'rocket', 'smoothness', 'dark-hive'}
+        
+twig:
+    globals:
+      slider_width: 610
+      slider_height: 373
+      slider_ratio: 1.63
+      slider_quality: 150
+      slider_miniature_width: 122
+      slider_miniature_height: 92
+      slider_miniature_ratio: 1.32
+      slider_miniature_quality: 150  
+      mosaique_width: 389
+      mosaique_height: 318
+      mosaique_ratio: 1.22
+      mosaique_quality: 150
+      image_principale_width: 610
+      image_principale_height: 350
+      image_principale_ratio: 1.74
+      image_principale_quality: 150        
           
 #
 # WsBundle configuration

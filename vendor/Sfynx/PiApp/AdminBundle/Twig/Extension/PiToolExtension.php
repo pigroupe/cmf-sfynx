@@ -307,13 +307,13 @@ class PiToolExtension extends \Twig_Extension
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getPictureCropFunction($media, $format = "PiAppTemplateBundle:Template\\Crop:default.html.twig", $nameForm = "", $type = '', $count="")
+    public function getPictureCropFunction($media, $format = "PiAppTemplateBundle:Template\\Crop:default.html.twig", $nameForm = "", $type = '', $count="", $class = "")
     {
     	if ($format == "default") {
     		$format = "PiAppTemplateBundle:Template\\Crop:default.html.twig";
     	}
     	if ($media instanceof \BootStrap\MediaBundle\Entity\Media) {            
-            $globals     = $this->container->getParameter("pi_app_admin.page.scop.globals");
+            $globals     = $this->container->get('twig')->getGlobals();
             if (!empty($type) && (in_array($type, array('input', 'script')))) {
                 $templateContent = $this->container->get('twig')->loadTemplate($format);
                 $crop_input = ($templateContent->hasBlock("crop_input")
@@ -321,7 +321,8 @@ class PiToolExtension extends \Twig_Extension
                           "media"=>$media,
                           "count"=>$count,
                           "nameForm"=>$nameForm,
-                          "globals" => $globals
+                          "globals" => $globals,
+                      	  "class" => $class
                       ))
                       : "");
                 $crop_script = ($templateContent->hasBlock("crop_script")
@@ -329,7 +330,8 @@ class PiToolExtension extends \Twig_Extension
                           "media" =>$media,
                           "count"=>$count,
                           "nameForm" =>$nameForm,
-                          "globals" => $globals
+                          "globals" => $globals,
+                      	  "class" => $class
                       ))
                       : "");  
 
@@ -344,7 +346,8 @@ class PiToolExtension extends \Twig_Extension
                         array(
                                 "media"=>$media,
                                 "nameForm"=>$nameForm,
-                                "globals" => $globals
+                                "globals" => $globals,
+                        		"class" => $class
                         )
                 );
 

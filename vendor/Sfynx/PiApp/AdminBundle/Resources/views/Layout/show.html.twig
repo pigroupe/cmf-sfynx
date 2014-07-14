@@ -79,7 +79,7 @@
                 // http://jquery-ui.googlecode.com/svn/tags/1.6rc5/tests/static/icons.html
                 $("a.button-ui-create").button({icons: {primary: "ui-icon-circle-plus"}});
                 $("button.button-ui-update").button({icons: {primary: "ui-icon-disk"}});
-                {% if NoLayout == false and is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_ADMIN') %}
                 $("a.button-ui-delete").button({icons: {primary: "ui-icon-trash"}}).click(function( event ) {
                 	 event.preventDefault();
                 	 id_form_delete = $(this).data('id');

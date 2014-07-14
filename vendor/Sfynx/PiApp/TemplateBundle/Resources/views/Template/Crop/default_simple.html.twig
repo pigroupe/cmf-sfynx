@@ -1,10 +1,7 @@
                     {{ picture_form(media, nameForm,  'reference', 'display: block; text-align:left;','cropbox', 'default_crop')|raw}}
                     {{ picture_form(media, nameForm,  'slider', 'display: block; text-align:left;', '', 'img_crop')|raw }}
                     {{ picture_form(media, nameForm,  'mosaique', 'display: block; text-align:left;', '','img_crop')|raw }}
-                    {{ picture_form(media, nameForm,  'sous_rubrique', 'display: block; text-align:left;', '', 'img_crop')|raw }}
-                    {{ picture_form(media, nameForm,  'rubrique_miniature', 'display: block; text-align:left;', '', 'img_crop')|raw }}
                     {{ picture_form(media, nameForm,  'image_principale', 'display: block; text-align:left;', '', 'img_crop')|raw }}
-                    {{ picture_form(media, nameForm,  'contenu_lie', 'display: block; text-align:left;', '', 'img_crop')|raw }}
 
                     <input type="hidden" id="x" name="x" value="0" />
                     <input type="hidden" id="y" name="y" value="0"/>
@@ -21,10 +18,7 @@
                     <select id="format_crop" style="margin-top: 10px; margin-bottom: 10px;">
                         <option value="slider">slider ({{ slider_width }}x{{ slider_height }})</option>
                         <option value="mosaique">mosaique ({{ mosaique_width }}x{{ mosaique_height }})</option>
-                        <option value="sous_rubrique">sous_rubrique ({{sous_rubrique_width }}x{{ sous_rubrique_height }})</option>
-                        <option value="rubrique_miniature">rubrique_miniature ({{ rubrique_miniature_width }}x{{ rubrique_miniature_height }})</option>
                         <option value="image_principale">image_principale ({{ image_principale_width }}x{{ image_principale_height }})</option>
-                        <option value="contenu_lie">contenu_lie ({{ contenu_lie_width }}x{{ contenu_lie_height }})</option>
                     </select></br></br>
                     
 				    <script type="text/javascript">
@@ -52,25 +46,10 @@
 							cropTab['mosaique_ratio']={{ mosaique_ratio }};
 							cropTab['mosaique_quality']={{ mosaique_quality }};
 						
-							cropTab['sous_rubrique_width']={{ sous_rubrique_width }};
-							cropTab['sous_rubrique_height']={{ sous_rubrique_height }};
-							cropTab['sous_rubrique_ratio']={{ sous_rubrique_ratio }};
-							cropTab['sous_rubrique_quality']={{ sous_rubrique_quality }};
-						
-							cropTab['rubrique_miniature_width']={{ rubrique_miniature_width }};
-							cropTab['rubrique_miniature_height']={{ rubrique_miniature_height }};
-							cropTab['rubrique_miniature_ratio']={{ rubrique_miniature_ratio }};
-							cropTab['rubrique_miniature_quality']={{ rubrique_miniature_quality }};
-						
 							cropTab['image_principale_width']={{ image_principale_width }};
 							cropTab['image_principale_height']={{ image_principale_height }};
 							cropTab['image_principale_ratio']={{ image_principale_ratio }};
 							cropTab['image_principale_quality']={{ image_principale_quality }};
-						
-							cropTab['contenu_lie_width']={{ contenu_lie_width }};
-							cropTab['contenu_lie_height']={{ contenu_lie_height }};
-							cropTab['contenu_lie_ratio']={{ contenu_lie_ratio }};
-							cropTab['contenu_lie_quality']={{ contenu_lie_quality }};
 						
 						    $(".img_crop").hide();
 						    $(".slider").show();

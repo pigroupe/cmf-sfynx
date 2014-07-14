@@ -309,7 +309,7 @@ class HandlerLogin
         // we get browser info
         $browser = $request->attributes->get('sfynx-browser');
         // Sets layout
-        if ($browser->isMobileDevice) {
+        if (!is_null($browser) && $browser->isMobileDevice) {
             if ($request->attributes->has('sfynx-screen')) {    
                 $SfynxScreen = $request->attributes->get('sfynx-screen'); 
             } else {
