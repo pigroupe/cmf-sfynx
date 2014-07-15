@@ -1,29 +1,31 @@
-                    {% block crop_input %}
+					{% set formats = crop.formats|sort|reverse %}
+					{% if (options.unset is defined) and (options.unset|count >= 1) %}
+						{% set formats = formats|unset(options.unset) %}
+					{% endif %}
+					{% set format_first = crop.formats|steps(0) %}
+					{% block crop_input %}
 	                    <input type="hidden" id="x_{{media.id}}" name="x_{{media.id}}" value="0" />
 	                    <input type="hidden" id="y_{{media.id}}" name="y_{{media.id}}" value="0"/>
-	                    <input type="hidden" id="w_{{media.id}}" name="w_{{media.id}}" value="{{ globals.slider_width }}" />
-	                    <input type="hidden" id="h_{{media.id}}" name="h_{{media.id}}" value="{{ globals.slider_height }}"/>
-	
-	                    <input type="hidden" id="img_crop[{{media.id}}]" name="img_crop[{{media.id}}]" value="0" />
-	                    <input type="hidden" id="img_name_{{media.id}}" name="img_name_{{media.id}}" value="slider"/>
-	                    <input type="hidden" id="img_title_{{media.id}}" name="img_title_{{media.id}}" value="{{ media.title|slugify }}"/>
-	                    <input type="hidden" id="img_width_{{media.id}}" name="img_width_{{media.id}}" value="{{ globals.slider_width }}" />
-	                    <input type="hidden" id="img_height_{{media.id}}" name="img_height_{{media.id}}" value="{{ globals.slider_height }}" />
-	                    <input type="hidden" id="img_quality_{{media.id}}" name="img_quality_{{media.id}}" value="{{ globals.slider_quality }}" />
-	
-	                    {% if class != "" %}
+	                    <input type="hidden" id="w_{{media.id}}" name="w_{{media.id}}" value="{{ format_first.width }}" />
+	                    <input type="hidden" id="h_{{media.id}}" name="h_{{media.id}}" value="{{ format_first.height }}"/>
+	                    <input type="hidden" id="img_crop[{{media.id}}]"   name="img_crop[{{media.id}}]"   value="0" />
+	                    <input type="hidden" id="img_name_{{media.id}}"    name="img_name_{{media.id}}"    value="{{ format_first.prefix }}"/>
+	                    <input type="hidden" id="img_width_{{media.id}}"   name="img_width_{{media.id}}"   value="{{ format_first.width }}" />
+	                    <input type="hidden" id="img_height_{{media.id}}"  name="img_height_{{media.id}}"  value="{{ format_first.height }}" />
+	                    <input type="hidden" id="img_quality_{{media.id}}" name="img_quality_{{media.id}}" value="{{ format_first.quality }}" />
+	                    {% if (options.class is defined) and (options.class != "") %}
                     	<div>
                     		<div class="symfony-form-errors" title="Alert Errors"></div>
                     		<div class="clearfix ">
                     			<label class="{{ class }}"></label>
                     			<div class="input">
 	                    {% endif %}
-			                    <select id="format_crop_{{media.id}}" style="margin-top: 10px; margin-bottom: 10px;">
-			                        <option value="slider">slider ({{ globals.slider_width }}x{{ globals.slider_height }})</option>
-			                        <option value="mosaique">mosaique ({{ globals.mosaique_width }}x{{ globals.globals.mosaique_height }})</option>
-			                        <option value="image_principale">image_principale ({{ globals.image_principale_width }}x{{ globals.image_principale_height }})</option>
+			                    <select id="select_crop_formats_{{media.id}}" style="margin-top: 10px; margin-bottom: 10px;">
+									{% for format in formats %}
+			                        <option value="{{ format.prefix }}">{{ format.legend }} ({{ format.width }}x{{ format.height }})</option>
+									{% endfor %}
 			                    </select></br></br>
-	                    {% if class != "" %}
+						{% if (options.class is defined) and (options.class != "") %}
 	                    		</div>
                     		</div>
                     	</div>
@@ -32,19 +34,18 @@
                     
                     
                     {% block crop_script %}
-                    {{ picture_form(media, nameForm,  'reference', 'display: block; text-align:left;','cropbox_'~media.id, 'default_crop_'~media.id)|raw}}
-                    {{ picture_form(media, nameForm,  'slider', 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
-                    {{ picture_form(media, nameForm,  'mosaique', 'display: block; text-align:left;', '','img_crop_'~media.id)|raw }}
-                    {{ picture_form(media, nameForm,  'image_principale', 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
-                    
-				    <script type="text/javascript">
-				    //<![CDATA[
-                    $(document).ready(function(){
+                    	{{ picture_form(media, nameForm,  'reference', 'display: block; text-align:left;','cropbox_'~media.id, 'reference_crop_'~media.id)|raw}}
+	                    {% for format in formats %}
+	                    {{ picture_form(media, nameForm,  format.prefix, 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
+	                    {% endfor %}
+	                    
+					    <script type="text/javascript">
+					    //<![CDATA[
+        	            $(document).ready(function(){
 				        	function updateTaille()
 						    {
 						        document.getElementById("img_crop[{{media.id}}]").value = "1";
-						    }
-						
+						    }						
 						    function updateCoords(c)
 						    {
 						        $('#x_{{media.id}}').val(c.x);
@@ -53,36 +54,28 @@
 						        $('#h_{{media.id}}').val(c.h);
 						    };
 							var cropTab = []
-						    cropTab['slider_width']={{ globals.slider_width }};
-							cropTab['slider_height']={{ globals.slider_height }};
-							cropTab['slider_ratio']={{ globals.slider_ratio }};
-							cropTab['slider_quality']={{ globals.slider_quality }};
-						
-							cropTab['mosaique_width']={{ globals.mosaique_width }};
-							cropTab['mosaique_height']={{ globals.mosaique_height }};
-							cropTab['mosaique_ratio']={{ globals.mosaique_ratio }};
-							cropTab['mosaique_quality']={{ globals.mosaique_quality }};
-						
-							cropTab['image_principale_width']={{ globals.image_principale_width }};
-							cropTab['image_principale_height']={{ globals.image_principale_height }};
-							cropTab['image_principale_ratio']={{ globals.image_principale_ratio }};
-							cropTab['image_principale_quality']={{ globals.image_principale_quality }};
-						
-                            $(".img_crop_{{media.id}}").hide();
-                            $("#picture_{{media.id}}_slider").show();
-                            $("[class*='default_crop_{{media.id}}']").each(function(i){
+							{% for format in formats %}
+		                    cropTab['{{ format.prefix }}_width']={{ format.width }};
+							cropTab['{{ format.prefix }}_height']={{ format.height }};
+							cropTab['{{ format.prefix }}_ratio']={{ format.ratio }};
+							cropTab['{{ format.prefix }}_quality']={{ format.quality }};
+		                    {% endfor %}
+						    
+							$(".img_crop_{{media.id}}").hide();
+                            $("#picture_{{media.id}}_{{ format_first.prefix }}").show();
+                            $("[class*='reference_crop_{{media.id}}']").each(function(i){
                                  $('#cropbox_{{media.id}}').css('max-width','none').Jcrop({
                                     onSelect: updateCoords,
                                     onChange: updateTaille,
-                                    animateTo: [ 0,0,cropTab['slider_width'],cropTab['slider_height'] ],
-                                    aspectRatio: cropTab['slider_ratio']
+                                    animateTo: [ 0,0,cropTab['{{ format_first.prefix }}_width'],cropTab['{{ format_first.prefix }}_height'] ],
+                                    aspectRatio: cropTab['{{ format_first.prefix }}_ratio']
                                  },function(){
                                     jcrop_api_{{media.id}} = this;
                                  });
-                                 $("#format_crop_{{media.id}}").on('change', function(){
-                                    var name = $("#format_crop_{{media.id}} option:selected").val();
-                                    $(".img_crop_{{media.id}}").hide();
-                                    $("#picture_{{media.id}}_" + name).show();
+                                 $("#select_crop_formats_{{media.id}}").on('change', function(){
+                                    var name = $("#select_crop_formats_{{media.id}} option:selected").val();
+                                    $(".img_crop_{{media.id}}").fadeOut();
+                                    $("#picture_{{media.id}}_" + name).fadeIn();
                                     $("#img_width_{{media.id}}").val(cropTab[name + "_width"]);
                                     $("#img_height_{{media.id}}").val(cropTab[name + "_height"]);
                                     $("#img_quality_{{media.id}}").val(cropTab[name + "_quality"]);
@@ -91,9 +84,9 @@
                                         aspectRatio: cropTab[name + "_ratio"]
                                     });
                                 });
-                                $('#format_crop_{{media.id}}').detach().appendTo(this);  
+                                $('#select_crop_formats_{{media.id}}').detach().appendTo(this);  
                             });  
-                    });
-					//]]>   
-				    </script> 
+                    	});
+						//]]>   
+				    	</script> 
                     {% endblock %}

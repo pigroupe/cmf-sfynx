@@ -114,6 +114,7 @@ class PiToolExtension extends \Twig_Extension
                 'end'                => new \Twig_Filter_Method($this, 'endFilter'),
                 'XmlString2array'    => new \Twig_Filter_Method($this, 'XmlString2arrayFilter'),
                 'orderBy'   		 => new \Twig_Filter_Method($this, 'orderByFilter'),
+        		'unset'                => new \Twig_Filter_Method($this, 'unsetFilter'),
                 
                 //translation
                 'translate_plural'    => new \Twig_Filter_Method($this, 'translatepluralFilter'),
@@ -302,54 +303,53 @@ class PiToolExtension extends \Twig_Extension
      * <code>
      * {% if entity.media.image is defined %}
      *   {{ picture_crop(entity.media.image, "default", "piapp_gedmobundle_blocktype_media_image_binaryContent")|raw}}
+     *   {{ picture_crop(entity.blocgeneral.media.image, "default", "plugins_contentbundle_articletype_blocgeneral_media", '', {'unset':[0,1]})|raw}}
      * {% endif %}
      * </code>
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getPictureCropFunction($media, $format = "PiAppTemplateBundle:Template\\Crop:default.html.twig", $nameForm = "", $type = '', $count="", $class = "")
+    public function getPictureCropFunction($media, $format = "PiAppTemplateBundle:Template\\Crop:default.html.twig", $nameForm = "", $type = '', $options = array())
     {
     	if ($format == "default") {
     		$format = "PiAppTemplateBundle:Template\\Crop:default.html.twig";
     	}
     	if ($media instanceof \BootStrap\MediaBundle\Entity\Media) {            
-            $globals     = $this->container->get('twig')->getGlobals();
+    		$crop     = $this->container->getParameter('pi_app_admin.crop');
+    		$globals  = $this->container->get('twig')->getGlobals();
             if (!empty($type) && (in_array($type, array('input', 'script')))) {
                 $templateContent = $this->container->get('twig')->loadTemplate($format);
                 $crop_input = ($templateContent->hasBlock("crop_input")
                       ? $templateContent->renderBlock("crop_input", array(
                           "media"=>$media,
-                          "count"=>$count,
                           "nameForm"=>$nameForm,
-                          "globals" => $globals,
-                      	  "class" => $class
+                          "crop" => $crop,
+                      	  "options" => $options,
+                      	  "globals" => $globals
                       ))
                       : "");
                 $crop_script = ($templateContent->hasBlock("crop_script")
                       ? $templateContent->renderBlock("crop_script", array(
                           "media" =>$media,
-                          "count"=>$count,
                           "nameForm" =>$nameForm,
-                          "globals" => $globals,
-                      	  "class" => $class
+                          "crop" => $crop,
+                      	  "options" => $options,
+                      	  "globals" => $globals
                       ))
                       : "");  
-
                 if ($type == 'input') {
                     return $crop_input;      
                 } elseif ($type == 'script') {
                     return $crop_script;
                 }              
             } else {
-                $response     = $this->container->get('templating')->renderResponse(
-                        $format,
-                        array(
+                $response = $this->container->get('templating')->renderResponse($format,array(
                                 "media"=>$media,
                                 "nameForm"=>$nameForm,
-                                "globals" => $globals,
-                        		"class" => $class
-                        )
-                );
+                                "crop" => $crop,
+                        		"options" => $options,
+                				"globals" => $globals
+                ));
 
                 return $response->getContent();
             }
@@ -555,6 +555,7 @@ class PiToolExtension extends \Twig_Extension
             $metas[] = "    <meta property='og:site_name' content=\"{$og_site_name}\"/>";
         }
         // additions management
+        ksort($additions);
         foreach ($additions as $k => $values) {
             $metas[] = $values;
         }
@@ -775,6 +776,14 @@ class PiToolExtension extends \Twig_Extension
     		throw ExtensionException::serviceNotConfiguredCorrectly();
     	}
     }   
+    
+    public function unsetFilter(array $array, array $unset_keys) {
+    	foreach ($unset_keys as $key) {
+    		unset($array[$key]);
+    	}
+    	
+    	return $array;
+    }
 
     /**
      * crop a picture.

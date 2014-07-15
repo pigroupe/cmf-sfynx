@@ -72,7 +72,7 @@ class AuthClient extends AbstractClient
     }
 
     /**
-     * Gets socloz request with parameters.
+     * Gets request with parameters.
      *
      * Here is an inline example:
      * <code>
@@ -96,7 +96,7 @@ class AuthClient extends AbstractClient
         $this->_logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN GET PERMISSION AUTH REQUEST]");
         //-----we set the url-----
         $this->setParams($handler, $getparams);
-        //-----we return the content of the socloz request-----
+        //-----we return the content of the request-----
         switch ($this->_method) {
             case "GET":
                 $result = $this->getRest()->setUrl($this->_url)->get($this->_getparams);

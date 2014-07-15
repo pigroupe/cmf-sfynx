@@ -40,7 +40,7 @@ class BootStrapWsExtension extends Extension {
         $loader->load('services.yml');
         
         /**
-         * Socloz config parameter
+         * Auth config parameter
          */
         if (isset($config['auth'])) {
             $container->setParameter('ws.auth', $config['auth']);

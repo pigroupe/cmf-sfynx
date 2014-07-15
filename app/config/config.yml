@@ -368,7 +368,6 @@ sonata_media:
 
             formats:
                 small: { width: 100 , quality: 70}
-                crop:   { width: 379 , height:383, quality: 66}
                 #big:   { width: 500 , quality: 70}
                 #cinema:     { width: 1850 , quality: 768}
                 #grandmatv:  { width: 640 , quality: 480}                
@@ -545,11 +544,11 @@ pi_app_admin:
         switch_layout_mobile_authorized: true
         memcache_enable_all: false
         seo_redirection:
-            seo_authorized: true
+            seo_authorized: false
             seo_repository : "%kernel.root_dir%/cache/seo"
             seo_file_name : seo_links.yml  
         scop:
-            authorized: true    
+            authorized: false    
             browscap:
                 remote_ini_url:       http://browscap.org/stream?q=Full_PHP_BrowsCapINI
                 remote_ver_url:       http://browscap.org/version
@@ -616,25 +615,23 @@ pi_app_admin:
         grid_index_css: style-grid-7.css             
         grid_show_css: style-grid-7.css
         theme_css: smoothness # {'sfynx', 'aristo', 'rocket', 'smoothness', 'dark-hive'}
-        
-twig:
-    globals:
-      slider_width: 610
-      slider_height: 373
-      slider_ratio: 1.63
-      slider_quality: 150
-      slider_miniature_width: 122
-      slider_miniature_height: 92
-      slider_miniature_ratio: 1.32
-      slider_miniature_quality: 150  
-      mosaique_width: 389
-      mosaique_height: 318
-      mosaique_ratio: 1.22
-      mosaique_quality: 150
-      image_principale_width: 610
-      image_principale_height: 350
-      image_principale_ratio: 1.74
-      image_principale_quality: 150        
+    crop:
+        formats:
+            0:
+                prefix: default_mosaique
+                legend: Mosaique
+                width: 380
+                height: 380
+                ratio: 1
+                quality: 70
+            1:
+                prefix: default_big
+                legend: Big
+                width: 760
+                height: 380
+                ratio: 2
+                quality: 70         
+      
           
 #
 # WsBundle configuration

@@ -19,7 +19,7 @@ use Symfony\Component\Templating\Helper\Helper;
 use BootStrap\WsBundle\Manager\Client\AuthClient;
 
 /**
- * Socloz Helper
+ * Auth Helper
  * 
  * @category Ws_Helper
  * @package Helper 

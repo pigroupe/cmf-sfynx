@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface {
     }
 
     /**
-     * Socloz config
+     * Auth config
      *
      * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
      * @return void

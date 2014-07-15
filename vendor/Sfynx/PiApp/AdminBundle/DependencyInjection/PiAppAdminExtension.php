@@ -43,23 +43,16 @@ class PiAppAdminExtension extends Extension
         $loaderYaml->load("services_form_builder.yml");
         $loaderYaml->load("services_form_validator.yml");
         $loaderYaml->load('services_listener.yml');
-        
-        //         $PROXY_HOST = "proxy.example.com"; // Proxy server address
-        //         $PROXY_PORT = "1234";    // Proxy server port
-        //         $PROXY_USER = "LOGIN";    // Username
-        //         $PROXY_PASS = "PASSWORD";   // Password
-        //         // Username and Password are required only if your proxy server needs basic authentication
-        //         $auth = base64_encode("$PROXY_USER:$PROXY_PASS");
-        //         stream_context_set_default(
-        //          array(
-        //           'http' => array(
-        //            'proxy' => "tcp://$PROXY_HOST:$PROXY_PORT",
-        //            'request_fulluri' => true,
-        //            'header' => "Proxy-Authorization: Basic $auth"
-        //            // Remove the 'header' option if proxy authentication is not required
-        //           )
-        //          )
-        //         );        
+
+        /**
+         * Admin config parameter
+         */
+        if (isset($config['crop'])){
+        	$container->setParameter('pi_app_admin.crop', $config['crop']);
+        	if (isset($config['crop']['formats'])) {
+        		$container->setParameter('pi_app_admin.crop.formats', $config['crop']['formats']);
+        	}
+        }
         
         /**
          * Admin config parameter
