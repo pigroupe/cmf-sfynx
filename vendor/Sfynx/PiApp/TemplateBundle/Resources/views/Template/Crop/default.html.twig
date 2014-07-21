@@ -1,18 +1,23 @@
-					{% set formats = crop.formats|sort|reverse %}
-					{% if (options.unset is defined) and (options.unset|count >= 1) %}
-						{% set formats = formats|unset(options.unset) %}
-					{% endif %}
-					{% set format_first = crop.formats|steps(0) %}
 					{% block crop_input %}
-	                    <input type="hidden" id="x_{{media.id}}" name="x_{{media.id}}" value="0" />
-	                    <input type="hidden" id="y_{{media.id}}" name="y_{{media.id}}" value="0"/>
-	                    <input type="hidden" id="w_{{media.id}}" name="w_{{media.id}}" value="{{ format_first.width }}" />
-	                    <input type="hidden" id="h_{{media.id}}" name="h_{{media.id}}" value="{{ format_first.height }}"/>
-	                    <input type="hidden" id="img_crop[{{media.id}}]"   name="img_crop[{{media.id}}]"   value="0" />
-	                    <input type="hidden" id="img_name_{{media.id}}"    name="img_name_{{media.id}}"    value="{{ format_first.prefix }}"/>
-	                    <input type="hidden" id="img_width_{{media.id}}"   name="img_width_{{media.id}}"   value="{{ format_first.width }}" />
-	                    <input type="hidden" id="img_height_{{media.id}}"  name="img_height_{{media.id}}"  value="{{ format_first.height }}" />
-	                    <input type="hidden" id="img_quality_{{media.id}}" name="img_quality_{{media.id}}" value="{{ format_first.quality }}" />
+						{% set formats = crop.formats|sort|reverse %}
+						{% if (options.unset is defined) and (options.unset|count >= 1) %}
+							{% set formats = formats|unset(options.unset) %}
+						{% endif %}
+						{% set format_first = crop.formats|steps(0) %}
+						{% if options.count is defined and (options.count|php_funct('is_int')) %}
+							{% set ident = media.id ~ '_' ~ options.count %}
+						{% else %}
+							{% set ident = media.id %}
+						{% endif %}
+	                    <input type="hidden" id="x_{{ ident }}" name="x_{{ ident }}" value="0" />
+	                    <input type="hidden" id="y_{{ ident }}" name="y_{{ ident }}" value="0"/>
+	                    <input type="hidden" id="w_{{ ident }}" name="w_{{ ident }}" value="{{ format_first.width }}" />
+	                    <input type="hidden" id="h_{{ ident }}" name="h_{{ ident }}" value="{{ format_first.height }}"/>
+	                    <input type="hidden" id="img_crop[{{ ident }}]"   name="img_crop[{{ ident }}]"   value="0" />
+	                    <input type="hidden" id="img_name_{{ ident }}"    name="img_name_{{ ident }}"    value="{{ format_first.prefix }}"/>
+	                    <input type="hidden" id="img_width_{{ ident }}"   name="img_width_{{ ident }}"   value="{{ format_first.width }}" />
+	                    <input type="hidden" id="img_height_{{ ident }}"  name="img_height_{{ ident }}"  value="{{ format_first.height }}" />
+	                    <input type="hidden" id="img_quality_{{ ident }}" name="img_quality_{{ ident }}" value="{{ format_first.quality }}" />
 	                    {% if (options.class is defined) and (options.class != "") %}
                     	<div>
                     		<div class="symfony-form-errors" title="Alert Errors"></div>
@@ -20,7 +25,7 @@
                     			<label class="{{ class }}"></label>
                     			<div class="input">
 	                    {% endif %}
-			                    <select id="select_crop_formats_{{media.id}}" style="margin-top: 10px; margin-bottom: 10px;">
+			                    <select id="select_crop_formats_{{ ident }}" style="margin-top: 10px; margin-bottom: 10px;">
 									{% for format in formats %}
 			                        <option value="{{ format.prefix }}">{{ format.legend }} ({{ format.width }}x{{ format.height }})</option>
 									{% endfor %}
@@ -34,9 +39,19 @@
                     
                     
                     {% block crop_script %}
-                    	{{ picture_form(media, nameForm,  'reference', 'display: block; text-align:left;','cropbox_'~media.id, 'reference_crop_'~media.id)|raw}}
+						{% set formats = crop.formats|sort|reverse %}
+						{% if (options.unset is defined) and (options.unset|count >= 1) %}
+							{% set formats = formats|unset(options.unset) %}
+						{% endif %}
+						{% set format_first = crop.formats|steps(0) %}                    
+						{% if options.count is defined and (options.count|php_funct('is_int')) %}
+							{% set ident = media.id ~ '_' ~ options.count %}
+						{% else %}
+							{% set ident = media.id %}
+						{% endif %}                    
+                    	{{ picture_form(media, nameForm,  'reference', 'display: block; text-align:left;','cropbox_'~ident, 'reference_crop_'~ident)|raw}}
 	                    {% for format in formats %}
-	                    {{ picture_form(media, nameForm,  format.prefix, 'display: block; text-align:left;', '', 'img_crop_'~media.id)|raw }}
+	                    {{ picture_form(media, nameForm,  format.prefix, 'display: block; text-align:left;', '', 'img_crop_'~ident)|raw }}
 	                    {% endfor %}
 	                    
 					    <script type="text/javascript">
@@ -44,14 +59,14 @@
         	            $(document).ready(function(){
 				        	function updateTaille()
 						    {
-						        document.getElementById("img_crop[{{media.id}}]").value = "1";
+						        document.getElementById("img_crop[{{ ident }}]").value = "1";
 						    }						
 						    function updateCoords(c)
 						    {
-						        $('#x_{{media.id}}').val(c.x);
-						        $('#y_{{media.id}}').val(c.y);
-						        $('#w_{{media.id}}').val(c.w);
-						        $('#h_{{media.id}}').val(c.h);
+						        $('#x_{{ ident }}').val(c.x);
+						        $('#y_{{ ident }}').val(c.y);
+						        $('#w_{{ ident }}').val(c.w);
+						        $('#h_{{ ident }}').val(c.h);
 						    };
 							var cropTab = []
 							{% for format in formats %}
@@ -61,30 +76,30 @@
 							cropTab['{{ format.prefix }}_quality']={{ format.quality }};
 		                    {% endfor %}
 						    
-							$(".img_crop_{{media.id}}").hide();
-                            $("#picture_{{media.id}}_{{ format_first.prefix }}").show();
-                            $("[class*='reference_crop_{{media.id}}']").each(function(i){
-                                 $('#cropbox_{{media.id}}').css('max-width','none').Jcrop({
+							$(".img_crop_{{ ident }}").hide();
+                            $("#picture_{{ media.id }}_{{ format_first.prefix }}").show();
+                            $("[class*='reference_crop_{{ ident }}']").each(function(i){
+                                 $('#cropbox_{{ ident }}').css('max-width','none').Jcrop({
                                     onSelect: updateCoords,
                                     onChange: updateTaille,
                                     animateTo: [ 0,0,cropTab['{{ format_first.prefix }}_width'],cropTab['{{ format_first.prefix }}_height'] ],
                                     aspectRatio: cropTab['{{ format_first.prefix }}_ratio']
                                  },function(){
-                                    jcrop_api_{{media.id}} = this;
+                                    jcrop_api_{{ ident }} = this;
                                  });
-                                 $("#select_crop_formats_{{media.id}}").on('change', function(){
-                                    var name = $("#select_crop_formats_{{media.id}} option:selected").val();
-                                    $(".img_crop_{{media.id}}").fadeOut();
-                                    $("#picture_{{media.id}}_" + name).fadeIn();
-                                    $("#img_width_{{media.id}}").val(cropTab[name + "_width"]);
-                                    $("#img_height_{{media.id}}").val(cropTab[name + "_height"]);
-                                    $("#img_quality_{{media.id}}").val(cropTab[name + "_quality"]);
-                                    $("#img_name_{{media.id}}").val(name);
-                                    jcrop_api_{{media.id}}.setOptions({
+                                 $("#select_crop_formats_{{ ident }}").on('change', function(){
+                                    var name = $("#select_crop_formats_{{ ident }} option:selected").val();
+                                    $(".img_crop_{{ ident }}").fadeOut();
+                                    $("#picture_{{ media.id }}_" + name).fadeIn();
+                                    $("#img_width_{{ ident }}").val(cropTab[name + "_width"]);
+                                    $("#img_height_{{ ident }}").val(cropTab[name + "_height"]);
+                                    $("#img_quality_{{ ident }}").val(cropTab[name + "_quality"]);
+                                    $("#img_name_{{ ident }}").val(name);
+                                    jcrop_api_{{ ident }}.setOptions({
                                         aspectRatio: cropTab[name + "_ratio"]
                                     });
                                 });
-                                $('#select_crop_formats_{{media.id}}').detach().appendTo(this);  
+                                $('#select_crop_formats_{{ ident }}').detach().appendTo(this);  
                             });  
                     	});
 						//]]>   

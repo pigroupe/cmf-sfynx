@@ -416,7 +416,7 @@ class Page
         if (!$this->translations->contains($translation))
               $this->translations->add($translation);
         
-           $translation->setPage($this);
+        $translation->setPage($this);
     }
     
     /**
@@ -474,6 +474,17 @@ class Page
      */
     public function getBlocks()
     {
+    	// we order by position value.
+    	$iterator = $this->blocks->getIterator();
+    	$iterator->uasort(function ($first, $second) {
+    		if ($first === $second) {
+    			return 0;
+    		}
+    		 
+    		return (int) $first->getPosition() < (int) $second->getPosition() ? -1 : 1;
+    	});
+    	$this->blocks = new \Doctrine\Common\Collections\ArrayCollection(iterator_to_array($iterator));
+    	
         return $this->blocks;
     }
 

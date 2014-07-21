@@ -317,6 +317,17 @@ class Block
      */
     public function getWidgets()
     {
+    	// we order by position value.
+    	$iterator = $this->widgets->getIterator();
+    	$iterator->uasort(function ($first, $second) {
+    		if ($first === $second) {
+    			return 0;
+    		}
+    		 
+    		return (int) $first->getPosition() < (int) $second->getPosition() ? -1 : 1;
+    	});
+    	$this->widgets = new \Doctrine\Common\Collections\ArrayCollection(iterator_to_array($iterator));
+    	
         return $this->widgets;
     }
     
