@@ -28,7 +28,7 @@
     // default options
     options: {
       header: true,
-      height: 175,
+      height: 271,
       minWidth: 225,
       classes: '',
       checkAllText: 'Check all',

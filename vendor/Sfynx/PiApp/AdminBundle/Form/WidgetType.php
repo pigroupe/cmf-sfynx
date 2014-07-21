@@ -35,6 +35,18 @@ class WidgetType extends AbstractType
                     //'data'  => true,
                     'label'    => 'pi.form.label.field.enabled',
             ))
+            ->add('secure', 'checkbox', array(
+            		'label'    => 'pi.page.form.secure',
+            		'required' => false,
+            ))
+            ->add('heritage', 'bootstrap_security_roles', array(
+            		'multiple' => true,
+            		'required' => false,
+            		'label'    => 'pi.page.form.heritage',
+            		"attr" => array(
+            				"class"=>"pi_multiselect",
+            		),
+            ))            
             ->add('plugin', 'choice', array(
                     'choices'   => PiWidgetExtension::getAvailableWidgetPlugins(),
                     'required'  => true,

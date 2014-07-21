@@ -31,8 +31,8 @@ class LabelFieldTypeExtension extends AbstractTypeExtension
     
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('label_attr', $form->getAttribute('label_attr'));
-        $view->set('label_render', $form->getAttribute('label_render'));
+        $view->vars['label_attr'] = $form->getConfig()->getAttribute('label_attr');
+        $view->vars['label_render'] = $form->getConfig()->getAttribute('label_render');
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)

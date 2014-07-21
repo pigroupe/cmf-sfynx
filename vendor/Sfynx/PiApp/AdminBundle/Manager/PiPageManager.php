@@ -281,20 +281,20 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                                     if ($widget->getPosition() && ($widget->getPosition() != 0)){
                                         $pos = $widget->getPosition();
                                         // we return the render (cache or not)
-                                        $widget_position[ $pos ]     = "<sfynx id=\"widget__".$widget->getId()."\" data-id=\"".$widget->getId()."\" style=\"display:block\"> \n";
-                                        $widget_position[ $pos ]     .= $widgetManager->render($this->language). " \n";
-                                        $widget_position[ $pos ]     .= "</sfynx> \n";
+                                        $widget_position[ $pos ]  = "<sfynx id=\"widget__".$widget->getId()."\" data-id=\"".$widget->getId()."\" style=\"display:block\"> \n";
+                                        $widget_position[ $pos ] .= $widgetManager->render($this->language). " \n";
+                                        $widget_position[ $pos ] .= "</sfynx> \n";
                                     } else {
                                         // we return the render (cache or not)
-                                        $widget_position[]              = "<sfynx id=\"widget__".$widget->getId()."\" data-id=\"".$widget->getId()."\" > \n";
-                                        $widget_position[]             .= $widgetManager->render($this->language) . " \n";
-                                        $widget_position[]             .= "</sfynx> \n";
+                                        $widget_position[]        = "<sfynx id=\"widget__".$widget->getId()."\" data-id=\"".$widget->getId()."\" > \n";
+                                        $widget_position[]       .= $widgetManager->render($this->language) . " \n";
+                                        $widget_position[]       .= "</sfynx> \n";
                                     } 
                                     // we set the js and css scripts.
                                     $container  = strtoupper($widget->getPlugin());
-                                    $this->script['js']        = array_merge($this->script['js'], $widgetManager->getScript('js', 'array'));
-                                    $this->script['css']    = array_merge($this->script['css'], $widgetManager->getScript('css', 'array'));
-                                    $this->script['init']    = array_merge($this->script['init'], $widgetManager->getScript('init', 'array'));
+                                    $this->script['js']   = array_merge($this->script['js'], $widgetManager->getScript('js', 'array'));
+                                    $this->script['css']  = array_merge($this->script['css'], $widgetManager->getScript('css', 'array'));
+                                    $this->script['init'] = array_merge($this->script['init'], $widgetManager->getScript('init', 'array'));
                                 }
                             }
                         }
@@ -1101,6 +1101,10 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     			$xmlConfig     = new \Zend_Config_Xml($xmlConfig);
     			if ($xmlConfig->widgets->get('gedmo')) {
     				$id = $xmlConfig->widgets->gedmo->id;
+    				// we refesh only if the widget is in cash.
+    				$Etag_widget  = 'widget:'.$id.':'.$lang;
+    				// we refesh only if the widget is in cash.
+    				$this->cacheRefreshByname($Etag_widget);
     			}
     		} catch (\Exception $e) {
     		}
@@ -1462,7 +1466,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                             if ($is_snippet && !empty($id_snippet)){
                                 $entity = $this->getWidgetById($id_snippet);
                                 $xmlConfig   = $entity->getConfigXml();
-                                $xmlConfig   = new \Zend_Config_Xml($xmlConfig);                                
+                                $xmlConfig   = new \Zend_Config_Xml($xmlConfig);     
+                                $Url['admin'] 		= $this->container->get('router')->generate('admin_widget_edit', array('id' => $id_snippet, 'NoLayout' => true));
                             }
                         }
                         ////////////////// url management of all gedmo widget ///////////////////////////

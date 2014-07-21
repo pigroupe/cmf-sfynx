@@ -32,9 +32,9 @@ class AddinfoFieldTypeExtension extends AbstractTypeExtension
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('widget_prefix', $form->getAttribute('widget_prefix'));
-        $view->set('widget_suffix', $form->getAttribute('widget_suffix'));
-        $view->set('widget_remove_btn', $form->getAttribute('widget_remove_btn'));
+        $view->vars['widget_prefix'] = $form->getConfig()->getAttribute('widget_prefix');
+        $view->vars['widget_suffix'] = $form->getConfig()->getAttribute('widget_suffix');
+        $view->vars['widget_remove_btn'] = $form->getConfig()->getAttribute('widget_remove_btn');
     }
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

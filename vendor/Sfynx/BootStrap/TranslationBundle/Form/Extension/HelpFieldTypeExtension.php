@@ -32,9 +32,9 @@ class HelpFieldTypeExtension extends AbstractTypeExtension
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('help_inline', $form->getAttribute('help_inline'));
-        $view->set('help_block', $form->getAttribute('help_block'));
-        $view->set('help_label', $form->getAttribute('help_label'));
+        $view->vars['help_inline'] = $form->getConfig()->getAttribute('help_inline');
+        $view->vars['help_block'] = $form->getConfig()->getAttribute('help_block');
+        $view->vars['help_label'] = $form->getConfig()->getAttribute('help_label');
     }
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

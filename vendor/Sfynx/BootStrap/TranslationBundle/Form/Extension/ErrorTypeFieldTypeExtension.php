@@ -31,8 +31,8 @@ class ErrorTypeFieldTypeExtension extends AbstractTypeExtension
     
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('field_error_type', $form->getAttribute('field_error_type'));
-        $view->set('error_delay', $form->getAttribute('error_delay'));
+        $view->vars['field_error_type'] = $form->getConfig()->getAttribute('field_error_type');
+        $view->vars['error_delay'] = $form->getConfig()->getAttribute('error_delay');
     }
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

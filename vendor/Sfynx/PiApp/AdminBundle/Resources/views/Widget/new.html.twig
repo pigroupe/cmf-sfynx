@@ -58,7 +58,36 @@
                 	widget_sluggify_content_form.parents('.clearfix').hide();
                 	widget_ajax_content_form.parents('.clearfix').show();
         		});                                     
-            });				
+            });	
+
+            $('ul.ui-widget-header').ready(function(){		
+        		var allListElements = new Array();		
+        		$("select[id$='_heritage']").each(function(index) {
+        			allListElements[index] = $(this).parents('.clearfix'); 
+        			allListElements[index].hide();
+        		});        		
+        		$("input[id$='_secure']").change(function () {
+        			if($(this).is(':checked')){
+        				$("select[id$='_heritage']").each(function(index) {
+        					$(this).parents('.no-accordion').find(allListElements[index]).show();
+        				});
+        			} else {
+        				$("select[id$='_heritage']").each(function(index) {
+        					$(this).parents('.no-accordion').find(allListElements[index]).hide();
+        				});
+        			}
+               	});
+        		$("input[id$='_secure']").live('ifChecked', function(event){
+        			$("select[id$='_heritage']").each(function(index) {
+        				$(this).parents('.no-accordion').find(allListElements[index]).show();
+        			});
+        		});
+        		$("input[id$='_secure']").live('ifUnchecked', function(event){
+        			$("select[id$='_heritage']").each(function(index) {
+        				$(this).parents('.no-accordion').find(allListElements[index]).hide();
+        			});
+        		});
+        	});            			
 	//]]>
 	</script>	
 
