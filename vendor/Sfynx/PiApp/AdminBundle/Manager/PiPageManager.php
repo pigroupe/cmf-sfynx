@@ -453,6 +453,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 		// we set the _route value
 		$this->container->get('request')->query->set('_route', $match['_route']);
 		$this->container->get('request')->attributes->set('_route', $match['_route']);
+		$this->container->get('request')->attributes->set('_locale', $lang);
+		$this->container->get('request')->setLocale($lang);
+		$_GET['_locale'] = $lang;
 	} 
     
     /**

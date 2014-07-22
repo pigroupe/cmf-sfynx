@@ -1060,12 +1060,6 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "    <span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
             	    $set .= "{% endif %}\n";
             	}
-            	// we register the tag value in the json file if does not exist.
-            	if (isset($params['widget-id'])) {
-            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
-            	} else {
-            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $serviceName, $lang, array('esi-url'=>"{$url}{$qs}"));
-            	}
             } else {
                 if ($is_render_service_with_ttl) {
                     $key = (int) $params['widget-id'];
@@ -1074,7 +1068,13 @@ class PiWidgetExtension extends \Twig_Extension
                 } else {
                     $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
                 }
-            }            
+            }
+            // we register the tag value in the json file if does not exist.
+            if (isset($params['widget-id'])) {
+            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
+            } else {
+            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $serviceName, $lang, array('esi-url'=>"{$url}{$qs}"));
+            }                        
         } else {
 	        $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
         }        
@@ -1180,12 +1180,6 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set .= "    <span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
             	    $set .= "{% endif %}\n";
             	}
-            	// we register the tag value in the json file if does not exist.            	
-            	if (isset($params['widget-id'])) {
-            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
-            	} else {
-            		$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $JQcontainer, $lang, array('esi-url'=>"{$url}{$qs}"));
-            	}
             } else {          
             	if ($is_render_service_with_ttl) {
                     $key = (int) $params['widget-id'];
@@ -1195,6 +1189,12 @@ class PiWidgetExtension extends \Twig_Extension
             	    $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
             	}
             }
+            // we register the tag value in the json file if does not exist.
+            if (isset($params['widget-id'])) {
+            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
+            } else {
+            	$this->container->get('pi_app_admin.manager.page')->setJsonFileEtag('esi', $JQcontainer, $lang, array('esi-url'=>"{$url}{$qs}"));
+            }            
         } else {
        	    $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
         }
