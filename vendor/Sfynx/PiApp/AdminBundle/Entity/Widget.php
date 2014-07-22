@@ -92,7 +92,7 @@ class Widget
      *
      * @ORM\Column(name="lifetime", type="integer", nullable=true)
      */
-    protected $lifetime = 0;    
+    protected $lifetime = 3;    
     
     /**
      * @var boolean $public

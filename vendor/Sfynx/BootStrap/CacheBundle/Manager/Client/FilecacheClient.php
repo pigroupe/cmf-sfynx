@@ -70,17 +70,26 @@ class FilecacheClient implements CacheClientInterface
         }
     }
     
-    /**
-     * Delete a value to the cache under a unique key
-     *
-     * @param string $key Unique key to identify the data
-     * @access public
-     * @return void
-     */
-    
-    public function clear($key)
-    {
-    }    
+	/**
+	 * Delete the file cache
+	 *
+	 * @param string $key Unique key to identify the data
+	 * @access public
+	 * @return void
+	 */
+	
+	public function clear($key)
+	{
+	    if ( !$this->isSafe() || empty( $key ) ){
+	    	return false;
+	    }
+	    if ( file_exists( $this->buildFilename( $key ) ) ) {
+	        unlink($this->buildFilename( $key ));
+	        return true;
+	    } else {
+	        return false;
+	    }    
+	}   
 
     public function setPath( $path )
     {

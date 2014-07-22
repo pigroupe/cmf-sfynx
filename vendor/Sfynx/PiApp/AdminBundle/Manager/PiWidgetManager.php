@@ -140,37 +140,52 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
      * @access    public
      *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-01-31
+     * @since 2014-07-21
      */
     public function renderSource($id, $lang = '', $params = null)
     {
         // we get the translation of the current page in terms of the lang value.
         $this->getWidgetById($id);  
-        $container         = $this->getCurrentWidget()->getPlugin();
-        $NameAction        = $this->getCurrentWidget()->getAction();
-        $id                = $this->getCurrentWidget()->getId();
-        $cssClass          = $this->container->get('pi_app_admin.string_manager')->slugify($this->getCurrentWidget()->getConfigCssClass());
-        //$configureXml    = $this->container->get('pi_app_admin.string_manager')->filtreString($this->getCurrentWidget()->getConfigXml());
+        $container       = $this->getCurrentWidget()->getPlugin();
+        $NameAction      = $this->getCurrentWidget()->getAction();
+        $id              = $this->getCurrentWidget()->getId();
+        $cssClass        = $this->container->get('pi_app_admin.string_manager')->slugify($this->getCurrentWidget()->getConfigCssClass());
+        $lifetime  		 = $this->getCurrentWidget()->getLifetime();
+        $cacheable 		 = strval($this->getCurrentWidget()->getCacheable());
+        $update    		 = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
+        $public    		 = strval($this->getCurrentWidget()->getPublic());
+        $cachetemplating = strval($this->getCurrentWidget()->getCacheTemplating());
+        $sluggify  		 = strval($this->getCurrentWidget()->getSluggify());
+        $ajax      		 = strval($this->getCurrentWidget()->getAjax());
+        $is_secure		 = $this->getCurrentWidget()->getSecure();
+        $heritage		 = $this->getCurrentWidget()->getHeritage();
         
-//         $options = array(
-//             'widget-id' => $id
-//         );
-//         $source = $this->extensionWidget->FactoryFunction(strtoupper($container), strtolower($NameAction), $options);
+//        $configureXml    = $this->container->get('pi_app_admin.string_manager')->filtreString($this->getCurrentWidget()->getConfigXml());
+//        $options = array(
+//            'widget-id' => $id
+//        );
+//        $source = $this->extensionWidget->FactoryFunction(strtoupper($container), strtolower($NameAction), $options);
+        
+        // get secure value
+        $if_script    = "";
+        $endif_script = "";
+        if ( $is_secure && !is_null($heritage) && (count($heritage) > 0) ) {
+        	$heritages_info = array_merge($heritage, $this->container->get('bootstrap.Role.factory')->getNoAuthorizeRoles($heritage));
+        	if ( !is_null($heritages_info) ) {
+        		$if_script      = $heritages_info['twig_if'];
+        		$endif_script   = $heritages_info['twig_endif'];
+        	}
+        }
+        $source  = $if_script;
         if (!empty($cssClass)) {
-            $source  = " <div class=\"{$cssClass}\"> \n";
+            $source .= " <div class=\"{$cssClass}\"> \n";
         } else {
-            $source  = " <div> \n";
-        }        
-        $lifetime  = $this->getCurrentWidget()->getLifetime();
-        $cacheable = strval($this->getCurrentWidget()->getCacheable());
-        $update    = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
-        $public    = strval($this->getCurrentWidget()->getPublic());
-        $cachetemplating    = strval($this->getCurrentWidget()->getCacheTemplating());
-        $sluggify  = strval($this->getCurrentWidget()->getSluggify());
-        $ajax      = strval($this->getCurrentWidget()->getAjax());
-        $source   .= "     {% set options = {'widget-id': '$id', 'widget-lang': '$lang', 'widget-lifetime': '$lifetime', 'widget-cacheable': '$cacheable', 'widget-update': '$update', 'widget-public': '$public', 'widget-cachetemplating': '$cachetemplating', 'widget-ajax': '$ajax', 'widget-sluggify': '$sluggify'} %} \n";
-        $source   .= "     {{ renderWidget('".strtoupper($container)."', '".strtolower($NameAction)."', options )|raw }} \n";
-        $source   .= " </div> \n";
+            $source .= " <div coiconi> \n";
+        }        		
+        $source .= "     {% set options = {'widget-id': '$id', 'widget-lang': '$lang', 'widget-lifetime': '$lifetime', 'widget-cacheable': '$cacheable', 'widget-update': '$update', 'widget-public': '$public', 'widget-cachetemplating': '$cachetemplating', 'widget-ajax': '$ajax', 'widget-sluggify': '$sluggify'} %} \n";
+        $source .= "     {{ renderWidget('".strtoupper($container)."', '".strtolower($NameAction)."', options )|raw }} \n";
+        $source .= " </div> \n";
+        $source .= $endif_script;
         
         return $source;
     }

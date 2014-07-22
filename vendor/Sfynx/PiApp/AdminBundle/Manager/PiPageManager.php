@@ -1133,6 +1133,23 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     		}
     		fclose($reading);
     	}
+        $path_json_file = $this->createJsonFileName('esi', $id, $lang);
+    	if (file_exists($path_json_file)) {
+    		$reading  = fopen($path_json_file, 'r');
+    		while (!feof($reading)) {
+    			$info = explode('|', fgets($reading));
+    			if (isset($info[1])) {
+    				// we get the esi url
+        			$info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+        			// we delete the cache widget file
+        			$this->container->get("pi_filecache")->getClient()->setPath($this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository());
+        			$this->container->get("pi_filecache")->clear($info[1]);
+        			//print_r($id);print_r($info[1]);
+        			//print_r('<br />');print_r('<br />');
+    			}
+    		}
+    		fclose($reading);
+    	}
     }    
     
     /**

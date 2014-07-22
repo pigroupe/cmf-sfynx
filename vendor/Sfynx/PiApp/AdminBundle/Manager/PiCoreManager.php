@@ -344,7 +344,24 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     	}
     
     	return $result;
-    }   
+    } 
+
+    /**
+     * Create the repository of the cache widget files
+     *
+     * @return string   path value
+     * @access    public
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2014-06-21
+     */
+    public function createCacheWidgetRepository()
+    {
+    	$dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
+    	\PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+    
+    	return $dossier;
+    }    
 
     /**
      * Refresh the cache by name

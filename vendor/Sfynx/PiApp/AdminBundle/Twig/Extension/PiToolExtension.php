@@ -179,13 +179,17 @@ class PiToolExtension extends \Twig_Extension
      */
     public function renderCacheFunction($key, $ttl, $serviceName, $method, $id, $lang, $params)
     {
-    	$dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
-    	\PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+    	$dossier = $this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository();
     	$this->container->get("pi_filecache")->getClient()->setPath($dossier);
     	$value = $this->container->get("pi_filecache")->get($key);
     	if ( !$value ) {
     		$value = $this->container->get($serviceName)->$method($id, $lang, $params);
     		$this->container->get("pi_filecache")->getClient()->setPath($dossier); // IMPORTANT if in the method of the service the path is overwrite.
+    		// important : if ttl is equal to zero then the cache is continuous
+    		// so if ttl = 0, we change value to 1 seconde
+    		if ($ttl = 0) {
+    			$ttl = 1;
+    		}
     		$this->container->get("pi_filecache")->set($key, $value, $ttl);
     	}
     	 

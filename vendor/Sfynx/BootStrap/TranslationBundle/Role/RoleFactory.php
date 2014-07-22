@@ -50,6 +50,61 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
     }
     
     /**
+     * Gets all no authorize roles of an heritage of roles.
+     *
+     * @param array     $heritage
+     * @return array    the best roles of all roles.
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function getNoAuthorizeRoles($heritage)
+    {
+    	if ( is_null($heritage) || (count($heritage) == 0) ) {
+    		return null;
+    	}
+    	$all_roles              = array_keys($this->getContainer()->getParameter('security.role_hierarchy.roles'));
+      	if (($key = array_search('ROLE_ALLOWED_TO_SWITCH', $all_roles)) !== false) {
+       		unset($all_roles[$key]);
+       	}
+       	$all_roles_authorized    = array_merge($heritage, $this->getContainer()->get('bootstrap.Role.factory')->getAllHeritageByRoles($heritage));
+       	$all_roles_no_authorized = array_diff($all_roles, $all_roles_authorized);
+       	$all_roles_authorized    = $this->getContainer()->get('bootstrap.Role.factory')->getBestRoles($all_roles_authorized);
+       	//
+       	if ( (count($all_roles_authorized) == 0) && (count($all_roles_no_authorized) == 0) ) {
+       		return null;
+       	}
+       	//
+       	$all_roles_authorized = array_map(function($value) {
+            return "is_granted('{$value}')";
+        },array_values($all_roles_authorized));
+       	$script_or = implode(' or ', $all_roles_authorized);
+       	//
+       	$all_roles_no_authorized = array_map(function($value) {
+       		return "not is_granted('{$value}')";
+       	},array_values($all_roles_no_authorized));
+       	$script_and = implode(' and ', $all_roles_no_authorized);
+       	//
+       	if (!empty($script_or) && !empty($script_and)) {
+       		$twig_if      = "{{ \" {% if ({$script_or}) and $script_and  %} \" }}\n";
+       	} elseif (empty($script_or) && !empty($script_and)) {
+       		$twig_if      = "{{ \" {% if $script_and  %} \" }}\n";
+       	} elseif (!empty($script_or) && empty($script_and)) {
+       		$twig_if      = "{{ \" {% if ({$script_or}) %} \" }}\n";
+       	}
+       	$twig_endif   = "{{ \" {% endif %}  \" }} \n";
+    
+    	return array(
+    			'autorized' => $all_roles_authorized,
+    			'no_authorized' => $all_roles_no_authorized,
+    			'script_or' => $script_or,
+    			'script_and' => $script_and,
+    			'twig_if' => $twig_if,
+    			'twig_endif' => $twig_endif
+    	);
+    }    
+    
+    /**
      * Gets all user roles.
      *
      * @param array     $ROLES

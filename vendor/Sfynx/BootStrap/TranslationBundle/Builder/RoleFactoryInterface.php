@@ -22,7 +22,9 @@ namespace BootStrap\TranslationBundle\Builder;
  */
 interface RoleFactoryInterface
 {
+    public function getNoAuthorizeRoles($heritage);
     public function isJsonFileExisted();
+    public function setJsonFileRoles();
     public function getAllUserRoles();
     public function getBestRoleUser();
     public function getBestRoles($ROLES);
