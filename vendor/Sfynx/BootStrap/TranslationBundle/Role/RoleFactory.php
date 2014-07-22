@@ -69,7 +69,6 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
        	}
        	$all_roles_authorized    = array_merge($heritage, $this->getContainer()->get('bootstrap.Role.factory')->getAllHeritageByRoles($heritage));
        	$all_roles_no_authorized = array_diff($all_roles, $all_roles_authorized);
-       	$all_roles_authorized    = $this->getContainer()->get('bootstrap.Role.factory')->getBestRoles($all_roles_authorized);
        	//
        	if ( (count($all_roles_authorized) == 0) && (count($all_roles_no_authorized) == 0) ) {
        		return null;
