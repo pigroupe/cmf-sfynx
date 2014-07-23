@@ -29,6 +29,10 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+use PiApp\AdminBundle\Event\LoginRedirectionEvent;
+use PiApp\AdminBundle\Event\LoginResponseEvent;
+use PiApp\AdminBundle\PiAppAdminEvents;
+
 
 /**
  * Custom login handler.
@@ -141,9 +145,15 @@ class HandlerLogin
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-    	// we deal with the general case with a non ajax connection.
-    	if (!empty($this->redirect)) {
-    		$response = new RedirectResponse($this->router->getRoute($this->redirect));
+        // we apply all events allowed to change the url redirection
+        $event_redirection = new LoginRedirectionEvent($this->router, $this->redirect);
+        $this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGIN_CHANGEREDIRECTION, $event_redirection);
+        $redirection = $event_redirection->getRedirection();
+        // we deal with the general case with a non ajax connection.
+        if (!empty($redirection)) {
+            $response = new RedirectResponse($redirection);
+        } elseif (!empty($this->redirect)) {
+   		    $response = new RedirectResponse($this->router->getRoute($this->redirect));
     	} elseif ( $this->security->isGranted('ROLE_CONTENT_MANAGER') || $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SUPER_ADMIN') ) {
     		$response = new RedirectResponse($this->router->getRoute($this->redirect_admin));
     		$this->redirect = $this->redirect_admin;
@@ -204,6 +214,12 @@ class HandlerLogin
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $this->layout, $dateExpire));
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', $this->redirect, $dateExpire));
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $this->locale, $dateExpire));
+        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-framework', 'Symfony 2.2', $dateExpire));
+        // we apply all events allowed to change the redirection response
+        $event_response = new LoginResponseEvent($response, $dateExpire);
+        $this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
+        $response = $event_response->getResponse();
+        //
         $event->setResponse($response);        
     }    
     

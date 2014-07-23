@@ -1,27 +1,29 @@
 parameters:
-    oradmin.manager.jquery.contextmenu.class : OrApp\OrAdminBundle\Util\PiJquery\PiContextMenuManager
-    oradmin.manager.jquery.widgetadmin.class : OrApp\OrAdminBundle\Util\PiJquery\PiWidgetAdminManager
-    oradmin.manager.jquery.widgetadmin.class : OrApp\OrAdminBundle\Util\PiJquery\PiWidgetAdminManager
+    oradmin.admin.handler.login.dispatcher.changeredirection.class: OrApp\OrAdminBundle\EventListener\DispatcherLoginRedirection
+    oradmin.admin.handler.login.dispatcher.changeresponse.class: OrApp\OrAdminBundle\EventListener\DispatcherLoginResponse
     
     oradmin.admin.handler.login.class: OrApp\OrAdminBundle\EventListener\HandlerLogin
 
-
 services:
     #
-    # configuration of the JQUERY Util classes
-    #
-    or_admin.jquery_manager.contextmenu:
-        class: %oradmin.manager.jquery.contextmenu.class%
-        arguments: ['@service_container']     
-        
-    or_admin.jquery_manager.widgetadmin:                       
-        class: %oradmin.manager.jquery.widgetadmin.class%
-        arguments: ['@service_container']   
-
+    # configuration of the pi event classes
+    #             
+    or_admin.dispatcher.login_handler.change_redirection:
+        class: %oradmin.admin.handler.login.dispatcher.changeredirection.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: pi.login.changeredirection, method: onPiLoginChangeRedirection, priority: 1 }  
+            
+    or_admin.dispatcher.login_handler.change_response:
+        class: %oradmin.admin.handler.login.dispatcher.changeresponse.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: pi.login.changeresponse, method: onPiLoginChangeResponse, priority: 1 }
+            
     #
     # configuration of the listener classes
     #        
-    or_admin.user.login_handler:
+    or_admin.login_handler:
         class: %oradmin.admin.handler.login.class%
         arguments: [@security.context, @event_dispatcher, @doctrine, @service_container]
         tags:
