@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	
+	<meta charset="UTF-8">
+
 	<title>Anything Zoomer | Double</title>
 
+	<!-- demo only -->
+	<link href="http://fonts.googleapis.com/css?family=Merienda+One" rel="stylesheet">
 	<link rel="stylesheet" href="demo/style.css">
-	<link rel="stylesheet" href="css/anythingzoomer.css">
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<!-- anythingZoomer required -->
+	<link rel="stylesheet" href="css/anythingzoomer.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 	<script src="js/jquery.anythingzoomer.js"></script>
 	<script>
 	$(function() {
@@ -21,6 +24,13 @@
 
 		$(".zoom:last").anythingZoomer();
 
+		$("button").click(function(){
+			var state = $(this).text(); // enable or disable
+			$(".zoom:eq(" + $(this).attr('data-id') + ")").anythingZoomer(state);
+			$(this).text( (state === "enable") ? "disable" : "enable" );
+			return false;
+		});
+
 	});
 	</script>
 </head>
@@ -29,25 +39,34 @@
 
 <div id="main-content">
 
-	<h1>AnythingZoomer</h1>
+	<h1>AnythingZoomer<sup>2</sup></h1>
 
-	<a href="https://github.com/Mottie/AnythingZoomer/downloads" id="dl">Download</a>
+	<a href="https://github.com/CSS-Tricks/AnythingZoomer/zipball/master" id="dl">Download</a>
 
 	<ul id="nav">
-		<li class="cal"><a href="index.html">Calendar Demo</a></li>
-		<li class="img"><a href="image.html">Image Demo</a></li>
-		<li class="txt"><a href="text.html">Text Demo</a></li>
-		<li class="dbl"><a href="double.html">Double Demo</a></li>
-		<li class="use"><a href="use.html">Usage</a></li>
+		<li><a href="index.html">Calendar</a></li>
+		<li><a href="image.html">Image</a></li>
+		<li><a href="swap.html">Swap</a></li>
+		<li><a href="text.html">Text</a></li>
+		<li><a class="current" href="double.html">Double</a></li>
+		<li><a class="use" href="use.html">Usage</a></li>
+		<li><a class="play" href="http://jsfiddle.net/Mottie/6sp2b/">Playground</a></li>
+		<li><a class="issue" href="https://github.com/CSS-Tricks/AnythingZoomer/issues">Issues</a></li>
 	</ul>
 
 	<h2>Double Demo</h2>
 
-	<p>Mouse over to see zoomed in version, double click to toggle between large and small versions. Multiple zoomers can be on the same page.</p>
+	<p>
+		<ul class="info">
+			<li>Mouse over either section below to see the zoom window.</li>
+			<li>Double click within the section to toggle between the large and small versions.</li>
+			<li>Use the enable/disable button to turn AnythingZoomer on or off.</li>
+		</ul>
+	</p>
 
 	<hr>
 
-	<p><strong>Text Demo</strong></p>
+	<p><strong>Text Demo <button data-id="0">disable</button></strong></p>
 
 	<div class="zoom">
 
@@ -61,9 +80,9 @@
 
 	<br>
 
-	<p><strong>Image Demo</strong></p>
+	<p><strong>Image Demo <button data-id="1">disable</button></strong></p>
 
-	<div class="zoom">
+	<div class="zoom second">
 
 		<div class="small">
 			<img src="demo/rushmore_small.jpg" alt="small rushmore">

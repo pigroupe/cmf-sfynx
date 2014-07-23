@@ -103,6 +103,7 @@ class PiTwigCache
         if (null === $response) {
             $response = new Response();
         }
+        $response->headers->set('PI-Application', 'Sfynx/2.2');
         $isMemCacheEnable = $this->container->getParameter("pi_app_admin.page.memcache_enable_all");
         // if the memcache service is disable
         // OR MemCache service doesn't exist

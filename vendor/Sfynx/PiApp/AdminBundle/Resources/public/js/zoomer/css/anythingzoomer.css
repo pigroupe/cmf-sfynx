@@ -4,6 +4,7 @@
 }
 .az-wrap-inner {
 	display: block;
+	margin: 0 auto; /* center small & large content */
 }
 /* This wraps the large image and hides it */
 .az-zoom {
@@ -32,4 +33,33 @@
 	width: auto;
 	position: static;
 	overflow: visible;
-};
+}
+
+/* overlay small area */
+.az-overlay {
+	background-color: #000;
+	opacity: 0.3;
+	filter: alpha(opacity=30);
+	z-index: 10;
+}
+
+/* fade out small content when hovering
+.az-hovered > * {
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
+*/
+
+/* edit mode coordinate styling */
+.az-coords {
+	display: none; /* hidden when expanded */
+}
+.az-zoom .az-coords {
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: #000;
+	background: rgba(0,0,0,0.5);
+	color: #fff;
+}

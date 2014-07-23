@@ -603,7 +603,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             top:'48%'
                         });
 
-                        j_prototype_bytabs.ftc_util_ajaxselect_main(container, _url_ajaxselect, _selectId, kw, max, spinner, 1);
+                        j_prototype_bytabs.ftc_util_ajaxselect_main(container, _url_ajaxselect, _selectId, kw, max, spinner, 0);
                     };
 
                     // We add options of a select element.

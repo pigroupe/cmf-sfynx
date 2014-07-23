@@ -423,7 +423,8 @@ class PiWidgetExtension extends \Twig_Extension
         return array(
                 'renderWidget'      => new \Twig_Function_Method($this, 'FactoryFunction'),
                 'renderJs'          => new \Twig_Function_Method($this, 'ScriptJsFunction'),
-                'renderCss'          => new \Twig_Function_Method($this, 'ScriptCssFunction'),
+                'renderCss'         => new \Twig_Function_Method($this, 'ScriptCssFunction'),
+                'renderCache'       => new \Twig_Function_Method($this, 'renderCacheFunction')
         );
     }
     
@@ -521,6 +522,31 @@ class PiWidgetExtension extends \Twig_Extension
         if ($widgetTranslation instanceof TranslationWidget) {
             $this->getServiceWidget()->setTranslationWidget($widgetTranslation);
         }
+    }    
+    
+
+    /**
+     * Put result content in cache with ttl.
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function renderCacheFunction($key, $ttl, $serviceName, $method, $id, $lang, $params)
+    {
+    	$dossier = $this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository();
+    	$this->container->get("pi_filecache")->getClient()->setPath($dossier);
+    	$value = $this->container->get("pi_filecache")->get($key);
+    	if ( !$value ) {
+    		$value = $this->container->get($serviceName)->$method($id, $lang, $params);
+    		$this->container->get("pi_filecache")->getClient()->setPath($dossier); // IMPORTANT if in the method of the service the path is overwrite.
+    		// important : if ttl is equal to zero then the cache is continuous
+    		// so if ttl = 0, we change value to 1 seconde
+    		if ($ttl = 0) {
+    			$ttl = 1;
+    		}
+    		$this->container->get("pi_filecache")->set($key, $value, $ttl);
+    	}
+    
+    	return $value;
     }    
     
     /**
@@ -1064,7 +1090,7 @@ class PiWidgetExtension extends \Twig_Extension
                 if ($is_render_service_with_ttl) {
                     $key = (int) $params['widget-id'];
                     $ttl = (int) $params['widget-lifetime'];
-                    $set = " {{ render_cache('{$url}{$qs}', '{$ttl}', '{$serviceName}', 'renderSource', '{$id}', '{$lang}', {$json})|raw }}\n";
+                    $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', '{$serviceName}', 'renderSource', '{$id}', '{$lang}', {$json})|raw }}\n";
                 } else {
                     $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
                 }
@@ -1184,7 +1210,7 @@ class PiWidgetExtension extends \Twig_Extension
             	if ($is_render_service_with_ttl) {
                     $key = (int) $params['widget-id'];
                     $ttl = (int) $params['widget-lifetime'];
-                    $set = " {{ render_cache('{$url}{$qs}', '{$ttl}', 'pi_app_admin.twig.extension.jquery', 'FactoryFunction', '{$JQcontainer}', '{$method}', {$json})|raw }}\n";
+                    $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', 'pi_app_admin.twig.extension.jquery', 'FactoryFunction', '{$JQcontainer}', '{$method}', {$json})|raw }}\n";
             	} else {
             	    $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
             	}
