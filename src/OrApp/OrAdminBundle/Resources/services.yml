@@ -1,6 +1,7 @@
 parameters:
     oradmin.admin.handler.login.dispatcher.changeredirection.class: OrApp\OrAdminBundle\EventListener\DispatcherLoginRedirection
     oradmin.admin.handler.login.dispatcher.changeresponse.class: OrApp\OrAdminBundle\EventListener\DispatcherLoginResponse
+    oradmin.admin.handler.logout.dispatcher.changeresponse.class: OrApp\OrAdminBundle\EventListener\DispatcherLogoutResponse
     
     oradmin.admin.handler.login.class: OrApp\OrAdminBundle\EventListener\HandlerLogin
 
@@ -12,13 +13,19 @@ services:
         class: %oradmin.admin.handler.login.dispatcher.changeredirection.class%
         arguments: [@service_container]
         tags:
-            - { name: kernel.event_listener, event: pi.login.changeredirection, method: onPiLoginChangeRedirection, priority: 1 }  
+            - { name: kernel.event_listener, event: pi.handler.login.changeredirection, method: onPiLoginChangeRedirection, priority: 1 }  
             
     or_admin.dispatcher.login_handler.change_response:
         class: %oradmin.admin.handler.login.dispatcher.changeresponse.class%
         arguments: [@service_container]
         tags:
-            - { name: kernel.event_listener, event: pi.login.changeresponse, method: onPiLoginChangeResponse, priority: 1 }
+            - { name: kernel.event_listener, event: pi.handler.login.changeresponse, method: onPiLoginChangeResponse, priority: 1 }
+            
+    or_admin.dispatcher.logout_handler.change_response:
+        class: %oradmin.admin.handler.logout.dispatcher.changeresponse.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: pi.handler.logout.changeresponse, method: onPiLogoutChangeResponse, priority: 1 }            
             
     #
     # configuration of the listener classes

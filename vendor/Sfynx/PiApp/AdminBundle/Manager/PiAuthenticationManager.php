@@ -138,6 +138,27 @@ class PiAuthenticationManager extends PiCoreManager implements PiTreeManagerBuil
         }
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
+        // we register the username in session used in dispatcherLoginFailureResponse
+        $session->set('login-username', $lastUsername);
+        // we test if the number of attempts allowed connections number with the username have been exceeded.
+        if (!empty($lastUsername) && $this->container->has('pi_app_admin.dispatcher.login_failure.change_response')) {
+        	$key = $this->container->get('pi_app_admin.dispatcher.login_failure.change_response')->getKeyValue();
+        	if ($key == "stop-client") {
+        		$session->set('login-username', '');
+        		$session->remove(SecurityContext::LAST_USERNAME);
+        	    if ($request->isXmlHttpRequest()) {
+                    $response = new Response(json_encode('error'));
+                    $response->headers->set('Content-Type', 'application/json');
+                    
+                    return $response;
+                } else {
+                    $new_url = $this->container->get('router')->generate('home_page');
+                    $session->getFlashBag()->add('errorform', "you exceeded the number of attempts allowed connections!");
+                    
+                    return new RedirectResponse($new_url);
+                }
+        	}
+        }
         
         $csrfToken = $this->container->has('form.csrf_provider')
         ? $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate')

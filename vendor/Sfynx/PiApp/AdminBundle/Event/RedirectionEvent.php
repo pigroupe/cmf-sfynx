@@ -24,7 +24,7 @@ use BootStrap\TranslationBundle\Builder\RouteTranslatorFactoryInterface;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class LoginRedirectionEvent extends Event
+class RedirectionEvent extends Event
 {
     /**
      * @var \BootStrap\TranslationBundle\Route\RouteTranslatorFactory $router

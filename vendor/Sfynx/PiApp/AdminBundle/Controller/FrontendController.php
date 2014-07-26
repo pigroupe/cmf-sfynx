@@ -12,7 +12,7 @@
  */
 namespace PiApp\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
+use BootStrap\TranslationBundle\Controller\abstractController;
 use PiApp\AdminBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,6 +28,8 @@ use PiApp\AdminBundle\Form\EnquiryType;
 use PiApp\AdminBundle\Entity\Page as Page;
 use PiApp\AdminBundle\Entity\TranslationPage;
 
+use PiApp\AdminBundle\Event\ResponseEvent;
+use PiApp\AdminBundle\PiAppAdminEvents;
 
 /**
  * Frontend controller.
@@ -37,7 +39,7 @@ use PiApp\AdminBundle\Entity\TranslationPage;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class FrontendController extends BaseController
+class FrontendController extends abstractController
 {
     /**
      * Main default page
@@ -143,7 +145,6 @@ class FrontendController extends BaseController
     /**
      * Redirection function
      *
-     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -161,6 +162,26 @@ class FrontendController extends BaseController
     	 
     	return $response;
     }    
+    
+    /**
+     * Login failure function
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2014-07-26
+     */
+    public function loginfailureAction()
+    {
+        // we create the redirection request.
+   		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute('fos_user_security_login'));
+   		// we apply all events allowed to change the redirection response
+   		$event_response = new ResponseEvent($response);
+   		$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGIN_FAILURE, $event_response);
+   		$response = $event_response->getResponse();
+    
+    	return $response;
+    }   
     
     /**
      * Execute an applying esi widget.

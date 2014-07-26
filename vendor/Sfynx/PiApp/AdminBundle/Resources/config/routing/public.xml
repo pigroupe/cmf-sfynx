@@ -8,6 +8,10 @@
         <default key="_controller">PiAppAdminBundle:Frontend:setLocal</default>
     </route>  
     
+    <route id="login_failure" pattern="/login_failure" >
+        <default key="_controller">PiAppAdminBundle:Frontend:loginfailure</default>
+    </route>     
+    
     <route id="admin_redirection" pattern="/redirectionuser" >
         <default key="_controller">PiAppAdminBundle:Frontend:redirectionuser</default>
     </route>     

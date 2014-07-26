@@ -15,11 +15,10 @@ namespace OrApp\OrAdminBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-use PiApp\AdminBundle\Event\LoginResponseEvent;
-use PiApp\AdminBundle\PiAppAdminEvents;
+use PiApp\AdminBundle\Event\ResponseEvent;
 
 /**
- * Response handler of connection user.
+ * Response handler of user connection.
  *
  * @category   Admin_Eventlistener
  * @package    EventListener
@@ -50,9 +49,10 @@ class DispatcherLoginResponse
     *
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
-   public function onPiLoginChangeResponse(LoginResponseEvent $event)
+   public function onPiLoginChangeResponse(ResponseEvent $event)
    {
        $response = $event->getResponse();
+       //$response->setTargetUrl('http://www.pi-groupe.fr');
        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('PI-Application', 'Sfynx/2.2', $event->getDateExpire()));
        $event->setResponse($response);
    }

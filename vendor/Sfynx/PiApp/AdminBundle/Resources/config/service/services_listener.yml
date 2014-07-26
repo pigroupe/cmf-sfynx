@@ -6,6 +6,8 @@ parameters:
     piapp.admin.handler.authenticationHandler.class: PiApp\AdminBundle\EventListener\HandlerAuthentication
     piapp.admin.handler.controllerHandler.class: PiApp\AdminBundle\EventListener\HandlerController
     
+    piapp.admin.handler.loginfailure.dispatcher.changeresponse.class: PiApp\AdminBundle\EventListener\DispatcherLoginFailureResponse
+    
     piapp.admin.listener.exception.class: PiApp\AdminBundle\EventListener\ExceptionListener
     piapp.admin.listener.postload.class: PiApp\AdminBundle\EventListener\PostLoadListener
     piapp.admin.listener.loadclassmetadata.class: PiApp\AdminBundle\EventListener\loadClassMetadataListener
@@ -78,7 +80,16 @@ services:
 #        class: %piapp.admin.handler.controllerHandler.class%
 #        arguments: [@service_container]
 #        tags:
-#            - { name: kernel.event_listener, event: kernel.response }         
+#            - { name: kernel.event_listener, event: kernel.response }  
+
+    #               
+    # Event dispatchers Configuration
+    # 
+    pi_app_admin.dispatcher.login_failure.change_response:
+        class: %piapp.admin.handler.loginfailure.dispatcher.changeresponse.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: pi.handler.login.failure, method: onPiLoginFailureResponse, priority: 1 }         
             
     #               
     # Doctrine events Configuration

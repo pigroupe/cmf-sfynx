@@ -26,7 +26,7 @@ security:
                 use_forward: false
                 check_path: /login_check
                 success_handler: pi_app_admin.user.authentication_handler
-                failure_path: null
+                failure_path: /login_failure
                 remember_me: true
                 #default_target_path: /home
             remember_me:

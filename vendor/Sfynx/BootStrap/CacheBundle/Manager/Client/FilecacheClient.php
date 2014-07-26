@@ -70,6 +70,28 @@ class FilecacheClient implements CacheClientInterface
         }
     }
     
+    public function changeValue($key, $newValue)
+    {
+        if ( !$this->isSafe() || empty( $key ) ) {
+        	return false;
+        }
+        if ( file_exists( $this->buildFilename( $key ) ) ){
+        	$file = file_get_contents( $this->buildFilename( $key ) );
+        	$file = unserialize( $file );
+        	//
+        	if ( !is_array( $file ) ) {
+        	    return false;
+            } elseif ( $file[ 'key' ] != $key ) {
+            	return false;
+            } else {
+                $file[ 'value' ] = serialize( $newValue );
+                return file_put_contents( $this->buildFilename( $key ), serialize( $file ) );
+            }
+        } else {
+            return false;
+        }
+    }
+    
 	/**
 	 * Delete the file cache
 	 *
@@ -89,7 +111,7 @@ class FilecacheClient implements CacheClientInterface
 	    } else {
 	        return false;
 	    }    
-	}   
+	}    
 
     public function setPath( $path )
     {

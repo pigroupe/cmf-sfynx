@@ -1030,6 +1030,36 @@ class PiStringManager implements PiStringManagerBuilderInterface
         // taille en ko
         return round($taille_content / 1024 * 100) / 100;
     }
+    
+    /**
+     * converts string with M or K to bytes integer
+     * - for example: 50M -> 52428800
+     *
+     * @param mixed $_value
+     * @return integer
+     */
+    public static function convertToBytes($_value)
+    {
+    	if (is_int($_value)) {
+    		$bytes = $_value;
+    	} else {
+    		if (preg_match("/M/", $_value)) {
+    			$value = substr($_value, 0, strpos($_value, 'M'));
+    			$factor = 1024 * 1024;
+    		} elseif (preg_match("/K/", $_value)) {
+    			$value = substr($_value, 0, strpos($_value, 'K'));
+    			$factor = 1024;
+    		} elseif (is_string($_value)) {
+    			$value = $_value;
+    			$factor = 1;
+    		} else {
+    			throw new Exception('Argument type not supported:' . gettype($_value));
+    		}
+    		$bytes = intval($value) * $factor;
+    	}
+    	 
+    	return $bytes;
+    }
         
     /**
      * List of stop words according to the language.

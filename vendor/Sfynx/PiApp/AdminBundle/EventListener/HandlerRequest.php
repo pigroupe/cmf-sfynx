@@ -23,6 +23,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PiApp\AdminBundle\Lib\Browscap;
 use PiApp\AdminBundle\Lib\MobileDetect;
 
+use PiApp\AdminBundle\Event\ResponseEvent;
+use PiApp\AdminBundle\PiAppAdminEvents;
+
 /**
  * Custom request handler.
  * Register the mobile/desktop format.
@@ -173,6 +176,10 @@ class HandlerRequest
         	if (($route != 'home_page') && ($url == '/')) {
         		$url_homepage = $this->container->get('bootstrap.RouteTranslator.factory')->getRoute('home_page');
         		$response     = new RedirectResponse($url_homepage, 301);
+        		// we apply all events allowed to change the redirection response
+        		$event_response = new ResponseEvent($response, $dateExpire);
+        		$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_REQUEST_CHANGERESPONSE_PREFIX_LOCALE_REDIRECTION, $event_response);
+        		$response = $event_response->getResponse();
         		
         		return $response;
         	}
@@ -236,6 +243,10 @@ class HandlerRequest
     	if ($SEOUrl) {
     		// we set response
     		$response = new RedirectResponse($SEOUrl, 301);
+    		// we apply all events allowed to change the redirection response
+    		$event_response = new ResponseEvent($response, $dateExpire);
+    		$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_REQUEST_CHANGERESPONSE_SEO_REDIRECTION, $event_response);
+    		$response = $event_response->getResponse();
     		
     		return $response;
     		//$response->setResponse(new Response(\PiApp\AdminBundle\Util\PiFileManager::getCurl($SEOUrl, null, null, $this->request->getUriForPath(''))));
@@ -304,6 +315,10 @@ class HandlerRequest
                 $response     = new \Symfony\Component\HttpFoundation\Response($this->request->getUri());
                 $response->headers->set('Content-Type', 'text/html');
                 $response     = $this->container->get('templating')->renderResponse('PiAppTemplateBundle:Template\\Nonav:nonav.html.twig', array('locale' => $locale, 'isCookies'=>$isCookies, 'isJs'=>$isJs, 'isNav'=>$isNav), $response);
+                // we apply all events allowed to change the response
+                $event_response = new ResponseEvent($response, $dateExpire);
+                $this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_REQUEST_CHANGERESPONSE_NOSCOPE, $event_response);
+                $response = $event_response->getResponse();
                 
                 return $response;
             }

@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class LoginResponseEvent extends Event
+class ResponseEvent extends Event
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Response $response

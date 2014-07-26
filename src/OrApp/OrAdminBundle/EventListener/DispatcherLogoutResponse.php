@@ -15,17 +15,17 @@ namespace OrApp\OrAdminBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-use PiApp\AdminBundle\Event\RedirectionEvent;
+use PiApp\AdminBundle\Event\ResponseEvent;
 
 /**
- * Redirection handler of connection user.
+ * Response handler of user deconnection
  *
  * @category   Admin_Eventlistener
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class DispatcherLoginRedirection
+class DispatcherLogoutResponse
 {
    /**
     * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -49,9 +49,12 @@ class DispatcherLoginRedirection
     *
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
-   public function onPiLoginChangeRedirection(RedirectionEvent $event)
+   public function onPiLogoutChangeResponse(ResponseEvent $event)
    {
-       $event->setRouteName($event->getRouteName());
+       $response = $event->getResponse();
+       //$response->setTargetUrl('http://www.pi-groupe.fr');
+       $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('PI-Application', 'Sfynx/2.2', $event->getDateExpire()));
+       $event->setResponse($response);
    }
 
 }

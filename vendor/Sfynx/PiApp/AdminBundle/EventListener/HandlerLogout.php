@@ -19,6 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 
+use PiApp\AdminBundle\Event\ResponseEvent;
+use PiApp\AdminBundle\PiAppAdminEvents;
+
 /**
  * Custom logout handler.
  *
@@ -162,6 +165,10 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', '', time() - 3600));
+    	// we apply all events allowed to change the redirection response
+    	$event_response = new ResponseEvent($response, time() - 3600);
+    	$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGOUT_CHANGERESPONSE, $event_response);
+    	$response = $event_response->getResponse();
     	
     	return $response;
     }    

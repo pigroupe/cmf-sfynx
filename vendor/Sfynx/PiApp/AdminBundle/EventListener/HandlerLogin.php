@@ -29,8 +29,8 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-use PiApp\AdminBundle\Event\LoginRedirectionEvent;
-use PiApp\AdminBundle\Event\LoginResponseEvent;
+use PiApp\AdminBundle\Event\RedirectionEvent;
+use PiApp\AdminBundle\Event\ResponseEvent;
 use PiApp\AdminBundle\PiAppAdminEvents;
 
 
@@ -145,8 +145,12 @@ class HandlerLogin
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
+        // we delete the username info in session if it exists
+        if ($this->container->get('request')->getSession()->has('login-username')) {
+        	$this->container->get('request')->getSession()->remove('login-username');
+        }
         // we apply all events allowed to change the url redirection
-        $event_redirection = new LoginRedirectionEvent($this->router, $this->redirect);
+        $event_redirection = new RedirectionEvent($this->router, $this->redirect);
         $this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGIN_CHANGEREDIRECTION, $event_redirection);
         $redirection = $event_redirection->getRedirection();
         // we deal with the general case with a non ajax connection.
@@ -216,7 +220,7 @@ class HandlerLogin
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $this->locale, $dateExpire));
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-framework', 'Symfony 2.2', $dateExpire));
         // we apply all events allowed to change the redirection response
-        $event_response = new LoginResponseEvent($response, $dateExpire);
+        $event_response = new ResponseEvent($response, $dateExpire);
         $this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
         $response = $event_response->getResponse();
         //
