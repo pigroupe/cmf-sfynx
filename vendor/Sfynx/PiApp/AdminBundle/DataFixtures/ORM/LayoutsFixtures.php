@@ -270,7 +270,29 @@ class LayoutsFixtures extends AbstractFixture implements OrderedFixtureInterface
     </blocks>
 </config>');
         $field16->setEnabled(true);
-        $manager->persist($field16);        
+        $manager->persist($field16);   
+
+        $field17 = new Layout();
+        $field17->setName('pi-layout-pi-model-responsive-two-fluid-columns');
+        $field17->setFilePc("models\layout-pi-model-responsive-two-fluid-columns.html.twig");
+        $field17->setFileMobile('Default');
+        $field17->setConfigXml('<?xml version="1.0"?>
+<config>
+    <blocks>
+        <name>pc_header</name>
+        <name>pc_menuwrapper</name>
+        <name>contenttitle</name>
+        <name>content</name>
+        <name>sidebaretitle</name>
+        <name>sidebare</name>
+        <name>pc_footer</name>
+        <name>mobile_novHeader</name>
+        <name>mobile_content</name>
+        <name>mobile_novFooter</name>
+    </blocks>
+</config>');
+        $field17->setEnabled(true);
+        $manager->persist($field17);        
 
         
         $manager->flush();
@@ -290,6 +312,7 @@ class LayoutsFixtures extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('layout-pi-model-two-columns-fixed-horiz-menu', $field14);
         $this->addReference('layout-pi-model-two-fluid-columns', $field15);
         $this->addReference('layout-pi-model-two-fluid-intelligent-columns', $field16);
+        $this->addReference('layout-pi-model-two-fluid-intelligent-columns', $field17);
     }
     
     /**
