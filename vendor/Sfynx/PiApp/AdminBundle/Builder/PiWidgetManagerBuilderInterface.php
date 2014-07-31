@@ -25,6 +25,9 @@ interface PiWidgetManagerBuilderInterface
     public function exec($id, $lang = "");
     public function render($lang = '');
     public function renderSource($id, $lang = '', $params = null);
+    public function renderCache($serviceName, $tag, $id, $lang, $params = null);
+    public function renderService($serviceName, $id, $lang, $params = null);
+    public function renderJquery($JQcontainer, $id, $lang, $params = null);
     public function setScript();
     public function setInit();
 }

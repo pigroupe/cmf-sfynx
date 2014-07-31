@@ -179,7 +179,7 @@ class PiUserManager extends PiWidgetExtension
                 $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
                 $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
                 
-                return $this->runByService('pi_app_admin.manager.authentication', "$this->entity~$this->method", $lang, $params);
+                return $this->renderService('pi_app_admin.manager.authentication', "$this->entity~$this->method", $lang, $params);
             } else {
                 throw ExtensionException::optionValueNotSpecified("gedmo controller", __CLASS__);
             }

@@ -83,6 +83,7 @@ class HandlerAuthentication implements AuthenticationSuccessHandlerInterface
 	    }
 	    $response = new Response(json_encode('ok'));
 	    $response->headers->set('Content-Type', 'application/json');
+	    
 	    return $response;
     }    
     

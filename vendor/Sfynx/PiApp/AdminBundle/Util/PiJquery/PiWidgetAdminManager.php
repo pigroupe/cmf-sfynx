@@ -49,15 +49,12 @@ class PiWidgetAdminManager extends PiJqueryExtension
     {
         // template management
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/jquery/jquery.tmpl.min.js");
-        
         // viewer management
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/viewer/js/jquery.mousewheel.min.js");
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/viewer/js/jquery.iviewer.js");
         $this->container->get('pi_app_admin.twig.extension.layouthead')->addCssFile("bundles/piappadmin/js/viewer/css/jquery.iviewer.css");
-        
-        // zoomer management
-        $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/zoomer/js/jquery.anythingzoomer.js");
-        $this->container->get('pi_app_admin.twig.extension.layouthead')->addCssFile("bundles/piappadmin/js/zoomer/css/anythingzoomer.css");
+        // Dialog extend for dialog ui
+        $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/ui/dialogextend/build/jquery.dialogextend.min.js");
     }    
     
     /**
@@ -160,17 +157,25 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                               $(this).dialog("close");
                                           }
                                       },
-                                      captionButtons: {
-                                          //pin: { visible: false },
-                                          refresh: { visible: false },
-                                          //toggle: { visible: false },
-                                          minimize: { visible: false },
-                                          maximize: { visible: false }
-                                      },
                                     show: 'scale',
                                     hide: 'scale',
                                     collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
                                     expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                                }).dialogExtend({
+                                    "closable" : true,
+                                    "maximizable" : true,
+                                    "minimizable" : true,
+                                    "collapsable" : true,
+                                    "dblclick" : "collapse",
+                                    "titlebar" : "transparent",
+                                    "minimizeLocation" : "right",
+                                    "icons" : {
+                                      "close" : "ui-icon-circle-close",
+                                      "maximize" : "ui-icon-circle-plus",
+                                      "minimize" : "ui-icon-circle-minus",
+                                      "collapse" : "ui-icon-triangle-1-s",
+                                      "restore" : "ui-icon-bullet"
+                                    },
                                 });                            
                      	    });
                             // end ajax    
@@ -206,18 +211,26 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                               $(this).dialog("close");
                                           }
                                       },
-                                      captionButtons: {
-                                          //pin: { visible: false },
-                                          refresh: { visible: false },
-                                          //toggle: { visible: false },
-                                          minimize: { visible: false },
-                                          maximize: { visible: false }
-                                      },
                                     show: 'scale',
                                     hide: 'scale',
                                     collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
                                     expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
-                                });                            
+                                }).dialogExtend({
+                                    "closable" : true,
+                                    "maximizable" : true,
+                                    "minimizable" : true,
+                                    "collapsable" : true,
+                                    "dblclick" : "collapse",
+                                    "titlebar" : "transparent",
+                                    "minimizeLocation" : "right",
+                                    "icons" : {
+                                      "close" : "ui-icon-circle-close",
+                                      "maximize" : "ui-icon-circle-plus",
+                                      "minimize" : "ui-icon-circle-minus",
+                                      "collapse" : "ui-icon-triangle-1-s",
+                                      "restore" : "ui-icon-bullet"
+                                    },
+                                });                         
                      	    });
                             // end ajax    
                         }                        
@@ -248,18 +261,26 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                      beforeClose: function () {
                                          window.location.href= "<?php echo $this->container->get('router')->generate('public_refresh_page') ?>";
                                      },
-                                     captionButtons: {
-                                        //pin: { visible: true },
-                                        refresh: { visible: true },
-                                        //toggle: { visible: true },
-                                        minimize: { visible: true },
-                                        maximize: { visible: true }
-                                     },                                           
                                      show: 'scale',
                                      hide: 'scale',
                                      collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
                                      expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
-                                });                            
+                                }).dialogExtend({
+                                    "closable" : true,
+                                    "maximizable" : true,
+                                    "minimizable" : true,
+                                    "collapsable" : true,
+                                    "dblclick" : "collapse",
+                                    "titlebar" : "transparent",
+                                    "minimizeLocation" : "right",
+                                    "icons" : {
+                                      "close" : "ui-icon-circle-close",
+                                      "maximize" : "ui-icon-circle-plus",
+                                      "minimize" : "ui-icon-circle-minus",
+                                      "collapse" : "ui-icon-triangle-1-s",
+                                      "restore" : "ui-icon-bullet"
+                                    },
+                                });                           
                      	    });
                             // end ajax    
                         }
@@ -302,17 +323,25 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                       });
                                       // end ajax    
                                      },
-                                     captionButtons: {
-                                        //pin: { visible: true },
-                                        refresh: { visible: true },
-                                        //toggle: { visible: true },
-                                        minimize: { visible: true },
-                                        maximize: { visible: true }
-                                     },                                           
                                      show: 'scale',
                                      hide: 'scale',
                                      collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
                                      expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                                }).dialogExtend({
+                                    "closable" : true,
+                                    "maximizable" : true,
+                                    "minimizable" : true,
+                                    "collapsable" : true,
+                                    "dblclick" : "collapse",
+                                    "titlebar" : "transparent",
+                                    "minimizeLocation" : "right",
+                                    "icons" : {
+                                      "close" : "ui-icon-circle-close",
+                                      "maximize" : "ui-icon-circle-plus",
+                                      "minimize" : "ui-icon-circle-minus",
+                                      "collapse" : "ui-icon-triangle-1-s",
+                                      "restore" : "ui-icon-bullet"
+                                    },
                                 });                             
                      	    });
                             // end ajax    
@@ -325,10 +354,10 @@ class PiWidgetAdminManager extends PiJqueryExtension
                      * start block action with click
                      ********************************/ 
                     $("a[class^='block_action_']").click( function() {
-                        var id         = $(this).data('id');
-                        var action    = $(this).data('action');
-                        var title    = $(this).attr('title');
-                        var _class    = $(this).attr('class');
+                        var id     = $(this).data('id');
+                        var action = $(this).data('action');
+                        var title  = $(this).attr('title');
+                        var _class = $(this).attr('class');
                         var height = jQuery(window).height();
                         // start ajax 
                         $.ajax({
@@ -354,18 +383,26 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                  beforeClose: function () {
                                      window.location.href= "<?php echo $this->container->get('router')->generate('public_refresh_page') ?>"; 
                                  },
-                                 captionButtons: {
-                                    //pin: { visible: true },
-                                    refresh: { visible: true },
-                                    //toggle: { visible: true },
-                                    minimize: { visible: true },
-                                    maximize: { visible: true }
-                                 },                                       
                                  show: 'scale',
                                  hide: 'scale',
                                  collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
                                  expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
-                             });                        
+                             }).dialogExtend({
+                                 "closable" : true,
+                                 "maximizable" : true,
+                                 "minimizable" : true,
+                                 "collapsable" : true,
+                                 "dblclick" : "collapse",
+                                 "titlebar" : "transparent",
+                                 "minimizeLocation" : "right",
+                                 "icons" : {
+                                   "close" : "ui-icon-circle-close",
+                                   "maximize" : "ui-icon-circle-plus",
+                                   "minimize" : "ui-icon-circle-minus",
+                                   "collapse" : "ui-icon-triangle-1-s",
+                                   "restore" : "ui-icon-bullet"
+                                 },
+                               });                       
                  	    });
                         // end ajax        
                     });
@@ -428,18 +465,25 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                             });
                                         }
                                     },
-                                    captionButtons: {
-                                        close: { visible: false },
-                                        //pin: { visible: false },
-                                        refresh: { visible: false },
-                                        //toggle: { visible: false },
-                                        minimize: { visible: false },
-                                        maximize: { visible: false }
-                                    },
                                     show: 'scale',
                                     hide: 'scale',
                                     collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
                                     expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                                }).dialogExtend({
+                                    "closable" : true,
+                                    "maximizable" : true,
+                                    "minimizable" : true,
+                                    "collapsable" : true,
+                                    "dblclick" : "collapse",
+                                    "titlebar" : "transparent",
+                                    "minimizeLocation" : "right",
+                                    "icons" : {
+                                      "close" : "ui-icon-circle-close",
+                                      "maximize" : "ui-icon-circle-plus",
+                                      "minimize" : "ui-icon-circle-minus",
+                                      "collapse" : "ui-icon-triangle-1-s",
+                                      "restore" : "ui-icon-bullet"
+                                    },
                                 });
                             } else {
                                 $('#widget-action-dialog').html('<iframe id="modalIframeId" width="100%" height="99%" style="overflow-x: hidden; overflow-y: auto" marginWidth="0" marginHeight="0" frameBorder="0" src="'+url+'" />').dialog({
@@ -455,17 +499,25 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                     beforeClose: function () {
                                         window.location.href= "<?php echo $this->container->get('router')->generate('public_refresh_page') ?>"; 
                                     },
-                                    captionButtons: {
-                                          //pin: { visible: true },
-                                          refresh: { visible: true },
-                                          //toggle: { visible: true },
-                                          minimize: { visible: true },
-                                          maximize: { visible: true }
-                                    },                                        
                                     show: 'scale',
                                     hide: 'scale',
                                     collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
                                     expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                                }).dialogExtend({
+                                    "closable" : true,
+                                    "maximizable" : true,
+                                    "minimizable" : true,
+                                    "collapsable" : true,
+                                    "dblclick" : "collapse",
+                                    "titlebar" : "transparent",
+                                    "minimizeLocation" : "right",
+                                    "icons" : {
+                                      "close" : "ui-icon-circle-close",
+                                      "maximize" : "ui-icon-circle-plus",
+                                      "minimize" : "ui-icon-circle-minus",
+                                      "collapse" : "ui-icon-triangle-1-s",
+                                      "restore" : "ui-icon-bullet"
+                                    },
                                 });                    
                             }                        
                  	    });
@@ -504,58 +556,6 @@ class PiWidgetAdminManager extends PiJqueryExtension
             <div id="page-action-dialog" >&nbsp;</div>
             <div id="block-action-dialog" >&nbsp;</div>
             <div id="widget-action-dialog" >&nbsp;</div>
-            
-            <script type="text/javascript">
-            //<![CDATA[
-            $(function() {    
-                $(".texte_desc2:first").anythingZoomer({
-                    clone : true
-                });
-
-                //SBLA - AJOUT EQUIVALENT POSITION:FIXED SUR DIALOGBOX. 
-                dialogs = [];
-                var ids = ["#page-action-dialog","#block-action-dialog","#widget-action-dialog"];
-                //CLASSE
-                function Diag(id){ this.id = $(id); }
-                Diag.prototype.isVisible = function(){ return this.id.parent('.ui-dialog.wijmo-wijdialog').is(':visible')==true; };
-                Diag.prototype.isFixed = function(){ return this.id.parent('.ui-dialog.wijmo-wijdialog').css('position')=='fixed'; };
-                Diag.prototype.top = function(){ return this.isVisible() ? this.id.parent('.ui-dialog.wijmo-wijdialog').offset().top : null; };
-                Diag.prototype.left = function(){ return this.isVisible() ? this.id.parent('.ui-dialog.wijmo-wijdialog').offset().left : null; };
-                Diag.prototype.fixed = function(offset){
-                    if (!this.isFixed()){
-                        this.id.parent('.ui-dialog.wijmo-wijdialog').css( {position:'fixed', left: this.left(), top: this.top()-offset });
-                    }
-                };
-                //INSTANCES
-                $.each(ids,function(i,id){ dialogs[i] = new Diag(id); });
-                //SCROLL HANDLER
-                var scrollOffset;
-                $(window).bind('scroll',function(){
-                    scrollOffset = $(window).scrollTop();
-                    $.each(dialogs,function(i){ dialogs[i].fixed(scrollOffset) });
-                });
-                //BUTTONS HANDLER
-                $.each(dialogs,function(i,diag){    
-                    //RESTORE & MAXIMISE HANDLER
-                    diag.id.bind('wijdialogstatechanged',function(e,data){
-                        // console.log('wijdialog.stateChanged',data);
-                        // console.log( 'fixed?',diag.isFixed(), 'pos:', diag.top()+'/'+diag.left() );
-                        if (data.state=='normal') {
-                            //IF POS. STILL ABSOLUTE
-                            if (diag.top()>400){
-                                scrollOffset = $(window).scrollTop();
-                                diag.id.parent('.ui-dialog.wijmo-wijdialog').css({ position:'fixed', left: diag.left(), top: diag.top()-scrollOffset });
-                            } else {
-                                diag.id.parent('.ui-dialog.wijmo-wijdialog').css({ position:'fixed', left: diag.left(), top: diag.top() });
-                            }
-                        } else if (data.state=='maximized') {
-                            diag.id.parent('.ui-dialog.wijmo-wijdialog').css({ position:'absolute' });
-                        }
-                    });
-                });
-            });
-            //]]>
-            </script>
 
         <?php 
         // We retrieve the contents of the buffer.

@@ -57,7 +57,6 @@
     text-align: left;
     width: auto;
     color: #FFF;
-    padding: 0 0 0 10px;
     margin-right: 5px;
 }
 
@@ -71,45 +70,19 @@
     cursor: pointer;
 }
 
-.myform legend {
-	display: none;
+form  {
+   padding: 0 0 0 10px;
 }
 
-.myform input[type="text"], .myform input[type="number"], .myform input[type="email"], .myform textarea, .myform select {
-	width: 320px;
-	font: normal 1.1em arial,verdana,tahoma,sans-serif;
-	color: #666;
-	padding: 1px 3px;
-	background: #F2F2F2;
-	border: 1px solid #D0D0D0;
-}
 
-.myform input[type="radio"] {
-	width:15px;
-	font: normal 1.1em arial,verdana,tahoma,sans-serif;
-	color: #666;
-	padding: 1px 3px;
-	background: #F2F2F2;
-	border: 1px solid #D0D0D0;
-	margin-right: 5px;
+/* VERSION MOBILE */
+@media screen and (min-width: 1000px){
+    div.clearfix div.input, li.addcollection div.clearfix {
+       display: inline-block;
+    }
 }
-
-.myform textarea{
-	height: 111px;
-}
-
-.myform input[type="checkbox"] {
-	margin-top: -35px;
-}
-
-.myform .ui-button-text-only .ui-button-text {
-	padding: .4em 0em;
-	margin-bottom: 11px;
-	width: 71px;
-}
-
-.myform .wijmo-wijinput, .myform .ui-state-default {
-	margin-top:11px;
-	margin-left: 79px;
-	border: 0;
-}
+@media screen and (max-width: 900px){
+    div.clearfix div.input, li.addcollection div.clearfix {
+       display:  block;
+    }
+} 

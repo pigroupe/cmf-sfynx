@@ -94,7 +94,7 @@ class User extends AbstractUser
      * @var array
      * @ORM\Column(type="array")
      */
-    protected $permissions = array();    
+    protected $permissions = array('VIEW', 'EDIT', 'CREATE', 'DELETE');
     
     /**
      * @var \DateTime

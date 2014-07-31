@@ -1,6 +1,6 @@
 /* ==============================================
    FEUILLE DE STYLES DES GABARITS HTML/CSS --- 09
-   © Elephorm & Alsacreations.com
+   Elephorm & Alsacreations.com
    Conditions d'utilisation:
    http://creativecommons.org/licenses/by/2.0/fr/
    ============================================== */
@@ -9,12 +9,12 @@
 /* --- COULEURS --- */
 
 /* Note: vous pouvez modifier simplement l'aspect de ce gabarit en modifiant
-   uniquement les couleurs de fond (propriétés background) et les couleurs
-   du texte (propriété color).
+   uniquement les couleurs de fond (propriÃ©tÃ©s background) et les couleurs
+   du texte (propriÃ©tÃ© color).
    Pour modifier la disposition des blocs, voir plus bas dans la feuille de
-   styles la partie «positionnement». */
+   styles la partie Ã©positionnementÃ©. */
 
-/* Général */
+/* General */
 body {
 	color: #F0E39E;
 	background: #2C2F22;
@@ -69,7 +69,7 @@ body {
 	padding: 20px 30px;
 }
 
-/* En-tête */
+/* En-tÃ©te */
 #entete {
 	padding: 20px 0;
 }
@@ -144,28 +144,28 @@ body {
 /* --- NOTES ---
 
 1.	On utilise le positionnement relatif sur div#centre afin que ce bloc serve
-	de référent à ses descendants positionnés en absolu.
-	Dit plus clairement: deux des trois enfants de div#centre, à savoir
-	div#navigation et div#secondaire, sont positionnés en absolu. Pour ces deux
-	éléments, on a utilisé les propriétés CSS top, left et right qui permettent
-	d'indiquer des coordonnées de positionnement. Ces coordonnées sont données
-	par rapport à un cadre de référence. Quel est ce cadre de référence?
-	- Par défaut, il s'agit de la zone de visualisation du navigateur (les
-	bords de la «fenêtre», donc).
-	- Ou bien il s'agira du plus proche élément positionné (en absolu, relatif
-	ou fixe) parmi les ancêtres de l'élément positionné en absolu.
+	de rÃ©fÃ©rent Ã© ses descendants positionnÃ©s en absolu.
+	Dit plus clairement: deux des trois enfants de div#centre, Ã© savoir
+	div#navigation et div#secondaire, sont positionnÃ©s en absolu. Pour ces deux
+	Ã©lÃ©ments, on a utilisÃ© les propriÃ©tÃ©s CSS top, left et right qui permettent
+	d'indiquer des coordonnÃ©es de positionnement. Ces coordonnÃ©es sont donnÃ©es
+	par rapport Ã© un cadre de rÃ©fÃ©rence. Quel est ce cadre de rÃ©fÃ©rence?
+	- Par dÃ©faut, il s'agit de la zone de visualisation du navigateur (les
+	bords de la Ã©fenÃ©treÃ©, donc).
+	- Ou bien il s'agira du plus proche Ã©lÃ©ment positionnÃ© (en absolu, relatif
+	ou fixe) parmi les ancÃ©tres de l'Ã©lÃ©ment positionnÃ© en absolu.
 	Si cette explication n'est pas claire, supprimez ou commentez le
 	"position: relative" de div#centre, et observez ce qui se passe. Puis
-	rétablissez-le et ajoutez une bordure visible à div#centre (ex:
-	"border: 2px solid red;"). Cela devrait être plus clair.
+	rÃ©tablissez-le et ajoutez une bordure visible Ã© div#centre (ex:
+	"border: 2px solid red;"). Cela devrait Ã©tre plus clair.
 
 2.	Le bloc de contenu principal (div#principal) est le seul des trois enfants
-	de div#centre qui n'est pas positionné en absolu. Ce n'est en effet pas
-	nécessaire. Comme div#principal considère que div#navigation et
-	div#secondaire, tous deux positionnés en absolu, ne sont «plus là», et ne
+	de div#centre qui n'est pas positionnÃ© en absolu. Ce n'est en effet pas
+	nÃ©cessaire. Comme div#principal considÃ©re que div#navigation et
+	div#secondaire, tous deux positionnÃ©s en absolu, ne sont Ã©plus lÃ©, et ne
 	se placera donc pas plus bas dans la page.
-	Pour éviter que les colonns latérales ne recouvrent des parties du
-	contenu, il nous suffit de donner des marges à gauche et à droite à
+	Pour Ã©viter que les colonns latÃ©rales ne recouvrent des parties du
+	contenu, il nous suffit de donner des marges Ã  gauche et Ã  droite Ã©
 	div#principal.
 
 */

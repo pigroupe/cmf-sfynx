@@ -1,6 +1,6 @@
 /* ==============================================
    FEUILLE DE STYLES DES GABARITS HTML/CSS --- 06
-   © Elephorm & Alsacreations.com
+   ï¿½ Elephorm & Alsacreations.com
    Conditions d'utilisation:
    http://creativecommons.org/licenses/by/2.0/fr/
    ============================================== */
@@ -9,12 +9,12 @@
 /* --- COULEURS --- */
 
 /* Note: vous pouvez modifier simplement l'aspect de ce gabarit en modifiant
-   uniquement les couleurs de fond (propriétés background) et les couleurs
-   du texte (propriété color).
+   uniquement les couleurs de fond (propriï¿½tï¿½s background) et les couleurs
+   du texte (propriï¿½tï¿½ color).
    Pour modifier la disposition des blocs, voir plus bas dans la feuille de
-   styles la partie «positionnement». */
+   styles la partie ï¿½positionnementï¿½. */
 
-/* Général */
+/* Gï¿½nï¿½ral */
 body {
 	color: #F0E39E;
 	background: #2C2F22;
@@ -36,7 +36,7 @@ strong {
 	background: #cbd888 url(img/06-gauche.png) repeat-y left top; /* -> 1 */
 }
 
-/* En-tête */
+/* En-tï¿½te */
 #entete {
 	background: #181A12;
 }
@@ -83,7 +83,7 @@ body {
 	margin-right: auto; /* -> 4 */
 }
 
-/* En-tête */
+/* En-tï¿½te */
 #entete {
 	padding: 20px;
 }
@@ -144,62 +144,62 @@ body {
 	les bordures des principaux blocs. On peut noter que:
 	- Le bloc div#global a une couleur de fond claire. C'est cette couleur de
 	  fond que l'on retrouve, visuellement, en fond de la colonne de contenu.
-	- La colonne de gauche ainsi que la «bordure» qui sépare les deux colonnes
-	  sont dessinées par une image de fond sur div#global, image qui se répète
+	- La colonne de gauche ainsi que la ï¿½bordureï¿½ qui sï¿½pare les deux colonnes
+	  sont dessinï¿½es par une image de fond sur div#global, image qui se rï¿½pï¿½te
 	  en hauteur.
-	- Le bloc d'en-tête masque complètement la couleur de fond et l'image de
+	- Le bloc d'en-tï¿½te masque complï¿½tement la couleur de fond et l'image de
 	  fond de div#global. Supprimez la couleur de fond de div#entete pour le
-	  vérifier.
-	- Le retrait de 20px à droite de la colonne de droite est créé par... une
+	  vï¿½rifier.
+	- Le retrait de 20px ï¿½ droite de la colonne de droite est crï¿½ï¿½ par... une
 	  bordure sur div#global.
-	- Une petite image de fond en haut à gauche de div#contenu vient compléter
+	- Une petite image de fond en haut ï¿½ gauche de div#contenu vient complï¿½ter
 	  l'effet visuel.
 
-2.	On utilise overflow:hidden empêcher le dépassement des flottants (cf.
+2.	On utilise overflow:hidden empï¿½cher le dï¿½passement des flottants (cf.
 	http://web.covertprestige.info/test/
 	03-elements-flottants-et-element-parent-1.html).
 
 3.	La largeur du conteneur principal est fluide. div#global a une largeur de
-	90%, c'est à dire une largeur qui dépend de l'espace disponible dans son
-	conteneur, l'élément BODY. Concrètement, la largeur de div#global dépendra
-	de la largeur de la fenêtre du navigateur.
-	Ensuite, on «limite» les largeurs que peut prendre div#global à une
-	fourchette allant de 700px (min-width) à 1000px (max-width). On évite
+	90%, c'est ï¿½ dire une largeur qui dï¿½pend de l'espace disponible dans son
+	conteneur, l'ï¿½lï¿½ment BODY. Concrï¿½tement, la largeur de div#global dï¿½pendra
+	de la largeur de la fenï¿½tre du navigateur.
+	Ensuite, on ï¿½limiteï¿½ les largeurs que peut prendre div#global ï¿½ une
+	fourchette allant de 700px (min-width) ï¿½ 1000px (max-width). On ï¿½vite
 	ainsi d'avoir des lignes de texte horriblement longues dans les grandes et
-	très grandes résolutions (1280px et plus).
+	trï¿½s grandes rï¿½solutions (1280px et plus).
 	Notez que l'on peut utiliser cette technique de largeur fluide
-	«intelligente» pour n'importe quel design fluide ou presque.
+	ï¿½intelligenteï¿½ pour n'importe quel design fluide ou presque.
 
-4.	Les marges automatiques à gauche et à droite permettent de centrer notre
+4.	Les marges automatiques ï¿½ gauche et ï¿½ droite permettent de centrer notre
 	bloc div#global, et donc tout le site.
-	Pour aligner div#global à gauche, on fera:
+	Pour aligner div#global ï¿½ gauche, on fera:
 		margin-left: 0;
 		margin-rigth: auto;
-	Pour aligner div#global à droite, on fera:
+	Pour aligner div#global ï¿½ droite, on fera:
 		margin-left: auto;
 		margin-right: 0;
-	Pour aligner div#global à droite avec un retrait (à droite) de 100px:
+	Pour aligner div#global ï¿½ droite avec un retrait (ï¿½ droite) de 100px:
 		margin-left: auto;
 		margin-right: 100px;
 
-5.	C'est la propriété "float" qui nous permet de placer deux blocs
-	côte-à-côte. Notez bien que l'élément flottant (ici, notre menu de
-	navigation) doit être placé en premier dans le code HTML. Il est
-	préférable de lui donner une largeur, ce que nous faisons ici avec un
+5.	C'est la propriï¿½tï¿½ "float" qui nous permet de placer deux blocs
+	cï¿½te-ï¿½-cï¿½te. Notez bien que l'ï¿½lï¿½ment flottant (ici, notre menu de
+	navigation) doit ï¿½tre placï¿½ en premier dans le code HTML. Il est
+	prï¿½fï¿½rable de lui donner une largeur, ce que nous faisons ici avec un
 	"width: 180px;".
 
-6.	Correction d'un bug d'Internet Explorer 6. Voir la dernière partie de
+6.	Correction d'un bug d'Internet Explorer 6. Voir la derniï¿½re partie de
 	http://blog.alsacreations.com/2006/10/20/294-impact-sur-le-rendu-de-la-
 	mise-en-forme-du-code-html
-	Dans l'idéal, on placera ce correctif dans une feuille séparée, appelée
+	Dans l'idï¿½al, on placera ce correctif dans une feuille sï¿½parï¿½e, appelï¿½e
 	via un commentaire conditionnel visant IE6.
 
-7.	Les éléments flottants ne repoussent pas les blocs, mais repoussent
+7.	Les ï¿½lï¿½ments flottants ne repoussent pas les blocs, mais repoussent
 	uniquement leur contenu. Pour que notre bloc de contenu principal forme
-	une colonne distincte du menu, on lui donne donc une marge à gauche de
+	une colonne distincte du menu, on lui donne donc une marge ï¿½ gauche de
 	220px.
 	Il existe une autre technique pour adapter la largeur d'un bloc aux
-	flottants qui le précèdent. On pourra lire l'article suivant:
+	flottants qui le prï¿½cï¿½dent. On pourra lire l'article suivant:
 		http://css.alsacreations.com/Faire-une-mise-en-page-sans-tableaux/
 		design-trois-colonnes-positionnement-flottant
 

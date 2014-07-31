@@ -1,0 +1,57 @@
+       {% block body %}
+		<section class="slider-home ">
+			<div class="wrap cf">
+				<div class="sliderHP">
+					<ul class="slides">
+		        	{{ slides.boucle1|raw }}
+		      		</ul>
+					<nav class="sliderHP-nav">
+						  <ul class="custom-controls">
+						  {{ slides.boucle2|raw }}
+						  </ul> 
+						  <a href="{{ path_url('page_lamelee_menuwrapper_evenements_calendar',{'locale':locale}) }}" class="agenda">
+						  		<span class="uppercase">{{ 'pi.lamelee.bloc.slider.event'|trans|striptags }}</span>	
+						  </a>
+						</nav>		      		
+	      		</div>
+	    	</div>
+		</section>
+        {% endblock %}
+        
+        {% block boucle1 %}
+        {% set url = path_url('page_lamelee_menuwrapper_evenements_detail', {'locale':locale, 'slug':slide.translate(locale).getSlug(), 'year':slide.publishedat|date('Y'), 'month':slide.publishedat|date('m')}) %}
+		<li>
+     	  <a href="{{ url }}">
+     	  	{% if slide.media.image.id is defined %}
+			<img src="{{ media_url(slide.media.mediaId, 'reference', true, slide.media.getUpdatedAt(), 'lamelee_event_') }}" width="100%" height="96%" alt="LA MELEE"/>
+			{% else %}
+			<img src="{{ asset("media/img/body/evenements/image_default.jpg") }}" width="100%" height="96%" alt="LA MELEE"/>
+			{% endif %}
+		  </a>
+     	  <p class="flex-caption">
+     	  	<a href="{{ url }}">
+	     	  	<span class="caption-arrow"></span>
+	     	  	<span class="tt">{{ slide.translate(locale).getTitle()|striptags }}</span>
+	     	  	<span class="date">{{ slide.publishedat|localedate('long','medium', locale, 'LLLL y')|ucfirst }}</span>
+				<span class="{{ slide.getLogoOfTypothematic() }} pict">{% if slide.getTypothematics().count() == 1 %} {{ slide.getTypothematics().first().getTitle() }} {% else %} {{ 'pi.newsletter.type.multi'|trans}} {% endif %}</span>
+     	  	</a>
+     	  </p>
+      	</li>	        
+        {% endblock %}    
+        
+		{% block boucle2 %}
+		<li {% if slide.getAccesMember() == 1 %}class="locked"{% endif %}>
+		    <a class="{{ slide.getLogoOfTypothematic() }}" href="{{ path_url('page_lamelee_menuwrapper_evenements_detail', {'locale':locale, 'slug':slide.translate(locale).getSlug(), 'year':slide.publishedat|date('Y'), 'month':slide.publishedat|date('m')}) }}">
+		    	<span><!--
+		    		--><span class='tt-9 bold tt-clr'>{{ slide.translate(locale).getTitle()|striptags|limite("0", 25) }}</span><br/>
+		    		<span class="date">
+					{% if slide.publishedat|localedate('long','medium', locale, 'EEEE d LLLL y') != slide.archiveat|localedate('long','medium', locale, 'EEEE d LLLL y') %}
+						{{ slide.publishedat|localedate('long','medium', locale, 'EEEE d')|ucfirst }} au {{ slide.archiveat|localedate('long','medium', locale, 'EEEE d LLLL y')|ucfirst }}
+					{% else %}
+						{{ slide.publishedat|localedate('long','medium', locale, 'EEEE d LLLL y')|ucfirst }}
+					{% endif %}		    		
+		    		</span><!--
+		    --></span>
+		    </a>
+		</li>	        
+        {% endblock %}                

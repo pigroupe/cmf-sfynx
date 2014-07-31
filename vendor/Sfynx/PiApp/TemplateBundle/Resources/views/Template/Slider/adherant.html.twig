@@ -1,0 +1,84 @@
+{% block body %}
+<section class="bloc-adhHP cf">
+	<div class="wrap">
+
+		<header class="adh">
+			<div class="title-border cf">
+				<h3 class="tt-1 fleft">{{ 'pi.lamelee.bloc.slider.adherant'|trans|striptags }}</h3>
+				<a href="{{ path_url("page_lamelee_menuwrapper_association_adherent", {"locale":locale}) }}">{{ 'pi.lamelee.bloc.slider.adherant.link.page.annuaire'|trans|striptags }}</a>	
+			</div>
+		</header>
+		<div class="slider-adh wrap">
+		 	
+ 		<ul class="slides">
+	 		{% for slide in slides.boucle1 %}
+			     {% if loop.index0 is divisibleby(4) %}
+			     <li>
+			     {% endif %}
+		      		{{ slide|raw }}
+			     {% if (loop.index0+1) is divisibleby(4) %}
+			     </li>
+			     {% endif %}
+			 {% endfor %}
+    	</ul>
+	 </div>
+	</div>
+</section>
+{% endblock %}
+
+{% block boucle1 %}
+		{% if slide.individual.id is defined %}
+			{% set id_corporation = '' %}
+			{% set id_individual = slide.individual.id %}
+		{% elseif slide.corporation.id is defined %}
+			{% set id_corporation = slide.corporation.id %}
+			{% set id_individual = '' %}
+		{% endif %}
+		<figure>
+			{% set url = path_url('admin_gedmo_adherent_detail_ajax', {'lang':locale, 'id_individual':id_individual, 'id_corporation':id_corporation, 'type':'person'}) %}
+	     	<a href="{{ url }}" class="tt-clr popin fancybox.ajax">
+				{% if (slide.individual.media.image.id is defined) and (slide.individual.media.image.name != getParameter('pi_app_admin.page.media_pixel')) and (slide.individual.ArgumentActivity is defined) %}
+				<img src="{{ media_url(slide.individual.media.image.id, 'reference', true, slide.individual.media.getUpdatedAt(), 'lamelee_individual_') }}" alt="Photo"/>
+				{% elseif (slide.corporation.media.image.id is defined) and (slide.corporation.media.image.name != getParameter('pi_app_admin.page.media_pixel')) and (slide.individual.ArgumentActivity is not defined)  %}
+				<img src="{{ media_url(slide.corporation.media.image.id, 'reference', true, slide.corporation.media.getUpdatedAt(), 'lamelee_coorporation_') }}" alt="Logo"/>
+				{% else %}
+					<img src="/media/img/body/annuAdh/default_avatar_user.png" alt="LA MELEE"/>
+				{% endif %}
+	     	</a>
+      		<figcaption>
+	   			<p class="light-clr"><a href="{{ url }}" class="tt-clr popin fancybox.ajax">
+					{% if id_corporation != '' %}
+						<span class="tt-clr">
+						<strong>
+						{% if slide.corporation.Name is defined %}
+							{{ slide.corporation.Name|upper }}
+						{% endif %}		   					
+						<br>
+						{% if slide.corporation.Nickname is defined %}
+							{{ slide.corporation.Nickname|capitalize }}
+						{% endif %}		
+						</strong>
+						</span><br>
+						{% if slide.corporation.CorporationName is defined %}
+							<span class="tt-clr"><strong>{{ slide.corporation.CorporationName }}</strong></span>
+						{% endif %}							
+					{% elseif id_individual != '' %}
+						<span class="tt-clr">
+						<strong>
+						{% if slide.individual.Name is defined %}
+							{{ slide.individual.Name|upper }}
+						{% endif %}		   					
+						<br>
+						{% if slide.individual.Nickname is defined %}
+							{{ slide.individual.Nickname|capitalize }}
+						{% endif %}		
+						</strong>
+						</span><br>
+						{% if slide.individual.Company is defined %}
+							{{ slide.individual.Company }}
+						{% endif %}
+					{% endif %}					
+	   			</a></p>
+	   		</figcaption>
+  		</figure>        
+{% endblock %}    

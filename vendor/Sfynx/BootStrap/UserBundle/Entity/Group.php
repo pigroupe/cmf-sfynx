@@ -60,7 +60,7 @@ class Group extends BaseGroup
       * @var array
       * @ORM\Column(type="array")
       */
-     protected $permissions = array();     
+     protected $permissions = array('VIEW', 'EDIT', 'CREATE', 'DELETE');    
 
      public function __construct($name, $roles = array())
      {

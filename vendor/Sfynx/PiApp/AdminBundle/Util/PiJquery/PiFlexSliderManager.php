@@ -33,13 +33,13 @@ class PiFlexSliderManager extends PiJqueryExtension
      * @var array
      * @static
      */
-    static $menus = array('default', 'entity', 'listentities');
+    public static $menus = array('default', 'entity', 'listentities');
     
     /**
      * @var array
      * @static
      */
-    static $actions = array('renderdefault', 'rendermultislider');
+    public static $actions = array('renderdefault', 'rendermultislider');
     
         
     /**
@@ -92,7 +92,7 @@ class PiFlexSliderManager extends PiJqueryExtension
             $sliders = $this->$method($options);
         } else {
             throw ExtensionException::MethodUnDefined($method);
-        }
+        } 
 
         return $this->$action($sliders, $options);
     }
@@ -124,18 +124,19 @@ class PiFlexSliderManager extends PiJqueryExtension
             $params = implode(", \n", $results);
         } else {
             $params = '
-                    animation: "slide",
+                    animation: "fade",
+                    animationLoop: true,
                     direction: "horizontal",
-                    redirection: false,
+                    redirection: true,
                     startAt: 0,
                     slideshow: true,
                     slideshowSpeed: 6000,
                     animationSpeed: 800,
                     directionNav: true,
-                    controlNav: true,
-                    pausePlay: true,
+                    pausePlay: false,
                     minItems: 1,
-                    maxItems: 1,                        
+                    maxItems: 1,   
+                    controlNav: true,
             ';
         }
         $startAt = "";
@@ -151,22 +152,36 @@ class PiFlexSliderManager extends PiJqueryExtension
             $startAt = ",startAt:$position";
         }
         //        
-        $insert_js = true;
+        if (isset($options['insert_js']) && !empty($options['insert_js'])) {
+            $insert_js = (int) $options['insert_js'];
+        } else {
+            $insert_js = true;
+        }
+        //
         if (isset($options['id']) && !empty($options['id'])) {
             $id_c = "id='{$options['id']}'";
             $id   = "#{$options['id']}";
-        } elseif (isset($options['class']) && !empty($options['class'])) {
-            $id_c = "class='{$options['class']}'";
-            $id   = ".{$options['class']}";
         } else {
-            $insert_js = false;
+            $options['id'] = 'flex-slider' . \PiApp\AdminBundle\Util\PiStringManager::random(11);
+            $id_c = "id='{$options['id']}'";
+            $id   = "#{$options['id']}";
+        }
+        if (!isset($options['class']) || empty($options['class'])) {
+        	$options['class'] = "";
+        }
+        //
+        if (!isset($options['width']) || empty($options['width'])) {
+            $options['width'] = "100%";
+        }
+        if (!isset($options['height']) || empty($options['height'])) {
+        	$options['height'] = "100%";
         }
         //
         $templateContent = $this->container->get('twig')->loadTemplate("PiAppTemplateBundle:Template\\Slider:{$options['template']}");
         if ($templateContent->hasBlock("body")) {
             $slider_result    = $templateContent->renderBlock("body", array_merge($options, array('slides'=>$sliders))) . " \n";
         } else {
-            $slider_result  = "<div $id_c >\n";
+            $slider_result  = "<div $id_c class='".$options['class']."' >\n";
             $slider_result .= "    <ul class='slides'>\n";
             if (is_array($sliders['boucle'])) {
                 $slider_result .= $sliders['boucle'];
@@ -314,8 +329,8 @@ class PiFlexSliderManager extends PiJqueryExtension
      *       'menu': 'default',
      *       'imgs':{
      *                  '0':{'title':'title', 'url':'{{ asset('bundles/piappadmin/images/layout/novedia/FOCUS/focus-novedia.png') }}' },
-     *                     '1':{'title':'title', 'url':'{{ asset(bundles/piappadmin/images/layout/novedia/FOCUS/focus-canalplus.jpg') }}' },
-     *                     '2':{'title':'title', 'url':'{{ asset(bundles/piappadmin/images/layout/novedia/FOCUS/focus-fnac.jpg') }}' },
+     *                  '1':{'title':'title', 'url':'{{ asset(bundles/piappadmin/images/layout/novedia/FOCUS/focus-canalplus.jpg') }}' },
+     *                  '2':{'title':'title', 'url':'{{ asset(bundles/piappadmin/images/layout/novedia/FOCUS/focus-fnac.jpg') }}' },
      *              },
      *       'id':'orga' } %}
      *  {{ renderJquery('SLIDER', 'slide-default', options_slider )|raw }}
@@ -414,7 +429,7 @@ class PiFlexSliderManager extends PiJqueryExtension
         foreach ($entities as $key => $entity) {
             $itemsLeft = $count-$key;
             $endSlider = $key+1 === $count ? true : false ;    
-            if ( $key === 0 || $key%8 === 0){
+            if ( $key === 0 || $key%8 === 0) {
                 $liLoopComplete = true;
                 $content.= "<li>\n";
                 $content .= "<center>\n";
@@ -448,8 +463,7 @@ class PiFlexSliderManager extends PiJqueryExtension
             $content     .= "<a href='$link'>\n";
             $content     .= $picture;
             $content     .= "<div class='infoNews'>{$title}</div>\n";
-            $content     .= "</a>\n";
-    
+            $content     .= "</a>\n";    
             if ( ($key+1)%4 === 0 || $endSlider === true) {
                 $content .= "</section>\n";
             }    
@@ -460,5 +474,6 @@ class PiFlexSliderManager extends PiJqueryExtension
         }
     
         return $content;
-    }    
+    }  
+    
 }

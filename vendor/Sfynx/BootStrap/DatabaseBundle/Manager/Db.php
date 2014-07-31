@@ -135,5 +135,36 @@ class Db extends AbstractFactory
      */    
     private function quoteSql($str) {
     	return "'".addslashes($str)."'";
+    } 
+
+    /**
+     * Gets the list of all tables.
+     *
+     * @return array    the list of all tables
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2014-08-01
+     */
+    public function listTables($type = 'table_name')
+    {
+        $tables = array();
+        switch ($type) {
+            case ('table_name') :
+                $tables = $this->getConnection()->getSchemaManager()->listTables();
+                break;
+            case ('table_class') :
+                $meta = $this->getEntityManager()->getMetadataFactory()->getAllMetadata();
+                foreach ($meta as $m) {
+                    list($domaine, $bundle, $entity) = split("\\\\", $m->getName(), 3);
+                	$tables[$m->getName()] = $domaine.$bundle.':'.str_replace('Entity\\', '', $entity);
+                }
+            	break;                
+            default :
+            	throw DatabaseException::notSupported($type);
+            	break;
+        }                    
+
+        return $tables;
     }    
 }

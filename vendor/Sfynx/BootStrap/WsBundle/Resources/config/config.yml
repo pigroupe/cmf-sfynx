@@ -11,18 +11,18 @@
 #        domains:
 #            domain1:
 #                key: ORCH23
-#                url: http://www.orchestra23.local/setCookies.php
+#                url: http://www.sfynx23.local/setCookies.php
 #            domain2:
 #                key: ORCH22
-#                url: http://www.orchestra22.local/setCookies.php
+#                url: http://www.sfynx22.local/setCookies.php
 #        handlers:
 #            getpermisssion:
 #                key: 0A1TG4GO
 #                method: GET
-#                api: http://www.orchestra22.local/ws/auth/get/permisssion
+#                api: http://www.sfynx22.local/ws/auth/get/permisssion
 #                format: json
 #            validateaccesstoken:
 #                key: 0A1TG4GO
 #                method: GET
-#                api: http://www.orchestra22.local/ws/auth/validate/access/token
+#                api: http://www.sfynx22.local/ws/auth/validate/access/token
 #                format: json

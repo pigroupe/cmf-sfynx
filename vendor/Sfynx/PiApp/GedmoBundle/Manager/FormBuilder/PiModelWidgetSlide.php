@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Gedmo> project.
  *
- * @category   Admin_Managers
+ * @category   Gedmo_Managers
  * @package    Page
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-06-26
+ * @since 2014-08-31
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,11 +15,13 @@ namespace PiApp\GedmoBundle\Manager\FormBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use PiApp\AdminBundle\Manager\PiFormBuilderManager;
+use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlideCollectionType;
+use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlideCollection2Type;
         
 /**
 * Description of the Form builder manager
 *
-* @category   Admin_Managers
+* @category   Gedmo_Managers
 * @package    Page
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -83,66 +85,226 @@ class PiModelWidgetSlide extends PiFormBuilderManager
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choiceList        = $this->_em->getRepository('PiAppAdminBundle:Widget')->findBy(array('block'=>null));
-         
-        $result = array();
-        if (is_array($choiceList)) {
-            foreach ($choiceList as $key => $field) {
-                $result[ $field->getId() ] = $field->getConfigCssClass();
-            }
-        }
-    
+        // we get all entities
+        $listTableClasses = $this->container->get('bootstrap.database.db')->listTables('table_class');
+        $listTableClasses = array_combine($listTableClasses, $listTableClasses);
+        // we get all slide templates
+        $listFiles = $this->container->get('pi_app_admin.file_manager')->ListFilesBundle("/Resources/views/Template/Slider");
+        $listFiles = array_map(function($value) {
+        	return basename($value);
+        }, array_values($listFiles));
+        $listFiles = array_combine($listFiles, $listFiles);
+        //
+        $action = \PiApp\AdminBundle\Util\PiJquery\PiFlexSliderManager::$actions;
+        $action = array_combine($action, $action);
+        //
+        $menus = \PiApp\AdminBundle\Util\PiJquery\PiFlexSliderManager::$menus;
+        $menus = array_combine($menus, $menus);    
+        //
+        $css = array(
+            "bundles/piappadmin/js/slider/flexslider/css/flexslider_v1.css" => 'Default',
+            "bundles/piappadmin/js/slider/flexslider/css/flexslider_v2.css" => 'Default-2',
+            "bundles/piappadmin/js/slider/flexslider/css/flexslider_v3.css" => 'Default-3',
+        );
+        // we create the forme
         $builder
-        ->add('choice', 'choice', array(
-                'choices'   => array("insert"=>"Insert", "create"=>"Create"),
-                'data'  => "insert",
-                'required'  => false,
+        ->add('action', 'choice', array(
+                'choices'   => $action,
+                'required'  => true,
                 'multiple'    => false,
-                'expanded' => true,
+                'expanded' => false,
+                'label'    => "Action",
                 "label_attr" => array(
                         "class"=>"select_choice",
                 ),
-        ))
-        ->add('id_snippet', 'choice', array(
-                'choices'   => $result,
-                'multiple'    => false,
-                'required'  => true,
-                'empty_value' => 'Choice a content',
                 "attr" => array(
-                        "class"=>"pi_simpleselect",
-                ),
-                "label_attr" => array(
-                        "class"=>"insert_collection",
+                		"class"=>"pi_simpleselect",
                 ),
         ))
-        ->add('configCssClass', 'text', array(
-                'label'     => 'Class Name / Snippet Name',
-                'required'  => true,
-                "label_attr" => array(
-                        "class"=>"snippet_collection",
+        ->add('menu', 'choice', array(
+        		'choices'   => $menus,
+        		'required'  => true,
+        		'multiple'    => false,
+        		'expanded' => false,
+                'preferred_choices' => array('entity'),
+        		'label'    => "Menu",
+        		"label_attr" => array(
+        				"class"=>"select_choice",
+        		),
+                "attr" => array(
+                		"class"=>"pi_simpleselect",
                 ),
+        ))        
+        ->add('template', 'choice', array(
+        		'choices'   => $listFiles,
+        		'multiple'    => false,
+        		'required'  => true,
+                'expanded' => false,
+                'preferred_choices' => array('default.html.twig'),
+        		'label' => 'pi.form.label.select.choose.template',
+        		"attr" => array(
+        				"class"=>"pi_simpleselect",
+        		),
+        ))   
+        ->add('css', 'choice', array(
+        		'choices'   => $css,
+        		'multiple'    => true,
+        		'required'  => true,
+        		'expanded' => false,
+        		'preferred_choices' => array("bundles/piappadmin/js/slider/flexslider/css/flexslider_v1.css"),
+        		'label' => 'pi.form.label.select.choose.css',
+        		"attr" => array(
+        				"class"=>"pi_multiselect",
+        		),
+        ))   
+        ->add('id', 'text', array(
+        		'required'  => false,
+        		'label'    => "Identifiant",
+        		"label_attr" => array(
+        				"class"=>"text_collection",
+        		),
+        ))             
+        ->add('class', 'text', array(
+                'required'  => false,
+                'data' => "flexslider",
+        		'label'    => "Classe Css",
+        		"label_attr" => array(
+        				"class"=>"text_collection",
+        		),
+        		'help_block' => 'ex: flexslider',
+        )) 
+        ->add('height', 'text', array(
+        		'required'  => false,
+        		'label'    => "Hauteur",
+        		"label_attr" => array(
+        				"class"=>"text_collection",
+        		),
+        		'help_block' => 'ex: 100px, 95%',
+        ))   
+        ->add('width', 'text', array(
+        		'required'  => false,
+        		'label'    => "Largeur",
+        		"label_attr" => array(
+        				"class"=>"text_collection",
+        		),
+        		'help_block' => 'ex: 100px, 95%',
+        ))   
+        ->add('insert_js', 'choice', array(
+        		'choices'   => array(1=>'pi.form.label.field.yes', 0=>'pi.form.label.field.no'),
+        		'required'  => true,
+        		'multiple'    => false,
+        		'expanded' => false,
+        		'preferred_choices' => array(1),
+        		'label'    => "Insérer code JS",
+        		"label_attr" => array(
+        				"class"=>"text_collection",
+        		),
+        ))                    
+        ->add('table', 'choice', array(
+        		'choices'   => $listTableClasses,
+        		'multiple'    => false,
+        		'required'  => true,
+        		'expanded' => false,
+        		'empty_value' => 'Choice a table',
+        		"attr" => array(
+        				"class"=>"pi_simpleselect",
+        		),
+        		"label_attr" => array(
+        				"class"=>"select_choice",
+        		),
+        		"attr" => array(
+        				"class"=>"pi_simpleselect",
+        		),
+        ))        
+        ->add('enabled', 'choice', array(
+        		'choices'   => array(1=>'pi.form.label.field.yes', 0=>'pi.form.label.field.no'),
+        		'required'  => false,
+        		'multiple'    => false,
+        		'expanded' => false,
+        		'label'    => "Activer",
+        		"label_attr" => array(
+        				"class"=>"select_choice",
+        		),
+        		"attr" => array(
+        				"class"=>"pi_simpleselect",
+        		),
         ))
-        ->add('plugin', 'choice', array(
-                'choices'   => PiWidgetExtension::getAvailableWidgetPlugins(),
-                'required'  => true,
-                'multiple'    => false,
-                'expanded'  => false,
-                "label_attr" => array(
-                        "class"=>"snippet_collection",
-                ),
+        ->add('orderby_position', 'choice', array(
+        		'choices'  => array('ASC'=>'ASC', 'DESC'=>'DESC'),
+        		'required' => false,
+        		'multiple' => false,
+        		'expanded' => false,
+        		'label'    => "Classer par position",
+        		"label_attr" => array(
+        	        "class"=>"select_choice",
+        		),
+        		"attr" => array(
+        		    "class"=>"pi_simpleselect",
+        		),
         ))
-        ->add('action', 'text', array(
-                'required'  => true,
-                "label_attr" => array(
-                        "class"=>"snippet_collection",
-                ),
+        ->add('orderby_date', 'choice', array(
+        		'choices'  => array('ASC'=>'ASC', 'DESC'=>'DESC'),
+        		'required' => false,
+        		'multiple' => false,
+        		'expanded' => false,
+        		'label'    => "Classer par date de publication",
+        		"label_attr" => array(
+        				"class"=>"select_choice",
+        		),
+        		"attr" => array(
+        				"class"=>"pi_simpleselect",
+        		),
+        ))     
+        ->add('MaxResults', 'text', array(
+        		'label'    => "Nbr de resultat Max",
+        		"label_attr" => array(
+        				"class"=>"text_collection",
+        		),
         ))
-        ->add('configXml', 'textarea', array(
-                'data'  => PiWidgetExtension::getDefaultConfigXml(),
-                'required'  => true,
-                "label_attr" => array(
-                        "class"=>"snippet_collection",
-                ),
+        ->add('query_function', 'text', array(
+                'required'  => false,
+        		'label'    => "Nom de la fonction SQL",
+        		"label_attr" => array(
+        				"class"=>"text_collection",
+        		),
+        ))   
+        ->add('boucle_array', 'choice', array(
+        		'choices'   => array(1=>'pi.form.label.field.yes', 0=>'pi.form.label.field.no'),
+        		'required'  => true,
+        		'multiple'    => false,
+        		'expanded' => false,
+        		'preferred_choices' => array(0),
+        		'label'    => "Résultat boucles sous forme Tableau",
+        		"label_attr" => array(
+        				"class"=>"select_choice",
+        		),
+        		"attr" => array(
+        				"class"=>"pi_simpleselect",
+        		),
+        ))   
+        ->add('flexsliderparams', 'collection', array(
+        		'allow_add' => true,
+        		'allow_delete' => true,
+        		'prototype'    => true,
+        		// Post update
+        		'by_reference' => true,
+        		'type'   => new PiModelWidgetSlideCollectionType($this->_locale, $this->_container),
+        		'options'  => array(
+        				'attr'      => array('class' => 'collection_widget')
+        		),
+        		'label'    => ' '
+        ))
+        ->add('searchfields', 'collection', array(
+        		'allow_add' => true,
+        		'allow_delete' => true,
+        		'prototype'    => true,
+        		// Post update
+        		'by_reference' => true,
+        		'type'   => new PiModelWidgetSlideCollection2Type($this->_locale, $this->_container),
+        		'options'  => array(
+        				'attr'      => array('class' => 'collection_widget')
+        		),
+        		'label'    => ' '
         ))
         ;
     }
@@ -156,7 +318,66 @@ class PiModelWidgetSlide extends PiFormBuilderManager
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function renderScript(array $option) {}        
+    public function renderScript(array $option) 
+    {
+        // We open the buffer.
+        ob_start ();
+        ?>
+            <br/>
+            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-slideparameters">Add another parameter</a>
+            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-sqlparameters">Add another field SQL</a>
+            &nbsp;&nbsp;&nbsp;<a href="bundles/piappadmin/js/slider/flexslider/options.txt" onclick="javascript:window.open(this.href, 'sfynx_licence', 'scrollbars=yes,resizable=yes,width=740,height=630'); return false;">Options</a>
+            <script type="text/javascript">
+            //<![CDATA[            
+                jQuery(document).ready(function() {
+                	var indexFlexsliderParams    = 0;
+                	jQuery("div#piappgedmobundlemanagerformbuilderpimodelwidgetslide").find("fieldset").append('<ul id="flexsliderparams-fields-list" ></ul>');
+                    jQuery('#add-another-slideparameters').click(function() {
+                        var prototypeList = jQuery('#prototype_script_flexsliderparams');   
+                        // parcourt le template prototype
+                        var newWidget = prototypeList.html().replace('<label class="required">__name__label__</label>', '');
+                        // remplace les "__name__" utilisés dans l'id et le nom du prototype
+                        // par un nombre unique pour chaque email
+                        // le nom de l'attribut final ressemblera à name="contact[emails][2]"
+                        newWidget = newWidget.replace(/__name__/g, indexFlexsliderParams);
+                        indexFlexsliderParams++;            
+                        // créer une nouvelle liste d'éléments et l'ajoute à notre liste
+                        var newLi = jQuery('<li class="addcollection"></li>').html(newWidget);
+                        newLi.appendTo(jQuery('#flexsliderparams-fields-list'));
+                        // we align the fields
+                        return false;
+                    });
+
+                    var indexSQLParams    = 0;
+                    jQuery("div#piappgedmobundlemanagerformbuilderpimodelwidgetslide").find("fieldset").append('<br ><ul id="sqlparams-fields-list" ></ul>');
+                    jQuery('#add-another-sqlparameters').click(function() {
+                        var prototypeList = jQuery('#prototype_script_searchfields');   
+                        // parcourt le template prototype
+                        var newWidget2 = prototypeList.html().replace('<label class="required">__name__label__</label>', '');
+                        // remplace les "__name__" utilisés dans l'id et le nom du prototype
+                        // par un nombre unique pour chaque email
+                        // le nom de l'attribut final ressemblera à name="contact[emails][2]"
+                        newWidget2 = newWidget2.replace(/__name__/g, indexSQLParams);
+                        indexSQLParams++;            
+                        // créer une nouvelle liste d'éléments et l'ajoute à notre liste
+                        var newLi2 = jQuery('<li class="addcollection"></li>').html(newWidget2);
+                        newLi2.appendTo(jQuery('#sqlparams-fields-list'));
+                        // we align the fields
+                        return false;
+                    });
+                })            
+            //]]>
+            </script>                      
+        <?php 
+        // We retrieve the contents of the buffer.
+        $_content = ob_get_contents ();
+        // We clean the buffer.
+        ob_clean ();
+        // We close the buffer.
+        ob_end_flush ();
+        
+        return $_content;        
+    }        
     
     /**
      *
@@ -203,15 +424,42 @@ class PiModelWidgetSlide extends PiFormBuilderManager
      */
     public function XmlConfigWidget(array $data)
     {
+        $AllCss = array();
+        foreach ($data['css'] as $css) {
+            $AllCss[] = $css;
+        }
+        
         return
         array(
                 'plugin'    => 'gedmo',
-                'action'    => 'snippet',
+                'action'    => 'slider',
                 'xml'         => Array (
                         "widgets"     => Array (
+                                'css' => $AllCss,
                                 "gedmo"        => Array (
-                                        "id"        => $data['id_snippet'],
-                                        "snippet"    => 'true'
+                                        "controller"        => $data['table'].':slide-default',
+                                        "params"    => array(
+                                            'template' => $data['template'],
+                                            'slider' => array(
+                                                'action' => $data['action'],
+                                                'menu'   => $data['menu'],
+                                                'id'  => $data['id'],
+                                                'class'  => $data['class'],
+                                                'width'  => $data['width'],
+                                                'height'  => $data['height'],
+                                                'enabled'  => $data['enabled'],
+                                                'insert_js'  => $data['insert_js'],
+                                                'orderby_date'  => $data['orderby_date'],
+                                                'orderby_position'  => $data['orderby_position'],
+                                                'MaxResults'  => $data['MaxResults'],
+                                                'boucle_array'  => $data['boucle_array'],
+                                                'query_function'  => $data['query_function'],
+                                                'searchFields' => array(
+                                                        0 => array('nameField'    => '','valueField'   => ''),
+                                                        1 => array('nameField'    => '','valueField'   => '')
+                                                )
+                                            )
+                                        )
                                 )
                         )
                 ),

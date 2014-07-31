@@ -44,28 +44,21 @@ class PiStringManager implements PiStringManagerBuilderInterface
     {
         // start with a blank string
         $string = "";
-
         // define possible characters
         $possible = "0123456789abcdfghjkmnpqrstvwxyz";
-
         // set up a counter
         $i = 0;
-
         // add random characters to $string until $length is reached
         while ($i < $length) {
-
             // pick a random character from the possible ones
             $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
-
             // we don't want this character if it's already in the string
             if (!strstr($string, $char)) {
                 $string .= $char;
                 $i++;
             }
-
         }
 
-        // done!
         return $string;
     }
     

@@ -344,8 +344,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     	}
     
     	return $result;
-    } 
-
+    }   
+    
     /**
      * Create the repository of the cache widget files
      *

@@ -1,0 +1,68 @@
+       {% block body %}
+	       
+			<section class="bloc-expHP cf">
+			  <div class="wrap">
+					{% if slides.boucle1|count >= 1 %}
+				    <header class="expertise">
+				      <div class="title-border cf">
+				        <h3 class="tt-1 fleft">{{ 'pi.lamelee.bloc.slider.resource'|trans|striptags }}</h3>
+				      </div>
+				    </header>
+				    <div class="slider-exp-wrap i-block">
+				      <div class="slider-exp">
+					      <ul class="slides">
+					        {% for slide in slides.boucle1 %}
+					      		{{ slide|raw }}
+							{% endfor %}
+					      </ul>
+				      </div>
+				    </div>
+					{% endif %}
+				    <div class="scoop-bloc i-block" ></div>
+			  </div>
+			</section>
+			
+        {% endblock %}
+        
+       {% block boucle1 %}
+			{% if slide.media.image.id is defined %}
+				{% set url_file = media_url(slide.media.mediaId, 'reference', true, slide.media.getUpdatedAt(), 'lamelee_resource_') %}
+			{% else %}
+				{% set url_file = "#" %}
+			{% endif %}
+			
+			{% if slide.getTypothematics().count == 1 %}
+				{% set class = slide.translate(locale).getTypothematics().first().getConfigCssClass() %}
+			{% else %}
+				{% set class = 'multi' %}
+			{% endif %}
+	        <li>
+	           
+			   {% if (not is_granted("IS_AUTHENTICATED_FULLY")) and (slide.getAccesMember() == 1) %}
+	           <a href="#" class="content pict  {{ class }}" target="_blanc">
+	            <strong>{{ slide.translate(locale).getTitle()|striptags|truncateText(55, '...') }}<br/></strong>
+	            <span class="italic">{{ slide.translate(locale).getDescriptif()|striptags|truncateText(70, '...')  }}</span>
+	           </a>			   
+	           <a href="{{ path_url('page_lamelee_connexion', {'locale':locale}) }}" class="button purple"><!--
+				--><span>{{ 'pi.lamelee.bouton.link.page.connexion'|trans|striptags }}</span><!--
+				--></a>
+			   {% elseif (not is_granted("ROLE_MEMBER")) and (slide.getAccesMember() == 1) %}
+	           <a href="#" class="content pict  {{ class }}" target="_blanc">
+	            <strong>{{ slide.translate(locale).getTitle()|striptags|truncateText(55, '...') }}<br/></strong>
+	            <span class="italic">{{ slide.translate(locale).getDescriptif()|striptags|truncateText(70, '...')  }}</span>
+	           </a>			   
+	           <a href="#" class="button purple"><!--
+				--><span>{{ 'pi.lamelee.bouton.link.page.adherant'|trans|striptags }}</span><!--
+				--></a>
+			   {% elseif ((slide.getAccesMember() == 1) and is_granted("ROLE_MEMBER")) or (slide.getAccesMember() == 0) %}
+	           <a href="{{ url_file }}" class="content pict  {{ class }}" target="_blanc">
+	            <strong>{{ slide.translate(locale).getTitle()|striptags|truncateText(55, '...') }}<br/></strong>
+	            <span class="italic">{{ slide.translate(locale).getDescriptif()|striptags|truncateText(70, '...')  }}</span>
+	           </a>			   
+	           <a href="{{ url_file }}" class="button purple" target="_blanc"><!--
+	           --><span>{{ 'pi.lamelee.bouton.expertise.link.download'|trans|striptags }}</span><!--
+	           --></a>	
+	           {% endif %}
+	           
+	        </li>
+        {% endblock %}        

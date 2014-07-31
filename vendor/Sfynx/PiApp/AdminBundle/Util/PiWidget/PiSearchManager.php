@@ -149,7 +149,7 @@ class PiSearchManager extends PiWidgetExtension
                    $values      = explode(':', $controller);
                    $JQcontainer = strtoupper($values[0]);
                    $JQservice   = strtolower($values[1]);
-//                    print_r($this->runByExtension('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params));
+//                    print_r($this->renderCache('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params));
 //                    krsort($params); // array_multisort
 //                    print_r($params);exit;                  
                    if ($this->isAvailableJqueryExtension($JQcontainer, $JQservice)) {
@@ -165,9 +165,9 @@ class PiSearchManager extends PiWidgetExtension
                        	$params['cachable'] = ($xmlConfig->widgets->search->params->cachable === 'true') ? true : false;
                        }                       
                        if ($params['cachable']) {
-                           return $this->runByExtension('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params);
+                           return $this->renderCache('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params);
                        } else {
-                           return $this->runByjqueryExtension($JQcontainer, $JQservice, $lang, $params);
+                           return $this->renderJquery($JQcontainer, $JQservice, $lang, $params);
                        }
                    }                   
             } else {

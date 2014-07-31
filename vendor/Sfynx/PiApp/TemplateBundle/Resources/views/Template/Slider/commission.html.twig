@@ -1,0 +1,43 @@
+{% block body %}
+<section class="bloc-commission cf">
+			<div class="wrap">
+				<div class="slider-comm">
+					<ul class="slides">
+					{{ slides.boucle1|raw }}
+					</ul>
+				</div>
+				{{ slides.boucle2|raw }}
+			</div>
+		</section>
+{% endblock %}
+
+{% block boucle1 %}
+{{ "{% set slug = getService('bootstrap.RouteTranslator.factory').getMatchParamOfRoute('slug', app.session.getLocale()) %}" }}
+<li>
+	<a class="{{ "{% if slug == '"~slide.translate(locale).getSlug()~"' %}active{% endif %}" }} {{ slide.getConfigCssClass() }}" data-id="#content-{{ slide.position }}" data-article="{{ path_url('gedmo_lamelee_article_list', {'locale':locale, 'MaxResults':4, 'type':'commission', 'idtypocommission':slide.id, 'template':'_template_lamelee_list_commission.html.twig'}) }}" data-slider="{{ path_url('gedmo_lamelee_resource_list', {'locale':locale, 'MaxResults':7, 'type':'commission', 'idtypocommission':slide.id, 'template':'resource.html.twig'}) }}" data-scoopit="{{ path_url('gedmo_lamelee_typocommission_show', {'locale':locale, 'id':slide.id, 'template':'_tmp_lamelee_block_scoopit.html.twig'}) }}" href="{{ path_url('page_lamelee_menuwrapper_association_commision', {'locale':locale, 'slug':slide.slug}) }}">
+	{{ slide.translate(locale).getTitle()|striptags }}
+	</a>
+</li>	        
+{% endblock %}   
+
+{% block boucle2 %}
+{{ "{% set slug = getService('bootstrap.RouteTranslator.factory').getMatchParamOfRoute('slug', app.session.getLocale()) %}" }}
+<div id="content-{{ slide.position }}"  class="dynamic-content {{ "{% if slug != '"~slide.translate(locale).getSlug()~"' %}hidden{% endif %}" }}">
+	<section class="bloc-slider-commision">
+		<article>
+			<header class="cf">
+				<hgroup class="fleft">
+					<h4 class="tt-2 tt-clr bold">Commission {{ slide.translate(locale).getTitle()|striptags }}</h4>
+				</hgroup>
+				<a href="mailto:{{ slide.email }}?subject={{ slide.translate(locale).getEmailSubject()|replace({'&':'and'}) }}{% if slide.translate(locale).getEmailBody() is not empty %}&body={{ slide.translate(locale).getEmailBody()|replace({'&':'and'}) }}{% endif %}{% if slide.emailCc is not empty %}&cc={{ slide.emailCc }}{% endif %}{% if slide.emailBcc is not empty %}&bcc={{ slide.emailBcc }}{% endif %}" class="button contact fright"><!--
+					--><span>{{ 'pi.lamelee.bloc.slider.commission.email'|trans|striptags }}</span><!--
+				--></a>
+			</header>
+			<section class="bloc-generic">
+			{{ slide.translate(locale).getDescriptif()|raw }}
+			</section>
+		</article>	
+	</section>
+	<section class="bloc-actuHP cf"></section>
+</div>	        
+{% endblock %} 

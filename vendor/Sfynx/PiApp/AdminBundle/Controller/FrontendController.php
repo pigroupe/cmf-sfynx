@@ -161,8 +161,8 @@ class FrontendController extends abstractController
     	}
     	 
     	return $response;
-    }    
-    
+    }  
+
     /**
      * Login failure function
      *
@@ -174,14 +174,14 @@ class FrontendController extends abstractController
     public function loginfailureAction()
     {
         // we create the redirection request.
-   		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute('fos_user_security_login'));
+        $response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute('fos_user_security_login'));
    		// we apply all events allowed to change the redirection response
    		$event_response = new ResponseEvent($response);
    		$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGIN_FAILURE, $event_response);
    		$response = $event_response->getResponse();
     
     	return $response;
-    }   
+    }    
     
     /**
      * Execute an applying esi widget.
@@ -203,7 +203,7 @@ class FrontendController extends abstractController
     	$pageManager = $this->get('pi_app_admin.manager.page');
     	// we set the ESI page result
     	$response    = $pageManager->renderESISource($serviceName, $method, $id, $lang, $params, $options);
-
+    	
     	//     	print_r($server['REQUEST_URI']);
     	//     	print_r($serviceName);
     	//     	print_r($method);

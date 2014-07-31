@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Gedmo> project.
  *
- * @category   Admin_Managers
+ * @category   Gedmo_Managers
  * @package    Page
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-26
@@ -19,7 +19,7 @@ use PiApp\AdminBundle\Manager\PiFormBuilderManager;
 /**
 * Description of the Form builder manager
 *
-* @category   Admin_Managers
+* @category   Gedmo_Managers
 * @package    Page
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

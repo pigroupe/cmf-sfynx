@@ -1,0 +1,54 @@
+		{% block body %}
+		<div id="{{ id }}" class="{{ class }}" style="{% if height is not empty %}height: {{ height }};{% endif %}{% if width is not empty %}width: {{ width }};{% endif %}">
+			<ul class="slides">
+			{{ slides.boucle|raw }}
+			</ul>
+		</div>
+		{% endblock %}        
+			
+		{% block boucle %}
+				{% if slide.media.image.id is defined %}
+                   	{% set url = media_url(slide.media.image.id, 'reference', true, slide.media.getUpdatedAt(), 'slide_') %}
+                {% elseif slide.image.id is defined %}
+                   	{% set url = media_url(slide.image.id, 'reference', true, slide.getUpdatedAt(), 'slide_') %}
+                {% else %}
+                   	{% set url = "" %}
+                {% endif %}
+                
+                {% if slide.media.title is defined %}
+                    {% set url_title = slide.media.translate(locale).getTitle() %}
+                {% elseif slide.title is defined %}
+                    {% set url_title = slide.translate(locale).getTitle() %}
+                {% else %}
+                   	{% set url_title = '' %}
+                {% endif %}
+           
+                {% if slide.getTitle() is defined %}
+                    {% set title = slide.translate(locale).getTitle() %}
+                {% else %}
+                    {% set title = "" %}                    
+                {% endif %}
+           
+                {% if slide.CssClass is defined %}
+                    {% set CssClass = slide.CssClass %}
+                {% else %}
+                    {% set CssClass = "" %}                    
+                {% endif %}
+                
+                {% if url is not empty %}
+                <li class="{{ CssClass }}" >
+                    <img src="{{ url }}" alt="{{ url_title }}" {% if width is not empty %}width="{{ width }}"{% endif %} {% if height is not empty %}height="{{ height }}"{% endif %} />
+                    {% if (params.animation is defined and params.animation != 'slide') or params.animation is not defined %}
+                        {% if title is not empty %}
+                        <p class="flex-caption">{{ title|striptags }}</p>
+                        {% elseif url_title is not empty %}
+                        <p class="flex-caption">{{ url_title|striptags }}</p>
+                        {% endif %}
+                    {% endif %}
+	            </li>
+	            {% endif %}
+	            
+		{% endblock %}              
+		                
+		                
+		                              

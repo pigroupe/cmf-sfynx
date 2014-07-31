@@ -112,11 +112,11 @@ class PiVeneerManager extends PiJqueryExtension
                             });
                             $( "sfynx[id^='widget__']" )
                             .mouseenter(function() {
-                                console.log('enter')
+                                //console.log('enter')
                                 $( this ).find("h6.widget_action_menu").attr("style", 'display:block !important');
                             })
                             .mouseleave(function() {
-                                console.log('out')
+                                //console.log('out')
                                 $( this ).find("h6.widget_action_menu").attr("style", 'display:none !important;');
                             });
 
@@ -173,8 +173,8 @@ class PiVeneerManager extends PiJqueryExtension
 
                                     if (id_start_block != 0) {
                                         id_end_block = $(this).data("id");    
-                                        //alert(id_start_block);
-                                        //alert(id_end_block);
+                                        //console.log(id_start_block)
+                                        ///console.log(id_end_block)
 
                                         // On supprimer l'élément de la page, le setTimeout est un fix pour IE (http://dev.jqueryui.com/ticket/4088)
                                         setTimeout(function() { ui.draggable.remove(); }, 1);                                

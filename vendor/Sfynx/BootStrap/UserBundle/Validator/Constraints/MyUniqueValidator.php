@@ -49,8 +49,6 @@ class MyUniqueValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        print_r('coincoin');
-        exit;
         if (!$this->userManager->validateUnique($value, $constraint)) {
             $this->context->addViolation($constraint->message, array(
                 '%property%' => $constraint->property

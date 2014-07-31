@@ -5,7 +5,7 @@
 #    security:
 #        handler: sonata.admin.security.handler.role
 #    title: Sonata Project
-#    title_logo: %kernel.http_host%/bundles/piappadmin/images/logo/logo-orchestra-white.png
+#    title_logo: %kernel.http_host%/bundles/piappadmin/images/logo/logo-sfynx-white.png
 #    templates:
 #        # default global templates
 #        layout:  SonataAdminBundle::standard_layout.html.twig

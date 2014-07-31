@@ -125,7 +125,7 @@ class PiContentManager extends PiWidgetExtension
         $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
         // if the gedmo widget is defined correctly as a "text"
         if ( ($this->action == "text" ) && $this->getTranslationWidget()) {
-            return $this->runByExtension('pi_app_admin.manager.transwidget', 'transwidget', $this->getTranslationWidget()->getId(), $lang, $params);
+            return $this->renderCache('pi_app_admin.manager.transwidget', 'transwidget', $this->getTranslationWidget()->getId(), $lang, $params);
         } else {
             return " no translation widget setting : {{ getService('pi_app_admin.string_manager').random(8)|raw }} \n";
         }
@@ -271,7 +271,7 @@ class PiContentManager extends PiWidgetExtension
                     $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
                     $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
                     
-                    return $this->runByExtension('pi_app_admin.manager.transwidget', 'transwidget', $TranslationWidget->getId(), $lang, $params);
+                    return $this->renderCache('pi_app_admin.manager.transwidget', 'transwidget', $TranslationWidget->getId(), $lang, $params);
                 } catch (\Exception $e) {
                     return "the snippet doesn't exist";
                 }
@@ -358,9 +358,9 @@ class PiContentManager extends PiWidgetExtension
                 	$params['cachable'] = ($xmlConfig->widgets->content->params->cachable === 'true') ? true : false;
                 }                
                 if ($params['cachable']) {
-                    return $this->runByExtension('pi_app_admin.manager.jqext', $this->action, "$JQcontainer~$JQservice", $lang, $params);
+                    return $this->renderCache('pi_app_admin.manager.jqext', $this->action, "$JQcontainer~$JQservice", $lang, $params);
                 } else {
-                    return $this->runByjqueryExtension($JQcontainer, $JQservice, $lang, $params);
+                    return $this->renderJquery($JQcontainer, $JQservice, $lang, $params);
                 }
             }            
         } else {

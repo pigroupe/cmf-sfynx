@@ -235,7 +235,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
     }
     
     /**
-     * Returns the names of files contained in a directory ans all subdirectories.
+     * Returns the names of files contained in a directory and all subdirectories.
      *
      * @param    string    $dir  path
      * @param    string    $type
@@ -247,11 +247,9 @@ class PiFileManager implements PiFileManagerBuilderInterface
      */    
     public static function ListFiles($dir, $type = false)
     {
-        if ($dh = opendir($dir)) {
-    
-            $files = Array();
-            $inner_files = Array();
-    
+        $files = Array();
+        if ($dh = @opendir($dir)) {    
+            $inner_files = Array();    
             while($file = readdir($dh)) {
                 if ($file != "." && $file != ".." && $file[0] != '.') {
                     if (is_dir($dir . "/" . $file)) {
@@ -283,9 +281,30 @@ class PiFileManager implements PiFileManagerBuilderInterface
             }
     
             closedir($dh);
-            return $files;
         }
-    }    
+        
+        return $files;
+    } 
+
+    /**
+     * Returns the names of files contained in a directory and all subdirectories of a bundle.
+     *
+     * @param    string    $dir  path
+     * @return array    array list of all files.
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function ListFilesBundle($dir)
+    {
+        $dir = trim(ltrim($dir, '/'));
+        $basePath1 = $this->container->get('kernel')->locateResource("@PiAppTemplateBundle/{$dir}");
+        $basePath2 = $this->container->get('kernel')->getBundle('PiAppTemplateBundle')->getPath() . "/" . $dir;
+        $listFiles1 = self::ListFiles($basePath1, 'twig');
+        $listFiles2 = array_merge($listFiles1, self::ListFiles($basePath2, 'twig'));
+        
+        return $listFiles2;
+    }
     
     /**
      * Returns the names of all directories ans all subdirectories.

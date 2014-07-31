@@ -48,7 +48,7 @@ class UsersController extends abstractController
      * Enabled Recette entities.
      *
      * @Route("/admin/users/enabled", name="users_enabledentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
 	 * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -62,7 +62,7 @@ class UsersController extends abstractController
      * Disable Recette entities.
      * 
      * @Route("/users/disable", name="users_disablentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
 	 * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -77,7 +77,7 @@ class UsersController extends abstractController
      * Change the position of a Recette entity.
      *
      * @Route("/users/position", name="users_position_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
 	 * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -91,7 +91,7 @@ class UsersController extends abstractController
      * Delete a Recette entity.
      *
      * @Route("/users/delete", name="users_deletentity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
 	 * @return \Symfony\Component\HttpFoundation\Response
      *     
      * @access  public
@@ -105,7 +105,7 @@ class UsersController extends abstractController
      * Archive a Media entity.
      *
      * @Route("/users/archive", name="users_archiventity_ajax")
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @access  public

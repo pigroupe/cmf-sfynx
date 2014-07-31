@@ -21,36 +21,31 @@
 
 /* FlexSlider Necessary Styles
 *********************************/ 
-.flexslider {margin: 0; padding: 0;}
+.flexslider {margin: 0; padding: 0;background: #fff url(img/ajax-loader.gif) no-repeat center center;}
 .flexslider .slides > li {display: none; -webkit-backface-visibility: hidden;} /* Hide the slides before the JS is loaded. Avoids image jumping */
 
 /*FOR BROWSER - @media screen and (min-width: 0px) and (max-width: 799px)
 @media screen and (min-width: 800px) and (max-width: 2000px)*/
 /*FOR TAB - @media only screen and (min-device-width : 0px) and (max-device-width : 799px)*/
-@media screen and (min-width: 0px) and (max-width: 800px){
-	#homePage .flexslider{position:relative;width:1336px;/*height:485px; */overflow:hidden;}
-	#homePage .slides{width:728px; height:485px; margin-left:-156px;}
-	#homePage .flex-control-nav {width: 100%; position: absolute; top:23px; left:28%;}
-	.useCasesPage .flexslider{position:relative;width:1336px;height:298px; overflow:hidden;}
-	.useCasesPage .slides{width:768px; height:298px;}
+@media screen and (min-width: 0px) and (max-width: 799px){
+	.flexslider{position:relative;width:1336px;height:485px; overflow:hidden;}
+	.slides{width:768px; height:485px; margin-left:-156px;}
 	.flex-direction-nav{display:none}
-	.flex-control-nav {width: 100%; position: absolute; top:23px; left:47%;}
+	.flex-control-nav {width: 100%; position: absolute; top:23px; left:28%;}
 }
-@media screen and (min-width: 801px) and (max-width: 1024px){
-	.indexPage.flexslider{position:relative;width:1336px;/*height:485px;*/ overflow:hidden;}
-	.indexPage .slides{width:768px; height:485px; margin-left:-156px;}
-	.useCasesPage.flexslider{position:relative;width:1336px;height:298px; overflow:hidden;}
-	.useCasesPage .slides{width:768px; height:298px;}
+@media screen and (min-width: 800px) and (max-width: 1049px){
+	.flexslider{position:relative;width:100%;height:485px; overflow:hidden;}
+	.slides{margin-left:-156px;}
 	.flex-direction-nav{display:none}
-	.flex-control-nav {width: 100%; position: absolute; top:23px; left:50%;}
+	.flex-control-nav {width: 100%; position: absolute; top:23px; left:38%;}
 }
-@media screen and (min-width: 1025px) and (max-width: 2000px){
+@media screen and (min-width: 1050px) and (max-width: 2000px){
 	.flexslider .slides img {width: 100%; display: block;}
-	.flex-control-nav {width: 100%; position: absolute; top:5px; right: 30px; text-align: center;}
+	.flex-control-nav {width: 100%; position: absolute; top:23px; text-align: center;}
 	#useCasesWrapper #flexsliderWrapper{width:750px; height:300px}
 	#useCasesWrapper .flex-prev{top:0%;margin: 110px 0 0 10px;}
 	#useCasesWrapper .flex-next{top:0%;margin: 110px 10px 0 0;}
-	#useCasesWrapper .flex-control-nav{top:5px; right:-10px;}
+	#useCasesWrapper .flex-control-nav{top:5px;}
 }
 .flex-pauseplay span {text-transform: capitalize;}
 
@@ -67,12 +62,12 @@ html[xmlns] .slides {display: block;}
 
 /* FlexSlider Default Theme
 *********************************/
-.flexslider {/*margin: 0 0 60px; */background: #fff;position: relative; 
+.flexslider {/*margin: 0 0 60px; */background: #fff; border-top: 5px solid #eaeaea; position: relative; 
 	/*-webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; 
 	-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.2);*/ zoom: 1;}
 .flex-viewport {max-height: 2000px; -webkit-transition: all 1s ease; -moz-transition: all 1s ease; transition: all 1s ease;}
 .loading .flex-viewport {max-height: 300px;}
-.flexslider .slides {zoom: 1;}
+.flexslider .slides {zoom: 1; margin:0 auto;}
 
 .carousel li {margin-right: 5px}
 
@@ -109,4 +104,3 @@ html[xmlns] .slides {display: block;}
   .flex-direction-nav .flex-prev {opacity: 1; left: 0;}
   .flex-direction-nav .flex-next {opacity: 1; right: 0;}
 }
-

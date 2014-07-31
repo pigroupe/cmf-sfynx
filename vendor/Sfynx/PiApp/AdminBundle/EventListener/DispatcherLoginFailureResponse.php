@@ -30,7 +30,11 @@ class DispatcherLoginFailureResponse
    /**
     * @var \Symfony\Component\DependencyInjection\ContainerInterface
     */
-   protected $container;   
+   protected $container;  
+
+   public $login_failure = true;
+   public $login_failure_time_expire = 3600;
+   public $login_failure_connection_attempts = 3;
 
    /**
     * Constructor.
@@ -40,9 +44,6 @@ class DispatcherLoginFailureResponse
    public function __construct(ContainerInterface $container)
    {
        $this->container     = $container;  
-       $this->login_failure = true;
-       $this->login_failure_time_expire = 120;
-       $this->login_failure_connection_attempts = 3;
    }
 
    /**

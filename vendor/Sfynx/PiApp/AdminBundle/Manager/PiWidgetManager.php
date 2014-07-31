@@ -180,7 +180,7 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         if (!empty($cssClass)) {
             $source .= " <div class=\"{$cssClass}\"> \n";
         } else {
-            $source .= " <div coiconi> \n";
+            $source .= " <div> \n";
         }        		
         $source .= "     {% set options = {'widget-id': '$id', 'widget-lang': '$lang', 'widget-lifetime': '$lifetime', 'widget-cacheable': '$cacheable', 'widget-update': '$update', 'widget-public': '$public', 'widget-cachetemplating': '$cachetemplating', 'widget-ajax': '$ajax', 'widget-sluggify': '$sluggify'} %} \n";
         $source .= "     {{ renderWidget('".strtoupper($container)."', '".strtolower($NameAction)."', options )|raw }} \n";
@@ -189,6 +189,269 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         
         return $source;
     }
+    
+    /**
+     * Returns the render source of a tag by the twig cache service.
+     *
+     * @param string    $tag
+     * @param string    $id
+     * @param string    $lang
+     * @param array     $params
+     *
+     * @return string    extension twig result
+     * @access    public
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2012-04-19
+     */
+    public function renderCache($serviceName, $tag, $id, $lang, $params = null)
+    {
+        // we create the twig code of the service to rn.
+        if (!is_null($params)) {
+            if (isset($params['widget-sluggify']) && ($params['widget-sluggify'] == true)) {
+                $params['widget-sluggify-url']    = $this->container->get('request')->getUri();
+            }            
+            $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);            
+            $set = " {{ getService('$serviceName').run('$tag', '$id', '$lang', {$json})|raw }} \n";
+        } else {
+            $set = " {{ getService('$serviceName').run('$tag', '$id', '$lang')|raw }} \n";
+        } 
+        // we register the tag value in the json file if does not exist.
+        $this->setJsonFileEtag($tag, $id, $lang, $params);
+        
+        return $set;
+    }
+    
+    /**
+     * Returns the render source of a service manager.
+     *
+     * @param string    $id
+     * @param string    $lang
+     * @param array        $params
+     *
+     * @return string    extension twig result
+     * @access    public
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2012-04-19
+     */
+    public function renderService($serviceName, $id, $lang, $params = null)
+    {
+        if (!isset($params['locale']) || empty($params['locale'])) {
+            $params['locale']    = $lang;
+        }
+        // get params
+        $is_render_service_with_ttl    = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ttl');
+        $is_render_service_with_ajax   = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
+        $is_render_service_for_varnish = $this->container->getParameter('pi_app_admin.page.esi.force_widget_tag_esi_for_varnish');
+        $esi_key                       = $this->container->getParameter('pi_app_admin.page.esi.encrypt_key');
+        //
+        if (!is_null($params)) {
+            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+            $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params); 
+            //
+            $esi_method      = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('renderSource', $esi_key);
+            $esi_serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($serviceName, $esi_key);
+            $esi_id          = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($id, $esi_key);
+            $esi_lang        = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($lang, $esi_key);
+            $esi_json        = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $esi_key);
+            // we get query string
+            if (null !== $qs = $this->container->get('request')->getQueryString()) {
+                $qs = '?'.$qs;
+            } else {
+                $qs = '';
+            }
+            //
+            $_server_ = array(
+                'REQUEST_URI'  => $this->container->get('request')->getRequestUri(),
+                'REDIRECT_URL' => $this->container->get('request')->server->get('REDIRECT_URL'),
+                'lifetime'     => $params['widget-lifetime'],
+                'cacheable'    => $params['widget-cacheable'],
+                'update'       => $params['widget-update'],
+                'public'       => $params['widget-public'],
+            );
+            $esi_server      = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $esi_key);
+            // url
+            $url = $this->container->get('bootstrap.RouteTranslator.factory')->getRoute('public_esi_apply_widget', array(
+                'method'        =>$esi_method,
+                'serviceName'   =>$esi_serviceName,
+                'id'            =>$esi_id,
+                'lang'          =>$esi_lang,
+                'params'        =>$esi_json,
+                'key'           =>$esi_key,
+                'server'        =>$esi_server
+            ));
+            // we get instances of parser and dumper component yaml files.
+            $yaml   = new \Symfony\Component\Yaml\Parser();
+            //$dumper = new \Symfony\Component\Yaml\Dumper();
+            // we get config.yml content in array
+            $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
+            $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
+            if (isset($parsed_yaml_file['framework']['esi']['enabled'])) {
+                $is_esi_activate = ((int) $parsed_yaml_file['framework']['esi']['enabled']) ? true : false;
+            } else {
+                $is_esi_activate = false;
+            }      
+            if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
+                if ($is_esi_activate) {
+                    $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
+                    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+                    $set .= "{% else %}\n";
+                    if ($is_render_service_for_varnish) {                   
+                        $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+                    } else {
+                        $set .= " {{ render_esi(\"{$url}{$qs}\")|raw }} \n";
+                    }
+                    $set .= "{% endif %}\n";
+                } elseif ( $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) ) {
+                    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";
+                    $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+                    $set .= "{% else %}\n";
+                    $set .= "    <span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
+                    $set .= "{% endif %}\n";
+                }
+            } else {
+                if ($is_render_service_with_ttl && ($ttl > 0)) {
+                    $key = (int) $params['widget-id'];
+                    $ttl = (int) $params['widget-lifetime'];
+                    $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', '{$serviceName}', 'renderSource', '{$id}', '{$lang}', {$json})|raw }}\n";
+                } else {
+                    $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+                }
+            }
+            // we register the tag value in the json file if does not exist.
+            if (isset($params['widget-id'])) {
+                $this->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
+            } else {
+                $this->setJsonFileEtag('esi', $serviceName, $lang, array('esi-url'=>"{$url}{$qs}"));
+            }                        
+        } else {
+            $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+        }        
+    
+        return $set;
+    } 
+
+    /**
+     * Returns the render source of a jquery extension.
+     *
+     * @param string    $JQcontainer
+     * @param string    $id
+     * @param string    $lang
+     * @param array     $params
+     *
+     * @return string    extension twig result
+     * @access    public
+     *
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since 2012-06-01
+     */
+    public function renderJquery($JQcontainer, $id, $lang, $params = null)
+    {
+        str_replace('~', '~', $id, $count);
+        if ($count == 2) {
+            list($entity, $method, $category) = explode('~', $id);
+        } elseif ($count == 1) {
+            list($entity, $method) = explode('~', $id);
+        } elseif ($count == 0) {
+            $method = $id;
+        } else {
+            throw new \InvalidArgumentException("you have not configure correctly the attibute id");
+        }        
+        if (!isset($params['locale']) || empty($params['locale'])) {
+            $params['locale']    = $lang;
+        }                
+        // get params
+        $is_render_service_with_ttl    = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ttl');
+        $is_render_service_with_ajax   = $this->container->getParameter('pi_app_admin.page.widget.render_service_with_ajax');
+        $is_render_service_for_varnish = $this->container->getParameter('pi_app_admin.page.esi.force_widget_tag_esi_for_varnish');
+        $esi_key                       = $this->container->getParameter('pi_app_admin.page.esi.encrypt_key');
+        //
+        if (!is_null($params)) {
+            $this->container->get('pi_app_admin.array_manager')->recursive_method($params, 'krsort');
+            $json = $this->container->get('pi_app_admin.string_manager')->json_encodeDecToUTF8($params);
+            // set url of the esi page
+            $esi_method      = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter('FactoryFunction', $esi_key);
+            $esi_serviceName = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter("pi_app_admin.twig.extension.jquery", $esi_key);
+            $esi_id          = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($JQcontainer, $esi_key);
+            $esi_lang        = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($method, $esi_key);
+            $esi_json        = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter($json, $esi_key);
+            // we get query string
+            if (null !== $qs = $this->container->get('request')->getQueryString()) {
+                $qs = '?'.$qs;
+            } else {
+                $qs = '';
+            }
+            $_server_ = array(
+                    'REQUEST_URI'  => $this->container->get('request')->getRequestUri(),
+                    'REDIRECT_URL' => $this->container->get('request')->server->get('REDIRECT_URL'),
+                    'lifetime'     => $params['widget-lifetime'],
+                    'cacheable'    => $params['widget-cacheable'],
+                    'update'       => $params['widget-update'],
+                    'public'       => $params['widget-public'],
+            );
+            $esi_server      = $this->container->get('pi_app_admin.twig.extension.tool')->encryptFilter(json_encode($_server_, JSON_UNESCAPED_UNICODE), $esi_key);
+            // url
+            $url = $this->container->get('bootstrap.RouteTranslator.factory')->getRoute('public_esi_apply_widget', array(
+                    'method'        =>$esi_method,
+                    'serviceName'   =>$esi_serviceName,
+                    'id'            =>$esi_id,
+                    'lang'          =>$esi_lang,
+                    'params'        =>$esi_json,
+                    'key'           =>$esi_key,
+                    'server'        =>$esi_server
+            ));
+            // we get instances of parser and dumper component yaml files.
+            $yaml   = new \Symfony\Component\Yaml\Parser();
+            //$dumper = new \Symfony\Component\Yaml\Dumper();
+            // we get config.yml content in array
+            $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
+            $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
+            if (isset($parsed_yaml_file['framework']['esi']['enabled'])) {
+                $is_esi_activate = ((int) $parsed_yaml_file['framework']['esi']['enabled']) ? true : false;
+            } else {
+                $is_esi_activate = false;
+            }   
+            if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
+                if($is_esi_activate) {
+                    $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
+                    $set .= "    {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
+                    $set .= "{% else %}\n";
+                    if ($is_render_service_for_varnish) {                   
+                        $set .= "    <esi:include src=\"{$url}{$qs}\" />\n";
+                    } else {
+                        $set .= " {{ render_esi(\"{$url}{$qs}\")|raw }} \n";
+                    }
+                    $set .= "{% endif %}\n";
+                } elseif ( $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) ) {
+                    $set  = "{% if is_widget_ajax_disable_after_post_request and (app_request_request_count >= 1) %}\n";
+                    $set .= "    {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
+                    $set .= "{% else %}\n";
+                    $set .= "    <span class=\"hiddenLinkWidget {{ '{$url}{$qs}'|obfuscateLink }}\" />\n";
+                    $set .= "{% endif %}\n";
+                }
+            } else {          
+                if ($is_render_service_with_ttl && ($ttl > 0)) {
+                    $key = (int) $params['widget-id'];
+                    $ttl = (int) $params['widget-lifetime'];
+                    $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', 'pi_app_admin.twig.extension.jquery', 'FactoryFunction', '{$JQcontainer}', '{$method}', {$json})|raw }}\n";
+                } else {
+                    $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
+                }
+            }
+            // we register the tag value in the json file if does not exist.
+            if (isset($params['widget-id'])) {
+                $this->setJsonFileEtag('esi', $params['widget-id'], $lang, array('esi-url'=>"{$url}{$qs}"));
+            } else {
+                $this->setJsonFileEtag('esi', $JQcontainer, $lang, array('esi-url'=>"{$url}{$qs}"));
+            }            
+        } else {
+            $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
+        }
+    
+        return $set;
+    }   
+    
     
     /**
      * Sets js and css script of the widget.

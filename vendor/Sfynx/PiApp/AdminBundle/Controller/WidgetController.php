@@ -42,7 +42,7 @@ class WidgetController extends abstractController
     /**
      * Lists all Widget entities.
      * 
-     * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -129,7 +129,7 @@ class WidgetController extends abstractController
     /**
      * Finds and displays a Widget entity.
      * 
-     * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * 
      * @access    public
@@ -305,7 +305,7 @@ class WidgetController extends abstractController
     /**
      * Deletes a Widget entity.
      * 
-     * @Secure(roles="ROLE_SUPER_ADMIN")
+     * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * 
      * @access    public

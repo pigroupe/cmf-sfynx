@@ -154,6 +154,18 @@ class HandlerRequest
     	}
     	    	
     	$this->is_prefix_locale                         = $this->container->getParameter("pi_app_admin.page.route.with_prefix_locale");
+    	$this->date_expire                              = $this->container->getParameter('pi_app_admin.cookies.date_expire');    	
+    	// Record the layout variable in cookies.
+    	if ($this->date_expire && !empty($this->date_interval)) {
+    		if (is_numeric($this->date_interval)) {
+    			$this->dateExpire = time() + intVal($this->date_interval);
+    		} else {
+    			$this->dateExpire = new \DateTime("NOW");
+    			$this->dateExpire->add(new \DateInterval($this->date_interval));
+    		}
+    	} else {
+    		$this->dateExpire = 0;
+    	}
     	
     	$this->is_scop_authorized                       = $this->container->getParameter("pi_app_admin.page.scop.authorized");
     	$this->scop_globals                             = $this->container->getParameter("pi_app_admin.page.scop.globals");
@@ -177,7 +189,7 @@ class HandlerRequest
         		$url_homepage = $this->container->get('bootstrap.RouteTranslator.factory')->getRoute('home_page');
         		$response     = new RedirectResponse($url_homepage, 301);
         		// we apply all events allowed to change the redirection response
-        		$event_response = new ResponseEvent($response, $dateExpire);
+        		$event_response = new ResponseEvent($response, $this->date_expire);
         		$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_REQUEST_CHANGERESPONSE_PREFIX_LOCALE_REDIRECTION, $event_response);
         		$response = $event_response->getResponse();
         		
@@ -244,7 +256,7 @@ class HandlerRequest
     		// we set response
     		$response = new RedirectResponse($SEOUrl, 301);
     		// we apply all events allowed to change the redirection response
-    		$event_response = new ResponseEvent($response, $dateExpire);
+    		$event_response = new ResponseEvent($response, $this->date_expire);
     		$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_REQUEST_CHANGERESPONSE_SEO_REDIRECTION, $event_response);
     		$response = $event_response->getResponse();
     		
@@ -316,7 +328,7 @@ class HandlerRequest
                 $response->headers->set('Content-Type', 'text/html');
                 $response     = $this->container->get('templating')->renderResponse('PiAppTemplateBundle:Template\\Nonav:nonav.html.twig', array('locale' => $locale, 'isCookies'=>$isCookies, 'isJs'=>$isJs, 'isNav'=>$isNav), $response);
                 // we apply all events allowed to change the response
-                $event_response = new ResponseEvent($response, $dateExpire);
+                $event_response = new ResponseEvent($response, $this->date_expire);
                 $this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_REQUEST_CHANGERESPONSE_NOSCOPE, $event_response);
                 $response = $event_response->getResponse();
                 

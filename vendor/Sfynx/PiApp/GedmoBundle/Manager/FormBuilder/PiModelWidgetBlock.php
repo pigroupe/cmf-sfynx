@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Gedmo> project.
  *
- * @category   Admin_Managers
+ * @category   Gedmo_Managers
  * @package    Page
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-09-11
@@ -21,7 +21,7 @@ use Doctrine\ORM\EntityRepository;
 /**
 * Description of the Form builder manager
 *
-* @category   Admin_Managers
+* @category   Gedmo_Managers
 * @package    Page
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

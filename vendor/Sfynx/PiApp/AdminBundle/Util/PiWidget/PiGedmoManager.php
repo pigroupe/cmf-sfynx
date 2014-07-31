@@ -293,9 +293,9 @@ class PiGedmoManager extends PiWidgetExtension
             }        
             if ($this->isAvailableAction($controller)) {
                 if ($params['cachable']) {
-                    return $this->runByExtension('pi_app_admin.manager.listener', $this->action, $controller, $lang, $params);
+                    return $this->renderCache('pi_app_admin.manager.listener', $this->action, $controller, $lang, $params);
                 } else {
-                    return $this->runByService('pi_app_admin.manager.listener', $controller, $lang, $params);
+                    return $this->renderService('pi_app_admin.manager.listener', $controller, $lang, $params);
                 }
             }
         } else {
@@ -446,10 +446,10 @@ class PiGedmoManager extends PiWidgetExtension
                         $params['lvlActifMenu'] = $xmlConfig->widgets->gedmo->params->navigation->lvlActifMenu->toArray();
                     }
                     if ($params['cachable']) {
-                        return $this->runByExtension('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
+                        return $this->renderCache('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
                     } else {
-                        return $this->runByService('pi_app_admin.manager.tree', "$this->entity~$this->method~$category", $lang, $params);
-                        //return $this->runByjqueryExtension("MENU", "$this->entity~$this->method~$category", $lang, $params);
+                        return $this->renderService('pi_app_admin.manager.tree', "$this->entity~$this->method~$category", $lang, $params);
+                        //return $this->renderJquery("MENU", "$this->entity~$this->method~$category", $lang, $params);
                     }
                 } else {
                     throw ExtensionException::optionValueNotSpecified("gedmo navigation", __CLASS__);
@@ -619,9 +619,9 @@ class PiGedmoManager extends PiWidgetExtension
                         $params['fields'] = $xmlConfig->widgets->gedmo->params->organigram->fields->field->toArray();
                     }
                     if ($params['cachable']) {
-                        return $this->runByExtension('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
+                        return $this->renderCache('pi_app_admin.manager.tree', $this->action, "$this->entity~$this->method~$category", $lang, $params);
                     } else {
-                        return $this->runByjqueryExtension("MENU", "$this->entity~$this->method~$category", $lang, $params);
+                        return $this->renderJquery("MENU", "$this->entity~$this->method~$category", $lang, $params);
                     }
                 } else {
                     throw ExtensionException::optionValueNotSpecified("gedmo navigation", __CLASS__);
@@ -742,9 +742,9 @@ class PiGedmoManager extends PiWidgetExtension
                         $params['menu']     = 'entity';
                     }
                     if ($params['cachable']) {
-                        return $this->runByExtension('pi_app_admin.manager.slider', $this->action, $this->entity."~".$this->method."~".$category, $lang, $params);
+                        return $this->renderCache('pi_app_admin.manager.slider', $this->action, $this->entity."~".$this->method."~".$category, $lang, $params);
                     } else {
-                        return $this->runByService('pi_app_admin.manager.slider', $this->entity."~".$this->method."~".$category, $lang, $params);
+                        return $this->renderService('pi_app_admin.manager.slider', $this->entity."~".$this->method."~".$category, $lang, $params);
                     }            
                 } else {
                     throw ExtensionException::optionValueNotSpecified("params xmlConfig", __CLASS__);

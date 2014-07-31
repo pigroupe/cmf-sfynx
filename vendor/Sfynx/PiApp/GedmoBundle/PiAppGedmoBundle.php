@@ -196,6 +196,13 @@ $GLOBALS['GEDMO_WIDGET_SLIDER']['PiAppGedmoBundle:Slider'] = array(
         )
 );
 
+$GLOBALS['GEDMO_WIDGET_SLIDER']['PiAppGedmoBundle:Media'] = array(
+		'method' => array('slide-default'),
+		'slide-default'     => array(
+				'edit'        => 'admin_gedmo_slider',
+		)
+);
+
 /**
  * BootStrap configuration and managment Bundle
  *

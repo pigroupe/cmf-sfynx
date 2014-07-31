@@ -1,0 +1,267 @@
+@charset "UTF-8";
+
+/**
+ *  Ideal resolution: 1280 * 960 pixels
+ */
+
+html, body {
+    height: 100%;
+    background-color: #FFFFFF;
+    border: 0px solid transparent;
+    font-size: 1em; /* Ideal: 16px */
+    margin: 0px 0px 0px 0px;
+    min-height: 100%;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+}
+
+img, object, embed, canvas, video, audio, picture {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.layout-main {
+    height: 100%;
+    margin: 0px auto 0px auto;
+    min-height: 100%;
+    width: 80%; /* Ideal: 1024px -> 1024 / 1280 */
+}
+
+.main {
+    height: 100%;
+    min-height: 100%;
+}
+
+.layout-menu, .layout-content, .layout-adv {
+    display: inline-block;
+    height: 100%;
+    /*min-height: 100%;*/
+    vertical-align: top;
+}
+
+.layout-menu {
+    color: #FFFFFF;
+    background-color: #CC0000;
+    width: 20.8984375%; /* Ideal: 214px -> 214 / 1024 */
+}
+
+.layout-content {
+    color: #000000;
+    background-color: #FFFFFF;
+    width: 58.203125%; /* Ideal: 596px -> 596 / 1024 */
+}
+
+.layout-adv {
+    color: #000000;
+    background-color: #F9F7ED;
+    width: 20.8984375%; /* Ideal: 214px -> 214 / 1024 */
+}
+
+.menu, .content, .adv {
+    padding: 5px 5px 5px 5px;
+}
+
+.menu h1 {
+    font-size: 1.5em; /* Ideal: 24px */
+}
+
+.menu li {
+    list-style: none;
+}
+
+.menu li a {
+    color: #FFFFFF;
+}
+
+.menu li a:before {
+    content: "> ";
+}
+
+.menu li a:hover {
+    color: #000000;
+}
+
+.content .content-item {
+    border-top: 1px solid #36393D;
+    clear: both;
+    margin: 0px auto 0px auto;
+    padding: 15px 0px 15px 0px;
+    text-align: center;
+    width: 90.939597315436241610738255033557%; /* Ideal: 542px -> 542 / 596 */
+}
+
+.content .content-item:first-child {
+    border: 0px solid transparent;
+}
+
+.content .content-item h1 {
+    font-size: 1.5em; /* Ideal: 24px */
+}
+
+.content .content-item p.description {
+    font-size: 0.750em; /* Ideal: 12px */
+    font-style: italic;
+}
+
+.content .content-item div.article {
+    text-align: justify;
+}
+
+.content .content-item img.article-image {
+    float: left;
+    padding: 0px 25px 25px 0px;
+    width: 16.107382550335570469798657718121%; /* Ideal: 96px -> 96 / 596 */
+}
+
+
+.adv .adv-item {
+    border-top: 1px solid #36393D;
+    margin: 0px auto 0px auto;
+    padding: 15px 0px 15px 0px;
+    text-align: center;
+    width: 85.046728971962616822429906542056%; /* Ideal: 182px -> 182 / 214 */
+}
+
+.adv .adv-item:first-child {
+    border: 0px solid transparent;
+}
+
+.adv .adv-item a {
+    color: #000000;
+    font-style: italic;
+}
+
+/**
+ *  Responsive design rules
+ */
+
+@media screen and (min-width: 421px) {
+    .menu select {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .layout-main {
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .layout-menu {
+        display: block;
+        height: auto;
+        min-height: auto;
+        vertical-align: top;
+        width: 100%;
+    }
+    
+    .layout-content {
+        width: 79.1015625%;
+    }
+    
+    .menu li {
+        display: inline-block;
+        margin-right: 2.6041666666666666666666666666667%; /* Ideal: 25px -> 25 / 960 */
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .layout-main {
+        margin: 0px 0px 0px 0px;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 640px) {  
+    .layout-content {
+        display: block;
+        height: auto;
+        min-height: auto;
+        width: 100%;
+    }
+    
+    .layout-adv {
+        display: block;
+        height: auto;
+        min-height: auto;
+        vertical-align: top;
+        width: 100%;
+    }
+    
+    .adv {
+        text-align: center;
+    }
+    
+    .adv .adv-item {
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .menu ul {
+        display: none;
+    }
+    
+    .menu select {
+        display: inherit;
+        width: 96%;
+    }
+    
+    .layout-adv {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .content .content-item img.article-image {
+        display: none;
+    }
+}
+
+/*
+ * Hack IE6 CSS
+ */
+
+.content .content-item {
+    _border-top: expression(this.previousSibling == null ? "0px solid transparent" : "1px solid #36393D");
+}
+
+.adv .adv-item {
+    _border-top: expression(this.previousSibling == null ? "0px solid transparent" : "1px solid #36393D");
+}
+
+/**
+ *  Hack IE6-7 CSS
+ */
+.layout-main {
+    *clear: both;
+}
+
+.layout-menu, .layout-content, .layout-adv {
+    *display: block;
+    *float: left;
+}
+
+@media screen and (max-width: 960px) {
+    .layout-menu {
+        *float: none;
+    }
+    
+    .menu li {
+        *display: block;
+        *float: left;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .layout-adv {
+        *float: none;
+    }
+    
+    .layout-content {
+        *float: none;
+        *width: 100%;
+    }
+}

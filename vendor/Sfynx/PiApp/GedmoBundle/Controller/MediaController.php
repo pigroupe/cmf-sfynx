@@ -510,7 +510,7 @@ class MediaController extends abstractController
     public function updateAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($locale, $id, "object"); 
         
         $status        = $this->container->get('request')->query->get('status');
@@ -545,6 +545,7 @@ class MediaController extends abstractController
             'delete_form' => $deleteForm->createView(),
             'NoLayout'       => $NoLayout,
             'status'    => $status,
+            'category'      => $category,
         ));
     }
 

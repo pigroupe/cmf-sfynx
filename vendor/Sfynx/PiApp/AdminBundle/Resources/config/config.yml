@@ -4,7 +4,7 @@
 #pi_app_admin:
 #    layout:
 #        init_pc:
-#            template_name: layout-pi-orchestra.html.twig
+#            template_name: layout-pi-sfynx.html.twig
 #            route_redirection_name: home_page
 #        init_mobile:
 #            template_name: Default
@@ -15,7 +15,7 @@
 #            redirection_user: admin_homepage
 #            template_user: layout-pi-admin.html.twig
 #            redirection_subscriber: home_page
-#            template_subscriber: layout-pi-orchestra.html.twig
+#            template_subscriber: layout-pi-sfynx.html.twig
 #        template:
 #            template_connection: layout-security.html.twig
 #            template_form: fields.html.twig
@@ -23,14 +23,14 @@
 #            template_flash: flash.html.twig
 #        meta_head:
 #            author: Sfynx
-#            copyright: http://pigroupe.github.io/cmf-orchestra/
+#            copyright: http://pigroupe.github.io/cmf-sfynx/
 #            title: Sfynx
 #            description: Based in Europe with operational offices in Switzerland, France, Russia, West and South Africa, Singapore.
 #            keywords: Sfynx, symfony 2, framework, CMF, CMS, PHP web applications
 #            og_title_add: "Sfynx : "
 #            og_type: website
-#            og_image: bundles/piappadmin/images/logo/logo-orchestra-white.png
-#            og_site_name: http://pigroupe.github.io/cmf-orchestra/
+#            og_image: bundles/piappadmin/images/logo/logo-sfynx-white.png
+#            og_site_name: http://pigroupe.github.io/cmf-sfynx/
 #            additions:
 #                 ### robot management
 #                 1: "<meta name='robots' content='ALL'/>" # to start referencement
@@ -62,7 +62,6 @@
 #            force_private_response_only_with_authentication: false # true if you want that all responses will have a private Cache-control without max-age after authentification
 #            disable_after_post_request: true
 #        widget:
-#            render_service_with_ttl: false
 #            render_service_with_ajax: false 
 #            ajax_disable_after_post_request: true          
 #        refresh:
@@ -108,7 +107,7 @@
 #    cookies:
 #        date_expire: true
 #        date_interval:  604800 # PT4H  604800
-#        application_id: orchestra
+#        application_id: sfynx
 #    permission:
 #        restriction_by_roles: false
 #        authorization:
@@ -144,7 +143,7 @@
 #        context_menu_theme: pi2 # {'xp', 'default', 'vista', 'osx', 'human', 'gloss', 'gloss,gloss-cyan', 'gloss,gloss-semitransparent', 'pi', 'pi2'}
 #        grid_index_css: style-grid-1.css             
 #        grid_show_css: style-grid-1.css
-#        theme_css: smoothness # {'orchestra', 'aristo', 'rocket', 'smoothness', 'dark-hive'}
+#        theme_css: smoothness # {'sfynx', 'aristo', 'rocket', 'smoothness', 'dark-hive'}
 #    crop:
 #        formats:
 #            0:

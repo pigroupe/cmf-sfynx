@@ -38,7 +38,7 @@ services:
            - { name: twig.loader }                   
         
     #
-    # configuration of the orchestra extensions
+    # configuration of the sfynx extensions
     #         
     pi_app_admin.twig.extension.forward:
         class: %piapp.twig.extension.forward.class%

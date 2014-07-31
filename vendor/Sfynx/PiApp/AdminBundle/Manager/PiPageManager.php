@@ -135,7 +135,6 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             }
             // We set the Etag value
             $id	   = $page->getId();
-            $lang_ = $this->language;
             $url_  = $this->container->get('request')->getRequestUri();
             // we register the tag value in the json file if does not exist.
             $this->setJsonFileEtag('page', $id, $lang, array('page-url'=>$url_));
@@ -333,9 +332,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         // we set all initWidget
         $source        = $this->getScript('init', 'implode') . "\n" . $source;
         
-        //print_r($source);
-        //print_r("<br /><br /><br />");
-        //exit;
+//         print_r($source);
+//         print_r("<br /><br /><br />");
+//         exit;
         
         return $source;
     }
@@ -1152,7 +1151,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     			}
     		}
     		fclose($reading);
-    	}
+    	}  	
     }    
     
     /**

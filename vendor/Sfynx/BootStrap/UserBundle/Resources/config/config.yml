@@ -9,7 +9,7 @@
 #    use_username_form_type: true
 #    model_manager_name:     null  # change it to the name of your entity/document manager if you don't want to use the default one.
 #    from_email:
-#        address:       orchestra@gmail.com
+#        address:       contact@sfynx.fr
 #        sender_name:   Admin    
 #    profile:
 #        form:
@@ -24,7 +24,7 @@
 #    registration:
 #        confirmation:
 #            from_email: # Use this node only if you don't want the global email address for the confirmation email
-#                address:        orchestra@gmail.com
+#                address:        contact@sfynx.fr
 #                sender_name:    commercial
 #            enabled:    true # change to true for required email confirmation
 #            #template:   FOSUserBundle:Registration:email.txt.twig
@@ -38,7 +38,7 @@
 #        token_ttl: 86400
 #        email:
 #            from_email: # Use this node only if you don't want the global email address for the resetting email
-#                address:        orchestra@gmail.com
+#                address:        contact@sfynx.fr
 #                sender_name:    admin
 #            template:   FOSUserBundle:Resetting:email.txt.twig
 #        form:

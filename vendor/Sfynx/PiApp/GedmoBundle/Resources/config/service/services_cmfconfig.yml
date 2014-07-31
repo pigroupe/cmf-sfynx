@@ -3,6 +3,7 @@ parameters:
         block: 'pi_app_admin.formbuilder_manager.model.block'
         content: 'pi_app_admin.formbuilder_manager.model.content'
         contact: 'pi_app_admin.formbuilder_manager.model.contact'
+        slide: 'pi_app_admin.formbuilder_manager.model.slide'
 
 services:
     #
