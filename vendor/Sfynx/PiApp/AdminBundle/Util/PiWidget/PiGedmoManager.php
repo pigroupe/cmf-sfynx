@@ -72,8 +72,8 @@ class PiGedmoManager extends PiWidgetExtension
     {
         $result = array();
         
-        if (isset($GLOBALS['GEDMO_WIDGET_LISTENER']))
-            return array_merge($result, $GLOBALS['GEDMO_WIDGET_LISTENER']);
+        if (isset($GLOBALS['WIDGET_LISTENER']))
+            return array_merge($result, $GLOBALS['WIDGET_LISTENER']);
         else
             return $result;        
     }    
@@ -92,8 +92,8 @@ class PiGedmoManager extends PiWidgetExtension
     {
         $result =  array();
         
-        if (isset($GLOBALS['GEDMO_WIDGET_NAVIGATION']))
-            return array_merge($result, $GLOBALS['GEDMO_WIDGET_NAVIGATION']);
+        if (isset($GLOBALS['WIDGET_NAVIGATION']))
+            return array_merge($result, $GLOBALS['WIDGET_NAVIGATION']);
         else
             return $result;        
     }
@@ -112,8 +112,8 @@ class PiGedmoManager extends PiWidgetExtension
     {
         $result = array();
         
-        if (isset($GLOBALS['GEDMO_WIDGET_ORGANIGRAM']))
-            return array_merge($result, $GLOBALS['GEDMO_WIDGET_ORGANIGRAM']);
+        if (isset($GLOBALS['WIDGET_ORGANIGRAM']))
+            return array_merge($result, $GLOBALS['WIDGET_ORGANIGRAM']);
         else
             return $result;        
     }
@@ -132,8 +132,8 @@ class PiGedmoManager extends PiWidgetExtension
     {
         $result = array();
         
-        if (isset($GLOBALS['GEDMO_WIDGET_SLIDER']))
-            return array_merge($result, $GLOBALS['GEDMO_WIDGET_SLIDER']);
+        if (isset($GLOBALS['WIDGET_SLIDER']))
+            return array_merge($result, $GLOBALS['WIDGET_SLIDER']);
         else
             return $result;        
     }    

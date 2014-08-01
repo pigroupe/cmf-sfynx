@@ -1,26 +1,26 @@
 parameters:
-    piapp.manager.formbuilder.model.block.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetBlock
-    piapp.manager.formbuilder.model.content.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetContent
-    piapp.manager.formbuilder.model.contact.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetContact
-    piapp.manager.formbuilder.model.slide.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlide
+    piappgedmo.manager.formbuilder.model.block.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetBlock
+    piappgedmo.manager.formbuilder.model.content.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetContent
+    piappgedmo.manager.formbuilder.model.contact.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetContact
+    piappgedmo.manager.formbuilder.model.slide.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlide
     
 services:
     #
     # configuration of the FORM BUILDER classes
     #
-    pi_app_admin.formbuilder_manager.model.block:
-        class: %piapp.manager.formbuilder.model.block.class%
+    pi_app_gedmo.formbuilder_manager.model.block:
+        class: %piappgedmo.manager.formbuilder.model.block.class%
         arguments: ['@service_container']          
         
-    pi_app_admin.formbuilder_manager.model.content:
-        class: %piapp.manager.formbuilder.model.content.class%
+    pi_app_gedmo.formbuilder_manager.model.content:
+        class: %piappgedmo.manager.formbuilder.model.content.class%
         arguments: ['@service_container']       
         
-    pi_app_admin.formbuilder_manager.model.contact:
-        class: %piapp.manager.formbuilder.model.contact.class%
+    pi_app_gedmo.formbuilder_manager.model.contact:
+        class: %piappgedmo.manager.formbuilder.model.contact.class%
         arguments: ['@service_container']         
         
-    pi_app_admin.formbuilder_manager.model.slide:
-        class: %piapp.manager.formbuilder.model.slide.class%
+    pi_app_gedmo.formbuilder_manager.model.slide:
+        class: %piappgedmo.manager.formbuilder.model.slide.class%
         arguments: ['@service_container']
         

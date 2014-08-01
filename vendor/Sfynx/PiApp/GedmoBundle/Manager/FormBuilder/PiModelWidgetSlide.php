@@ -86,8 +86,10 @@ class PiModelWidgetSlide extends PiFormBuilderManager
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // we get all entities
-        $listTableClasses = $this->container->get('bootstrap.database.db')->listTables('table_class');
-        $listTableClasses = array_combine($listTableClasses, $listTableClasses);
+        //$listTableClasses = $this->container->get('bootstrap.database.db')->listTables('table_class');
+        //$listTableClasses = array_combine($listTableClasses, $listTableClasses);
+        $ListsAvailableEntities = \PiApp\AdminBundle\Util\PiWidget\PiGedmoManager::getAvailableSlider();
+        $ListsAvailableEntities = array_combine(array_keys($ListsAvailableEntities), array_keys($ListsAvailableEntities));
         // we get all slide templates
         $listFiles = $this->container->get('pi_app_admin.file_manager')->ListFilesBundle("/Resources/views/Template/Slider");
         $listFiles = array_map(function($value) {
@@ -95,10 +97,10 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         }, array_values($listFiles));
         $listFiles = array_combine($listFiles, $listFiles);
         //
-        $action = \PiApp\AdminBundle\Util\PiJquery\PiFlexSliderManager::$actions;
+        $action = \PiApp\GedmoBundle\Util\PiJquery\PiFlexSliderManager::$actions;
         $action = array_combine($action, $action);
         //
-        $menus = \PiApp\AdminBundle\Util\PiJquery\PiFlexSliderManager::$menus;
+        $menus = \PiApp\GedmoBundle\Util\PiJquery\PiFlexSliderManager::$menus;
         $menus = array_combine($menus, $menus);    
         //
         $css = array(
@@ -201,7 +203,7 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         		),
         ))                    
         ->add('table', 'choice', array(
-        		'choices'   => $listTableClasses,
+        		'choices'   => $ListsAvailableEntities,
         		'multiple'    => false,
         		'required'  => true,
         		'expanded' => false,

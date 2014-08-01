@@ -63,19 +63,21 @@ class PiConfigManager implements PiConfigManagerBuilderInterface
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function setConfig($container, $type, array $options)
+    public function setConfig($container, $type, array $options = null)
     {
-        if (
-            !isset($GLOBALS[ $container ]) 
-            || 
-            !isset($GLOBALS[ $container ][ $type ])
-        ) {
-            $GLOBALS[ $container ][ $type ] = array();
-        }
-        if (is_null($options) || (count($options) == 0)) {
-            throw ExtensionException::ConfigWidgetUnDefined( $container , $type);
-        } else {
-            $GLOBALS[ $container ][ $type ] = array_unique(array_merge($options, $GLOBALS[ $container ][ $type ]));
+        if (!is_null($options) && (count($options) > 0)) {
+            if (
+                !isset($GLOBALS[ $container ]) 
+                || 
+                !isset($GLOBALS[ $container ][ $type ])
+            ) {
+                $GLOBALS[ $container ][ $type ] = array();
+            }
+            if ( isset($GLOBALS[ $container ][ $type ]) && (count($GLOBALS[ $container ][ $type ]) >= 1) ) {
+                $GLOBALS[ $container ][ $type ] = array_merge($options, $GLOBALS[ $container ][ $type ]);
+            } else {
+                $GLOBALS[ $container ][ $type ] = $options;
+            }
         }
     }    
     

@@ -1,10 +1,96 @@
 parameters:
+    #
+    # FORM
+    #   
     pi_app_gedmo.config.form : 
-        block: 'pi_app_admin.formbuilder_manager.model.block'
-        content: 'pi_app_admin.formbuilder_manager.model.content'
-        contact: 'pi_app_admin.formbuilder_manager.model.contact'
-        slide: 'pi_app_admin.formbuilder_manager.model.slide'
+        block: 'pi_app_gedmo.formbuilder_manager.model.block'
+        content: 'pi_app_gedmo.formbuilder_manager.model.content'
+        contact: 'pi_app_gedmo.formbuilder_manager.model.contact'
+        slide: 'pi_app_gedmo.formbuilder_manager.model.slide'
+       
+    #
+    # JQUERY
+    #           
+    pi_app_gedmo.config.jquery.flexslider : 
+        slide-default: 'pi_app_gedmo.jquery_manager.flexslider'
+        
+    #
+    # ENTITY AUTHORISATION
+    #           
+    pi_app_gedmo.config.entity.authorization.prepersist : 
+        PiApp\GedmoBundle\Entity\Media: true
+        PiApp\GedmoBundle\Entity\Translation\MediaTranslation: true
+        Proxies\__CG__\PiApp\GedmoBundle\Entity\Media: true
+        Proxies\PiAppGedmoBundleEntityMediaProxy: true
 
+        PiApp\GedmoBundle\Entity\Contact: true
+        PiApp\GedmoBundle\Entity\Translation\ContactTranslation: true 
+        Proxies\__CG__\PiApp\GedmoBundle\Entity\Contact: true
+        Proxies\PiAppGedmoBundleEntityContactProxy: true
+        
+    pi_app_gedmo.config.entity.authorization.preupdate : 
+        PiApp\GedmoBundle\Entity\Media: true
+        PiApp\GedmoBundle\Entity\Translation\MediaTranslation: true
+        Proxies\__CG__\PiApp\GedmoBundle\Entity\Media: true
+        Proxies\PiAppGedmoBundleEntityMediaProxy: true
+
+        PiApp\GedmoBundle\Entity\Contact: true
+        PiApp\GedmoBundle\Entity\Translation\ContactTranslation: true 
+        Proxies\__CG__\PiApp\GedmoBundle\Entity\Contact: true
+        Proxies\PiAppGedmoBundleEntityContactProxy: true
+        
+    pi_app_gedmo.config.entity.authorization.preremove : 
+        PiApp\GedmoBundle\Entity\Media: true
+        PiApp\GedmoBundle\Entity\Translation\MediaTranslation: true
+        Proxies\__CG__\PiApp\GedmoBundle\Entity\Media: true
+        Proxies\PiAppGedmoBundleEntityMediaProxy: true
+
+        PiApp\GedmoBundle\Entity\Contact: true
+        PiApp\GedmoBundle\Entity\Translation\ContactTranslation: true 
+        Proxies\__CG__\PiApp\GedmoBundle\Entity\Contact: true
+        Proxies\PiAppGedmoBundleEntityContactProxy: true
+        
+    #
+    # ENTITY PROHIBITION
+    #                          
+    pi_app_gedmo.config.entity.prohibition.preupdate : ~
+        #PiApp\AdminBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
+        #PiApp\AdminBundle\Entity\Page: true
+        
+    pi_app_gedmo.config.entity.prohibition.preremove : ~ 
+        #PiApp\AdminBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
+        #PiApp\AdminBundle\Entity\Page: true    
+    
+    #
+    # ENTITY RESTRICTION
+    #                          
+    pi_app_gedmo.config.entity.restriction.bymedia :  ~ # [ 'getBlock', 'getContent' ]
+        
+    pi_app_gedmo.config.entity.restriction.byrole : ~
+        #PiApp\AdminBundle\Entity\Page: { 0: 'home_page', 1: 'page_rouetanme'}
+        #PiApp\AdminBundle\Entity\Page: true    
+        
+    #
+    # ROUTE SLUGGABLE
+    #
+    pi_app_gedmo.config.route.sluggable : ~
+#        page_slider:
+#            entity: 'PiAppGedmoBundle:Slider' 
+#            field_search: 'slug'
+#            field_title: 'title'
+#            field_resume: 'meta_description'
+#            field_keywords: 'meta_keywords'   
+#            requirement: { _method: 'GET|POST', slug: "[a-zA-Z0-9\-]+" }
+#        page_diaporamas:
+#            entity: 'PluginsContentBundle:MediasDiaporama' 
+#            field_name: 'slug'
+#            field_search: 'slug_id'
+#            delimiter: '_'
+#            field_title: 'title'
+#            field_resume: 'meta_description'
+#            field_keywords: 'meta_keywords'       
+#            requirement: { _method: 'GET|POST', slug: "[a-zA-Z0-9\-]+" }          
+        
 services:
     #
     # configuration of the class manager allowed for the Memcache
@@ -16,3 +102,33 @@ services:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
       calls:
         - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_gedmo.config.form% ] ]
+        
+        - [ setConfig, [ 'JQUERY', 'SLIDER', %pi_app_gedmo.config.jquery.flexslider% ] ]
+        
+        - [ setConfig, [ 'ROUTE', 'SLUGGABLE', %pi_app_gedmo.config.route.sluggable% ] ]
+
+        - [ setConfig, [ 'ENTITIES', 'AUTHORIZATION_PREPERSIST', %pi_app_gedmo.config.entity.authorization.prepersist% ] ]
+        - [ setConfig, [ 'ENTITIES', 'AUTHORIZATION_PREUPDATE', %pi_app_gedmo.config.entity.authorization.preupdate% ] ]
+        - [ setConfig, [ 'ENTITIES', 'AUTHORIZATION_PREREMOVE', %pi_app_gedmo.config.entity.authorization.preremove% ] ]
+        - [ setConfig, [ 'ENTITIES', 'PROHIBITION_PREUPDATE', %pi_app_gedmo.config.entity.prohibition.preupdate% ] ]
+        - [ setConfig, [ 'ENTITIES', 'PROHIBITION_PREREMOVE', %pi_app_gedmo.config.entity.prohibition.preremove% ] ]
+        - [ setConfig, [ 'ENTITIES', 'RESTRICTION_BY_MEDIA', %pi_app_gedmo.config.entity.restriction.bymedia% ] ]
+        - [ setConfig, [ 'ENTITIES', 'RESTRICTION_BY_ROLES', %pi_app_gedmo.config.entity.restriction.byrole% ] ]
+        
+        - [ setConfig, [ 'WIDGET_SLIDER', 'PiAppGedmoBundle:Slider', {method: { 0: 'slide-default' }, slide-default: { edit : 'admin_gedmo_slider' }} ] ]
+        - [ setConfig, [ 'WIDGET_SLIDER', 'PiAppGedmoBundle:Media', {method: { 0: 'slide-default' }, slide-default: { edit : 'admin_gedmo_media' }} ] ]
+
+        - [ setConfig, [ 'WIDGET_ORGANIGRAM', 'PiAppGedmoBundle:Organigram', { method: { 0: 'org-chart-page', 1: 'org-tree-semantique' }, org-chart-page: { edit : 'admin_gedmo_organigram_tree' }, org-tree-semantique: { edit : 'admin_gedmo_organigram_semantique' } } ] ]
+        - [ setConfig, [ 'WIDGET_ORGANIGRAM', 'PiAppGedmoBundle:Menu', { method: { 0: 'org-chart-page' }, org-chart-page: { edit : 'admin_gedmo_menu_tree' } } ] ]        
+        
+        - [ setConfig, [ 'WIDGET_NAVIGATION', 'PiAppGedmoBundle:Menu', { method: { 0: '_navigation_default' }, _navigation_default: { edit : 'admin_gedmo_menu_tree' } } ] ]
+        - [ setConfig, [ 'WIDGET_NAVIGATION', 'PiAppGedmoBundle:Organigram', { method: { 0: '_navigation_default' }, _navigation_default: { edit : 'admin_gedmo_organigram_tree' } } ] ]
+        
+        - [ setConfig, [ 'WIDGET_LISTENER', 'PiAppGedmoBundle:Media', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_gedmo_media_edit' }, _template_list: { edit : 'admin_gedmo_media' } } ] ]
+        - [ setConfig, [ 'WIDGET_LISTENER', 'PiAppGedmoBundle:Block', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_gedmo_block_edit' }, _template_list: { edit : 'admin_gedmo_block' } } ] ]
+        - [ setConfig, [ 'WIDGET_LISTENER', 'PiAppGedmoBundle:Content', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_gedmo_content_edit' }, _template_list: { edit : 'admin_gedmo_content' } } ] ]
+        - [ setConfig, [ 'WIDGET_LISTENER', 'PiAppGedmoBundle:Contact', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_gedmo_contact_edit' }, _template_list: { edit : 'admin_gedmo_contact' } } ] ]
+        - [ setConfig, [ 'WIDGET_LISTENER', 'PiAppGedmoBundle:Slider', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_gedmo_slider_edit' }, _template_list: { edit : 'admin_gedmo_slider' } } ] ]
+        - [ setConfig, [ 'WIDGET_LISTENER', 'PiAppGedmoBundle:Menu', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_gedmo_menu_edit' }, _template_list: { edit : 'admin_gedmo_menu' } } ] ]
+        - [ setConfig, [ 'WIDGET_LISTENER', 'PiAppGedmoBundle:Organigram', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_gedmo_organigram_edit' }, _template_list: { edit : 'admin_gedmo_organigram' } } ] ]
+     

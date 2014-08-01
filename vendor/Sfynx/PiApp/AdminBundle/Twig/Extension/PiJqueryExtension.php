@@ -17,56 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use PiApp\AdminBundle\Twig\TokenParser\StyleSheetJqueryTokenParser;
 use PiApp\AdminBundle\Exception\ExtensionException;
 
-// Matrix des differents validateurs définis.
-$GLOBALS['JQUERY']['GRID'] = array(
-        'grid-table'            => 'pi_app_admin.jquery_manager.gridtable',
-);
-
-$GLOBALS['JQUERY']['FORM'] = array(
-        'prototype-bytab'       => 'pi_app_admin.jquery_manager.prototypebytabs',
-        'form-simple'           => 'pi_app_admin.jquery_manager.formsimple',
-);
-
-$GLOBALS['JQUERY']['SESSION'] = array(
-        'flash'                 => 'pi_app_admin.jquery_manager.sessionflash',
-);
-
-$GLOBALS['JQUERY']['MENU'] = array(
-        'context-menu'          => 'pi_app_admin.jquery_manager.contextmenu',
-        'org-chart-page'        => 'pi_app_admin.jquery_manager.orgchartpage',
-        'org-tree-page'            => 'pi_app_admin.jquery_manager.orgtreepage',
-        'org-tree-semantique'   => 'pi_app_admin.jquery_manager.orgsemantique',
-        'org-tree-breadcrumb'   => 'pi_app_admin.jquery_manager.orgbreadcrumb',
-);
-
-$GLOBALS['JQUERY']['SLIDER'] = array(
-        'slide-default'         => 'pi_app_admin.jquery_manager.flexslider',
-);
-
-$GLOBALS['JQUERY']['TOOL'] = array(
-        'backstretch'           => 'pi_app_admin.jquery_manager.backstretch',
-        'veneer'                => 'pi_app_admin.jquery_manager.veneer',
-        'tabs'                  => 'pi_app_admin.jquery_manager.tab',
-        'languagechoice'        => 'pi_app_admin.jquery_manager.languagechoice',
-        'widgetadmin'           => 'pi_app_admin.jquery_manager.widgetadmin',
-        'widgetimport'          => 'pi_app_admin.jquery_manager.widgetimport',
-		'dialog'                => 'pi_app_admin.jquery_manager.dialog',
-        'spinner'               => 'pi_app_admin.jquery_manager.spinner',        
-);
-
-$GLOBALS['JQUERY']['ACCORDEON'] = array(
-        'tiny'                  => 'pi_app_admin.jquery_manager.tinyaccordeon',
-        'nested'                => 'pi_app_admin.jquery_manager.nestedaccordeon',
-);
-
-$GLOBALS['JQUERY']['TWITTER'] = array(
-        'tweets_blog'           => 'pi_app_admin.jquery_manager.twitter',
-);
-
-$GLOBALS['JQUERY']['LUCENE'] = array(
-        'search-lucene'         => 'pi_app_admin.jquery_manager.searchlucene',
-);
-
 /**
  * Jquery Matrix used in twig
  *

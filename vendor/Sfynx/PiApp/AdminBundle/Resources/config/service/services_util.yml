@@ -28,7 +28,6 @@ parameters:
     piapp.manager.jquery.nestedaccordeon.class: PiApp\AdminBundle\Util\PiJquery\PiNestedAccordeonManager
     piapp.manager.jquery.tab.class: PiApp\AdminBundle\Util\PiJquery\PiTabManager
     piapp.manager.jquery.widgetadmin.class: PiApp\AdminBundle\Util\PiJquery\PiWidgetAdminManager
-    piapp.manager.jquery.flexslider.class: PiApp\AdminBundle\Util\PiJquery\PiFlexSliderManager
     piapp.manager.jquery.twitter.class: PiApp\AdminBundle\Util\PiJquery\PiTwitterManager
     piapp.manager.jquery.searchlucene.class: PiApp\AdminBundle\Util\PiJquery\PiSearchLuceneManager
     piapp.manager.jquery.widgetimport.class: PiApp\AdminBundle\Util\PiJquery\PiwidgetimportManager
@@ -136,10 +135,6 @@ services:
         
     pi_app_admin.jquery_manager.tab:                       
         class: %piapp.manager.jquery.tab.class%
-        arguments: ['@service_container']
-        
-    pi_app_admin.jquery_manager.flexslider:
-        class: %piapp.manager.jquery.flexslider.class%
         arguments: ['@service_container']
         
     pi_app_admin.jquery_manager.twitter:

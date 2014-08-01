@@ -18,33 +18,6 @@ use PiApp\AdminBundle\Twig\TokenParser\StyleSheetWidgetTokenParser;
 use PiApp\AdminBundle\Exception\ExtensionException;
 use PiApp\AdminBundle\Entity\TranslationWidget;
 
-// Matrix des differents validateurs définis.
-$GLOBALS['WIDGET']['CONTENT'] = array(
-        'snippet'        => 'pi_app_admin.widget_manager.content.snippet',
-        'text'             => 'pi_app_admin.widget_manager.content.text',
-        'media'            => 'pi_app_admin.widget_manager.content.media',
-        'jqext'            => 'pi_app_admin.widget_manager.content.jqext',
-);
-
-$GLOBALS['WIDGET']['GEDMO'] = array(
-        'snippet'        => 'pi_app_admin.widget_manager.gedmo.snippet',
-        'listener'        => 'pi_app_admin.widget_manager.gedmo.listener',
-        'navigation'    => 'pi_app_admin.widget_manager.gedmo.navigation',
-        'organigram'    => 'pi_app_admin.widget_manager.gedmo.organigram',
-        'slider'        => 'pi_app_admin.widget_manager.gedmo.slider',
-);
-
-$GLOBALS['WIDGET']['SEARCH'] = array(
-        'lucene'        => 'pi_app_admin.widget_manager.search.lucene',
-);
-
-$GLOBALS['WIDGET']['USER'] = array(
-        'connexion'        => 'pi_app_admin.widget_manager.user.connexion',
-);
-
-$GLOBALS['WIDGET']['TAB'] = array(
-);
-
 /**
  * Widget Matrix used in twig
  *

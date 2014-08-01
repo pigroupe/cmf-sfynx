@@ -140,6 +140,10 @@ class Db extends AbstractFactory
     /**
      * Gets the list of all tables.
      *
+     * <code>
+     *   $listTableClasses = $this->container->get('bootstrap.database.db')->listTables('table_class');
+     *   $listTableClasses = array_combine($listTableClasses, $listTableClasses);
+     * </code>
      * @return array    the list of all tables
      * @access public
      *
