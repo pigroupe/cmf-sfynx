@@ -238,7 +238,7 @@ fos_user:
     use_username_form_type: true
     model_manager_name:     null  # change it to the name of your entity/document manager if you don't want to use the default one.
     from_email:
-        address:       test@gmail.com
+        address:       contact@sfynx.fr
         sender_name:   Admin    
     profile:
         form:
@@ -253,7 +253,7 @@ fos_user:
     registration:
         confirmation:
             from_email: # Use this node only if you don't want the global email address for the confirmation email
-                address:        test@gmail.com
+                address:        contact@sfynx.fr
                 sender_name:    commercial
             enabled:    true # change to true for required email confirmation
             #template:   FOSUserBundle:Registration:email.txt.twig
@@ -267,7 +267,7 @@ fos_user:
         token_ttl: 86400
         email:
             from_email: # Use this node only if you don't want the global email address for the resetting email
-                address:        test@gmail.com
+                address:        contact@sfynx.fr
                 sender_name:    admin
             template:   FOSUserBundle:Resetting:email.txt.twig
         form:
@@ -493,7 +493,7 @@ pi_app_admin:
             template_flash: flash.html.twig
         meta_head:
             author: Sfynx
-            copyright: http://pigroupe.github.io/cmf-sfynx/
+            copyright: http://www.sfynx.fr/
             title: Sfynx
             description: Based in Europe with operational offices in Switzerland, France, Russia, West and South Africa, Singapore.
             keywords: Sfynx, symfony 2, framework, CMF, CMS, PHP web applications
@@ -636,8 +636,7 @@ pi_app_admin:
 #
 # WsBundle configuration
 #
-boot_strap_ws:
-    
+boot_strap_ws:    
     auth:
         log:
             dev: true
