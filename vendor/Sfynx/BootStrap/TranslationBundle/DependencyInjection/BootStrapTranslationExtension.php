@@ -31,6 +31,8 @@ class BootStrapTranslationExtension extends Extension{
     {
         $loaderYaml = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/service'));
         $loaderYaml->load('services.yml');
+        $loaderYaml->load('services_util.yml');
+        $loaderYaml->load('services_cmfconfig.yml');
         $loaderYaml->load('services_doctrine_extensions.yml');
         $loaderYaml->load("services_form_extension.yml");
         $loaderYaml->load('services_subscriber.yml');

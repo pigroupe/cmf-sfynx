@@ -397,10 +397,10 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 		    ||
 		    ( isset($options['lifetime']) && ($options['lifetime'] == 0) )
 		) {
-			$response->headers->set('Pragma', "no-cache");
-			$response->headers->set('Cache-control', "private");
 			$response->setSharedMaxAge(0);
 			$response->setMaxAge(0);
+		    $response->headers->set('Pragma', "no-cache");
+			$response->headers->set('Cache-control', "private");
 		}
 	
 		return $response;

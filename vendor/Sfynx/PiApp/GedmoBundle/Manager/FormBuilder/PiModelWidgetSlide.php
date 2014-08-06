@@ -258,6 +258,7 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         		),
         ))     
         ->add('MaxResults', 'text', array(
+                'required' => false,
         		'label'    => "Nbr de resultat Max",
         		"label_attr" => array(
         				"class"=>"text_collection",
@@ -296,7 +297,7 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         		),
         		'label'    => ' '
         ))
-        ->add('searchfields', 'collection', array(
+        ->add('flexslidersearchfields', 'collection', array(
         		'allow_add' => true,
         		'allow_delete' => true,
         		'prototype'    => true,
@@ -353,7 +354,7 @@ class PiModelWidgetSlide extends PiFormBuilderManager
                     var indexSQLParams    = 0;
                     jQuery("div#piappgedmobundlemanagerformbuilderpimodelwidgetslide").find("fieldset").append('<br ><ul id="sqlparams-fields-list" ></ul>');
                     jQuery('#add-another-sqlparameters').click(function() {
-                        var prototypeList = jQuery('#prototype_script_searchfields');   
+                        var prototypeList = jQuery('#prototype_script_flexslidersearchfields');   
                         // parcourt le template prototype
                         var newWidget2 = prototypeList.html().replace('<label class="required">__name__label__</label>', '');
                         // remplace les "__name__" utilisés dans l'id et le nom du prototype
@@ -430,6 +431,11 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         foreach ($data['css'] as $css) {
             $AllCss[] = $css;
         }
+        //
+        $AllParams = array();
+        foreach ($data['flexsliderparams'] as $param) {
+            $AllParams[  $param['field'] ] = $param['value']; 
+        }
         
         return
         array(
@@ -456,10 +462,8 @@ class PiModelWidgetSlide extends PiFormBuilderManager
                                                 'MaxResults'  => $data['MaxResults'],
                                                 'boucle_array'  => $data['boucle_array'],
                                                 'query_function'  => $data['query_function'],
-                                                'searchFields' => array(
-                                                        0 => array('nameField'    => '','valueField'   => ''),
-                                                        1 => array('nameField'    => '','valueField'   => '')
-                                                )
+                                                'params' => $AllParams,
+                                                'searchFields' => $data['flexslidersearchfields'],
                                             )
                                         )
                                 )

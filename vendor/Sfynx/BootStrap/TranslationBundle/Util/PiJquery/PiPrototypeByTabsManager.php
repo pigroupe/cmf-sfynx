@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Translation> project.
  *
- * @category   Admin_Util
+ * @category   Translation_Util
  * @package    Extension_jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\AdminBundle\Util\PiJquery;
+namespace BootStrap\TranslationBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,7 +20,7 @@ use PiApp\AdminBundle\Exception\ExtensionException;
 /**
  * MultiSelect Jquery plugin
  *
- * @category   Admin_Util
+ * @category   AdmTranslation_Utilin_Util
  * @package    Extension_jquery
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

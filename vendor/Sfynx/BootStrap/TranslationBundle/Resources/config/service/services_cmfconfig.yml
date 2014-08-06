@@ -1,0 +1,23 @@
+parameters:
+    #
+    # JQUERY
+    #         
+    bootstrap.translation.config.jquery.grid : 
+        grid-table: 'bootstrap.translation.jquery_manager.gridtable'  
+        
+    bootstrap.translation.config.jquery.form : 
+        prototype-bytab: 'bootstrap.translation.jquery_manager.prototypebytabs'
+        form-simple: 'bootstrap.translation.jquery_manager.formsimple'
+        
+services:
+    #
+    # configuration of the class manager allowed for the config CMF
+    #       
+    bootstrap.translation.cmfconfig:
+      class: %piapp.manager.config.class%
+      arguments: ['@service_container']
+      tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
+      calls:
+        - [ setConfig, [ 'JQUERY', 'GRID', %bootstrap.translation.config.jquery.grid% ] ]
+        - [ setConfig, [ 'JQUERY', 'FORM', %bootstrap.translation.config.jquery.form% ] ]

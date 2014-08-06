@@ -311,9 +311,8 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                     $set .= "{% endif %}\n";
                 }
             } else {
+                $ttl = (int) $params['widget-lifetime'];
                 if ($is_render_service_with_ttl && ($ttl > 0)) {
-                    $key = (int) $params['widget-id'];
-                    $ttl = (int) $params['widget-lifetime'];
                     $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', '{$serviceName}', 'renderSource', '{$id}', '{$lang}', {$json})|raw }}\n";
                 } else {
                     $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
@@ -431,9 +430,8 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                     $set .= "{% endif %}\n";
                 }
             } else {          
+                $ttl = (int) $params['widget-lifetime'];
                 if ($is_render_service_with_ttl && ($ttl > 0)) {
-                    $key = (int) $params['widget-id'];
-                    $ttl = (int) $params['widget-lifetime'];
                     $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', 'pi_app_admin.twig.extension.jquery', 'FactoryFunction', '{$JQcontainer}', '{$method}', {$json})|raw }}\n";
                 } else {
                     $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";

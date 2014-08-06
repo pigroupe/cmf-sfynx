@@ -27,10 +27,10 @@ class PiModelWidgetSlideCollection2Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text', array(
+        $builder->add('nameField', 'text', array(
         		'label'    => "Name field",
         ));
-        $builder->add('value', 'text', array(
+        $builder->add('valueField', 'text', array(
                 'label'    => "Value field",
                 'data' => 'IS NOT NULL, LIKE "%a%"',
         ));

@@ -13,9 +13,6 @@ parameters:
     piapp.manager.encryption.class: PiApp\AdminBundle\Util\PiEncryption
     
     piapp.manager.jquery.languagechoice.class: PiApp\AdminBundle\Util\PiJquery\PiLanguageChoiceManager
-    piapp.manager.jquery.gridtable.class: PiApp\AdminBundle\Util\PiJquery\PiGridTableManager
-    piapp.manager.jquery.formsimple.class: PiApp\AdminBundle\Util\PiJquery\PiFormSimpleManager
-    piapp.manager.jquery.prototypebytabs.class: PiApp\AdminBundle\Util\PiJquery\PiPrototypeByTabsManager
     piapp.manager.jquery.sessionflash.class: PiApp\AdminBundle\Util\PiJquery\PiSessionFlashManager
     piapp.manager.jquery.orgchartpage.class: PiApp\AdminBundle\Util\PiJquery\PiOrgChartPageManager
     piapp.manager.jquery.orgsemantique.class: PiApp\AdminBundle\Util\PiJquery\PiOrgSemantiquePageManager
@@ -89,18 +86,6 @@ services:
         class: %piapp.manager.jquery.languagechoice.class%
         arguments: ['@service_container']
                 
-    pi_app_admin.jquery_manager.gridtable:
-        class: %piapp.manager.jquery.gridtable.class%
-        arguments: ['@service_container']                             
-            
-    pi_app_admin.jquery_manager.formsimple:
-        class: %piapp.manager.jquery.formsimple.class%
-        arguments: ['@service_container']
-        
-    pi_app_admin.jquery_manager.prototypebytabs:
-        class: %piapp.manager.jquery.prototypebytabs.class%
-        arguments: ['@service_container']
-        
     pi_app_admin.jquery_manager.sessionflash:
         class: %piapp.manager.jquery.sessionflash.class%
         arguments: ['@service_container']

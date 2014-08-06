@@ -93,7 +93,7 @@ parameters:
         
 services:
     #
-    # configuration of the class manager allowed for the Memcache
+    # configuration of the class manager allowed for the Config CMF
     #       
     pi_app_gedmo.cmfconfig:
       class: %piapp.manager.config.class%

@@ -1,0 +1,20 @@
+parameters:
+    bootstrap.translation.manager.jquery.gridtable.class: BootStrap\TranslationBundle\Util\PiJquery\PiGridTableManager
+    bootstrap.translation.manager.jquery.formsimple.class: BootStrap\TranslationBundle\Util\PiJquery\PiFormSimpleManager
+    bootstrap.translation.manager.jquery.prototypebytabs.class: BootStrap\TranslationBundle\Util\PiJquery\PiPrototypeByTabsManager
+
+services:
+    #
+    # configuration of the JQUERY Util classes
+    #
+    bootstrap.translation.jquery_manager.gridtable:
+        class: %bootstrap.translation.manager.jquery.gridtable.class%
+        arguments: ['@service_container']                             
+            
+    bootstrap.translation.jquery_manager.formsimple:
+        class: %bootstrap.translation.manager.jquery.formsimple.class%
+        arguments: ['@service_container']
+        
+    bootstrap.translation.jquery_manager.prototypebytabs:
+        class: %bootstrap.translation.manager.jquery.prototypebytabs.class%
+        arguments: ['@service_container']

@@ -230,7 +230,6 @@ class FrontendController extends abstractController
      */
     public function copypageAction()
     {
-    	
     	try {
     		$locale      = $this->container->get('request')->getLocale();
     		$data        = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($locale, array('result' => 'match'));

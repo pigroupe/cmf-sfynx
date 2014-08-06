@@ -11,13 +11,6 @@ parameters:
     #
     # JQUERY
     #         
-    pi_app_admin.config.jquery.grid : 
-        grid-table: 'pi_app_admin.jquery_manager.gridtable'  
-        
-    pi_app_admin.config.jquery.form : 
-        prototype-bytab: 'pi_app_admin.jquery_manager.prototypebytabs'
-        form-simple: 'pi_app_admin.jquery_manager.formsimple'
-        
     pi_app_admin.config.jquery.session :   
         flash: 'pi_app_admin.jquery_manager.sessionflash'
         
@@ -143,7 +136,7 @@ parameters:
                                     
 services:
     #
-    # configuration of the class manager allowed for the Memcache
+    # configuration of the class manager allowed for the config CMF
     #       
     pi_app_admin.cmfconfig:
       class: %piapp.manager.config.class%
@@ -153,8 +146,6 @@ services:
       calls:
         - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_admin.config.form% ] ]
         
-        - [ setConfig, [ 'JQUERY', 'GRID', %pi_app_admin.config.jquery.grid% ] ]
-        - [ setConfig, [ 'JQUERY', 'FORM', %pi_app_admin.config.jquery.form% ] ]
         - [ setConfig, [ 'JQUERY', 'SESSION', %pi_app_admin.config.jquery.session% ] ]
         - [ setConfig, [ 'JQUERY', 'MENU', %pi_app_admin.config.jquery.menu% ] ]
         - [ setConfig, [ 'JQUERY', 'TOOL', %pi_app_admin.config.jquery.tool% ] ]

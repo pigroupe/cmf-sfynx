@@ -574,10 +574,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             || 
             (method_exists($object, 'getLifetime') && ($object->getLifetime() == 0)) 
         ) {
-        	$response->headers->set('Pragma', "no-cache");
-        	$response->headers->set('Cache-control', "private");
         	$response->setSharedMaxAge(0);
         	$response->setMaxAge(0);
+            $response->headers->set('Pragma', "no-cache");
+        	$response->headers->set('Cache-control', "private");
         }
         if (method_exists($object, 'getMetaContentType')) {
         	$response->headers->set('Content-Type', $object->getMetaContentType());

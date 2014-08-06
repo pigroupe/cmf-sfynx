@@ -459,7 +459,6 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                                 cache: false,
                                                 error: function(msg){ alert( "Error !: " + msg );},                 
                                                 success: function(response){
-                                                    //console.log(response);
                                                     window.location.href= "<?php echo $this->container->get('router')->generate('public_refresh_page') ?>";
                                                 }
                                             });

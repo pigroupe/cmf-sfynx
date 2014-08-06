@@ -51,8 +51,8 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
      * Return the referer url translated to the locale value and record the language in session..
      * 
 	 * <code>
-	 *     $match = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($this->container->get('session')->getLocale(), array('result' => 'match'));
-	 *     $url   = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($this->container->get('session')->getLocale());
+	 *     $match = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($this->container->get('request')->getLocale(), array('result' => 'match'));
+	 *     $url   = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($this->container->get('request')->getLocale());
 	 * </code>
 	 * 
      * @param string $langue
@@ -75,22 +75,19 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         	$request->setLocale($langue);
         }        
         // It tries to redirect to the original page.
-        $old_url_path     = $request->headers->get('referer'); // probleme avec les esi => pas de valeur retourné
-        $old_url         = str_replace($request->getUriForPath(''), '', $old_url_path);
-        
-        $old_info = explode('?', $old_url);
-        $data            = $this->getRouterTranslator()->match($old_info[0]);    
-        
+        $old_url_path = $request->headers->get('referer');
+        $old_url      = str_replace($request->getUriForPath(''), '', $old_url_path);
+        $old_info     = explode('?', $old_url);
         try {
-            $new_url     = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue), UrlGeneratorInterface::ABSOLUTE_PATH);
+            $data     = $this->getRouterTranslator()->match($old_info[0]);
+            $new_url = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue), UrlGeneratorInterface::ABSOLUTE_PATH);
         } catch (\Exception $e) {
-            $new_url    = $old_url_path;
-        }
-        
+            $data    = null;
+            $new_url = $old_url_path;
+        }        
         if (empty($new_url) || ($new_url == "/")) {
             $new_url = $this->getContainer()->get('router')->generate('home_page', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
-        }
-        
+        }   
     	if (isset($options['result']) && ($options['result'] == 'match')) {
 			return	$data;
 		} else {
@@ -102,8 +99,8 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
      * Return the current url translated to the locale value.
      * 
 	 * <code>
-	 *     $match	= $this->container->get('bootstrap.RouteTranslator.factory')->getLocaleRoute($this->container->get('session')->getLocale(), array('result' => 'match'));
-	 *     $url    	= $this->container->get('bootstrap.RouteTranslator.factory')->getLocaleRoute($this->container->get('session')->getLocale(), array('result' => 'string'));
+	 *     $match	= $this->container->get('bootstrap.RouteTranslator.factory')->getLocaleRoute($this->container->get('request')->getLocale(), array('result' => 'match'));
+	 *     $url    	= $this->container->get('bootstrap.RouteTranslator.factory')->getLocaleRoute($this->container->get('request')->getLocale(), array('result' => 'string'));
 	 * </code> 
      * 
      * @param string $langue
