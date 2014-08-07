@@ -390,17 +390,16 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 		// set header tags.
 		$is_force_private_response           = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_for_all");
 		$is_force_private_response_with_auth = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_only_with_authentication");
-		if (
+		if ( 
 		    $is_force_private_response
 		    ||
-		    ($this->isUsernamePasswordToken() && $is_force_private_response_with_auth)
-		    ||
-		    ( isset($options['lifetime']) && ($options['lifetime'] == 0) )
+		    ($this->isUsernamePasswordToken() && $is_force_private_response_with_auth)		
 		) {
+			$response->headers->set('Pragma', "no-cache");
+			$response->headers->set('Cache-control', "private");
+		} elseif ( isset($options['lifetime']) && ($options['lifetime'] == 0) ) {
 			$response->setSharedMaxAge(0);
 			$response->setMaxAge(0);
-		    $response->headers->set('Pragma', "no-cache");
-			$response->headers->set('Cache-control', "private");
 		}
 	
 		return $response;

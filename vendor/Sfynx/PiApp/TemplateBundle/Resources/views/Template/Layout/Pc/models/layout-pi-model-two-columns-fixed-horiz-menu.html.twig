@@ -38,7 +38,10 @@
 		</ul>
 		{% endblock %}
 		
-		{% include "BootStrapUserBundle::connexion-ul-li.html.twig" %}
+        {# {% include "BootStrapUserBundle::connexion-ul-li.html.twig" %} #}
+	    {% set widget_service_params = {"template":"PiAppTemplateBundle:Template@@@@@@@@Login@@@@@@@@Security:connexion-ajax.html.twig"} %} 
+ 	    {{ getService('pi_app_admin.manager.authentication').renderSource('BootStrapUserBundle:User~_connexion_default', 'fr_FR', widget_service_params)|raw }}
+		
 	</div><!-- #navigation -->
 
 	<div id="centre">
