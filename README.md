@@ -326,9 +326,9 @@ Many systems allow you to use ACL chmod a +.
 Then you must add the uploads/media folder to allow specific users to load :
 
 ``` bash
-chmod –R 0777 app / cache
-chmod –R 0777 app / log
-chmod –R 0777 Orcehstra / BootStrap/TranslatorBundle/Resources/translations
+chmod –R 0777 app/cache
+chmod –R 0777 app/log
+chmod –R 0777 vendor/Sfynx/BootStrap/TranslatorBundle/Resources/translations
 
 mkdir web/uploads
 mkdir web/uploads/media

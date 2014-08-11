@@ -1,6 +1,18 @@
 <?php
+/*
+ use Symfony\Component\ClassLoader\ApcClassLoader;
+*/
 use Symfony\Component\HttpFoundation\Request;
+
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+// Use APC for autoloading to improve performance.
+// Change 'sf2' to a unique prefix in order to prevent cache key conflicts
+// with other applications also using APC.
+/*
+ $loader = new ApcClassLoader('sf2', $loader);
+$loader->register(true);
+*/
+
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
 //umask(0000);
@@ -14,8 +26,10 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
     header('HTTP/1.0 403 Forbidden');
     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 }*/
+
 require_once __DIR__.'/../app/AppKernel.php';
 require_once __DIR__.'/../app/AppCache.php';
+
 if(preg_match("/app_dev.php/",$_SERVER['REQUEST_URI']) || preg_match("/app.php/",$_SERVER['REQUEST_URI'] )) {
     header('Location: /');
 } else {

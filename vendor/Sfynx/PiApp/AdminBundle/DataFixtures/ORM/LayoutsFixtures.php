@@ -333,8 +333,8 @@ class LayoutsFixtures extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('layout-pi-model-two-columns-fixed-horiz-menu', $field14);
         $this->addReference('layout-pi-model-two-fluid-columns', $field15);
         $this->addReference('layout-pi-model-two-fluid-intelligent-columns', $field16);
-        $this->addReference('layout-pi-model-two-fluid-intelligent-columns', $field17);
-        $this->addReference('layout-pi-model-three-fluid-intelligent-columns', $field18);
+        $this->addReference('layout-pi-model-responsive-two-fluid-columns', $field17);
+        $this->addReference('layout-pi-model-responsive-three-fluid-columns', $field18);
     }
     
     /**

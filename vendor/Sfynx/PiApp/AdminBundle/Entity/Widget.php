@@ -97,21 +97,21 @@ class Widget
     /**
      * @var boolean $public
      *
-     * @ORM\Column(name="is_templating_cache", type="integer", nullable=false)
+     * @ORM\Column(name="is_templating_cache", type="integer", nullable=true)
      */
     protected $cacheTemplating = 0; 
 
     /**
      * @var boolean $public
      *
-     * @ORM\Column(name="is_ajax", type="integer", nullable=false)
+     * @ORM\Column(name="is_ajax", type="integer", nullable=true)
      */
     protected $ajax = 0;    
     
     /**
      * @var boolean $sluggify
      *
-     * @ORM\Column(name="is_sluggify", type="integer", nullable=false)
+     * @ORM\Column(name="is_sluggify", type="integer", nullable=true)
      */
     protected $sluggify = 0;    
     
