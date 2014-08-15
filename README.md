@@ -24,9 +24,10 @@ The bundle has been split into 2 directories :
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 
 * MediaBundle : A bundle which overload the SonataMediaBundle.
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate Sfynx bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
+* ToolBundle : A bundle which contains tool libraries and services of route and role and twig extensions
+* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate Sfynx bundle with a CRUD system of an entity, and annotation to encrypt fields and to manage position.
 * TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
-* UserBundle : A bundle which overload the FOSUserBundle.
+* UserBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
 ```
 
