@@ -31,7 +31,7 @@ use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCrudCommand as BaseGen
 class DoctrineCrudCommand extends BaseGenerator
 {
     /**
-     * @var \PiApp\AdminBundle\Util\PiLogManager
+     * @var \BootStrap\ToolBundle\Util\PiLogManager
      */
     private $_logger;
     

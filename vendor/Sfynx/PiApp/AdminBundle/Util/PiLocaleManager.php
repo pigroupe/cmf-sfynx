@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Utils
- * @package    Util
+ * @category   Util
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
  *
@@ -23,9 +23,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     $fileFormatter    = $this-container->get('pi_app_admin.locale_manager');
  * </code>
  * 
- * @category   Admin_Utils
- * @package    Util
- * 
+ * @category   Util
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiLocaleManager implements PiLocaleManagerBuilderInterface 

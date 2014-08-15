@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
+ * @category   Schema
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-02-23
@@ -23,7 +23,7 @@ use PiApp\AdminBundle\EventListener\CoreListener;
  * The loadClassMetadata event occurs after the mapping metadata for a class has been loaded
  * from a mapping source (annotations/xml/yaml).
  *
- * @category   Admin_Eventlistener
+ * @category   Schema
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

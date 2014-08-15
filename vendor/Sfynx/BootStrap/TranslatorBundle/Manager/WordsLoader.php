@@ -158,7 +158,7 @@ class WordsLoader implements LoaderInterface
 
         $foundBundle   = $this->container->get('kernel')->getBundle('BootStrapTranslatorBundle');
         $basePath      = $foundBundle->getPath() . "/Resources/translations/";
-        $dir           = \PiApp\AdminBundle\Util\PiFileManager::mkdirr($basePath);
+        $dir           = \BootStrap\ToolBundle\Util\PiFileManager::mkdirr($basePath);
 
         $array = array();
         if (!isset($_GET['_end_wordsloader_'])) {
@@ -189,7 +189,7 @@ class WordsLoader implements LoaderInterface
         
         $basePath_cache_translations         = realpath($this->container->getParameter("kernel.cache_dir"). '/translations/');
         if ($basePath_cache_translations){
-            $all_files = \PiApp\AdminBundle\Util\PiFileManager::ListFiles($basePath_cache_translations);
+            $all_files = \BootStrap\ToolBundle\Util\PiFileManager::ListFiles($basePath_cache_translations);
             foreach ($all_files as $filename ) {
                  unlink ($filename);
             }  

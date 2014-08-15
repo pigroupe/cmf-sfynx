@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Template> project.
  * 
- * @category   Bundle
- * @package    PiApp
+ * @category   Bootstrap
+ * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -15,10 +15,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Wurfl managment Bundle
+ * Template managment Bundle
  *
- * @category   Bundle
- * @package    PiApp
+ * @category   Bootstrap
+ * @package    Bundle
  * 
  * @author <etienne de Longeaux> <etienne.delongeaux@gmail.com>
  */

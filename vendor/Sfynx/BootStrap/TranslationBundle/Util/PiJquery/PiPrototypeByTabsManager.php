@@ -14,7 +14,7 @@ namespace BootStrap\TranslationBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use PiApp\AdminBundle\Twig\Extension\PiJqueryExtension;
+use BootStrap\ToolBundle\Twig\Extension\PiJqueryExtension;
 use PiApp\AdminBundle\Exception\ExtensionException;
 
 /**
@@ -92,7 +92,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
     {
         // Option management
         if (!isset($options['prototype-name']) || empty($options['prototype-name'])) {
-            throw ExtensionException::optionValueNotSpecified('prototype-name', __CLASS__);
+            $options['prototype-name'] = '';
         }
         if (!isset($options['prototype-tab-title']) || empty($options['prototype-tab-title'])) {
             throw ExtensionException::optionValueNotSpecified('prototype-tab-title', __CLASS__);

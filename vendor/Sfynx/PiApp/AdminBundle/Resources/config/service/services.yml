@@ -12,6 +12,9 @@ parameters:
     piapp.admin.manager.formbuilder.class: PiApp\AdminBundle\Manager\PiFormBuilderManager
     piapp.admin.manager.authentication.class: PiApp\AdminBundle\Manager\PiAuthenticationManager
 
+    piapp.route.route_loader.class: PiApp\AdminBundle\Route\RouteLoader
+    piapp.route.route_doctrine.class: PiApp\AdminBundle\Route\DoctrineRoute
+    
     piapp.twig.loader.class: PiApp\AdminBundle\Twig\PiTwigLoader
     piapp.twig.caching.class: PiApp\AdminBundle\Twig\PiTwigCache
     
@@ -65,6 +68,19 @@ services:
     pi_app_admin.manager.authentication: 
         class: %piapp.admin.manager.authentication.class%
         arguments: ['@service_container'] 
+        
+    #
+    # configuration of the route manager
+    # 
+    pi.route.route_loader:
+        class: %piapp.route.route_loader.class%
+        arguments: ['@service_container']       
+        tags:
+            - { name: routing.loader }            
+        
+    pi.route.route_doctrine:
+        class: %piapp.route.route_doctrine.class%
+        arguments: ['@service_container']         
         
     #
     # configuration of the Twig and Template

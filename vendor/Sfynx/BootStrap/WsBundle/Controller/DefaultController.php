@@ -1,12 +1,11 @@
 <?php
 
 /**
- * This file is part of the <mappy shopping> project.
+ * This file is part of the <WS> project.
  *
- * @category Ws_Controller
- * @package  Controller
+ * @category   BootStrap
+ * @package    Controller
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright Copyright (c) 2013, Mappy
  * @since 2013-03-26
  *
  * For the full copyright and license information, please view the LICENSE
@@ -29,8 +28,8 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 /**
  * This controller is made for define all webservices.
  * 
- * @category Ws_Controller
- * @package Controller
+ * @category   BootStrap
+ * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class DefaultController extends abstractController
@@ -122,7 +121,7 @@ class DefaultController extends abstractController
     	        $isAuthorization = true;
     	    } else {
     	    	$now = new \Datetime();
-    	        $token            = md5($now->getTimestamp()) . strtoupper(\PiApp\AdminBundle\Util\PiStringManager::random(24));
+    	        $token            = md5($now->getTimestamp()) . strtoupper(\BootStrap\ToolBundle\Util\PiStringManager::random(24));
     	        $isAuthorization  = false;
     	    }
     	    //-----we initialize de logger-----
@@ -317,7 +316,7 @@ class DefaultController extends abstractController
     		//-----we set info in the logger-----
     		$logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN BAD AUTH REQUEST]");
     		//-----we set errors in the logger-----
-    		$loggerr->setErr(date("Y-m-d H:i:s") . " [LOG] mappy url :" . $request->getUri());
+    		$loggerr->setErr(date("Y-m-d H:i:s") . " [LOG] WS url :" . $request->getUri());
     		$logger->setErr(date("Y-m-d H:i:s") . " [LOG] param url :" . $result['url']);
     		//-----we set info in the logger-----
     		$logger->setInfo(date("Y-m-d H:i:s") . " [END]");

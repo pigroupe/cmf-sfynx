@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Symfony\Component\Validator\Constraints;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -344,10 +345,10 @@ class MediaType extends AbstractType
         return 'piapp_gedmobundle_mediatype_' . $this->_status;
     }
     
-    public function getDefaultOptions(array $options)
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
-                'data_class' => 'PiApp\GedmoBundle\Entity\Media',
-        );
-    }       
+    	$resolver->setDefaults(array(
+    			'data_class' => 'PiApp\GedmoBundle\Entity\Media',
+    	));
+    }    
 }

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Builders
+ * @category   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -19,9 +19,8 @@ use PiApp\AdminBundle\Entity\TranslationWidget;
 /**
  * PiCoreManagerBuilderInterface interface.
  *
- * @category   Admin_Builders
+ * @category   PiApp
  * @package    Builder
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface PiCoreManagerBuilderInterface

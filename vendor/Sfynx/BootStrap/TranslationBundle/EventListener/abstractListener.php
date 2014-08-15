@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translation> project.
  *
- * @category   BootStrap_Eventlistener
+ * @category   Core
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-30
@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * abstract listener manager.
  * This event is called after an entity is constructed by the EntityManager.
  *
- * @category   BootStrap_Eventlistener
+ * @category   Core
  * @package    EventListener
  * @abstract
  *

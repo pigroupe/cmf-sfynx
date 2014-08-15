@@ -6,7 +6,6 @@
  * @category Ws_Manager
  * @package  Manager
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright Copyright (c) 2013, Mappy
  * @since 2013-03-26
  *
  * For the full copyright and license information, please view the LICENSE
@@ -54,7 +53,7 @@ class AuthClient extends AbstractClient
     private $_getparams;
 
     /**
-     * @var \PiApp\AdminBundle\Util\PiLogManager
+     * @var \BootStrap\ToolBundle\Util\PiLogManager
      */
     private $_logger;
 

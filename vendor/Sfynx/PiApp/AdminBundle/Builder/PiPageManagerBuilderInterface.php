@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Builders
+ * @category   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -17,9 +17,8 @@ use Symfony\Component\HttpFoundation\Response as Response;
 /**
  * PiPageManagerBuilderInterface interface.
  *
- * @category   Admin_Builders
+ * @category   PiApp
  * @package    Builder
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface PiPageManagerBuilderInterface

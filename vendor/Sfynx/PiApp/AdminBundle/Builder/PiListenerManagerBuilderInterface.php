@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Builders
+ * @category   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -15,9 +15,8 @@ namespace PiApp\AdminBundle\Builder;
 /**
  * PiListenerManagerBuilderInterface interface.
  *
- * @category   Admin_Builders
+ * @category   PiApp
  * @package    Builder
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface PiListenerManagerBuilderInterface

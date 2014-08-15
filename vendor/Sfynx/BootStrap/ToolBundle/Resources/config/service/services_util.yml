@@ -1,0 +1,62 @@
+parameters:
+    bootstrap.tool.manager.config.class: BootStrap\ToolBundle\Util\PiConfigManager
+    bootstrap.tool.manager.array.class: BootStrap\ToolBundle\Util\PiArrayManager
+    bootstrap.tool.manager.string.class: BootStrap\ToolBundle\Util\PiStringManager
+    bootstrap.tool.manager.stringcut.class: BootStrap\ToolBundle\Util\PiStringCutManager
+    bootstrap.tool.manager.date.class: BootStrap\ToolBundle\Util\PiDateManager
+    bootstrap.tool.manager.file.class: BootStrap\ToolBundle\Util\PiFileManager
+    bootstrap.tool.manager.regex.class: BootStrap\ToolBundle\Util\PiRegexManager
+    bootstrap.tool.manager.mailer.class: BootStrap\ToolBundle\Util\PiMailerManager
+    bootstrap.tool.manager.rest.class: BootStrap\ToolBundle\Util\PiRestManager
+    bootstrap.tool.manager.log.class: BootStrap\ToolBundle\Util\PiLogManager
+    bootstrap.tool.manager.encryption.class: BootStrap\ToolBundle\Util\PiEncryption
+    
+    bootstrap.tool.manager.jquery.dashboard.class: BootStrap\ToolBundle\Util\PiJquery\PiDashboardManager
+
+services:
+    #
+    # configuration of the Util classes
+    # 
+    pi_app_admin.array_manager:
+        class: %bootstrap.tool.manager.array.class% 
+
+    pi_app_admin.string_manager:
+        class: %bootstrap.tool.manager.string.class% 
+        
+    pi_app_admin.string_cut_manager:
+        class: %bootstrap.tool.manager.stringcut.class%
+
+    pi_app_admin.date_manager:
+        class: %bootstrap.tool.manager.date.class%    
+
+    pi_app_admin.file_manager:
+        class: %bootstrap.tool.manager.file.class%  
+        arguments: ['@service_container']  
+        
+    pi_app_admin.regex_manager:
+        class: %bootstrap.tool.manager.regex.class%  
+        arguments: ['@service_container']  
+        
+    pi_app_admin.mailer_manager:
+        class: %bootstrap.tool.manager.mailer.class%  
+        arguments: ['@service_container']
+        
+    pi_app_admin.rest_manager:
+        class: %bootstrap.tool.manager.rest.class%
+        
+    pi_app_admin.log_manager:
+        class: %bootstrap.tool.manager.log.class%      
+        arguments: ['@service_container']    
+        
+    pi_app_admin.encryption_manager:
+        class: %bootstrap.tool.manager.encryption.class%      
+        arguments: ['@service_container']       
+        
+    #
+    # configuration of the JQUERY Util classes
+    #
+    bootstrap.tool.jquery_manager.dashboard:
+        class: %bootstrap.tool.manager.jquery.dashboard.class%
+        arguments: ['@service_container']                            
+        
+                                                                                                                                  

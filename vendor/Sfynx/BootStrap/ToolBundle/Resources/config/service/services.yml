@@ -1,0 +1,24 @@
+parameters:
+    bootstrap.RouteTranslator.factory.class: BootStrap\ToolBundle\Route\RouteTranslatorFactory
+    bootstrap.route_cache.class: BootStrap\ToolBundle\Route\CacheRoute
+    bootstrap.Role.factory.class: BootStrap\ToolBundle\Role\RoleFactory
+
+services:  
+    #
+    # configuration of the role manager
+    #         
+    
+    bootstrap.Role.factory:
+        class: %bootstrap.Role.factory.class%
+        arguments: ['@service_container']   
+                
+    #
+    # configuration of the route manager
+    # 
+    bootstrap.RouteTranslator.factory:
+        class: %bootstrap.RouteTranslator.factory.class%
+        arguments: ['@service_container']        
+            
+    bootstrap.route_cache:
+        class: %bootstrap.route_cache.class%
+        arguments: ['@service_container']

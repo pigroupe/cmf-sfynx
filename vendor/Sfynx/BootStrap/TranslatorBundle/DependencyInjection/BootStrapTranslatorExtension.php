@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Bundle
- * @package    DependencyInjection
+ * @category   BootStrap
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
  *
@@ -20,9 +20,8 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @category   Bundle
- * @package    DependencyInjection
- *
+ * @category   BootStrap
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class BootStrapTranslatorExtension extends Extension

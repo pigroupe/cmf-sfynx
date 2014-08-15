@@ -387,7 +387,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 		} else {
 			$response->setLastModified(new \DateTime());
 		}
-		// set header tags.
+		//
 		$is_force_private_response           = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_for_all");
 		$is_force_private_response_with_auth = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_only_with_authentication");
 		if ( 
@@ -577,12 +577,12 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      * @param \PiApp\AdminBundle\Entity\Page $page
      *
      * @return void
-     * @access private
+     * @access public
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-01-31
      */
-    private function setPage(Page $page)
+    public function setPage(Page $page)
     {
         $id = $page->getId();
         if (!$this->getPageById($id)){
@@ -1011,7 +1011,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     	if (file_exists($path_json_file)) {
     		$info = explode('|', file_get_contents($path_json_file));
     		if (isset($info[1])) {
-    		    $info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+    		    $info[1] = \BootStrap\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     			$this->cacheRefreshByname($info[1]);
     			//print_r($info[1]);
     			//print_r('<br />');print_r('<br />');
@@ -1023,7 +1023,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         	while (!feof($reading)) {
     			$info = explode('|', fgets($reading));
     			if (isset($info[1])) {
-    			    $info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+    			    $info[1] = \BootStrap\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     				$this->cacheRefreshByname($info[1]);
     				//print_r($info[1]);
     				//print_r('<br />');print_r('<br />');
@@ -1037,7 +1037,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     		while (!feof($reading)) {
     			$info = explode('|', fgets($reading));
     			if (isset($info[1])) {
-    				$info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+    				$info[1] = \BootStrap\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     				$this->cacheRefreshByname($info[1]);
     				//print_r($info[1]);
     				//print_r('<br />');print_r('<br />');
@@ -1114,7 +1114,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     	if (file_exists($path_json_file)) {
     		$info = explode('|', file_get_contents($path_json_file));
     		if (isset($info[1])) {
-    		    $info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+    		    $info[1] = \BootStrap\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     			$this->cacheRefreshByname($info[1]);
     			//print_r($info[1]);
     			//print_r('<br />');print_r('<br />');
@@ -1126,7 +1126,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     		while (!feof($reading)) {
     			$info = explode('|', fgets($reading));
     			if (isset($info[1])) {
-    				$info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+    				$info[1] = \BootStrap\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
     				$this->cacheRefreshByname($info[1]);
     				//print_r($info[1]);
     				//print_r('<br />');print_r('<br />');
@@ -1141,7 +1141,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     			$info = explode('|', fgets($reading));
     			if (isset($info[1])) {
     				// we get the esi url
-        			$info[1] = \PiApp\AdminBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+        			$info[1] = \BootStrap\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
         			// we delete the cache widget file
         			$this->container->get("pi_filecache")->getClient()->setPath($this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository());
         			$this->container->get("pi_filecache")->clear($info[1]);

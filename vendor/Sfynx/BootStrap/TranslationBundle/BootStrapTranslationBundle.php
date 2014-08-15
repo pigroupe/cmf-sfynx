@@ -2,27 +2,23 @@
 /**
  * This file is part of the <Translation> project.
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 namespace BootStrap\TranslationBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use BootStrap\TranslationBundle\DependencyInjection\Compiler\AddDependencyRoute;
-
 /**
  * BootStrap configuration and managment of the translation Bundle
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
@@ -41,8 +37,6 @@ class BootStrapTranslationBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        // we add all route pages.
-        $container->addCompilerPass(new AddDependencyRoute());        
     }
     
     /**

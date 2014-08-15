@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_DataFixtures
- * @package    ORM
+ * @category   CMF
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-23
  *
@@ -20,9 +20,8 @@ use PiApp\AdminBundle\Entity\TranslationWidget;
 /**
  * Translation Pages DataFixtures.
  *
- * @category   Admin_DataFixtures
- * @package    ORM
- *
+ * @category   CMF
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class TranslationWidgetsFixtures extends AbstractFixture implements OrderedFixtureInterface

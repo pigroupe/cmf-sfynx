@@ -816,8 +816,8 @@ class PiFormBuilderManager extends AbstractType implements PiFormBuilderManagerI
             try {
                 $XmlConfigWidget = $this->XmlConfigWidget($this->_data);
                 if ( is_array($XmlConfigWidget) && (count($XmlConfigWidget)>=1) ) {                    
-                    \PiApp\AdminBundle\Util\PiArrayManager::init('1.0', 'UTF-8');
-                    $this->_xmlconfig = \PiApp\AdminBundle\Util\PiArrayManager::createXML('config', $XmlConfigWidget['xml'])->saveXML();
+                    \BootStrap\ToolBundle\Util\PiArrayManager::init('1.0', 'UTF-8');
+                    $this->_xmlconfig = \BootStrap\ToolBundle\Util\PiArrayManager::createXML('config', $XmlConfigWidget['xml'])->saveXML();
                 } else {
                     $this->_xmlconfig = null;
                 }

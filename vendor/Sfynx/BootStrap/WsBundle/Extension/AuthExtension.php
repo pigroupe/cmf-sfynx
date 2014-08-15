@@ -6,7 +6,6 @@
  * @category Ws_Extension
  * @package Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright Copyright (c) 2013, Mappy
  * @since 2013-03-26
  *
  * For the full copyright and license information, please view the LICENSE

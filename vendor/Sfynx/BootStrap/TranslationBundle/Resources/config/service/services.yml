@@ -1,9 +1,5 @@
 parameters:
     bootstrap.EntitiesContainer.listener.class: BootStrap\TranslationBundle\EventListener\EntitiesContainer
-    bootstrap.RouteTranslator.factory.class: BootStrap\TranslationBundle\Route\RouteTranslatorFactory
-    bootstrap.route_loader.class: BootStrap\TranslationBundle\Route\RouteLoader
-    bootstrap.route_cache.class: BootStrap\TranslationBundle\Route\CacheRoute
-    bootstrap.Role.factory.class: BootStrap\TranslationBundle\Role\RoleFactory
     
 services:
     #
@@ -11,29 +7,4 @@ services:
     # 
     bootstrap.EntitiesContainer.listener:
         class: %bootstrap.EntitiesContainer.listener.class%
-        arguments: ['@service_container']   
-        
-    #
-    # configuration of the role manager
-    #         
-    
-    bootstrap.Role.factory:
-        class: %bootstrap.Role.factory.class%
-        arguments: ['@service_container']   
-                
-    #
-    # configuration of the route manager
-    # 
-    bootstrap.RouteTranslator.factory:
-        class: %bootstrap.RouteTranslator.factory.class%
         arguments: ['@service_container']
-        
-    bootstrap.route_loader:
-        class: %bootstrap.route_loader.class%
-        arguments: ['@service_container']       
-        tags:
-            - { name: routing.loader }
-            
-    bootstrap.route_cache:
-        class: %bootstrap.route_cache.class%
-        arguments: ['@service_container']                                        

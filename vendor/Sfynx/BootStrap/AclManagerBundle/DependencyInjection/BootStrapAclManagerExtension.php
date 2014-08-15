@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * This file is part of the <Acl> project.
+ *
+ * @category   BootStrap
+ * @package    Configuration
+ * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since 2012-01-11
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace BootStrap\AclManagerBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension,
@@ -7,6 +17,12 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
     Symfony\Component\DependencyInjection\Loader,
     Symfony\Component\Config\FileLocator;
 
+/**
+ *
+ * @category   BootStrap
+ * @package    Configuration
+ * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ */
 class BootStrapAclManagerExtension extends Extension
 {
 

@@ -140,7 +140,7 @@ class Page
      * 
      * @ORM\Column(name="lifetime", type="integer", nullable=true)
      */
-    protected $lifetime;    
+    protected $lifetime = 0;    
     
     /**
      * @var string $route_name

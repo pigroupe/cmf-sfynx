@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
+ * @category   Entity
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-27
@@ -21,7 +21,7 @@ use PiApp\AdminBundle\EventListener\CoreListener;
  * The onFlush event occurs after the change-sets of all managed entities are computed.
  * This event is not a lifecycle callback.
  *
- * @category   Admin_Eventlistener
+ * @category   Entity
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

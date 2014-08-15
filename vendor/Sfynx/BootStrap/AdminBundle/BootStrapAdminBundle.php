@@ -2,14 +2,12 @@
 /**
  * This file is part of the <BootStrap> project.
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 namespace BootStrap\AdminBundle;
 
@@ -17,10 +15,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Admin Sonata Class managment Bundle
+ * BootStrap configuration and managment of the Admin Sonata Bundle
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Util
- * @package    Extension_jquery 
+ * @category   Jquery
+ * @package    Tool
  * @author (c) <stephan mascarell> <stephan.mascarell@wanadoo.fr>
  * @since 2012-06-08
  *
@@ -14,15 +14,14 @@ namespace PiApp\AdminBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use PiApp\AdminBundle\Twig\Extension\PiJqueryExtension;
+use BootStrap\ToolBundle\Twig\Extension\PiJqueryExtension;
 use PiApp\AdminBundle\Exception\ExtensionException;
 
 /**
  * Backstretch Jquery plugin
  *
- * @category   Admin_Util
- * @package    Extension_jquery 
- * 
+ * @category   Jquery
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiTwitterManager extends PiJqueryExtension

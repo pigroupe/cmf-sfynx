@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Util
- * @package    Extension_widget 
+ * @category   Widget
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-11
  *
@@ -23,9 +23,8 @@ use PiApp\AdminBundle\Exception\ExtensionException;
 /**
  * Gedmo Widget plugin
  *
- * @category   Admin_Util
- * @package    Extension_widget 
- * 
+ * @category   Widget
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiGedmoManager extends PiWidgetExtension
@@ -317,7 +316,7 @@ class PiGedmoManager extends PiWidgetExtension
      *                    <node>6</node>
      *                    <enabledonly>true</enabledonly>
      *                    <cachable>true</cachable>
-     *                  <navigation>
+     *                    <navigation>
      *                       <separatorClass>separateur</separatorClass>
      *                       <separatorText>&ndash;</separatorText>
      *                       <separatorFirst>false</separatorFirst>
@@ -339,7 +338,7 @@ class PiGedmoManager extends PiWidgetExtension
      *                           <aInactiveClass>tnoir</aInactiveClass>
      *                             <enabledonly>false</enabledonly>
      *                       </lvlActifMenu>
-     *                  </navigation>
+     *                    </navigation>
      *                </params>
      *            </gedmo>
      *        </widgets>
@@ -368,11 +367,22 @@ class PiGedmoManager extends PiWidgetExtension
         if ( ($this->action == "navigation") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params') ) {
             $controller    = $xmlConfig->widgets->gedmo->controller;            
             if ($this->isAvailableAction($controller)) {
-                //$render_navigation = $this->method . "Action";
+                $params['entity']           = $this->entity;
+                $params['widget-id']        = $options['widget-id'];
+                $params['widget-lifetime']  = $options['widget-lifetime'];
+                $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
+                $params['widget-update']    = $options['widget-update'];
+                $params['widget-public']    = $options['widget-public'];
+                $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
+                $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
+                $params['cachable']         = ((int) $options['widget-cachetemplating']) ? true : false;
+                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+                    $params['cachable'] = ($xmlConfig->widgets->gedmo->params->cachable === 'true') ? true : false;
+                }
                 if ($xmlConfig->widgets->gedmo->params->get('category')) {
-                    $category = $xmlConfig->widgets->gedmo->params->category;
+                    $category = $params['category'] = $xmlConfig->widgets->gedmo->params->category;
                 } else {
-                    $category = ""; 
+                    $category = $params['category'] = ""; 
                 }
                 if ($xmlConfig->widgets->gedmo->params->get('node')) {
                     $params['node'] = $xmlConfig->widgets->gedmo->params->node;
@@ -385,25 +395,19 @@ class PiGedmoManager extends PiWidgetExtension
                     $params['enabledonly'] = "true";    
                 }
                 if ($xmlConfig->widgets->gedmo->params->get('template')) {
-                    $template = $xmlConfig->widgets->gedmo->params->template;
+                    $params['template'] = $xmlConfig->widgets->gedmo->params->template;
                 } else {
-                    $template = "";
-                }
-                $params['entity']    = $this->entity;
-                $params['category']  = $category;
-                $params['template']  = $template;
-                $params['widget-id']        = $options['widget-id'];
-                $params['widget-lifetime']  = $options['widget-lifetime'];
-                $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
-                $params['widget-update']    = $options['widget-update'];
-                $params['widget-public']    = $options['widget-public'];
-                $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
-                $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
-                $params['cachable']         = ((int) $options['widget-cachetemplating']) ? true : false;
-                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-                    $params['cachable'] = ($xmlConfig->widgets->gedmo->params->cachable === 'true') ? true : false;
+                    $params['template'] = "";
                 }
                 if ($xmlConfig->widgets->gedmo->params->get('navigation')) {
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('searchFields')) {
+                    	$params['searchFields'] = $xmlConfig->widgets->gedmo->params->navigation->searchFields->toArray();
+                    }                    
+                    if ($xmlConfig->widgets->gedmo->params->navigation->get('query_function')) {
+                    	$params['query_function'] = $xmlConfig->widgets->gedmo->params->navigation->query_function;
+                    } else {
+                    	$params['query_function'] = null;
+                    }
                     if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass')) {
                         $params['separatorClass'] = $xmlConfig->widgets->gedmo->params->navigation->separatorClass;
                     } else {
@@ -476,7 +480,7 @@ class PiGedmoManager extends PiWidgetExtension
      *                    <category>BO</category>
      *                    <node>3</node>
      *                    <cachable>true</cachable>
-     *                  <organigram>
+     *                    <organigram>
      *                        <params>
      *                              <action>renderDefault</action>
      *                            <menu>organigram</menu>
@@ -492,7 +496,7 @@ class PiGedmoManager extends PiWidgetExtension
      *                                <class></class>
      *                            </field>
      *                         </fields>
-     *                  </organigram>
+     *                    </organigram>
      *                </params>
      *            </gedmo>
      *        </widgets>
@@ -539,14 +543,14 @@ class PiGedmoManager extends PiWidgetExtension
      *                <controller>PiAppGedmoBundle:Menu:org-tree-breadcrumb</controller>
      *                <params>
      *                    <node>3</node>
-     *                  <template>organigram-breadcrumb.html.twig</template>
+     *                    <template>organigram-breadcrumb.html.twig</template>
      *                    <cachable>true</cachable>
-     *                  <organigram>
+     *                    <organigram>
      *                        <params>
-     *                              <action>renderDefault</action>
+     *                            <action>renderDefault</action>
      *                            <menu>breadcrumb</menu>
      *                        </params>
-     *                  </organigram>
+     *                    </organigram>
      *                </params>
      *            </gedmo>
      *        </widgets>
@@ -576,11 +580,22 @@ class PiGedmoManager extends PiWidgetExtension
         if ( ($this->action == "organigram") && $xmlConfig->widgets->get('gedmo') && $xmlConfig->widgets->gedmo->get('controller') && $xmlConfig->widgets->gedmo->get('params')  ) {
             $controller    = $xmlConfig->widgets->gedmo->controller;            
             if ($this->isAvailableAction($controller)) {
-                //$render_navigation = $this->method . "Action";            
+                $params['entity']           = $this->entity;
+                $params['widget-id']        = $options['widget-id'];
+                $params['widget-lifetime']  = $options['widget-lifetime'];
+                $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
+                $params['widget-update']    = $options['widget-update'];
+                $params['widget-public']    = $options['widget-public'];
+                $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
+                $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
+                $params['cachable']         = ((int) $options['widget-cachetemplating']) ? true : false;
+                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
+                    $params['cachable'] = ($xmlConfig->widgets->gedmo->params->cachable === 'true') ? true : false;
+                }          
                 if ($xmlConfig->widgets->gedmo->params->get('category')) {
-                    $category = $xmlConfig->widgets->gedmo->params->category;
+                    $category = $params['category'] = $xmlConfig->widgets->gedmo->params->category;
                 } else {
-                    $category = "";
+                    $category = $params['category'] = "";
                 }
                 if ($xmlConfig->widgets->gedmo->params->get('node')) {
                     $params['node'] = $xmlConfig->widgets->gedmo->params->node;
@@ -593,25 +608,19 @@ class PiGedmoManager extends PiWidgetExtension
                     $params['enabledonly'] = "true";
                 }
                 if ($xmlConfig->widgets->gedmo->params->get('template')) {
-                    $template = $xmlConfig->widgets->gedmo->params->template;
+                    $params['template'] = $xmlConfig->widgets->gedmo->params->template;
                 } else {
-                    $template = "";
-                }
-                $params['entity']    = $this->entity;
-                $params['category']  = $category;
-                $params['template']  = $template;
-                $params['widget-id']        = $options['widget-id'];
-                $params['widget-lifetime']  = $options['widget-lifetime'];
-                $params['widget-cacheable'] = ((int) $options['widget-cacheable']) ? true : false;
-                $params['widget-update']    = $options['widget-update'];
-                $params['widget-public']    = $options['widget-public'];
-                $params['widget-ajax']      = ((int) $options['widget-ajax']) ? true : false;
-                $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
-                $params['cachable']         = ((int) $options['widget-cachetemplating']) ? true : false;
-                if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-                    $params['cachable'] = ($xmlConfig->widgets->gedmo->params->cachable === 'true') ? true : false;
+                    $params['template'] = "";
                 }
                 if ($xmlConfig->widgets->gedmo->params->get('organigram')) {
+                    if ($xmlConfig->widgets->gedmo->params->organigram->get('searchFields')) {
+                    	$params['searchFields'] = $xmlConfig->widgets->gedmo->params->organigram->searchFields->toArray();
+                    }
+                    if ($xmlConfig->widgets->gedmo->params->organigram->get('query_function')) {
+                    	$params['query_function'] = $xmlConfig->widgets->gedmo->params->organigram->query_function;
+                    } else {
+                    	$params['query_function'] = null;
+                    }
                     if ($xmlConfig->widgets->gedmo->params->organigram->get('params')) {
                         $params = array_merge($params, $xmlConfig->widgets->gedmo->params->organigram->params->toArray());
                     }

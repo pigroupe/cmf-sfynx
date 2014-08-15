@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Twig
- * @package    Extension_widget
+ * @category   Widget
+ * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
  *
@@ -21,9 +21,8 @@ use PiApp\AdminBundle\Entity\TranslationWidget;
 /**
  * Widget Matrix used in twig
  *
- * @category   Admin_Twig
- * @package    Extension_widget 
- * 
+ * @category   Widget
+ * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiWidgetExtension extends \Twig_Extension
@@ -212,16 +211,22 @@ class PiWidgetExtension extends \Twig_Extension
         // navigation and organigram and slider common parameters                
         $source .=  "            <controller>PiAppGedmoBundle:Activity:_template_list</controller>\n";
         $source .=  "            <params>\n";
-        $source .=  "                <id></id>\n";
         $source .=  "                <node></node>\n";
         $source .=  "                <enabledonly>true</enabledonly>\n";
         $source .=  "                <category></category>\n";
         $source .=  "                <template></template>\n"; 
-        $source .=  "                <MaxResults></MaxResults>\n";
-        $source .=  "                <order>DESC</order>\n";
         $source .=  "                <cachable>true</cachable>\n";
         // navigation parameters        
         $source .=  "                <navigation>\n";
+        $source .=  "                    <query_function>getAllTree</query_function>\n";
+        $source .=  "                    <searchFields>\n";
+        $source .=  "                          <nameField>field1</nameField>\n";
+        $source .=  "                          <valueField>value1</valueField>\n";
+        $source .=  "                    </searchFields>\n";
+        $source .=  "                    <searchFields>\n";
+        $source .=  "                          <nameField>field2</nameField>\n";
+        $source .=  "                          <valueField>value2</valueField>\n";
+        $source .=  "                    </searchFields>\n";        
         $source .=  "                    <separatorClass>separateur</separatorClass>\n";
         $source .=  "                    <separatorText><![CDATA[ &ndash; ]]></separatorText>\n";
         $source .=  "                    <separatorFirst>false</separatorFirst>\n";
@@ -246,6 +251,15 @@ class PiWidgetExtension extends \Twig_Extension
         $source .=  "                </navigation>\n";
         // organigram parameters
         $source .=  "                <organigram>\n";
+        $source .=  "                    <query_function>getAllTree</query_function>\n";
+        $source .=  "                    <searchFields>\n";
+        $source .=  "                          <nameField>field1</nameField>\n";
+        $source .=  "                          <valueField>value1</valueField>\n";
+        $source .=  "                    </searchFields>\n";
+        $source .=  "                    <searchFields>\n";
+        $source .=  "                          <nameField>field2</nameField>\n";
+        $source .=  "                          <valueField>value2</valueField>\n";
+        $source .=  "                    </searchFields>\n";        
         $source .=  "                    <params>\n";
         $source .=  "                        <action>renderDefault</action>\n";
         $source .=  "                        <menu>organigram</menu>\n";
@@ -263,22 +277,22 @@ class PiWidgetExtension extends \Twig_Extension
         $source .=  "                </organigram>\n";
         // slider parameters
         $source .=  "                <slider>\n";
-        $source .=  "                    <action>renderDefault</action>\n";
-        $source .=  "                    <menu>entity</menu>\n";
-        $source .=  "                    <id>flexslider</id>\n";
-        $source .=  "                    <boucle_array>false</boucle_array>\n";
-        $source .=  "                    <orderby_date></orderby_date>\n";
-        $source .=  "                    <orderby_position>ASC</orderby_position>\n";
-        $source .=  "                    <MaxResults>4</MaxResults>\n";
         $source .=  "                    <query_function>getAllAdherents</query_function>\n";
         $source .=  "                    <searchFields>\n";
         $source .=  "                          <nameField>field1</nameField>\n";
         $source .=  "                          <valueField>value1</valueField>\n";
-        $source .=  "                   </searchFields>\n";
+        $source .=  "                    </searchFields>\n";
         $source .=  "                    <searchFields>\n";
         $source .=  "                          <nameField>field2</nameField>\n";
         $source .=  "                          <valueField>value2</valueField>\n";
-        $source .=  "                   </searchFields>\n";
+        $source .=  "                    </searchFields>\n";        
+        $source .=  "                    <orderby_date></orderby_date>\n";
+        $source .=  "                    <orderby_position>ASC</orderby_position>\n";
+        $source .=  "                    <MaxResults>4</MaxResults>\n";
+        $source .=  "                    <action>renderDefault</action>\n";
+        $source .=  "                    <menu>entity</menu>\n";
+        $source .=  "                    <id>flexslider</id>\n";
+        $source .=  "                    <boucle_array>false</boucle_array>\n";
         $source .=  "                    <params>\n";
         $source .=  "                        <animation>slide</animation>\n";
         $source .=  "                        <direction>horizontal</slideDirection>\n";

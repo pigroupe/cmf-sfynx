@@ -3,7 +3,7 @@
 /**
  * This file is part of the <Translation> project.
  *
- * @category   BootStrap_Builders
+ * @category   BootStrap
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -16,9 +16,8 @@ namespace BootStrap\TranslationBundle\Builder;
 /**
  * PiEncryptorInterface interface.
  *
- * @category   BootStrap_Builders
+ * @category   BootStrap
  * @package    Builder
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface PiEncryptorInterface {

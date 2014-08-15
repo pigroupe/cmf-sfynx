@@ -461,7 +461,7 @@ abstract class AbstractManager implements DatabaseManagerInterface
         else
             $filename = '/doctrine_backup_database-' . $this->getDatabase() . '_' . date('Y-m-d-H-i-s') . '.sql';
         
-        if (\PiApp\AdminBundle\Util\PiFileManager::mkdirr($path, 0777)) {
+        if (\BootStrap\ToolBundle\Util\PiFileManager::mkdirr($path, 0777)) {
             $this->path = realpath($path);
             $this->path = $this->path . $filename;
         }

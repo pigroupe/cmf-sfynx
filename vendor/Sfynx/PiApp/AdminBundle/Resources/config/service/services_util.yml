@@ -1,16 +1,5 @@
 parameters:
-    piapp.manager.config.class: PiApp\AdminBundle\Util\PiConfigManager
-    piapp.manager.array.class: PiApp\AdminBundle\Util\PiArrayManager
-    piapp.manager.string.class: PiApp\AdminBundle\Util\PiStringManager
-    piapp.manager.stringcut.class: PiApp\AdminBundle\Util\PiStringCutManager
-    piapp.manager.date.class: PiApp\AdminBundle\Util\PiDateManager
-    piapp.manager.file.class: PiApp\AdminBundle\Util\PiFileManager
     piapp.manager.locale.class: PiApp\AdminBundle\Util\PiLocaleManager
-    piapp.manager.regex.class: PiApp\AdminBundle\Util\PiRegexManager
-    piapp.manager.mailer.class: PiApp\AdminBundle\Util\PiMailerManager
-    piapp.manager.rest.class: PiApp\AdminBundle\Util\PiRestManager
-    piapp.manager.log.class: PiApp\AdminBundle\Util\PiLogManager
-    piapp.manager.encryption.class: PiApp\AdminBundle\Util\PiEncryption
     
     piapp.manager.jquery.languagechoice.class: PiApp\AdminBundle\Util\PiJquery\PiLanguageChoiceManager
     piapp.manager.jquery.sessionflash.class: PiApp\AdminBundle\Util\PiJquery\PiSessionFlashManager
@@ -40,44 +29,9 @@ services:
     #
     # configuration of the Util classes
     # 
-    pi_app_admin.array_manager:
-        class: %piapp.manager.array.class% 
-
-    pi_app_admin.string_manager:
-        class: %piapp.manager.string.class% 
-        
-    pi_app_admin.string_cut_manager:
-        class: %piapp.manager.stringcut.class%
-
-    pi_app_admin.date_manager:
-        class: %piapp.manager.date.class%    
-
-    pi_app_admin.file_manager:
-        class: %piapp.manager.file.class%  
-        arguments: ['@service_container']  
-        
     pi_app_admin.locale_manager:
         class: %piapp.manager.locale.class%  
         arguments: ['@service_container']
-        
-    pi_app_admin.regex_manager:
-        class: %piapp.manager.regex.class%  
-        arguments: ['@service_container']  
-        
-    pi_app_admin.mailer_manager:
-        class: %piapp.manager.mailer.class%  
-        arguments: ['@service_container']
-        
-    pi_app_admin.rest_manager:
-        class: %piapp.manager.rest.class%
-        
-    pi_app_admin.log_manager:
-        class: %piapp.manager.log.class%      
-        arguments: ['@service_container']    
-        
-    pi_app_admin.encryption_manager:
-        class: %piapp.manager.encryption.class%      
-        arguments: ['@service_container']                           
         
     #
     # configuration of the JQUERY Util classes

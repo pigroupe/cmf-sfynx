@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Bundle
- * @package    PiApp
+ * @category   Bootstrap
+ * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
  *
@@ -15,12 +15,13 @@ namespace PiApp\AdminBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use PiApp\AdminBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
+use PiApp\AdminBundle\DependencyInjection\Compiler\AddDependencyRoute;
 
 /**
- * CMS managment Bundle.
+ * CMF managment Bundle.
  *
- * @category   Bundle
- * @package    PiApp
+ * @category   Bootstrap
+ * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
@@ -39,7 +40,10 @@ class PiAppAdminBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
+        // register extension
         $container->addCompilerPass(new PiTwigEnvironmentPass());
+        // register all route pages.
+        $container->addCompilerPass(new AddDependencyRoute());
     }
     
     /**

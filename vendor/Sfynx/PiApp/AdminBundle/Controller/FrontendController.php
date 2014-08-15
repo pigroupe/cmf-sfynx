@@ -42,82 +42,6 @@ use PiApp\AdminBundle\PiAppAdminEvents;
 class FrontendController extends abstractController
 {
     /**
-     * Main default page
-     *
-     * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
-     */
-    public function indexAction()
-    {
-    	return $this->render('PiAppAdminBundle:Frontend:index.html.twig', array());
-    }    
-    
-    /**
-     * Licence page
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
-     */
-    public function licenceAction()
-    {
-    	return $this->render('PiAppAdminBundle:Frontend:licence.html.twig', array());
-    }    
-    
-    /**
-     * Parse a file and returns the contents
-     *
-     * @param string    $file         file name consists of: web_bundle_piappadmin_css_screen__css for express this path : web/bundle/piappadmin/css/screen.css
-     * @return string    content of the file
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-12
-     */
-    public function contentfileAction($file)
-    {
-        $fileFormatter    = $this->container->get('pi_app_admin.file_manager');
-        
-        return $fileFormatter->getContentCodeFile($file);
-    }
-        
-    /**
-     * Configures the local language
-     *
-     * @param string $langue
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-      * @since 2011-12-29
-     */    
-    public function setLocalAction($langue = '')
-    {
-        // It tries to redirect to the original page.
-        $new_url = $this->container->get('bootstrap.RouteTranslator.factory')->getRefererRoute($langue, null, true);
-        $response = new RedirectResponse($new_url, 302);
-        // we get params
-        $this->date_expire    = $this->container->getParameter('pi_app_admin.cookies.date_expire');
-        $this->date_interval  = $this->container->getParameter('pi_app_admin.cookies.date_interval');        
-        // Record the layout variable in cookies.
-        if ($this->date_expire && !empty($this->date_interval)) {
-            if (is_numeric($this->date_interval)) {
-                $dateExpire = time() + intVal($this->date_interval);
-            } else {
-                $dateExpire = new \DateTime("NOW");
-                $dateExpire->add(new \DateInterval($this->date_interval));
-            }
-        } else {
-        	$dateExpire = 0;
-        }
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $langue, $dateExpire));
-        
-        return $response;
-    }    
-    
-    /**
      * Displays a page
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -141,47 +65,6 @@ class FrontendController extends abstractController
         
         return $response;
     }
-    
-    /**
-     * Redirection function
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
-     */
-    public function redirectionuserAction()
-    {
-    	if ($this->getRequest()->cookies->has('sfynx-redirection')) {
-    		$parameters   = array();
-    		$redirection  = $this->getRequest()->cookies->get('sfynx-redirection');
-    		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute($redirection, $parameters));
-    	} else {
-    		$response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute('home_page'));
-    	}
-    	 
-    	return $response;
-    }  
-
-    /**
-     * Login failure function
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-07-26
-     */
-    public function loginfailureAction()
-    {
-        // we create the redirection request.
-        $response     = new RedirectResponse($this->container->get('bootstrap.RouteTranslator.factory')->getRoute('fos_user_security_login'));
-   		// we apply all events allowed to change the redirection response
-   		$event_response = new ResponseEvent($response);
-   		$this->container->get('event_dispatcher')->dispatch(PiAppAdminEvents::HANDLER_LOGIN_FAILURE, $event_response);
-   		$response = $event_response->getResponse();
-    
-    	return $response;
-    }    
     
     /**
      * Execute an applying esi widget.
@@ -302,9 +185,11 @@ class FrontendController extends abstractController
             switch ($action) {
                 case ('archiving') :
                     $this->container->get('pi_app_admin.manager.search_lucene')->indexPage($page);
+                    return new Response('archiving-ok');
                     break;
                 case ('delete') :
                     $this->container->get('pi_app_admin.manager.search_lucene')->deletePage($page);
+                    return new Response('delete-archiving-ok');
                     break;
                 default:
                     // deafault
@@ -312,7 +197,7 @@ class FrontendController extends abstractController
             }
         }
         
-        return new Response();
+        return new Response('no');
     }
 
     /**
@@ -395,7 +280,23 @@ class FrontendController extends abstractController
         return $this->render("PiAppAdminBundle:Frontend:$template", array(
                 'NoLayout'    => $NoLayout,
         ));        
-    }   
+    }  
+
+    /**
+     * Parse a file and returns the contents
+     *
+     * @param string    $file         file name consists of: web_bundle_piappadmin_css_screen__css for express this path : web/bundle/piappadmin/css/screen.css
+     * @return string    content of the file
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-01-12
+     */
+    public function contentfileAction($file)
+    {
+    	$fileFormatter    = $this->container->get('pi_app_admin.file_manager');
+    
+    	return $fileFormatter->getContentCodeFile($file);
+    }    
 
     /**
      * 

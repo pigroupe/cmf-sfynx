@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
+ * @category   Entity
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-27
@@ -23,7 +23,7 @@ use PiApp\AdminBundle\EventListener\CoreListener;
  * It will be invoked after the database delete operations.
  * It is not called for a DQL DELETE statement.
  *
- * @category   Admin_Eventlistener
+ * @category   Entity
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

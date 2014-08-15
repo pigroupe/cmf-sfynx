@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Acl> project.
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -15,10 +15,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Acl managment Bundle
+ * BootStrap configuration and managment of the Acl Bundle
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

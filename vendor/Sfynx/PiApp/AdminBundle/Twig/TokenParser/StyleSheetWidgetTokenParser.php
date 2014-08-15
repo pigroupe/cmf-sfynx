@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Twig
- * @package    Extension_widget
+ * @category   Widget
+ * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-10
  *
@@ -17,9 +17,8 @@ use PiApp\AdminBundle\Twig\Node\StyleSheetWidgetNode;
 /**
  * StyleSheet Widget Token Parser.
  *
- * @category   Admin_Twig
- * @package    Extension_widget
- *
+ * @category   Widget
+ * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class StyleSheetWidgetTokenParser extends \Twig_TokenParser

@@ -92,10 +92,10 @@
 {% spaceless %}
 {% if field_error_type %}
 {{ field_error_type }}
-{% elseif ( form.parent != null ) != 0 %}
+{% elseif ( form.parent is not empty ) %}
     {% set form = form.parent %}
     {{ block('error_type') }}
-{% elseif ( form.parent != null ) == 0 %}
+{% elseif ( form.parent is empty ) %}
     {{ form.vars.error_type }}
 {% endif %}
 {% endspaceless %}
@@ -113,7 +113,7 @@
 	        {{ form_row(prototype) }}
 	    </script>
     {% endif %}
-    {% if ( form.parent != null ) == 0 %}
+    {% if form.parent is empty %}
     <div {{ block('widget_container_attributes') }}>
     	<fieldset>
     	{% if show_legend %}{{ block('form_legend') }}{% endif %}
@@ -122,7 +122,7 @@
         	{{ block('field_rows_widget') }}    
         	{{ form_rest(form) }}
         </div>
-    {% if ( form.parent != null ) == 0 %}
+    {% if form.parent is empty %}
         </fieldset>
     </div>
     {% endif %} 
@@ -144,14 +144,14 @@
 {# Basic form and field blocks #}
 
 {% block form_widget %}
-    {% if ( form.parent != null ) == 0 %}
+    {% if form.parent is empty %}
     <div {{ block('widget_container_attributes') }}>
     	<fieldset>
     	{% if show_legend %}{{ block('form_legend') }}{% endif %}
     {% endif %}
         	{{ block('form_rows') }}    
         	{{ form_rest(form) }}
-    {% if ( form.parent != null ) == 0 %}
+    {% if form.parent is empty %}
         </fieldset>
     </div>
     {% endif %} 
@@ -162,7 +162,7 @@
     <div class="clearfix {% if errors|length > 0 %}errors{% endif %}">
     {% endif %}
 				
-        {% if (form.vars.types is defined)  and 'form' in form.vars.types and ( form.parent != null ) != 0 %}
+        {% if (form.vars.types is defined)  and 'form' in form.vars.types and ( form.parent is not empty) %}
             {% if show_child_legend %}
                 {{ block('form_legend') }}
             {% endif %}

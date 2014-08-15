@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
+ * @category   Exception
  * @package    EventListener
  * @author riad hellal <hellal.riad@gmail.com>
  * @since 2013-04-18
@@ -61,7 +61,7 @@ class ExceptionListener
             // new Response object
             $response = new Response();
             $url      = $this->container->get('bootstrap.RouteTranslator.factory')->getRoute('error_404', array('locale'=> $this->local));
-            $content  = \PiApp\AdminBundle\Util\PiFileManager::getCurl('/'.$url, null, null, $this->request->getUriForPath(''));
+            $content  = \BootStrap\ToolBundle\Util\PiFileManager::getCurl('/'.$url, null, null, $this->request->getUriForPath(''));
             // set response content
             $response->setContent($content);
             // HttpExceptionInterface is a special type of exception

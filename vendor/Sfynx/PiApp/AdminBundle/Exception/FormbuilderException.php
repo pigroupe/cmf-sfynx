@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Exception
+ * @category   Formbuilder
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-02-10
@@ -15,9 +15,8 @@ namespace PiApp\AdminBundle\Exception;
 /**
  * Extension Exception
  *
- * @category   Admin_Exception
+ * @category   Formbuilder
  * @package    Exception
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class FormbuilderException extends \Exception

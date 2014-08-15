@@ -3,6 +3,8 @@ parameters:
     piappgedmo.manager.formbuilder.model.content.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetContent
     piappgedmo.manager.formbuilder.model.contact.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetContact
     piappgedmo.manager.formbuilder.model.slide.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlide
+    piappgedmo.manager.formbuilder.model.menu.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetMenu
+    piappgedmo.manager.formbuilder.model.organigram.class: PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetOrganigram
     
 services:
     #
@@ -23,4 +25,12 @@ services:
     pi_app_gedmo.formbuilder_manager.model.slide:
         class: %piappgedmo.manager.formbuilder.model.slide.class%
         arguments: ['@service_container']
+        
+    pi_app_gedmo.formbuilder_manager.model.menu:
+        class: %piappgedmo.manager.formbuilder.model.menu.class%
+        arguments: ['@service_container']
+        
+    pi_app_gedmo.formbuilder_manager.model.organigram:
+        class: %piappgedmo.manager.formbuilder.model.organigram.class%
+        arguments: ['@service_container']                
         

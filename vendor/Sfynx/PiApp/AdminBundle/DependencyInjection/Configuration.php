@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Bundle
- * @package    DependencyInjection
+ * @category   CMF
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
  *
@@ -19,9 +19,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * @category   Bundle
- * @package    DependencyInjection
- *
+ * @category   CMF
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class Configuration implements ConfigurationInterface

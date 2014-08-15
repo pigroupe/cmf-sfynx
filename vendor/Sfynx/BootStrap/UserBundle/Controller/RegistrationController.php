@@ -1,13 +1,14 @@
 <?php
-
-/*
- * This file is part of the FOSUserBundle package.
-*
-* (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+/**
+ * This file is part of the <User> project.
+ *
+ * @category   BootStrap
+ * @package    Controller
+ * @since 2012-01-03
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace BootStrap\UserBundle\Controller;
 
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
@@ -25,7 +26,9 @@ use FOS\UserBundle\Model\UserInterface;
 
 /**
  * Controller managing the registration
- *
+ * 
+ * @category   BootStrap
+ * @package    Controller
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Christophe Coevoet <stof@notk.org>
  */

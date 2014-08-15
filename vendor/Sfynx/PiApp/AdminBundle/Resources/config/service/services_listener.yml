@@ -1,12 +1,7 @@
 parameters:
     piapp.admin.handler.localeHandler.class: PiApp\AdminBundle\EventListener\HandlerLocale
     piapp.admin.handler.requestHandler.class: PiApp\AdminBundle\EventListener\HandlerRequest
-    piapp.admin.handler.loginHandler.class: PiApp\AdminBundle\EventListener\HandlerLogin
-    piapp.admin.handler.logoutHandler.class: PiApp\AdminBundle\EventListener\HandlerLogout
-    piapp.admin.handler.authenticationHandler.class: PiApp\AdminBundle\EventListener\HandlerAuthentication
     piapp.admin.handler.controllerHandler.class: PiApp\AdminBundle\EventListener\HandlerController
-    
-    piapp.admin.handler.loginfailure.dispatcher.changeresponse.class: PiApp\AdminBundle\EventListener\DispatcherLoginFailureResponse
     
     piapp.admin.listener.exception.class: PiApp\AdminBundle\EventListener\ExceptionListener
     piapp.admin.listener.postload.class: PiApp\AdminBundle\EventListener\PostLoadListener
@@ -62,34 +57,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 65 }
 
-    pi_app_admin.user.authentication_handler:
-        class: %piapp.admin.handler.authenticationHandler.class%
-        arguments: [@service_container, @doctrine]  
-                    
-    pi_app_admin.user.login_handler:
-        class: %piapp.admin.handler.loginHandler.class%
-        arguments: [@security.context, @event_dispatcher, @doctrine, @service_container]
-        tags:
-            - { name: kernel.event_listener, event: security.interactive_login}
-            
-    pi_app_admin.user.logout_handler:
-        class: %piapp.admin.handler.logoutHandler.class%
-        arguments: [@service_container, @doctrine]
-        
 #    pi_app_admin.controller_handler:
 #        class: %piapp.admin.handler.controllerHandler.class%
 #        arguments: [@service_container]
 #        tags:
 #            - { name: kernel.event_listener, event: kernel.response }  
 
-    #               
-    # Event dispatchers Configuration
-    # 
-    pi_app_admin.dispatcher.login_failure.change_response:
-        class: %piapp.admin.handler.loginfailure.dispatcher.changeresponse.class%
-        arguments: [@service_container]
-        tags:
-            - { name: kernel.event_listener, event: pi.handler.login.failure, method: onPiLoginFailureResponse, priority: 1 }         
             
     #               
     # Doctrine events Configuration

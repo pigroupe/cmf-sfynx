@@ -7,6 +7,8 @@ parameters:
         content: 'pi_app_gedmo.formbuilder_manager.model.content'
         contact: 'pi_app_gedmo.formbuilder_manager.model.contact'
         slide: 'pi_app_gedmo.formbuilder_manager.model.slide'
+        menu: 'pi_app_gedmo.formbuilder_manager.model.menu'
+        organigram: 'pi_app_gedmo.formbuilder_manager.model.organigram'
        
     #
     # JQUERY
@@ -96,12 +98,12 @@ services:
     # configuration of the class manager allowed for the Config CMF
     #       
     pi_app_gedmo.cmfconfig:
-      class: %piapp.manager.config.class%
+      class: %bootstrap.tool.manager.config.class%
       arguments: ['@service_container']
       tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
       calls:
-        - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_gedmo.config.form% ] ]
+        - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_gedmo.config.form%, 'append' ] ]
         
         - [ setConfig, [ 'JQUERY', 'SLIDER', %pi_app_gedmo.config.jquery.flexslider% ] ]
         

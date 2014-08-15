@@ -2,8 +2,8 @@
 /**
  * This file is part of the <User> project.
  *
- * @category   BootStrap_DataFixtures
- * @package    ORM
+ * @category   Authentication
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
  *
@@ -20,9 +20,8 @@ use BootStrap\UserBundle\Entity\User;
 /**
  * Users DataFixtures.
  *
- * @category   BootStrap_DataFixtures
- * @package    ORM
- *
+ * @category   Authentication
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class UsersFixtures extends AbstractFixture implements OrderedFixtureInterface

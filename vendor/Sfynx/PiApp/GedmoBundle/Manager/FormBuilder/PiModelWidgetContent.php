@@ -3,7 +3,7 @@
  * This file is part of the <Gedmo> project.
  *
  * @category   Gedmo_Managers
- * @package    Page
+ * @package    FormBuilder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-26
  *
@@ -20,7 +20,7 @@ use PiApp\AdminBundle\Manager\PiFormBuilderManager;
 * Description of the Form builder manager
 *
 * @category   Gedmo_Managers
-* @package    Page
+* @package    FormBuilder
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
 */

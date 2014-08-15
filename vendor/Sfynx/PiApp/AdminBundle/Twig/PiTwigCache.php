@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Twig
- * @package    Cache
+ * @category   TwigCacheLoader
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-12
  *
@@ -18,9 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Twig cache config.
  *
- * @category   Admin_Twig
- * @package    Cache
- *
+ * @category   TwigCacheLoader
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiTwigCache

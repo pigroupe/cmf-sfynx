@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Util
- * @package    Extension_jquery 
+ * @category   Jquery
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
  *
@@ -14,7 +14,7 @@ namespace PiApp\AdminBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use PiApp\AdminBundle\Twig\Extension\PiJqueryExtension;
+use BootStrap\ToolBundle\Twig\Extension\PiJqueryExtension;
 use PiApp\AdminBundle\Exception\ExtensionException;
 use PiApp\AdminBundle\Manager\PiPageManager;
 use PiApp\AdminBundle\Manager\PiTreeManager;
@@ -22,9 +22,8 @@ use PiApp\AdminBundle\Manager\PiTreeManager;
 /**
  * Semantique tree of all pages according to the section.
  *
- * @category   Admin_Util
- * @package    Extension_jquery 
- * 
+ * @category   Jquery
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiOrgSemantiquePageManager extends PiJqueryExtension

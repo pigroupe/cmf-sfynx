@@ -6,7 +6,6 @@
  * @category Ws_Manager
  * @package  Manager
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright Copyright (c) 2013, Mappy
  * @since 2013-03-26
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,7 +19,7 @@ use BootStrap\WsBundle\Builder\WsClientInterface;
 use BootStrap\WsBundle\Exception\ClientException;
 
 /**
- * Abstract class of all mappy shopping client.
+ * Abstract class of all WS client.
  *
  * @category Ws_Manager
  * @package Manager
@@ -52,7 +51,7 @@ abstract class AbstractClient implements WsClientInterface
     private $container;
 
     /**
-     * @var \PiApp\AdminBundle\Util\PiRestManager
+     * @var \BootStrap\ToolBundle\Util\PiRestManager
      */
     private $rest;
 
@@ -91,7 +90,7 @@ abstract class AbstractClient implements WsClientInterface
     /**
      * Gets rest manager.
      *
-     * @return \PiApp\AdminBundle\Util\PiRestManager
+     * @return \BootStrap\ToolBundle\Util\PiRestManager
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */

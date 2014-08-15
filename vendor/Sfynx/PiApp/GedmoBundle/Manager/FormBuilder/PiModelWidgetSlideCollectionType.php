@@ -3,7 +3,7 @@
  * This file is part of the <Gedmo> project.
  *
  * @category   Gedmo_Managers
- * @package    CMS_Form
+ * @package    FormBuilder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-08-31
  *
@@ -16,10 +16,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Description of the EnquiryType form.
+ * Description of the Form builder manager
  *
  * @category   Gedmo_Managers
- * @package    CMS_Form
+ * @package    FormBuilder
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <User> project.
  *
- * @category   BootStrap_Controllers
+ * @category   BootStrap
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-24
@@ -23,9 +23,8 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 /**
  * Frontend controller.
  *
- * @category   BootStrap_Controllers
+ * @category   BootStrap
  * @package    Controller
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class ErrorController extends BaseController

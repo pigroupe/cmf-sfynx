@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_DataFixtures
- * @package    ORM
+ * @category   CMF
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-23
  *
@@ -20,9 +20,8 @@ use PiApp\AdminBundle\Entity\Widget;
 /**
  * Widget DataFixtures.
  *
- * @category   Admin_DataFixtures
- * @package    ORM
- *
+ * @category   CMF
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class WidgetsFixtures extends AbstractFixture implements OrderedFixtureInterface

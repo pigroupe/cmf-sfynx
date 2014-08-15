@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
+ * @category   Handler
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-25
@@ -30,7 +30,7 @@ use PiApp\AdminBundle\PiAppAdminEvents;
  * Custom request handler.
  * Register the mobile/desktop format.
  *
- * @category   Admin_Eventlistener
+ * @category   Handler
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -212,19 +212,19 @@ class HandlerRequest
     {
         if ( $this->is_switch_redirection_seo_authorized ) {
             $dossier  = $this->seo_redirection_repository . "/old_urls/";
-            \PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+            \BootStrap\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
             $fileSeo  = $this->seo_redirection_repository . "/" . $this->seo_redirection_file_name;
             
-        	//$is_cache_not_created = \PiApp\AdminBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
+        	//$is_cache_not_created = \BootStrap\ToolBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
             //if (file_exists($fileSeo) && $is_cache_not_created) {
             
             //$path_tmp_file = $dossier.'tmp.file';
             //if (file_exists($fileSeo) && !file_exists($path_tmp_file)) {
             	// we set the tmp file
-            	//$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_tmp_file, "", 0777, LOCK_EX);
+            	//$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_tmp_file, "", 0777, LOCK_EX);
 
             // if all cache seo files are not created from the seo file, we create them.
-            $all_cache_files = \PiApp\AdminBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' ); // more fast in linux but not in windows
+            $all_cache_files = \BootStrap\ToolBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' ); // more fast in linux but not in windows
             if ( file_exists($fileSeo) && (count($all_cache_files) == 0) ) {
         		$this->container->get("pi_filecache")->getClient()->setPath($dossier);
         		$file_handle = fopen($fileSeo, "r");
@@ -261,7 +261,7 @@ class HandlerRequest
     		$response = $event_response->getResponse();
     		
     		return $response;
-    		//$response->setResponse(new Response(\PiApp\AdminBundle\Util\PiFileManager::getCurl($SEOUrl, null, null, $this->request->getUriForPath(''))));
+    		//$response->setResponse(new Response(\BootStrap\ToolBundle\Util\PiFileManager::getCurl($SEOUrl, null, null, $this->request->getUriForPath(''))));
     	}
     	
     	return false;
@@ -280,7 +280,7 @@ class HandlerRequest
         $locale        = $this->request->getLocale();
         if ( $this->is_scop_authorized ) {
             // we set libs.
-            \PiApp\AdminBundle\Util\PiFileManager::mkdirr($this->scop_browscap_cache_dir, 0777);
+            \BootStrap\ToolBundle\Util\PiFileManager::mkdirr($this->scop_browscap_cache_dir, 0777);
             $this->mobiledetect = $this->container->get("pi_app_admin.lib.mobiledetect");
             $this->browscap     = $this->container->get("pi_app_admin.lib.browscap");
             // we set the browser  and globals information

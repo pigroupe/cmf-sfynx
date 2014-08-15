@@ -15,6 +15,7 @@ namespace PiApp\GedmoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints;
@@ -414,11 +415,11 @@ class BlockType extends AbstractType
         return 'piapp_gedmobundle_blocktype';
     }
     
-    public function getDefaultOptions(array $options)
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
-                'data_class' => 'PiApp\GedmoBundle\Entity\Block',
-        );
-    }   
+    	$resolver->setDefaults(array(
+    			'data_class' => 'PiApp\GedmoBundle\Entity\Block',
+    	));
+    }
         
 }

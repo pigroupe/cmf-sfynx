@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Translation> project.
  *
- * @category   BootStrap_EventSubscriber
- * @package    Encryptor
+ * @category   BootStrap
+ * @package    EventSubscriber
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-27
  *
@@ -28,8 +28,8 @@ use Doctrine\DBAL\Types\StringType;
 /**
  * Doctrine event subscriber which encrypt/decrypt entities
  * 
- * @category   BootStrap_EventSubscriber
- * @package    Encryptor 
+ * @category   BootStrap
+ * @package    EventSubscriber 
  * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class EncryptSubscriber extends MappedEventSubscriber
@@ -153,7 +153,7 @@ class EncryptSubscriber extends MappedEventSubscriber
                     		if ($refProperty->isPublic()) {
                     			$entity->$propName = $this->encryptor->encrypt($refProperty->getValue());
                     		} else {
-                        		$methodName = \PiApp\AdminBundle\Util\PiStringManager::capitalize($propName);
+                        		$methodName = \BootStrap\ToolBundle\Util\PiStringManager::capitalize($propName);
                                 if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
                                     // we get the locale value
                                     $locale = false;                                
@@ -243,7 +243,7 @@ class EncryptSubscriber extends MappedEventSubscriber
                             if ($refProperty->isPublic()) {
                                 $entity->$propName = $this->encryptor->$encryptorMethod($refProperty->getValue());
                             } else {
-                                $methodName = \PiApp\AdminBundle\Util\PiStringManager::capitalize($propName);
+                                $methodName = \BootStrap\ToolBundle\Util\PiStringManager::capitalize($propName);
                                 if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
                                     if ($isEncryptOperation) {
                                         // we get the locale value

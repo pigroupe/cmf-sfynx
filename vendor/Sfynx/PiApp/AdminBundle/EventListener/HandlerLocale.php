@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
+ * @category   Handler
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-04-18
@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\HttpKernel;
 /**
  * Custom locale handler.
  *
- * @category   Admin_Eventlistener
+ * @category   Handler
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

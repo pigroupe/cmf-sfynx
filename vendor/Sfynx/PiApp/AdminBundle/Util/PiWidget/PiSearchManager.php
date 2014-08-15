@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Util
- * @package    Extension_widget 
+ * @category   Widget
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-13
  *
@@ -21,9 +21,8 @@ use PiApp\AdminBundle\Exception\ExtensionException;
 /**
  * Search Widget plugin
  *
- * @category   Admin_Util
- * @package    Extension_widget 
- * 
+ * @category   Widget
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiSearchManager extends PiWidgetExtension

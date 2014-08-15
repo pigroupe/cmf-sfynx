@@ -2,7 +2,7 @@
 /**
  * This file is part of the <User> project.
  *
- * @category   BootStrap_Builders
+ * @category   BootStrap
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-02
@@ -15,9 +15,8 @@ namespace BootStrap\UserBundle\Builder;
 /**
  * RepositoryBuilderInterface interface.
  *
- * @category   BootStrap_Builders
+ * @category   BootStrap
  * @package    Builder
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface RepositoryBuilderInterface

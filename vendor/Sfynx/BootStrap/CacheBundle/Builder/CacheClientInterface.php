@@ -1,13 +1,22 @@
 <?php
-
+/**
+ * This file is part of the <Cache> project.
+ *
+ * @category   BootStrap
+ * @package    Builder
+ * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since 2012-02-23
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace BootStrap\CacheBundle\Builder;
 
 /**
  * Minimum requirements for interfacing with a typical key-value store
  * 
- * @package 
- * @version $id$
- * 
+ * @category   BootStrap
+ * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface CacheClientInterface

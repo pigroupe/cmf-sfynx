@@ -62,9 +62,13 @@ class Indexation
      */
     public static function index(\Zend_Search_Lucene_Proxy $Index, $type, $indexValues = null, $locale = '', $obj = null, $pathFile = '')
     {
+        // ignore invalid characters for lucene text search
+        \Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
+        \Zend_Search_Lucene_Analysis_Analyzer::setDefault(
+        		new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive ()
+        );
         self::$_index = $Index;
-        self::$_doc      = null;
-        
+        self::$_doc   = null;
         switch ($type){
             case "html":
                 self::$_doc = \Zend_Search_Lucene_Document_Html::loadHtmlFile($pathFile, false);
@@ -92,48 +96,37 @@ class Indexation
                 $indexValues['Contents'] = self::$_doc->getFieldUtf8Value('body');
                 break;                
         }   
-             
         if ( self::$_doc instanceof \Zend_Search_Lucene_Document ) {
             // Remove all accens
-            $indexValues['Contents'] = \PiApp\AdminBundle\Util\PiStringManager::minusculesSansAccents($indexValues['Contents']);
+            $indexValues['Contents'] = \BootStrap\ToolBundle\Util\PiStringManager::minusculesSansAccents($indexValues['Contents']);
             // Remove all doublons
-            $indexValues['Contents'] = \PiApp\AdminBundle\Util\PiStringManager::uniqueWord($indexValues['Contents']);
+            $indexValues['Contents'] = \BootStrap\ToolBundle\Util\PiStringManager::uniqueWord($indexValues['Contents']);
             // clean the content
-            $indexValues['Contents'] = \PiApp\AdminBundle\Util\PiStringManager::cleanContent($indexValues['Contents']);            
+            $indexValues['Contents'] = \BootStrap\ToolBundle\Util\PiStringManager::cleanContent($indexValues['Contents']);            
             // Delete all stop words
-            $stopWord                  = \PiApp\AdminBundle\Util\PiStringManager::stopWord("", strtolower($locale));
+            $stopWord                = \BootStrap\ToolBundle\Util\PiStringManager::stopWord(strtolower($locale));
             if ($stopWord){
                 $wordsIndex              = explode(' ', $indexValues['Contents']);
-                $diff                      = array_diff($wordsIndex, $stopWord);
+                $diff                    = array_diff($wordsIndex, $stopWord);
                 $indexValues['Contents'] = implode(' ', $diff);
             }
-            
-            
 //             print_r($locale);
 //             print_r('<br /><br /><br />');
-            
 //             print_r(implode(' ', $wordsIndex));
 //             print_r('<br /><br /><br />');
-            
 //             print_r(implode(' ', $stopWord));
 //             print_r('<br /><br /><br />');
-            
 //             print_r($indexValues['Contents']);
 //             print_r('<br /><br /><br />');
-                        
-            
             // If the document creation was sucessful then add it to our index.
             try {
                 setlocale(LC_ALL, $locale);
                 self::defaultAddFields($indexValues);
                 self::addDocument();
-                
 //                 print_r($indexValues['Key']);
 //                 print_r('<br />');
 //                 print_r($indexValues['Contents']);
 //                 print_r('<br /><br /><br />');
-
-                
             } catch (\Exception $e) {
                 setlocale(LC_ALL, 'fr_FR');
                 self::defaultAddFields($indexValues);
@@ -144,7 +137,6 @@ class Indexation
             }
 
         }
-  
         // Return the Lucene index object.
         return self::$_index;
     }   
@@ -162,16 +154,15 @@ class Indexation
     public static function addDocument()
     {
         // Search for documents with the same Key value.
-        $term    = new \Zend_Search_Lucene_Index_Term(self::$_doc->Key, 'Key');
-        $docIds = self::$_index->termDocs($term);
-    
+        $term   = new \Zend_Search_Lucene_Index_Term(self::$_doc->Key, 'Key');
+        $docIds = self::$_index->termDocs($term);    
         // Delete any documents found.
         foreach ($docIds as $id) {
             self::$_index->delete($id);
+        }    
+        if ( self::$_doc instanceof \Zend_Search_Lucene_Document ) {
+            self::$_index->addDocument(self::$_doc);
         }
-    
-        if ( self::$_doc instanceof \Zend_Search_Lucene_Document )
-                self::$_index->addDocument(self::$_doc);
     }
     
     /**

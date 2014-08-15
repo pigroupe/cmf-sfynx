@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
+ * @category   Handler
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-25
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Controller handler.
  *
- * @category   Admin_Eventlistener
+ * @category   Handler
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

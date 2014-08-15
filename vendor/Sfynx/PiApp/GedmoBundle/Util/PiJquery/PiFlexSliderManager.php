@@ -14,7 +14,7 @@ namespace PiApp\GedmoBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use PiApp\AdminBundle\Twig\Extension\PiJqueryExtension;
+use BootStrap\ToolBundle\Twig\Extension\PiJqueryExtension;
 use PiApp\AdminBundle\Exception\ExtensionException;
 use PiApp\AdminBundle\Manager\PiPageManager;
 use PiApp\AdminBundle\Manager\PiSliderManager;
@@ -162,7 +162,7 @@ class PiFlexSliderManager extends PiJqueryExtension
             $id_c = "id='{$options['id']}'";
             $id   = "#{$options['id']}";
         } else {
-            $options['id'] = 'flex-slider' . \PiApp\AdminBundle\Util\PiStringManager::random(11);
+            $options['id'] = 'flex-slider' . \BootStrap\ToolBundle\Util\PiStringManager::random(11);
             $id_c = "id='{$options['id']}'";
             $id   = "#{$options['id']}";
         }

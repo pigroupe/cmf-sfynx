@@ -61,7 +61,7 @@ class LangueType extends AbstractType
                      'label'    => 'pi.form.label.field.enabled',
             ))
             ->add('id', 'choice', array(
-                    'choices'   => \PiApp\AdminBundle\Util\PiStringManager::allLocales($this->_locale), //array('fr_FR'=>'fr', 'en_GB'=>'en'),
+                    'choices'   => \BootStrap\ToolBundle\Util\PiStringManager::allLocales($this->_locale), //array('fr_FR'=>'fr', 'en_GB'=>'en'),
                     'multiple'    => false,
                     'required'  => true,
                     'empty_value' => 'pi.form.label.select.choose.option',

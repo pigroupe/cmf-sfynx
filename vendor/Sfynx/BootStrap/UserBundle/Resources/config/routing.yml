@@ -41,3 +41,7 @@ fos_users:
 unauthorized:
     pattern:  /unauthorized
     defaults: { _controller: BootStrapUserBundle:Error:unauthorized }
+    
+fos_public:
+    resource: "@BootStrapUserBundle/Resources/config/routing/public.xml"
+    prefix: /  

@@ -13,7 +13,7 @@
 namespace BootStrap\DatabaseBundle\Manager;
 
 use BootStrap\DatabaseBundle\Exception\DatabaseException;
-use BootStrap\TranslationBundle\Route\AbstractFactory;
+use BootStrap\ToolBundle\Route\AbstractFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

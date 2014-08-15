@@ -139,12 +139,12 @@ services:
     # configuration of the class manager allowed for the config CMF
     #       
     pi_app_admin.cmfconfig:
-      class: %piapp.manager.config.class%
+      class: %bootstrap.tool.manager.config.class%
       arguments: ['@service_container']
       tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
       calls:
-        - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_admin.config.form% ] ]
+        - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_admin.config.form%, 'prepend'  ] ]
         
         - [ setConfig, [ 'JQUERY', 'SESSION', %pi_app_admin.config.jquery.session% ] ]
         - [ setConfig, [ 'JQUERY', 'MENU', %pi_app_admin.config.jquery.menu% ] ]

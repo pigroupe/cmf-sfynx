@@ -1,6 +1,12 @@
 parameters:
     bootstrap.user.repository.class: BootStrap\UserBundle\Repository\Repository
     bootstrap.user.validator.unique.class: BootStrap\UserBundle\Validator\Constraints\MyUniqueValidator
+    
+    bootstrap.user.handler.loginHandler.class: BootStrap\UserBundle\EventListener\HandlerLogin
+    bootstrap.user.handler.logoutHandler.class: BootStrap\UserBundle\EventListener\HandlerLogout
+    bootstrap.user.handler.authenticationHandler.class: BootStrap\UserBundle\EventListener\HandlerAuthentication
+    
+    bootstrap.user.dispatcher.loginfailure.changeresponse.class: BootStrap\UserBundle\EventListener\DispatcherLoginFailureResponse
 
 services:
     #
@@ -39,6 +45,32 @@ services:
         arguments: [@fos_user.user_manager]
         tags:
             - { name: validator.constraint_validator, alias: bootstrap.user.validator.unique }
+       
+    #               
+    # handlers Configuration
+    #           
+    bootstrap.user.authentication_handler:
+        class: %bootstrap.user.handler.authenticationHandler.class%
+        arguments: [@service_container, @doctrine]  
+                    
+    bootstrap.user.login_handler:
+        class: %bootstrap.user.handler.loginHandler.class%
+        arguments: [@security.context, @event_dispatcher, @doctrine, @service_container]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login}
+            
+    bootstrap.user.logout_handler:
+        class: %bootstrap.user.handler.logoutHandler.class%
+        arguments: [@service_container, @doctrine]         
+        
+    #               
+    # Event dispatchers Configuration
+    # 
+    bootstrap.dispatcher.login_failure.change_response:
+        class: %bootstrap.user.dispatcher.loginfailure.changeresponse.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: pi.handler.login.failure, method: onPiLoginFailureResponse, priority: 1 }              
             
     #
     # configuration overload security encoder

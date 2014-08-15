@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Translator_Exception
+ * @category   Controller
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-11-14
@@ -15,9 +15,8 @@ namespace BootStrap\TranslatorBundle\Exception;
 /**
  * Controller Exception
  *
- * @category   Translator_Exception
+ * @category   Controller
  * @package    Exception
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class ControllerException extends \Exception

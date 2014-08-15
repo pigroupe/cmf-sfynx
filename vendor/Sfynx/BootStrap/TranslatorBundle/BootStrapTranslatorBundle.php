@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
  *
@@ -16,10 +16,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * CMS managment Bundle.
+ * BootStrap configuration and managment of the translor Bundle
  *
- * @category   Bundle
- * @package    BootStrap
+ * @category   Bootstrap
+ * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

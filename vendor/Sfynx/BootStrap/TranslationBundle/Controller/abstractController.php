@@ -2,7 +2,7 @@
 /**
  * This file is part of the <PI_CRUD> project.
  *
- * @category   PI_CRUD_Controllers
+ * @category   BootStrap
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-10-01
@@ -23,10 +23,8 @@ use FOS\UserBundle\Model\UserInterface;
 /**
  * abstract controller.
  *
- *
- * @category   PI_CRUD_Controllers
+ * @category   Abstract
  * @package    Controller
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class abstractController extends Controller
@@ -408,7 +406,7 @@ abstract class abstractController extends Controller
     				if ($is_trans && isset($info['field_trans_name']) && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
     					$current_encoding = mb_detect_encoding($info['field_value'], 'auto');
     					$info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
-    					$info['field_value'] = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+    					$info['field_value'] = \BootStrap\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
     						
     					$trans_name = $info['field_trans_name'];
 		    			$andModule_title = $query->expr()->andx();
@@ -431,7 +429,7 @@ abstract class abstractController extends Controller
     				} elseif (!$is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
     					$current_encoding = mb_detect_encoding($info['field_value'], 'auto');
     					$info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
-    					$info['field_value'] = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+    					$info['field_value'] = \BootStrap\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
     					
     					//$query->add($query->expr()->like('LOWER('.$info['field_name'].')', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
     					$query->add("LOWER(".$info['field_name'].") LIKE :var3".$i."");
@@ -577,7 +575,7 @@ abstract class abstractController extends Controller
                     //
                     $current_encoding = mb_detect_encoding($s, 'auto');
                     $s = iconv($current_encoding, 'UTF-8', $s);
-                    $s = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s);
+                    $s = \BootStrap\ToolBundle\Util\PiStringManager::withoutaccent($s);
                     //
                     $array_params["var".$i] = '%'.strtolower($s).'%';
                 }
@@ -598,7 +596,7 @@ abstract class abstractController extends Controller
         			    //
         			    $current_encoding = mb_detect_encoding($s, 'auto');
         			    $s = iconv($current_encoding, 'UTF-8', $s);
-        			    $s = \PiApp\AdminBundle\Util\PiStringManager::withoutaccent($s);
+        			    $s = \BootStrap\ToolBundle\Util\PiStringManager::withoutaccent($s);
         			    //
         			    $array_params["var2".$i] = '%'.strtolower($s).'%';
         			}
@@ -753,7 +751,7 @@ abstract class abstractController extends Controller
     	if ($type == 'array') {
       		return $errors;
      	} else {
-     		return \PiApp\AdminBundle\Util\PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
+     		return \BootStrap\ToolBundle\Util\PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
      	}
     }
     

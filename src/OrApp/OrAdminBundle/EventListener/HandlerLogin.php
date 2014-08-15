@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use PiApp\AdminBundle\EventListener\HandlerLogin as baseLoginHandler;
+use BootStrap\UserBundle\EventListener\HandlerLogin as baseLoginHandler;
 
 
 /**

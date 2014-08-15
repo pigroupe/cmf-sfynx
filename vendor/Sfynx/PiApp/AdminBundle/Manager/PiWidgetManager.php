@@ -292,7 +292,12 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
             } else {
                 $is_esi_activate = false;
             }      
-            if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
+            $ttl = (int) $params['widget-lifetime'];
+            if (
+            	( $ttl > 0 )
+            	&&
+            	( $is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) )
+            ) {
                 if ($is_esi_activate) {
                     $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
                     $set .= "    {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
@@ -311,7 +316,6 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                     $set .= "{% endif %}\n";
                 }
             } else {
-                $ttl = (int) $params['widget-lifetime'];
                 if ($is_render_service_with_ttl && ($ttl > 0)) {
                     $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', '{$serviceName}', 'renderSource', '{$id}', '{$lang}', {$json})|raw }}\n";
                 } else {
@@ -325,7 +329,7 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                 $this->setJsonFileEtag('esi', $serviceName, $lang, array('esi-url'=>"{$url}{$qs}"));
             }                        
         } else {
-            $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}', {$json})|raw }}\n";
+            $set = " {{ getService('{$serviceName}').renderSource('{$id}', '{$lang}')|raw }}\n";
         }        
     
         return $set;
@@ -411,7 +415,12 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
             } else {
                 $is_esi_activate = false;
             }   
-            if ($is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true))) {
+            $ttl = (int) $params['widget-lifetime'];
+            if (
+            	( $ttl > 0 )
+            	&&
+            	( $is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) )
+            ) {
                 if($is_esi_activate) {
                     $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
                     $set .= "    {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
@@ -430,7 +439,6 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                     $set .= "{% endif %}\n";
                 }
             } else {          
-                $ttl = (int) $params['widget-lifetime'];
                 if ($is_render_service_with_ttl && ($ttl > 0)) {
                     $set = " {{ renderCache('{$url}{$qs}', '{$ttl}', 'pi_app_admin.twig.extension.jquery', 'FactoryFunction', '{$JQcontainer}', '{$method}', {$json})|raw }}\n";
                 } else {
@@ -444,7 +452,7 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                 $this->setJsonFileEtag('esi', $JQcontainer, $lang, array('esi-url'=>"{$url}{$qs}"));
             }            
         } else {
-            $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}', {$json})|raw }}\n";
+            $set = " {{ getService('pi_app_admin.twig.extension.jquery').FactoryFunction('{$JQcontainer}', '{$method}')|raw }}\n";
         }
     
         return $set;

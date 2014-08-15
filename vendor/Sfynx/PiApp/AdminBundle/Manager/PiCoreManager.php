@@ -293,53 +293,53 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     		if ($this->isSluggifyPage()) {    		
     			$path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $this->Etag, $lang);
     			if (!file_exists($path_json_file_tmp)) {
-	    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
+	    			$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
 	    			// we add new Etag in the sluggify file.
 	    			$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
-	    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
+	    			$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
     			}
     		// if the page has queries
     		} elseif ($this->isQueryStringPage()) {	
     			$path_json_file_tmp = $this->createJsonFileName('page-history-tmp', $this->Etag, $lang);
     			if (!file_exists($path_json_file_tmp)) {
-	    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
+	    			$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
 	    			// we add new Etag in the history.
     		    	$path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
-    		    	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);    		    
+    		    	$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);    		    
     			}
     		} else {
     			$path_json_file   = $this->createJsonFileName('page', $id, $lang);
     			if (!file_exists($path_json_file)) {
-    		    	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    		    	$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     			}
     		}
     	} elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
     	    $path_json_file_tmp = $this->createJsonFileName('esi-tmp', $params['esi-url'], $lang);
     		if (!file_exists($path_json_file_tmp)) {
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
+    			$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
     			// we add new ESI tag in the file.
     			$path_json_file = $this->createJsonFileName('esi', $id, $lang);
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
+    			$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
     		}
     	} elseif (isset($params['widget-id']) && !empty($params['widget-id'])) {
     	    if (isset($params['widget-sluggify-url'])) {
     	        $path_json_file_tmp = $this->createJsonFileName('widget-history-tmp', $this->Etag, $lang);
     	        if (!file_exists($path_json_file_tmp)) {
-    	        	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    	        	$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     	        	// we add new Etag in the history.
     	        	$path_json_file_history = $this->createJsonFileName('widget-history', $params['widget-id'], $lang);
-    	        	$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
+    	        	$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
     	        }
     	    } else {
     		    $path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
-    		    $result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    		    $result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     	    }
     	} else {
 	   		$path_json_file_tmp = $this->createJsonFileName('default-tmp', $this->Etag, $lang);
     		if (!file_exists($path_json_file_tmp)) {
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+    			$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     			$path_json_file = $this->createJsonFileName('default', $tag, $lang);
-    			$result = \PiApp\AdminBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
+    			$result = \BootStrap\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
     		}
     	}
     
@@ -358,7 +358,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     public function createCacheWidgetRepository()
     {
     	$dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
-    	\PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+    	\BootStrap\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
     
     	return $dossier;
     }    
@@ -567,8 +567,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         } else {
             $response->setLastModified(new \DateTime());
         }    
-        $response->setETag($this->Etag);
         // set header tags.
+        $response->setETag($this->Etag);
+        //
         if ( $this->isUsernamePasswordToken() ) {
             $response->headers->set('Pragma', "no-cache");
         	$response->headers->set('Cache-control', "private");

@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Eventlistener
- * @package    EventListener
+ * @category   Dispatcher
+ * @package    Event
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-04-18
  *
@@ -15,7 +15,7 @@ namespace OrApp\OrAdminBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-use PiApp\AdminBundle\Event\ResponseEvent;
+use BootStrap\UserBundle\Event\ResponseEvent;
 
 /**
  * Response handler of user deconnection

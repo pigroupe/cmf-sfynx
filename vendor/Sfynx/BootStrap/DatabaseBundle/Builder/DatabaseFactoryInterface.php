@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Database> project.
  *
- * @category   BootStrap_Builders
+ * @category   BootStrap
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -15,9 +15,8 @@ namespace BootStrap\DatabaseBundle\Builder;
 /**
  * DatabaseFactoryInterface interface.
  *
- * @category   BootStrap_Builders
+ * @category   BootStrap
  * @package    Builder
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface DatabaseFactoryInterface

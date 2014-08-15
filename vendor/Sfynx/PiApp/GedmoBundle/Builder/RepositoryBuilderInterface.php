@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Gedmo> project.
  *
- * @category   Gedmo_Builders
+ * @category   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -15,9 +15,8 @@ namespace PiApp\GedmoBundle\Builder;
 /**
  * RepositoryBuilderInterface interface.
  *
- * @category   Gedmo_Builders
+ * @category   PiApp
  * @package    Builder
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface RepositoryBuilderInterface

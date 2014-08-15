@@ -3,7 +3,7 @@
  * This file is part of the <Gedmo> project.
  *
  * @category   Gedmo_Managers
- * @package    Page
+ * @package    FormBuilder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-09-11
  *
@@ -22,7 +22,7 @@ use Doctrine\ORM\EntityRepository;
 * Description of the Form builder manager
 *
 * @category   Gedmo_Managers
-* @package    Page
+* @package    FormBuilder
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
 */

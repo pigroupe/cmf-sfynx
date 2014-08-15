@@ -23,7 +23,7 @@ use Doctrine\DBAL\Platforms\SQLServerPlatform;
 use Doctrine\DBAL\Platforms\SQLServer2005Platform;
 use Doctrine\DBAL\Platforms\SQLServer2008Platform;
 
-use BootStrap\TranslationBundle\Route\AbstractFactory;
+use BootStrap\ToolBundle\Route\AbstractFactory;
 use BootStrap\DatabaseBundle\Exception\DatabaseException;
 
 use BootStrap\DatabaseBundle\Manager\Database\BackupDB2Platform;

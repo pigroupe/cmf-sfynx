@@ -3,7 +3,7 @@
  * This file is part of the <Gedmo> project.
  *
  * @category   Gedmo_Managers
- * @package    Page
+ * @package    FormBuilder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-08-31
  *
@@ -16,13 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use PiApp\AdminBundle\Manager\PiFormBuilderManager;
 use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlideCollectionType;
-use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlideCollection2Type;
+use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSearchFieldsType;
         
 /**
 * Description of the Form builder manager
 *
 * @category   Gedmo_Managers
-* @package    Page
+* @package    FormBuilder
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
 */
@@ -303,7 +303,7 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         		'prototype'    => true,
         		// Post update
         		'by_reference' => true,
-        		'type'   => new PiModelWidgetSlideCollection2Type($this->_locale, $this->_container),
+        		'type'   => new PiModelWidgetSearchFieldsType($this->_locale, $this->_container),
         		'options'  => array(
         				'attr'      => array('class' => 'collection_widget')
         		),

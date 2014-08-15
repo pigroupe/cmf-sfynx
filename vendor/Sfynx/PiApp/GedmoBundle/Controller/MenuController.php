@@ -127,13 +127,12 @@ class MenuController extends abstractController
     public function indexAction()
     {
         $em         = $this->getDoctrine()->getManager();
-        $locale        = $this->container->get('request')->getLocale();
-        $entities     = $em->getRepository("PiAppGedmoBundle:Menu")->getAllTree($locale);
-         
+        $locale     = $this->container->get('request')->getLocale();
+        $entities   = $em->getRepository("PiAppGedmoBundle:Menu")->getAllTree($locale);
+        //
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)     $template = "index.html.twig"; else $template = "index_ajax.html.twig";
          
-        return $this->render("PiAppGedmoBundle:Menu:$template", array(
+        return $this->render("PiAppGedmoBundle:Menu:index.html.twig", array(
                 'entities'    => $entities,
                 'NoLayout'      => $NoLayout,
         ));
@@ -150,21 +149,16 @@ class MenuController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($id, $locale);
-        
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)
-            $template = "show.html.twig";
-        else
-            $template = "show_ajax.html.twig";        
-        
+
+        $entity = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($id, $locale);
         if (!$entity) {
             throw ControllerException::NotFoundException('Menu');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render("PiAppGedmoBundle:Menu:$template", array(
+        return $this->render("PiAppGedmoBundle:Menu:show.html.twig", array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
             'NoLayout'       => $NoLayout,
@@ -181,24 +175,23 @@ class MenuController extends abstractController
     public function newAction()
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $entity = new Menu();
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new_ajax.html.twig";    
-
+        //
         $category   = $this->container->get('request')->query->get('category');
+        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if ($category)
             $entity->setCategory($em->getRepository("PiAppGedmoBundle:Category")->find($category));
-        
+        //
         $parent_id   = $this->container->get('request')->query->get('parent');
         if ($parent_id){
             $parent = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($parent_id, $locale);
             $entity->setParent($parent);
         }
-        
-        $form   = $this->createForm(new MenuType($this->container, $em), $entity, array('show_legend' => false));        
-        return $this->render("PiAppGedmoBundle:Menu:$template", array(
+        //
+        $form   = $this->createForm(new MenuType($this->container, $em), $entity, array('show_legend' => false)); 
+               
+        return $this->render("PiAppGedmoBundle:Menu:new.html.twig", array(
             'entity'     => $entity,
             'form'       => $form->createView(),
             'NoLayout'  => $NoLayout,
@@ -219,7 +212,6 @@ class MenuController extends abstractController
         
         $category   = $this->container->get('request')->query->get('category');
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new_ajax.html.twig";        
     
         $entity  = new Menu();
         $request = $this->getRequest();
@@ -234,7 +226,7 @@ class MenuController extends abstractController
             return $this->redirect($this->generateUrl('admin_gedmo_menu_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
         }
 
-        return $this->render("PiAppGedmoBundle:Menu:$template", array(
+        return $this->render("PiAppGedmoBundle:Menu:new.html.twig", array(
             'entity' => $entity,
             'form'   => $form->createView(),
                'NoLayout'  => $NoLayout,
@@ -252,23 +244,18 @@ class MenuController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($id, $locale, 'object');
-        
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)
-            $template = "edit.html.twig";
-        else
-            $template = "edit_ajax.html.twig";        
-
+        //
+        $entity = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($id, $locale, 'object');
         if (!$entity) {
             $entity = $em->getRepository("PiAppGedmoBundle:Menu")->find($id);
             $entity->addTranslation(new MenuTranslation($locale));            
         }
-
+        //
         $editForm   = $this->createForm(new MenuType($this->container, $em), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render("PiAppGedmoBundle:Menu:$template", array(
+        return $this->render("PiAppGedmoBundle:Menu:edit.html.twig", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -287,21 +274,15 @@ class MenuController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($id, $locale, "object");
-        
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)
-            $template = "edit.html.twig";
-        else
-            $template = "edit_ajax.html.twig";        
-
+        //
+        $entity = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($id, $locale, "object");
         if (!$entity) {
             $entity = $em->getRepository("PiAppGedmoBundle:Menu")->find($id);
         }
-
+        //
         $editForm   = $this->createForm(new MenuType($this->container, $em), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-
         $editForm->bind($this->getRequest(), $entity);
         if ($editForm->isValid()) {
             $entity->setTranslatableLocale($locale);
@@ -311,7 +292,7 @@ class MenuController extends abstractController
             return $this->redirect($this->generateUrl('admin_gedmo_menu_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         }
 
-        return $this->render("PiAppGedmoBundle:Menu:$template", array(
+        return $this->render("PiAppGedmoBundle:Menu:edit.html.twig", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -480,7 +461,7 @@ class MenuController extends abstractController
             $node = null;
         }
         
-        $nodes         = $em->getRepository("PiAppGedmoBundle:Menu")->getAllTree($locale, $category, 'array', false, false, $node);
+        $nodes       = $em->getRepository("PiAppGedmoBundle:Menu")->getAllTree($locale, $category, 'array', false, false, $node);
         $tree        = $em->getRepository("PiAppGedmoBundle:Menu")->buildTree($nodes, $options);        
         
         return $this->render("PiAppGedmoBundle:Menu:$template", array(

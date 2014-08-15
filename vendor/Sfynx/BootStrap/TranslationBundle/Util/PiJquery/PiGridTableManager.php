@@ -14,7 +14,7 @@ namespace BootStrap\TranslationBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use PiApp\AdminBundle\Twig\Extension\PiJqueryExtension;
+use BootStrap\ToolBundle\Twig\Extension\PiJqueryExtension;
 use PiApp\AdminBundle\Exception\ExtensionException;
 
 /**

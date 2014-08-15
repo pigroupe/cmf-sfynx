@@ -333,13 +333,17 @@ class TreeRepository extends NestedTreeRepository
         if ($is_checkRoles) {
             $query = $this->checkRoles($query);
         }
-        if ($iscache) {
-        	$query = $this->cacheQuery($query->getQuery());
+        if ($result == 'query') {
+            return $query;
         } else {
-        	$query = $query->getQuery();
+            if ($iscache) {
+            	$query = $this->cacheQuery($query->getQuery());
+            } else {
+            	$query = $query->getQuery();
+            }
+            
+            return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN);
         }
-        
-        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN);
     }   
     
     /**

@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Twig
- * @package    Extension_widget
+ * @category   Widget
+ * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-10
  *
@@ -15,9 +15,8 @@ namespace PiApp\AdminBundle\Twig\Node;
 /**
  * StyleSheetJquery Node.
  *
- * @category   Admin_Twig
- * @package    Extension_widget
- *
+ * @category   Widget
+ * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class StyleSheetWidgetNode extends \Twig_Node

@@ -3,7 +3,7 @@
  * This file is part of the <Admin> project.
  *
  * @category   Admin_Managers
- * @package    Page
+ * @package    FormBuilder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-26
  *
@@ -22,7 +22,7 @@ use PiApp\AdminBundle\Twig\Extension\PiWidgetExtension;
 * Description of the Form builder manager
 *
 * @category   Admin_Managers
-* @package    Page
+* @package    FormBuilder
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
 */

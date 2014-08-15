@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_DataFixtures
- * @package    ORM
+ * @category   CMF
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
  *
@@ -20,9 +20,8 @@ use PiApp\AdminBundle\Entity\Langue;
 /**
  * Langues DataFixtures.
  *
- * @category   Admin_DataFixtures
- * @package    ORM
- *
+ * @category   CMF
+ * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class LanguesFixtures extends AbstractFixture implements OrderedFixtureInterface

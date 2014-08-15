@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Util
- * @package    Extension_jquery 
+ * @category   Jquery
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
  *
@@ -14,7 +14,7 @@ namespace PiApp\AdminBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use PiApp\AdminBundle\Twig\Extension\PiJqueryExtension;
+use BootStrap\ToolBundle\Twig\Extension\PiJqueryExtension;
 use PiApp\AdminBundle\Exception\ExtensionException;
 use PiApp\AdminBundle\Manager\PiPageManager;
 use PiApp\AdminBundle\Manager\PiTreeManager;
@@ -22,9 +22,8 @@ use PiApp\AdminBundle\Manager\PiTreeManager;
 /**
  * Organigramm of all pages according to the section with Org Chart Jquery plugin.
  *
- * @category   Admin_Util
- * @package    Extension_jquery 
- * 
+ * @category   Jquery
+ * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiOrgChartPageManager extends PiJqueryExtension
@@ -283,7 +282,6 @@ class PiOrgChartPageManager extends PiJqueryExtension
      * Define page Org html with ul/li balises.
      *
      * <code>
-     *  
      *  {% set options_chartpage = {
      *       'entity':'PiAppGedmoBundle:Menu',
      *       'category':'Menuwrapper',
@@ -293,8 +291,7 @@ class PiOrgChartPageManager extends PiJqueryExtension
      *                  '0':{'content':'title', 'class':'pi_tree_desc'}
      *              },
      *       'id':'orga' } %}
-     *    {{ renderJquery('MENU', 'org-chart-page', options_chartpage )|raw }}
-     *  
+     *  {{ renderJquery('MENU', 'org-chart-page', options_chartpage )|raw }}
      * <code> 
      *
      * @param    array $options
@@ -306,21 +303,22 @@ class PiOrgChartPageManager extends PiJqueryExtension
     public function organigramMenu($options = null)
     {
         // Options management
-        if ( !isset($options['entity']) || empty($options['entity']) )
+        if ( !isset($options['entity']) || empty($options['entity']) ) {
             throw ExtensionException::optionValueNotSpecified('entity', __CLASS__);
-        if ( !isset($options['category']) )
+        }
+        if ( !isset($options['category']) ) {
             throw ExtensionException::optionValueNotSpecified('category', __CLASS__);
-        if ( !isset($options['locale']) )
+        }
+        if ( !isset($options['locale']) ) {
             $locale     = $this->container->get('request')->getLocale();
-        else        
+        } else {        
             $locale = $options['locale'];
-        
+        }
         $TreeManager = $this->container->get('pi_app_admin.manager.tree');        
-        
-        //print_r($options['fields']);exit;
-        if ($TreeManager instanceof PiTreeManager){
+        if ($TreeManager instanceof PiTreeManager) {
             return $TreeManager->defaultOrganigram($locale, $options['entity'], $options['category'], $options);    
-        }else
+        } else {
             throw ExtensionException::serviceUndefined('PiTreeManager');
+        }
     }    
 }

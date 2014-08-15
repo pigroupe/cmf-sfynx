@@ -34,7 +34,7 @@ use Symfony\Component\Console\Input\InputOption;
 class BackupCommand extends ContainerAwareCommand
 {
     /**
-     * @var \PiApp\AdminBundle\Util\PiLogManager
+     * @var \BootStrap\ToolBundle\Util\PiLogManager
      */
     private $_logger;
     

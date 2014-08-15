@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Bundle
- * @package    DependencyInjection
+ * @category   BootStrap
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
  *
@@ -19,9 +19,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * @category   Bundle
- * @package    DependencyInjection
- *
+ * @category   BootStrap
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class Configuration implements ConfigurationInterface

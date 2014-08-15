@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   BootStrap_EventSubscriber
- * @package    EventSubscriber
+ * @category   BootStrap
+ * @package    EventSubscriber 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-07-20
  *
@@ -24,8 +24,8 @@ use BootStrap\TranslationBundle\EventListener\abstractListener;
 /**
  * Media entity Subscriber.
  *
- * @category   BootStrap_EventSubscriber
- * @package    EventSubscriber
+ * @category   BootStrap
+ * @package    EventSubscriber 
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
@@ -165,8 +165,8 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
      */
     private function _cleanName($string)
     {
-        $string = \PiApp\AdminBundle\Util\PiStringManager::minusculesSansAccents($string);
-        $string = \PiApp\AdminBundle\Util\PiStringManager::cleanFilename($string);
+        $string = \BootStrap\ToolBundle\Util\PiStringManager::minusculesSansAccents($string);
+        $string = \BootStrap\ToolBundle\Util\PiStringManager::cleanFilename($string);
          
         return $string;
     }   

@@ -25,7 +25,7 @@ security:
                 login_path: /login
                 use_forward: false
                 check_path: /login_check
-                success_handler: pi_app_admin.user.authentication_handler
+                success_handler: bootstrap.user.authentication_handler
                 failure_path: /login_failure
                 remember_me: true
                 #default_target_path: /home
@@ -38,7 +38,7 @@ security:
             logout:
                 path: /logout
                 target: /
-                success_handler: pi_app_admin.user.logout_handler
+                success_handler: bootstrap.user.logout_handler
                 invalidate_session: false
             anonymous: true
             

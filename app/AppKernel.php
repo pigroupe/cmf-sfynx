@@ -48,6 +48,7 @@ class AppKernel extends Kernel
 	            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
         		
         		# boostrap
+                new BootStrap\ToolBundle\BootStrapToolBundle(),
         		new BootStrap\DatabaseBundle\BootStrapDatabaseBundle(),
         		new BootStrap\CacheBundle\BootStrapCacheBundle(),
         		new BootStrap\AclManagerBundle\BootStrapAclManagerBundle(),

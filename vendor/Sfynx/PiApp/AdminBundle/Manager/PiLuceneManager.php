@@ -58,7 +58,7 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
         parent::__construct($container);
         //
         $dossier = $container->get('kernel')->getRootDir() . '/cache/Indexation';
-        if (\PiApp\AdminBundle\Util\PiFileManager::mkdirr($dossier, 0777)) {
+        if (\BootStrap\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777)) {
             $this->_indexPath = $dossier . self::NAME_INDEX;
         } else {
             throw new \InvalidArgumentException("The Indexation cache repository is not created correctly");
@@ -131,6 +131,11 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
         try {
             // Attempt to open the index.
             self::$_index = new \Zend_Search_Lucene_Proxy(new \Zend_Search_Lucene($directory, false));
+            // ignore invalid characters for lucene text search
+            \Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
+            \Zend_Search_Lucene_Analysis_Analyzer::setDefault(
+                new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive ()
+            );
         } catch (\Exception $e) {
             // Return a newly created index using the create method of this class.
             self::create($directory);
@@ -168,13 +173,9 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
     {
         // Open the index
         self::open($this->_indexPath);
-        // we get the page manager
-        $pageManager      = $this->container->get('pi_app_admin.manager.page');
-        // we set the object Translation Page by route
-        $pageManager->setPageByRoute($page->getRouteName());
         // we set the indexation of the locale translations of the page.
         $translationPage = $page->getTranslationByLocale($this->language);
-        if ($translationPage instanceof \PiApp\AdminBundle\Entity\TranslationPage){
+        if ($translationPage instanceof \PiApp\AdminBundle\Entity\TranslationPage) {
             // if the page is sluggify, we get the entity associated
             $pathInfo     = str_replace($this->container->get('request')->getUriForPath(''), '', $this->container->get('request')->headers->get('referer'));
             $page_options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($this->language, '', '', '', $pathInfo);
@@ -192,11 +193,10 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
             }
             $indexValues['Key']         = "page:{$page->getId()}:{$this->language}:{$pathInfo}";
             $indexValues['Route']       = $page->getRouteName();
-            //$indexValues['Contents']  = $this->deleteTags($pageManager->render($this->language)->getContent());
             $indexValues['Contents']    = $this->deleteTags(file_get_contents($this->container->get('request')->getUriForPath('') . $pathInfo));
             $indexValues['Keywords']    = $translationPage->getMetaKeywords();
             $indexValues['Subject']     = $translationPage->getMetaDescription();    
-
+            
             self::$_index = Indexation::index(self::$_index, 'page', $indexValues, $this->language);
         }       
         // Commit the index

@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Bundle
- * @package    DependencyInjection
+ * @category   CMF
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
  *
@@ -19,9 +19,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * Adds tagged twig.extension services to the pi_app_admin twig service
  *
- * @category   Bundle
- * @package    DependencyInjection
- *
+ * @category   CMF
+ * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiTwigEnvironmentPass implements CompilerPassInterface

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Translator> project.
+ * This file is part of the <User> project.
  *
- * @category   Translator_Controllers
+ * @category   BootStrap
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
@@ -34,16 +34,17 @@ use BootStrap\UserBundle\Form\Type\UsersNewFormType;
 
 use Symfony\Component\Form\FormError;
 
-
 /**
  * Userscontroller.
  *
+ * @category   BootStrap
+ * @package    Controller
+ * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class UsersController extends abstractController
 {
     protected $_entityName = "BootStrapUserBundle:User";
     
-
     /**
      * Enabled Recette entities.
      *

@@ -1,4 +1,14 @@
 <?php
+/**
+ * This file is part of the <User> project.
+ *
+ * @category   BootStrap
+ * @package    Controller
+ * @since 2012-01-03
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace BootStrap\UserBundle\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -9,6 +19,9 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * @Route("/front/secured")
+ * 
+ * @category   BootStrap
+ * @package    Controller
  */
 class SecuredController extends ContainerAware
 {

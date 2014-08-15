@@ -2,7 +2,7 @@
 /**
  * This file is part of the <User> project.
  *
- * @category   BootStrap_Exception
+ * @category   BootStrap
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-30
@@ -15,9 +15,8 @@ namespace BootStrap\UserBundle\Exception;
 /**
  * Database Exception
  *
- * @category   BootStrap_Exception
+ * @category   BootStrap
  * @package    Exception
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class UserException extends \Exception

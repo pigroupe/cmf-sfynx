@@ -3,10 +3,9 @@
 /**
  * This file is part of the <web service> project.
  *
- * @category Ws_Exception
- * @package Exception
+ * @category   BootStrap
+ * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright Copyright (c) 2013, Mappy
  * @since 2013-03-26
  *
  * For the full copyright and license information, please view the LICENSE
@@ -16,10 +15,10 @@
 namespace BootStrap\WsBundle\Exception;
 
 /**
- * Extension Exception
+ * Exception
  *
- * @category Ws_Exception
- * @package Exception
+ * @category   BootStrap
+ * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class ClientException extends \Exception {

@@ -1,6 +1,6 @@
 parameters:
     bootstrap.subscriber.encrypters.class: BootStrap\TranslationBundle\EventSubscriber\EncryptSubscriber
-    bootstrap.subscriber.position.class: BootStrap\TranslationBundle\EventSubscriber\EventSubscriberPosition
+    bootstrap.subscriber.position.class: BootStrap\TranslationBundle\EventSubscriber\PositionSubscriber
 
 services:
     #               

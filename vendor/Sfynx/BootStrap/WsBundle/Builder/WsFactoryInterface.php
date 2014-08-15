@@ -1,12 +1,11 @@
 <?php
 
 /**
- * This file is part of the <web service> project.
+ * This file is part of the <WS> project.
  *
- * @category Ws_Builders
- * @package Builder
+ * @category   BootStrap
+ * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright Copyright (c) 2013, Mappy
  * @since 2013-03-26
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,10 +17,10 @@ namespace BootStrap\WsBundle\Builder;
 use BootStrap\WsBundle\Builder\WsClientInterface;
 
 /**
- * MappyWs Factory Interface
+ * WS Factory Interface
  *
- * @category Ws_Builders
- * @package Builder
+ * @category   BootStrap
+ * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface WsFactoryInterface {

@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Bundle
- * @package    DependencyInjection
+ * @category   BootStrap
+ * @package    OverrideService
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
  *
@@ -18,16 +18,15 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * Adds tagged twig.extension services to the pi_app_admin twig service
  *
- * @category   Bundle
- * @package    DependencyInjection
- *
+ * @category   BootStrap
+ * @package    OverrideService
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class OverrideServiceCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('pi_app_admin.user.login_handler');
+        $definition = $container->getDefinition('bootstrap.user.login_handler');
         $definition->setClass('OrApp\OrAdminBundle\EventListener\HandlerLogin');    
     }
 }
