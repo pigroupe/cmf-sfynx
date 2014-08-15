@@ -56,9 +56,10 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 * CacheBundle : A bundle which provides classes to cache handlers <span class="o">(</span>memcache, files<span class="o">)</span>.
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor<span class="sb">`</span>s utilities to backup and restore databases. 
 * MediaBundle : A bundle which overload the SonataMediaBundle.
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a <span class="nb">command </span>to generate Sfynx bundle with a CRUD system of an entity, contains core libraries and services of route, etc.
+* ToolBundle : A bundle which contains tool libraries and services of route and role and twig extensions
+* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a <span class="nb">command </span>to generate Sfynx bundle with a CRUD system of an entity, and annotation to encrypt fields and to manage position.
 * TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
-* UserBundle : A bundle which overload the FOSUserBundle.
+* UserBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and <span class="nb">set </span>handlers <span class="k">for</span> login behavior, <span class="nb">logout </span>behavior and failure connection behavior
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
 </pre></div>
 
@@ -79,7 +80,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 </ul><h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
-<p><strong>Copyright <g-emoji alias="copyright" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/00a9.png">©</g-emoji> 20012-2014, <a href="mailto:contact@pi-groupe.fr">contact@pi-groupe.fr</a>.</strong>
+<p><strong>Copyright © 20012-2014, <a href="mailto:contact@pi-groupe.fr">contact@pi-groupe.fr</a>.</strong>
 <strong>This bundle is under the <a href="https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt">GNU General Public License</a>, permitting combination and redistribution with software that uses the MIT License</strong></p>
 
 <p>SFYNX is a free software distributed under the GPL license. This license guarantees the following freedoms:</p>
@@ -370,9 +371,9 @@ configured for Symfony.</p>
 
 <p>Then you must add the uploads/media folder to allow specific users to load :</p>
 
-<div class="highlight highlight-bash"><pre>chmod –R <span class="m">0777</span> app / cache
-chmod –R <span class="m">0777</span> app / log
-chmod –R <span class="m">0777</span> Orcehstra / BootStrap/TranslatorBundle/Resources/translations
+<div class="highlight highlight-bash"><pre>chmod –R <span class="m">0777</span> app/cache
+chmod –R <span class="m">0777</span> app/log
+chmod –R <span class="m">0777</span> vendor/Sfynx/BootStrap/TranslatorBundle/Resources/translations
 
 mkdir web/uploads
 mkdir web/uploads/media
