@@ -1,9 +1,0 @@
-# IDE specificities
-# Netbean
-nbproject/
-# Gedit
-*~
-# Eclipse
-.project
-
-vendor/*

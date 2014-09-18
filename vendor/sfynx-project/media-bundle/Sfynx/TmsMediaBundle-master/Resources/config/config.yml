@@ -1,4 +1,0 @@
-idci_exporter:
-    entities:
-        medias:
-            class: "Tms\\Bundle\\MediaBundle\\Entity\Media"
