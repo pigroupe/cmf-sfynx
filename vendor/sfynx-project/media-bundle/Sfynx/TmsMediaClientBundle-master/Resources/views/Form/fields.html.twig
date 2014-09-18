@@ -1,0 +1,146 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block related_to_many_media_widget %}
+    {% spaceless %}
+        {{ block('collection_widget') }}
+    {% endspaceless %}
+
+    <script type="text/javascript">
+        var collectionHolder = $('.tms_media_client__related_to_many_media');
+        var $addMediaLink = $('<a href="#" class="btn btn-default add_media_link">Add media</a>');
+        var $newLink = $('<div></div>').append($addMediaLink);
+
+        jQuery(document).ready(function() {
+            collectionHolder.append($newLink);
+
+            $addMediaLink.on('click', function(e) {
+                e.preventDefault();
+                addMediaForm(collectionHolder, $newLink);
+            });
+
+            collectionHolder.find('.tms_media_client__related_to_one_media').each(function() {
+                addMediaFormDeleteLink($(this));
+            });
+        });
+
+        function addMediaForm(collectionHolder, $newLink) {
+            var prototype = collectionHolder.attr('data-prototype');
+            var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+            var $newFormDiv = $('<div></div>').append(newForm);
+            $newLink.before($newFormDiv);
+            addMediaFormDeleteLink($newFormDiv);
+        }
+
+        function addMediaFormDeleteLink($mediaFormDiv) {
+            var $removeFormA = $('<a href="#" class="btn btn-default">Delete media</a>');
+            $mediaFormDiv.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                e.preventDefault();
+                $mediaFormDiv.remove();
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block related_to_one_media_widget %}
+    {% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+        {% if data %}
+        <table class="table table-condensed table-bordered" style="font-size: 10px;">
+            <tr>
+                {% if data.isImageable() %}
+                <td rowspan="4">
+                    <img src="{{ data.getUrl('png', {'resize': 1, 'height': 100}) }}" alt="{{ data }}" title="{{ data }}" />
+                </td>
+                {% endif %}
+                <th>{% trans %}Provider name{% endtrans %}</th>
+                <td>{{ data.providerName }}</td>
+            </tr>
+            <tr>
+                <th>{% trans %}Provider reference{% endtrans %}</th>
+                <td><a href="{{ data.publicUri }}" target="_blank">{{ data.providerReference }}</a></td>
+            </tr>
+            <tr>
+                <th>{% trans %}Extension{% endtrans %}</th>
+                <td>{{ data.extension }}</td>
+            </tr>
+            <tr>
+                <th>{% trans %}Mime type{% endtrans %}</th>
+                <td>{{ data.mimeType }}</td>
+            </tr>
+        </table>
+        {% endif %}
+        {% if form.parent is empty %}
+            {{ form_errors(form) }}
+        {% endif %}
+        {{ block('form_rows') }}
+        {{ form_rest(form) }}
+    </div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block tms_media_upload_widget %}
+    {% spaceless %}
+        {{ block('collection_widget') }}
+    {% endspaceless %}
+
+    {% set url       = data ? data.getUrl('png') : null %}
+    {% set mimeType  = data ? data.mimeType : null %}
+    {% set reference = data ? data.providerReference : null %}
+
+    <script type="text/javascript">
+        $.fn.loadUploadedArea = function(url, mimeType, name) {
+            var $uploadedArea = $(this).siblings('.uploaded_area');
+            var $that = $(this);
+            if ($uploadedArea.length == 0) {
+                $uploadedArea = $('<div class="uploaded_area"></div>');
+                $(this).after($uploadedArea);
+            }
+
+            $uploadedArea.empty();
+            var $uploadedElement = $('<div class="item"></div>');
+            $uploadedArea.append($uploadedElement);
+
+            if (mimeType.match('image.*')) {
+                $img = $('<img src="'+url+'" title="'+name+'" />');
+                $uploadedElement.append($img);
+            }
+            $data = $('\
+                <div class="file_data">\
+                    <p class="name"><strong>Nom:</strong> '+name+'</p>\
+                    <p class="mime_type"><strong>Type:</strong> '+mimeType+'</p>\
+                </div>\
+            ');
+            $uploadedElement.append($data);
+        };
+
+        {% set cleanId = id | replace({'-': ''}) %}
+        $('document').ready(function() {
+            var $url_{{ cleanId }} = "{{ url }}";
+            var $mimeType_{{ cleanId }} = "{{ mimeType }}";
+            var $reference_{{ cleanId }} = "{{ reference }}";
+
+            var $inputFile = $('#{{ id }}_uploadedFile');
+            $inputFile.loadUploadedArea($url_{{ cleanId }}, $mimeType_{{ cleanId }}, $reference_{{ cleanId }});
+
+            $inputFile.on('change', function(event) {
+                var files = event.target.files;
+                // Loop through the FileList and render image files as thumbnails.
+                for (var i = 0, f; f = files[i]; i++) {
+                    var reader = new FileReader();
+                    // Closure to capture the file information.
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            $inputFile.loadUploadedArea(e.target.result, theFile.type, theFile.name);
+                        };
+                    })(f);
+
+                    // Read in the image file as a data URL.
+                    reader.readAsDataURL(f);
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

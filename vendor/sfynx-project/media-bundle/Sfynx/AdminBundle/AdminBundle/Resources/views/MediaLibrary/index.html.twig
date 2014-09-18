@@ -1,0 +1,52 @@
+{% extends 'AppAdminBundle:Layout:admin_layout.html.twig' %}
+
+
+    
+{% block stylesheets %} 
+   {{ parent() }}
+   <link href="{{ asset('bundles/fmelfinder/css/elfinder.min.css') }}" rel="stylesheet">
+   <link href="{{ asset('bundles/fmelfinder/css/jquery-ui-1.8.21.custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/fmelfinder/css/theme.css') }}" rel="stylesheet">
+{% endblock %}
+    
+{% block body %}
+          <section class="site-min-height">
+              <!-- page start-->
+              <section class="panel">
+                  <header class="panel-heading">
+                      Médiathèque
+                  </header>
+                  <div class="panel-body">
+                     <div id="elfinder"></div>
+                  </div>
+              </section>
+              <!-- page end-->
+          </section>
+{% endblock %}
+
+{% block javascripts %}
+   {{ parent() }}
+   <script src="{{ asset('bundles/fmelfinder/js/main.js') }}" ></script>
+   <script src="{{ asset('bundles/fmelfinder/js/jquery/jquery-ui-1.8.23.custom.min.js') }}" ></script>
+   <script src="{{ asset('bundles/fmelfinder/js/elfinder.min.js') }}" ></script>
+   <script src="{{ asset('bundles/fmelfinder/js/i18n/elfinder.fr.js') }}" ></script>
+
+   <script type="text/javascript" charset="utf-8">
+    $().ready(function() {
+        var $f = $('#elfinder').elfinder({
+            url : '{{path('ef_connect')}}',
+            lang : '{{locale}}'
+        });
+
+        {% if fullscreen %}
+        var $window = $(window);
+        $window.resize(function(){
+            var $win_height = $window.height();
+            if( $f.height() != $win_height ){
+                $f.height($win_height).resize();
+            }
+        });
+        {% endif %}
+    });
+</script>
+{% endblock %}   

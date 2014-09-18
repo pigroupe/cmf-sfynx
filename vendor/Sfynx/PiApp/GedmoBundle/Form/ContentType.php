@@ -69,7 +69,7 @@ class ContentType extends AbstractType
 //             ->add('published_at', 'date', array(
 //                     'widget' => 'single_text', // choice, text, single_text
 //                     'input' => 'datetime',
-//                     'format' => $this->_container->get('pi_app_admin.twig.extension.tool')->getDatePatternByLocalFunction($this->_locale),// 'dd/MM/yyyy', 'MM/dd/yyyy',
+//                     'format' => $this->_container->get('sfynx.tool.twig.extension.tool')->getDatePatternByLocalFunction($this->_locale),// 'dd/MM/yyyy', 'MM/dd/yyyy',
 //                     'empty_value' => array('year' => 'Année', 'month' => 'Mois', 'day' => 'Jour'),
 //                     //'pattern' => "{{ day }}/{{ month }}/{{ year }}",
 //                     //'data_timezone' => "Europe/Paris",
@@ -125,7 +125,7 @@ class ContentType extends AbstractType
                     ),
              ))  
             ->add('pageurl', 'entity', array(
-                     'class' => 'PiAppAdminBundle:Page',
+                     'class' => 'SfynxCmfBundle:Page',
                      'query_builder' => function(EntityRepository $er) {
                          return $er->getAllPageHtml();
                      },

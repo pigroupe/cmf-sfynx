@@ -1,0 +1,24 @@
+users:
+    pattern:  /
+    defaults: { _controller: "SfynxAuthBundle:Users:index" }
+users_ajax:
+    pattern:  /ajax
+    defaults: { _controller: "SfynxAuthBundle:Users:indexAjax" }
+    requirements: { _method: post }
+users_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "SfynxAuthBundle:Users:show" }
+users_new:
+    pattern:  /new
+    defaults: { _controller: "SfynxAuthBundle:Users:new" }
+users_create:
+    pattern:  /create
+    defaults: { _controller: "SfynxAuthBundle:Users:create" }
+    requirements: { _method: post }
+users_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "SfynxAuthBundle:Users:edit" }
+users_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "SfynxAuthBundle:Users:update" }
+    requirements: { _method: post|put }

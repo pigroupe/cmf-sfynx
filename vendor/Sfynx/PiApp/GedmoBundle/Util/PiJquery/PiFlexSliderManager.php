@@ -2,8 +2,8 @@
 /**
  * This file is part of the <Gedmo> project.
  *
- * @category   Gedmo_Util
- * @package    Extension_jquery 
+ * @category   Gedmo
+ * @package    Jquery 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-05-3
  *
@@ -14,17 +14,16 @@ namespace PiApp\GedmoBundle\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use BootStrap\ToolBundle\Twig\Extension\PiJqueryExtension;
-use PiApp\AdminBundle\Exception\ExtensionException;
-use PiApp\AdminBundle\Manager\PiPageManager;
-use PiApp\AdminBundle\Manager\PiSliderManager;
+use Sfynx\ToolBundle\Twig\Extension\PiJqueryExtension;
+use Sfynx\ToolBundle\Exception\ExtensionException;
+use Sfynx\CmfBundle\Manager\PiPageManager;
+use Sfynx\CmfBundle\Manager\PiSliderManager;
 
 /**
  * Slider of the FlexSlider Jquery plugin.
  *
- * @category   Gedmo_Util
- * @package    Extension_jquery 
- * 
+ * @category   Gedmo
+ * @package    Jquery 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiFlexSliderManager extends PiJqueryExtension
@@ -63,10 +62,10 @@ class PiFlexSliderManager extends PiJqueryExtension
     protected function init($options = null)
     {
         // css
-        //$this->container->get('pi_app_admin.twig.extension.layouthead')->addCssFile("bundles/piappadmin/js/slider/flexslider/css/flexcrollstyles.css");
+        //$this->container->get('sfynx.tool.twig.extension.layouthead')->addCssFile("bundles/sfynxtemplate/js/slider/flexslider/css/flexcrollstyles.css");
         
         // js
-        $this->container->get('pi_app_admin.twig.extension.layouthead')->addJsFile("bundles/piappadmin/js/slider/flexslider/js/jquery.flexslider-min.js");
+        $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/slider/flexslider/js/jquery.flexslider-min.js");
     }    
     
     /**
@@ -162,7 +161,7 @@ class PiFlexSliderManager extends PiJqueryExtension
             $id_c = "id='{$options['id']}'";
             $id   = "#{$options['id']}";
         } else {
-            $options['id'] = 'flex-slider' . \BootStrap\ToolBundle\Util\PiStringManager::random(11);
+            $options['id'] = 'flex-slider' . \Sfynx\ToolBundle\Util\PiStringManager::random(11);
             $id_c = "id='{$options['id']}'";
             $id   = "#{$options['id']}";
         }
@@ -177,7 +176,7 @@ class PiFlexSliderManager extends PiJqueryExtension
         	$options['height'] = "100%";
         }
         //
-        $templateContent = $this->container->get('twig')->loadTemplate("PiAppTemplateBundle:Template\\Slider:{$options['template']}");
+        $templateContent = $this->container->get('twig')->loadTemplate("SfynxTemplateBundle:Template\\Slider:{$options['template']}");
         if ($templateContent->hasBlock("body")) {
             $slider_result    = $templateContent->renderBlock("body", array_merge($options, array('slides'=>$sliders))) . " \n";
         } else {
@@ -279,7 +278,7 @@ class PiFlexSliderManager extends PiJqueryExtension
                     maxItems: 1,        
             ';
         }
-        $templateContent = $this->container->get('twig')->loadTemplate("PiAppTemplateBundle:Template\\Slider:{$options['template']}");
+        $templateContent = $this->container->get('twig')->loadTemplate("SfynxTemplateBundle:Template\\Slider:{$options['template']}");
         if ($templateContent->hasBlock("body")) {
             $slider_result  = $templateContent->renderBlock("body", array_merge($options, array('content'=>$sliders))) . "\n";
         } else {
@@ -328,9 +327,9 @@ class PiFlexSliderManager extends PiJqueryExtension
      *       'action':'renderDefault',
      *       'menu': 'default',
      *       'imgs':{
-     *                  '0':{'title':'title', 'url':'{{ asset('bundles/piappadmin/images/layout/novedia/FOCUS/focus-novedia.png') }}' },
-     *                  '1':{'title':'title', 'url':'{{ asset(bundles/piappadmin/images/layout/novedia/FOCUS/focus-canalplus.jpg') }}' },
-     *                  '2':{'title':'title', 'url':'{{ asset(bundles/piappadmin/images/layout/novedia/FOCUS/focus-fnac.jpg') }}' },
+     *                  '0':{'title':'title', 'url':'{{ asset('bundles/sfynxtemplate/images/layout/novedia/FOCUS/focus-novedia.png') }}' },
+     *                  '1':{'title':'title', 'url':'{{ asset(bundles/sfynxtemplate/images/layout/novedia/FOCUS/focus-canalplus.jpg') }}' },
+     *                  '2':{'title':'title', 'url':'{{ asset(bundles/sfynxtemplate/images/layout/novedia/FOCUS/focus-fnac.jpg') }}' },
      *              },
      *       'id':'orga' } %}
      *  {{ renderJquery('SLIDER', 'slide-default', options_slider )|raw }}
@@ -447,9 +446,9 @@ class PiFlexSliderManager extends PiJqueryExtension
                     $content .="<section class='slide-line'>\n";
                 }
             }    
-            if (method_exists($entity, 'getPage') && ($entity->getPage() instanceof \PiApp\AdminBundle\Entity\Page)) {
+            if (method_exists($entity, 'getPage') && ($entity->getPage() instanceof \Sfynx\CmfBundle\Entity\Page)) {
                 $routeName     = $entity->getPage()->getRouteName();
-                $link          = $container->get('bootstrap.RouteTranslator.factory')->getRoute($routeName);
+                $link          = $container->get('sfynx.tool.route.factory')->getRoute($routeName);
                 $picture     = $container->get('sonata.media.twig.extension')->media($entity->getImage(), 'default_small', array('alt' => ''));
             } else {
                 $link          = "#";

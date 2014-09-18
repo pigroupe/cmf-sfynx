@@ -14,7 +14,7 @@ namespace PiApp\GedmoBundle\Manager\FormBuilder;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use PiApp\AdminBundle\Manager\PiFormBuilderManager;
+use Sfynx\CmfBundle\Manager\PiFormBuilderManager;
         
 /**
 * Description of the Form builder manager
@@ -199,8 +199,6 @@ class PiModelWidgetContent extends PiFormBuilderManager
         // We open the buffer.
         ob_start ();
         ?>                        
-            <script type="text/javascript">
-            // <![CDATA[
             jQuery(document).ready(function(){        
                 var  create_content_form  = $(".content_collection");
                 var  insert_content_form  = $(".insert_collection");
@@ -241,17 +239,15 @@ class PiModelWidgetContent extends PiFormBuilderManager
                    });
                                       
             });
-            // ]]>
-            </script> 
-        <?php
+        <?php 
         // We retrieve the contents of the buffer.
-        $_content = ob_get_contents ();
+        $_content_js = ob_get_contents ();
         // We clean the buffer.
         ob_clean ();
         // We close the buffer.
         ob_end_flush ();
         
-        return $_content;
+        return  $this->container->get('sfynx.tool.script_manager')->renderScript($_content_js, "", 'formbuilder/default/content/');
     }            
     
     /**

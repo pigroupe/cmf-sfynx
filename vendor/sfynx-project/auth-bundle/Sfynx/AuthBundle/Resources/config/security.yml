@@ -1,0 +1,82 @@
+security:
+
+    access_denied_url: /unauthorized
+    
+    access_decision_manager:
+        # Strategy can be: affirmative, unanimous or consensus
+        strategy: unanimous
+        
+    encoders:
+        #Sfynx\AuthBundle\Entity\User: sha512 # sha512 plaintext
+        FOS\UserBundle\Model\UserInterface: { id: my_password_encoder }
+
+    firewalls:
+        #
+        # By specifying form_login, you have told the Symfony2 framework that any time  
+        # a request is made to this firewall that leads to the user needing to authenticate himself, 
+        # the user will be redirected to a form where he will be able to enter his credentials.
+        #
+        
+        # defaut login area for standard users   
+        main:
+            pattern: .*
+            form_login:
+                provider: fos_userbundle
+                use_forward: false
+                login_path: /login
+                check_path: /login_check
+                failure_path: /login_failure
+                success_handler: sfynx.auth.authentication_handler
+                remember_me: true
+                #default_target_path: /home
+            remember_me:
+                key: "%secret%"
+                lifetime: 31536000 # a year
+                path:     /
+                domain:   ~ # Prend la valeur par défaut du domaine courant depuis $_SERVER
+                remember_me_parameter: _remember_me
+            logout:
+                path: /logout
+                target: /
+                success_handler: sfynx.auth.logout_handler
+                invalidate_session: false
+            anonymous: true
+            
+        # -> end custom configuration  
+        
+        secured_area:
+            pattern: ^/front/secured/
+            form_login:
+                provider: fos_userbundle
+                login_path: /front/secured/login
+                check_path: /front/secured/login_check
+                #default_target_path: /home
+            logout:
+                path: /front/secured/logout
+                target: /
+            anonymous: true
+        # -> end custom configuration          
+                
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern:  ^/demo/secured/login$
+            security: false
+
+#        secured_area:
+#            pattern:    ^/demo/secured/
+#            form_login:
+#                check_path: /demo/secured/login_check
+#                login_path: /demo/secured/login
+#            logout:
+#                path:   /demo/secured/logout
+#                target: /demo/
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+    
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username            

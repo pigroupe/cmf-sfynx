@@ -15,7 +15,7 @@ namespace PiApp\GedmoBundle\Manager\FormBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-use PiApp\AdminBundle\Manager\PiFormBuilderManager;
+use Sfynx\CmfBundle\Manager\PiFormBuilderManager;
 use Doctrine\ORM\EntityRepository;
         
 /**
@@ -182,12 +182,11 @@ class PiModelWidgetBlock extends PiFormBuilderManager
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function renderScript(array $option) {
+    public function renderScript(array $option) 
+    {
         // We open the buffer.
         ob_start ();
         ?>
-            <script type="text/javascript">
-            // <![CDATA[
             jQuery(document).ready(function(){        
                 var  create_content_form  = $(".block_collection");
                 var  insert_content_form  = $(".insert_collection");
@@ -229,17 +228,15 @@ class PiModelWidgetBlock extends PiFormBuilderManager
                    });
                                       
             });
-            // ]]>
-            </script> 
-        <?php
+        <?php 
         // We retrieve the contents of the buffer.
-        $_content = ob_get_contents ();
+        $_content_js = ob_get_contents ();
         // We clean the buffer.
         ob_clean ();
         // We close the buffer.
         ob_end_flush ();
         
-        return $_content;
+        return  $this->container->get('sfynx.tool.script_manager')->renderScript($_content_js, "", 'formbuilder/default/block/');
     }                
     
     /**
@@ -250,7 +247,8 @@ class PiModelWidgetBlock extends PiFormBuilderManager
      *
      * @author (c) Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
-    public function preEventBindRequest(){
+    public function preEventBindRequest()
+    {
         $this->_createentity    =     new  \PiApp\GedmoBundle\Entity\Block();
         //$this->_form            = $this->container->get('form.factory')->create(new PiModelWidgetBlock($this->container));
     }    
@@ -263,7 +261,8 @@ class PiModelWidgetBlock extends PiFormBuilderManager
      *
      * @author (c) Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
-    public function preEventActionForm(array $data){
+    public function preEventActionForm(array $data)
+    {
         if ($data["choice"] == "create"){
             $this->_createentity->setEnabled(true);            
             

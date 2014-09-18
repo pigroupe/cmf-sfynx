@@ -63,10 +63,10 @@
 	{% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
 	<ul class="ui-widget-header ui-footer">
 		<li>
-	        <a href="{{ path('admin_gedmo_organigram', { 'NoLayout': NoLayout }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>      
+	        <a href="{{ path('admin_gedmo_organigram', { 'NoLayout': app.request.query.get('NoLayout') }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>      
 		</li>
 		<li>
-	        <form action="{{ path('admin_gedmo_organigram_edit', { 'id': entity.id, 'NoLayout': NoLayout }) }}" method="post">
+	        <form action="{{ path('admin_gedmo_organigram_edit', { 'id': entity.id, 'NoLayout': app.request.query.get('NoLayout') }) }}" method="post">
 	            <button type="submit" class="button-ui-update">{{ 'pi.grid.action.update'|trans }}</button>
 	        </form>	        
 		</li>
@@ -76,13 +76,13 @@
 	        {% endif %}
         </li>
         <li>
-            <a href="{{ path('admin_gedmo_organigram_new', { 'NoLayout': NoLayout }) }}" class="button-ui-create">{{ 'pi.grid.action.create'|trans }}</a>
+            <a href="{{ path('admin_gedmo_organigram_new', { 'NoLayout': app.request.query.get('NoLayout') }) }}" class="button-ui-create">{{ 'pi.grid.action.create'|trans }}</a>
         </li>
 	</ul>
 
     {% if is_granted('ROLE_ADMIN') %}   
 	<div style="display:none">		
-    	<form id="delete-form" action="{{ path('admin_gedmo_organigram_delete', { 'id': entity.id, 'NoLayout': NoLayout }) }}" method="post">
+    	<form id="delete-form" action="{{ path('admin_gedmo_organigram_delete', { 'id': entity.id, 'NoLayout': app.request.query.get('NoLayout') }) }}" method="post">
         	{{ form_widget(delete_form) }}
         	<button type="submit">{{ 'pi.grid.action.delete'|trans }}</button>
     	</form>
@@ -100,7 +100,7 @@
                 // http://jquery-ui.googlecode.com/svn/tags/1.6rc5/tests/static/icons.html
                 $("a.button-ui-create").button({icons: {primary: "ui-icon-circle-plus"}});
                 $("button.button-ui-update").button({icons: {primary: "ui-icon-disk"}});
-                {% if NoLayout == false and is_granted('ROLE_ADMIN') %}
+                {% if app.request.query.get('NoLayout') == false and is_granted('ROLE_ADMIN') %}
                 $("a.button-ui-delete").button({icons: {primary: "ui-icon-trash"}}).click(function( event ) {
                 	 event.preventDefault();
                 	 id_form_delete = $(this).data('id');

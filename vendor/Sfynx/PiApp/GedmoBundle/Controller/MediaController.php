@@ -13,8 +13,8 @@
 namespace PiApp\GedmoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BootStrap\TranslationBundle\Controller\abstractController;
-use PiApp\AdminBundle\Exception\ControllerException;
+use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -204,19 +204,17 @@ class MediaController extends abstractController
      */
     public function indexAction()
     {
+        $em      = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
-        $em  = $this->getDoctrine()->getManager();
-        $locale = $this->container->get('request')->getLocale();
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)     $template = "index.html.twig"; else $template = "index.html.twig";
-        
-        $category   = $this->container->get('request')->query->get('category');
+        $locale  = $request->getLocale();
+        // we get params
+        $NoLayout   = $request->query->get('NoLayout');
+        $category   = $request->query->get('category');
         if (is_array($category) && isset($category['__isInitialized__'])) {
             $category = $category['__isInitialized__'];
         }
-
-        $query                = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory($category, null, '', '', false);
+        // weg set query
+        $query = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory($category, null, '', '', false);
         $query
         ->leftJoin('a.image', 'm')
         ->leftJoin('a.category', 'c')
@@ -272,14 +270,14 @@ class MediaController extends abstractController
               	  } else {
               			$row[] = (string) $e->getImage()->getName();
               	  }
-                  $url = $this->container->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'media_');
+                  $url = $this->container->get('sfynx.tool.twig.extension.route')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'media_');
               } else {
                   $row[] = "";
                   $url = "#";
               }
               
               if ($e->getStatus() == 'image') {
-              	$UrlPicture = $this->container->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'gedmo_media_');
+              	$UrlPicture = $this->container->get('sfynx.tool.twig.extension.route')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'gedmo_media_');
               	$row[] = (string) '<a href="#" title=\'<img src="'.$UrlPicture.'" class="info-tooltip-image" >\' class="info-tooltip"><img width="20px" src="'.$UrlPicture.'"></a>';
               } else {
               	$row[] = "";
@@ -297,22 +295,22 @@ class MediaController extends abstractController
                   $row[] = "";
               }
               // create enabled/disabled buttons
-              $Urlenabled     = $this->container->get('templating.helper.assets')->getUrl("bundles/piappadmin/css/themes/img/enabled.png");
-              $Urldisabled     = $this->container->get('templating.helper.assets')->getUrl("bundles/piappadmin/css/themes/img/disabled.png");
+              $Urlenabled     = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.auth.theme.layout.admin.grid.img')."enabled.png");
+              $Urldisabled     = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.auth.theme.layout.admin.grid.img')."disabled.png");
               if ($e->getEnabled()) {
                   $row[] = (string) '<img width="17px" src="'.$Urlenabled.'">';
               } else {
                   $row[] = (string) '<img width="17px" src="'.$Urldisabled.'">';
               }
               // create action links
-              $route_path_show = $this->container->get('pi_app_admin.twig.extension.route')->getUrlByRouteFunction('admin_gedmo_media_show', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
-              $route_path_edit = $this->container->get('pi_app_admin.twig.extension.route')->getUrlByRouteFunction('admin_gedmo_media_edit', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
+              $route_path_show = $this->container->get('sfynx.tool.twig.extension.route')->getUrlByRouteFunction('admin_gedmo_media_show', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
+              $route_path_edit = $this->container->get('sfynx.tool.twig.extension.route')->getUrlByRouteFunction('admin_gedmo_media_edit', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
               if (is_object($e->getImage()) && ($e->getStatus() == 'image')) {
-                  $actions = '<a href="'.$route_path_show.'" title="'.$this->container->get('translator')->trans('pi.grid.action.show').'" class="button-ui-show info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.show').'</a>'; //actions
+                  $actions = '<a href="'.$route_path_show.'" title="'.$this->container->get('translator')->trans('pi.grid.action.show').'" data-ui-icon="ui-icon-show" class="button-ui-icon-show info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.show').'</a>'; //actions
               } else {
-                  $actions = '<a href="'.$url.'" target="_blank" title="'.$this->container->get('translator')->trans('pi.grid.action.show').'" class="button-ui-show info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.show').'</a>'; //actions
+                  $actions = '<a href="'.$url.'" target="_blank" title="'.$this->container->get('translator')->trans('pi.grid.action.show').'" data-ui-icon="ui-icon-show" class="button-ui-icon-show info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.show').'</a>'; //actions
               }              
-              $actions .= '<a href="'.$route_path_edit.'" title="'.$this->container->get('translator')->trans('pi.grid.action.edit').'" class="button-ui-edit info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.edit').'</a>'; //actions
+              $actions .= '<a href="'.$route_path_edit.'" title="'.$this->container->get('translator')->trans('pi.grid.action.edit').'" data-ui-icon="ui-icon-edit" class="button-ui-icon-edit info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.edit').'</a>'; //actions
               $row[] = (string) $actions;
               
               $output['aaData'][] = $row ;
@@ -323,13 +321,17 @@ class MediaController extends abstractController
             return $response;
         }
         if (!$is_Server_side) {
-           $query      = $em->getRepository("PiAppGedmoBundle:Media")->cacheQuery($query->getQuery(), 3600, 3 /*\Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_list_gedmomedia');
-           $entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query, 'object', false);
+            if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
+            } else {
+                $query = $em->getRepository("PiAppGedmoBundle:Media")->setContainer($this->container)->checkRoles($query);
+            }
+            $query     = $em->getRepository("PiAppGedmoBundle:Media")->cacheQuery($query->getQuery(), 3600, 3 /*\Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_list_gedmomedia');
+            $entities  = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query, 'object', false);
         } else {
-           $entities   = null;
+            $entities  = null;
         }
         
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("PiAppGedmoBundle:Media:index.html.twig", array(
             'isServerSide' => $is_Server_side,
             'entities' => $entities,
             'NoLayout'    => $NoLayout,
@@ -360,7 +362,7 @@ class MediaController extends abstractController
             $category = $category['__isInitialized__'];
 
         if (!$entity) {
-            throw ControllerException::NotFoundException('Media');
+            throw ControllerException::NotFoundEntity('Media');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -574,7 +576,7 @@ class MediaController extends abstractController
         if ($form->isValid()) {
             $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($locale, $id, 'object');
             if (!$entity) {
-                throw ControllerException::NotFoundException('Media');
+                throw ControllerException::NotFoundEntity('Media');
             }
             try {
                 $em->remove($entity);
@@ -617,7 +619,7 @@ class MediaController extends abstractController
         $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($lang, $id, 'object', false);
         
         if (!$entity) {
-            throw ControllerException::NotFoundException('Media');
+            throw ControllerException::NotFoundEntity('Media');
         }
     
         return $this->render("PiAppGedmoBundle:Media:$template", array(

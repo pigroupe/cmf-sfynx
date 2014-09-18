@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Admin_Twig
+ * @category   Gedmo
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -13,12 +13,12 @@
 namespace PiApp\GedmoBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use PiApp\AdminBundle\Exception\ExtensionException;
+use Sfynx\ToolBundle\Exception\ExtensionException;
 
 /**
  * Tool Filters and Functions used in twig
  *
- * @category   Admin_Twig
+ * @category   Gedmo
  * @package    Extension
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

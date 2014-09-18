@@ -19,7 +19,7 @@ use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use BootStrap\TranslationBundle\EventListener\abstractListener;
+use Sfynx\CoreBundle\EventListener\abstractListener;
 
 /**
  * Media entity Subscriber.
@@ -165,8 +165,8 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
      */
     private function _cleanName($string)
     {
-        $string = \BootStrap\ToolBundle\Util\PiStringManager::minusculesSansAccents($string);
-        $string = \BootStrap\ToolBundle\Util\PiStringManager::cleanFilename($string);
+        $string = \Sfynx\ToolBundle\Util\PiStringManager::minusculesSansAccents($string);
+        $string = \Sfynx\ToolBundle\Util\PiStringManager::cleanFilename($string);
          
         return $string;
     }   

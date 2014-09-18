@@ -14,7 +14,7 @@ namespace PiApp\GedmoBundle\Manager\FormBuilder;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use PiApp\AdminBundle\Manager\PiFormBuilderManager;
+use Sfynx\CmfBundle\Manager\PiFormBuilderManager;
 use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlideCollectionType;
 use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSearchFieldsType;
         
@@ -86,12 +86,12 @@ class PiModelWidgetOrganigram extends PiFormBuilderManager
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // we get all entities
-        //$listTableClasses = $this->container->get('bootstrap.database.db')->listTables('table_class');
+        //$listTableClasses = $this->container->get('sfynx.database.db')->listTables('table_class');
         //$listTableClasses = array_combine($listTableClasses, $listTableClasses);
-        $ListsAvailableEntities = \PiApp\AdminBundle\Util\PiWidget\PiGedmoManager::getAvailableOrganigram();
+        $ListsAvailableEntities = \Sfynx\CmfBundle\Util\PiWidget\PiGedmoManager::getAvailableOrganigram();
         $ListsAvailableEntities = array_combine(array_keys($ListsAvailableEntities), array_keys($ListsAvailableEntities));
         // we get all slide templates
-        $listFiles = $this->container->get('pi_app_admin.file_manager')->ListFilesBundle("/Resources/views/Template/Organigram");
+        $listFiles = $this->container->get('sfynx.tool.file_manager')->ListFilesBundle("/Resources/views/Template/Organigram");
         $listFiles = array_map(function($value) {
         	return basename($value);
         }, array_values($listFiles));
@@ -217,10 +217,6 @@ class PiModelWidgetOrganigram extends PiFormBuilderManager
         // We open the buffer.
         ob_start ();
         ?>
-            <br/>
-            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-sqlparameters-organigram">Add another field SQL</a>
-            <script type="text/javascript">
-            //<![CDATA[            
                 jQuery(document).ready(function() {
                     var indexSQLParams    = 0;
                     jQuery("div#piappgedmobundlemanagerformbuilderpimodelwidgetorganigram").find("fieldset").append('<br ><ul id="sqlparams-fields-list-organigram" ></ul>');
@@ -240,17 +236,28 @@ class PiModelWidgetOrganigram extends PiFormBuilderManager
                         return false;
                     });
                 })            
-            //]]>
-            </script>                      
         <?php 
         // We retrieve the contents of the buffer.
-        $_content = ob_get_contents ();
+        $_content_js = ob_get_contents ();
         // We clean the buffer.
         ob_clean ();
         // We close the buffer.
         ob_end_flush ();
         
-        return $_content;        
+        // We open the buffer.
+        ob_start ();
+        ?>
+            <br/>
+            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-sqlparameters-organigram">Add another field SQL</a>
+        <?php
+        // We retrieve the contents of the buffer.
+        $_content_html = ob_get_contents ();
+        // We clean the buffer.
+        ob_clean ();
+        // We close the buffer.
+        ob_end_flush ();
+        
+        return  $this->container->get('sfynx.tool.script_manager')->renderScript($_content_js, $_content_html, 'formbuilder/default/organogram/');            
     }        
     
     /**

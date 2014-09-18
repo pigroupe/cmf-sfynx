@@ -1,0 +1,31 @@
+Tms\Bundle\MediaClientBundle\Entity\Media:
+    exclusion_policy: ALL
+
+    properties:
+        publicUri:
+            expose: true
+            groups: [tms_rest.collection, tms_rest.item]
+
+        mimeType:
+            expose: true
+            groups: [tms_rest.collection, tms_rest.item]
+
+        extension:
+            expose: true
+            groups: [tms_rest.collection, tms_rest.item]
+
+        providerName:
+            expose: true
+            groups: [tms_rest.collection, tms_rest.item]
+
+        providerReference:
+            expose: true
+            groups: [tms_rest.collection, tms_rest.item]
+
+        createdAt:
+            expose: true
+            groups: [tms_rest.collection, tms_rest.item]
+
+        updatedAt:
+            expose: true
+            groups: [tms_rest.collection, tms_rest.item]

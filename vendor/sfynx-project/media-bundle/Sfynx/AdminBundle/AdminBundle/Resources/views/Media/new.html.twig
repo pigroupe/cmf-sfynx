@@ -1,0 +1,26 @@
+{% extends 'AppAdminBundle:Layout:admin_layout.html.twig' %}
+{% form_theme form 'AppAdminBundle:Form:fields.html.twig' %}
+
+{% block body %}
+<div class="row">
+   <div class="col-lg-12">
+       <section class="panel">
+           <header class="panel-heading">
+               Création d'un média
+           </header>
+          <div class="panel-body">
+          <form method="post" class="form-horizontal tasi-form" action="{{ path ('media') }}" {{ form_enctype(form) }}>
+              {{ form(form) }}
+          </div>
+            </form>
+            <ul class="record_actions">
+               <li>
+                   <a href="{{ path('media') }}">
+                       Back to the list
+                   </a>
+               </li>
+            </ul>
+       </section>
+   </div>
+</div>
+{% endblock %}

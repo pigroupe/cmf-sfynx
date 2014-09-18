@@ -11,7 +11,7 @@
 namespace PiApp\GedmoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use BootStrap\TranslationBundle\Repository\TranslationRepository;
+use Sfynx\CoreBundle\Repository\TranslationRepository;
 
 /**
  * Contact Repository

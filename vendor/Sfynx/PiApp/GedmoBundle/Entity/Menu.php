@@ -18,8 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-use BootStrap\TranslationBundle\Model\AbstractDefault;
-use BootStrap\TranslationBundle\Annotation as PI;
+use Sfynx\CoreBundle\Model\AbstractDefault;
+use Sfynx\PositionBundle\Annotation as PI;
 
 /**
  * PiApp\GedmoBundle\Entity\Menu
@@ -109,9 +109,9 @@ class Menu extends AbstractDefault
     protected $configCssClass;    
     
     /**
-     * @var \PiApp\AdminBundle\Entity\Page $page
+     * @var \Sfynx\CmfBundle\Entity\Page $page
      * 
-     * @ORM\ManyToOne(targetEntity="PiApp\AdminBundle\Entity\Page", inversedBy="menus", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Sfynx\CmfBundle\Entity\Page", inversedBy="menus", cascade={"persist"})
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", nullable=true)
      */
     protected $page;
@@ -186,7 +186,7 @@ class Menu extends AbstractDefault
     /**
      * Set page
      *
-     * @param \PiApp\AdminBundle\Entity\Page    $page
+     * @param \Sfynx\CmfBundle\Entity\Page    $page
      */
     public function setPage($page)
     {
@@ -196,7 +196,7 @@ class Menu extends AbstractDefault
     /**
      * Get page
      *
-     * @return \PiApp\AdminBundle\Entity\Page
+     * @return \Sfynx\CmfBundle\Entity\Page
      */
     public function getPage()
     {

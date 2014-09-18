@@ -1,9 +1,9 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }    
-    - { resource: "@BootStrapUserBundle/Resources/config/security.yml" }
-    - { resource: "@BootStrapAclManagerBundle/Resources/config/security.yml" }
-    - { resource: "@BootStrapAdminBundle/Resources/config/security.yml" }
+    - { resource: "@SfynxAuthBundle/Resources/config/security.yml" }
+    - { resource: "@SfynxAclManagerBundle/Resources/config/security.yml" }
+    - { resource: "@SfynxAdminBundle/Resources/config/security.yml" }
 
 framework:
     translator:      { fallback: %locale% }
@@ -21,10 +21,10 @@ framework:
     trusted_proxies: ~
     #trust_proxy_headers: false # Whether or not the Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP) 
     session:
-        name: PHPSESSID
-        cookie_lifetime: %pi_cookie_lifetime% # 604800 86400 
+        name: %pi_session_name%
+        cookie_lifetime: %pi_cookie_lifetime%  # 604800 86400 
         # surcharge session handler with memcache
-        #handler_id:     pi_session.handler.memcache 
+        #handler_id:     pi_session.handler.memcache
 #        cookie_path:          ~
 #        cookie_domain:        ~
 #        cookie_secure:        true # true pour déterminer que les cookies soient envoyés seulement par des connexions sécurisée.
@@ -33,7 +33,7 @@ framework:
 #        gc_probability:       ~
 #        gc_maxlifetime:       ~
         save_path:            %kernel.cache_dir%/sessions               
-    esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php        
+    #esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php       
     fragments:  { path: /_proxy  } # Pour utiliser les tags ESI dans les templates Twig 
     
 # Twig Configuration
@@ -45,7 +45,7 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-#    bundles:        [ PiAppTemplateBundle, PiAppGedmoBundle, PiAppAdminBundle ]
+#    bundles:        [ SfynxTemplateBundle, PiAppGedmoBundle, SfynxCmfBundle ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -168,24 +168,23 @@ doctrine:
             #    dir:                  ~
             #    alias:                ~
             #    prefix:               ~
-            #    is_bundle:            ~     
+            #    is_bundle:            ~    OrAppOrCmfBundle 
             FOSUserBundle: ~
             StofDoctrineExtensionsBundle: ~
             SonataMediaBundle: ~
-            OrAppOrAdminBundle: ~
+            OrAppOrCmfBundle: ~
             OrAppOrGedmoBundle: ~
-            BootStrapUserBundle: ~
-            #BootStrapUserBundle:
-            #    type: xml
-            #    dir: "%kernel.root_dir%/../src/OrApp/OrUserBundle/Resources/config/doctrine/mapping"
-            #    prefix: BootStrap\UserBundle\Entity
-            #    alias: BootStrapUserBundle
-            #    is_bundle: false             
-            BootStrapTranslationBundle: ~
-            BootStrapTranslatorBundle: ~
-            BootStrapMediaBundle: ~        
-            PiAppAdminBundle: ~
+            SfynxTranslatorBundle: ~
+            SfynxCmfBundle: ~
             PiAppGedmoBundle: ~
+            BootStrapMediaBundle: ~        
+            SfynxAuthBundle: ~
+            #SfynxAuthBundle:
+            #    type: xml
+            #    dir: "%kernel.root_dir%/../src/OrApp/OrAuthBundle/Resources/config/doctrine/mapping"
+            #    prefix: Sfynx\AuthBundle\Entity
+            #    alias: SfynxAuthBundle
+            #    is_bundle: false             
             translatable:
                 type: annotation
                 alias: Gedmo
@@ -203,7 +202,7 @@ doctrine:
                 dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
         metadata_cache_driver: array # array|apc
         query_cache_driver: array
-        result_cache_driver: array
+#        result_cache_driver: array
 #        metadata_cache_driver:
 #            type: memcache
 #            host: localhost
@@ -216,16 +215,12 @@ doctrine:
 #            port: 11211
 #            class: Doctrine\Common\Cache\MemcacheCache
 #            instance_class: Memcache          
-#        result_cache_driver:
-#            type: memcache
-#            host: localhost
-#            port: 11211
-#            class: Doctrine\Common\Cache\MemcacheCache
-#            instance_class: Memcache       
-            
-#               
-# Doctrine MongoDB Configuration
-#      
+        result_cache_driver:
+            type: memcache
+            host: localhost
+            port: 11211
+            class: Doctrine\Common\Cache\MemcacheCache
+            instance_class: Memcache       
 
 #
 # FOSUserBundle configuration
@@ -233,7 +228,7 @@ doctrine:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: BootStrap\UserBundle\Entity\User  #OrApp\OrUserBundle\Entity\User   BootStrap\UserBundle\Entity\User
+    user_class: Sfynx\AuthBundle\Entity\User  #OrApp\OrAuthBundle\Entity\User   Sfynx\AuthBundle\Entity\User
     use_listener:           true
     use_username_form_type: true
     model_manager_name:     null  # change it to the name of your entity/document manager if you don't want to use the default one.
@@ -282,7 +277,7 @@ fos_user:
     template:
         engine: twig
     group:
-        group_class: BootStrap\UserBundle\Entity\Group
+        group_class: Sfynx\AuthBundle\Entity\Group
         group_manager:  fos_user.group_manager.default
         form:
             type:               fos_user_group
@@ -301,7 +296,7 @@ sonata_admin:
     security:
         handler: sonata.admin.security.handler.role
     title: Sonata Project
-    title_logo: %kernel.http_host%/bundles/piappadmin/images/logo/logo-sfynx-white.png
+    title_logo: %kernel.http_host%/bundles/sfynxtemplate/images/logo/logo-sfynx-white.png
     templates:
         # default global templates
         layout:  SonataAdminBundle::standard_layout.html.twig
@@ -465,41 +460,23 @@ knp_menu:
 ewz_recaptcha:
     public_key:   6LcpsucSAAAAAMymbppD7z2W917CVN6Tv6kp8qZr
     private_key:  6LcpsucSAAAAAOpXuESiygvlqVi2afdtSeW4U8sf
-#    secure:       false
+#    secure:       false    
     locale_key:   locale  
                 
 #
-# PiAppAdminBundle configuration
+# SfynxCmfBundle configuration
 #
-pi_app_admin:
-    layout:
-        init_pc:
-            template_name: layout-pi-sfynx.html.twig
-            route_redirection_name: home_page
-        init_mobile:
-            template_name: Default
-            route_redirection_name: home_page
-        login_role:
-            redirection_admin: admin_homepage
-            template_admin: layout-pi-admin.html.twig
-            redirection_user: admin_homepage
-            template_user: layout-pi-admin.html.twig
-            redirection_subscriber: home_page
-            template_subscriber: layout-pi-sfynx.html.twig
-        template:
-            template_connection: layout-security.html.twig
-            template_form: fields.html.twig
-            template_grid: grid.theme.html.twig
-            template_flash: flash.html.twig
+sfynx_cmf:
+    seo:
         meta_head:
             author: Sfynx
-            copyright: http://www.sfynx.fr/
+            copyright: http://www.sfynx.fr
             title: Sfynx
             description: Based in Europe with operational offices in Switzerland, France, Russia, West and South Africa, Singapore.
             keywords: Sfynx, symfony 2, framework, CMF, CMS, PHP web applications
             og_title_add: "Sfynx : "
             og_type: website
-            og_image: bundles/piappadmin/images/logo/logo-sfynx-white.png
+            og_image: bundles/sfynxtemplate/images/logo/logo-sfynx-white.png
             og_site_name: http://pigroupe.github.io/cmf-sfynx/
             additions:
                  ### robot management
@@ -516,14 +493,16 @@ pi_app_admin:
                  #7: "<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>"
                  
                  ### Empécher Microsoft de générer des "smart tags" sur notre page web.
-                 #8: "<meta name='MSSmartTagsPreventParsing' content='TRUE'/>"            
-    translation:
-        defaultlocale_setting: false
+                 #8: "<meta name='MSSmartTagsPreventParsing' content='TRUE'/>"
+        redirection_oldurl_to_new_url:
+            authorized: true
+            repository : "%kernel.root_dir%/cache/seo"
+            file_name : seo_links.yml                 
     page:
         homepage_deletewidget: true
         page_management_by_user_only: true
         route:
-            with_prefix_locale: true
+            with_prefix_locale: false
             single_slug: false
         esi:
             encrypt_key: %esi_key%
@@ -532,7 +511,7 @@ pi_app_admin:
             force_private_response_only_with_authentication: false # true if you want that all responses will have a private Cache-control without max-age after authentification
             disable_after_post_request: true
         widget:
-            render_service_with_ttl: false
+            render_service_with_ttl: true
             render_service_with_ajax: false
             ajax_disable_after_post_request: true
         refresh:
@@ -540,29 +519,10 @@ pi_app_admin:
             allpage_containing_snippet: true
             css_js_cache_file: true
         indexation_authorized_automatically: false
-        switch_language_browser_authorized: true
         switch_layout_mobile_authorized: true
         memcache_enable_all: false
-        seo_redirection:
-            seo_authorized: false
-            seo_repository : "%kernel.root_dir%/cache/seo"
-            seo_file_name : seo_links.yml  
         scop:
             authorized: false    
-            browscap:
-                remote_ini_url:       http://browscap.org/stream?q=Full_PHP_BrowsCapINI
-                remote_ver_url:       http://browscap.org/version
-                cache_dir:            "%kernel.root_dir%/cache/browscap" # null : If null, use your application cache directory
-                timeout:              5
-                update_interval:      432000
-                error_interval:       7200
-                do_auto_update:       true
-                update_method:        'cURL' # Supported methods: 'URL-wrapper','socket','cURL' and 'local'.
-                local_file:           null # Only if used
-                cache_filename:       'cache.php'
-                ini_filename:         'browscap.ini'
-                lowercase:            false # You need to rebuild the cache if this option is changed
-                silent:               false            
             globals:
                 navigator:
                     chrome:  25
@@ -575,10 +535,19 @@ pi_app_admin:
                 tablet:
                     android: 3.9
                     ios: 5.9      
+    admin:
+        context_menu_theme: pi2 # {'xp', 'default', 'vista', 'osx', 'human', 'gloss', 'gloss,gloss-cyan', 'gloss,gloss-semitransparent', 'pi', 'pi2'}
+        
+#
+# SfynxCoreBundle configuration
+#       
+sfynx_core:  
     cookies:
         date_expire: true
-        date_interval:  %pi_cookie_lifetime% # PT4H  604800
-        application_id: sfynx
+        date_interval:  %pi_cookie_lifetime% # 604800 PT4H  604800
+        application_id: sfynx  
+    translation:
+        defaultlocale_setting: false        
     permission:
         restriction_by_roles: false
         authorization:
@@ -587,34 +556,93 @@ pi_app_admin:
             preremove: true
         prohibition:
             preupdate: true
-            preremove: true     
-    encrypters:
-        encrypter_expert:
-            encryptor_annotation_name: PiApp\AdminBundle\EventSubscriber\Encryptors\Annotation\Expertencrypted
-            encryptor_class: PiApp\AdminBundle\EventSubscriber\Encryptors\ExpertEncryptor #  If you want, you can use your own Encryptor. Encryptor must implements EncryptorInterface interface
-            encryptor_options:
-                secret_key: "@kernel.secret" #The secret that is used to encrypt data. By default, it will use the kernel secret.
-                algorithm: "rijndael-128" #Encryption algorithm
-                mode: "cbc" #Encryption mode
-                random_initialization_vector: true #If you set it to false, it will use a blank string as initialization vector.
-                base64: true #Encode the encrypted data with the base64 algorithm.
-                base64_url_safe: true #Replace "+" and "/" characters by "-" and "_" 
-        encrypter_aes:
-            encryptor_annotation_name: PiApp\AdminBundle\EventSubscriber\Encryptors\Annotation\Aesencrypted
-            encryptor_class: PiApp\AdminBundle\EventSubscriber\Encryptors\AESEncryptor
-            encryptor_options:      
-                secret_key: "@kernel.secret"                  
+            preremove: true 
+            
+#
+# SfynxAuthBundle configuration
+#  
+sfynx_auth:
+    locale:
+        authorized: ~ #[fr_FR, en_GB]
+    browser:
+        switch_language_authorized: true
+        switch_layout_mobile_authorized: true
+    default_layout:
+        init_pc:
+            template: layout-pi-sfynx.html.twig
+        init_mobile:
+            template: Default
+    default_login_redirection:
+        redirection: admin_homepage
+        template: layout-pi-admin-cmf.html.twig
+    theme:     
+        name: smoothness # {'flatlab','smoothness'} 
+        login: "SfynxSmoothnessBundle::Login\\"
+        layout: "SfynxSmoothnessBundle::Layout\\"
+        global:
+            layout: "SfynxSmoothnessBundle::Layout\\layout-global-cmf.html.twig"
+            css: "bundles/sfynxsmoothness/layout/screen-layout-global.css"
+        ajax:
+            layout: "SfynxSmoothnessBundle::Layout\\layout-ajax.html.twig"
+            css: "bundles/sfynxsmoothness/layout/screen-layout-ajax.css"
+        error:
+            route_name: ~ # error_404
+            html: "@SfynxSmoothnessBundle/Resources/views/Error/error.html.twig"
+        admin:
+            pc: "SfynxSmoothnessBundle::Layout\\Pc\\"
+            mobile: "SfynxSmoothnessBundle::Layout\\Mobile\\Admin\\"
+            css: "bundles/sfynxsmoothness/admin/screen.css"
+            home: "SfynxSmoothnessBundle:Home:admin.html.twig"  # SfynxAuthBundle:Frontend:index.html.twig
+            dashboard: "dashboard.default.html.twig"
+            grid:
+                img: "/bundles/sfynxsmoothness/admin/grid/img/"
+                css: ""   
+                type: simple
+                state_save: false
+                row_select: 'multi'  # multi, single
+                pagination: true 
+                pagination_type: "full_numbers"  # bootstrap, full_numbers, simple_numbers    
+                pagination_top: false
+                lengthmenu: 20
+                filters_tfoot_up: true
+                filters_active: false  
+            form:
+                builder: "SfynxSmoothnessBundle:Form"
+                template: "SfynxSmoothnessBundle:Form:fields.html.twig" 
+                css: ""  
+            flash: "SfynxSmoothnessBundle:Flash:flash.html.twig" 
+        front:
+            pc: "SfynxSmoothnessBundle::Layout\\Pc\\"
+            pc_path: "@SfynxSmoothnessBundle/Resources/views/Layout/Pc/"
+            mobile: "SfynxSmoothnessBundle::Layout\\Mobile\\"
+            mobile_path: "@SfynxSmoothnessBundle/Resources/views/Layout/Mobile/"
+            css: ""
+        connexion:
+            login: "SfynxSmoothnessBundle::Login\\Security\\login-layout.html.twig"
+            widget : "SfynxSmoothnessBundle::Login\\Security\\connexion-widget.html.twig" 
+
+     
+        
+#
+# SfynxTemplateBundle configuration
+#        
+sfynx_template:  
     form:
         show_legend: true
         show_child_legend: false
-        error_type: inline
+        error_type: inline            
+                    
+#
+# SfynxToolBundle configuration
+#
+sfynx_tool: 
     mail:
-        overloading_mail: ~ # test@gmail.com   
-    admin:
-        context_menu_theme: pi2 # {'xp', 'default', 'vista', 'osx', 'human', 'gloss', 'gloss,gloss-cyan', 'gloss,gloss-semitransparent', 'pi', 'pi2'}
-        grid_index_css: style-grid-7.css             
-        grid_show_css: style-grid-7.css
-        theme_css: smoothness # {'sfynx', 'aristo', 'rocket', 'smoothness', 'dark-hive'}
+        overloading_mail: ~ # test@gmail.com  
+        
+#
+# SfynxMediaBundle configuration
+#       
+sfynx_media:        
     crop:
         formats:
             0:
@@ -630,13 +658,52 @@ pi_app_admin:
                 width: 760
                 height: 380
                 ratio: 2
-                quality: 70         
-      
-          
+                quality: 70                          
+            
 #
-# WsBundle configuration
+# SfynxEncryptBundle configuration
+# 
+sfynx_encrypt:
+    encrypters:
+        encrypter_expert:
+            encryptor_annotation_name: Sfynx\EncryptBundle\Annotation\Encryptors\Expertencrypted
+            encryptor_class: Sfynx\EncryptBundle\EventSubscriber\Encryptors\ExpertEncryptor #  If you want, you can use your own Encryptor. Encryptor must implements EncryptorInterface interface
+            encryptor_options:
+                secret_key: "@kernel.secret" #The secret that is used to encrypt data. By default, it will use the kernel secret.
+                algorithm: "rijndael-128" #Encryption algorithm
+                mode: "cbc" #Encryption mode
+                random_initialization_vector: true #If you set it to false, it will use a blank string as initialization vector.
+                base64: true #Encode the encrypted data with the base64 algorithm.
+                base64_url_safe: true #Replace "+" and "/" characters by "-" and "_" 
+        encrypter_aes:
+            encryptor_annotation_name: Sfynx\EncryptBundle\Annotation\Encryptors\Aesencrypted
+            encryptor_class: Sfynx\EncryptBundle\EventSubscriber\Encryptors\AESEncryptor
+            encryptor_options:      
+                secret_key: "@kernel.secret"            
+            
 #
-boot_strap_ws:    
+# SfynxBrowserBundle configuration
+#  
+sfynx_browser:            
+    browscap:
+        remote_ini_url:       http://browscap.org/stream?q=Full_PHP_BrowsCapINI
+        remote_ver_url:       http://browscap.org/version
+        cache_dir:            "%kernel.root_dir%/cache/browscap" # null : If null, use your application cache directory
+        timeout:              5
+        update_interval:      432000
+        error_interval:       7200
+        do_auto_update:       true
+        update_method:        'cURL' # Supported methods: 'URL-wrapper','socket','cURL' and 'local'.
+        local_file:           null # Only if used
+        cache_filename:       'cache.php'
+        ini_filename:         'browscap.ini'
+        lowercase:            false # You need to rebuild the cache if this option is changed
+        silent:               false             
+                  
+#
+# SfynxWsBundle configuration
+#
+sfynx_ws:    
     auth:
         log:
             dev: true
@@ -648,7 +715,7 @@ boot_strap_ws:
 #                url: http://www.sfynx.local/setCookies.php
 #            domain2:
 #                key: or22
-#                url: http://www.sfynx22.local/setCookies.php              
+#                url: http://www.sfynx22.local/setCookies.php                
         handlers:
             getpermisssion:
                 key: %ws_key%
@@ -659,4 +726,9 @@ boot_strap_ws:
                 key: %ws_key%
                 method: GET
                 api: http://www.sfynx22.local/ws/auth/validate/token
-                format: json            
+                format: json   
+    sso:
+        prefix_host: 'http://'
+        uri_proxy: 'http://www.sfyn22.local'
+        uri_proxy_login: 'http://www.sfyn22.local'
+        application_name: sso-sfynx                         

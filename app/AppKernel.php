@@ -47,25 +47,29 @@ class AppKernel extends Kernel
 	            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),  
 	            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
         		
-        		# boostrap
-                new BootStrap\ToolBundle\BootStrapToolBundle(),
-        		new BootStrap\DatabaseBundle\BootStrapDatabaseBundle(),
-        		new BootStrap\CacheBundle\BootStrapCacheBundle(),
-        		new BootStrap\AclManagerBundle\BootStrapAclManagerBundle(),
-        		new BootStrap\AdminBundle\BootStrapAdminBundle(),
-        		new BootStrap\UserBundle\BootStrapUserBundle(),
-        		new BootStrap\TranslationBundle\BootStrapTranslationBundle(),
-        		new BootStrap\TranslatorBundle\BootStrapTranslatorBundle(),
+        		# Sfynx
+                new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
+                new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
+                new Sfynx\WsBundle\SfynxWsBundle(),
+                new Sfynx\CacheBundle\SfynxCacheBundle(),
+                new Sfynx\ToolBundle\SfynxToolBundle(),
+        		new Sfynx\CoreBundle\SfynxCoreBundle(),
+                new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
+                new Sfynx\BrowserBundle\SfynxBrowserBundle(),
+                new Sfynx\EncryptBundle\SfynxEncryptBundle(),
+                new Sfynx\PositionBundle\SfynxPositionBundle(),
+                new Sfynx\AuthBundle\SfynxAuthBundle(),
+                new Sfynx\MediaBundle\SfynxMediaBundle(),
+                new Sfynx\AdminBundle\SfynxAdminBundle(),
+                new Sfynx\CmfBundle\SfynxCmfBundle(),
+                new Sfynx\TemplateBundle\SfynxTemplateBundle(),
+                new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
+                
         		new BootStrap\MediaBundle\BootStrapMediaBundle(),
-                new BootStrap\WsBundle\BootStrapWsBundle(),
-        		
-        		# trades
-        		new PiApp\AdminBundle\PiAppAdminBundle(),
         		new PiApp\GedmoBundle\PiAppGedmoBundle(),
-        		new PiApp\TemplateBundle\PiAppTemplateBundle(),
                 
                 #override Sfynx bundles
-                new OrApp\OrAdminBundle\OrAppOrAdminBundle(),
+                new OrApp\OrCmfBundle\OrAppOrCmfBundle(),
                 new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
                 new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),      
 

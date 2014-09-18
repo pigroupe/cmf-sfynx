@@ -1,0 +1,14 @@
+{%  initJquery 'FORM:prototype-bytab' %}
+{% extends app.request.attributes.get('sfynx-layout') %}
+
+{% block title %}
+	<h1><a href="{{ path('admin_redirection') }}">{{ "pi.home"|trans }}</a> > <a href="{{ path_url('admin_blockbywidget_show') }}">{{ 'pi.page.widget.title'|trans }}</a> > {{ 'pi.grid.action.edit'|trans }}</h1>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}
+    
+	{% include 'SfynxCmfBundle:Widget:edit_view.html.twig' with {'edit_form':edit_form, 'delete_form':delete_form, 'NoLayout':NoLayout, 'entity':entity} %}
+	
+{% endblock %}

@@ -1,0 +1,170 @@
+parameters:
+    #
+    # FORM
+    # 
+    pi_app_admin.config.form : 
+        snippet: 'pi_app_admin.formbuilder_manager.model.snippet'
+        breadcrumb: 'pi_app_admin.formbuilder_manager.model.breadcrumb'
+        connexion: 'pi_app_admin.formbuilder_manager.model.connexion'
+        reset: 'pi_app_admin.formbuilder_manager.model.reset'        
+        
+    #
+    # JQUERY
+    #         
+    pi_app_admin.config.jquery.menu :   
+        context-menu: 'pi_app_admin.jquery_manager.contextmenu'
+        org-chart-page: 'pi_app_admin.jquery_manager.orgchartpage'
+        org-tree-page: 'pi_app_admin.jquery_manager.orgtreepage'
+        org-tree-semantique: 'pi_app_admin.jquery_manager.orgsemantique'
+        org-tree-breadcrumb: 'pi_app_admin.jquery_manager.orgbreadcrumb'
+        
+    pi_app_admin.config.jquery.tool :  
+        backstretch: 'pi_app_admin.jquery_manager.backstretch'
+        veneer: 'pi_app_admin.jquery_manager.veneer'
+        tabs: 'pi_app_admin.jquery_manager.tab'
+        languagechoice: 'pi_app_admin.jquery_manager.languagechoice'
+        widgetadmin: 'pi_app_admin.jquery_manager.widgetadmin'
+        widgetimport: 'pi_app_admin.jquery_manager.widgetimport'
+        dialog: 'pi_app_admin.jquery_manager.dialog'
+        spinner: 'pi_app_admin.jquery_manager.spinner'              
+
+    pi_app_admin.config.jquery.accordeon :  
+        tiny: 'pi_app_admin.jquery_manager.tinyaccordeon'
+        nested: 'pi_app_admin.jquery_manager.nestedaccordeon'
+        
+    pi_app_admin.config.jquery.twitter :   
+        tweets_blog: 'pi_app_admin.jquery_manager.twitter'       
+        
+    pi_app_admin.config.jquery.searchlucene :   
+        search-lucene: 'pi_app_admin.jquery_manager.searchlucene'  
+        
+    #
+    # WIDGET
+    #                       
+    pi_app_admin.config.widget.content :   
+        snippet: 'pi_app_admin.widget_manager.content.snippet'
+        text: 'pi_app_admin.widget_manager.content.text'
+        media: 'pi_app_admin.widget_manager.content.media'
+        jqext: 'pi_app_admin.widget_manager.content.jqext'  
+        
+    pi_app_admin.config.widget.gedmo :
+        snippet: 'pi_app_admin.widget_manager.gedmo.snippet'
+        listener: 'pi_app_admin.widget_manager.gedmo.listener'
+        navigation: 'pi_app_admin.widget_manager.gedmo.navigation'
+        organigram: 'pi_app_admin.widget_manager.gedmo.organigram'
+        slider: 'pi_app_admin.widget_manager.gedmo.slider'
+        
+    pi_app_admin.config.widget.search :
+        lucene: 'pi_app_admin.widget_manager.search.lucene'        
+                            
+    pi_app_admin.config.widget.user :
+        connexion: 'pi_app_admin.widget_manager.user.connexion'  
+        
+    #
+    # ENTITY AUTHORISATION
+    #           
+    pi_app_admin.config.entity.authorization.prepersist : 
+        BootStrap\MediaBundle\Entity\Media:  true
+        Proxies\__CG__\BootStrap\MediaBundle\Entity\Media: true       
+        Proxies\BootStrapMediaBundleEntityMediaProxy: true
+
+        Sfynx\AuthBundle\Entity\User: true
+        Proxies\__CG__\Sfynx\AuthBundle\Entity\User: true
+        Proxies\SfynxAuthBundleEntityUserProxy: true
+        
+    pi_app_admin.config.entity.authorization.preupdate : 
+        BootStrap\MediaBundle\Entity\Media:  true
+        Proxies\__CG__\BootStrap\MediaBundle\Entity\Media: true       
+        Proxies\BootStrapMediaBundleEntityMediaProxy: true
+
+        Sfynx\AuthBundle\Entity\User: true
+        Proxies\__CG__\Sfynx\AuthBundle\Entity\User: true
+        Proxies\SfynxAuthBundleEntityUserProxy: true
+        
+    pi_app_admin.config.entity.authorization.preremove : 
+        BootStrap\MediaBundle\Entity\Media:  true
+        Proxies\__CG__\BootStrap\MediaBundle\Entity\Media: true       
+        Proxies\BootStrapMediaBundleEntityMediaProxy: true
+
+        Sfynx\AuthBundle\Entity\User: true
+        Proxies\__CG__\Sfynx\AuthBundle\Entity\User: true
+        Proxies\SfynxAuthBundleEntityUserProxy: true        
+          
+    #
+    # ENTITY PROHIBITION
+    #                          
+    pi_app_admin.config.entity.prohibition.preupdate :  ~
+        #Sfynx\CmfBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
+        #Sfynx\CmfBundle\Entity\Page: true    
+        
+    pi_app_admin.config.entity.prohibition.preremove :  
+        Sfynx\CmfBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
+        Sfynx\AuthBundle\Entity\Layout: { 0: 1, 1: 2, 2: 3}
+        
+    #
+    # ENTITY RESTRICTION
+    #                          
+    pi_app_admin.config.entity.restriction.bymedia :  ~ # [ 'getBlock', 'getContent' ]
+        
+    pi_app_admin.config.entity.restriction.byrole : ~
+        #Sfynx\CmfBundle\Entity\Page: { 0: 'home_page', 1: 'page_rouetanme'}
+        #Sfynx\CmfBundle\Entity\Page: true        
+        
+    #
+    # ROUTE SLUGGABLE
+    #                          
+    pi_app_admin.config.route.sluggable : ~
+#        page_slider_detail:
+#            entity: 'PiAppGedmoBundle:Slider' 
+#            field_search: 'slug'
+#            field_title: 'title'
+#            field_resume: 'meta_description'
+#            field_keywords: 'meta_keywords'   
+#            requirement: { _method: 'GET|POST', slug: "[a-zA-Z0-9\-]+" }
+#        page_diaporama_detail:
+#            entity: 'PluginsContentBundle:MediasDiaporama' 
+#            field_name: 'slug'
+#            field_search: 'slug_id'
+#            delimiter: '_'
+#            field_title: 'title'
+#            field_resume: 'meta_description'
+#            field_keywords: 'meta_keywords'       
+#            requirement: { _method: 'GET|POST', slug: "[a-zA-Z0-9\-]+" } 
+                                    
+services:
+    #
+    # configuration of the class manager allowed for the config CMF
+    #       
+    pi_app_admin.cmfconfig:
+      class: %sfynx.tool.manager.config.class%
+      arguments: ['@service_container']
+      tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
+      calls:
+        - [ setConfig, [ 'FORM', 'WIDGET', %pi_app_admin.config.form%, 'prepend'  ] ]
+        
+        - [ setConfig, [ 'JQUERY', 'MENU', %pi_app_admin.config.jquery.menu% ] ]
+        - [ setConfig, [ 'JQUERY', 'TOOL', %pi_app_admin.config.jquery.tool% ] ]
+        - [ setConfig, [ 'JQUERY', 'ACCORDEON', %pi_app_admin.config.jquery.accordeon% ] ]
+        - [ setConfig, [ 'JQUERY', 'TWITTER', %pi_app_admin.config.jquery.twitter% ] ]
+        - [ setConfig, [ 'JQUERY', 'LUCENE', %pi_app_admin.config.jquery.searchlucene% ] ]
+        
+        - [ setConfig, [ 'ROUTE', 'SLUGGABLE', %pi_app_admin.config.route.sluggable% ] ]  
+        
+        - [ setConfig, [ 'ENTITIES', 'AUTHORIZATION_PREPERSIST', %pi_app_admin.config.entity.authorization.prepersist% ] ]
+        - [ setConfig, [ 'ENTITIES', 'AUTHORIZATION_PREUPDATE', %pi_app_admin.config.entity.authorization.preupdate% ] ]
+        - [ setConfig, [ 'ENTITIES', 'AUTHORIZATION_PREREMOVE', %pi_app_admin.config.entity.authorization.preremove% ] ]
+        - [ setConfig, [ 'ENTITIES', 'PROHIBITION_PREUPDATE', %pi_app_admin.config.entity.prohibition.preupdate% ] ]
+        - [ setConfig, [ 'ENTITIES', 'PROHIBITION_PREREMOVE', %pi_app_admin.config.entity.prohibition.preremove% ] ]
+        - [ setConfig, [ 'ENTITIES', 'RESTRICTION_BY_MEDIA', %pi_app_admin.config.entity.restriction.bymedia% ] ]
+        - [ setConfig, [ 'ENTITIES', 'RESTRICTION_BY_ROLES', %pi_app_admin.config.entity.restriction.byrole% ] ]        
+        
+        - [ setConfig, [ 'WIDGET', 'CONTENT', %pi_app_admin.config.widget.content% ] ]
+        - [ setConfig, [ 'WIDGET', 'GEDMO', %pi_app_admin.config.widget.gedmo% ] ]
+        - [ setConfig, [ 'WIDGET', 'SEARCH', %pi_app_admin.config.widget.search% ] ]
+        - [ setConfig, [ 'WIDGET', 'USER', %pi_app_admin.config.widget.user% ] ]
+        
+        - [ setConfig, [ 'WIDGET_ORGANIGRAM', 'SfynxCmfBundle:Rubrique', {method: { 0: 'org-chart-page' }, org-chart-page: { edit : 'admin_rubrique_tree' }} ] ]        
+        - [ setConfig, [ 'WIDGET_NAVIGATION', 'SfynxCmfBundle:Rubrique', {method: { 0: '_navigation_default' }, _navigation_default: { edit : 'admin_rubrique_tree' }} ] ]
+        - [ setConfig, [ 'WIDGET_LISTENER', 'SfynxCmfBundle:Rubrique', { method: { 0: '_template_show', 1: '_template_list' }, _template_show: { edit : 'admin_rubrique_edit' }, _template_list: { edit : 'admin_rubrique_tree' } } ] ]
+        

@@ -13,7 +13,7 @@
 namespace PiApp\GedmoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use BootStrap\TranslationBundle\Repository\TreeRepository;
+use Sfynx\CmfBundle\Repository\CmfTreeRepository;
 
 /**
  * Activity Repository
@@ -26,6 +26,6 @@ use BootStrap\TranslationBundle\Repository\TreeRepository;
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class OrganigramRepository extends TreeRepository
+class OrganigramRepository extends CmfTreeRepository
 {
 }

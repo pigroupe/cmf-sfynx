@@ -1,0 +1,94 @@
+{% initJquery 'GRID:grid-table' %}
+{% if app.request.query.get('NoLayout') %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1>Word translate list</h1>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}
+    
+	{% if app.request.query.get('NoLayout') == false %}
+	<!--  start actions-box ............................................... -->
+	<div id="actions-box">
+		<a href="{{ path('admin_word') }}" class="action-back-list" title="{{ 'Retour'|trans }}">{{ 'Retour'|trans }}</a>
+		<div class="clear"></div>	
+	</div>
+	<!-- end actions-box........... -->
+	{% endif %}
+	
+	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
+	<table id="grid_word" class="grid" >
+	    <thead>
+	        <tr>	            
+	            <th><a>Id</a></th>	            
+	            <th><a>Langue</a></th>	            
+	            <th><a>keyword</a></th>	            
+	            <th><a>Label</a></th>        	
+	            <th><a>Statut</a></th>        	
+				<th><a>Actions</a></th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	    {% set num_line = 0 %}
+	    {% for lang in langs %}
+				<tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_row_{{ entity.id }}'  >
+					<td><a href="{{ path('admin_word_show', { 'id': entity.id, 'NoLayout': app.request.query.get('NoLayout') }) }}" title="">{{ entity.id }}</a></td>	
+					<td>
+						{% if lang.id == app.request.locale %}<b>{% endif %}{{ lang.label }}{% if lang.id == app.request.locale %}</b> (source){% endif %}
+					</td>	
+					<td>
+						{{ entity.keyword|striptags }}
+					</td>
+					<td>
+						{% if entity.translate(lang.id).getLabel() != "" %}
+						     {{ entity.translate(lang.id).getLabel()|striptags }}
+						{% else %}
+							{{ ' n/a ' }}
+						{% endif %}
+					</td>	
+					<td>
+						{% if entity.translate(lang.id).getLabel() != "" %}
+							{{ 'Publié' }}
+						{% else %}
+							{{ 'Non traduit' }}
+						{% endif %}
+					</td>				
+					<td>
+						<a href="{{ path('admin_word_edit_translate', { 'id': entity.id, 'lang': lang.id, 'NoLayout': app.request.query.get('NoLayout') }) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="icon-1 info-tooltip" >&nbsp;</a>
+					</td>	
+				</tr>	
+			{% if num_line == 0 %} 
+				{% set num_line = 1 %}
+			{% else %}
+				{% set num_line = 0 %}
+			{% endif %}				
+	    {% endfor %}
+	    </tbody>
+	</table>
+	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}
+	
+{% endblock %}
+
+{% block global_script_divers_footer %}
+	{% set options_gridtabale = {'grid-name': 'grid_word', 'grid-type':'simple', 
+			'grid-paginate':'false',
+			'grid-filters': { 
+					'2':'Identifiant',
+				},
+			'grid-sorting': { 
+					'0':'asc',
+				},
+			'grid-visible': {
+				'0':'false',
+				},								
+			} 			
+	%}
+	{{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}
+{% endblock %}

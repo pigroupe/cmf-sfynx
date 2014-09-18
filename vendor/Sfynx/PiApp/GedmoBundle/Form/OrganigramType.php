@@ -62,7 +62,7 @@ class OrganigramType extends AbstractType
             ))          
             //->add('slug')            
             ->add('page', 'entity', array(
-                    'class' => 'PiAppAdminBundle:Page',
+                    'class' => 'SfynxCmfBundle:Page',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->getAllPageHtml();
                     },

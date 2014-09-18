@@ -1,0 +1,94 @@
+parameters:
+    piapp.admin.handler.requestHandler.class: Sfynx\CmfBundle\EventListener\HandlerRequest
+    piapp.admin.handler.controllerHandler.class: Sfynx\CmfBundle\EventListener\HandlerController
+    
+    piapp.admin.listener.postload.class: Sfynx\CmfBundle\EventListener\PostLoadListener
+    piapp.admin.listener.loadclassmetadata.class: Sfynx\CmfBundle\EventListener\loadClassMetadataListener
+    piapp.admin.listener.onflush.class: Sfynx\CmfBundle\EventListener\OnFlushListener
+    piapp.admin.listener.preremove.class: Sfynx\CmfBundle\EventListener\PreRemoveListener
+    piapp.admin.listener.postremove.class: Sfynx\CmfBundle\EventListener\PostRemoveListener
+    piapp.admin.listener.prepersist.class: Sfynx\CmfBundle\EventListener\PrePersistListener
+    piapp.admin.listener.postpersist.class: Sfynx\CmfBundle\EventListener\PostPersistListener
+    piapp.admin.listener.preupdate.class: Sfynx\CmfBundle\EventListener\PreUpdateListener
+    piapp.admin.listener.postupdate.class: Sfynx\CmfBundle\EventListener\PostUpdateListener
+    piapp.admin.listener.schema.class: Sfynx\CmfBundle\EventListener\SchemaListener
+
+services:
+    #               
+    # handlers Configuration
+    #
+    pi_app_admin.request_handler:
+        class: %piapp.admin.handler.requestHandler.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 64 }
+
+#    pi_app_admin.controller_handler:
+#        class: %piapp.admin.handler.controllerHandler.class%
+#        arguments: [@service_container]
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.response }  
+
+            
+    #               
+    # Doctrine events Configuration
+    #
+    pi_app_admin.postload_listener:
+        class: %piapp.admin.listener.postload.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postLoad, connexion: default }
+
+#    pi_app_admin.loadclassmetadata_listener:
+#        class: %piapp.admin.listener.loadclassmetadata.class%
+#        arguments: [@service_container]
+#        tags:
+#            - { name: doctrine.event_listener, event: loadClassMetadata, connexion: default }
+
+#    pi_app_admin.onflush_listener:
+#        class: %piapp.admin.listener.onflush.class%
+#        arguments: [@service_container]
+#        tags:
+#            - { name: doctrine.event_listener, event: onFlush, connexion: default }
+
+    pi_app_admin.preremove_listener:
+        class: %piapp.admin.listener.preremove.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preRemove, connexion: default }
+
+    pi_app_admin.postremove_listener:
+        class: %piapp.admin.listener.postremove.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postRemove, connexion: default }
+
+    pi_app_admin.schema_listener:
+        class: %piapp.admin.listener.schema.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postGenerateSchema, connexion: default }
+
+    pi_app_admin.prepersist_listener:
+        class: %piapp.admin.listener.prepersist.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: prePersist, connexion: default }   
+            
+    pi_app_admin.postpersist_listener:
+        class: %piapp.admin.listener.postpersist.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, connexion: default }
+
+    pi_app_admin.preupdate_listener:
+        class: %piapp.admin.listener.preupdate.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate, connexion: default } 
+
+    pi_app_admin.postupdate_listener:
+        class: %piapp.admin.listener.postupdate.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, connexion: default }           

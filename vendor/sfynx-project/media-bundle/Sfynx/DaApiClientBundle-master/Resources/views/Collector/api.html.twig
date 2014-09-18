@@ -1,0 +1,95 @@
+{% extends "WebProfilerBundle:Profiler:layout.html.twig" %}
+
+{% block toolbar %}
+    {% set icon %}
+        <img alt="API" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQdDTkHrb8HmQAAAcxJREFUSMftlsFq1FAUhr8/tyOGQZ9CXHQ7LyC4qFi3LvQB3I+v4cJVFxVBEWq7tgwMdAR9DUHwAdy5GiH5XfTeckknTjJJF4IHDiHJzf3Pf+45fw78t5FNjfs7wDmwluQhG9sWcBt4AvxqW3cKeGT/kgPsNQCfS7LtZ8AP4GkKeAeS+8AHSWu75XNJyS8iyPsNQQGErWclzSRZ0rJLdEHSW8CSVmVZCqAoirTZYlRASRRFEYDE9Cx7N++S4r4MASjLEuBjrNjPko4j69EAZ8ABcDcxjbZKVSepHsKwaKx7BSyB+zmgpO/p3nYeSG8rGlH9ztugrmskzW2/iO1iDUFrKfnLMg0h1HX9yfbjyGwo1saUXllVVZXtQ0BRpmT7yuP5pALKr4sQQugN2Ec2Y7qR9NL2YVVV1Y0A+lKzFP2N7ddJHGJGsH2r0xl2AGtW7b30PNo34BHw82+9s4wVOuvQZ+nMjrM+PZtMJtqkXIMBI9gcYDqd5r+2VefM9WS4SIKeMUja+64TaB/AltIPESwxvda7exvGAoD9bU0eVejaWCHpyPYD4CFwGn/mrdr7NRPpnT0fMSSdbB2iJK13HCt6D1E3MxqOoMH/jv0BrUrn9lZvEP4AAAAASUVORK5CYII=" />
+        <span class="sf-toolbar-status">
+            {{ collector.countApiQueries }}
+        </span>
+    {% endset %}
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>API Queries</b>
+            <span>{{ collector.countApiQueries }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Query time</b>
+            <span>{{ '%0.2f'|format(collector.sumExecutionMS) }} ms</span>
+        </div>
+    {% endset %}
+    {% include "@WebProfiler/Profiler/toolbar_item.html.twig" with { "link": profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon">
+            <img alt="API" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQdDTkHrb8HmQAAAcxJREFUSMftlsFq1FAUhr8/tyOGQZ9CXHQ7LyC4qFi3LvQB3I+v4cJVFxVBEWq7tgwMdAR9DUHwAdy5GiH5XfTeckknTjJJF4IHDiHJzf3Pf+45fw78t5FNjfs7wDmwluQhG9sWcBt4AvxqW3cKeGT/kgPsNQCfS7LtZ8AP4GkKeAeS+8AHSWu75XNJyS8iyPsNQQGErWclzSRZ0rJLdEHSW8CSVmVZCqAoirTZYlRASRRFEYDE9Cx7N++S4r4MASjLEuBjrNjPko4j69EAZ8ABcDcxjbZKVSepHsKwaKx7BSyB+zmgpO/p3nYeSG8rGlH9ztugrmskzW2/iO1iDUFrKfnLMg0h1HX9yfbjyGwo1saUXllVVZXtQ0BRpmT7yuP5pALKr4sQQugN2Ec2Y7qR9NL2YVVV1Y0A+lKzFP2N7ddJHGJGsH2r0xl2AGtW7b30PNo34BHw82+9s4wVOuvQZ+nMjrM+PZtMJtqkXIMBI9gcYDqd5r+2VefM9WS4SIKeMUja+64TaB/AltIPESwxvda7exvGAoD9bU0eVejaWCHpyPYD4CFwGn/mrdr7NRPpnT0fMSSdbB2iJK13HCt6D1E3MxqOoMH/jv0BrUrn9lZvEP4AAAAASUVORK5CYII=" />
+        </span>
+        <strong>API</strong>
+        <span class="count">
+            <span>{{ collector.countApiQueries }}</span>
+            <span>{{ '%0.2f'|format(collector.sumExecutionMS) }} ms</span>
+        </span>
+    </span>
+    {# the menu content #}
+{% endblock %}
+
+{% block panel %}
+    <h2>Queries</h2>
+
+    {% if collector.apiQueries is empty %}
+        <p>
+            <em>No queries.</em>
+        </p>
+    {% else %}
+        <ul class="alt" id="queriesPlaceholder">
+        {% for i,query in collector.apiQueries %}
+            <li class="{{ cycle(['odd', 'even'], i) }}" data-extra-info="{{ '%0.2f'|format(query.executionMS) }}" data-target-id="{{ i }}">
+                <div style="margin-top: 4px" id="queryNo-{{ i }} }}">
+                    <div onclick="return expandQuery(this);" title="Expand Api Query" data-target-id="code-{{ i }}" style="cursor: pointer;">
+                        <img alt="+" src="{{ asset('bundles/framework/images/blue_picto_more.gif') }}" style="display: inline;" />
+                        <img alt="-" src="{{ asset('bundles/framework/images/blue_picto_less.gif') }}" style="display: none;" />
+                        <span id="smallcode-{{ i }}">
+                            [{{ query.requestMethod }}] {{ query.requestUrl }}
+                        </span>
+                    </div>
+                    <div id="response-{{ i }}" style="display: none;">
+                        <label>Header:</label>
+                        <p style="margin-bottom: 4px; padding: 3px; font-size:10px;">{{ query.responseHeaders|raw }}</p>
+                        <label>Content:</label>
+                        <p style="margin-bottom: 4px; padding: 3px; font-size:10px;">{{ query.responseContent }}</p>
+                    </div>
+                    <small>
+                        <strong>Request Headers</strong>: {{ query.requestHeaders }}<br />
+                        <strong>Request Query String</strong>: {{ query.requestQueryString }}<br />
+                        <strong>Reponse Code</strong>: {{ query.responseCode }}<br />
+                        <strong>Time</strong>: {{ '%0.2f'|format(query.executionMS) }} ms<br />
+                        <strong>Cache</strong>: {% if query.isCached %}hit ({{ query.cacheLifetime }}){% else %}miss{% endif %}
+                    </small>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <script type="text/javascript">
+        function expandQuery(link) {
+            var sections = link.children,
+                target = link.getAttribute('data-target-id'),
+                targetId = target.replace('code', ''),
+                response = document.getElementById('response' + targetId);
+
+            if (response.style.display != 'none') {
+                response.style.display = 'none';
+                sections[0].style.display = 'inline';
+                sections[1].style.display = 'none';
+            } else {
+                response.style.display = 'block';
+                sections[0].style.display = 'none';
+                sections[1].style.display = 'inline';
+            }
+
+            return false;
+        }
+    </script>
+{% endblock %}

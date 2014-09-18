@@ -1,0 +1,8 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% extends getParameter('sfynx.auth.theme.layout.ajax') %}
+
+{% block global_layout %}
+
+	{% include 'SfynxCmfBundle:Widget:edit_view.html.twig' with {'edit_form':edit_form, 'delete_form':delete_form, 'NoLayout':NoLayout, 'entity':entity} %}
+
+{% endblock %}

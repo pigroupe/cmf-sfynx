@@ -13,8 +13,8 @@
 namespace PiApp\GedmoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BootStrap\TranslationBundle\Controller\abstractController;
-use PiApp\AdminBundle\Exception\ControllerException;
+use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -166,7 +166,7 @@ class ContentController extends abstractController
         if (!$NoLayout)     $template = "show.html.twig"; else $template = "show_ajax.html.twig";        
 
         if (!$entity) {
-            throw ControllerException::NotFoundException('Content');
+            throw ControllerException::NotFoundEntity('Content');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -347,7 +347,7 @@ class ContentController extends abstractController
             $entity = $em->getRepository("PiAppGedmoBundle:Content")->findOneByEntity($locale, $id, 'object');
 
             if (!$entity) {
-                throw ControllerException::NotFoundException('Content');
+                throw ControllerException::NotFoundEntity('Content');
             }
 
             try {
@@ -388,7 +388,7 @@ class ContentController extends abstractController
         $entity = $em->getRepository("PiAppGedmoBundle:Content")->findOneByEntity($lang, $id, 'object', false);
         
         if (!$entity) {
-            throw ControllerException::NotFoundException('Content');
+            throw ControllerException::NotFoundEntity('Content');
         }
     
         return $this->render("PiAppGedmoBundle:Content:$template", array(

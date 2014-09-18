@@ -18,8 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-use BootStrap\TranslationBundle\Model\AbstractDefault;
-use BootStrap\TranslationBundle\Annotation as PI;
+use Sfynx\CoreBundle\Model\AbstractDefault;
+use Sfynx\PositionBundle\Annotation as PI;
 
 /**
  * PiApp\GedmoBundle\Entity\Media

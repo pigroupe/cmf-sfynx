@@ -1,0 +1,39 @@
+services:
+    tms_media_client.storage_provider_handler:
+        class: Tms\Bundle\MediaClientBundle\StorageProvider\StorageProviderHandler
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    tms_media_client.storage_provider.tms_media:
+        class: Tms\Bundle\MediaClientBundle\StorageProvider\TmsMediaStorageProvider
+        arguments: [@da_api_client.api.media, %tms_media_client.api.source_name%]
+        tags:
+            - { name: tms_media_client.storage_provider, alias: Tms Media }
+
+    tms_media_client.form_type.provider_choices:
+        class: Tms\Bundle\MediaClientBundle\Form\Type\ProviderChoicesType
+        arguments: [%tms_media_client.config.storage_providers%]
+        tags:
+            - { name: form.type, alias: provider_choices }
+
+    tms_media_client.form_type.media:
+        class: Tms\Bundle\MediaClientBundle\Form\Type\MediaType
+        arguments: [@tms_media_client.storage_provider_handler]
+        tags:
+            - { name: form.type, alias: media }
+
+    tms_media_client.form_type.related_to_one_media:
+        class: Tms\Bundle\MediaClientBundle\Form\Type\RelatedToOneMediaType
+        tags:
+            - { name: form.type, alias: related_to_one_media }
+
+    tms_media_client.form_type.related_to_many_media:
+        class: Tms\Bundle\MediaClientBundle\Form\Type\RelatedToManyMediaType
+        tags:
+            - { name: form.type, alias: related_to_many_media }
+
+    tms_media_client.form_type.tms_media_upload:
+        class: Tms\Bundle\MediaClientBundle\Form\Type\TmsMediaUploadType
+        arguments: [@tms_media_client.storage_provider.tms_media, @validator]
+        tags:
+            - { name: form.type, alias: tms_media_upload }

@@ -18,7 +18,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use BootStrap\TranslationBundle\EventListener\abstractListener;
+use Sfynx\CoreBundle\EventListener\abstractListener;
 
 /**
  * Bundle Subscriber.

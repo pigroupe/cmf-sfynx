@@ -1,0 +1,44 @@
+{% initJquery 'TOOL:tabs' %}
+{% initJquery 'GRID:grid-table' %}
+{% if app.request.query.get('NoLayout') %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1><a href="{{ path('admin_redirection') }}">{{ "pi.home"|trans }}</a> > {{ 'pi.page.index.title'|trans }}</h1>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}
+    
+    <div class="tool-tabs">
+	{% set options_tabs = 
+		{
+			'id': 'tab', 
+			'vertical' : true,
+			'tabs-urls': { 
+				'0': { 'route_name':'admin_pagebytrans_wizard', 'title':'pi.page.All', 'params':{'status':'all'} },
+				'1': { 'route_name':'admin_pagebytrans_wizard', 'title':'pi.page.Draft', 'params':{'status':'draft'} }, 
+				'2': { 'route_name':'admin_pagebytrans_wizard', 'title':'pi.page.Reviewed', 'params':{'status':'reviewed'} },
+				'3': { 'route_name':'admin_pagebytrans_wizard', 'title':'pi.page.Published', 'params':{'status':'published'} },
+				'4': { 'route_name':'admin_pagebytrans_wizard', 'title':'pi.page.Hidden', 'params':{'status':'hidden'} },
+				'5': { 'route_name':'admin_pagebytrans_wizard', 'title':'pi.page.Trash', 'params':{'status':'trash'} },
+				'6': { 'route_name':'admin_pagebytrans_wizard', 'title':'pi.page.Refused', 'params':{'status':'refused'} },
+			}
+		} 
+	%}
+	{{ renderJquery('TOOL', 'tabs', options_tabs )|raw }}	
+	</div>
+	
+	<style>
+		.ui-widget-content {
+		border: 0px solid #e3e3e3;
+		background: #fff url('') 50% 50% repeat-x;
+		}
+    </style>
+		
+{% endblock %}

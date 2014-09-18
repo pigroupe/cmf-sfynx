@@ -1,0 +1,16 @@
+{% extends 'AppAdminBundle:Layout:admin_layout.html.twig' %}
+{% form_theme edit_form 'AppAdminBundle:Form:fields.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Édition de la langue
+                </header>
+                   {{ form(edit_form) }}
+            </section>
+        </div>
+    </div>
+{% endblock %}

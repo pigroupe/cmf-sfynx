@@ -1,0 +1,83 @@
+parameters:
+    piapp.admin.repository.class: Sfynx\CmfBundle\Repository\Repository
+    
+    piapp.admin.manager.page.class: Sfynx\CmfBundle\Manager\PiPageManager
+    piapp.admin.manager.widget.class: Sfynx\CmfBundle\Manager\PiWidgetManager
+    piapp.admin.manager.transwidget.class: Sfynx\CmfBundle\Manager\PiTransWidgetManager
+    piapp.admin.manager.listener.class: Sfynx\CmfBundle\Manager\PiListenerManager
+    piapp.admin.manager.tree.class: Sfynx\CmfBundle\Manager\PiTreeManager
+    piapp.admin.manager.slider.class: Sfynx\CmfBundle\Manager\PiSliderManager
+    piapp.admin.manager.jqext.class: Sfynx\CmfBundle\Manager\PiJqextManager
+    piapp.admin.manager.search_lucene.class: Sfynx\CmfBundle\Manager\PiLuceneManager
+    piapp.admin.manager.formbuilder.class: Sfynx\CmfBundle\Manager\PiFormBuilderManager
+    piapp.admin.manager.authentication.class: Sfynx\CmfBundle\Manager\PiAuthenticationManager
+
+    piapp.route.route_loader.class: Sfynx\CmfBundle\Route\RouteLoader
+    piapp.route.route_doctrine.class: Sfynx\CmfBundle\Route\DoctrineRoute
+    
+    piapp.twig.loader.class: Sfynx\CmfBundle\Twig\PiTwigLoader
+    piapp.twig.caching.class: Sfynx\CmfBundle\Twig\PiTwigCache
+    
+services:
+    #
+    # configuration of the main repository manager allowed for the repository management
+    #  
+    pi_app_admin.repository:
+        class: %piapp.admin.repository.class%
+        arguments: ['@doctrine.orm.entity_manager']
+
+    #
+    # configuration of the class manager allowed for the CMS management
+    #  
+    pi_app_admin.manager.page:
+        class: %piapp.admin.manager.page.class%
+        arguments: ['@service_container']    
+
+    pi_app_admin.manager.widget:
+        class: %piapp.admin.manager.widget.class%
+        arguments: ['@service_container']    
+        
+    pi_app_admin.manager.transwidget:
+        class: %piapp.admin.manager.transwidget.class%
+        arguments: ['@service_container']
+
+    pi_app_admin.manager.listener:
+        class: %piapp.admin.manager.listener.class%
+        arguments: ['@service_container']
+        
+    pi_app_admin.manager.tree:
+        class: %piapp.admin.manager.tree.class%
+        arguments: ['@service_container']
+        
+    pi_app_admin.manager.slider:
+        class: %piapp.admin.manager.slider.class%
+        arguments: ['@service_container']
+        
+    pi_app_admin.manager.jqext:
+        class: %piapp.admin.manager.jqext.class%
+        arguments: ['@service_container']        
+        
+    pi_app_admin.manager.search_lucene:
+        class: %piapp.admin.manager.search_lucene.class%
+        arguments: ['@service_container']
+        
+    pi_app_admin.manager.formbuilder:
+        class: %piapp.admin.manager.formbuilder.class%
+        arguments: ['@service_container']        
+        
+    pi_app_admin.manager.authentication: 
+        class: %piapp.admin.manager.authentication.class%
+        arguments: ['@service_container'] 
+        
+    #
+    # configuration of the route manager
+    # 
+    pi.route.route_loader:
+        class: %piapp.route.route_loader.class%
+        arguments: ['@service_container']       
+        tags:
+            - { name: routing.loader }            
+        
+    pi.route.route_doctrine:
+        class: %piapp.route.route_doctrine.class%
+        arguments: ['@service_container']

@@ -1,0 +1,68 @@
+#
+#   import routes from a controller directory
+#
+annotation_sfynx_cmf:
+    resource: "@SfynxCmfBundle/Controller"
+    type: annotation
+    
+#
+#    SfynxCoreBundle customer route loader 
+#    
+fos_route_extra:
+    resource: .
+    type: sfynxtemplateextra    
+
+#
+#   Import Default routing files
+#
+piapp_rubrique:
+    resource: "@SfynxCmfBundle/Resources/config/routing/rubrique.xml"
+    prefix: /admin/rubrique
+        
+piapp_pagebytrans:
+    resource: "@SfynxCmfBundle/Resources/config/routing/pagebytrans.xml"
+    prefix: /admin/pagebytrans
+    
+piapp_pagebyblock:
+    resource: "@SfynxCmfBundle/Resources/config/routing/pagebyblock.xml"
+    prefix: /admin/pagebyblock 
+    
+piapp_pagecssjs:
+    resource: "@SfynxCmfBundle/Resources/config/routing/pagecssjs.xml"
+    prefix: /admin/pagecssjs
+    
+piapp_translationpage:
+    resource: "@SfynxCmfBundle/Resources/config/routing/translationpage.xml"
+    prefix: /admin/transpage    
+    
+piapp_blockbyWidget:
+    resource: "@SfynxCmfBundle/Resources/config/routing/blockbywidget.xml"
+    prefix: /admin/blockbywidget
+    
+piapp_widget:
+    resource: "@SfynxCmfBundle/Resources/config/routing/widget.xml"
+    prefix: /admin/widget 
+    
+piapp_snippet:
+    resource: "@SfynxCmfBundle/Resources/config/routing/snippet.xml"
+    prefix: /admin/snippet    
+    
+piapp_translationwidget:
+    resource: "@SfynxCmfBundle/Resources/config/routing/translationwidget.xml"
+    prefix: /admin/transwidget                
+            
+piapp_tag:
+    resource: "@SfynxCmfBundle/Resources/config/routing/tag.xml"
+    prefix: /admin/tag   
+            
+piapp_keyword:
+    resource: "@SfynxCmfBundle/Resources/config/routing/keyword.xml"
+    prefix: /admin/keyword  
+    
+piapp_comment:
+    resource: "@SfynxCmfBundle/Resources/config/routing/comment.xml"
+    prefix: /admin/comment
+    
+piapp_public:
+    resource: "@SfynxCmfBundle/Resources/config/routing/public.xml"
+    prefix: /

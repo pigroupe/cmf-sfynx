@@ -1,0 +1,16 @@
+parameters:
+    sfynx.annotation.subscriber.encrypters.class: Sfynx\EncryptBundle\EventSubscriber\EncryptSubscriber
+
+services:
+    #               
+    # Doctrine encryption events Configuration
+    #        
+    sfynx.annotation.subscriber.encrypters:
+        class: %sfynx.annotation.subscriber.encrypters.class%
+        public: true
+        arguments: [@annotation_reader, %sfynx.annotation.encrypters%, @service_container]
+        properties:
+            locale: %locale%
+            interfaceclass: Sfynx\EncryptBundle\Builder\PiEncryptorInterface
+        tags:
+            - { name: doctrine.event_subscriber, connexion: default, priority: 1 }                   

@@ -1,0 +1,53 @@
+{% macro flash(type, message, close) %}
+	<div class="alert-message {{ type }}" data-alert="alert" title="{{ type }}">
+		{% if close|default(false) %} 
+			<a class="close" href="#">×</a>
+		{% endif %}
+		<p>
+			{{ message | trans | raw }}
+		</p>
+	</div>
+{% endmacro %}
+
+{% macro session_flash() %}
+	{% set types = ['permission','success','notice','error','warning','errorform'] %}
+    {% if app.session.flashbag.peekAll()|count > 0 %}
+	<div id="symfony-layout-flash" title="{{ 'pi.session.flash.title' | trans }}">
+        {% for type in types %}
+				{% for flashMessage in app.session.flashbag.get(type)|php_funct('array_unique') %}
+				    {% if is_granted("ROLE_USER") or (type != 'permission') %}
+				        {{ _self.flash(type, flashMessage) | raw }}
+				    {% endif %}	
+				{% endfor %}
+         {% endfor %} 
+	</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro session_flash_frontoffice() %}
+	{% set types = ['permission','success','notice','error','warning','errorform'] %}
+    {% if app.session.flashbag.peekAll()|count > 0 %}
+    
+        {# {% set route_name_form = getService('sfynx.tool.route.factory').getMatchParamOfRoute('_route', app.session.locale, 0) %} #}
+   
+		<div id="confirm-popup-flash" style="display:none">
+			<div class="fancybox-sfynx fancybox-flash">
+				<section>
+                {% for type in types %}
+                	{% set flashMessages = app.session.flashbag.get(type)|php_funct('array_unique') %}
+                	{% if (flashMessages|count >= 1) %}
+						<header class="tt-grey">
+							<h3>{{ ('pi.session.flash.type.'~type)|trans|raw }}</h3>
+						</header>
+	                    {% for flashMessage in flashMessages %}
+	                        {% if is_granted("ROLE_USER") or (type != 'permission') %}
+						        {{ _self.flash(type, flashMessage) | raw }}
+						    {% endif %}
+						{% endfor %}
+					{% endif %}
+                {% endfor %} 
+				</section>
+			</div>
+		</div>
+	{% endif %}
+{% endmacro %}

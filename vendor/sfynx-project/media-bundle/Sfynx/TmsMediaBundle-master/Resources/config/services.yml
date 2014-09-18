@@ -1,0 +1,96 @@
+parameters:
+    tms_media.storage_mapper.class: Tms\Bundle\MediaBundle\StorageMapper\StorageMapper
+
+services:
+
+    ## Managers ##
+
+    tms_media.manager.media:
+        class: Tms\Bundle\MediaBundle\Manager\MediaManager
+        arguments: [@doctrine.orm.entity_manager, @event_dispatcher, %tms_media.configuration%]
+
+    tms_media.storage_mapper:
+        class: %tms_media.storage_mapper.class%
+        arguments: [null, null]
+        abstract: true
+
+
+    ## Storage Mapper Rules ##
+
+    tms_media.rule.min_size:
+        class: Tms\Bundle\MediaBundle\StorageMapper\Rule\MinSizeRule
+        arguments: [null]
+        public: false
+        abstract: true
+        tags:
+            - { name: tms_media.mapper.rule, alias: min_size }
+    tms_media.rule.max_size:
+        class: Tms\Bundle\MediaBundle\StorageMapper\Rule\MaxSizeRule
+        arguments: [null]
+        public: false
+        abstract: true
+        tags:
+            - { name: tms_media.mapper.rule, alias: max_size }
+    tms_media.rule.mime_types:
+        class: Tms\Bundle\MediaBundle\StorageMapper\Rule\MimeTypesRule
+        arguments: [null]
+        public: false
+        abstract: true
+        tags:
+            - { name: tms_media.mapper.rule, alias: mime_types }
+    tms_media.rule.created_before:
+        class: Tms\Bundle\MediaBundle\StorageMapper\Rule\CreatedBeforeRule
+        arguments: [null]
+        public: false
+        abstract: true
+        tags:
+            - { name: tms_media.mapper.rule, alias: created_before }
+    tms_media.rule.created_after:
+        class: Tms\Bundle\MediaBundle\StorageMapper\Rule\CreatedAfterRule
+        arguments: [null]
+        public: false
+        abstract: true
+        tags:
+            - { name: tms_media.mapper.rule, alias: created_after }
+
+
+    ## Metadata Extrators ##
+
+    tms_media.metadata_extractor.image:
+        class: Tms\Bundle\MediaBundle\MetadataExtractor\ImageMetadataExtractor
+        public: false
+        tags:
+            - { name: tms_media.metadata_extractor }
+    # Keep the default metadata extractor in last position
+    tms_media.metadata_extractor.default:
+        class: Tms\Bundle\MediaBundle\MetadataExtractor\DefaultMetadataExtractor
+        public: false
+        tags:
+            - { name: tms_media.metadata_extractor }
+
+
+    ## Media Transformers ##
+
+    tms_media.transformer.image:
+        class: Tms\Bundle\MediaBundle\Media\Transformer\ImageMediaTransformer
+        arguments: [%tms_media.cache_directory%]
+        public: false
+        tags:
+            - { name: tms_media.transformer }
+    tms_media.transformer.document:
+        class: Tms\Bundle\MediaBundle\Media\Transformer\DocumentMediaTransformer
+        public: false
+        tags:
+            - { name: tms_media.transformer }
+    tms_media.transformer.rest:
+        class: Tms\Bundle\MediaBundle\Media\Transformer\RestMediaTransformer
+        arguments: [@idci_exporter.manager]
+        public: false
+        tags:
+            - { name: tms_media.transformer }
+    # Keep the default transformer in last position
+    tms_media.transformer.default:
+        class: Tms\Bundle\MediaBundle\Media\Transformer\DefaultMediaTransformer
+        public: false
+        tags:
+            - { name: tms_media.transformer }

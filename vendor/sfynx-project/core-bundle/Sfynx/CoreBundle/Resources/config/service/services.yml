@@ -1,0 +1,14 @@
+parameters:
+    sfynx.core.entities.listener.class: Sfynx\CoreBundle\EventListener\EntitiesContainer
+    
+services:
+    #               
+    # handlers Configuration
+    #
+
+    #
+    # configuration of the persist Entities container
+    # 
+    sfynx.core.entities.listener:
+        class: %sfynx.core.entities.listener.class%
+        arguments: ['@service_container']

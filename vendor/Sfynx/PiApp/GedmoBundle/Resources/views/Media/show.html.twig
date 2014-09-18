@@ -1,7 +1,5 @@
-{% stylesheet getParameter('pi_app_admin.admin.grid_show_css') %}
-{% stylesheet getParameter('pi_app_admin.admin.theme_css')~":prepend" %}
-{% if NoLayout %}
-	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% if app.request.query.get('NoLayout') %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
 {% else %}
 	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
 {% endif %}	
@@ -12,8 +10,7 @@
 	
 {% block content %}
 
-
-{% if NoLayout %}
+{% if app.request.query.get('NoLayout') %}
     {% if entity.image is defined %}
     	{% media entity.image, 'reference' %}
     	<input type="hidden" id="piapp_gedmobundle_mediatype_id" name="piapp_gedmobundle_mediatype[id]"  value="{{ entity.id }}">
@@ -22,7 +19,7 @@
 {% else %}    
     {{ parent() }}
     
-	<table class="grid">
+	<table class="grid_show">
 		<caption>Media</caption>
 	    <tbody>	
 	        <tr>
@@ -108,7 +105,7 @@
                 // http://jquery-ui.googlecode.com/svn/tags/1.6rc5/tests/static/icons.html
                 $("a.button-ui-create").button({icons: {primary: "ui-icon-circle-plus"}});
                 $("button.button-ui-update").button({icons: {primary: "ui-icon-disk"}});
-                {% if NoLayout == false and is_granted('ROLE_ADMIN') %}
+                {% if app.request.query.get('NoLayout') == false and is_granted('ROLE_ADMIN') %}
                 $("a.button-ui-delete").button({icons: {primary: "ui-icon-trash"}}).click(function( event ) {
                 	 event.preventDefault();
                 	 id_form_delete = $(this).data('id');

@@ -14,7 +14,7 @@ namespace PiApp\GedmoBundle\Manager\FormBuilder;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use PiApp\AdminBundle\Manager\PiFormBuilderManager;
+use Sfynx\CmfBundle\Manager\PiFormBuilderManager;
 use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSlideCollectionType;
 use PiApp\GedmoBundle\Manager\FormBuilder\PiModelWidgetSearchFieldsType;
         
@@ -86,12 +86,12 @@ class PiModelWidgetSlide extends PiFormBuilderManager
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // we get all entities
-        //$listTableClasses = $this->container->get('bootstrap.database.db')->listTables('table_class');
+        //$listTableClasses = $this->container->get('sfynx.database.db')->listTables('table_class');
         //$listTableClasses = array_combine($listTableClasses, $listTableClasses);
-        $ListsAvailableEntities = \PiApp\AdminBundle\Util\PiWidget\PiGedmoManager::getAvailableSlider();
+        $ListsAvailableEntities = \Sfynx\CmfBundle\Util\PiWidget\PiGedmoManager::getAvailableSlider();
         $ListsAvailableEntities = array_combine(array_keys($ListsAvailableEntities), array_keys($ListsAvailableEntities));
         // we get all slide templates
-        $listFiles = $this->container->get('pi_app_admin.file_manager')->ListFilesBundle("/Resources/views/Template/Slider");
+        $listFiles = $this->container->get('sfynx.tool.file_manager')->ListFilesBundle("/Resources/views/Template/Slider");
         $listFiles = array_map(function($value) {
         	return basename($value);
         }, array_values($listFiles));
@@ -104,9 +104,9 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         $menus = array_combine($menus, $menus);    
         //
         $css = array(
-            "bundles/piappadmin/js/slider/flexslider/css/flexslider_v1.css" => 'Default',
-            "bundles/piappadmin/js/slider/flexslider/css/flexslider_v2.css" => 'Default-2',
-            "bundles/piappadmin/js/slider/flexslider/css/flexslider_v3.css" => 'Default-3',
+            "bundles/sfynxtemplate/js/slider/flexslider/css/flexslider_v1.css" => 'Default',
+            "bundles/sfynxtemplate/js/slider/flexslider/css/flexslider_v2.css" => 'Default-2',
+            "bundles/sfynxtemplate/js/slider/flexslider/css/flexslider_v3.css" => 'Default-3',
         );
         // we create the forme
         $builder
@@ -153,7 +153,7 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         		'multiple'    => true,
         		'required'  => true,
         		'expanded' => false,
-        		'preferred_choices' => array("bundles/piappadmin/js/slider/flexslider/css/flexslider_v1.css"),
+        		'preferred_choices' => array("bundles/sfynxtemplate/js/slider/flexslider/css/flexslider_v1.css"),
         		'label' => 'pi.form.label.select.choose.css',
         		"attr" => array(
         				"class"=>"pi_multiselect",
@@ -326,12 +326,6 @@ class PiModelWidgetSlide extends PiFormBuilderManager
         // We open the buffer.
         ob_start ();
         ?>
-            <br/>
-            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-slideparameters">Add another parameter</a>
-            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-sqlparameters">Add another field SQL</a>
-            &nbsp;&nbsp;&nbsp;<a href="bundles/piappadmin/js/slider/flexslider/options.txt" onclick="javascript:window.open(this.href, 'sfynx_licence', 'scrollbars=yes,resizable=yes,width=740,height=630'); return false;">Options</a>
-            <script type="text/javascript">
-            //<![CDATA[            
                 jQuery(document).ready(function() {
                 	var indexFlexsliderParams    = 0;
                 	jQuery("div#piappgedmobundlemanagerformbuilderpimodelwidgetslide").find("fieldset").append('<ul id="flexsliderparams-fields-list" ></ul>');
@@ -369,17 +363,30 @@ class PiModelWidgetSlide extends PiFormBuilderManager
                         return false;
                     });
                 })            
-            //]]>
-            </script>                      
         <?php 
         // We retrieve the contents of the buffer.
-        $_content = ob_get_contents ();
+        $_content_js = ob_get_contents ();
         // We clean the buffer.
         ob_clean ();
         // We close the buffer.
         ob_end_flush ();
         
-        return $_content;        
+        // We open the buffer.
+        ob_start ();
+        ?>
+            <br/>
+            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-slideparameters">Add another parameter</a>
+            &nbsp;&nbsp;&nbsp;<a href="#" id="add-another-sqlparameters">Add another field SQL</a>
+            &nbsp;&nbsp;&nbsp;<a href="bundles/sfynxtemplate/js/slider/flexslider/options.txt" onclick="javascript:window.open(this.href, 'sfynx_licence', 'scrollbars=yes,resizable=yes,width=740,height=630'); return false;">Options</a>
+        <?php
+        // We retrieve the contents of the buffer.
+        $_content_html = ob_get_contents ();
+        // We clean the buffer.
+        ob_clean ();
+        // We close the buffer.
+        ob_end_flush ();
+        
+        return  $this->container->get('sfynx.tool.script_manager')->renderScript($_content_js, $_content_html, 'formbuilder/default/slide/');            
     }        
     
     /**

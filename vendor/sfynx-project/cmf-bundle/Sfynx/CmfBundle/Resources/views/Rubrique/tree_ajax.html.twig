@@ -1,0 +1,14 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% initJquery 'ACCORDEON:tiny' %}
+
+{% javascript "bundles/sfynxtemplate/js/jquery/multiselect/js/jquery.multiselect.filter.min.js" %}
+{% stylesheet "bundles/sfynxtemplate/js/jquery/multiselect/css/jquery.multiselect.filter.css:prepend" %}
+{% stylesheet "bundles/sfynxtemplate/js/jquery/multiselect/css/jquery.multiselect.css:prepend" %}
+
+{% extends getParameter('sfynx.auth.theme.layout.ajax') %}
+
+{% block global_layout %}
+	
+	{% include 'SfynxCmfBundle:Rubrique:tree_view.html.twig' with {'NoLayout':NoLayout, 'tree':tree} %}
+	
+{% endblock %}

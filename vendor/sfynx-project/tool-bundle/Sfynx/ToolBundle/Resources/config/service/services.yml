@@ -1,0 +1,15 @@
+parameters:
+    sfynx.tool.route.factory.class: Sfynx\ToolBundle\Route\RouteTranslatorFactory
+    sfynx.tool.route.cache.class: Sfynx\ToolBundle\Route\CacheRoute
+
+services:  
+    #
+    # configuration of the route manager
+    # 
+    sfynx.tool.route.factory:
+        class: %sfynx.tool.route.factory.class%
+        arguments: ['@service_container']        
+            
+    sfynx.tool.route.cache:
+        class: %sfynx.tool.route.cache.class%
+        arguments: ['@service_container']

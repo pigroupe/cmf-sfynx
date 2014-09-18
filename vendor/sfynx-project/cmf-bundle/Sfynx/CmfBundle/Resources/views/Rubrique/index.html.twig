@@ -1,0 +1,84 @@
+{% initJquery 'GRID:grid-table' %}
+{% if app.request.query.get('NoLayout') %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1><a href="{{ path('admin_redirection') }}">{{ "pi.home"|trans }}</a> > {{ 'pi.page.topic.title'|trans }}</h1>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}
+    
+	<!--  start actions-box ............................................... -->
+	<div id="actions-box">
+		<a href="{{ path('admin_rubrique_new') }}" class="action-edit">{{ 'pi.grid.action.create'|trans }}</a>
+		<div class="clear"></div>
+	</div>
+	<!-- end actions-box........... -->
+	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
+	<table id="grid" >
+	    <thead>
+	        <tr>
+	            <th><a href="">Id</a></th>
+	            <th><a href="">Titre</a></th>
+	            <th><a href="">Parent</a></th>
+	            <th><a href="">Descriptif</a></th>
+	            <th><a href="">Texte</a></th>
+	            <th><a href="">Enabled</a></th>
+	            <th><a href="">Actions</a></th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	    {% set num_line = 0 %}
+	    {% for entity in entities %}
+	        <tr {% if(num_line == 0) %}class="odd"{% endif %} id="{{ entity.id }}_row_{{ entity.id }}"  >
+	            <td><a href="{{ path('admin_rubrique_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+	            <td>{{ entity.titre }}</td>
+	            <td>{% if entity.getParent().getTitre() is defined %}{{ entity.getParent().getTitre() }}{% endif%}</td>
+	            <td>{{ entity.descriptif }}</td>
+	            <td>{{ entity.texte }}</td>
+	            <td class="enabled" width="20px">{{ entity.enabled }}</td>
+	            <td width="130px">
+					<a href="{{ path('admin_rubrique_show', { 'id': entity.id }) }}" title="{{ 'pi.grid.action.show'|trans }}" data-ui-icon="ui-icon-show" class="button-ui-icon-show info-tooltip">{{ 'pi.grid.action.show'|trans }}</a>
+					<a href="{{ path('admin_rubrique_edit', { 'id': entity.id }) }}" title="{{ 'pi.grid.action.edit'|trans }}" data-ui-icon="ui-icon-edit" class="button-ui-icon-edit info-tooltip">{{ 'pi.grid.action.edit'|trans }}</a>
+	            </td>
+	        </tr>
+	        {% if num_line == 0 %} 
+	        	{% set num_line = 1 %} 
+	        {% else %}
+	        	{% set num_line = 0 %}
+	        {% endif %}	        
+	    {% endfor %}
+	    </tbody>
+	</table>
+	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}
+	
+{% endblock %}
+
+{% block global_script_divers_footer %}
+	
+	{% set options_gridtabale = {'grid-name': 'grid', 'grid-type':'simple', 
+		'grid-paginate':'false',
+		'grid-filters': {
+				'1':'Identifiant',
+			},
+		'grid-sorting': { 
+				'1':'desc',
+			},	
+		'grid-actions': {
+				'rows_grouping': {'columnIndex':2, 'Collapsible':'false'},
+				'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'admin_rubrique_enabledentity_ajax',},
+				'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'admin_rubrique_disablentity_ajax'},
+				'select_all': {'sButtonText':'pi.grid.action.select_all'},
+				'select_none': {'sButtonText':'pi.grid.action.select_none'},
+			}				
+		}
+	%}
+	{{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}	
+	
+{% endblock %}

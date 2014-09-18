@@ -1,0 +1,125 @@
+{% extends 'AppAdminBundle:Layout:admin_layout.html.twig' %}
+{#{% form_theme edit_form 'AppAdminBundle:Form:fields.html.twig' %}#}
+
+{% block body %}
+   
+   <div class="col-lg-12">
+         <section class="panel">
+             <header class="panel-heading">
+                 Édition d'un média
+             </header>
+            <div class="panel-body">
+                 <div>
+                    <img  width="{{ iImageWith }}" src="{{ asset('uploads/documents/' ~ entity.path ~'.' ~ entity.extension) }}" id="target" /><br>
+
+                    <a class="btn btn-success" onclick="crop({{ entity.id }});">Crop</a>
+                 </div>
+            </div>
+            <select id="format_crop" name="format_crop">
+              {% for format in formats %}
+                 <option value="{{ format.slug }}">{{format.name}}</option>
+              {% endfor %}
+            </select>
+          {#  <div id="formats">
+              {% for format in formats %}
+                <img src="{{ asset('uploads/documents/' ~ entity.path ~ '_' ~ format.slug ~ '.' ~ entity.extension) }}" />
+              {% endfor %}
+            </div> #}
+         </section>
+         <section id="formats" class="panel">
+                 <header class="panel-heading">
+                     Images cropées
+                 </header>
+                        
+                     <div id="container">
+                        {% set i = 1 %}
+                        {% for format in formats %}
+                           
+                           <div ><img src="{{ asset('uploads/documents/' ~ entity.path ~ '_' ~ format.slug ~ '.' ~ entity.extension) }}" /></div>
+                           
+                           {#<li>
+                             <figure>
+                                 <img src="{{ asset('uploads/documents/' ~ entity.path ~ '_' ~ format.slug ~ '.' ~ entity.extension) }}" />
+                                 <figcaption>
+                                     <h3>Mindblowing</h3>
+                                     <span>lorem ipsume </span>
+                                     <a class="fancybox" rel="group" href="img/gallery/4.jpg">Take a look</a>
+                                 </figcaption>
+                             </figure>
+                         </li>#}
+                        {% endfor %}
+                     </div>
+
+             </section>
+          
+   </div>
+</div>
+{% endblock %}
+
+{% block javascripts %} 
+   {{ parent() }}
+   
+   
+   <script language="Javascript">
+      
+      var cropTab = [];
+   
+   {% for format in formats %}
+      cropTab['{{format.slug}}_width'] = {{ format.width }};
+      cropTab['{{format.slug}}_height'] = {{ format.height }};
+      cropTab['{{format.slug}}_quality'] = {{ format.quality }};
+      cropTab['{{format.slug}}_ratio'] = {{ format.width / format.height}};
+    {% endfor %}  
+       
+       var x    = 0;
+       var y    = 0;
+       var x2   = 0;
+       var y2   = 0;
+       var w    = 0;
+       var h    = 0;
+       var slug = "";
+
+     function changeCoords(c)
+     {
+        console.log(c);
+        x  = c.x *  {{ dCoeffCrop }};
+        y  = c.y *  {{ dCoeffCrop }};
+        x2 = c.x2 * {{ dCoeffCrop }};
+        y2 = c.y2 * {{ dCoeffCrop }};
+        w  = c.w *  {{ dCoeffCrop }};
+        h  = c.h *  {{ dCoeffCrop }};
+     };
+  
+     function crop($id)
+     {
+        
+        slug = $("#format_crop option:selected").val();
+        
+         $.post("{{path('media_crop')}}", { x : x , y : y , x2 : x2 , y2 : y2 , w : w , h : h , id : $id, slug : slug })
+                 .done(function(data){
+                    
+                     alert(data.path);
+                     
+                  });
+     }
+   
+   $('#target').Jcrop({
+       onSelect: changeCoords,
+       animateTo: [ 0,0,{{ formats.0.width}},{{ formats.0.height}} ],
+       aspectRatio: {{ formats.0.width / formats.0.height }}
+   },function(){
+       jcrop_api = this;
+   });
+     
+     $("#format_crop").on('change', function(){
+         var name = $("#format_crop option:selected").val();
+         $("#img_width").val(cropTab[name + "_width"]);
+         $("#img_height").val(cropTab[name + "_height"]);
+         $("#img_quality").val(cropTab[name + "_quality"]);
+         $("#img_name").val(name);
+         jcrop_api.setOptions({
+          aspectRatio: cropTab[name + "_ratio"]
+         });
+     }); 
+   </script>
+  {% endblock %}

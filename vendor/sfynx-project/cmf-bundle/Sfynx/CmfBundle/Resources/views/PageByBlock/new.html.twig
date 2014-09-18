@@ -1,0 +1,40 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% if app.request.query.get('NoLayout') %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1><a href="{{ path('admin_redirection') }}">{{ "pi.home"|trans }}</a> > <a href="{{ path_url('admin_pagebytrans') }}">{{ 'pi.page.index.title'|trans }}</a> > {{ 'pi.grid.action.create'|trans }}</h1>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}
+    
+	<!-- Begin tag markup -->
+	<div id="tabs">
+		{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-header.html.twig" %}
+		{% form_theme form getParameter('sfynx.auth.theme.layout.admin.form.template') %}
+		<form class="myform" action="{{ path('admin_pagebyblock_create') }}" method="post" {{ form_enctype(form) }} novalidate>
+			<div id="tabs-1">
+				    {{ form_widget(form) }} 
+			</div>
+		    <ul class="ui-widget-header ui-footer">
+			    <li>
+			    	<button id="add_tab" class="button-ui-add-tab">{{ 'pi.grid.action.add-tab'|trans }}</button>
+			    	<button type="submit" class="button-ui-create">{{ 'pi.grid.action.create'|trans }}</button>
+		            <a href="{{ path('admin_pagebytrans') }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+			    </li>
+			</ul>		    
+		</form>
+		{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-footer.html.twig" %}
+	</div>
+	<!-- End tag markup -->
+	
+	{% set options = {'prototype-name': ['blocks'], 'prototype-tab-title': 'B'} %}
+	{{ renderJquery('FORM', 'prototype-bytab', options )|raw }}
+	
+{% endblock %}

@@ -66,7 +66,7 @@ class SliderType extends AbstractType
 //             ->add('published_at', 'date', array(
 //                     'widget'     => 'single_text', // choice, text, single_text
 //                     'input'     => 'datetime',
-//                     'format'     => $this->_container->get('pi_app_admin.twig.extension.tool')->getDatePatternByLocalFunction($this->_locale),// 'dd/MM/yyyy', 'MM/dd/yyyy',
+//                     'format'     => $this->_container->get('sfynx.tool.twig.extension.tool')->getDatePatternByLocalFunction($this->_locale),// 'dd/MM/yyyy', 'MM/dd/yyyy',
 //                     "attr"     => array(
 //                             "class"=>"pi_datepicker",
 //                     ),
@@ -131,7 +131,7 @@ class SliderType extends AbstractType
             
             
             ->add('page', 'entity', array(
-                    'class' => 'PiAppAdminBundle:Page',
+                    'class' => 'SfynxCmfBundle:Page',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->getAllPageHtml();
                     },

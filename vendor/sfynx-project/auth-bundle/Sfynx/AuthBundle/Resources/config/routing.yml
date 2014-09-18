@@ -1,0 +1,56 @@
+#
+#   import routes from a controller directory
+#
+annotation_sfynx_auth:
+    resource: "@SfynxAuthBundle/Controller"
+    type:     annotation
+
+#
+#   Import FOSUserBundle routing files
+#
+auth_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /admin/group
+    
+auth_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+auth_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /user/profile
+
+auth_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /user/register
+
+auth_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /user/resetting
+    
+auth_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /user/change-password
+    
+auth_users:
+    resource: "@SfynxAuthBundle/Resources/config/routing/users.yml"
+    prefix: /admin/users    
+    
+#
+#    SfynxAuthBundle routing url
+#     
+unauthorized:
+    pattern:  /unauthorized
+    defaults: { _controller: SfynxAuthBundle:Error:unauthorized }
+    
+auth_public:
+    resource: "@SfynxAuthBundle/Resources/config/routing/public.xml"
+    prefix: /  
+        
+auth_langue:
+    resource: "@SfynxAuthBundle/Resources/config/routing/langue.xml"
+    prefix: /admin/langue
+       
+auth_layout:
+    resource: "@SfynxAuthBundle/Resources/config/routing/layout.xml"
+    prefix: /admin/layout
+    

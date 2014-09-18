@@ -1,0 +1,39 @@
+form .uploaded_area {
+    margin: 5px;
+    padding: 3px 0;
+}
+
+form .uploaded_area > .item {
+    height: 90px;
+    margin: 0 0 5px;
+}
+
+form .uploaded_area > .item > * {
+    float: left;
+}
+
+form .uploaded_area > .item > img {
+    height: 100%;
+    margin: 0 5px 0 0;
+    border: 1px solid #888;
+}
+
+form .uploaded_area > .item > .file_data {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    background: #F5F5F5;
+    box-shadow: 2px 2px 4px #DDD;
+    transition: 0.6s;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+form .uploaded_area > .item > img:hover + .file_data {
+    visibility: visible;
+    opacity: 1;
+}
+
+form .uploaded_area > .item > .file_data > p {
+    font-size: 11px;
+}

@@ -1,0 +1,111 @@
+{% extends 'AppAdminBundle:Layout:admin_layout.html.twig' %}
+
+{% block body -%}
+   
+   <section class="site-min-height">
+              <!-- page start-->
+              <section class="panel">
+                  <header class="panel-heading">
+                      Liste des formats de croping
+                  </header>
+                  <div class="panel-body">
+                      <div class="adv-table editable-table">
+                          <div class="clearfix">
+                             <a href="{{ path ('croping_new') }}">
+                              <div class="btn-group">
+                                  <button  class="btn green">
+                                      Ajouter un nouveau format <i class="fa fa-plus"></i>
+                                  </button>
+                              </div>
+                             </a>
+                           
+                           
+                          </div>
+                          <br>
+                          <div class="space15"></div>
+                           <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                              <thead>
+                              <tr>
+                                  <th>Id</th>
+                                 <th>Name</th>
+                                 <th>Slug</th>
+                                 <th>Width</th>
+                                 <th>Height</th>
+                                 <th>Quality</th>
+                                 <th>Actions</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              
+                              {% for key,entity in entities %}
+                                 <tr>
+                                     <td>{{ entity.id }}</td>
+                                     <td>{{ entity.name }}</td>
+                                    <td>{{ entity.slug }}</td>
+                                    <td>{{ entity.width }}</td>
+                                    <td>{{ entity.height }}</td>
+                                    <td>{{ entity.quality }}</td>
+
+                                     <td class="center">
+                                             {#<a class="btn btn-success btn-sm" href="{{ path('question_show', { 'id': question.object.id }) }}"><i class="fa fa-eye"></i></a>#}
+                                             <a class="btn btn-primary btn-sm" href="{{ path('croping_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
+                                     </td>
+                                 </tr>
+                              {% endfor %}
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </section>
+              <!-- page end-->
+          </section>
+
+
+    {% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    <script>
+
+
+
+        var oTable = $('#editable-sample').dataTable({
+            "aLengthMenu": [
+                [12, 15, 20, 50, 100, -1],
+                [12, 15, 20, 50, 100, "Tous"] // change per page values here
+            ],
+            'bAutoWidth': false,
+            // set the initial value
+            "iDisplayLength": 12,
+            "sDom": "<'row'<'col-lg-6'l><'col-lg-6'f>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
+            "sPaginationType": "bootstrap",
+            "oLanguage": {
+                "sProcessing":     "Traitement en cours...",
+                "sSearch":         "Rechercher&nbsp;:",
+                "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+                "sInfo":           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                "sInfoEmpty":      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                "sInfoPostFix":    "",
+                "sLoadingRecords": "Chargement en cours...",
+                "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                "sEmptyTable":     "Aucune donnée disponible dans le tableau",
+                "oPaginate": {
+                    "sFirst":      "Premier",
+                    "sPrevious":   "Pr&eacute;c&eacute;dent",
+                    "sNext":       "Suivant",
+                    "sLast":       "Dernier"
+                },
+                "oAria": {
+                    "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                    "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                }
+            },
+            "aoColumnDefs": [
+                { "bSortable": false , "sWidth": "90px", "aTargets" : [ 6 ] }
+            ]
+        });
+    </script>
+{% endblock %}
+

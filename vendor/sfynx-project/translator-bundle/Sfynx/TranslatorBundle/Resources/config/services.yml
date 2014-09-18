@@ -1,0 +1,12 @@
+parameters:
+    sfynx.translator.wordsloader.class: Sfynx\TranslatorBundle\Manager\WordsLoader
+    
+services:
+    #
+    # configuration of the main repository manager allowed for the repository management
+    #  
+    sfynx.translator.wordsloader:
+        class: %sfynx.translator.wordsloader.class%
+        arguments: ['@service_container']
+        tags:
+            - { name: translation.loader, alias: yml }

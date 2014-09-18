@@ -13,8 +13,8 @@
 namespace PiApp\GedmoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BootStrap\TranslationBundle\Controller\abstractController;
-use PiApp\AdminBundle\Exception\ControllerException;
+use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -159,7 +159,7 @@ class ContactController extends abstractController
         if (!$NoLayout)     $template = "show.html.twig"; else $template = "show.html.twig";        
 
         if (!$entity) {
-            throw ControllerException::NotFoundException('Contact');
+            throw ControllerException::NotFoundEntity('Contact');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -343,7 +343,7 @@ class ContactController extends abstractController
             $entity = $em->getRepository("PiAppGedmoBundle:Contact")->findOneByEntity($locale, $id, 'object');
 
             if (!$entity) {
-                throw ControllerException::NotFoundException('Contact');
+                throw ControllerException::NotFoundEntity('Contact');
             }
 
             try {
@@ -385,7 +385,7 @@ class ContactController extends abstractController
         $entity = $em->getRepository("PiAppGedmoBundle:Contact")->findOneByEntity($lang, $id, 'object', false);
         
         if (!$entity) {
-            throw ControllerException::NotFoundException('Contact');
+            throw ControllerException::NotFoundEntity('Contact');
         }
         
         if (method_exists($entity, "getTemplate") && $entity->getTemplate() != "")

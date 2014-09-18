@@ -1,55 +1,59 @@
 #
-#   Import PiAppAdminBundle routing files
-#     
-PiAppAdminBundle:
-    resource: "@PiAppAdminBundle/Resources/config/routing.yml"
-    prefix:   / 
-
-#
 #   Import PiAppGedmoBundle routing files
 #        
 PiAppGedmoBundle:
     resource: "@PiAppGedmoBundle/Resources/config/routing.yml"
-    prefix: /      
-
-#
-#   Import BootStrapUserBundle routing files
-#       
-BootStrapUserBundle:
-    resource: "@BootStrapUserBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix: / 
+    
     
 #
-#   Import BootStrapTranslationBundle routing files
-#       
-BootStrapTranslationBundle:
-    resource: "@BootStrapTranslationBundle/Resources/config/routing.yml"
-    prefix:   /    
-    
-#
-#   Import SonataAdminBundle routing files
-#     
-BootStrapAdminBundle:
-    resource: "@BootStrapAdminBundle/Resources/config/routing.yml"
-    prefix:   /
-    
-#
-#   Import SonataPageBundle routing files
+#   Import BootStrapMediaBundle routing files
 #     
 BootStrapMediaBundle:
     resource: "@BootStrapMediaBundle/Resources/config/routing.yml"
+    prefix:   /   
+    
+         
+         
+         
+#
+#   Import SfynxMediaBundle routing files
+#     
+SfynxMediaBundle:
+    resource: "@SfynxMediaBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#
+#   Import SfynxCmfBundle routing files
+#     
+SfynxCmfBundle:
+    resource: "@SfynxCmfBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#
+#   Import SfynxAuthBundle routing files
+#       
+SfynxAuthBundle:
+    resource: "@SfynxAuthBundle/Resources/config/routing.yml"
     prefix:   /
     
 #
-#   Import SonataPageBundle routing files
+#   Import SfynxAdminBundle routing files
 #     
-BootStrapTranslatorBundle:
-    resource: "@BootStrapTranslatorBundle/Resources/config/routing.yml"
-    prefix:   /      
-  
+SfynxAdminBundle:
+    resource: "@SfynxAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+    
 #
-#   Import BootStrapWsBundle routing files
+#   Import SfynxTranslatorBundle routing files
 #     
-BootStrapWsBundle:
-    resource: "@BootStrapWsBundle/Resources/config/routing.yml"
-    prefix:   /  
+SfynxTranslatorBundle:
+    resource: "@SfynxTranslatorBundle/Resources/config/routing.yml"
+    prefix:   /   
+    
+#
+#   Import SfynxWsBundle routing files
+#     
+SfynxWsBundle:
+    resource: "@SfynxWsBundle/Resources/config/routing.yml"
+    prefix:   /

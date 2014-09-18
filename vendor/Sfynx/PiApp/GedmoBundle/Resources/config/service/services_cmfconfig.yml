@@ -56,12 +56,12 @@ parameters:
     # ENTITY PROHIBITION
     #                          
     pi_app_gedmo.config.entity.prohibition.preupdate : ~
-        #PiApp\AdminBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
-        #PiApp\AdminBundle\Entity\Page: true
+        #Sfynx\CmfBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
+        #Sfynx\CmfBundle\Entity\Page: true
         
     pi_app_gedmo.config.entity.prohibition.preremove : ~ 
-        #PiApp\AdminBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
-        #PiApp\AdminBundle\Entity\Page: true    
+        #Sfynx\CmfBundle\Entity\Page: { 0: 1, 1: 2, 2: 3}
+        #Sfynx\CmfBundle\Entity\Page: true    
     
     #
     # ENTITY RESTRICTION
@@ -69,8 +69,8 @@ parameters:
     pi_app_gedmo.config.entity.restriction.bymedia :  ~ # [ 'getBlock', 'getContent' ]
         
     pi_app_gedmo.config.entity.restriction.byrole : ~
-        #PiApp\AdminBundle\Entity\Page: { 0: 'home_page', 1: 'page_rouetanme'}
-        #PiApp\AdminBundle\Entity\Page: true    
+        #Sfynx\CmfBundle\Entity\Page: { 0: 'home_page', 1: 'page_rouetanme'}
+        #Sfynx\CmfBundle\Entity\Page: true    
         
     #
     # ROUTE SLUGGABLE
@@ -98,7 +98,7 @@ services:
     # configuration of the class manager allowed for the Config CMF
     #       
     pi_app_gedmo.cmfconfig:
-      class: %bootstrap.tool.manager.config.class%
+      class: %sfynx.tool.manager.config.class%
       arguments: ['@service_container']
       tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      

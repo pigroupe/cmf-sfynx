@@ -241,7 +241,7 @@ class BlockType extends AbstractType
          if ($is_page)
              $builder
              ->add('pageurl', 'entity', array(
-                     'class' => 'PiAppAdminBundle:Page',
+                     'class' => 'SfynxCmfBundle:Page',
                      'query_builder' => function(EntityRepository $er) {
                          return $er->getAllPageHtml();
                      },
@@ -303,14 +303,14 @@ class BlockType extends AbstractType
             		),
             		"attr" => array(
             				"class"=>"pi_simpleselect ajaxselect", // ajaxselect
-            				"data-url"=>$this->_container->get('bootstrap.RouteTranslator.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
+            				"data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
             				"data-selectid" => $id_media,
             		        "data-max" => 50,
             		),
             		'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
              				title="Ajouter une image à la médiatheque"
              				data-title="Mediatheque"
-             				data-href="'.$this->_container->get('bootstrap.RouteTranslator.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
+             				data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
              				data-selectid="#piapp_gedmobundle_mediatype_id"
              				data-selecttitle="#piapp_gedmobundle_mediatype_title"
              				data-insertid="#piapp_gedmobundle_blocktype_media"
@@ -371,14 +371,14 @@ class BlockType extends AbstractType
             		),
             		"attr" => array(
             				"class"=>"pi_simpleselect ajaxselect", // ajaxselect
-            				"data-url"=>$this->_container->get('bootstrap.RouteTranslator.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
+            				"data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
             				"data-selectid" => $id_media1,
             		        "data-max" => 50,
             		),
             		'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
              				title="Ajouter une image à la médiatheque"
              				data-title="Mediatheque"
-             				data-href="'.$this->_container->get('bootstrap.RouteTranslator.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
+             				data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
              				data-selectid="#piapp_gedmobundle_mediatype_id"
              				data-selecttitle="#piapp_gedmobundle_mediatype_title"
              				data-insertid="#piapp_gedmobundle_blocktype_media1"

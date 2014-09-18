@@ -1,0 +1,11 @@
+#
+#   import routes from a controller directory
+#
+annotation_sfynx_media:
+    resource: "@SfynxMediaBundle/Controller"
+    type:     annotation
+
+#SfynxMediaBundle:Media
+sfynx_media_media:
+    resource: "@SfynxMediaBundle/Resources/config/routing/media.xml"
+    prefix: /admin/media

@@ -1,0 +1,26 @@
+{
+    "name": "tms/media-client-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony MediaClientBundle",
+    "keywords": ["symfony2", "media"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "TESSI MARKETING",
+            "email": "contact@tessi.fr",
+            "homepage": "http://www.tessi.fr"
+        }
+    ],
+    "require": {
+        "php":                            ">=5.3.3",
+        "symfony/framework-bundle":       ">=2.3",
+        "twig/twig":                      "*",
+        "jms/serializer-bundle":          "dev-master",
+        "da/api-client-bundle":           "1.1.*"
+    },
+    "autoload": {
+        "psr-0": { "Tms\\Bundle\\MediaClientBundle": "" }
+    },
+    "target-dir": "Tms/Bundle/MediaClientBundle",
+    "minimum-stability": "dev"
+}

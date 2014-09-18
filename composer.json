@@ -58,6 +58,19 @@
         
         "excelwebzone/recaptcha-bundle": "dev-master"
     },
+    "require-dev": {
+        "benjam1/symfttpd": "2.1.*",
+        "phpunit/phpunit": "4.0.20",
+        "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
+        "squizlabs/php_codesniffer": "2.0.*@dev",
+        "phpmd/phpmd": "dev-master",
+        "guzzlehttp/guzzle": "~4.0",
+        "sebastian/phpcpd": "2.0.*@dev",
+        "pdepend/pdepend": "2.0.*",
+        "phpunit/php-invoker": "dev-master",
+        "phake/phake": "*",
+        "phing/phing": "dev-master",
+    },       
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
@@ -75,7 +88,7 @@
     "config": {
         "bin-dir": "bin"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
@@ -88,6 +101,23 @@
             "OrApp" : "src",
             "PiApp": "vendor/Sfynx",
             "BootStrap": "vendor/Sfynx",
+            'Sfynx\\AclManagerBundle': '/sfynx-project/acl-manager-bundle',
+            'Sfynx\\DatabaseBundle': '/sfynx-project/database-bundle',
+            'Sfynx\\WsBundle': '/sfynx-project/ws-bundle',
+            'Sfynx\\TranslatorBundle': '/sfynx-project/translator-bundle',
+            'Sfynx\\CacheBundle': '/sfynx-project/cache-bundle',
+            'Sfynx\\ToolBundle': '/sfynx-project/tool-bundle',
+            'Sfynx\\CoreBundle': '/sfynx-project/core-bundle',
+            'Sfynx\\CmfBundle': '/sfynx-project/cmf-bundle',
+            'Sfynx\\AdminBundle': '/sfynx-project/admin-bundle',
+            'Sfynx\\AuthBundle': '/sfynx-project/auth-bundle',
+            'Sfynx\\MediaBundle': '/sfynx-project/media-bundle',
+            'Sfynx\\BrowserBundle': '/sfynx-project/browser-bundle',
+            'Sfynx\\EncryptBundle': '/sfynx-project/annotation-bundle',
+            'Sfynx\\PositionBundle': '/sfynx-project/annotation-bundle',
+            'Sfynx\\TemplateBundle': '/sfynx-project/template-bundle',
+            'Sfynx\\SmoothnessBundle': '/sfynx-project/template-bundle',
+            'Sfynx\\FlatlabBundle': '/sfynx-project/template-bundle',
             "Zend_": "vendor/Zend/library"
         }
     }    

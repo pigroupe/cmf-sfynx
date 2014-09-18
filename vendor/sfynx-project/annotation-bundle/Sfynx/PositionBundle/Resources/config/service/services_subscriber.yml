@@ -1,0 +1,14 @@
+parameters:
+    sfynx.annotation.subscriber.position.class: Sfynx\PositionBundle\EventSubscriber\PositionSubscriber
+
+services:
+    #
+    # configuration of the event subscriber of position
+    #         
+    sfynx.annotation.subscriber.position:
+        class: %sfynx.annotation.subscriber.position.class%
+        arguments: [@annotation_reader, @service_container]
+        properties:
+            annotationclass: Sfynx\PositionBundle\Annotation\Positioned        
+        tags:
+            - { name: doctrine.event_subscriber, connexion: default, priority: 1  }                       

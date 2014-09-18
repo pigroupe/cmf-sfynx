@@ -1,0 +1,17 @@
+{% extends "AppAdminBundle:Layout:layout.html.twig" %}
+
+
+
+<body class="login-body">
+
+<div class="container">
+    <form class="form-signin" action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST">
+        <h2 class="form-signin-heading">Changer le mot de passe</h2>
+        <div class="login-wrap">
+            {{ form_widget(form) }}
+            <input type="submit" value="Valider" />
+        </div>
+
+    </form>
+</div>
+</body>

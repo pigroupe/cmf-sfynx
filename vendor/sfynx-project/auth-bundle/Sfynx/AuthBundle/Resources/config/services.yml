@@ -1,0 +1,146 @@
+parameters:
+    sfynx.auth.handler.exception.class: Sfynx\AuthBundle\EventListener\HandlerException
+    sfynx.auth.handler.localeHandler.class: Sfynx\AuthBundle\EventListener\HandlerLocale
+    sfynx.auth.handler.requestHandler.class: Sfynx\AuthBundle\EventListener\HandlerRequest
+    sfynx.auth.handler.loginHandler.class: Sfynx\AuthBundle\EventListener\HandlerLogin
+    sfynx.auth.handler.logoutHandler.class: Sfynx\AuthBundle\EventListener\HandlerLogout
+    sfynx.auth.handler.authenticationHandler.class: Sfynx\AuthBundle\EventListener\HandlerAuthentication
+    
+    sfynx.auth.dispatcher.loginfailure.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherLoginFailureResponse
+
+    sfynx.auth.manager.locale.class: Sfynx\AuthBundle\Util\PiLocaleManager
+    sfynx.auth.role.factory.class: Sfynx\AuthBundle\Role\RoleFactory
+    sfynx.auth.repository.class: Sfynx\AuthBundle\Repository\Repository
+    sfynx.auth.validator.emailblackList.class: Sfynx\AuthBundle\Validator\Constraint\EmailBlackListValidator
+    
+    sfynx.auth.manager.jquery.sessionflash.class: Sfynx\AuthBundle\Util\PiJquery\PiSessionFlashManager
+    sfynx.auth.manager.jquery.languagechoice.class: Sfynx\AuthBundle\Util\PiJquery\PiLanguageChoiceManager
+    sfynx.auth.manager.jquery.dashboard.class: Sfynx\AuthBundle\Util\PiJquery\PiDashboardManager    
+
+services:       
+    #               
+    # handlers Configuration
+    #           
+    sfynx.auth.exception_handler:
+        class: %sfynx.auth.handler.exception.class%
+        arguments: [@templating, @kernel, @service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException } 
+            
+    sfynx.auth.locale_handler:
+        class: %sfynx.auth.handler.localeHandler.class%
+        arguments: [%locale%, @service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 66 }
+                
+    sfynx.auth.request_handler:
+        class: %sfynx.auth.handler.requestHandler.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 65 }
+                
+    sfynx.auth.authentication_handler:
+        class: %sfynx.auth.handler.authenticationHandler.class%
+        arguments: [@service_container, @doctrine]  
+                    
+    sfynx.auth.login_handler:
+        class: %sfynx.auth.handler.loginHandler.class%
+        arguments: [@security.context, @event_dispatcher, @doctrine, @service_container]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login}
+            
+    sfynx.auth.logout_handler:
+        class: %sfynx.auth.handler.logoutHandler.class%
+        arguments: [@service_container, @doctrine]         
+        
+    #               
+    # Event dispatchers Configuration
+    # 
+    sfynx.auth.dispatcher.login_failure.change_response:
+        class: %sfynx.auth.dispatcher.loginfailure.changeresponse.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: pi.handler.login.failure, method: onPiLoginFailureResponse, priority: 1 }          
+        
+    #
+    # configuration of the locale manager
+    #    
+    sfynx.auth.locale_manager:
+        class: %sfynx.auth.manager.locale.class%  
+        arguments: ['@service_container']
+        
+    #
+    # configuration of the role manager
+    #         
+    sfynx.auth.role.factory:
+        class: %sfynx.auth.role.factory.class%
+        arguments: ['@service_container']   
+
+    #
+    # configuration of the main repository manager allowed for the User management
+    # 
+    sfynx.auth.repository:
+        class: %sfynx.auth.repository.class%
+        arguments: ['@doctrine.orm.entity_manager']
+        
+    #
+    # configuration of the user form registration
+    # 
+    sfynx.auth.registration.form.type:
+        class: Sfynx\AuthBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: bootstrap_user_registration }
+
+    sfynx.auth.form.handler.registration:
+        class: Sfynx\AuthBundle\Form\Handler\RegistrationFormHandler
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer"]
+        scope: request
+        public: false
+                    
+    sfynx.auth.profile.form.type:
+        class: Sfynx\AuthBundle\Form\Type\ProfileFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: bootstrap_user_profile }
+            
+    #
+    # configuration overload validators
+    # 
+    sfynx.auth.validator.unique:
+        class: %sfynx.auth.validator.emailblackList.class%
+        alls:
+            - [ setBlackList, [ %mail_blacklist% ] ]
+        tags:
+            - { name: validator.constraint_validator, alias: email_black_list }
+            
+    #
+    # configuration of the Util classes
+    # 
+    sfynx.auth.jquery_manager.sessionflash:
+        class: %sfynx.auth.manager.jquery.sessionflash.class%
+        arguments: ['@service_container']
+            
+    sfynx.auth.jquery_manager.languagechoice:
+        class: %sfynx.auth.manager.jquery.languagechoice.class%
+        arguments: ['@service_container']
+        
+    sfynx.auth.jquery_manager.dashboard:
+        class: %sfynx.auth.manager.jquery.dashboard.class%
+        arguments: ['@service_container']                           
+            
+    #
+    # configuration overload security encoder
+    #             
+    my_password_encoder:
+        class: Sfynx\AuthBundle\Security\Encoder\MyPasswordEncoder               
+                        
+    #
+    # configuration of IP address allowed for the Admin and user access control
+    #    
+    #security.access.blacklist_voter:
+    #    class:      Sfynx\AuthBundle\Security\Authorization\Voter\ClientIpVoter
+    #    arguments:  [@service_container, [127.0.0.1, ::1, 188.165.248.255]]
+    #    public:     false
+    #    tags:
+    #        -       { name: security.voter } 

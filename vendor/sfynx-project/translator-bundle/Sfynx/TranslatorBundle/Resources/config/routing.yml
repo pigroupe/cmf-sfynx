@@ -1,0 +1,11 @@
+#
+#   import routes from a controller directory
+#
+annotation_sfynx_translator:
+    resource: "@SfynxTranslatorBundle/Controller"
+    type:     annotation 
+
+#SfynxTranslatorBundle:Word     
+sfynx_translator_word:
+    resource: "@SfynxTranslatorBundle/Resources/config/routing/word.xml"
+    prefix: /admin/gedmo/word

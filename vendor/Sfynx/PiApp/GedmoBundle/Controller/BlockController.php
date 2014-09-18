@@ -13,8 +13,8 @@
 namespace PiApp\GedmoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BootStrap\TranslationBundle\Controller\abstractController;
-use PiApp\AdminBundle\Exception\ControllerException;
+use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -167,7 +167,7 @@ class BlockController extends abstractController
         if (!$NoLayout)     $template = "show.html.twig"; else $template = "show.html.twig";        
 
         if (!$entity) {
-            throw ControllerException::NotFoundException('Block');
+            throw ControllerException::NotFoundEntity('Block');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -352,7 +352,7 @@ class BlockController extends abstractController
             $entity = $em->getRepository("PiAppGedmoBundle:Block")->findOneByEntity($locale, $id, 'object');
 
             if (!$entity) {
-                throw ControllerException::NotFoundException('Block');
+                throw ControllerException::NotFoundEntity('Block');
             }
 
             try {
@@ -394,7 +394,7 @@ class BlockController extends abstractController
         $entity = $em->getRepository("PiAppGedmoBundle:Block")->findOneByEntity($lang, $id, 'object', false);
         
         if (!$entity) {
-            throw ControllerException::NotFoundException('Block');
+            throw ControllerException::NotFoundEntity('Block');
         }
         
         return $this->render("PiAppGedmoBundle:Block:$template", array(

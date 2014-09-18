@@ -1,0 +1,23 @@
+{% if app.request.query.get('NoLayout') %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+<h1>{{ 'users'|trans }}</h1>
+{% endblock %}
+
+{% block content %}
+    <h2>{{ 'pi.form.title.show'|trans }}</h2>
+    <div class="show-form cf">
+        <p><label>{{ 'Id'|trans }} :</label> {{ entity.id }}</p>
+        <p><label>{{ 'pi.form.label.field.username'|trans }} : </label> {{ entity.username }}</p>
+        <p><label>{{ 'pi.form.label.field.email'|trans }} : </label> {{ entity.email }}</p>
+        <p><label>{{ 'pi.form.label.field.language'|trans }} : </label> {{ entity.langCode }}</p>
+        <p><label>{{ 'pi.form.label.field.usergroup'|trans }} : </label> {% for group in entity.groups %} {{ group.name }} {% endfor %}</p>
+        <p><label>{{ 'pi.grid.action.activation'|trans }} : </label> {{ entity.enabled }}</p>
+    </div>
+  
+{% endblock %}

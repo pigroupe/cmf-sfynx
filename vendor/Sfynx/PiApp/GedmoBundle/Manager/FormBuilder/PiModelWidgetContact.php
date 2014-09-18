@@ -14,7 +14,7 @@ namespace PiApp\GedmoBundle\Manager\FormBuilder;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use PiApp\AdminBundle\Manager\PiFormBuilderManager;
+use Sfynx\CmfBundle\Manager\PiFormBuilderManager;
         
 /**
 * Description of the Form builder manager

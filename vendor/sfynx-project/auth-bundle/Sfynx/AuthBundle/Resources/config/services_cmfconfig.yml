@@ -1,0 +1,23 @@
+parameters:
+    #
+    # JQUERY
+    #         
+    sfynx.auth.config.jquery.tool :  
+        dashboard: 'sfynx.auth.jquery_manager.dashboard'
+        languagechoice: 'sfynx.auth.jquery_manager.languagechoice'
+        
+    sfynx.auth.config.jquery.session :   
+        flash: 'sfynx.auth.jquery_manager.sessionflash'        
+                                    
+services:
+    #
+    # configuration of the class manager allowed for the config CMF
+    #       
+    sfynx.tool.cmfconfig:
+      class: %sfynx.tool.manager.config.class%
+      arguments: ['@service_container']
+      tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
+      calls:
+        - [ setConfig, [ 'JQUERY', 'SESSION', %sfynx.auth.config.jquery.session% ] ]
+        - [ setConfig, [ 'JQUERY', 'TOOL', %sfynx.auth.config.jquery.tool% ] ]

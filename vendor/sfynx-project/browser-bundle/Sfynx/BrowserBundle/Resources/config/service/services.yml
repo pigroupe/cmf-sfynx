@@ -1,0 +1,27 @@
+parameters:
+    sfynx.browser.lib.browscap.class: Sfynx\BrowserBundle\Lib\Browscap
+    sfynx.browser.lib.mobiledetect.class: Sfynx\BrowserBundle\Lib\MobileDetect
+
+services:  
+    #               
+    # libraries Configuration
+    #
+    sfynx.browser.lib.browscap:
+        class: %sfynx.browser.lib.browscap.class%
+        arguments: [%sfynx.browser.browscap.cache_dir%]
+        properties:
+             remoteIniUrl: %sfynx.browser.browscap.remote_ini_url%
+             remoteVerUrl: %sfynx.browser.browscap.remote_ver_url%
+             timeout: %sfynx.browser.browscap.timeout%
+             updateInterval: %sfynx.browser.browscap.update_interval%
+             errorInterval: %sfynx.browser.browscap.error_interval%
+             doAutoUpdate: %sfynx.browser.browscap.do_auto_update%
+             updateMethod: %sfynx.browser.browscap.update_method%
+             localFile: %sfynx.browser.browscap.local_file%
+             lowercase: %sfynx.browser.browscap.lowercase%
+             silent: %sfynx.browser.browscap.silent%
+             cacheFilename: %sfynx.browser.browscap.cache_filename%
+             iniFilename: %sfynx.browser.browscap.ini_filename%             
+        
+    sfynx.browser.lib.mobiledetect:
+        class: %sfynx.browser.lib.mobiledetect.class%

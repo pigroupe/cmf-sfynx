@@ -14,37 +14,41 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 
 ## Structure of the framework
 
-The bundle has been split into 2 directories :
+The framework has been split into 15 bundles :
 
-**BootStrap**
 
 ``` bash
-* AclManagerBundle : A bundle which provides classes to run ACL Manager`s utilities for Symfony2.
-* AdminBundle : A bundle which overload the SonataAdminBundle.
+* CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
+( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )
+* TemplateBundle :  A bundle which is used to stock all template of layout and others.
+* AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
+* ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
+* CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 
-* MediaBundle : A bundle which overload the SonataMediaBundle.
-* ToolBundle : A bundle which contains tool libraries and services of route and role and twig extensions
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a command to generate Sfynx bundle with a CRUD system of an entity, and annotation to encrypt fields and to manage position.
-* TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
-* UserBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
+* AclManagerBundle : A bundle which provides classes to run ACL Manager`s utilities for Symfony2.
+* BrowserBundle : A bundle which provides library to run Browscap Manager`s utilities and MobileDetect Manager`s utilities.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
-```
-
-**PiApp**
-
-``` bash
-* AdminBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
-( includes management of permissions Event, management varnish and memcache, SEO pages, a library, a library of tools, implementation of full table with DataTable, management of complete multi-forms with multiselect with pagination and search ajax with cropping system on the media, etc. )
+* EncryptBundle : A bundle which provides annotations to encrypt fields
+* PositionBundle : A bundle which provides annotations to manage position of entiy rows
+* AdminBundle : A bundle which overload the SonataAdminBundle.
+* MediaBundle : A bundle which overload the SonataMediaBundle, with crop system.
+* TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
 * GedmoBundle : A bundle which is used to create a project with the CMF.
-* TemplateBundle :  A bundle which is used to stock all template of layout and others.
 ```
 
 ## Documentation
  
-* [Example of CMF usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/PiApp/AdminBundle/Resources/doc/index.md)
-* [Example of SSO usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/BootStrap/WsBundle/Resources/doc/index.md)
-
+* [Example of CMF usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/cmf-bundle/Sfynx/CmfBundle/Resources/doc/index.md)
+* [Example of Auth usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle/Resources/doc/index.md)
+* [Example of Template usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/template-bundle/Sfynx/TemplateBundle/Resources/doc/index.md)
+* [Example of Core usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/core-bundle/Sfynx/CoreBundle/Resources/doc/index.md)
+* [Example of Tool usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/tool-bundle/Sfynx/ToolBundle/Resources/doc/index.md)
+* [Example of Media usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/media-bundle/Sfynx/MediaBundle/Resources/doc/index.md)
+* [Example of Encrypt annotation usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/EncryptBundle/Resources/doc/index.md)
+* [Example of Position annotation usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/PositionBundle/Resources/doc/index.md)
+* [Example of Ws usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsBundle/Resources/doc/index.md)
+* [Example of Browser usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/browser-bundle/Sfynx/BrowserBundle/Resources/doc/index.md)
 
 ## License
 **Copyright © 20012-2014, contact@pi-groupe.fr.**
@@ -111,28 +115,23 @@ Register all bundle in your `app/AppKernel.php` file:
                 new Sonata\jQueryBundle\SonatajQueryBundle(),
                 new Sonata\MediaBundle\SonataMediaBundle(),             
 
-                # tools
-                new FOS\UserBundle\FOSUserBundle(),
-                new FOS\FacebookBundle\FOSFacebookBundle(),
-                new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-                new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),  
-                new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
-                
-                # boostrap
-                new BootStrap\DatabaseBundle\BootStrapDatabaseBundle(),
-                new BootStrap\CacheBundle\BootStrapCacheBundle(),
-                new BootStrap\AclManagerBundle\BootStrapAclManagerBundle(),
-                new BootStrap\AdminBundle\BootStrapAdminBundle(),
-                new BootStrap\UserBundle\BootStrapUserBundle(),
-                new BootStrap\TranslationBundle\BootStrapTranslationBundle(),
-                new BootStrap\TranslatorBundle\BootStrapTranslatorBundle(),
+                # Sfynx
+                new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
+                new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
+                new Sfynx\WsBundle\SfynxWsBundle(),
+                new Sfynx\CacheBundle\SfynxCacheBundle(),
+                new Sfynx\ToolBundle\SfynxToolBundle(),
+                new Sfynx\CoreBundle\SfynxCoreBundle(),
+                new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
+                new Sfynx\TemplateBundle\SfynxTemplateBundle(),
+                new Sfynx\BrowserBundle\SfynxBrowserBundle(),
+                new Sfynx\EncryptBundle\SfynxEncryptBundle(),
+                new Sfynx\PositionBundle\SfynxPositionBundle(),
+                new Sfynx\AuthBundle\SfynxAuthBundle(),
+                new Sfynx\AdminBundle\SfynxAdminBundle(),
+                new Sfynx\CmfBundle\SfynxCmfBundle(),
                 new BootStrap\MediaBundle\BootStrapMediaBundle(),
-                new BootStrap\WsBundle\BootStrapWsBundle(),
-                
-                # trades
-                new PiApp\AdminBundle\PiAppAdminBundle(),
                 new PiApp\GedmoBundle\PiAppGedmoBundle(),
-                new PiApp\TemplateBundle\PiAppTemplateBundle(),
                 
                 #override Sfynx bundles
                 new OrApp\OrAdminBundle\OrAppOrAdminBundle(),

@@ -18,8 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-use BootStrap\TranslationBundle\Model\AbstractDefault;
-use BootStrap\TranslationBundle\Annotation as PI;
+use Sfynx\CoreBundle\Model\AbstractDefault;
+use Sfynx\PositionBundle\Annotation as PI;
 
 /**
  * PiApp\GedmoBundle\Entity\Content
@@ -100,9 +100,9 @@ class Content extends AbstractDefault
     protected $content;
     
     /**
-     * @var \PiApp\AdminBundle\Entity\Page $pageurl
+     * @var \Sfynx\CmfBundle\Entity\Page $pageurl
      *
-     * @ORM\ManyToOne(targetEntity="PiApp\AdminBundle\Entity\Page")
+     * @ORM\ManyToOne(targetEntity="Sfynx\CmfBundle\Entity\Page")
      * @ORM\JoinColumn(name="page_intro_id", referencedColumnName="id", nullable=true)
      */
     protected $pageurl;    
@@ -242,7 +242,7 @@ class Content extends AbstractDefault
     /**
      * Set page url
      *
-     * @param \PiApp\AdminBundle\Entity\Page
+     * @param \Sfynx\CmfBundle\Entity\Page
      */
     public function setPageurl($pageurl)
     {
@@ -253,7 +253,7 @@ class Content extends AbstractDefault
     /**
      * Get page url
      *
-     * @return \PiApp\AdminBundle\Entity\Page
+     * @return \Sfynx\CmfBundle\Entity\Page
      */
     public function getPageurl()
     {

@@ -1,0 +1,19 @@
+{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% initJquery 'TOOL:dashboard:default' %}
+{% extends layout_nav %}
+
+{% block title %} {{ 'pi.welcome.title'|trans }} {% endblock %}
+
+{% block content %}
+
+    {% set options_dashboard = {
+             'action':'default',
+             'menu': 'default',
+             'template': getParameter('sfynx.auth.theme.layout.admin.dashboard'),
+             'locale': app.request.locale,
+             'noJs': false,
+           }
+     %}
+     {{ renderJquery('TOOL', 'dashboard', options_dashboard )|raw }}
+    
+{% endblock %}

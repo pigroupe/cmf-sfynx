@@ -1,0 +1,41 @@
+parameters:    
+    sfynx.ws.factory.class: Sfynx\WsBundle\Manager\WsFactory
+    
+    sfynx.ws.client.auth.class: Sfynx\WsBundle\Manager\Client\AuthClient
+    sfynx.ws.helper.auth.class: Sfynx\WsBundle\Helper\AuthHelper
+    sfynx.ws.twig.extension.auth.class : Sfynx\WsBundle\Extension\AuthExtension    
+    
+services:
+    #
+    # configuration of the clients
+    #       
+    sfynx.ws.client.auth:
+      class: %sfynx.ws.client.auth.class%
+      arguments: ['@service_container', 'auth']           
+      
+    #
+    # configuration of the helpers
+    #   
+    sfynx.ws.helper.auth:
+      class: %sfynx.ws.helper.auth.class%
+      arguments: ['@sfynx.ws.client.auth']
+      tags:
+             - { name: templating.helper, alias: ws_auth }             
+            
+    #
+    # configuration of the extensions
+    #         
+    sfynx.ws.twig.extension.auth:
+      class: %sfynx.ws.twig.extension.auth.class%
+      arguments: ['@sfynx.ws.helper.auth']
+      tags:
+             - { name: twig.extension }                            
+             
+    #
+    # configuration of the class factory 
+    #                 
+    sfynx.ws.factory.auth:
+      class: %sfynx.ws.factory.class%
+      arguments: ['@service_container'] 
+      calls:
+             - [ setClient, ['@sfynx.ws.client.auth'] ]             

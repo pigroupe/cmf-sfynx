@@ -1,0 +1,10 @@
+parameters:
+    sfynx.database.factory.class: Sfynx\DatabaseBundle\Manager\DatabaseFactory
+
+services:
+    #
+    # configuration of the service allowing to backup and restore database
+    # 
+    sfynx.database.factory:
+        class: %sfynx.database.factory.class%
+        arguments: ['@service_container']       

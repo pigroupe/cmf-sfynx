@@ -13,8 +13,8 @@
 namespace PiApp\GedmoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BootStrap\TranslationBundle\Controller\abstractController;
-use PiApp\AdminBundle\Exception\ControllerException;
+use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -162,7 +162,7 @@ class SliderController extends abstractController
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
 
         if (!$entity) {
-            throw ControllerException::NotFoundException('Slider');
+            throw ControllerException::NotFoundEntity('Slider');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -341,7 +341,7 @@ class SliderController extends abstractController
             $entity = $em->getRepository("PiAppGedmoBundle:Slider")->findOneByEntity($locale, $id, 'object');
 
             if (!$entity) {
-                throw ControllerException::NotFoundException('Slider');
+                throw ControllerException::NotFoundEntity('Slider');
             }
 
             try {

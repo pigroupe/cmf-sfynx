@@ -1,0 +1,44 @@
+parameters:
+    piapp.twig.extension.widget.class: Sfynx\CmfBundle\Twig\Extension\PiWidgetExtension  
+    piapp.twig.extension.seo.class: Sfynx\CmfBundle\Twig\Extension\PiSeoExtension   
+
+services:        
+    #
+    # configuration of the Twig and Template
+    #   
+    pi_app_admin.twig.loader:
+        class: %piapp.twig.loader.class%
+        arguments: ['@pi_app_admin.manager.page', '@pi_app_admin.manager.widget', '@pi_app_admin.manager.transwidget', '@pi_app_admin.manager.tree', '@pi_app_admin.manager.listener', '@pi_app_admin.manager.slider', '@pi_app_admin.manager.jqext', '@pi_app_admin.manager.search_lucene', '@twig.loader']
+        
+    pi_app_admin.twig.loader_chain:
+        class: Twig_Loader_Chain
+        arguments: [['@pi_app_admin.twig.loader','@twig.loader']]
+
+    pi_app_admin.twig:
+        class: %twig.class%
+        arguments: ['@pi_app_admin.twig.loader_chain', %twig.options%]
+        calls:
+             - [ addGlobal, ['app', '@templating.globals'] ]
+        
+    pi_app_admin.templating:
+        class: %templating.engine.twig.class%
+        arguments: ['@pi_app_admin.twig', '@templating.name_parser', '@file_locator']
+        
+    pi_app_admin.caching:
+        class: %piapp.twig.caching.class%
+        arguments: ['@pi_app_admin.twig', '@service_container']
+        
+    #
+    # configuration of the sfynx extensions
+    #         
+    pi_app_admin.twig.extension.widget:
+        class: %piapp.twig.extension.widget.class%
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.extension }   
+            
+    pi_app_admin.twig.extension.seo:
+        class: %piapp.twig.extension.seo.class%
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.extension }                     

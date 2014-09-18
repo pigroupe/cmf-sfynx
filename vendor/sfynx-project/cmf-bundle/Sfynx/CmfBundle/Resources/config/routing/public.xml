@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="public_copy_page" pattern="/copy-page">
+        <default key="_controller">SfynxCmfBundle:Frontend:copypage</default>
+        <requirement key="_method">get|post</requirement>
+    </route>    
+    
+    <route id="public_refresh_page" pattern="/refresh-page">
+        <default key="_controller">SfynxCmfBundle:Frontend:refreshpage</default>
+        <requirement key="_method">get|post</requirement>
+    </route>
+    
+    <route id="public_indexation_page" pattern="/indexation-page/{action}">
+        <default key="_controller">SfynxCmfBundle:Frontend:indexation</default>
+        <requirement key="action">archiving||delete</requirement>
+        <requirement key="_method">get|post</requirement>
+    </route>    
+
+    <route id="public_urlmanagement_page" pattern="/urlmanagement-page">
+        <default key="_controller">SfynxCmfBundle:Frontend:urlmanagement</default>
+        <requirement key="_method">get|post</requirement>
+    </route>
+    
+    <route id="public_importmanagement_widget" pattern="/importmanagement-page">
+        <default key="_controller">SfynxCmfBundle:Frontend:importmanagement</default>
+        <requirement key="_method">get|post</requirement>
+    </route>
+    
+    <route id="public_esi_apply_widget" pattern="/esi-widget-page/{method}/{serviceName}/{id}/{lang}/{params}/{server}/{key}">
+        <default key="_controller">SfynxCmfBundle:Frontend:esipage</default>
+        <requirement key="_method">get|post</requirement>
+    </route>     
+
+    <route id="public_head_file" pattern="/contentfilebytype/{filetype}/{file}">
+        <default key="_controller">SfynxCmfBundle:Frontend:contentfile</default>
+        <requirement key="filetype">css|js</requirement>
+        <requirement key="_method">GET</requirement>
+    </route>  
+ 
+    <route id="public_chained" pattern="/chained">
+        <default key="_controller">SfynxCmfBundle:Frontend:chained</default>
+        <requirement key="_method">get|post</requirement>
+    </route> 
+   
+</routes>

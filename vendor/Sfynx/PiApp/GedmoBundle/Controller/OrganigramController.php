@@ -13,8 +13,8 @@
 namespace PiApp\GedmoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BootStrap\TranslationBundle\Controller\abstractController;
-use PiApp\AdminBundle\Exception\ControllerException;
+use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -159,7 +159,7 @@ class OrganigramController extends abstractController
             $template = "show_ajax.html.twig";        
 
         if (!$entity) {
-            throw ControllerException::NotFoundException('Organigram');
+            throw ControllerException::NotFoundEntity('Organigram');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -345,7 +345,7 @@ class OrganigramController extends abstractController
             $entity = $em->getRepository("PiAppGedmoBundle:Organigram")->findNodeOr404($id, $locale, 'object');
 
             if (!$entity) {
-                throw ControllerException::NotFoundException('Organigram');
+                throw ControllerException::NotFoundEntity('Organigram');
             }
 
             try {
@@ -414,12 +414,12 @@ class OrganigramController extends abstractController
                     $tree   = $self->getContainer()->get('doctrine')->getManager()->getRepository($self->_entityName)->findOneById($node['id']);
                 
                     // define of all url images
-                    $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/piappadmin/images/icons/tree/plus.png');
-                    $UrlpathAdd    = $self->get('templating.helper.assets')->getUrl('bundles/piappadmin/images/icons/tree/add.png');
-                    $Urlpath1     = $self->get('templating.helper.assets')->getUrl('bundles/piappadmin/images/icons/tree/view.png');
-                    $Urlpath2     = $self->get('templating.helper.assets')->getUrl('bundles/piappadmin/images/icons/tree/up.png');
-                    $Urlpath3     = $self->get('templating.helper.assets')->getUrl('bundles/piappadmin/images/icons/tree/down.png');
-                    $Urlpath4     = $self->get('templating.helper.assets')->getUrl('bundles/piappadmin/images/icons/tree/remove.png');                
+                    $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
+                    $UrlpathAdd    = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
+                    $Urlpath1     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
+                    $Urlpath2     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
+                    $Urlpath3     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
+                    $Urlpath4     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');                
                 
                     $title = $tree->getTitle();
                     $title = preg_replace('/([ \t\r\n\v\f])(\d{0,3})([ \t\r\n\v\f])/i', '  ', $title);

@@ -1,9 +1,6 @@
 {% initJquery 'GRID:grid-table' %}
-{% stylesheet getParameter('pi_app_admin.admin.theme_css')~":prepend" %}
-{% if NoLayout %}
-	{% stylesheet 'bundles/piappadmin/css/layout/admin/screen.css' %}
-	{% javascript 'bundles/piappadmin/js/jquery/custom_jquery.js' %}
-	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% if app.request.query.get('NoLayout') %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
 {% else %}
 	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
 {% endif %}	
@@ -17,7 +14,7 @@
 
     {{ parent() }}
     
-	{% if NoLayout == false %}
+	{% if app.request.query.get('NoLayout') == false %}
 	<!--  start actions-box ............................................... -->
 	<div id="actions-box">
 		<a href="{{ path('admin_gedmo_block_new') }}" class="action-edit" title="{{ 'pi.grid.action.create'|trans }}">{{ 'pi.grid.action.create'|trans }}</a>
@@ -26,6 +23,7 @@
 	<!-- end actions-box........... -->
 	{% endif %}
 
+	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
 	<table id="grid_block" class="grid" >
 	    <thead>
 	        <tr>	            
@@ -43,7 +41,7 @@
 	    {% for entity in entities %}
 	        <tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_row_{{ entity.id }}'  >	
 	        	<td class="position" >{{ entity.position}}</td>
-	            <td><a href="{{ path('admin_gedmo_block_show', { 'id': entity.id, 'NoLayout': NoLayout }) }}" title="">{{ entity.id }}</a></td>	
+	            <td><a href="{{ path('admin_gedmo_block_show', { 'id': entity.id, 'NoLayout': app.request.query.get('NoLayout') }) }}" title="">{{ entity.id }}</a></td>	
 	            <td>
 	            	{{ entity.category }}
 	            </td>	            
@@ -53,8 +51,8 @@
 	            <td>{% if entity.publishedat %}{{ entity.publishedat|date('Y-m-d') }}{% endif%}</td>	
 	            <td class="enabled" width="20px">{{ entity.enabled}}</td>	
 				<td width="130px">
-					<a href="{{ path('admin_gedmo_block_show', { 'id': entity.id, 'NoLayout':NoLayout }) }}" title="{{ 'pi.grid.action.show'|trans }}" class="button-ui-show info-tooltip">{{ 'pi.grid.action.show'|trans }}</a>
-                	<a href="{{ path('admin_gedmo_block_edit', { 'id': entity.id, 'NoLayout':NoLayout }) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="button-ui-edit info-tooltip">{{ 'pi.grid.action.edit'|trans }}</a>
+					<a href="{{ path('admin_gedmo_block_show', { 'id': entity.id, 'NoLayout':NoLayout }) }}" title="{{ 'pi.grid.action.show'|trans }}" data-ui-icon="ui-icon-show" class="button-ui-icon-show info-tooltip">{{ 'pi.grid.action.show'|trans }}</a>
+                	<a href="{{ path('admin_gedmo_block_edit', { 'id': entity.id, 'NoLayout':NoLayout }) }}" title="{{ 'pi.grid.action.edit'|trans }}" data-ui-icon="ui-icon-edit" class="button-ui-icon-edit info-tooltip">{{ 'pi.grid.action.edit'|trans }}</a>
 				</td>	
 	        </tr>
 	        {% if num_line == 0 %} 
@@ -66,7 +64,11 @@
 	    {% endfor %}
 	    </tbody>
 	</table>
+	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}
+	
+{% endblock %}
 
+{% block global_script_divers_footer %}
 	{% set options_gridtabale = {'grid-name': 'grid_block', 'grid-type':'simple', 
 		    'grid-paginate':'true',
 		    'grid-LengthMenu':10,

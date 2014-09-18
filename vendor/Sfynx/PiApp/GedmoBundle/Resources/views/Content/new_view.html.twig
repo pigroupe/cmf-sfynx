@@ -1,7 +1,7 @@
 	<!-- Begin tag markup -->
 	<div id="tabs">
-        <ul><li><a href="#tabs-1" title="">{{ 'pi.form.title.default.create'|trans }}</a></li></ul>
-		{% form_theme form getParameter('pi_app_admin.layout.template.form') %}
+        {% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-header.html.twig" %}
+		{% form_theme form getParameter('sfynx.auth.theme.layout.admin.form.template') %}
 		<form class="myform" action="{{ path('admin_gedmo_content_create', {'NoLayout': NoLayout, 'category':category}) }}" method="post" {{ form_enctype(form) }} novalidate>
 		    <div id="tabs-1">
 		    	{{ form_widget(form) }}
@@ -14,6 +14,7 @@
 			    </li>
 			</ul>		    	    
 		</form>
+		{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-footer.html.twig" %}
 	</div>
 	<!-- End tag markup -->	
 	
