@@ -47,36 +47,41 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 </ul><h2>
 <a name="structure-of-the-framework" class="anchor" href="#structure-of-the-framework"><span class="octicon octicon-link"></span></a>Structure of the framework</h2>
 
-<p>The bundle has been split into 2 directories :</p>
+<p>The framework has been split into 15 bundles :</p>
 
-<p><strong>BootStrap</strong></p>
-
-<div class="highlight highlight-bash"><pre>* AclManagerBundle : A bundle which provides classes to run ACL Manager<span class="sb">`</span>s utilities <span class="k">for</span> Symfony2.
-* AdminBundle : A bundle which overload the SonataAdminBundle.
+<div class="highlight highlight-bash"><pre>* CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
+<span class="o">(</span> management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. <span class="o">)</span>
+* TemplateBundle :  A bundle which is used to stock all template of layout and others.
+* AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and <span class="nb">set </span>handlers <span class="k">for</span> login behavior, <span class="nb">logout </span>behavior and failure connection behavior
+* ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
+* CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine <span class="o">(</span>translation, tree, CRUD  generate Datatable table and multi-forms<span class="o">)</span>
 * CacheBundle : A bundle which provides classes to cache handlers <span class="o">(</span>memcache, files<span class="o">)</span>.
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor<span class="sb">`</span>s utilities to backup and restore databases. 
-* MediaBundle : A bundle which overload the SonataMediaBundle.
-* ToolBundle : A bundle which contains tool libraries and services of route and role and twig extensions
-* TranslationBundle : A bundle which provides models of classes allowing to work and develop with Gedmo translation and Gedmo tree, and a <span class="nb">command </span>to generate Sfynx bundle with a CRUD system of an entity, and annotation to encrypt fields and to manage position.
-* TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
-* UserBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and <span class="nb">set </span>handlers <span class="k">for</span> login behavior, <span class="nb">logout </span>behavior and failure connection behavior
+* AclManagerBundle : A bundle which provides classes to run ACL Manager<span class="sb">`</span>s utilities <span class="k">for</span> Symfony2.
+* BrowserBundle : A bundle which provides library to run Browscap Manager<span class="sb">`</span>s utilities and MobileDetect Manager<span class="sb">`</span>s utilities.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
-</pre></div>
-
-<p><strong>PiApp</strong></p>
-
-<div class="highlight highlight-bash"><pre>* AdminBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
-<span class="o">(</span> includes management of permissions Event, management varnish and memcache, SEO pages, a library, a library of tools, implementation of full table with DataTable, management of <span class="nb">complete </span>multi-forms with multiselect with pagination and search ajax with cropping system on the media, etc. <span class="o">)</span>
+* EncryptBundle : A bundle which provides annotations to encrypt fields
+* PositionBundle : A bundle which provides annotations to manage position of entiy rows
+* AdminBundle : A bundle which overload the SonataAdminBundle.
+* MediaBundle : A bundle which overload the SonataMediaBundle, with crop system.
+* TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
 * GedmoBundle : A bundle which is used to create a project with the CMF.
-* TemplateBundle :  A bundle which is used to stock all template of layout and others.
 </pre></div>
 
 <h2>
 <a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
 
 <ul>
-<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/PiApp/AdminBundle/Resources/doc/index.md">Example of CMF usage</a></li>
-<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/Sfynx/BootStrap/WsBundle/Resources/doc/index.md">Example of SSO usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/cmf-bundle/Sfynx/CmfBundle/Resources/doc/index.md">Example of CMF usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle/Resources/doc/index.md">Example of Auth usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/template-bundle/Sfynx/TemplateBundle/Resources/doc/index.md">Example of Template usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/core-bundle/Sfynx/CoreBundle/Resources/doc/index.md">Example of Core usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/tool-bundle/Sfynx/ToolBundle/Resources/doc/index.md">Example of Tool usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/media-bundle/Sfynx/MediaBundle/Resources/doc/index.md">Example of Media usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/EncryptBundle/Resources/doc/index.md">Example of Encrypt annotation usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/PositionBundle/Resources/doc/index.md">Example of Position annotation usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsBundle/Resources/doc/index.md">Example of Ws usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/browser-bundle/Sfynx/BrowserBundle/Resources/doc/index.md">Example of Browser usage</a></li>
 </ul><h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
@@ -129,6 +134,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
                 <span class="k">new</span> <span class="nx">BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle</span><span class="p">(),</span>             
 
                 <span class="c1"># sonata admin</span>
+                <span class="k">new</span> <span class="nx">Sonata\CoreBundle\SonataCoreBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">Sonata\AdminBundle\SonataAdminBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">Sonata\NotificationBundle\SonataNotificationBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">Sonata\EasyExtendsBundle\SonataEasyExtendsBundle</span><span class="p">(),</span>
@@ -140,26 +146,30 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 
                 <span class="c1"># tools</span>
                 <span class="k">new</span> <span class="nx">FOS\UserBundle\FOSUserBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">FOS\FacebookBundle\FOSFacebookBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">Knp\Bundle\MenuBundle\KnpMenuBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">Knp\Bundle\PaginatorBundle\KnpPaginatorBundle</span><span class="p">(),</span>  
-                <span class="k">new</span> <span class="nx">Knp\Bundle\SnappyBundle\KnpSnappyBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Knp\Bundle\SnappyBundle\KnpSnappyBundle</span><span class="p">(),</span>             
 
-                <span class="c1"># boostrap</span>
-                <span class="k">new</span> <span class="nx">BootStrap\DatabaseBundle\BootStrapDatabaseBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">BootStrap\CacheBundle\BootStrapCacheBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">BootStrap\AclManagerBundle\BootStrapAclManagerBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">BootStrap\AdminBundle\BootStrapAdminBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">BootStrap\UserBundle\BootStrapUserBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">BootStrap\TranslationBundle\BootStrapTranslationBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">BootStrap\TranslatorBundle\BootStrapTranslatorBundle</span><span class="p">(),</span>
+                <span class="c1"># Sfynx</span>
+                <span class="k">new</span> <span class="nx">Sfynx\AclManagerBundle\SfynxAclManagerBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\DatabaseBundle\SfynxDatabaseBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\WsBundle\SfynxWsBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\CacheBundle\SfynxCacheBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\ToolBundle\SfynxToolBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\CoreBundle\SfynxCoreBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\TranslatorBundle\SfynxTranslatorBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\BrowserBundle\SfynxBrowserBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\EncryptBundle\SfynxEncryptBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\PositionBundle\SfynxPositionBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\AuthBundle\SfynxAuthBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\MediaBundle\SfynxMediaBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\AdminBundle\SfynxAdminBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\CmfBundle\SfynxCmfBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\TemplateBundle\SfynxTemplateBundle</span><span class="p">(),</span>
+                <span class="k">new</span> <span class="nx">Sfynx\SmoothnessBundle\SfynxSmoothnessBundle</span><span class="p">(),</span>
+
                 <span class="k">new</span> <span class="nx">BootStrap\MediaBundle\BootStrapMediaBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">BootStrap\WsBundle\BootStrapWsBundle</span><span class="p">(),</span>
-
-                <span class="c1"># trades</span>
-                <span class="k">new</span> <span class="nx">PiApp\AdminBundle\PiAppAdminBundle</span><span class="p">(),</span>
                 <span class="k">new</span> <span class="nx">PiApp\GedmoBundle\PiAppGedmoBundle</span><span class="p">(),</span>
-                <span class="k">new</span> <span class="nx">PiApp\TemplateBundle\PiAppTemplateBundle</span><span class="p">(),</span>
 
                 <span class="c1">#override Sfynx bundles</span>
                 <span class="k">new</span> <span class="nx">OrApp\OrAdminBundle\OrAppOrAdminBundle</span><span class="p">(),</span>
@@ -183,14 +193,14 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
         <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"The \"Symfony Standard Edition\" distribution"</span><span class="p">,</span>
         <span class="nt">"repositories"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="nt">"type"</span><span class="p">:</span><span class="s2">"vcs"</span><span class="p">,</span>
+            <span class="nt">"type"</span><span class="p">:</span><span class="s2">"git"</span><span class="p">,</span>
             <span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://github.com/vincecore/BeSimpleI18nRoutingBundle.git"</span>
         <span class="p">}</span>
         <span class="p">],</span>
         <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"php"</span><span class="p">:</span> <span class="s2">"&gt;=5.3.3"</span><span class="p">,</span>
             <span class="nt">"symfony/symfony"</span><span class="p">:</span> <span class="s2">"2.2.4"</span><span class="p">,</span>
-            <span class="nt">"doctrine/orm"</span><span class="p">:</span> <span class="s2">"2.5.*@dev"</span><span class="p">,</span>
+            <span class="nt">"doctrine/orm"</span><span class="p">:</span> <span class="s2">"2.3"</span><span class="p">,</span>
             <span class="nt">"doctrine/doctrine-bundle"</span><span class="p">:</span> <span class="s2">"1.2.0"</span><span class="p">,</span>
             <span class="nt">"twig/extensions"</span><span class="p">:</span> <span class="s2">"1.0.0"</span><span class="p">,</span>
             <span class="nt">"symfony/assetic-bundle"</span><span class="p">:</span> <span class="s2">"2.1.3"</span><span class="p">,</span>
@@ -210,7 +220,6 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
             <span class="nt">"stof/doctrine-extensions-bundle"</span><span class="p">:</span> <span class="s2">"1.1.0"</span><span class="p">,</span>
 
             <span class="nt">"friendsofsymfony/user-bundle"</span><span class="p">:</span> <span class="s2">"2.0.*@dev"</span><span class="p">,</span>
-            <span class="nt">"friendsofsymfony/facebook-bundle"</span><span class="p">:</span> <span class="s2">"1.2.*"</span><span class="p">,</span>
             <span class="nt">"besimple/i18n-routing-bundle"</span><span class="p">:</span> <span class="s2">"2.2.x-dev"</span><span class="p">,</span>
 
             <span class="nt">"imagine/Imagine"</span><span class="p">:</span> <span class="s2">"*@stable"</span><span class="p">,</span>
@@ -233,9 +242,23 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
             <span class="nt">"sonata-project/jquery-bundle"</span><span class="p">:</span> <span class="s2">"1.8.*@dev"</span><span class="p">,</span>
             <span class="nt">"sonata-project/media-bundle"</span><span class="p">:</span> <span class="s2">"2.2.*@dev"</span><span class="p">,</span>
             <span class="nt">"sonata-project/notification-bundle"</span><span class="p">:</span> <span class="s2">"2.2.*@dev"</span><span class="p">,</span>
+            <span class="nt">"sonata-project/core-bundle"</span><span class="p">:</span> <span class="s2">"2.2.*@dev"</span><span class="p">,</span>
 
             <span class="nt">"excelwebzone/recaptcha-bundle"</span><span class="p">:</span> <span class="s2">"dev-master"</span>
         <span class="p">},</span>
+        <span class="nt">"require-dev"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"benjam1/symfttpd"</span><span class="p">:</span> <span class="s2">"2.1.*"</span><span class="p">,</span>
+            <span class="nt">"phpunit/phpunit"</span><span class="p">:</span> <span class="s2">"4.0.20"</span><span class="p">,</span>
+            <span class="nt">"whatthejeff/nyancat-phpunit-resultprinter"</span><span class="p">:</span> <span class="s2">"~1.2"</span><span class="p">,</span>
+            <span class="nt">"squizlabs/php_codesniffer"</span><span class="p">:</span> <span class="s2">"2.0.*@dev"</span><span class="p">,</span>
+            <span class="nt">"phpmd/phpmd"</span><span class="p">:</span> <span class="s2">"2.1.*"</span><span class="p">,</span>
+            <span class="nt">"guzzlehttp/guzzle"</span><span class="p">:</span> <span class="s2">"~4.0"</span><span class="p">,</span>
+            <span class="nt">"sebastian/phpcpd"</span><span class="p">:</span> <span class="s2">"2.0.*@dev"</span><span class="p">,</span>
+            <span class="nt">"pdepend/pdepend"</span><span class="p">:</span> <span class="s2">"2.0.*"</span><span class="p">,</span>
+            <span class="nt">"phpunit/php-invoker"</span><span class="p">:</span> <span class="s2">"dev-master"</span><span class="p">,</span>
+            <span class="nt">"phake/phake"</span><span class="p">:</span> <span class="s2">"*"</span><span class="p">,</span>
+            <span class="nt">"phing/phing"</span><span class="p">:</span> <span class="s2">"dev-master"</span><span class="p">,</span>
+        <span class="p">},</span>       
         <span class="nt">"scripts"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"post-install-cmd"</span><span class="p">:</span> <span class="p">[</span>
                 <span class="s2">"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"</span><span class="p">,</span>
@@ -253,7 +276,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
         <span class="nt">"config"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"bin-dir"</span><span class="p">:</span> <span class="s2">"bin"</span>
         <span class="p">},</span>
-        <span class="nt">"minimum-stability"</span><span class="p">:</span> <span class="s2">"dev"</span><span class="p">,</span>
+        <span class="nt">"minimum-stability"</span><span class="p">:</span> <span class="s2">"stable"</span><span class="p">,</span>
         <span class="nt">"extra"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"symfony-app-dir"</span><span class="p">:</span> <span class="s2">"app"</span><span class="p">,</span>
             <span class="nt">"symfony-web-dir"</span><span class="p">:</span> <span class="s2">"web"</span><span class="p">,</span>
@@ -266,12 +289,26 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
                 <span class="nt">"OrApp"</span> <span class="p">:</span> <span class="s2">"src"</span><span class="p">,</span>
                 <span class="nt">"PiApp"</span><span class="p">:</span> <span class="s2">"vendor/Sfynx"</span><span class="p">,</span>
                 <span class="nt">"BootStrap"</span><span class="p">:</span> <span class="s2">"vendor/Sfynx"</span><span class="p">,</span>
+                <span class="err">'Sfynx\\AclManagerBundle':</span> <span class="err">'/sfynx-project/acl-manager-bundle',</span>
+                <span class="err">'Sfynx\\DatabaseBundle':</span> <span class="err">'/sfynx-project/database-bundle',</span>
+                <span class="err">'Sfynx\\WsBundle':</span> <span class="err">'/sfynx-project/ws-bundle',</span>
+                <span class="err">'Sfynx\\TranslatorBundle':</span> <span class="err">'/sfynx-project/translator-bundle',</span>
+                <span class="err">'Sfynx\\CacheBundle':</span> <span class="err">'/sfynx-project/cache-bundle',</span>
+                <span class="err">'Sfynx\\ToolBundle':</span> <span class="err">'/sfynx-project/tool-bundle',</span>
+                <span class="err">'Sfynx\\CoreBundle':</span> <span class="err">'/sfynx-project/core-bundle',</span>
+                <span class="err">'Sfynx\\CmfBundle':</span> <span class="err">'/sfynx-project/cmf-bundle',</span>
+                <span class="err">'Sfynx\\AdminBundle':</span> <span class="err">'/sfynx-project/admin-bundle',</span>
+                <span class="err">'Sfynx\\AuthBundle':</span> <span class="err">'/sfynx-project/auth-bundle',</span>
+                <span class="err">'Sfynx\\MediaBundle':</span> <span class="err">'/sfynx-project/media-bundle',</span>
+                <span class="err">'Sfynx\\BrowserBundle':</span> <span class="err">'/sfynx-project/browser-bundle',</span>
+                <span class="err">'Sfynx\\EncryptBundle':</span> <span class="err">'/sfynx-project/annotation-bundle',</span>
+                <span class="err">'Sfynx\\PositionBundle':</span> <span class="err">'/sfynx-project/annotation-bundle',</span>
+                <span class="err">'Sfynx\\TemplateBundle':</span> <span class="err">'/sfynx-project/template-bundle',</span>
+                <span class="err">'Sfynx\\SmoothnessBundle':</span> <span class="err">'/sfynx-project/template-bundle',</span>
                 <span class="nt">"Zend_"</span><span class="p">:</span> <span class="s2">"vendor/Zend/library"</span>
             <span class="p">}</span>
         <span class="p">}</span>    
-    <span class="p">}</span>
-
-
+    <span class="p">}</span>    
 </pre></div>
 
 <h2>
@@ -344,19 +381,39 @@ configured for Symfony.</p>
 <li>Give the name "mydatabase" for example in the database and choose the type pdo_mysql to use a MySQL database.</li>
 <li>Give your user and password of your Gmail count.</li>
 <li>Change the secret code that will be used to protect your application from XSS attacks.</li>
-</ul><div class="highlight highlight-bash"><pre><span class="o">[</span>parameters<span class="o">]</span>
-    <span class="nv">database_driver</span><span class="o">=</span><span class="s2">"pdo_mysql"</span>
-    <span class="nv">database_host</span><span class="o">=</span><span class="s2">"localhost"</span>
-    <span class="nv">database_port</span><span class="o">=</span><span class="s2">""</span>
-    <span class="nv">database_name</span><span class="o">=</span><span class="s2">"mydatabase"</span>
-    <span class="nv">database_user</span><span class="o">=</span><span class="s2">"root"</span>
-    <span class="nv">database_password</span><span class="o">=</span><span class="s2">""</span>
-    <span class="nv">mailer_transport</span><span class="o">=</span><span class="s2">"gmail"</span>
-    <span class="nv">mailer_host</span><span class="o">=</span><span class="s2">""</span>
-    <span class="nv">mailer_user</span><span class="o">=</span><span class="s2">"MyUserGMAIL"</span>
-    <span class="nv">mailer_password</span><span class="o">=</span><span class="s2">"MyPswGMAIL"</span>
-    <span class="nv">locale</span><span class="o">=</span><span class="s2">"en_GB"</span>
-    <span class="nv">secret</span><span class="o">=</span><span class="s2">"5b5a0ff57bd45284dafe7f104fc7d8e15"</span>
+</ul><div class="highlight highlight-bash"><pre>parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     symfsfynx22
+    database_user:     root
+    database_password: ~
+
+    mailer_transport:  sendmail
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en_GB
+    secret:            5b5a0ff57bd45284dafe7f104fc7d8e15
+
+    <span class="c"># memcache params</span>
+    session_memcache_host: 127.0.0.1 <span class="c"># 127.0.0.1</span>
+    session_memcache_port: <span class="m">11211</span> <span class="c"># 11211</span>
+    session_memcache_prefix: sess_memcache_
+    session_memcache_expire: 864000
+    session_memcache_locking: <span class="nb">true      </span>
+<span class="nb">    </span>session_memcache_spin_lock_wait: <span class="m">150000</span>      
+
+    <span class="c">#pi_app_admin </span>
+    pi_cookie_lifetime: 604800
+    pi_session_name: <span class="s2">"PHPSESSID"</span>
+
+    <span class="c">#boot_strap_ws</span>
+    ws_key: 0A1TG4GO  
+
+    <span class="c">#esi key</span>
+    esi_key: 9eu9ghv9
 </pre></div>
 
 <h3>
