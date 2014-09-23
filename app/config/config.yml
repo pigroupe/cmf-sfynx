@@ -202,7 +202,7 @@ doctrine:
                 dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
         metadata_cache_driver: array # array|apc
         query_cache_driver: array
-#        result_cache_driver: array
+        result_cache_driver: array
 #        metadata_cache_driver:
 #            type: memcache
 #            host: localhost
@@ -215,12 +215,12 @@ doctrine:
 #            port: 11211
 #            class: Doctrine\Common\Cache\MemcacheCache
 #            instance_class: Memcache          
-        result_cache_driver:
-            type: memcache
-            host: localhost
-            port: 11211
-            class: Doctrine\Common\Cache\MemcacheCache
-            instance_class: Memcache       
+#        result_cache_driver:
+#            type: memcache
+#            host: localhost
+#            port: 11211
+#            class: Doctrine\Common\Cache\MemcacheCache
+#            instance_class: Memcache       
 
 #
 # FOSUserBundle configuration

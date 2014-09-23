@@ -106,6 +106,7 @@ Register all bundle in your `app/AppKernel.php` file:
                 new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),             
                 
                 # sonata admin
+                new Sonata\CoreBundle\SonataCoreBundle(),
                 new Sonata\AdminBundle\SonataAdminBundle(),
                 new Sonata\NotificationBundle\SonataNotificationBundle(),
                 new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
@@ -115,6 +116,12 @@ Register all bundle in your `app/AppKernel.php` file:
                 new Sonata\jQueryBundle\SonatajQueryBundle(),
                 new Sonata\MediaBundle\SonataMediaBundle(),             
 
+                # tools
+                new FOS\UserBundle\FOSUserBundle(),
+                new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+                new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),  
+                new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),             
+
                 # Sfynx
                 new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
                 new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
@@ -123,13 +130,16 @@ Register all bundle in your `app/AppKernel.php` file:
                 new Sfynx\ToolBundle\SfynxToolBundle(),
                 new Sfynx\CoreBundle\SfynxCoreBundle(),
                 new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
-                new Sfynx\TemplateBundle\SfynxTemplateBundle(),
                 new Sfynx\BrowserBundle\SfynxBrowserBundle(),
                 new Sfynx\EncryptBundle\SfynxEncryptBundle(),
                 new Sfynx\PositionBundle\SfynxPositionBundle(),
                 new Sfynx\AuthBundle\SfynxAuthBundle(),
+                new Sfynx\MediaBundle\SfynxMediaBundle(),
                 new Sfynx\AdminBundle\SfynxAdminBundle(),
                 new Sfynx\CmfBundle\SfynxCmfBundle(),
+                new Sfynx\TemplateBundle\SfynxTemplateBundle(),
+                new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
+                
                 new BootStrap\MediaBundle\BootStrapMediaBundle(),
                 new PiApp\GedmoBundle\PiAppGedmoBundle(),
                 
@@ -143,7 +153,6 @@ Register all bundle in your `app/AppKernel.php` file:
         );
         
 ```
-
 ## composer.json
 
 ``` json
@@ -155,14 +164,14 @@ Register all bundle in your `app/AppKernel.php` file:
         "description": "The \"Symfony Standard Edition\" distribution",
         "repositories": [
         {
-            "type":"vcs",
+            "type":"git",
             "url":"https://github.com/vincecore/BeSimpleI18nRoutingBundle.git"
         }
         ],
         "require": {
             "php": ">=5.3.3",
             "symfony/symfony": "2.2.4",
-            "doctrine/orm": "2.5.*@dev",
+            "doctrine/orm": "2.3",
             "doctrine/doctrine-bundle": "1.2.0",
             "twig/extensions": "1.0.0",
             "symfony/assetic-bundle": "2.1.3",
@@ -182,7 +191,6 @@ Register all bundle in your `app/AppKernel.php` file:
             "stof/doctrine-extensions-bundle": "1.1.0",
             
             "friendsofsymfony/user-bundle": "2.0.*@dev",
-            "friendsofsymfony/facebook-bundle": "1.2.*",
             "besimple/i18n-routing-bundle": "2.2.x-dev",
             
             "imagine/Imagine": "*@stable",
@@ -205,9 +213,23 @@ Register all bundle in your `app/AppKernel.php` file:
             "sonata-project/jquery-bundle": "1.8.*@dev",
             "sonata-project/media-bundle": "2.2.*@dev",
             "sonata-project/notification-bundle": "2.2.*@dev",
+            "sonata-project/core-bundle": "2.2.*@dev",
             
             "excelwebzone/recaptcha-bundle": "dev-master"
         },
+        "require-dev": {
+            "benjam1/symfttpd": "2.1.*",
+            "phpunit/phpunit": "4.0.20",
+            "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
+            "squizlabs/php_codesniffer": "2.0.*@dev",
+            "phpmd/phpmd": "2.1.*",
+            "guzzlehttp/guzzle": "~4.0",
+            "sebastian/phpcpd": "2.0.*@dev",
+            "pdepend/pdepend": "2.0.*",
+            "phpunit/php-invoker": "dev-master",
+            "phake/phake": "*",
+            "phing/phing": "dev-master",
+        },       
         "scripts": {
             "post-install-cmd": [
                 "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
@@ -225,7 +247,7 @@ Register all bundle in your `app/AppKernel.php` file:
         "config": {
             "bin-dir": "bin"
         },
-        "minimum-stability": "dev",
+        "minimum-stability": "stable",
         "extra": {
             "symfony-app-dir": "app",
             "symfony-web-dir": "web",
@@ -238,12 +260,26 @@ Register all bundle in your `app/AppKernel.php` file:
                 "OrApp" : "src",
                 "PiApp": "vendor/Sfynx",
                 "BootStrap": "vendor/Sfynx",
+                'Sfynx\\AclManagerBundle': '/sfynx-project/acl-manager-bundle',
+                'Sfynx\\DatabaseBundle': '/sfynx-project/database-bundle',
+                'Sfynx\\WsBundle': '/sfynx-project/ws-bundle',
+                'Sfynx\\TranslatorBundle': '/sfynx-project/translator-bundle',
+                'Sfynx\\CacheBundle': '/sfynx-project/cache-bundle',
+                'Sfynx\\ToolBundle': '/sfynx-project/tool-bundle',
+                'Sfynx\\CoreBundle': '/sfynx-project/core-bundle',
+                'Sfynx\\CmfBundle': '/sfynx-project/cmf-bundle',
+                'Sfynx\\AdminBundle': '/sfynx-project/admin-bundle',
+                'Sfynx\\AuthBundle': '/sfynx-project/auth-bundle',
+                'Sfynx\\MediaBundle': '/sfynx-project/media-bundle',
+                'Sfynx\\BrowserBundle': '/sfynx-project/browser-bundle',
+                'Sfynx\\EncryptBundle': '/sfynx-project/annotation-bundle',
+                'Sfynx\\PositionBundle': '/sfynx-project/annotation-bundle',
+                'Sfynx\\TemplateBundle': '/sfynx-project/template-bundle',
+                'Sfynx\\SmoothnessBundle': '/sfynx-project/template-bundle',
                 "Zend_": "vendor/Zend/library"
             }
         }    
-    }
-
-    
+    }    
 ```
 
 ## Installation
@@ -299,19 +335,39 @@ To use Doctrine, you will need to have installed PDO. And you must have installe
 * Change the secret code that will be used to protect your application from XSS attacks.
 
 ``` bash
-[parameters]
-    database_driver="pdo_mysql"
-    database_host="localhost"
-    database_port=""
-    database_name="mydatabase"
-    database_user="root"
-    database_password=""
-    mailer_transport="gmail"
-    mailer_host=""
-    mailer_user="MyUserGMAIL"
-    mailer_password="MyPswGMAIL"
-    locale="en_GB"
-    secret="5b5a0ff57bd45284dafe7f104fc7d8e15"
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     symfsfynx22
+    database_user:     root
+    database_password: ~
+
+    mailer_transport:  sendmail
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en_GB
+    secret:            5b5a0ff57bd45284dafe7f104fc7d8e15
+    
+    # memcache params
+    session_memcache_host: 127.0.0.1 # 127.0.0.1
+    session_memcache_port: 11211 # 11211
+    session_memcache_prefix: sess_memcache_
+    session_memcache_expire: 864000
+    session_memcache_locking: true      
+    session_memcache_spin_lock_wait: 150000      
+
+    #pi_app_admin 
+    pi_cookie_lifetime: 604800
+    pi_session_name: "PHPSESSID"
+    
+    #boot_strap_ws
+    ws_key: 0A1TG4GO  
+    
+    #esi key
+    esi_key: 9eu9ghv9
 ```
 
 ### Step 2: Setting up Permissions

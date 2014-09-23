@@ -63,7 +63,7 @@
         "phpunit/phpunit": "4.0.20",
         "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
         "squizlabs/php_codesniffer": "2.0.*@dev",
-        "phpmd/phpmd": "dev-master",
+        "phpmd/phpmd": "2.1.*",
         "guzzlehttp/guzzle": "~4.0",
         "sebastian/phpcpd": "2.0.*@dev",
         "pdepend/pdepend": "2.0.*",
@@ -117,7 +117,6 @@
             'Sfynx\\PositionBundle': '/sfynx-project/annotation-bundle',
             'Sfynx\\TemplateBundle': '/sfynx-project/template-bundle',
             'Sfynx\\SmoothnessBundle': '/sfynx-project/template-bundle',
-            'Sfynx\\FlatlabBundle': '/sfynx-project/template-bundle',
             "Zend_": "vendor/Zend/library"
         }
     }    
