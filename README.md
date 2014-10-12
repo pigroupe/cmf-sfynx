@@ -21,6 +21,7 @@ The framework has been split into 15 bundles :
 * CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
 ( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )
 * TemplateBundle :  A bundle which is used to stock all template of layout and others.
+* SmoothnessBundle: A bundle which is used to define a complet admin template with all layers
 * AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
 * ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
 * CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
@@ -139,7 +140,6 @@ Register all bundle in your `app/AppKernel.php` file:
                 new Sfynx\CmfBundle\SfynxCmfBundle(),
                 new Sfynx\TemplateBundle\SfynxTemplateBundle(),
                 new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
-                new Sfynx\FlatlabBundle\SfynxFlatlabBundle(),
                 
                 new BootStrap\MediaBundle\BootStrapMediaBundle(),
                 new PiApp\GedmoBundle\PiAppGedmoBundle(),
@@ -285,7 +285,6 @@ Register all bundle in your `app/AppKernel.php` file:
                 'Sfynx\\PositionBundle': '/sfynx-project/annotation-bundle',
                 'Sfynx\\TemplateBundle': '/sfynx-project/template-bundle',
                 'Sfynx\\SmoothnessBundle': '/sfynx-project/template-bundle',
-                'Sfynx\\FlatlabBundle': '/sfynx-project/template-bundle',            
                 "Zend_": "vendor/Zend/library"
             }
         }    
