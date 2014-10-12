@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\DependencyInjection\Compiler;
+namespace OrApp\OrCmfBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -26,7 +26,7 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('bootstrap.user.login_handler');
-        $definition->setClass('OrApp\OrAdminBundle\EventListener\HandlerLogin');    
+        $definition = $container->getDefinition('sfynx.auth.login_handler');
+        $definition->setClass('OrApp\OrCmfBundle\EventListener\HandlerLogin');    
     }
 }

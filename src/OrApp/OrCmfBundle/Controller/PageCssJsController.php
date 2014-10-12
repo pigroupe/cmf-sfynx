@@ -10,17 +10,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\TagController as baseTagController;
+use Sfynx\CmfBundle\Controller\PageCssJsController as basePageCssJsController;
 
 /**
- * Tag controller.
+ * PageByTrans controller.
  * 
  * @category   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class TagController extends baseTagController
+class PageCssJsController extends basePageCssJsController
 {}

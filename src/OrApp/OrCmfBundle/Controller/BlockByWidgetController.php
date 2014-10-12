@@ -5,23 +5,23 @@
  * @category   Admin_Controllers
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-03
+ * @since 2012-01-01
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\FrontendController as baseFrontendController;
-
+use Sfynx\CmfBundle\Controller\BlockByWidgetController as baseBlockByWidgetController;
 
 /**
- * Frontend controller.
- *
+ * BlockByWidget controller.
+ * 
  * @category   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class FrontendController extends baseFrontendController
-{}
+class BlockByWidgetController extends baseBlockByWidgetController
+{
+}

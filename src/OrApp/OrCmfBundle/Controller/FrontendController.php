@@ -10,18 +10,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\LayoutController as baseLayoutController;
+use Sfynx\CmfBundle\Controller\FrontendController as baseFrontendController;
+
 
 /**
- * Layout controller.
- * 
+ * Frontend controller.
+ *
  * @category   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class LayoutController extends baseLayoutController
-{
-}
+class FrontendController extends baseFrontendController
+{}

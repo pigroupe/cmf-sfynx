@@ -1,6 +1,6 @@
 <?php
 
-namespace OrApp\OrAdminBundle\DependencyInjection;
+namespace OrApp\OrCmfBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <OrCmf> project.
  *
  * @category   Dispatcher
  * @package    Event
@@ -10,22 +10,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\EventListener;
+namespace OrApp\OrCmfBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-use BootStrap\UserBundle\Event\ResponseEvent;
+use Sfynx\AuthBundle\Event\RedirectionEvent;
 
 /**
- * Response handler of user connection.
+ * Redirection handler of connection user.
  *
  * @category   Admin_Eventlistener
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class DispatcherLoginResponse
+class DispatcherLoginRedirection
 {
    /**
     * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -49,12 +49,9 @@ class DispatcherLoginResponse
     *
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
-   public function onPiLoginChangeResponse(ResponseEvent $event)
+   public function onPiLoginChangeRedirection(RedirectionEvent $event)
    {
-       $response = $event->getResponse();
-       //$response->setTargetUrl('http://www.pi-groupe.fr');
-       $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('PI-Application', 'Sfynx/2.2', $event->getDateExpire()));
-       $event->setResponse($response);
+       $event->setRouteName($event->getRouteName());
    }
 
 }

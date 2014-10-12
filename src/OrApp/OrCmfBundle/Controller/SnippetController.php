@@ -10,9 +10,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\WidgetController as baseWidgetController;
+use Sfynx\CmfBundle\Controller\SnippetController as baseSnippetController;
 
 /**
  * Widget controller.
@@ -22,5 +22,5 @@ use PiApp\AdminBundle\Controller\WidgetController as baseWidgetController;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class WidgetController extends baseWidgetController
+class SnippetController extends baseSnippetController
 {}

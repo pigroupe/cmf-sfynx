@@ -10,17 +10,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\PageCssJsController as basePageCssJsController;
+use Sfynx\CmfBundle\Controller\PageByBlockController as basePageByBlockController;
 
 /**
- * PageByTrans controller.
+ * PageByBlock controller.
  * 
  * @category   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class PageCssJsController extends basePageCssJsController
-{}
+class PageByBlockController extends basePageByBlockController
+{
+}

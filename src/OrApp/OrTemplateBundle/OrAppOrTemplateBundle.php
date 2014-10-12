@@ -13,7 +13,7 @@ class OrAppOrTemplateBundle extends Bundle
      */
     public function getParent()
     {
-        return 'PiAppTemplateBundle';
+        return 'SfynxTemplateBundle';
     }    
     
     /**

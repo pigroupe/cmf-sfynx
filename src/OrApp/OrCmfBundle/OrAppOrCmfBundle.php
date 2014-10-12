@@ -1,12 +1,12 @@
 <?php
 
-namespace OrApp\OrAdminBundle;
+namespace OrApp\OrCmfBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use OrApp\OrAdminBundle\DependencyInjection\Compiler\OverrideServiceCompilerPass;
+use OrApp\OrCmfBundle\DependencyInjection\Compiler\OverrideServiceCompilerPass;
 
-class OrAppOrAdminBundle extends Bundle
+class OrAppOrCmfBundle extends Bundle
 {
     
      /**
@@ -14,7 +14,7 @@ class OrAppOrAdminBundle extends Bundle
      */
     public function getParent()
     {
-        return 'PiAppAdminBundle';
+        return 'SfynxCmfBundle';
     }
     
     /**

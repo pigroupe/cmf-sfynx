@@ -1,9 +1,9 @@
 parameters:
-    oradmin.admin.handler.login.dispatcher.changeredirection.class: OrApp\OrAdminBundle\EventListener\DispatcherLoginRedirection
-    oradmin.admin.handler.login.dispatcher.changeresponse.class: OrApp\OrAdminBundle\EventListener\DispatcherLoginResponse
-    oradmin.admin.handler.logout.dispatcher.changeresponse.class: OrApp\OrAdminBundle\EventListener\DispatcherLogoutResponse
+    oradmin.admin.handler.login.dispatcher.changeredirection.class: OrApp\OrCmfBundle\EventListener\DispatcherLoginRedirection
+    oradmin.admin.handler.login.dispatcher.changeresponse.class: OrApp\OrCmfBundle\EventListener\DispatcherLoginResponse
+    oradmin.admin.handler.logout.dispatcher.changeresponse.class: OrApp\OrCmfBundle\EventListener\DispatcherLogoutResponse
     
-    oradmin.admin.handler.login.class: OrApp\OrAdminBundle\EventListener\HandlerLogin
+    oradmin.admin.handler.login.class: OrApp\OrCmfBundle\EventListener\HandlerLogin
 
 services:
     #

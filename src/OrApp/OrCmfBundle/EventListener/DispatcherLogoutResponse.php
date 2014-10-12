@@ -10,12 +10,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\EventListener;
+namespace OrApp\OrCmfBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-use BootStrap\UserBundle\Event\ResponseEvent;
+use Sfynx\AuthBundle\Event\ResponseEvent;
 
 /**
  * Response handler of user deconnection

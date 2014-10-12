@@ -5,22 +5,22 @@
  * @category   Admin_Controllers
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-03
+ * @since 2012-02-10
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\TranslationPageController as baseTranslationPageController;
+use Sfynx\CmfBundle\Controller\WidgetController as baseWidgetController;
 
 /**
- * TranslationPage controller.
+ * Widget controller.
  * 
  * @category   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class TranslationPageController extends baseTranslationPageController
+class WidgetController extends baseWidgetController
 {}

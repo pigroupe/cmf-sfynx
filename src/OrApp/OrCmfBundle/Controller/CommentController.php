@@ -10,17 +10,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\PageByTransController as basePageByTransController;
+use Sfynx\CmfBundle\Controller\CommentController as baseCommentController;
 
 /**
- * PageByTrans controller.
+ * Comment controller.
  * 
  * @category   Admin_Controllers
  * @package    Controller
- *
+ * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class PageByTransController extends basePageByTransController
-{}
+class CommentController extends baseCommentController
+{
+}

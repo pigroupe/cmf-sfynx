@@ -5,23 +5,23 @@
  * @category   Admin_Controllers
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-01
+ * @since 2012-01-03
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\BlockByWidgetController as baseBlockByWidgetController;
+use Sfynx\CmfBundle\Controller\KeyWordController as baseKeyWordController;
 
 /**
- * BlockByWidget controller.
+ * KeyWord controller.
  * 
  * @category   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class BlockByWidgetController extends baseBlockByWidgetController
+class KeyWordController extends baseKeyWordController
 {
 }

@@ -10,17 +10,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\RubriqueController as baseRubriqueController;
+use Sfynx\CmfBundle\Controller\TagController as baseTagController;
 
 /**
- * Rubrique controller.
+ * Tag controller.
  * 
  * @category   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class RubriqueController extends baseRubriqueController
+class TagController extends baseTagController
 {}

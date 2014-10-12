@@ -10,18 +10,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace OrApp\OrAdminBundle\Controller;
+namespace OrApp\OrCmfBundle\Controller;
 
-use PiApp\AdminBundle\Controller\CommentController as baseCommentController;
+use Sfynx\CmfBundle\Controller\RubriqueController as baseRubriqueController;
 
 /**
- * Comment controller.
+ * Rubrique controller.
  * 
  * @category   Admin_Controllers
  * @package    Controller
- * 
+ *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class CommentController extends baseCommentController
-{
-}
+class RubriqueController extends baseRubriqueController
+{}
