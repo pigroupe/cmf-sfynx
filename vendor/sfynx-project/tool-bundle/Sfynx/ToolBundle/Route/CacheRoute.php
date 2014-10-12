@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Route
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-27
@@ -24,7 +24,7 @@ use Symfony\Component\Config\ConfigCache;
 /**
  * route cache management.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Route
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

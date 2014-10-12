@@ -3,7 +3,7 @@
  * This file is part of the <web service> project.
  *
  * @uses WsFactoryInterface
- * @category WS
+ * @subpackage WS
  * @package Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -21,7 +21,7 @@ use Sfynx\WsBundle\Builder\WsClientInterface;
  * Client factory.
  * 
  * @uses WsFactoryInterface
- * @category WS
+ * @subpackage WS
  * @package Manager
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

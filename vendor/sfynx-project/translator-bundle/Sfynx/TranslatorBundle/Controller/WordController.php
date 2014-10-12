@@ -3,7 +3,7 @@
  * This file is part of the <Translator> project.
  * 
  * @uses abstractController
- * @category   Translator
+ * @subpackage   Translator
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
@@ -34,7 +34,7 @@ use Sfynx\TranslatorBundle\Entity\Translation\WordTranslation;
  * Word controller.
  *
  * @uses abstractController
- * @category   Translator
+ * @subpackage   Translator
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

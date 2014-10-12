@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Position> project.
  *
- * @category   Position
+ * @subpackage   Position
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @category   Position
+ * @subpackage   Position
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Controllers
+ * @subpackage   Admin_Controllers
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -31,7 +31,7 @@ use Sfynx\CmfBundle\Form\TagType;
 /**
  * Tag controller.
  * 
- * @category   Admin_Controllers
+ * @subpackage   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

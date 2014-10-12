@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-07-31

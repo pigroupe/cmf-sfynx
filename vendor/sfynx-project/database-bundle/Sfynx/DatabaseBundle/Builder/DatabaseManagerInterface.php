@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Database> project.
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-02
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * DatabaseManagerInterface interface.
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

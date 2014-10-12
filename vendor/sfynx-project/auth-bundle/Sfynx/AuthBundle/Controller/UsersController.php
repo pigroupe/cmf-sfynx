@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
@@ -37,7 +37,7 @@ use Symfony\Component\Form\FormError;
 /**
  * Users controller.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

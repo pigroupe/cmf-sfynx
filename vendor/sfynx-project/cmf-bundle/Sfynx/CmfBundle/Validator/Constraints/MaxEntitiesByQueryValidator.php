@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Validators
+ * @subpackage   Admin_Validators
  * @package    Validator
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-02-21
@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   protected $highlighted2;
  * <code>
  * 
- * @category   Admin_Validators
+ * @subpackage   Admin_Validators
  * @package    Validator
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

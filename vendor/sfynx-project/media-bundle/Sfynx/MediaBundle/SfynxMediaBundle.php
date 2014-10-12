@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
@@ -18,7 +18,7 @@ use Sfynx\MediaBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
 /**
  * BootStrap configuration and managment of the user Bundle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

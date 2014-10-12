@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-29
@@ -21,7 +21,7 @@ use Sfynx\ToolBundle\Exception\ServiceException;
 /**
  * PiwidgetimportManager Jquery 
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

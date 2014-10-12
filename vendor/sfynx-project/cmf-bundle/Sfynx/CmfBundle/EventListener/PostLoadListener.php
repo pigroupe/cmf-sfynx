@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-27
@@ -22,7 +22,7 @@ use Sfynx\CmfBundle\EventListener\CoreListener;
  * The postLoad event occurs for an entity after the entity has been loaded into the 
  * current EntityManager from the database or after the refresh operation has been applied to it.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

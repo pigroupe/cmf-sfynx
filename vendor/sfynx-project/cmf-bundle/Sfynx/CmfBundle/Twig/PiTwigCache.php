@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   TwigCacheLoader
+ * @subpackage   TwigCacheLoader
  * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-12
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Twig cache config.
  *
- * @category   TwigCacheLoader
+ * @subpackage   TwigCacheLoader
  * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

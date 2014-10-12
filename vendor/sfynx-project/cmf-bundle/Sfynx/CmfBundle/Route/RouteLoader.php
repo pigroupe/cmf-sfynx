@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Route
+ * @subpackage   Route
  * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-27
@@ -25,7 +25,7 @@ use Sfynx\CmfBundle\Route\DoctrineRoute;
 /**
  * route page management.
  *
- * @category   Route
+ * @subpackage   Route
  * @package    Tool
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

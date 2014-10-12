@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cache> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the cache clients
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

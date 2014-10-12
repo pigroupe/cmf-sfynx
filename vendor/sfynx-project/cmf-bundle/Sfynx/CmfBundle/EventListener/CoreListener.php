@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-30
@@ -31,7 +31,7 @@ use Sfynx\CmfBundle\Manager\SearchLucene\Indexation;
  * abstract listener manager.
  * This event is called after an entity is constructed by the EntityManager.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @abstract
  *

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -21,7 +21,7 @@ use Sfynx\CmfBundle\Manager\PiPageManager;
 /**
  * Organigramm of all pages according to the section with DHTMLGOODIES Tree plugin.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

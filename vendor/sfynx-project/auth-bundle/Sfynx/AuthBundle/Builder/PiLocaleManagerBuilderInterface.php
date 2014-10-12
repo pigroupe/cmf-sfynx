@@ -2,7 +2,7 @@
 /**
  * This Locale is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -15,7 +15,7 @@ namespace Sfynx\AuthBundle\Builder;
 /**
  * PiLocaleManagerBuilderInterface interface.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -3,7 +3,7 @@
  * This file is part of the <Database> project.
  *
  * @uses DatabaseManagerInterface
- * @category   DB
+ * @subpackage   DB
  * @package    Manager
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -24,7 +24,7 @@ use Sfynx\DatabaseBundle\Exception\DatabaseException;
  * Database factory for backup database.
  *
  * @uses DatabaseManagerInterface
- * @category   DB
+ * @subpackage   DB
  * @package    Manager
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

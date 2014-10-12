@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @since 2012-01-03
  *
@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Controller managing the resetting of the password
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Christophe Coevoet <stof@notk.org>
@@ -66,11 +66,9 @@ class ResettingController extends ContainerAware
             $response = new JsonResponse();
             if (null === $user) {
                 return $response->setData(json_encode(array('text'=> 'Identifiant inconnu', 'error' => true, 'type' => 'unknown' )));
-            }
-            else if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl')) && $type == 'send') {
+            } else if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl')) && $type == 'send') {
                 return $response->setData(json_encode(array('text'=> 'Vous devez au préalable activer votre compte en cliquant sur le mail de Confirmation d\'inscription reçu', 'error' => true, 'type' => '24h' )));
-            }
-            else {
+            } else {
                 $tokenGenerator = $this->container->get('fos_user.util.token_generator');
                 $user->setConfirmationToken($tokenGenerator->generateToken());
                 $em = $this->container->get('doctrine')->getManager();
@@ -85,8 +83,7 @@ class ResettingController extends ContainerAware
                 return $response->setData(json_encode(array('text'=> 'Un email vous a été envoyé pour créer un nouveau mot de passe sur le site', 'error' => false)));
             }
 
-        }
-        else {
+        } else {
             if (null === $user) {
                 return $this->container->get('templating')->renderResponse($template, array('invalid_username' => $username));
             }
@@ -103,7 +100,6 @@ class ResettingController extends ContainerAware
             $this->sendResettingEmailMessage($user, $routereset);
             $user->setPasswordRequestedAt(new \DateTime());
             $this->container->get('fos_user.user_manager')->updateUser($user);
-
             try {
                 return $this->container->get('templating')->renderResponse(str_replace('::', ':', $this->container->getParameter('sfynx.auth.theme.login')).'Resetting:request.html.twig', array('success' => true));
             } catch (\Exception $e) {

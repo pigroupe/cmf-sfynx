@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Script
+ * @subpackage   Script
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -17,7 +17,7 @@ use Sfynx\ToolBundle\Twig\Node\StyleSheetNode;
 /**
  * StyleSheet Token Parser.
  *
- * @category   Script
+ * @subpackage   Script
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

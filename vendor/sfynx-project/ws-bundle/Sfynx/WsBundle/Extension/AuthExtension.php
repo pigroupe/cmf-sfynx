@@ -2,7 +2,7 @@
 /**
  * This file is part of the <web service> project.
  *
- * @category WS
+ * @subpackage WS
  * @package Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -17,7 +17,7 @@ use Sfynx\WsBundle\Helper\AuthHelper;
 /**
  * Authentication Extension
  *
- * @category WS
+ * @subpackage WS
  * @package Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

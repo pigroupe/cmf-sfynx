@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-30
@@ -26,7 +26,7 @@ use Sfynx\AuthBundle\Repository\RoleRepository;
  * @ORM\Entity(repositoryClass="Sfynx\AuthBundle\Repository\RoleRepository")
  * @ORM\HasLifecycleCallbacks() 
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

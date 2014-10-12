@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-27
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * route cache management.
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

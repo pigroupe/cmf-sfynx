@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Template> project.
  *
- * @category   Template
+ * @subpackage   Template
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @category   Template
+ * @subpackage   Template
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-29
@@ -23,7 +23,7 @@ use Sfynx\CmfBundle\Entity\TranslationPage;
 /**
  * Active the context menu of the admin.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

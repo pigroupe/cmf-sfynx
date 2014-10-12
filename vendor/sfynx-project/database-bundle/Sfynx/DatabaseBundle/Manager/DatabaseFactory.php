@@ -3,7 +3,7 @@
  * This file is part of the <Database> project.
  * 
  * @uses DatabaseFactoryInterface
- * @category   DB
+ * @subpackage   DB
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-03
@@ -42,7 +42,7 @@ use Sfynx\DatabaseBundle\Builder\DatabaseFactoryInterface;
  * Database factory for backup, restore, ... database.
  * 
  * @uses DatabaseFactoryInterface
- * @category   DB
+ * @subpackage   DB
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

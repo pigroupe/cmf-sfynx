@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-23
@@ -27,7 +27,7 @@ use Sfynx\CmfBundle\Entity\TranslationWidget;
 /**
  * Description of the Page manager
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * @abstract
  * 

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Database> project.
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Command
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-01
@@ -26,7 +26,7 @@ use Symfony\Component\Console\Input\InputOption;
  *         php app/console sfynx:database:backup app/cache/Backup doctrine_backup_database-default.sql
  * </code>
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Command
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

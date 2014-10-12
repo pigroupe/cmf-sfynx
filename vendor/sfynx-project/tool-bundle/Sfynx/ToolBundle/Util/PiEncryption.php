@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  *     {{ obfuscateLinkJS('iframe','hiddenLinkIframe')|raw }}
  * </code>
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

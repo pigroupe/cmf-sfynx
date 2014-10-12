@@ -2,7 +2,7 @@
 /**
  * This file is part of the <WS> project.
  *
- * @category   WS
+ * @subpackage   WS
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -15,7 +15,7 @@ namespace Sfynx\WsBundle\Builder;
 /**
  * WS Client Interface.
  *
- * @category   WS
+ * @subpackage   WS
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

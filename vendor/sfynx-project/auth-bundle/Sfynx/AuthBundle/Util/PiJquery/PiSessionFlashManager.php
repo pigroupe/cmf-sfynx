@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -20,7 +20,7 @@ use Sfynx\ToolBundle\Exception\ExtensionException;
 /**
  * Session flash Jquery plugin
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

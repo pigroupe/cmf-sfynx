@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  * 
- * @category   Type
+ * @subpackage   Type
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-11-17
@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Security Permissions
  *
- * @category   Type
+ * @subpackage   Type
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -15,7 +15,6 @@ namespace Sfynx\AuthBundle\Controller;
 use Sfynx\AuthBundle\Controller\abstractController;
 use Sfynx\ToolBundle\Exception\ControllerException;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,7 +33,7 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
 /**
  * Frontend controller.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
@@ -79,8 +78,8 @@ class FrontendController extends abstractController
     public function setLocalAction($langue = '')
     {
         // It tries to redirect to the original page.
-        $new_url = $this->container->get('sfynx.tool.route.factory')->getRefererRoute($langue, null, true);
-        $response = new RedirectResponse($new_url, 302);
+        $referer  = $this->container->get('sfynx.tool.route.factory')->getRefererRoute($langue, null, true);
+        $response = $this->redirect($referer);
         // we get params
         $this->date_expire    = $this->container->getParameter('sfynx.core.cookies.date_expire');
         $this->date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');        
@@ -113,9 +112,9 @@ class FrontendController extends abstractController
     	if ($this->getRequest()->cookies->has('sfynx-redirection')) {
     		$parameters   = array();
     		$redirection  = $this->getRequest()->cookies->get('sfynx-redirection');
-    		$response     = new RedirectResponse($this->container->get('sfynx.tool.route.factory')->getRoute($redirection, $parameters));
+    		$response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute($redirection, $parameters));
     	} else {
-    		$response     = new RedirectResponse($this->container->get('sfynx.tool.route.factory')->getRoute('home_page'));
+    		$response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute('home_page'));
     	}
     	 
     	return $response;
@@ -136,7 +135,7 @@ class FrontendController extends abstractController
         	$response->headers->set('Content-Type', 'application/json');
         } else {
             // we create the redirection request.
-            $response     = new RedirectResponse($this->container->get('sfynx.tool.route.factory')->getRoute('fos_user_security_login'));
+            $response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute('fos_user_security_login'));
        		// we apply all events allowed to change the redirection response
        		$event_response = new ResponseEvent($response);
        		$this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_FAILURE, $event_response);

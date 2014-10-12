@@ -2,7 +2,7 @@
 /**
  * This file is part of the <web service> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

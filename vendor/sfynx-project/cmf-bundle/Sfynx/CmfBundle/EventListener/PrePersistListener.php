@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-27
@@ -22,7 +22,7 @@ use Sfynx\CmfBundle\EventListener\CoreListener;
  * The prePersist event occurs for a given entity before the respective EntityManager
  * persist operation for that entity is executed.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

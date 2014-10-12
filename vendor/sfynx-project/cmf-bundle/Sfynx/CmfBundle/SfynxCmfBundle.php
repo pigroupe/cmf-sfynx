@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
@@ -20,7 +20,7 @@ use Sfynx\CmfBundle\DependencyInjection\Compiler\AddDependencyRoute;
 /**
  * CMF managment Bundle.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

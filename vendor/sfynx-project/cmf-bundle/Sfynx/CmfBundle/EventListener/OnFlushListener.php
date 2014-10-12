@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-27
@@ -21,7 +21,7 @@ use Sfynx\CmfBundle\EventListener\CoreListener;
  * The onFlush event occurs after the change-sets of all managed entities are computed.
  * This event is not a lifecycle callback.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Handler
- * @package    EventListerner
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-25
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Authentication
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,10 +28,15 @@ use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 /**
  * Custom logout handler.
  *
- * @category   Handler
- * @package    EventListerner
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Authentication
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerAuthentication implements AuthenticationSuccessHandlerInterface 
 {
@@ -38,7 +48,7 @@ class HandlerAuthentication implements AuthenticationSuccessHandlerInterface
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    private $container;
+    protected $container;
     
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -48,24 +58,24 @@ class HandlerAuthentication implements AuthenticationSuccessHandlerInterface
     /**
      * Constructs a new instance of SecurityListener.
      * 
-     * @param Router $router The router
-     * @param ContainerInterface $container The service container
+     * @param ContainerInterface $container The container service
+     * @param Doctrine           $doctrine  The doctrine service
      */
     public function __construct(ContainerInterface $container, Doctrine $doctrine)
     {
-    	$this->router        = $container->get('sfynx.tool.route.factory');
-    	$this->container     = $container;
-    	$this->em            = $doctrine->getManager();
+    	$this->router    = $container->get('sfynx.tool.route.factory');
+    	$this->container = $container;
+    	$this->em        = $doctrine->getManager();
     }
     
     /**
      * We deal with the case where the connection is limited to a set of roles (ajax or not ajax connection).
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @return Response
+     * @param Request        $request The request service
+     * @param TokenInterface $token   The token class
      * 
+     * @access public
+     * @return Response
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)

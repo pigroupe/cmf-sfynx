@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   BootStrap_Repositories
+ * @subpackage   BootStrap_Repositories
  * @package    Repository
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-09
@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\Collection;
 /**
  * Proxy Translator
  *
- * @category   BootStrap_Repositories
+ * @subpackage   BootStrap_Repositories
  * @package    Repository
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

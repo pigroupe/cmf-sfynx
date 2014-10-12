@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Entities
+ * @subpackage   Admin_Entities
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Sfynx\CmfBundle\Repository\HistoricalStatusRepository")
  * @ORM\HasLifecycleCallbacks
  * 
- * @category   Admin_Entities
+ * @subpackage   Admin_Entities
  * @package    Entity
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

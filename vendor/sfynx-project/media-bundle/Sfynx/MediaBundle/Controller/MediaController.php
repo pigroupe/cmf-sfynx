@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-08-23
@@ -31,7 +31,7 @@ use Sfynx\MediaBundle\Entity\Translation\MediaTranslation;
  * Media controller.
  *
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

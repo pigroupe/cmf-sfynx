@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Widget
+ * @subpackage   Widget
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-10
@@ -15,7 +15,7 @@ namespace Sfynx\CmfBundle\Twig\Node;
 /**
  * StyleSheetJquery Node.
  *
- * @category   Widget
+ * @subpackage   Widget
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Database> project.
  *
- * @category   Cache
+ * @subpackage   Cache
  * @package    Command
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-01
@@ -27,7 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  *   php app/console sfynx:cacheclient:stats --debug
  * </code>
  *
- * @category   Cache
+ * @subpackage   Cache
  * @package    Command 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

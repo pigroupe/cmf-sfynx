@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Command
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-01
@@ -25,7 +25,7 @@ use Symfony\Component\Console\Input\InputOption;
  *         php app/console sfynx:routes:parse
  * </code>
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Command
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

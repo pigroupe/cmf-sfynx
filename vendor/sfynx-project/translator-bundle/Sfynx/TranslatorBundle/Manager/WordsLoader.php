@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Sfynx_Manager
+ * @subpackage   Sfynx_Manager
  * @package    translator
  * @author Riad HELLAL <hellal.riad@gmail.com>
  * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -20,7 +20,7 @@ use Symfony\Component\Translation\MessageCatalogue;
 /**
  * Words translator management.
  *
- * @category   Sfynx_Manager
+ * @subpackage   Sfynx_Manager
  * @package    translator
  * @author Riad HELLAL <hellal.riad@gmail.com>
  * @author etienne de Longeaux <etienne.delongeaux@gmail.com>

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Twig
+ * @subpackage   Admin_Twig
  * @package    Loader
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -24,7 +24,7 @@ use Sfynx\CmfBundle\Builder\PiSearchLuceneManagerBuilderInterface;
 /**
  * Loads a template from a repository.
  *
- * @category   Admin_Twig
+ * @subpackage   Admin_Twig
  * @package    Loader
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   User
+ * @subpackage   User
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-02
@@ -15,7 +15,7 @@ namespace Sfynx\AuthBundle\Builder;
 /**
  * RepositoryBuilderInterface interface.
  *
- * @category   User
+ * @subpackage   User
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

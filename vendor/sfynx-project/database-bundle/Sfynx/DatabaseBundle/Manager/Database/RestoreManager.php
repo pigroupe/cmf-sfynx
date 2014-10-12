@@ -3,7 +3,7 @@
  * This file is part of the <Database> project.
  *
  * @uses AbstractManager
- * @category   DB
+ * @subpackage   DB
  * @package    Manage
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-03
@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Database factory for backup database.
  *
  * @uses AbstractManager
- * @category   DB
+ * @subpackage   DB
  * @package    Manage
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

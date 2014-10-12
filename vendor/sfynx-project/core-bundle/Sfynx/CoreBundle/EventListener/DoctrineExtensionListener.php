@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-09
@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Translation listener manager.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

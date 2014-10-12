@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin
+ * @subpackage   Admin
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -21,7 +21,7 @@ use Sfynx\CmfBundle\Twig\TokenParser\StyleSheetWidgetTokenParser;
 /**
  * Widget Matrix used in twig
  *
- * @category   Admin
+ * @subpackage   Admin
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

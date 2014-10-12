@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    Command
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-08
@@ -23,7 +23,7 @@ use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCrudCommand as BaseGen
  *         php app/console sfynx:generate:crud
  * </code>
  * 
- * @category   Core
+ * @subpackage   Core
  * @package    Command
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

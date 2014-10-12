@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Translator
+ * @subpackage   Translator
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @category   Translator
+ * @subpackage   Translator
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

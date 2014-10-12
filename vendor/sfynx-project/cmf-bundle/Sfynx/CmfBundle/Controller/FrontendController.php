@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Controllers
+ * @subpackage   Admin_Controllers
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -30,7 +30,7 @@ use Sfynx\CmfBundle\Entity\Page as Page;
 /**
  * Frontend controller.
  *
- * @category   Admin_Controllers
+ * @subpackage   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -47,6 +47,7 @@ class FrontendController extends CmfabstractController
      */
     public function pageAction()
     {
+        // we get the route name of the page
         $route   = $this->container->get('request')->get('route_name');
         // we get the page manager
         $pageManager      = $this->get('pi_app_admin.manager.page');

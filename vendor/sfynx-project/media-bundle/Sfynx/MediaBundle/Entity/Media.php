@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-07-31
@@ -29,7 +29,7 @@ use Sfynx\PositionBundle\Annotation as PI;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\TranslationEntity(class="Sfynx\MediaBundle\Entity\Translation\MediaTranslation")
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Entity
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

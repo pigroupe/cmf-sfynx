@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Form
+ * @subpackage   Admin_Form
  * @package    CMS_Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-07
@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Description of the RubriqueType form.
  *
- * @category   Admin_Form
+ * @subpackage   Admin_Form
  * @package    CMS_Form
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

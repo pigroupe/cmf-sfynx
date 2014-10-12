@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * abstract listener manager.
  * This event is called after an entity is constructed by the EntityManager.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

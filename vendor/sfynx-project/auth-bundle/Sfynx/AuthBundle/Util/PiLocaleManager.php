@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     $fileFormatter    = $this-container->get('sfynx.Auth.locale_manager');
  * </code>
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-11-28
@@ -20,7 +20,7 @@ use Sfynx\AuthBundle\Repository\PermissionRepository;
  * @ORM\Entity
  * @ORM\Table(name="fos_group")
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

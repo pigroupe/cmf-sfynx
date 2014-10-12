@@ -3,7 +3,7 @@
 /**
  * This file is part of the <Encrypt> project.
  *
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -16,7 +16,7 @@ namespace Sfynx\EncryptBundle\Builder;
 /**
  * PiEncryptorInterface interface.
  *
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

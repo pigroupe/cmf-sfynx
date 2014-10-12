@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translation> project.
  *
- * @category   Translation_Util
+ * @subpackage   Translation_Util
  * @package    Extension_jquery 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-01
@@ -20,7 +20,7 @@ use Sfynx\ToolBundle\Exception\ExtensionException;
 /**
  * GridTable Jquery plugin
  *
- * @category   Translation_Util
+ * @subpackage   Translation_Util
  * @package    Extension_jquery 
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

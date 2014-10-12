@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -20,7 +20,7 @@ use Sfynx\CmfBundle\Manager\PiLuceneManager;
 /**
  * Search lucene of all pages.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

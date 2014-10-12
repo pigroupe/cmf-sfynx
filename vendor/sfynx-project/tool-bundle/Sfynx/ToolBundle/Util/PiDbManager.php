@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-11-14
@@ -19,7 +19,7 @@ use Sfynx\ToolBundle\Route\AbstractFactory;
 /**
  * Instance Db
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

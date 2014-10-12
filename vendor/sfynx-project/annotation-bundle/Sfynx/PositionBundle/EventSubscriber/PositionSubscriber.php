@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Position> project.
  *
- * @category   Position
+ * @subpackage   Position
  * @package    EventSubscriber 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-10-08
@@ -25,7 +25,7 @@ use Sfynx\CoreBundle\EventListener\abstractListener;
 /**
  * Position Subscriber.
  *
- * @category   Position
+ * @subpackage   Position
  * @package    EventSubscriber 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

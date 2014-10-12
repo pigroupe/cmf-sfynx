@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Template> project.
  *
- * @category   Extension
+ * @subpackage   Extension
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-09
@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\Options;
 /**
  *  LabelField Extension
  *
- * @category   Extension
+ * @subpackage   Extension
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

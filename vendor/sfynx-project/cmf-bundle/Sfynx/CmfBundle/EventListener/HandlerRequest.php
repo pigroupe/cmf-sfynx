@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Handler
- * @package    EventListener
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-25
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Request
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,10 +35,15 @@ use Sfynx\CmfBundle\SfynxCmfEvents;
  * Custom request handler.
  * Register the mobile/desktop format.
  *
- * @category   Handler
- * @package    EventListener
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Request
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerRequest
 {
@@ -65,8 +75,9 @@ class HandlerRequest
     /**
      * Invoked to modify the controller that should be executed.
      *
-     * @param FilterControllerEvent $event The event
-     *
+     * @param GetResponseEvent $event The event
+     * 
+     * @return null
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelRequest(GetResponseEvent $event)
@@ -111,9 +122,8 @@ class HandlerRequest
     /**
      * Sets parameter template values.
      *
-     * @return void
      * @access protected
-     *
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setParams()
@@ -143,9 +153,8 @@ class HandlerRequest
     /**
      * Sets the good home_page
      *
-     * @return void
      * @access protected
-     *
+     * @return false|RedirectResponse
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isPrefixLocale()
@@ -171,9 +180,8 @@ class HandlerRequest
     /**
      * Sets the SEO url valule if is a old url.
      *
-     * @return void
      * @access protected
-     *
+     * @return false|RedirectResponse
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isSEOUrl()
@@ -238,15 +246,20 @@ class HandlerRequest
     /**
      * Sets the SEO url valule if is a old url.
      *
-     * @return void
      * @access protected
-     *
+     * @return false|RedirectResponse
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isNoScope()
     {
         $locale   = $this->request->getLocale();
-        if ( $this->is_scop_authorized && $this->container->has("sfynx.browser.lib.mobiledetect") && $this->container->has("sfynx.browser.lib.browscap")) {
+        if (
+            $this->is_scop_authorized 
+            && 
+            $this->container->has("sfynx.browser.lib.mobiledetect") 
+            && 
+            $this->container->has("sfynx.browser.lib.browscap")
+        ) {
             // we get the browser
             \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($this->browscap_cache_dir, 0777);
             if ($this->request->attributes->has('sfynx-browser')) {

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   User
+ * @subpackage   User
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-23
@@ -15,7 +15,7 @@ namespace Sfynx\AuthBundle\Builder;
 /**
  * RoleFactory interface.
  *
- * @category   User
+ * @subpackage   User
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

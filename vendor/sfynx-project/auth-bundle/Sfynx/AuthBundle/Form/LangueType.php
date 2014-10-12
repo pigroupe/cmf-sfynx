@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-07
@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Description of the LangueType form.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

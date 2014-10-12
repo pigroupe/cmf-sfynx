@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * BootStrap configuration and managment of the translation Bundle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

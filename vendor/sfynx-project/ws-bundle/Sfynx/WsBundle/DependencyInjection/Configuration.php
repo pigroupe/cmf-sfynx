@@ -2,7 +2,7 @@
 /**
  * This file is part of the <web service> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -19,7 +19,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-09-20
@@ -15,7 +15,7 @@ namespace Sfynx\ToolBundle\Builder;
 /**
  * PiRegexManagerBuilderInterface interface.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

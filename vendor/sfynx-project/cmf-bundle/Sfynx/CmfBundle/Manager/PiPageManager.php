@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-23
@@ -27,7 +27,7 @@ use Sfynx\CmfBundle\Entity\Widget;
 /**
  * Description of the Page manager
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -63,6 +63,21 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      */
     public function render($lang = '', $isSetPage = false)
     {
+        // we disable the handler
+        $em     = $this->container->get('doctrine')->getManager();
+        $eventManager = $em->getEventManager();
+        $eventManager->removeEventListener(
+        		array('kernel.request'),
+        		$this->container->get('sfynx.auth.locale_handler')
+        );
+        $eventManager->removeEventListener(
+        		array('kernel.request'),
+        		$this->container->get('sfynx.auth.request_handler')
+        );
+        $eventManager->removeEventListener(
+        		array('kernel.request'),
+        		$this->container->get('pi_app_admin.request_handler')
+        );
         // we set the langue
         if (empty($lang))    $lang = $this->language;
         // Initialize page

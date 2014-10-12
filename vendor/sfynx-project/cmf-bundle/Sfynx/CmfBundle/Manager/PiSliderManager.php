@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-04-25
@@ -22,7 +22,7 @@ use Sfynx\CmfBundle\Entity\Widget;
 /**
  * Description of the slider Widget manager
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
@@ -20,7 +20,7 @@ use Sfynx\CmfBundle\Entity\KeyWord;
 /**
  * KeyWords DataFixtures.
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controllerr
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-24
@@ -23,7 +23,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 /**
  * Frontend controller.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

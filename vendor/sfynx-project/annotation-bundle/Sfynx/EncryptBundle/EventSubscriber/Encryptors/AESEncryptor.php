@@ -3,7 +3,7 @@
  * This file is part of the <Encrypt> project.
  * 
  * @uses PiEncryptorInterface
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    EventSubscriber 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -19,7 +19,7 @@ use Sfynx\EncryptBundle\Builder\PiEncryptorInterface;
  * Class for AES encryption
  * 
  * @uses PiEncryptorInterface
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    EventSubscriber 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

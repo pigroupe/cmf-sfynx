@@ -2,7 +2,7 @@
 /**
  * This file is part of the <web service> project.
  *
- * @category   WS
+ * @subpackage   WS
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -15,7 +15,7 @@ namespace Sfynx\WsBundle\Exception;
 /**
  * Exception
  *
- * @category   WS
+ * @subpackage   WS
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

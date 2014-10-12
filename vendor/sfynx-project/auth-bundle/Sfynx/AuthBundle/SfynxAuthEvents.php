@@ -3,7 +3,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Const
+ * @subpackage   Const
  * @package    Event
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-07-23

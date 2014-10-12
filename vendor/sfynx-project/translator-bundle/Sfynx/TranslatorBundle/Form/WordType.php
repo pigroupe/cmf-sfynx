@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Translator_Form
+ * @subpackage   Translator_Form
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
@@ -21,7 +21,7 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Description of the WordType form.
  *
- * @category   Translator_Form
+ * @subpackage   Translator_Form
  * @package    Form
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

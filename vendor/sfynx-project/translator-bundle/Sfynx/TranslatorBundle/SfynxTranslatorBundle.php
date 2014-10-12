@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the translor Bundle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

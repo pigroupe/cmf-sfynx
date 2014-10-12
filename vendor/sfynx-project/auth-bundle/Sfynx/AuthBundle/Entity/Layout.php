@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
@@ -24,7 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("name")
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

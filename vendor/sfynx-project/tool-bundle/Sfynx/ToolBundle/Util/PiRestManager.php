@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -30,7 +30,7 @@ use Sfynx\ToolBundle\Builder\PiRestManagerInterface;
  * $rest->setUrl('http://api.socloz.com/v2/shop/id/11.xml')->delete();
  * </code>
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

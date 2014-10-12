@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Handler
- * @package    EventListener
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-25
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Request
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,10 +35,15 @@ use Sfynx\CmfBundle\SfynxCmfEvents;
  * Custom request handler.
  * Register the mobile/desktop format.
  *
- * @category   Handler
- * @package    EventListener
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Request
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerRequest
 {
@@ -66,7 +76,9 @@ class HandlerRequest
      * Invoked to modify the controller that should be executed.
      *
      * @param FilterControllerEvent $event The event
-     *
+     * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelRequest(GetResponseEvent $event)
@@ -132,9 +144,8 @@ class HandlerRequest
     /**
      * Sets parameter template values.
      *
-     * @return void
      * @access protected
-     *
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setParams()

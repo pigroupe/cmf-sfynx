@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Eventlistener
+ * @subpackage   Admin_Eventlistener
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-27
@@ -22,7 +22,7 @@ use Sfynx\CmfBundle\EventListener\CoreListener;
  * The loadClassMetadata event occurs after the mapping metadata for a class has been loaded
  * from a mapping source (annotations/xml/yaml).
  * 
- * @category   Admin_Eventlistener
+ * @subpackage   Admin_Eventlistener
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

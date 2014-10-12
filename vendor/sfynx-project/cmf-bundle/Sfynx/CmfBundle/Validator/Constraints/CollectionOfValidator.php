@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Validators
+ * @subpackage   Admin_Validators
  * @package    Validator
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-24
@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  *   protected $users;
  * <code>
  * 
- * @category   Admin_Validators
+ * @subpackage   Admin_Validators
  * @package    Validator
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

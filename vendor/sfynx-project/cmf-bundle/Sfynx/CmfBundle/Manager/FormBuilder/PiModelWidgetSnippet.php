@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    FormBuilder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-26
@@ -21,7 +21,7 @@ use Sfynx\CmfBundle\Twig\Extension\PiWidgetExtension;
 /**
 * Description of the Form builder manager
 *
-* @category   Admin_Managers
+ * @subpackage   Admin_Managers
 * @package    FormBuilder
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

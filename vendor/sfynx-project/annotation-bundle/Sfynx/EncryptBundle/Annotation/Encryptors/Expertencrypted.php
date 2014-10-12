@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Encrypt> project.
  *
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    Annotation
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -19,7 +19,7 @@ namespace Sfynx\EncryptBundle\Annotation\Encryptors;
  *     @PI\Expertencrypted
  * </code>
  *
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    Annotation
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @Annotation

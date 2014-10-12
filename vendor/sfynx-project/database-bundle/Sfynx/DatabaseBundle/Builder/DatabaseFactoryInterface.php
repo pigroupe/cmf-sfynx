@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Database> project.
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -15,7 +15,7 @@ namespace Sfynx\DatabaseBundle\Builder;
 /**
  * DatabaseFactoryInterface interface.
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-11
@@ -21,7 +21,7 @@ use Sfynx\CmfBundle\Manager\SearchLucene\Indexation;
 /**
  * Description of the search lucnene manager
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

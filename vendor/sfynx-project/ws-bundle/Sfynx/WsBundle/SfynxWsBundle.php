@@ -2,7 +2,7 @@
 /**
  * This file is part of the <WS> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the Webservice Bundle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

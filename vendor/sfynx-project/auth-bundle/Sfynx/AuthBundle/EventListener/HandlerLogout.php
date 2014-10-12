@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Handler
- * @package    EventListerner
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-25
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Authentication
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,15 +30,20 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
 /**
  * Custom logout handler.
  *
- * @category   Handler
- * @package    EventListerner
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Authentication
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerLogout implements LogoutSuccessHandlerInterface 
 {
 	/**
-	 * @var \Symfony\Component\Routing\Router $router
+	 * @var \Symfony\Component\Routing\Router
 	 */
 	protected $router;
 		
@@ -53,20 +63,20 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     protected $redirection = '';    
     
     /**
-     * @var \Symfony\Component\HttpFoundation\Request $request
+     * @var \Symfony\Component\HttpFoundation\Request
      */
     protected $request;    
     
     /**
-     * @var $layout
+     * @var string
      */
     protected $layout;    
     
     /**
      * Constructs a new instance of SecurityListener.
      * 
-     * @param Router $router The router
-     * @param ContainerInterface $container The service container
+     * @param ContainerInterface $container The container service
+     * @param Doctrine           $doctrine  The doctrine service
      */
     public function __construct(ContainerInterface $container, Doctrine $doctrine)
     {
@@ -76,10 +86,12 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     }
     
     /**
-     *
-     * @param \Symfony\Component\HttpFoundation\Request Request
-     * @return RedirectResponse
+     * Invoked after a successful logout.
      * 
+     * @param Request $request The request service
+     * 
+     * @access public
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function onLogoutSuccess(Request $request)
@@ -90,15 +102,14 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
         // Sets init.
         $this->setValues();   
         // set redirection
-        return $this->Redirection();  
+        return $this->redirection();  
     }    
     
     /**
      * Sets values.
      *
-     * @return void
      * @access protected
-     *
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setValues()
@@ -119,10 +130,11 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     /**
      * Set logout redirection value in order to the role deconnected user
      *
-     * @param FilterResponseEvent $event The event
+     * @access protected
+     * @return RedirectResponse
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function Redirection()
+    protected function redirection()
     {
     	if (!empty($this->redirection)) {
     		$response = new RedirectResponse($this->router->getRoute($this->redirection));

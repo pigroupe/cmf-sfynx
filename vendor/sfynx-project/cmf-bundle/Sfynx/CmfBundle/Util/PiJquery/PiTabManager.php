@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-29
@@ -20,7 +20,7 @@ use Sfynx\ToolBundle\Exception\ExtensionException;
 /**
  * Tab jquery ui
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

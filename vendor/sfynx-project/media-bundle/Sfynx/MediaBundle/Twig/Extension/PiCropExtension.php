@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -19,7 +19,7 @@ use Sfynx\ToolBundle\Exception\ServiceException;
 /**
  * Tool Filters and Functions used in twig
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

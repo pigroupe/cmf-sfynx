@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -22,7 +22,7 @@ use Sfynx\CmfBundle\Manager\PiTreeManager;
 /**
  * Semantique tree of all pages according to the section.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Jquery
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

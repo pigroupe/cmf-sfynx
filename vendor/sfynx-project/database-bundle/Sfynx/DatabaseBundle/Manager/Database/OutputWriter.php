@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Database> project.
  *
- * @category   DB
+ * @subpackage   DB
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-03
@@ -15,7 +15,7 @@ namespace Sfynx\DatabaseBundle\Manager\Database;
 /**
  * Simple class for outputting information.
  *
- * @category   DB
+ * @subpackage   DB
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

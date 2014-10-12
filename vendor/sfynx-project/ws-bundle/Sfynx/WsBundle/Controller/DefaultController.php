@@ -2,7 +2,7 @@
 /**
  * This file is part of the <WS> project.
  *
- * @category   WS
+ * @subpackage   WS
  * @package    Controller
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -28,7 +28,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 /**
  * This controller is made for define all webservices.
  * 
- * @category   WS
+ * @subpackage   WS
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

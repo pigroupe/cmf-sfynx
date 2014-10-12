@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-09-20
@@ -22,7 +22,7 @@ use Sfynx\ToolBundle\Builder\PiRegexManagerBuilderInterface;
  *  $result            = $RegexFormatter->LimiteCaractere($text, '0', 25); // obtains a datetime instance
  * </code>
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -3,7 +3,7 @@
  * This file is part of the <web service> project.
  *
  * @uses WsClientInterface
- * @category WS
+ * @subpackage WS
  * @package Manager
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -21,7 +21,7 @@ use Sfynx\WsBundle\Exception\ClientException;
  * Abstract class of all WS client.
  *
  * @uses WsClientInterface
- * @category WS
+ * @subpackage WS
  * @package Manager
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

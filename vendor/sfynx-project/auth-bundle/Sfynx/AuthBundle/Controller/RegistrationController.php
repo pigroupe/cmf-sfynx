@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @since 2012-01-03
  *
@@ -27,7 +27,7 @@ use FOS\UserBundle\Model\UserInterface;
 /**
  * Controller managing the registration
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Christophe Coevoet <stof@notk.org>

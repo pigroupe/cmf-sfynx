@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
- * @package    EventListener
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-04-18
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Request
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,13 +26,22 @@ use Symfony\Component\HttpKernel\HttpKernel;
 /**
  * Custom locale handler.
  *
- * @category   Auth
- * @package    EventListener
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Request
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerLocale
 {
-   private $defaultLocale;
+    /**
+     * @var string
+     */    
+   protected $defaultLocale;
    
    /**
     * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -37,7 +51,8 @@ class HandlerLocale
    /**
     * Constructor.
     *
-    * @param string $defaultLocale	Locale value
+    * @param string             $defaultLocale	Locale value
+    * @param ContainerInterface $container      The container service
     */   
    public function __construct($defaultLocale = 'en', ContainerInterface $container)
    {
@@ -48,8 +63,10 @@ class HandlerLocale
    /**
     * Invoked to modify the controller that should be executed.
     *
-    * @param FilterControllerEvent $event The event
-    *
+    * @param GetResponseEvent $event The event
+    * 
+    * @access public
+    * @return null|void
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
    public function onKernelRequest(GetResponseEvent $event)
@@ -83,6 +100,7 @@ class HandlerLocale
            $this->request->setLocale($localevalue);
            $_GET['_locale'] = $localevalue;
        } else {
+           $this->request->attributes->set('_locale', $this->defaultLocale);
            $this->request->setLocale($this->defaultLocale);
            $_GET['_locale'] = $this->defaultLocale;   
        }

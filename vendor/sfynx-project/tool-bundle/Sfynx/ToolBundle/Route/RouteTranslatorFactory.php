@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Route
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-03
@@ -26,7 +26,7 @@ use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
 /**
  * route factory.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Route
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

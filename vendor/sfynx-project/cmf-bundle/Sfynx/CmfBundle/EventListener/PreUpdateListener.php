@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-27
@@ -22,7 +22,7 @@ use Sfynx\CmfBundle\EventListener\CoreListener;
  * The preUpdate event occurs before the database update operations to entity data.
  * It is not called for a DQL UPDATE statement.
  *
- * @category   Entity
+ * @subpackage   Entity
  * @package    EventListener
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

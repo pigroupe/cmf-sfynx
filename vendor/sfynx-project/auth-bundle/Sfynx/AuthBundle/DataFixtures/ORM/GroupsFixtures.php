@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Authentication
+ * @subpackage   Authentication
  * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
@@ -20,7 +20,7 @@ use Sfynx\AuthBundle\Entity\Group;
 /**
  * Groups DataFixtures.
  *
- * @category   Authentication
+ * @subpackage   Authentication
  * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -20,7 +20,7 @@ use Sfynx\ToolBundle\Exception\ExtensionException;
 /**
  * Configuration service of the CMF system
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This Locale is part of the <Admin> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-02-05
@@ -15,7 +15,7 @@ namespace Sfynx\ToolBundle\Builder;
 /**
  * PiMailerManagerBuilderInterface interface.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

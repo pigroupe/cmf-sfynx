@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Handler
+ * @category   EventListener
  * @package    Handler
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-25
+ * @subpackage Authentication
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -38,25 +43,30 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  * Custom login handler.
  * This allow you to execute code right after the user succefully logs in.
  * 
- * @category   Handler
- * @package    EventListerner
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Authentication
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerLogin
 {
     /**
-     * @var \Sfynx\ToolBundle\Route\RouteTranslatorFactory $router
+     * @var \Sfynx\ToolBundle\Route\RouteTranslatorFactory
      */
     protected $router;
         
     /** 
-     * @var \Symfony\Component\Security\Core\SecurityContext $security
+     * @var \Symfony\Component\Security\Core\SecurityContext
      */
     protected $security;
     
     /**
-     * @var \Symfony\Component\EventDispatcher\Event\EventDispatcher $dispatcher
+     * @var \Symfony\Component\EventDispatcher\Event\EventDispatcher
      */
     protected $dispatcher;    
 
@@ -76,32 +86,32 @@ class HandlerLogin
     protected $container;    
     
     /**
-     * @var $redirect        route name of the login redirection
+     * @var string $redirect route name of the login redirection
      */    
     protected $redirect = "";
     
     /**
-     * @var $template        layout file name
+     * @var string $template layout file name
      */    
     protected $template = "";
     
     /**
-     * @var $layout
+     * @var string
      */
     protected $layout;
     
     /**
-     * @var $locale
+     * @var string
      */
     protected $locale;  
     
     /**
      * Constructs a new instance of SecurityListener.
      * 
-     * @param SecurityContext $security The security context
-     * @param EventDispatcher $dispatcher The event dispatcher
-     * @param Doctrine        $doctrine
-     * @param Container        $container
+     * @param SecurityContext    $security   The security context
+     * @param EventDispatcher    $dispatcher The event dispatcher
+     * @param Doctrine           $doctrine   The doctrine service
+     * @param ContainerInterface $container  The container service
      */
     public function __construct(SecurityContext $security, EventDispatcher $dispatcher, Doctrine $doctrine, ContainerInterface $container)
     {
@@ -117,6 +127,8 @@ class HandlerLogin
      * 
      * @param InteractiveLoginEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent  $event)
@@ -139,6 +151,8 @@ class HandlerLogin
      *
      * @param FilterResponseEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function onKernelResponse(FilterResponseEvent $event)
@@ -222,6 +236,8 @@ class HandlerLogin
      *
      * @param FilterControllerEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelController(FilterControllerEvent $event)
@@ -240,6 +256,8 @@ class HandlerLogin
      *
      * @param FilterControllerEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelView(GetResponseForControllerResultEvent $event)
@@ -256,6 +274,8 @@ class HandlerLogin
      *
      * @param FilterControllerEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelException(GetResponseForExceptionEvent $event)
@@ -273,9 +293,8 @@ class HandlerLogin
     /**
      * Sets the state of the redirection.
      *
-     * @return void
      * @access protected
-     *
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setParams()
@@ -326,9 +345,8 @@ class HandlerLogin
     /**
      * Sets the user local value.
      *
-     * @return void
      * @access protected
-     *
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setLocaleUser()
@@ -344,9 +362,8 @@ class HandlerLogin
     /**
      * Return the request object.
      *
-     * @return \Symfony\Component\HttpFoundation\Request
      * @access protected
-     *
+     * @return \Symfony\Component\HttpFoundation\Request
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     protected function getRequest()
@@ -357,9 +374,8 @@ class HandlerLogin
     /**
      * Return the connected user entity object.
      *
-     * @return \Sfynx\AuthBundle\Entity\user
      * @access protected
-     *
+     * @return \Sfynx\AuthBundle\Entity\user
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     protected function getUser()
@@ -370,9 +386,8 @@ class HandlerLogin
     /**
      * Gets the flash bag.
      *
-     * @return \Symfony\Component\HttpFoundation\Session\Flash\FlashBag
      * @access protected
-     *
+     * @return \Symfony\Component\HttpFoundation\Session\Flash\FlashBag
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getFlashBag()
@@ -383,9 +398,8 @@ class HandlerLogin
     /**
      * Sets the welcome flash message.
      *
-     * @return void
      * @access protected
-     *
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     protected function setFlash()

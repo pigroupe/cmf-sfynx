@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Dispatcher
+ * @subpackage   Dispatcher
  * @package    Event
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-07-26
@@ -20,7 +20,7 @@ use Sfynx\AuthBundle\Event\ResponseEvent;
 /**
  * Response handler of login failure connection
  *
- * @category   Dispatcher
+ * @subpackage   Dispatcher
  * @package    Event
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

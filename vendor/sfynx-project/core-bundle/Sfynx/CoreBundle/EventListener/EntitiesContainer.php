@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-02-08
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Persist Entities listener manager.
  * This event is called after an entity is constructed by the EntityManager.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    EventListener
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

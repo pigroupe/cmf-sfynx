@@ -3,7 +3,7 @@
  * This file is part of the <Cache> project.
  * 
  * @uses SessionHandlerInterface
- * @category   Handler
+ * @subpackage   Handler
  * @package    Session
  * @since 2012-02-23
  *
@@ -19,7 +19,7 @@ namespace Sfynx\CacheBundle\Session\Storage\Handler;
  * provided by the PHP memcached extension with added locking support.
  *
  * @uses SessionHandlerInterface
- * @category   Handler
+ * @subpackage   Handler
  * @package    Session
  * @see http://php.net/memcached
  * @author Maurits van der Schee <m.vanderschee@leaseweb.com>

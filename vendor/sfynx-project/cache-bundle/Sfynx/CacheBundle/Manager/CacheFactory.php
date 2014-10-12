@@ -3,7 +3,7 @@
  * This file is part of the <Cache> project.
  * 
  * @uses CacheInterface
- * @category   Cache
+ * @subpackage   Cache
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-03
@@ -20,7 +20,7 @@ use Sfynx\CacheBundle\Builder\CacheClientInterface;
  * cache factory.
  *
  * @uses CacheInterface
- * @category   Cache
+ * @subpackage   Cache
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

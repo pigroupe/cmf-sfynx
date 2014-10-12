@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-02-10
@@ -15,7 +15,7 @@ namespace Sfynx\ToolBundle\Exception;
 /**
  * Extension Exception
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

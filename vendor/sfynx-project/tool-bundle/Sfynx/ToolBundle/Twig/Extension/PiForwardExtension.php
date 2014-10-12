@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * Action Functions used in twig
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

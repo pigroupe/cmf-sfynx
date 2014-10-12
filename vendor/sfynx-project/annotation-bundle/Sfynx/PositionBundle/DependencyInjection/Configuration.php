@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Position> project.
  *
- * @category   Position
+ * @subpackage   Position
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -21,7 +21,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  * 
- * @category   Position
+ * @subpackage   Position
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

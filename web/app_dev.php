@@ -11,6 +11,19 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 /*
  $loader = new ApcClassLoader('sf2', $loader);
 $loader->register(true);
+//apc_clear_cache();
+//
+//# clear user cache
+//apc_clear_cache('user');
+//
+//# clear opcode cache
+//apc_clear_cache('opcode'); 
+//
+//# clear sf2 cache
+//apc_clear_cache('sf2'); 
+//
+//var_dump(realpath_cache_get());
+//exit;
 */
 
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line

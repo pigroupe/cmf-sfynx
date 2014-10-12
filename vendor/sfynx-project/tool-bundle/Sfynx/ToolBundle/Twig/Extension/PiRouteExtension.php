@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Routing Functions used in twig
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

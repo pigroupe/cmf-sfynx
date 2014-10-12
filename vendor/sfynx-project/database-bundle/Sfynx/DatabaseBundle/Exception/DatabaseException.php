@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Database> project.
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-01-30
@@ -15,7 +15,7 @@ namespace Sfynx\DatabaseBundle\Exception;
 /**
  * Database Exception
  *
- * @category   Database
+ * @subpackage   Database
  * @package    Exception
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

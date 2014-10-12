@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Jquery
+ * @subpackage   Jquery
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -15,7 +15,7 @@ namespace Sfynx\ToolBundle\Twig\Node;
 /**
  * StyleSheetJquery Node.
  *
- * @category   Jquery
+ * @subpackage   Jquery
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

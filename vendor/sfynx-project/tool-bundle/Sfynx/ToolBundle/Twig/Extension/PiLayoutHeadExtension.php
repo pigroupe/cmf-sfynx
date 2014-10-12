@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -23,7 +23,7 @@ use Sfynx\ToolBundle\Twig\TokenParser\JavascriptTokenParser;
  * stylesheet and javascript tags used in twig
  * This extension lets you save the CSS and JS files with tags.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Extension
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

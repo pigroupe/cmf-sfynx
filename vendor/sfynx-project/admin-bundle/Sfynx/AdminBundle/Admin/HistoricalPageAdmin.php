@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    sonataCRUD
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-09
@@ -25,7 +25,7 @@ use FOS\UserBundle\Model\UserManagerInterface;
 /**
  * HistoricalPage Sonata Admin Controle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    sonataCRUD
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

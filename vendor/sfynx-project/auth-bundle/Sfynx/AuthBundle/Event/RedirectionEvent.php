@@ -3,7 +3,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Object
+ * @subpackage   Object
  * @package    Event
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-07-23
@@ -19,7 +19,7 @@ use Sfynx\ToolBundle\Builder\RouteTranslatorFactoryInterface;
 /**
  * Redirection event of connection user.
  *
- * @category   Object
+ * @subpackage   Object
  * @package    Event
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

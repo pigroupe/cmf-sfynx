@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Controllers
+ * @subpackage   Admin_Controllers
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-01
@@ -30,7 +30,7 @@ use Sfynx\CmfBundle\Form\BlockByWidgetType;
 /**
  * BlockByWidget controller.
  * 
- * @category   Admin_Controllers
+ * @subpackage   Admin_Controllers
  * @package    Controller
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

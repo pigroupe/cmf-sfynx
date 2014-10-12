@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -24,7 +24,7 @@ use Sfynx\ToolBundle\Exception\ControllerException;
 /**
  * abstract controller.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -678,9 +678,9 @@ abstract class abstractController extends Controller
     	$errors = array();
     	foreach ($form->getErrors() as $key => $error) {
     		if($error->getMessagePluralization() !== null) {
-    			$errors[$key] = $this->get('translator')->transChoice($error->getMessage(), $error->getMessagePluralization(), $error->getMessageParameters());
+    			$errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->transChoice($error->getMessage(), $error->getMessagePluralization(), $error->getMessageParameters()));
     		} else {
-    			$errors[$key] = $this->get('translator')->trans($error->getMessage());
+    			$errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->trans($error->getMessage()));
     		}    		
     	}
     	$all = $form->all();

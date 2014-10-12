@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Route
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -25,7 +25,7 @@ use BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBALTranslator;
 /**
  * Database factory for backup database.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Route
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

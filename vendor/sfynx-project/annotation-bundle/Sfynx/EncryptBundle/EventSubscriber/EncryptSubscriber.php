@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Encrypt> project.
  *
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    EventSubscriber
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-27
@@ -28,7 +28,7 @@ use Doctrine\DBAL\Types\StringType;
 /**
  * Doctrine event subscriber which encrypt/decrypt entities
  * 
- * @category   Encrypt
+ * @subpackage   Encrypt
  * @package    EventSubscriber 
  * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

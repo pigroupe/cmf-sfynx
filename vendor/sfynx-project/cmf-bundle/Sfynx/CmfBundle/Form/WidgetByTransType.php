@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Form
+ * @subpackage   Admin_Form
  * @package    CMS_Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-10
@@ -22,7 +22,7 @@ use Sfynx\CmfBundle\Twig\Extension\PiWidgetExtension;
 /**
  * Description of the TranslationPageType form.
  *
- * @category   Admin_Form
+ * @subpackage   Admin_Form
  * @package    CMS_Form
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

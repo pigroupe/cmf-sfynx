@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author        Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-28
@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * $logger->save(); 
  * </code>
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author        Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  *     $fileFormatter    = $this-container->get('sfynx.tool.file_manager');
  * </code>
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
@@ -101,6 +101,21 @@ class PiFileManager implements PiFileManagerBuilderInterface
             return $content;
         }
     }
+    
+    /**
+     * Retrieves the dirname of a file.
+     *
+     * @param  $filename    $filename  nom du fichier
+     *
+     * @return string
+     * @access public
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public static function getFileDirname($filename)
+    {
+    	return dirname($filename);
+    }    
     
     /**
      * Retrieves the extension of a file.

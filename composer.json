@@ -70,6 +70,14 @@
         "phpunit/php-invoker": "dev-master",
         "phake/phake": "*",
         "phing/phing": "dev-master",
+        "behat/behat": "3.0.*@dev",
+        "behat/mink": "1.6.*@dev",
+        "behat/symfony2-extension": "*@dev",
+        "behat/mink-extension":  "*@dev",
+        "behat/mink-selenium2-driver":  "*@dev",
+        "behat/mink-browserkit-driver": "1.2.*@dev",
+        "jns/xhprof-bundle": "1.0.*@dev",
+        "facebook/xhprof": "dev-master@dev"
     },       
     "scripts": {
         "post-install-cmd": [

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Search
  * @subpackage Indexation
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -25,7 +25,7 @@ use Sfynx\CmfBundle\Manager\SearchLucene\Modele;
  * @uses    \Zend_Search_Lucene_Document_Html
  * @uses    \Zend_Search_Lucene_Document_Xlsx
  * @uses    \Zend_Search_Lucene_Document_Pptx
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Search
  * @subpackage Indexation
  *

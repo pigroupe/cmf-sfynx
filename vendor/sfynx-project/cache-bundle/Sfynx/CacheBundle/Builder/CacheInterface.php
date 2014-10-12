@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cache> project.
  *
- * @category   Cache
+ * @subpackage   Cache
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-23
@@ -17,7 +17,7 @@ use Sfynx\CacheBundle\Builder\CacheClientInterface;
 /**
  * CacheInterface 
  * 
- * @category   Cache
+ * @subpackage   Cache
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Smoothness> project.
  * 
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Smoothness managment Bundle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author <etienne de Longeaux> <etienne.delongeaux@gmail.com>
  */

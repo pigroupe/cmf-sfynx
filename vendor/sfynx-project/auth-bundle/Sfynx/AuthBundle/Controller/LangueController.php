@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-03
@@ -32,7 +32,7 @@ use Sfynx\AuthBundle\Form\LangueType;
 /**
  * Langue controller.
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Controller
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

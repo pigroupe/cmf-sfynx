@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Handler
- * @package    EventListener
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-25
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Controller
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,10 +28,15 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Controller handler.
  *
- * @category   Handler
- * @package    EventListener
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Controller
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerController
 {
@@ -64,6 +74,8 @@ class HandlerController
      *
      * @param FilterResponseEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function onKernelResponse(FilterResponseEvent $event)
@@ -77,6 +89,8 @@ class HandlerController
      *
      * @param FilterControllerEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelController(FilterControllerEvent $event)
@@ -93,8 +107,10 @@ class HandlerController
     /**
      * Invoked to allow some other return value to be converted into a Response.
      *
-     * @param FilterControllerEvent $event The event
+     * @param GetResponseForControllerResultEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelView(GetResponseForControllerResultEvent $event)
@@ -109,8 +125,10 @@ class HandlerController
     /**
      * Invoked to allow to create and set a Response object, create and set a new Exception object, or do nothing.
      *
-     * @param FilterControllerEvent $event The event
+     * @param GetResponseForExceptionEvent $event The event
      * 
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function onKernelException(GetResponseForExceptionEvent $event)

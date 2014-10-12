@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Form
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 20XX-XX-XX
@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Description of the MediaType form.
  *
- * @category   Media
+ * @subpackage   Media
  * @package    Form
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

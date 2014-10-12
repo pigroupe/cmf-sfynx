@@ -2,7 +2,7 @@
 /**
  * This file is part of the <User> project.
  *
- * @category Sfynx_phpunit
+ * @subpackage Sfynx_phpunit
  * @package PhpUnit
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-29
@@ -22,7 +22,7 @@ use Sfynx\UserBundle\Command\RoutesCommand;
 /**
  * Default Controller Test
  *
- * @category Sfynx_phpunit
+ * @subpackage Sfynx_phpunit
  * @package PhpUnit
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

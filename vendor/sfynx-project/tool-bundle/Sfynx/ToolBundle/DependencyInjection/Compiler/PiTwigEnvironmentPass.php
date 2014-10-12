@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * Adds tagged twig.extension services to the twig service
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

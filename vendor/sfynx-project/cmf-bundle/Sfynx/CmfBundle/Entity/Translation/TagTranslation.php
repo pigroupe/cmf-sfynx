@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Gedmo> project.
  *
- * @category   Gedmo_Entities
+ * @subpackage   Gedmo_Entities
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-08

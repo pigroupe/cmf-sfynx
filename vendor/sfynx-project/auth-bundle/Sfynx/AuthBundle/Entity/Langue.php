@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-12-28
@@ -28,7 +28,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslation;
  * @Gedmo\TranslationEntity(class="Sfynx\AuthBundle\Entity\Translation\LangueTranslation")
  * @UniqueEntity("id")
  * 
- * @category   Auth
+ * @subpackage   Auth
  * @package    Entity 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Admin> project.
  * 
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    sonataCRUD
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2011-11-17
@@ -23,7 +23,7 @@ use Sonata\AdminBundle\Validator\ErrorElement;
 /**
  * Group Sonata Admin Controle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    sonataCRUD
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

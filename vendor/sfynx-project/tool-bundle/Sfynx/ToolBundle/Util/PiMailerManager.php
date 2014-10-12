@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-02-05
@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     $Mailer    = $this-container->get('sfynx.tool.mailer_manager');
  * </code>
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

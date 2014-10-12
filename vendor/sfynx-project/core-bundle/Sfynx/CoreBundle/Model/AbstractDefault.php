@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   BootStrap_Model
+ * @subpackage   BootStrap_Model
  * @package    Model
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-22
@@ -23,7 +23,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslation;
 /**
  * abstract class for default attribut.
  *
- * @category   BootStrap_Model
+ * @subpackage   BootStrap_Model
  * @package    Model
  * @abstract
  *

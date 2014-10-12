@@ -229,6 +229,14 @@ Register all bundle in your `app/AppKernel.php` file:
             "phpunit/php-invoker": "dev-master",
             "phake/phake": "*",
             "phing/phing": "dev-master",
+            "behat/behat": "3.0.*@dev",
+            "behat/mink": "1.6.*@dev",
+            "behat/symfony2-extension": "*@dev",
+            "behat/mink-extension":  "*@dev",
+            "behat/mink-selenium2-driver":  "*@dev",
+            "behat/mink-browserkit-driver": "1.2.*@dev",
+            "jns/xhprof-bundle": "1.0.*@dev",
+            "facebook/xhprof": "dev-master@dev"
         },       
         "scripts": {
             "post-install-cmd": [
@@ -300,7 +308,7 @@ Execute the `check.php` script from the command line:
 
 **Required** : 
 
-- PHP with at least version 5.3.2 of PHP
+- PHP with at least version 5.3.2 of PHP (php5.4.4 recommended)
 - Sqlite3 must be enabled
 - JSON must be enabled
 - Ctype must be enabled
@@ -384,7 +392,6 @@ Then you must add the uploads/media folder to allow specific users to load :
 ``` bash
 chmod –R 0777 app/cache
 chmod –R 0777 app/log
-chmod –R 0777 vendor/Sfynx/BootStrap/TranslatorBundle/Resources/translations
 
 mkdir web/uploads
 mkdir web/uploads/media

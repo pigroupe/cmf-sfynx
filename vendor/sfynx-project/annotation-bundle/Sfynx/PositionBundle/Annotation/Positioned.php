@@ -3,7 +3,7 @@
 /**
  * This file is part of the <Position> project.
  *
- * @category   Position
+ * @subpackage   Position
  * @package    Annotation
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2014-06-02
@@ -20,7 +20,7 @@ namespace Sfynx\PositionBundle\Annotation;
  *     @PI\Positioned(SortableOrders = {"type":"relationship","field":"page","columnName":"page_id"})
  * </code>
  * 
- * @category   Position
+ * @subpackage   Position
  * @package    Annotation
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @Annotation

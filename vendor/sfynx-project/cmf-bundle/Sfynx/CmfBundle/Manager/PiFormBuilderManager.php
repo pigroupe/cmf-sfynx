@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Admin_Managers
+ * @subpackage   Admin_Managers
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-26
@@ -22,7 +22,7 @@ use Sfynx\ToolBundle\Exception\ServiceException;
 /**
 * Description of the Abstract Form builder manager
 *
-* @category   Admin_Managers
+ * @subpackage   Admin_Managers
 * @package    Manager
 *
 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

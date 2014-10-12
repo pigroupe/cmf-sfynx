@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   BootStrap_Model
+ * @subpackage   BootStrap_Model
  * @package    Model
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-08
@@ -21,7 +21,7 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 /**
  * abstract class for Translation management.
  *
- * @category   BootStrap_Model
+ * @subpackage   BootStrap_Model
  * @package    Model
  * @abstract
  *

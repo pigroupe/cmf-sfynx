@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -19,7 +19,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

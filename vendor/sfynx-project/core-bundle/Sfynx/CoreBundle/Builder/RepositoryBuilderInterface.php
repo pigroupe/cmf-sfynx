@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-09
@@ -17,7 +17,7 @@ use Doctrine\ORM\Query;
 /**
  * RepositoryBuilderInterface interface.
  *
- * @category   Core
+ * @subpackage   Core
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

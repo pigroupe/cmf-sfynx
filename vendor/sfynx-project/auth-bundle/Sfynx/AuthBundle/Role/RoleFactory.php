@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   User
+ * @subpackage   User
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-03
@@ -25,7 +25,7 @@ use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
 /**
  * role factory.
  *
- * @category   User
+ * @subpackage   User
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

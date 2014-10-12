@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cache> project.
  *
- * @category   Cache
+ * @subpackage   Cache
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-02-23
@@ -15,7 +15,7 @@ namespace Sfynx\CacheBundle\Builder;
 /**
  * Minimum requirements for interfacing with a typical key-value store
  * 
- * @category   Cache
+ * @subpackage   Cache
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

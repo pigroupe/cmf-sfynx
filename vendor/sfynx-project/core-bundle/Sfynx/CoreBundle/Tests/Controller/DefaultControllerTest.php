@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category BootStrap_phpunit
+ * @subpackage BootStrap_phpunit
  * @package PhpUnit
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-29
@@ -22,7 +22,7 @@ use Sfynx\CoreBundle\Command\RoutesCommand;
 /**
  * Default Controller Test
  *
- * @category BootStrap_phpunit
+ * @subpackage BootStrap_phpunit
  * @package PhpUnit
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Acl> project.
  *
- * @category   Acl
+ * @subpackage   Acl
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 
 /**
  *
- * @category   Acl
+ * @subpackage   Acl
  * @package    Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

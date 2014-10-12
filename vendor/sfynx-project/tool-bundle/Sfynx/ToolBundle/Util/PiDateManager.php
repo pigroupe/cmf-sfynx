@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-11
@@ -41,7 +41,7 @@ use Sfynx\ToolBundle\Builder\PiDateManagerBuilderInterface;
  * 	$finish 	= date("N", mktime(0,0,0,$date_month,$days,$date_year)); // Finishing day of  current month
  * </code>
  * 
- * @category   Tool
+ * @subpackage   Tool
  * @package    Util
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

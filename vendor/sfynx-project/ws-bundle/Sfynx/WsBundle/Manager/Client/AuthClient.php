@@ -2,7 +2,7 @@
 /**
  * This file is part of the <web service> project.
  *
- * @category WS
+ * @subpackage WS
  * @package Manager
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -19,7 +19,7 @@ use phpbrowscap\Browscap;
 /**
  * Authentification client
  * 
- * @category WS
+ * @subpackage WS
  * @package Manager
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

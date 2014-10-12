@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Controller
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -25,7 +25,7 @@ use Sfynx\ToolBundle\Exception\ControllerException;
 /**
  * abstract controller.
  *
- * @category   Cmf
+ * @subpackage   Cmf
  * @package    Controller
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

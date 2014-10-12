@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   PiApp
+ * @subpackage   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-26
@@ -15,7 +15,7 @@ namespace Sfynx\CmfBundle\Builder;
 /**
  * PiSearchLuceneManagerBuilderInterface interface.
  *
- * @category   PiApp
+ * @subpackage   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

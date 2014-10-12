@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-23
@@ -21,7 +21,7 @@ use Sfynx\CmfBundle\Repository\TranslationPageRepository;
 /**
  * Translation Pages DataFixtures.
  *
- * @category   CMF
+ * @subpackage   CMF
  * @package    DataFixtures
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

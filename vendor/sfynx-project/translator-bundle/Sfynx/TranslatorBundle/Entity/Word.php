@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Translator_Entities
+ * @subpackage   Translator_Entities
  * @package    Entity
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-11-14
@@ -29,7 +29,7 @@ use Sfynx\EncryptBundle\Annotation\Encryptors as PI;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\TranslationEntity(class="Sfynx\TranslatorBundle\Entity\Translation\WordTranslation")
  * 
- * @category   Admin_Entities
+ * @subpackage   Admin_Entities
  * @package    Entity
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

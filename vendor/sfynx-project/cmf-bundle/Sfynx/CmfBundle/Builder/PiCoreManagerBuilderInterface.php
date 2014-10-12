@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   PiApp
+ * @subpackage   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-01-18
@@ -19,7 +19,7 @@ use Sfynx\CmfBundle\Entity\TranslationWidget;
 /**
  * PiCoreManagerBuilderInterface interface.
  *
- * @category   PiApp
+ * @subpackage   PiApp
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

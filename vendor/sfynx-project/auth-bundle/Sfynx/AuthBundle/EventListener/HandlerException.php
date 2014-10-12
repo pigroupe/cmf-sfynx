@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @category   Auth
- * @package    EventListener
- * @author riad hellal <hellal.riad@gmail.com>
- * @since 2013-04-18
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Exception
+ * @author     riad hellal <hellal.riad@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,15 +27,31 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Custom Exception handler.
  *
- * @category   Auth
- * @package    EventListener
- *
- * @author riad hellal <hellal.riad@gmail.com>
+ * @category   EventListener
+ * @package    Handler
+ * @subpackage Exception
+ * @author     riad hellal <hellal.riad@gmail.com>
+ * @copyright  2014 Pi-groupe
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
+ * @since      2014-07-18
  */
 class HandlerException
 {
+    /**
+     * @var EngineInterface
+     */
     protected $templating;
+    
+    /**
+     * @var \AppKernel
+     */
     protected $kernel;
+    
+    /**
+     * @var string
+     */
     protected $local;
     
     /**
@@ -40,10 +61,12 @@ class HandlerException
     
     /**
      * Constructor.
-     *
+     * 
+     * @param EngineInterface $templating
+     * @param \AppKernel $kernel
      * @param ContainerInterface $container The service container
      */
-    public function __construct(EngineInterface $templating, $kernel, ContainerInterface $container)
+    public function __construct(EngineInterface $templating, \AppKernel $kernel, ContainerInterface $container)
     {
         $this->container  = $container;
         $this->templating = $templating;
@@ -51,6 +74,16 @@ class HandlerException
         $this->local = $this->container->get('request')->getLocale();
     }
 
+    /**
+     * Event handler that renders not found page
+     * in case of a NotFoundHttpException
+     *
+     * @param GetResponseForExceptionEvent $event
+     *
+     * @access public
+     * @return void
+     * @author Riad Hellal <hellal.riad@gmail.com>
+     */    
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $this->request = $event->getRequest($event);

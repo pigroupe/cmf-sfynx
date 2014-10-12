@@ -3,7 +3,7 @@
  * This file is part of the <Database> project.
  *
  * @uses AbstractManager
- * @category   DB
+ * @subpackage   DB
  * @package    Managerngeaux <etienne.delongeaux@gmail.com>
  * @since 2012-06-28
  *
@@ -21,7 +21,7 @@ use Sfynx\DatabaseBundle\Manager\Database\AbstractManager;
  * Database factory for backup database with the SQLServer platform.
  *
  * @uses AbstractManager
- * @category   DB
+ * @subpackage   DB
  * @package    Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
@@ -18,7 +18,7 @@ use Sfynx\ToolBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
 /**
  * Sfynx configuration and managment of the Tool Bundle
  *
- * @category   Sfynx
+ * @subpackage   Sfynx
  * @package    Bundle
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

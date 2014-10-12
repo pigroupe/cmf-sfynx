@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Cache> project.
  *
- * @category Cache
+ * @subpackage Cache
  * @package Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2013-03-26
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Loader;
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @category Cache
+ * @subpackage Cache
  * @package Configuration
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
