@@ -21,7 +21,7 @@
       <div class="inner">
         <h1>SFYNX</h1>
         <h2>SFYNX is not just to simplify the developper&#39;s work, and to speed up the creation and maintenance of your PHP web applications. It also allows you to create your own CMS. It&#39;s a CMF easy to use, build your own template (layout), add your own custom block with your own logic, build all the widget you need.</h2>
-        <a href="https://github.com/pigroupe/cmf-sfynx" class="button"><small>View project on</small>GitHub</a>
+        <a href="https://github.com/pigroupe/cmf-sfynx" class="button"><small>View project on</small> GitHub</a>
       </div>
     </header>
 
@@ -44,7 +44,9 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <li><a href="http://www.sfynx.fr">http://www.sfynx.fr</a></li>
 <li><a href="http://www.pi-groupe.fr">http://www.pi-groupe.fr</a></li>
 <li><a href="http://www.pi-groupe.net">http://www.pi-groupe.net</a></li>
-</ul><h2>
+</ul>
+
+<h2>
 <a name="structure-of-the-framework" class="anchor" href="#structure-of-the-framework"><span class="octicon octicon-link"></span></a>Structure of the framework</h2>
 
 <p>The framework has been split into 15 bundles :</p>
@@ -52,6 +54,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <div class="highlight highlight-bash"><pre>* CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
 <span class="o">(</span> management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. <span class="o">)</span>
 * TemplateBundle :  A bundle which is used to stock all template of layout and others.
+* SmoothnessBundle: A bundle which is used to define a complet admin template with all layers
 * AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and <span class="nb">set </span>handlers <span class="k">for</span> login behavior, <span class="nb">logout </span>behavior and failure connection behavior
 * ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
 * CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine <span class="o">(</span>translation, tree, CRUD  generate Datatable table and multi-forms<span class="o">)</span>
@@ -82,7 +85,9 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/PositionBundle/Resources/doc/index.md">Example of Position annotation usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsBundle/Resources/doc/index.md">Example of Ws usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/browser-bundle/Sfynx/BrowserBundle/Resources/doc/index.md">Example of Browser usage</a></li>
-</ul><h2>
+</ul>
+
+<h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p><strong>Copyright © 20012-2014, <a href="mailto:contact@pi-groupe.fr">contact@pi-groupe.fr</a>.</strong>
@@ -102,7 +107,9 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <li><p>A copy of the GNU General Public License must be provided with this software; if it is not, please write to the Free Software Foundation Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p></li>
 <li><p>You can download this software from <a href="http://pigroupe.github.io/cmf-sfynx/">http://pigroupe.github.io/cmf-sfynx/</a>; you will also find a complete user manual and additional information on this site.</p></li>
 <li><p>In French law, SFYNX falls under the regulations stipulated in the code of intellectual property rights (CPI). The SFYNX kernel is a collaborative work by its authors, listed above as per article L 113-1 of the CPI. The entire SFYNX project is comprised of a collective work in respect of articles L 113-2 and L 113-5 of the CPI. The authors release the work to the public in accordance with the rights and obligations as defined by the GNU public license.</p></li>
-</ul><h2>
+</ul>
+
+<h2>
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <p>Register all bundle in your <code>app/AppKernel.php</code> file:</p>
@@ -258,6 +265,14 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
             <span class="nt">"phpunit/php-invoker"</span><span class="p">:</span> <span class="s2">"dev-master"</span><span class="p">,</span>
             <span class="nt">"phake/phake"</span><span class="p">:</span> <span class="s2">"*"</span><span class="p">,</span>
             <span class="nt">"phing/phing"</span><span class="p">:</span> <span class="s2">"dev-master"</span><span class="p">,</span>
+            <span class="nt">"behat/behat"</span><span class="p">:</span> <span class="s2">"3.0.*@dev"</span><span class="p">,</span>
+            <span class="nt">"behat/mink"</span><span class="p">:</span> <span class="s2">"1.6.*@dev"</span><span class="p">,</span>
+            <span class="nt">"behat/symfony2-extension"</span><span class="p">:</span> <span class="s2">"*@dev"</span><span class="p">,</span>
+            <span class="nt">"behat/mink-extension"</span><span class="p">:</span>  <span class="s2">"*@dev"</span><span class="p">,</span>
+            <span class="nt">"behat/mink-selenium2-driver"</span><span class="p">:</span>  <span class="s2">"*@dev"</span><span class="p">,</span>
+            <span class="nt">"behat/mink-browserkit-driver"</span><span class="p">:</span> <span class="s2">"1.2.*@dev"</span><span class="p">,</span>
+            <span class="nt">"jns/xhprof-bundle"</span><span class="p">:</span> <span class="s2">"1.0.*@dev"</span><span class="p">,</span>
+            <span class="nt">"facebook/xhprof"</span><span class="p">:</span> <span class="s2">"dev-master@dev"</span>
         <span class="p">},</span>       
         <span class="nt">"scripts"</span><span class="p">:</span> <span class="p">{</span>
             <span class="nt">"post-install-cmd"</span><span class="p">:</span> <span class="p">[</span>
@@ -330,24 +345,24 @@ configured for Symfony.</p>
 <p><strong>Required</strong> : </p>
 
 <ul>
-<li>PHP with at least version 5.3.2 of PHP</li>
+<li>PHP with at least version 5.3.2 of PHP (php5.4.4 recommended)</li>
 <li>Sqlite3 must be enabled</li>
 <li>JSON must be enabled</li>
 <li>Ctype must be enabled</li>
 <li>PHP-XML module must be installed</li>
-<li>Installtion the gd library (for images): apt-get install php5-gd [command linux]</li>
+<li>Installtion the gd library (for images)</li>
 <li>
 <p>PHP.ini must have the extensions:</p>
 
 <ul>
-<li>date.timezone</li>
-<li>php_fileinfo.dll</li>
-<li>PDO_SQLITE.dll</li>
-<li>php_intl.dll</li>
-<li>php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)</li>
-<li>php_curl.dll</li>
-<li>php_openssl.dll (enabled Socket transport “ssl” in PHP)</li>
-<li>php-mcrypt</li>
+<li>php-pear php5-dev php5-gd  php5-curl  php5-imap php5-mcrypt </li>
+<li>php5-geoip avec la database GeoLiteCountry/GeoIP.dat.gz</li>
+<li>php-apc avec APC 3.0.17+ </li>
+<li>Intl (php5-intl) doit être installé avec ICU 4+</li>
+<li>timezonedb pour le parametre date.timezone</li>
+<li>JSON doit être activé</li>
+<li>pdo, pdo_mysql </li>
+<li>php5-memcache / php5-memcached</li>
 <li>activation d'envoi de mail
 
 <ul>
@@ -369,7 +384,9 @@ configured for Symfony.</p>
 </li>
 </ul>
 </li>
-</ul><p><strong>Doctrine</strong> : </p>
+</ul>
+
+<p><strong>Doctrine</strong> : </p>
 
 <p>To use Doctrine, you will need to have installed PDO. And you must have installed the PDO driver for the database server you want to use.    </p>
 
@@ -381,7 +398,9 @@ configured for Symfony.</p>
 <li>Give the name "mydatabase" for example in the database and choose the type pdo_mysql to use a MySQL database.</li>
 <li>Give your user and password of your Gmail count.</li>
 <li>Change the secret code that will be used to protect your application from XSS attacks.</li>
-</ul><div class="highlight highlight-bash"><pre>parameters:
+</ul>
+
+<div class="highlight highlight-bash"><pre>parameters:
     database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
@@ -423,14 +442,15 @@ configured for Symfony.</p>
 <li>The directories app / cache app / logs should be writable by both the web server and the user.</li>
 <li>On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. </li>
 <li>We must change www-data on your web server.</li>
-</ul><p>Many systems allow you to use ACL chmod a +.
+</ul>
+
+<p>Many systems allow you to use ACL chmod a +.
 <strong>For more information</strong> : <a href="http://symfony.com/doc/current/book/installation.html">http://symfony.com/doc/current/book/installation.html</a></p>
 
 <p>Then you must add the uploads/media folder to allow specific users to load :</p>
 
 <div class="highlight highlight-bash"><pre>chmod –R <span class="m">0777</span> app/cache
 chmod –R <span class="m">0777</span> app/log
-chmod –R <span class="m">0777</span> vendor/Sfynx/BootStrap/TranslatorBundle/Resources/translations
 
 mkdir web/uploads
 mkdir web/uploads/media
@@ -467,7 +487,9 @@ to create a new project is to use it.</p>
 <ul>
 <li>There's no way to configure these defaults inside Doctrine, as it tries to be as agnostic as possible in terms of environment configuration. </li>
 <li>One way to solve this problem is to configure server-level defaults.</li>
-</ul><p><strong>Setting UTF8 defaults for MySQL is as simple as adding a few lines to your configuration file (typically my.cnf)</strong></p>
+</ul>
+
+<p><strong>Setting UTF8 defaults for MySQL is as simple as adding a few lines to your configuration file (typically my.cnf)</strong></p>
 
 <div class="highlight highlight-bash"><pre>
     <span class="o">[</span>mysqld<span class="o">]</span>
@@ -489,7 +511,9 @@ to create a new project is to use it.</p>
 <ul>
 <li>Open your console (cmd) or Putty.</li>
 <li>Go to the root of the application cmfpi_project.</li>
-</ul><p><strong>Type the following command to create the database</strong></p>
+</ul>
+
+<p><strong>Type the following command to create the database</strong></p>
 
 <div class="highlight highlight-bash"><pre>
     php  app/console  doctrine:database:create
