@@ -17,13 +17,14 @@ parameters:
     # memcache params
     session_memcache_host: 127.0.0.1 # 127.0.0.1
     session_memcache_port: 11211 # 11211
-    session_memcache_prefix: "session_"
+    session_memcache_prefix: sess_memcache_
     session_memcache_expire: 604800 
     session_memcache_locking: true      
     session_memcache_spin_lock_wait: 150000     
     
     #pi_app_admin 
     pi_cookie_lifetime: 604800    
+    pi_session_name: "PHPSESSID"
 
     #boot_strap_ws
     ws_key: 0A1TG4GO
