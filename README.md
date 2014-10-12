@@ -139,6 +139,7 @@ Register all bundle in your `app/AppKernel.php` file:
                 new Sfynx\CmfBundle\SfynxCmfBundle(),
                 new Sfynx\TemplateBundle\SfynxTemplateBundle(),
                 new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
+                new Sfynx\FlatlabBundle\SfynxFlatlabBundle(),
                 
                 new BootStrap\MediaBundle\BootStrapMediaBundle(),
                 new PiApp\GedmoBundle\PiAppGedmoBundle(),
@@ -284,6 +285,7 @@ Register all bundle in your `app/AppKernel.php` file:
                 'Sfynx\\PositionBundle': '/sfynx-project/annotation-bundle',
                 'Sfynx\\TemplateBundle': '/sfynx-project/template-bundle',
                 'Sfynx\\SmoothnessBundle': '/sfynx-project/template-bundle',
+                'Sfynx\\FlatlabBundle': '/sfynx-project/template-bundle',            
                 "Zend_": "vendor/Zend/library"
             }
         }    
@@ -313,18 +315,18 @@ Execute the `check.php` script from the command line:
 - JSON must be enabled
 - Ctype must be enabled
 - PHP-XML module must be installed
-- Installtion the gd library (for images): apt-get install php5-gd [command linux]
+- Installtion the gd library (for images)
 - PHP.ini must have the extensions:
 
-    - date.timezone
-    - php_fileinfo.dll
-    - PDO_SQLITE.dll
-    - php_intl.dll
-    - php_memcache.dll (facultatif pour une gestion performante de cache de doctrine)
-    - php_curl.dll
-    - php_openssl.dll (enabled Socket transport “ssl” in PHP)
-    - php-mcrypt
-    - activation d'envoi de mail
+    * php-pear php5-dev php5-gd  php5-curl  php5-imap php5-mcrypt 
+    * php5-geoip avec la database GeoLiteCountry/GeoIP.dat.gz
+    * php-apc avec APC 3.0.17+ 
+    * Intl (php5-intl) doit être installé avec ICU 4+
+    * timezonedb pour le parametre date.timezone
+    * JSON doit être activé
+    * pdo, pdo_mysql 
+    * php5-memcache / php5-memcached
+    * activation d'envoi de mail
          - sous windows : 
               - SMTP = smtp-host-value
               - smtp_port = smtp-port-value
