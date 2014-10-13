@@ -1,33 +1,24 @@
+# This file is auto-generated during the composer install
 parameters:
-    database_driver:   pdo_mysql
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     symfsfynx23
-    database_user:     root
-    database_password: ~
-
-    mailer_transport:  sendmail
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
-
-    locale:            en_GB
-    secret:            5b5a0ff57bd45284dafe7f104fc7d8e15
-    
-    # memcache params
-    session_memcache_host: 127.0.0.1 # 127.0.0.1
-    session_memcache_port: 11211 # 11211
+    database_driver: pdo_mysql
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfsfynx23
+    database_user: root
+    database_password: pacman
+    mailer_transport: sendmail
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: en_GB
+    secret: 5b5a0ff57bd45284dafe7f104fc7d8e15
+    session_memcache_host: 127.0.0.1
+    session_memcache_port: 11211
     session_memcache_prefix: sess_memcache_
-    session_memcache_expire: 604800 
-    session_memcache_locking: true      
-    session_memcache_spin_lock_wait: 150000    
-    
-    #pi_app_admin 
-    pi_cookie_lifetime: 604800  
-    pi_session_name: "PHPSESSID"   
-
-    #boot_strap_ws
+    session_memcache_expire: 604800
+    session_memcache_locking: true
+    session_memcache_spin_lock_wait: 150000
+    pi_cookie_lifetime: 604800
+    pi_session_name: PHPSESSID
     ws_key: 0A1TG4GO
-    
-    #esi key
-    esi_key: 9eu9ghv9 
+    esi_key: 9eu9ghv9

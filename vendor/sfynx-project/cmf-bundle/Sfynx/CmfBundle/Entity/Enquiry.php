@@ -13,8 +13,7 @@ namespace Sfynx\CmfBundle\Entity;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\MinLength;
-use Symfony\Component\Validator\Constraints\MaxLength;
+use Symfony\Component\Validator\Constraints\Length;
 
 class Enquiry
 {
@@ -35,7 +34,7 @@ class Enquiry
         $metadata->addPropertyConstraint('subject', new NotBlank());
         $metadata->addPropertyConstraint('subject', new MaxLength(50));
 
-        $metadata->addPropertyConstraint('body', new MinLength(50));
+        $metadata->addPropertyConstraint('body', new Length(50));
     }
 
     public function getName()

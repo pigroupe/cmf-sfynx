@@ -42,7 +42,7 @@ class Permission
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      * @Assert\NotBlank()
-     * @Assert\MinLength(limit = 3, message = "Le nom doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le nom doit avoir au moins {{ limit }} caractères")
      */
     protected $name;    
     
@@ -51,7 +51,7 @@ class Permission
      *
      * @ORM\Column(type="text", nullable=true)
      * @Assert\NotBlank(message = "You must enter a comment")
-     * @Assert\MinLength(limit = 25, message = "Le commentaire doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 25, minMessage = "Le commentaire doit avoir au moins {{ limit }} caractères")
      */
     protected $comment;  
 

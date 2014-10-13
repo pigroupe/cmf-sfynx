@@ -51,7 +51,7 @@ class Layout
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
      * @Assert\NotBlank()
-     * @Assert\MinLength(limit = 3, message = "Le nom doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le nom doit avoir au moins {{ limit }} caractères")
      */
     protected $name;
     
@@ -60,7 +60,7 @@ class Layout
      *
      * @ORM\Column(name="file_pc", type="string", nullable=false)
      * @Assert\NotBlank(message = "You must enter a name file")
-     * @Assert\MinLength(limit = 5, message = "Le nom du fichier doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 5, minMessage = "Le nom du fichier doit avoir au moins {{ limit }} caractères")
      */
     protected $filePc;   
 
@@ -69,7 +69,7 @@ class Layout
      *
      * @ORM\Column(name="file_mobile", type="string", nullable=false)
      * @Assert\NotBlank(message = "You must enter a name file")
-     * @Assert\MinLength(limit = 5, message = "Le nom du fichier doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 5, minMessage = "Le nom du fichier doit avoir au moins {{ limit }} caractères")
      */
     protected $fileMobile;    
 

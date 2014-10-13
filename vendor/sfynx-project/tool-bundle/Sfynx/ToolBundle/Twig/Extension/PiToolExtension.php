@@ -449,23 +449,23 @@ class PiToolExtension extends \Twig_Extension
     
     public function orderByFilter($objs, $orderMethod, $orderBy = "ASC") {
     	if ($objs instanceof \Doctrine\ORM\PersistentCollection) {
-    		$array = array();
-    		foreach ($objs as $obj) {
-    			if (method_exists($obj, $orderMethod)) {
-    				$array[$obj->$orderMethod()] = $obj;
-    			} else {
-    				throw ServiceException::serviceNotConfiguredCorrectly();
-    			}
-    		}
-    		if ($orderBy == "ASC") {
-    			ksort($array);
-    		} elseif ($orderBy == "DESC") {
-    			krsort($array);
-    		}
+            $array = array();
+            foreach ($objs as $obj) {
+                if (method_exists($obj, $orderMethod)) {
+                    $array[$obj->$orderMethod()] = $obj;
+                } else {
+                    throw ServiceException::serviceNotConfiguredCorrectly();
+                }
+            }
+            if ($orderBy == "ASC") {
+                    ksort($array);
+            } elseif ($orderBy == "DESC") {
+                    krsort($array);
+            }
     		 
-    		return $array;
+            return $array;
     	} else {
-    		throw ServiceException::serviceNotConfiguredCorrectly();
+            throw ServiceException::serviceNotConfiguredCorrectly();
     	}
     }   
     

@@ -41,7 +41,7 @@ class Ressource
      * @var string $route_name
      * 
      * @ORM\Column(name="route_name", type="text", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le route name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le route name doit avoir au moins {{ limit }} caractères")
      */
     protected $route_name;
     
@@ -50,7 +50,7 @@ class Ressource
      * 
      * @ORM\Column(name="slug", type="text", nullable=false)
      * @Assert\NotBlank(message = "You must enter a slug")
-     * @Assert\MinLength(limit = 3, message = "Le slug name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le slug name doit avoir au moins {{ limit }} caractères")
      */
     protected $slug;
     

@@ -7,74 +7,71 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
-	            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-	            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-	            new Symfony\Bundle\TwigBundle\TwigBundle(),
-	            new Symfony\Bundle\MonologBundle\MonologBundle(),
-	            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-	            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-	            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-        		
-        		# secure
-	            new JMS\AopBundle\JMSAopBundle(),
-	            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-	            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),  
-        		new JMS\TranslationBundle\JMSTranslationBundle(),
-        		
-        		# doctrine
-        		new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-        		new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-        		new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),        		
-        		
-        		# route
-        		new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),        		
-        		
-        		# sonata admin
-                new Sonata\CoreBundle\SonataCoreBundle(),
-        		new Sonata\AdminBundle\SonataAdminBundle(),
-                new Sonata\NotificationBundle\SonataNotificationBundle(),
-        		new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
-        		new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
-        		new Sonata\CacheBundle\SonataCacheBundle(),
-        		new Sonata\BlockBundle\SonataBlockBundle(),
-        		new Sonata\jQueryBundle\SonatajQueryBundle(),
-        		new Sonata\MediaBundle\SonataMediaBundle(),        		
-
-        		# tools
-        		new FOS\UserBundle\FOSUserBundle(),
-	            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-	            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),  
-	            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
-        		
-        		# Sfynx
-                new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
-                new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
-                new Sfynx\WsBundle\SfynxWsBundle(),
-                new Sfynx\CacheBundle\SfynxCacheBundle(),
-                new Sfynx\ToolBundle\SfynxToolBundle(),
-        		new Sfynx\CoreBundle\SfynxCoreBundle(),
-                new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
-                new Sfynx\BrowserBundle\SfynxBrowserBundle(),
-                new Sfynx\EncryptBundle\SfynxEncryptBundle(),
-                new Sfynx\PositionBundle\SfynxPositionBundle(),
-                new Sfynx\AuthBundle\SfynxAuthBundle(),
-                new Sfynx\MediaBundle\SfynxMediaBundle(),
-                new Sfynx\AdminBundle\SfynxAdminBundle(),
-                new Sfynx\CmfBundle\SfynxCmfBundle(),
-                new Sfynx\TemplateBundle\SfynxTemplateBundle(),
-                new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
+            $bundles = array(
                 
-        		new BootStrap\MediaBundle\BootStrapMediaBundle(),
-        		new PiApp\GedmoBundle\PiAppGedmoBundle(),
-                
-                #override Sfynx bundles
-                new OrApp\OrCmfBundle\OrAppOrCmfBundle(),
-                new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
-                new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),      
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Symfony\Bundle\MonologBundle\MonologBundle(),
+            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
-                # recaptcha
-                new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
+            # secure
+            new JMS\AopBundle\JMSAopBundle(),
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),  
+            new JMS\TranslationBundle\JMSTranslationBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+
+            # doctrine
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),        		
+
+            # route
+            new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),        		
+
+            # sonata
+            new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Sonata\NotificationBundle\SonataNotificationBundle(),
+            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),        		
+            new Sonata\BlockBundle\SonataBlockBundle(),        		
+            new Sonata\MediaBundle\SonataMediaBundle(),        		
+            new Sonata\ClassificationBundle\SonataClassificationBundle(), 
+            new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
+
+            # tools
+            new FOS\UserBundle\FOSUserBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),	       
+
+            # Sfynx
+            new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
+            new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
+            new Sfynx\WsBundle\SfynxWsBundle(),
+            new Sfynx\CacheBundle\SfynxCacheBundle(),
+            new Sfynx\ToolBundle\SfynxToolBundle(),
+            new Sfynx\CoreBundle\SfynxCoreBundle(),
+            new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
+            new Sfynx\BrowserBundle\SfynxBrowserBundle(),
+            new Sfynx\EncryptBundle\SfynxEncryptBundle(),
+            new Sfynx\PositionBundle\SfynxPositionBundle(),
+            new Sfynx\AuthBundle\SfynxAuthBundle(),
+            new Sfynx\MediaBundle\SfynxMediaBundle(),
+            new Sfynx\AdminBundle\SfynxAdminBundle(),
+            new Sfynx\CmfBundle\SfynxCmfBundle(),
+            new Sfynx\TemplateBundle\SfynxTemplateBundle(),
+            new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
+
+            new BootStrap\MediaBundle\BootStrapMediaBundle(),
+            new PiApp\GedmoBundle\PiAppGedmoBundle(),
+
+            #override Sfynx bundles
+            new OrApp\OrCmfBundle\OrAppOrCmfBundle(),
+            new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
+            new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(), 
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -104,7 +104,7 @@ class Slider extends AbstractDefault
      * 
      * @Gedmo\Translatable
      * @ORM\Column(name="descriptif_left", type="text", nullable=true)
-     * @Assert\MinLength(limit = 25, message = "Le descriptif name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 25, minMessage = "Le descriptif name doit avoir au moins {{ limit }} caractères")
      */
     protected $descriptifleft;    
 
@@ -113,7 +113,7 @@ class Slider extends AbstractDefault
      * 
      * @Gedmo\Translatable
      * @ORM\Column(name="descriptif_right", type="text", nullable=true)
-     * @Assert\MinLength(limit = 25, message = "Le descriptif name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 25, minMessage = "Le descriptif name doit avoir au moins {{ limit }} caractères")
      */
     protected $descriptifright; 
     

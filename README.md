@@ -14,7 +14,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 
 ## Structure of the framework
 
-The framework has been split into 15 bundles :
+The framework works with Symfony 2.3 and has been split into 17 bundles :
 
 
 ``` bash
@@ -83,212 +83,213 @@ Register all bundle in your `app/AppKernel.php` file:
 
     public function registerBundles()
     {
-              $bundles = array(
-                new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-                new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-                new Symfony\Bundle\TwigBundle\TwigBundle(),
-                new Symfony\Bundle\MonologBundle\MonologBundle(),
-                new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-                new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-                new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            $bundles = array(
                 
-                # secure
-                new JMS\AopBundle\JMSAopBundle(),
-                new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-                new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),  
-                new JMS\TranslationBundle\JMSTranslationBundle(),
-                
-                # doctrine
-                new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-                new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-                new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),               
-                
-                # route
-                new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),             
-                
-                # sonata admin
-                new Sonata\CoreBundle\SonataCoreBundle(),
-                new Sonata\AdminBundle\SonataAdminBundle(),
-                new Sonata\NotificationBundle\SonataNotificationBundle(),
-                new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
-                new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
-                new Sonata\CacheBundle\SonataCacheBundle(),
-                new Sonata\BlockBundle\SonataBlockBundle(),
-                new Sonata\jQueryBundle\SonatajQueryBundle(),
-                new Sonata\MediaBundle\SonataMediaBundle(),             
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Symfony\Bundle\MonologBundle\MonologBundle(),
+            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
-                # tools
-                new FOS\UserBundle\FOSUserBundle(),
-                new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-                new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),  
-                new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),             
+            # secure
+            new JMS\AopBundle\JMSAopBundle(),
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),  
+            new JMS\TranslationBundle\JMSTranslationBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
 
-                # Sfynx
-                new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
-                new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
-                new Sfynx\WsBundle\SfynxWsBundle(),
-                new Sfynx\CacheBundle\SfynxCacheBundle(),
-                new Sfynx\ToolBundle\SfynxToolBundle(),
-                new Sfynx\CoreBundle\SfynxCoreBundle(),
-                new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
-                new Sfynx\BrowserBundle\SfynxBrowserBundle(),
-                new Sfynx\EncryptBundle\SfynxEncryptBundle(),
-                new Sfynx\PositionBundle\SfynxPositionBundle(),
-                new Sfynx\AuthBundle\SfynxAuthBundle(),
-                new Sfynx\MediaBundle\SfynxMediaBundle(),
-                new Sfynx\AdminBundle\SfynxAdminBundle(),
-                new Sfynx\CmfBundle\SfynxCmfBundle(),
-                new Sfynx\TemplateBundle\SfynxTemplateBundle(),
-                new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
-                
-                new BootStrap\MediaBundle\BootStrapMediaBundle(),
-                new PiApp\GedmoBundle\PiAppGedmoBundle(),
-                
-                #override Sfynx bundles
-                new OrApp\OrAdminBundle\OrAppOrAdminBundle(),
-                new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
-                new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),      
+            # doctrine
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),        		
 
-                # recaptcha
-                new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),        
+            # route
+            new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),        		
+
+            # sonata
+            new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Sonata\NotificationBundle\SonataNotificationBundle(),
+            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),        		
+            new Sonata\BlockBundle\SonataBlockBundle(),        		
+            new Sonata\MediaBundle\SonataMediaBundle(),        		
+            new Sonata\ClassificationBundle\SonataClassificationBundle(), 
+            new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
+
+            # tools
+            new FOS\UserBundle\FOSUserBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),	       
+
+            # Sfynx
+            new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
+            new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
+            new Sfynx\WsBundle\SfynxWsBundle(),
+            new Sfynx\CacheBundle\SfynxCacheBundle(),
+            new Sfynx\ToolBundle\SfynxToolBundle(),
+            new Sfynx\CoreBundle\SfynxCoreBundle(),
+            new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
+            new Sfynx\BrowserBundle\SfynxBrowserBundle(),
+            new Sfynx\EncryptBundle\SfynxEncryptBundle(),
+            new Sfynx\PositionBundle\SfynxPositionBundle(),
+            new Sfynx\AuthBundle\SfynxAuthBundle(),
+            new Sfynx\MediaBundle\SfynxMediaBundle(),
+            new Sfynx\AdminBundle\SfynxAdminBundle(),
+            new Sfynx\CmfBundle\SfynxCmfBundle(),
+            new Sfynx\TemplateBundle\SfynxTemplateBundle(),
+            new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
+
+            new BootStrap\MediaBundle\BootStrapMediaBundle(),
+            new PiApp\GedmoBundle\PiAppGedmoBundle(),
+
+            #override Sfynx bundles
+            new OrApp\OrCmfBundle\OrAppOrCmfBundle(),
+            new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
+            new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(), 
         );
+
+        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+        }
+
+        return $bundles;
+    }
         
 ```
 ## composer.json
 
 ``` json
 
-    {
-        "name": "symfony/framework-standard-edition",
-        "license": "MIT",
-        "type": "project",
-        "description": "The \"Symfony Standard Edition\" distribution",
-        "repositories": [
-        {
-            "type":"git",
-            "url":"https://github.com/vincecore/BeSimpleI18nRoutingBundle.git"
-        }
+{
+    "name": "symfony/framework-standard-edition",
+    "license": "MIT",
+    "type": "project",
+    "description": "The \"Symfony Standard Edition\" distribution",
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.3.19",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "1.2.*",
+        "twig/extensions": "1.0.*",
+        "symfony/assetic-bundle": "2.3.*",
+        "symfony/swiftmailer-bundle": "2.3.*",
+        "symfony/monolog-bundle": "2.3.*",
+        "sensio/distribution-bundle": "2.3.*",
+        "sensio/framework-extra-bundle": "2.3.*",
+        "sensio/generator-bundle": "2.3.*",
+        "incenteev/composer-parameter-handler": "~2.0",
+        
+        "jms/security-extra-bundle": "1.5.*",
+        "jms/di-extra-bundle": "1.4.*",  
+        "jms/serializer-bundle": "0.13.*@dev",
+        
+        "symfony/translation": "2.6.*@dev",
+        "jms/translation-bundle": "1.1.*@dev",
+        
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "doctrine/data-fixtures": "1.0.*",
+        "doctrine/doctrine-cache-bundle": "1.0.*",    
+        "gedmo/doctrine-extensions": "2.3.*@dev",
+        "stof/doctrine-extensions-bundle": "1.1.*@dev",
+        
+        "friendsofsymfony/user-bundle": "2.0.*@dev",
+        "besimple/i18n-routing-bundle": "2.3.0",
+        
+        "sonata-project/admin-bundle": "2.4.*@dev",
+        "sonata-project/media-bundle": "2.4.*@dev",
+        "sonata-project/classification-bundle": "2.3.*@dev",
+        "sonata-project/datagrid-bundle": "2.2.*@dev"
+    },
+    "require-dev": {
+        "benjam1/symfttpd": "2.1.*",
+        "phpunit/phpunit": "4.0.20",
+        "phploc/phploc": "2.1.*@dev",
+        "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
+        "squizlabs/php_codesniffer": "2.0.*@dev",
+        "phpmd/phpmd": "2.1.*",
+        "guzzlehttp/guzzle": "~4.0",
+        "sebastian/phpcpd": "2.0.*@dev",
+        "pdepend/pdepend": "2.0.*",
+        "phpunit/php-invoker": "dev-master",
+        "phake/phake": "*",
+        "phing/phing": "dev-master",
+        "behat/behat": "3.0.*@dev",
+        "behat/mink": "1.6.*@dev",
+        "behat/symfony2-extension": "*@dev",
+        "behat/mink-extension":  "*@dev",
+        "behat/mink-selenium2-driver":  "*@dev",
+        "behat/mink-browserkit-driver": "1.2.*@dev",
+        "jns/xhprof-bundle": "1.0.*@dev",
+        "facebook/xhprof": "dev-master@dev",
+        "phpcasperjs/phpcasperjs": "dev-master",
+        "phpdocumentor/phpdocumentor": "dev-master"
+    },       
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ],
-        "require": {
-            "php": ">=5.3.3",
-            "symfony/symfony": "2.2.4",
-            "doctrine/orm": "2.3",
-            "doctrine/doctrine-bundle": "1.2.0",
-            "twig/extensions": "1.0.0",
-            "symfony/assetic-bundle": "2.1.3",
-            "symfony/swiftmailer-bundle": "2.2.4",
-            "symfony/monolog-bundle": "2.2.0",
-            "sensio/distribution-bundle": "2.2.4",
-            "sensio/framework-extra-bundle": "2.2.4",
-            "sensio/generator-bundle": "2.2.4",
-            
-            "jms/translation-bundle": "1.1.*@dev",
-            "jms/security-extra-bundle": "1.4.*",
-            "jms/di-extra-bundle": "1.3.*",
-            
-            "gedmo/doctrine-extensions": "2.3.*@dev",
-            "doctrine/data-fixtures": "1.0.*@dev",
-            "doctrine/doctrine-fixtures-bundle": "2.1.*@dev",
-            "stof/doctrine-extensions-bundle": "1.1.0",
-            
-            "friendsofsymfony/user-bundle": "2.0.*@dev",
-            "besimple/i18n-routing-bundle": "2.2.x-dev",
-            
-            "imagine/Imagine": "*@stable",
-            "kriswallsmith/buzz": "0.*",        
-            
-            "knplabs/knp-menu-bundle": ">=1.1,<2.0",
-            "knplabs/knp-menu": "1.1.*",
-            "knplabs/knp-components": "1.2.2",
-            "knplabs/knp-paginator-bundle": "2.3.*@dev",        
-            "knplabs/knp-snappy": "dev-master",
-            "knplabs/knp-snappy-bundle": "dev-master",        
-            
-            "sonata-project/intl-bundle": "2.1.*",
-            "sonata-project/exporter": "1.*",
-            "sonata-project/admin-bundle": "2.2.*@dev",
-            "sonata-project/block-bundle": ">=2.2.1,<3.0",
-            "sonata-project/cache-bundle": "2.1.*@dev",
-            "sonata-project/doctrine-orm-admin-bundle": "2.2.*@dev",
-            "sonata-project/easy-extends-bundle": "2.1.*@dev",
-            "sonata-project/jquery-bundle": "1.8.*@dev",
-            "sonata-project/media-bundle": "2.2.*@dev",
-            "sonata-project/notification-bundle": "2.2.*@dev",
-            "sonata-project/core-bundle": "2.2.*@dev",
-            
-            "excelwebzone/recaptcha-bundle": "dev-master"
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
         },
-        "require-dev": {
-            "benjam1/symfttpd": "2.1.*",
-            "phpunit/phpunit": "4.0.20",
-            "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
-            "squizlabs/php_codesniffer": "2.0.*@dev",
-            "phpmd/phpmd": "2.1.*",
-            "guzzlehttp/guzzle": "~4.0",
-            "sebastian/phpcpd": "2.0.*@dev",
-            "pdepend/pdepend": "2.0.*",
-            "phpunit/php-invoker": "dev-master",
-            "phake/phake": "*",
-            "phing/phing": "dev-master",
-            "behat/behat": "3.0.*@dev",
-            "behat/mink": "1.6.*@dev",
-            "behat/symfony2-extension": "*@dev",
-            "behat/mink-extension":  "*@dev",
-            "behat/mink-selenium2-driver":  "*@dev",
-            "behat/mink-browserkit-driver": "1.2.*@dev",
-            "jns/xhprof-bundle": "1.0.*@dev",
-            "facebook/xhprof": "dev-master@dev"
-        },       
-        "scripts": {
-            "post-install-cmd": [
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-            ],
-            "post-update-cmd": [
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-                "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-            ]
-        },
-        "config": {
-            "bin-dir": "bin"
-        },
-        "minimum-stability": "stable",
-        "extra": {
-            "symfony-app-dir": "app",
-            "symfony-web-dir": "web",
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
-        "autoload": {
-            "psr-0": {
-                "OrApp" : "src",
-                "PiApp": "vendor/Sfynx",
-                "BootStrap": "vendor/Sfynx",
-                'Sfynx\\AclManagerBundle': '/sfynx-project/acl-manager-bundle',
-                'Sfynx\\DatabaseBundle': '/sfynx-project/database-bundle',
-                'Sfynx\\WsBundle': '/sfynx-project/ws-bundle',
-                'Sfynx\\TranslatorBundle': '/sfynx-project/translator-bundle',
-                'Sfynx\\CacheBundle': '/sfynx-project/cache-bundle',
-                'Sfynx\\ToolBundle': '/sfynx-project/tool-bundle',
-                'Sfynx\\CoreBundle': '/sfynx-project/core-bundle',
-                'Sfynx\\CmfBundle': '/sfynx-project/cmf-bundle',
-                'Sfynx\\AdminBundle': '/sfynx-project/admin-bundle',
-                'Sfynx\\AuthBundle': '/sfynx-project/auth-bundle',
-                'Sfynx\\MediaBundle': '/sfynx-project/media-bundle',
-                'Sfynx\\BrowserBundle': '/sfynx-project/browser-bundle',
-                'Sfynx\\EncryptBundle': '/sfynx-project/annotation-bundle',
-                'Sfynx\\PositionBundle': '/sfynx-project/annotation-bundle',
-                'Sfynx\\TemplateBundle': '/sfynx-project/template-bundle',
-                'Sfynx\\SmoothnessBundle': '/sfynx-project/template-bundle',
-                "Zend_": "vendor/Zend/library"
-            }
-        }    
+        "branch-alias": {
+            "dev-master": "2.3-dev",
+            "bin-dir": "bin/"
+        }
+    },
+    "autoload": {
+        "psr-0": {
+            "OrApp" : "src",
+            "PiApp": "vendor/Sfynx",
+            "BootStrap": "vendor/Sfynx",
+            "Application": "vendor/Sfynx",
+            "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
+            "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",
+            "Sfynx\\WsBundle": "vendor/sfynx-project/ws-bundle",
+            "Sfynx\\TranslatorBundle": "vendor/sfynx-project/translator-bundle",
+            "Sfynx\\CacheBundle": "vendor/sfynx-project/cache-bundle",
+            "Sfynx\\ToolBundle": "vendor/sfynx-project/tool-bundle",
+            "Sfynx\\CoreBundle": "vendor/sfynx-project/core-bundle",
+            "Sfynx\\CmfBundle": "vendor/sfynx-project/cmf-bundle",
+            "Sfynx\\AdminBundle": "vendor/sfynx-project/admin-bundle",
+            "Sfynx\\AuthBundle": "vendor/sfynx-project/auth-bundle",
+            "Sfynx\\MediaBundle": "vendor/sfynx-project/media-bundle",
+            "Sfynx\\BrowserBundle": "vendor/sfynx-project/browser-bundle",
+            "Sfynx\\EncryptBundle": "vendor/sfynx-project/annotation-bundle",
+            "Sfynx\\PositionBundle": "vendor/sfynx-project/annotation-bundle",
+            "Sfynx\\TemplateBundle": "vendor/sfynx-project/template-bundle",
+            "Sfynx\\SmoothnessBundle": "vendor/sfynx-project/template-bundle",
+            "Zend_": "vendor/Zend/library"
+        }
     }    
+}
+
+
 ```
 
 ## Installation
@@ -418,8 +419,8 @@ http://getcomposer.org/ or just run the following command:
 **Setting vendor with composer.json**
 ``` bash
 
+    php  composer.phar install
     php  composer.phar selfupdate
-    php  composer.phar install -v
 
 ```
 

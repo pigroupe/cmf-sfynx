@@ -103,7 +103,7 @@ class Rubrique
      *
      * @ORM\Column(name="titre", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message = "You must enter a title")
-     * @Assert\MinLength(limit = 3, message = "Le titre name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le titre name doit avoir au moins {{ limit }} caractères")
      */
     protected $titre;
 
@@ -111,7 +111,7 @@ class Rubrique
      * @var text $descriptif
      *
      * @ORM\Column(name="descriptif", type="text", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le descriptif name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le descriptif name doit avoir au moins {{ limit }} caractères")
      */
     protected $descriptif;
 

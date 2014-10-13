@@ -120,7 +120,7 @@ class TranslationPage
      * @var string $breadcrumb
      * 
      * @ORM\Column(name="breadcrumb", type="string", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le breadcrumb doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le breadcrumb doit avoir au moins {{ limit }} caractères")
      */
     protected $breadcrumb;    
     
@@ -128,7 +128,7 @@ class TranslationPage
      * @var string $slug
      * 
      * @ORM\Column(name="slug", type="string", nullable=true)
-     * @Assert\MinLength(limit = 2, message = "erreur.slug.minlength")
+     * @Assert\Length(min = 2, minMessage = "erreur.slug.minlength")
      * @MyAssert\Unique(entity="TranslationPage", property="slug")
      */
     protected $slug;
@@ -158,7 +158,7 @@ class TranslationPage
      * @var string $surtitre
      *
      * @ORM\Column(name="surtitre", type="string", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le surtitre name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le surtitre name doit avoir au moins {{ limit }} caractères")
      */
     protected $surtitre;
 
@@ -166,7 +166,7 @@ class TranslationPage
      * @var string $titre
      *
      * @ORM\Column(name="titre", type="string", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le titre name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le titre name doit avoir au moins {{ limit }} caractères")
      */
     protected $titre;
 
@@ -174,7 +174,7 @@ class TranslationPage
      * @var string $soustitre
      *
      * @ORM\Column(name="soustitre", type="string", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le soustitre name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le soustitre name doit avoir au moins {{ limit }} caractères")
      */
     protected $soustitre;
 
@@ -182,7 +182,7 @@ class TranslationPage
      * @var text $descriptif
      *
      * @ORM\Column(name="descriptif", type="text", nullable=true)
-     * @Assert\MinLength(limit = 25, message = "Le descriptif name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 25, minMessage = "Le descriptif name doit avoir au moins {{ limit }} caractères")
      */
     protected $descriptif;
 
@@ -190,7 +190,7 @@ class TranslationPage
      * @var text $chapo
      *
      * @ORM\Column(name="chapo", type="text", nullable=true)
-     * @Assert\MinLength(limit = 25, message = "Le chapo name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 25, minMessage = "Le chapo name doit avoir au moins {{ limit }} caractères")
      */
     protected $chapo;
 

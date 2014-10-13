@@ -1,6 +1,25 @@
 ##
-## SonataCacheBundle configuration
-##
+## SonataClassificationBundle configuration
+##            
+#sonata_classification:
+#    class:
+#        tag:          Application\Sonata\ClassificationBundle\Entity\Tag
+#        category:     Application\Sonata\ClassificationBundle\Entity\Category
+#        collection:   Application\Sonata\ClassificationBundle\Entity\Collection
+#
+#    admin:
+#        tag:
+#            class:        Sonata\ClassificationBundle\Admin\TagAdmin
+#            controller:   SonataAdminBundle:CRUD
+#            translation:  SonataClassificationBundle
+#        category:
+#            class:        Sonata\ClassificationBundle\Admin\CategoryAdmin
+#            controller:   SonataAdminBundle:CRUD
+#            translation:  SonataClassificationBundle
+#        collection:
+#            class:        Sonata\ClassificationBundle\Admin\CollectionAdmin
+#            controller:   SonataAdminBundle:CRUD
+#            translation:  SonataClassificationBundle  
 #
 #
 ##
@@ -120,4 +139,28 @@
 #knp_menu:
 #    twig: true  # set to false to disable the Twig extension and the TwigRenderer
 #    templating: false # if true, enables the helper for PHP templates
-#    default_renderer: twig # The renderer to use, list is also available by default                                    
+#    default_renderer: twig # The renderer to use, list is also available by default
+#
+##
+## KnpPaginationBundle configuration
+##
+#knp_paginator:
+#    page_range: 5                      # default page range used in pagination control
+#    default_options:
+#        page_name: page                # page query parameter name
+#        sort_field_name: sort          # sort field query parameter name
+#        sort_direction_name: direction # sort direction query parameter name
+#        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+#    template:
+#        pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
+#        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template 
+#        
+#knp_snappy:
+#    pdf:
+#        enabled:    true
+#        #binary:     /usr/local/bin/wkhtmltopdf
+#        options:    []
+#    image:
+#        enabled:    true
+#        #binary:     /usr/local/bin/wkhtmltoimage
+#        options:    []   

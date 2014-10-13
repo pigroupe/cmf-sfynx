@@ -48,7 +48,7 @@ class MaxEntitiesByQueryValidator extends ConstraintValidator
         $this->container = $container;
     }
     
-    public function isValid($value, Constraint $constraint) 
+    public function validate($value, Constraint $constraint) 
     {
         $em         = $this->container->get('doctrine')->getManager();
         

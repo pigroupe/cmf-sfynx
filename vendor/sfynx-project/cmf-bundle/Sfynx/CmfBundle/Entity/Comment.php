@@ -60,7 +60,7 @@ class Comment
      * 
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message = "You must enter a comment")
-     * @Assert\MinLength(limit = 25, message = "Le commentaire doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 25, minMessage = "Le commentaire doit avoir au moins {{ limit }} caractères")
      */
     protected $comment;
     
