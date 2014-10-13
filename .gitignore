@@ -15,8 +15,7 @@ web/bundles/*
 web/yui/*
 
 # Configuration files
-app/config/parameters.ini
-app/config/parameters.yml
+#app/config/parameters.yml
 app/phpunit.xml
 
 # Composer
