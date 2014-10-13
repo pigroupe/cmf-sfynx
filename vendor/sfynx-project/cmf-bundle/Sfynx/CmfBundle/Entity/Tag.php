@@ -73,7 +73,7 @@ class Tag extends AbstractTranslation
      *
      * @Gedmo\Translatable
      * @ORM\Column(name="groupname", type="string", length=255, nullable=true)
-     * @Assert\MinLength(limit = 2, message = "Le nom doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 2, minMessage = "Le nom doit avoir au moins {{ limit }} caractères")
      */
     protected $groupname;
     
@@ -90,7 +90,7 @@ class Tag extends AbstractTranslation
      * @Gedmo\Translatable
      * @ORM\Column(name="name", type="string", length=255, nullable=true, unique=true)
      * @Assert\NotBlank()
-     * @Assert\MinLength(limit = 2, message = "Le nom doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 2, minMessage = "Le nom doit avoir au moins {{ limit }} caractères")
      */
     protected $name;
 
@@ -98,8 +98,7 @@ class Tag extends AbstractTranslation
      * @var string $color
      *
      * @ORM\Column(name="color", type="string", length=7, nullable=true)
-     * @Assert\MinLength(limit = 7, message = "La couleur doit avoir {{ limit }} caractères")
-     * @Assert\MaxLength(limit = 7, message = "La couleur doit avoir {{ limit }} caractères")
+     * @Assert\Length(min = 7, max = 7, minMessage = "La couleur doit avoir {{ limit }} caractères", maxMessage = "La couleur doit avoir {{ limit }} caractères")
      */
     protected $color;
 
@@ -107,8 +106,7 @@ class Tag extends AbstractTranslation
      * @var string $Hicolor
      *
      * @ORM\Column(name="Hicolor", type="string", length=7, nullable=true)
-     * @Assert\MinLength(limit = 7, message = "La couleur Hi doit avoir {{ limit }} caractères")
-     * @Assert\MaxLength(limit = 7, message = "La couleur Hi doit avoir {{ limit }} caractères")
+     * @Assert\Length(min = 7, max = 7, minMessage = "La couleur doit avoir {{ limit }} caractères", maxMessage = "La couleur doit avoir {{ limit }} caractères")
      */
     protected $Hicolor;
     

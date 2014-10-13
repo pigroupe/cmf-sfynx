@@ -146,7 +146,7 @@ class Page
      * @var string $route_name
      * 
      * @ORM\Column(name="route_name", type="string", nullable=true, unique=true)
-     * @Assert\MinLength(limit = 3, message = "Le route name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le route name doit avoir au moins {{ limit }} caractères")
      */
     protected $route_name;
     

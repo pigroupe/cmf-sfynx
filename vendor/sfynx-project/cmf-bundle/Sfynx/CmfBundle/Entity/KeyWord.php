@@ -42,7 +42,7 @@ class KeyWord
      * @var string $groupname
      *
      * @ORM\Column(name="groupname", type="string", length=255, nullable=true)
-     * @Assert\MinLength(limit = 2, message = "Le nom doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 2, minMessage = "Le nom doit avoir au moins {{ limit }} caractères")
      */
     protected $groupname;
     
@@ -58,7 +58,7 @@ class KeyWord
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      * @Assert\NotBlank()
-     * @Assert\MinLength(limit = 2, message = "Le nom doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 2, minMessage = "Le nom doit avoir au moins {{ limit }} caractères")
      */
     protected $name;
     

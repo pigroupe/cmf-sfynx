@@ -331,9 +331,9 @@ class PiWidgetExtension extends \Twig_Extension
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container The service container
-     * @param  string         $container            name of widget container.
-     * @param  string         $actionName            name of action.
+     * @param ContainerInterface $container  The service container
+     * @param string             $container  Name of widget container.
+     * @param string             $actionName Name of action.
      * 
      * @author (c) Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
@@ -344,9 +344,13 @@ class PiWidgetExtension extends \Twig_Extension
         //
         if (isset($GLOBALS['WIDGET'][strtoupper($container)][strtolower($action)])) {
             $this->action = $action;
-        } else {
-            throw ServiceException::serviceNotConfiguredCorrectly();
-        }
+        } 
+//        else {
+//            print_r($container);
+//            print_r($action);
+//            exit;
+//            throw ServiceException::serviceNotConfiguredCorrectly();
+//        }
     }    
     
     /**
@@ -596,30 +600,30 @@ class PiWidgetExtension extends \Twig_Extension
         $actionName = $infos[1];
         //
         if (!in_array($container, array('css', 'js'))) {
-	        if (count($infos) == 3) {
-	            $method    = $infos[2];
-	        }        
-	        if (count($infos) == 4) {
-	            $method    = $infos[2] . ":" . $infos[3];
-	        }     
-	        if ($this->isServiceSupported($container, $actionName)){
-	            if (method_exists($this->getServiceWidget(), 'init')){
-	                $this->getServiceWidget()->setMethod($method);
-	                $this->getServiceWidget()->init();
-	            }
-	        }
+            if (count($infos) == 3) {
+                $method    = $infos[2];
+            }        
+            if (count($infos) == 4) {
+                $method    = $infos[2] . ":" . $infos[3];
+            }     
+            if ($this->isServiceSupported($container, $actionName)){
+                if (method_exists($this->getServiceWidget(), 'init')){
+                    $this->getServiceWidget()->setMethod($method);
+                    $this->getServiceWidget()->init();
+                }
+            }
         } else {
-        	if ($container == "css") {
-        		$all_css = json_decode($actionName);
-        		foreach ($all_css as $path_css) {
-        			$this->container->get('sfynx.tool.twig.extension.layouthead')->addCssFile($path_css, 'append');
-        		}
-        	} elseif ($container == "js") {
-        		$all_js = json_decode($actionName);
-        	    foreach ($all_js as $path_js) {
-        			$this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile($path_js, 'append');
-        		}
-        	}
+            if ($container == "css") {
+                $all_css = json_decode($actionName);
+                foreach ($all_css as $path_css) {
+                    $this->container->get('sfynx.tool.twig.extension.layouthead')->addCssFile($path_css, 'append');
+                }
+            } elseif ($container == "js") {
+                $all_js = json_decode($actionName);
+                foreach ($all_js as $path_js) {
+                    $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile($path_js, 'append');
+                }
+            }
         }
     }    
 

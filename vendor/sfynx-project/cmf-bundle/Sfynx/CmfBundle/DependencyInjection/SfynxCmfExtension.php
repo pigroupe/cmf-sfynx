@@ -33,9 +33,9 @@ class SfynxCmfExtension extends Extension
     {
         // we load all services
         $loaderYaml  = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/service'));
+        $loaderYaml->load('services_cmfconfig.yml');
         $loaderYaml->load('services_util.yml');
         $loaderYaml->load('services_twig_extension.yml');
-        $loaderYaml->load('services_cmfconfig.yml');
         $loaderYaml->load('services.yml');
         $loaderYaml->load("services_form_builder.yml");
         $loaderYaml->load("services_form_validator.yml");

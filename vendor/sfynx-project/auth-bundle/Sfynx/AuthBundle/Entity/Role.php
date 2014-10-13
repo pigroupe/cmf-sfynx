@@ -53,15 +53,14 @@ class Role
     /**
      * @ORM\Column(type="string",length=55, nullable=false)
      * @Assert\NotBlank()
-     * @Assert\MinLength(limit = 3, message = "Le label doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le label doit avoir au moins {{ limit }} caractères")
      */
     protected $label;    
     
     /**
      * @ORM\Column(type="string",length=25, nullable=false)
      * @Assert\NotBlank()
-     * @Assert\MinLength(limit = 8, message = "Le nom doit avoir au moins {{ limit }} caractères")
-     * @Assert\MaxLength(limit = 25, message = "Le nom doit avoir au plus {{ limit }} caractères")
+     * @Assert\Length(min = 8, max = 25, minMessage = "Le nom doit avoir au moins {{ limit }} caractères", maxMessage = "Le nom doit avoir au plus {{ limit }} caractères")
      */
     protected $name;    
     
@@ -70,7 +69,7 @@ class Role
      *
      * @ORM\Column(type="text", nullable=true)
      * @Assert\NotBlank(message = "You must enter a comment")
-     * @Assert\MinLength(limit = 25, message = "Le commentaire doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 25, minMessage = "Le commentaire doit avoir au moins {{ limit }} caractères")
      */
     protected $comment;    
 
@@ -84,7 +83,7 @@ class Role
      * @var string $route_name
      * 
      * @ORM\Column(name="route_login", type="string", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le route name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le route name doit avoir au moins {{ limit }} caractères")
      * @Assert\Blank
      */
     protected $route_login;
@@ -93,7 +92,7 @@ class Role
      * @var string $route_name
      *
      * @ORM\Column(name="route_logout", type="string", nullable=true)
-     * @Assert\MinLength(limit = 3, message = "Le route name doit avoir au moins {{ limit }} caractères")
+     * @Assert\Length(min = 3, minMessage = "Le route name doit avoir au moins {{ limit }} caractères")
      * @Assert\Blank
      */
     protected $route_logout;    

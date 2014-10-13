@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  */
 class CollectionOfValidator extends ConstraintValidator {
     
-    public function isValid($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint)
     {
         if ($value === null)
             return true;

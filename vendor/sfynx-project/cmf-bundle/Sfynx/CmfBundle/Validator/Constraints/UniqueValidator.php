@@ -49,7 +49,7 @@ class UniqueValidator extends ConstraintValidator
         $this->container = $container;
     }
     
-    public function isValid($value, Constraint $constraint) 
+    public function validate($value, Constraint $constraint) 
     {
         // if the config autorize that the page slug is not unique.
         $is_unique_slug = $this->container->getParameter('pi_app_admin.page.route.single_slug');

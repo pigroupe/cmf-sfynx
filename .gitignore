@@ -1,1 +1,34 @@
+# Bootstrap
+app/bootstrap*
+
+# Symfony directories
+nbproject/*
+vendor/*
+!vendor/Sfynx/
+!vendor/sfynx-project/
+!vendor/Pear/
+!vendor/Zend/
+*/logs/*
+*/cache/*
+web/uploads/*
+web/bundles/*
+web/yui/*
+
 # Configuration files
+#app/config/parameters.yml
+app/phpunit.xml
+
+# Composer
+composer.phar
+composer.lock
+
+# OTHER
+*.DS_Store
+.buildpath
+.project
+.settings
+.svn
+resetProjectDatasTest.sh
+
+# Build
+build
