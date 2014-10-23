@@ -1023,23 +1023,14 @@ abstract class abstractController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     	if ($userId instanceof \Sfynx\AuthBundle\Entity\User) {
-    		$entity = $userId;
+            $entity = $userId;
     	} else {
-    		$entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
+            $entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
     	}
         if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-        	$all_applications =  $entity->getApplicationTokens();
-        	if (!is_null($all_applications)) {
-            	foreach ($all_applications as $applicationToken) {
-            	    $string = strtoupper($applicationToken); 
-            	    $replace = strtoupper($application.'::');
-            	    $token = str_replace($replace, '', $string, $count);
-            	    if ($count == 1) {
-            	    	return strtoupper($token);
-            	    }
-            	}
-        	}
+            return $entity->getTokenByApplicationName($application);
         }
+        
         return false;
     }
 
@@ -1058,17 +1049,18 @@ abstract class abstractController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
         if ($userId instanceof \Sfynx\AuthBundle\Entity\User) {
-        	$entity = $userId;
+            $entity = $userId;
         } else {
-        	$entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
+            $entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
         }
         if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-        	$entity->setApplicationTokens(array(strtoupper($application.'::'.$token)));
-        	$em->persist($entity);
+            $entity->addTokenByApplicationName($application, $token);
+            $em->persist($entity);
             $em->flush();
-        	return true;
+            
+            return true;
         } else {
-        	return false;
+            return false;
         }
     }    
     

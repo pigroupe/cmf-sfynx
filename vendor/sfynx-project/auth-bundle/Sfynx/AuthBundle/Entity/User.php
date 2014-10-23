@@ -458,18 +458,35 @@ class User extends AbstractUser
     }    
     
     /**
+     * we add a token associate to an application
+     *
+     * @param string $application
+     * @param string $token
+     * 
+     * @return integer
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function addTokenByApplicationName($application, $token)
+    {
+    	$this->setApplicationTokens(array(strtoupper($application.'::'.$token)));
+    } 
+    
+    /**
      * Set application tokens
      *
      * @param array $all
      */
     public function setApplicationTokens( array $all)
     {
-    	$this->applicationTokens = array();
     	foreach ($all as $one) {
-    		$one = strtoupper($one);
-    		if (!in_array($one, $this->applicationTokens, true)) {
-    			$this->applicationTokens[] = $one;
-    		}
+            $one = strtoupper($one);
+            if (!in_array($one, $this->applicationTokens, true)) {
+                $this->applicationTokens[] = $one;
+            } else {
+                $key = array_search($one, $this->applicationTokens); 
+                $this->applicationTokens[ $key ] = $one;
+            }
     	}
     }
     
@@ -486,27 +503,26 @@ class User extends AbstractUser
     /**
      * we return the token associated to the name given in param.
      *
-     * @param string    $selection
+     * @param string $name
+     * 
      * @return integer
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getTokenByApplicationName($name)
     {
     	$all_appl =  $this->applicationTokens;
     	if (!is_null($all_appl)) {
-    		foreach ($all_appl as $appl) {
-    			$string = strtoupper($appl);
-    			$replace = strtoupper($name.'::');
-    			$token = str_replace($replace, '', $string, $count);
-    			if ($count == 1) {
-    				return strtoupper($token);
-    			}
-    		}
+            foreach ($all_appl as $appl) {
+                $string = strtoupper($appl);
+                $replace = strtoupper($name.'::');
+                $token = str_replace($replace, '', $string, $count);
+                if ($count == 1) {
+                    return strtoupper($token);
+                }
+            }
     	}
     	 
     	return '';
     }   
-    
 }

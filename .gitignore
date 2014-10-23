@@ -1,3 +1,13 @@
+# documentation
+doc/uml/xmi/*
+doc/uml/php/*
+doc/uml/html/*
+doc/uml/htmlnew/*
+doc/phpdocumentor/*
+web/phpdocumentor/*
+doc/phpmd/*
+doc/phpcpd/*
+
 # Bootstrap
 app/bootstrap*
 
@@ -15,7 +25,7 @@ web/bundles/*
 web/yui/*
 
 # Configuration files
-#app/config/parameters.yml
+app/config/parameters.yml
 app/phpunit.xml
 
 # Composer

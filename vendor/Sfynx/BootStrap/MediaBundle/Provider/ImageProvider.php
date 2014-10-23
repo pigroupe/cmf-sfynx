@@ -52,9 +52,17 @@ class ImageProvider extends FileProvider
             3 => 'image/x-png',
         );
         parent::__construct($name, $filesystem, $cdn, $pathGenerator, $thumbnail, $allowedExtensions, $allowedMimeTypes, $metadata);
-        
+
         $this->imagineAdapter = $adapter;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getProviderMetadata()
+    {
+        return new Metadata($this->getName(), $this->getName().".description", false, "SonataMediaBundle", array('class' => 'fa fa-picture-o'));
+    }    
 
     /**
      * {@inheritdoc}
@@ -100,15 +108,23 @@ class ImageProvider extends FileProvider
     {
         parent::doTransform($media);
 
-        if ($media->getBinaryContent()) {
-            $image = $this->imagineAdapter->open($media->getBinaryContent()->getPathname());
-            $size  = $image->getSize();
-
-            $media->setWidth($size->getWidth());
-            $media->setHeight($size->getHeight());
-
-            $media->setProviderStatus(MediaInterface::STATUS_OK);
+        if (!is_object($media->getBinaryContent()) && !$media->getBinaryContent()) {
+            return;
         }
+
+        try {
+            $image = $this->imagineAdapter->open($media->getBinaryContent()->getPathname());
+        } catch (\RuntimeException $e) {
+            $media->setProviderStatus(MediaInterface::STATUS_ERROR);
+            return;
+        }
+
+        $size  = $image->getSize();
+
+        $media->setWidth($size->getWidth());
+        $media->setHeight($size->getHeight());
+
+        $media->setProviderStatus(MediaInterface::STATUS_OK);
     }
 
     /**
@@ -159,17 +175,17 @@ class ImageProvider extends FileProvider
         return $this->thumbnail->generatePrivateUrl($this, $media, $format);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function preRemove(MediaInterface $media)
-    {
-        $path = $this->getReferenceImage($media);
-
-        if ($this->getFilesystem()->has($path)) {
-            $this->getFilesystem()->delete($path);
-        }
-
-        $this->thumbnail->delete($this, $media);
-    }
+//    /**
+//     * {@inheritdoc}
+//     */
+//    public function preRemove(MediaInterface $media)
+//    {
+//        $path = $this->getReferenceImage($media);
+//
+//        if ($this->getFilesystem()->has($path)) {
+//            $this->getFilesystem()->delete($path);
+//        }
+//
+//        $this->thumbnail->delete($this, $media);
+//    }
 }
