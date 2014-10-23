@@ -25,36 +25,31 @@ class SymfonyConnexion_1 extends Simulation {
 
     val scn = scenario("Scenario name")
         .group("Login") {
-            exec(
-                http("request_1")
+            exec(http("request_1")
                     .get("/")
                     .headers(headers_1)
                     .check(status.is(200)))
                 .pause(0 milliseconds, 100 milliseconds)
                 .feed(csv("connexion.csv"))
-                .exec(
-                http("request_2")
+                .exec(http("request_2")
                     .post("/login_check")
                     .headers(headers_2)
                     .formParam("_username","${username}")
                     .formParam("_password","${password}")
-                    .check(status.is(200)))
+                    .check(status.in(200 to 302)))
         }
         .pause(0 milliseconds, 100 milliseconds)
         .repeat(1) {
-            exec(
-                http("request_3")
+            exec(http("request_3")
                     .get("/")
                     .headers(headers_1))
                 .pause(7, 8)
-        }.exec(
-            http("request_4")
+        }.exec(http("request_4")
                 .get("/logout")
                 .headers(headers_1)
-                .check(status.is(200)))
+                .check(status.in(200 to 302)))
         .pause(0 milliseconds, 100 milliseconds)
-        .exec(
-            http("request_5")
+        .exec(http("request_5")
                 .get("/")
                 .headers(headers_1))
 

@@ -1,11 +1,16 @@
 <?php
 /**
- * This file is part of the <PI_CRUD> project.
+ * This file is part of the <NameProject> project.
  *
- * @category   PI_CRUD_Controllers
+ * @category   <NameProjectCode>
  * @package    Controller
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since XXXX-XX-XX
+ * @subpackage {{ entity_namespace }}
+ * @author     <NameAuthor> <Mail@Author>
+ * @copyright  {{ "now"|date("Y") }} <NameCopyright>
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      {{ "now"|date("m/d/Y") }}
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -37,10 +42,15 @@ use {{ namespace }}\Entity\Translation\{{ entity }}Translation;
  * @Route("/{{ route_prefix }}")
 {% endif %}
  *
- * @category   PI_CRUD_Controllers
+ * @category   <NameProjectCode>
  * @package    Controller
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage {{ entity_namespace }}
+ * @author     <NameAuthor> <Mail@Author>
+ * @copyright  {{ "now"|date("Y") }} <NameCopyright>
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      {{ "now"|date("m/d/Y") }}
  */
 class {{ entity_class }}Controller extends abstractController
 {

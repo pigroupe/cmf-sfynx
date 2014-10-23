@@ -43,6 +43,7 @@ class HelpFieldTypeExtension extends AbstractTypeExtension
         $view->vars['help_block'] = $form->getConfig()->getAttribute('help_block');
         $view->vars['help_label'] = $form->getConfig()->getAttribute('help_label');
     }
+    
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -51,6 +52,12 @@ class HelpFieldTypeExtension extends AbstractTypeExtension
             'help_label' => null,
         ));
     }
+    
+    /**
+     * Returns the name of the type being extended.
+     *
+     * @return string The name of the type being extended
+     */
     public function getExtendedType()
     {
         return 'field';
