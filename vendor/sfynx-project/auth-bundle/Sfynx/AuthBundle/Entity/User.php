@@ -479,15 +479,28 @@ class User extends AbstractUser
      */
     public function setApplicationTokens( array $all)
     {
-    	foreach ($all as $one) {
+        foreach ($all as $one) {
             $one = strtoupper($one);
-            if (!in_array($one, $this->applicationTokens, true)) {
+            if (is_null($this->applicationTokens)) {
                 $this->applicationTokens[] = $one;
             } else {
-                $key = array_search($one, $this->applicationTokens); 
-                $this->applicationTokens[ $key ] = $one;
+                $info = explode("::", $one);
+                $name = $info[0];
+                $is_in = false;
+                foreach ($this->applicationTokens as $key => $appl) {
+                    $string = strtoupper($appl);
+                    $info_ = explode("::", $appl);
+                    $name_ = $info[0];
+                    if ($name == $name_) {
+                        $this->applicationTokens[ $key ] = $one;
+                        $is_in = true;
+                    }
+                }
+                if (!$is_in) {
+                    $this->applicationTokens[] = $one;
+                }
             }
-    	}
+        }
     }
     
     /**
