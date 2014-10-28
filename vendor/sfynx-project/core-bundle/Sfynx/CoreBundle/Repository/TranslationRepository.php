@@ -61,10 +61,13 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      */
     public function __construct(EntityManager $em, ClassMetadata $class)
     {
-           parent::__construct($em, $class);
-           
-           if (isset($this->getClassMetadata()->associationMappings['translations']) && !empty($this->getClassMetadata()->associationMappings['translations']))
-               $this->_entityTranslationName = $this->getClassMetadata()->associationMappings['translations']['targetEntity'];
+        parent::__construct($em, $class);
+
+        if (isset($this->getClassMetadata()->associationMappings['translations']) 
+               && !empty($this->getClassMetadata()->associationMappings['translations'])) {
+           $this->_entityTranslationName = $this->getClassMetadata()
+                   ->associationMappings['translations']['targetEntity'];
+        }
     }
     
     /**
@@ -112,10 +115,13 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function count($enabled = null){
-        if (!is_null($enabled))
-            return $this->_em->createQuery("SELECT COUNT(c) FROM {$this->_entityName} c WHERE c.enabled = '{$enabled}'")->getSingleScalarResult();
-        else
+        if (!is_null($enabled)) {
+            return $this->_em
+            ->createQuery("SELECT COUNT(c) FROM {$this->_entityName} c WHERE c.enabled = '{$enabled}'")
+            ->getSingleScalarResult();
+        } else {
             return $this->_em->createQuery("SELECT COUNT(c) FROM {$this->_entityName} c")->getSingleScalarResult();
+        }
     }    
     
     /**
@@ -219,7 +225,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
             $query->setCacheMode($MODE);
         }
         if (method_exists($query, 'setCacheable')) {
-        	$query->setCacheable($setCacheable);
+            $query->setCacheable($setCacheable);
         }
         
     	return $query;

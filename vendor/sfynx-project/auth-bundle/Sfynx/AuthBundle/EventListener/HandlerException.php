@@ -40,38 +40,41 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class HandlerException
 {
     /**
-     * @var EngineInterface
+     * @var EngineInterface $templating The templating service
      */
     protected $templating;
     
     /**
-     * @var \AppKernel
+     * @var string $locale The locale value
      */
-    protected $kernel;
+    protected $locale;
     
     /**
-     * @var string
-     */
-    protected $local;
-    
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface $container The service container
      */
     protected $container;
     
     /**
+     * @var \AppKernel $kernel Kernel service
+     */
+    protected $kernel;    
+    
+    /**
      * Constructor.
      * 
-     * @param EngineInterface $templating
-     * @param \AppKernel $kernel
-     * @param ContainerInterface $container The service container
+     * @param EngineInterface    $templating The templating service
+     * @param \AppKernel         $kernel     The kernel service
+     * @param ContainerInterface $container  The containerservice
      */
-    public function __construct(EngineInterface $templating, \AppKernel $kernel, ContainerInterface $container)
-    {
+    public function __construct(
+        EngineInterface $templating,
+        \AppKernel $kernel,
+        ContainerInterface $container
+    ) {
         $this->container  = $container;
         $this->templating = $templating;
-        $this->kernel = $kernel;
-        $this->local = $this->container->get('request')->getLocale();
+        $this->locale     = $this->container->get('request')->getLocale();
+        $this->kernel     = $kernel;
     }
 
     /**
@@ -94,16 +97,18 @@ class HandlerException
             // new Response object
             $response = new Response();
             //
-            if ($this->container->hasParameter('sfynx.auth.theme.layout.error.html') && ($this->container->getParameter('sfynx.auth.theme.layout.error.html') != "")) {
-                $path_error_file = realpath($this->container->get('kernel')->locateResource($this->container->getParameter('sfynx.auth.theme.layout.error.html')));
+            if ($this->container->hasParameter('sfynx.auth.theme.layout.error.html')
+                    && ($this->container->getParameter('sfynx.auth.theme.layout.error.html') != "")) {
+                $path_error_file = realpath($this->kernel->locateResource($this->container->getParameter('sfynx.auth.theme.layout.error.html')));
                 $response->setContent(file_get_contents($path_error_file));
             } else {
-                if ($this->container->hasParameter('sfynx.auth.theme.layout.error.route_name') && ($this->container->getParameter('sfynx.auth.theme.layout.error.route_name' != ""))) {
+                if ($this->container->hasParameter('sfynx.auth.theme.layout.error.route_name')
+                        && ($this->container->getParameter('sfynx.auth.theme.layout.error.route_name' != ""))) {
                     $route_name = $this->container->getParameter('sfynx.auth.theme.layout.error.route_name');
                 } else {
                     $route_name = 'error_404';
                 }
-                $url      = $this->container->get('sfynx.tool.route.factory')->getRoute($route_name, array('locale'=> $this->local));
+                $url      = $this->container->get('sfynx.tool.route.factory')->getRoute($route_name, array('locale'=> $this->locale));
                 $content  = \Sfynx\ToolBundle\Util\PiFileManager::getCurl('/'.$url, null, null, $this->request->getUriForPath(''));
                 $response->setContent($content);
             }
