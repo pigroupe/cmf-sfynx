@@ -1,4 +1,4 @@
-#Configuration Reference
+# Configuration Reference
 
 All available configuration options are listed below with their default values.
 
@@ -36,3 +36,9 @@ sfynx_ws:
         uri_proxy_login: 'http://www.sfyn22.local'
         application_name: sso-sfynx                     
 ```
+
+# Configuration BDD
+
+We have to add an index in the application_token field like that :
+
+ALTER TABLE  `beforemrmilesin`.`fos_user` ADD INDEX  `application_token_idx` (  `application_tokens` ( 125 ) )

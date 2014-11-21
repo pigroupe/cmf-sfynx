@@ -572,13 +572,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         //
         if ( $this->isUsernamePasswordToken() ) {
             $response->headers->set('Pragma', "no-cache");
-        	$response->headers->set('Cache-control', "private");
+            $response->headers->set('Cache-control', "private");
         } elseif ( (method_exists($object, 'getLifetime') && ($object->getLifetime() == 0))  ) {
             $response->setSharedMaxAge(0);
             $response->setMaxAge(0);
         }
         if (method_exists($object, 'getMetaContentType')) {
-        	$response->headers->set('Content-Type', $object->getMetaContentType());
+            $response->headers->set('Content-Type', $object->getMetaContentType());
         }
         
         return $response;

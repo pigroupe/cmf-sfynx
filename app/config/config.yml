@@ -24,7 +24,7 @@ framework:
         name: %pi_session_name%
         cookie_lifetime: %pi_cookie_lifetime%  # 604800 86400 
         # surcharge session handler with memcache
-        #handler_id:     pi_session.handler.memcache
+        handler_id: ~ #pi_session.handler.memcache
 #        cookie_path:          ~
 #        cookie_domain:        ~
 #        cookie_secure:        true # true pour déterminer que les cookies soient envoyés seulement par des connexions sécurisée.

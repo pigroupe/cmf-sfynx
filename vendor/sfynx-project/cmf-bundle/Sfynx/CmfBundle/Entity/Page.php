@@ -20,7 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Sfynx\CmfBundle\Entity\Page
  *
- * @ORM\Table(name="pi_page")
+ * @ORM\Table(name="pi_page", indexes={@ORM\Index(name="route_name_idx", columns={"route_name"})})
  * @ORM\Entity(repositoryClass="Sfynx\CmfBundle\Repository\PageRepository")
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("route_name")

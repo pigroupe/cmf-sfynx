@@ -114,11 +114,13 @@ class HandlerException
             }
             // HttpExceptionInterface is a special type of exception
             // that holds status code and header details
-            if ($exception instanceof HttpExceptionInterface) {
+            if (method_exists($exception, "getStatusCode")) {
                 $response->setStatusCode($exception->getStatusCode());
-                $response->headers->replace($exception->getHeaders());
             } else {
-                $response->setStatusCode(500);
+                $response->setStatusCode('404');
+            }
+            if (method_exists($response, "getHeaders")) {
+                $response->headers->replace($exception->getHeaders());
             }
             // set the new $response object to the $event
             $event->setResponse($response);

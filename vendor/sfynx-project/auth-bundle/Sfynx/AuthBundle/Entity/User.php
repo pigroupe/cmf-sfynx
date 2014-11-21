@@ -24,7 +24,10 @@ use Sfynx\AuthBundle\Repository\PermissionRepository;
  * Storage agnostic overloding fos user object
  * 
  * @ORM\Entity(repositoryClass="Sfynx\AuthBundle\Repository\UserRepository")
- * @ORM\Table(name="fos_user")
+ * @ORM\Table(name="fos_user", indexes={
+ *      @ORM\Index(name="emailCanonical_idx", columns={"email_canonical"}),
+ *      @ORM\Index(name="email_idx", columns={"email"})
+ * })
  * @UniqueEntity(
  *     fields={"email"},
  *     message="Your E-Mail adress has already been registered",
@@ -488,9 +491,9 @@ class User extends AbstractUser
                 $name = $info[0];
                 $is_in = false;
                 foreach ($this->applicationTokens as $key => $appl) {
-                    $string = strtoupper($appl);
+                    $appl = strtoupper($appl);
                     $info_ = explode("::", $appl);
-                    $name_ = $info[0];
+                    $name_ = $info_[0];
                     if ($name == $name_) {
                         $this->applicationTokens[ $key ] = $one;
                         $is_in = true;
