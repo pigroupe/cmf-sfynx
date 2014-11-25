@@ -56,8 +56,7 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
-        //
-        $dossier = $container->get('kernel')->getRootDir() . '/cache/Indexation';
+        $dossier = $this->container->getParameter('pi_app_admin.cache_dir.indexation');
         if (\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777)) {
             $this->_indexPath = $dossier . self::NAME_INDEX;
         } else {

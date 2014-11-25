@@ -35,12 +35,36 @@ class Configuration implements ConfigurationInterface
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
+        $this->addCacheConfig($rootNode);
         $this->addAdminConfig($rootNode);
         $this->addSeoConfig($rootNode);
         $this->addPageConfig($rootNode);
 
         return $treeBuilder;
     }
+    
+    /**
+     * Admin config
+     *
+     * @param $rootNode ArrayNodeDefinition Class
+     *
+     * @return void
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */    
+    protected function addCacheConfig(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+        ->children()
+            ->arrayNode('cache_dir')
+                ->addDefaultsIfNotSet()
+                ->children()                
+                    ->scalarNode('etag')->defaultValue('%kernel.root_dir%/cachesfynx/Etag/')->cannotBeEmpty()->end()
+                    ->scalarNode('indexation')->defaultValue('%kernel.root_dir%/cachesfynx/Indexation')->cannotBeEmpty()->end()
+                ->end()        
+            ->end()
+        ->end();
+    }       
     
     /**
      * Admin config
@@ -196,8 +220,8 @@ class Configuration implements ConfigurationInterface
                         ->isRequired()
                             ->children()
                                 ->booleanNode('authorized')->isRequired()->defaultValue(false)->end()
-                                ->scalarNode('repository')->isRequired()->defaultValue("")->end()
-                                ->scalarNode('file_name')->isRequired()->defaultValue("")->end()
+                                ->scalarNode('repository')->isRequired()->defaultValue("%kernel.root_dir%/cachesfynx/seo")->cannotBeEmpty()->end()
+                                ->scalarNode('file_name')->isRequired()->defaultValue("seo_links.yml")->cannotBeEmpty()->end()
                             ->end()
                         ->end()                        
                         
@@ -205,5 +229,4 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
     }  
-
 }

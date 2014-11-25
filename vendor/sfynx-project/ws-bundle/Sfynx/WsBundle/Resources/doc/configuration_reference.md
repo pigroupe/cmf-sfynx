@@ -41,4 +41,6 @@ sfynx_ws:
 
 We have to add an index in the application_token field like that :
 
+```
 ALTER TABLE  `beforemrmilesin`.`fos_user` ADD INDEX  `application_token_idx` (  `application_tokens` ( 125 ) )
+```

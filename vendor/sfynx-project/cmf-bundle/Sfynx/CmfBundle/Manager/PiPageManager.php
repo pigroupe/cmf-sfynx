@@ -64,24 +64,26 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     public function render($lang = '', $isSetPage = false)
     {
         // we disable the handler
-        $em     = $this->container->get('doctrine')->getManager();
+        $em = $this->container->get('doctrine')->getManager();
         $eventManager = $em->getEventManager();
         $eventManager->removeEventListener(
-        		array('kernel.request'),
-        		$this->container->get('sfynx.auth.locale_handler')
+            array('kernel.request'),
+            $this->container->get('sfynx.auth.locale_handler')
         );
         $eventManager->removeEventListener(
-        		array('kernel.request'),
-        		$this->container->get('sfynx.auth.request_handler')
+            array('kernel.request'),
+            $this->container->get('sfynx.auth.request_handler')
         );
         $eventManager->removeEventListener(
-        		array('kernel.request'),
-        		$this->container->get('pi_app_admin.request_handler')
+            array('kernel.request'),
+            $this->container->get('pi_app_admin.request_handler')
         );
         // we set the langue
-        if (empty($lang))    $lang = $this->language;
+        if (empty($lang)) {
+            $lang = $this->language;
+        }
         // Initialize page
-        if ($this->getCurrentPage()) {
+        if ($this->getCurrentPage() instanceof Page) {
             // we get the current page.
             $page = $this->getCurrentPage();
             // we set the page.
@@ -98,7 +100,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         }
         // if the page is enabled.
         if ($page && $page->getEnabled()) {
-            //     Initialize response
+            // Initialize response
             $response = $this->getResponseByIdAndType('page', $page->getId());            
             // we register only the translation page asked in the $lang value.
             $this->setTranslations($page, $lang);
@@ -115,9 +117,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // If the translation page is secure and the user is not authorized, we return to the home page.
             if ($pageTrans && $pageTrans->getSecure() && $this->isUsernamePasswordToken()) {
                 // Gets all user roles.
-                $user_roles                = $this->container->get('sfynx.auth.role.factory')->getAllUserRoles();
+                $user_roles            = $this->container->get('sfynx.auth.role.factory')->getAllUserRoles();
                 // Gets the best role authorized to access to the entity.
-                $authorized_page_roles     = $this->container->get('sfynx.auth.role.factory')->getBestRoles($pageTrans->getHeritage());                
+                $authorized_page_roles = $this->container->get('sfynx.auth.role.factory')->getBestRoles($pageTrans->getHeritage());                
                 $right = false;
                 if (is_null($authorized_page_roles)) {
                     $right = true;
@@ -539,10 +541,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      *
      * @param string    $route        route page
      * @param bool        $isSetPage
-     *
+     *L
      * @return \Sfynx\CmfBundle\Entity\Page
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-01-23
      */
@@ -552,7 +553,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         if (!$route || empty($route)) {
             $page = $this->getRepository('page')->getHomepage();
         } else {
-            $page = $this->getRepository('page')->findOneBy(array('route_name' => $route));
+            $page = $this->getRepository('page')->getPageByRoute($route);
         }
         if ($page instanceof Page) {
             // we set the result
@@ -568,34 +569,33 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         }
     }  
 
-  	/**
-  	 * Redirect to the url by his route name.
-  	 *
-  	 * @param string $route_name        route name of a page
-  	 * @param string $lang
-  	 * @return string    content page
-  	 * @access    public
-  	 *
-  	 * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-  	 * @since 2012-06-11
-  	 */
-  	public function redirectPage($route_name = 'error_404')
-  	{
+    /**
+     * Redirect to the url by his route name.
+     *
+     * @param string $route_name Route name of a page
+     * @param string $lang       Language value 
+     * 
+     * @return string    content page
+     * @access public
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since  2012-06-11
+     */
+    public function redirectPage($route_name = 'error_404')
+    {
         $url_redirection = $this->container->get('sfynx.tool.route.factory')->getRoute($route_name);
         header('Location: '. $url_redirection);
         exit;
-  	}  	
+    }  	
 
     /**
      * Sets a page and construct all it information.
      *
-     * @param \Sfynx\CmfBundle\Entity\Page $page
+     * @param Page $page A page entity
      *
      * @return void
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function setPage(Page $page)
     {
@@ -1011,54 +1011,54 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     {
     	// we get the id of the page.
     	if ($page instanceof \Sfynx\CmfBundle\Entity\Page ) {
-    		$id = $page->getId();
+            $id = $page->getId();
     	} else {
-    		$id = $page;
+            $id = $page;
     	}
     	if (!is_null($referer_url)) {
-    		$name_page   = $this->createEtag('page', $id, $lang, array('page-url'=>$referer_url));
-    		$name_page   = str_replace('//', '/', $name_page);
-    		$this->cacheRefreshByname($name_page);
+            $name_page   = $this->createEtag('page', $id, $lang, array('page-url'=>$referer_url));
+            $name_page   = str_replace('//', '/', $name_page);
+            $this->cacheRefreshByname($name_page);
     	}
     	//print_r($name_page);
     	//print_r('<br />');print_r('<br />');
     	$path_json_file = $this->createJsonFileName('page', $id, $lang);
     	if (file_exists($path_json_file)) {
-    		$info = explode('|', file_get_contents($path_json_file));
-    		if (isset($info[1])) {
-    		    $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
-    			$this->cacheRefreshByname($info[1]);
-    			//print_r($info[1]);
-    			//print_r('<br />');print_r('<br />');
-    		}
+            $info = explode('|', file_get_contents($path_json_file));
+            if (isset($info[1])) {
+                $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+                $this->cacheRefreshByname($info[1]);
+                //print_r($info[1]);
+                //print_r('<br />');print_r('<br />');
+            }
     	}
     	$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
     	if (file_exists($path_json_file_sluggify)) {
-        	$reading  = fopen($path_json_file_sluggify, 'r');
-        	while (!feof($reading)) {
-    			$info = explode('|', fgets($reading));
-    			if (isset($info[1])) {
-    			    $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
-    				$this->cacheRefreshByname($info[1]);
-    				//print_r($info[1]);
-    				//print_r('<br />');print_r('<br />');
-    			}
-    		}
-    		fclose($reading);
+            $reading  = fopen($path_json_file_sluggify, 'r');
+            while (!feof($reading)) {
+                $info = explode('|', fgets($reading));
+                if (isset($info[1])) {
+                    $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+                    $this->cacheRefreshByname($info[1]);
+                    //print_r($info[1]);
+                    //print_r('<br />');print_r('<br />');
+                }
+            }
+            fclose($reading);
     	}
     	$path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
     	if (file_exists($path_json_file_history)) {
-    		$reading  = fopen($path_json_file_history, 'r');
-    		while (!feof($reading)) {
-    			$info = explode('|', fgets($reading));
-    			if (isset($info[1])) {
-    				$info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
-    				$this->cacheRefreshByname($info[1]);
-    				//print_r($info[1]);
-    				//print_r('<br />');print_r('<br />');
-    			}
-    		}
-    		fclose($reading);
+            $reading  = fopen($path_json_file_history, 'r');
+            while (!feof($reading)) {
+                $info = explode('|', fgets($reading));
+                if (isset($info[1])) {
+                    $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+                    $this->cacheRefreshByname($info[1]);
+                    //print_r($info[1]);
+                    //print_r('<br />');print_r('<br />');
+                }
+            }
+            fclose($reading);
     	}    	
     }   
         
@@ -1085,86 +1085,86 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     	$params_transwidget = json_encode(array('widget-id'=>$id), JSON_UNESCAPED_UNICODE);
     	$widget_translations = $this->getWidgetManager()->setWidgetTranslations($widget);
     	if (is_array($widget_translations)) {
-    		foreach ($widget_translations as $translang => $translationWidget) {
-	    		// we create the cache name of the transwidget
-    			$Etag_transwidget  = 'transwidget:'.$translationWidget->getId().':'.$translang.':'.$params_transwidget;
-		    	// we refresh the cache of the transwidget
-    			$this->cacheRefreshByname($Etag_transwidget);
-    		}
+            foreach ($widget_translations as $translang => $translationWidget) {
+                    // we create the cache name of the transwidget
+                    $Etag_transwidget  = 'transwidget:'.$translationWidget->getId().':'.$translang.':'.$params_transwidget;
+                    // we refresh the cache of the transwidget
+                    $this->cacheRefreshByname($Etag_transwidget);
+            }
     	}
-	   	// If the widget is a "content snippet"
+        // If the widget is a "content snippet"
     	if ( ($widget->getPlugin() == 'content') && ($widget->getAction() == 'snippet') ) {
-    		$xmlConfig    = $widget->getConfigXml();
-    		// if the configXml field of the widget is configured correctly.
-    		try {
-	    		$xmlConfig    = new \Zend_Config_Xml($xmlConfig);
-    			if ($xmlConfig->widgets->get('content')) {
-    				$id_snippet    = $xmlConfig->widgets->content->id;
-		    		// we create the cache name of the snippet
-    				$Etag_snippet  = 'transwidget:'.$id_snippet.':'.$lang.':'.$params_transwidget;
-		    		// we refresh the cache of the snippet
-    				$this->cacheRefreshByname($Etag_snippet);
-    			}
-    		} catch (\Exception $e) {
-    		}
+            $xmlConfig    = $widget->getConfigXml();
+            // if the configXml field of the widget is configured correctly.
+            try {
+                $xmlConfig    = new \Zend_Config_Xml($xmlConfig);
+                if ($xmlConfig->widgets->get('content')) {
+                    $id_snippet    = $xmlConfig->widgets->content->id;
+                    // we create the cache name of the snippet
+                    $Etag_snippet  = 'transwidget:'.$id_snippet.':'.$lang.':'.$params_transwidget;
+                    // we refresh the cache of the snippet
+                    $this->cacheRefreshByname($Etag_snippet);
+                }
+            } catch (\Exception $e) {
+            }
     	}
     	// If the widget is a "gedmo snippet"
     	if ( ($widget->getPlugin() == 'gedmo') && ($widget->getAction() == 'snippet') ) {
-    		$xmlConfig  = $widget->getConfigXml();
-    		$new_widget = null;
-    		// if the configXml field of the widget is configured correctly.
-    		try {
-    			$xmlConfig     = new \Zend_Config_Xml($xmlConfig);
-    			if ($xmlConfig->widgets->get('gedmo')) {
-    				$id = $xmlConfig->widgets->gedmo->id;
-    				// we refesh only if the widget is in cash.
-    				$Etag_widget  = 'widget:'.$id.':'.$lang;
-    				// we refesh only if the widget is in cash.
-    				$this->cacheRefreshByname($Etag_widget);
-    			}
-    		} catch (\Exception $e) {
-    		}
+            $xmlConfig  = $widget->getConfigXml();
+            $new_widget = null;
+            // if the configXml field of the widget is configured correctly.
+            try {
+                $xmlConfig     = new \Zend_Config_Xml($xmlConfig);
+                if ($xmlConfig->widgets->get('gedmo')) {
+                    $id = $xmlConfig->widgets->gedmo->id;
+                    // we refesh only if the widget is in cash.
+                    $Etag_widget  = 'widget:'.$id.':'.$lang;
+                    // we refesh only if the widget is in cash.
+                    $this->cacheRefreshByname($Etag_widget);
+                }
+            } catch (\Exception $e) {
+            }
     	}
     	$path_json_file = $this->createJsonFileName('widget', $id, $lang);
     	if (file_exists($path_json_file)) {
-    		$info = explode('|', file_get_contents($path_json_file));
-    		if (isset($info[1])) {
-    		    $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
-    			$this->cacheRefreshByname($info[1]);
-    			//print_r($info[1]);
-    			//print_r('<br />');print_r('<br />');
-    		}
+            $info = explode('|', file_get_contents($path_json_file));
+            if (isset($info[1])) {
+                $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+                $this->cacheRefreshByname($info[1]);
+                //print_r($info[1]);
+                //print_r('<br />');print_r('<br />');
+            }
     	}
     	$path_json_file_history = $this->createJsonFileName('widget-history', $id, $lang);
     	if (file_exists($path_json_file_history)) {
-    		$reading  = fopen($path_json_file_history, 'r');
-    		while (!feof($reading)) {
-    			$info = explode('|', fgets($reading));
-    			if (isset($info[1])) {
-    				$info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
-    				$this->cacheRefreshByname($info[1]);
-    				//print_r($info[1]);
-    				//print_r('<br />');print_r('<br />');
-    			}
-    		}
-    		fclose($reading);
+            $reading  = fopen($path_json_file_history, 'r');
+            while (!feof($reading)) {
+                $info = explode('|', fgets($reading));
+                if (isset($info[1])) {
+                    $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+                    $this->cacheRefreshByname($info[1]);
+                    //print_r($info[1]);
+                    //print_r('<br />');print_r('<br />');
+                }
+            }
+            fclose($reading);
     	}
         $path_json_file = $this->createJsonFileName('esi', $id, $lang);
     	if (file_exists($path_json_file)) {
-    		$reading  = fopen($path_json_file, 'r');
-    		while (!feof($reading)) {
-    			$info = explode('|', fgets($reading));
-    			if (isset($info[1])) {
-    				// we get the esi url
-        			$info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
-        			// we delete the cache widget file
-        			$this->container->get("sfynx.cache.filecache")->getClient()->setPath($this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository());
-        			$this->container->get("sfynx.cache.filecache")->clear($info[1]);
-        			//print_r($id);print_r($info[1]);
-        			//print_r('<br />');print_r('<br />');
-    			}
-    		}
-    		fclose($reading);
+            $reading  = fopen($path_json_file, 'r');
+            while (!feof($reading)) {
+                $info = explode('|', fgets($reading));
+                if (isset($info[1])) {
+                    // we get the esi url
+                    $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
+                    // we delete the cache widget file
+                    $this->container->get("sfynx.cache.filecache")->getClient()->setPath($this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository());
+                    $this->container->get("sfynx.cache.filecache")->clear($info[1]);
+                    //print_r($id);print_r($info[1]);
+                    //print_r('<br />');print_r('<br />');
+                }
+            }
+            fclose($reading);
     	}  	
     }    
     
@@ -1225,118 +1225,118 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     public function cacheDelete($entity, $delete_cache_only)
     {
         if (
-    		$entity instanceof \Sfynx\CmfBundle\Entity\Page ||
-    		$entity instanceof \Sfynx\CmfBundle\Entity\TranslationPage ||
-    		$entity instanceof \Sfynx\CmfBundle\Entity\Widget
+            $entity instanceof \Sfynx\CmfBundle\Entity\Page 
+                || $entity instanceof \Sfynx\CmfBundle\Entity\TranslationPage 
+                || $entity instanceof \Sfynx\CmfBundle\Entity\Widget
         ) {
-        	if ($entity instanceof \Sfynx\CmfBundle\Entity\TranslationPage) {
-        		$entity = $entity->getPage();
-        	}
-        	// we set the persist of the Page entity
-        	if ($entity instanceof \Sfynx\CmfBundle\Entity\Page) {
-        		$type = 'page';
-        	} elseif ($entity instanceof \Sfynx\CmfBundle\Entity\Widget) {
-        		$type = 'widget';
-        	}
-        	$names = array();
-        	$all_locales = $this->container->get('sfynx.auth.locale_manager')->getAllLocales();
-        	foreach ($all_locales as $key => $lang) {
-        		// we delete the cache of the page or the widget
-        		$path_json_file = $this->createJsonFileName($type, $entity->getId(), $lang);
-        		if (file_exists($path_json_file)) {
-        			$info = explode('|', file_get_contents($path_json_file));
-        			if (isset($info[1])) {
-        				$this->cacheRefreshByname($info[1]);
-        				// we delete the json file cache
-        				if (!$delete_cache_only) {
-        					unlink($path_json_file);
-        				}
-        			}
-        		}
-        		if ($type == 'page') {
-        			// we delete the cache of all sluggify urls of the page.
-        			$path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $entity->getId(), $lang);
-        			if (file_exists($path_json_file_sluggify)) {
-        				$reading  = fopen($path_json_file_sluggify, 'r');
-        				while (!feof($reading)) {
-        					$info = explode('|', fgets($reading));
-        					if (isset($info[1])) {
-        						$this->cacheRefreshByname($info[1]);
-        						$path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $info[1], $lang);
-        						if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
-        							unlink($path_json_file_tmp);
-        						}
-        					}
-        				}
-        				fclose($reading);
-        				// we delete the json file cache
-        				if (!$delete_cache_only) {
-        					unlink($path_json_file_sluggify);
-        				}
-        			}
-        			// we delete the cache of all history urls of the page.
-        			$path_json_file_sluggify = $this->createJsonFileName('page-history', $entity->getId(), $lang);
-        			if (file_exists($path_json_file_sluggify)) {
-        				$reading  = fopen($path_json_file_sluggify, 'r');
-        				while (!feof($reading)) {
-        					$info = explode('|', fgets($reading));
-        					if (isset($info[1])) {
-        						$this->cacheRefreshByname($info[1]);
-        						$path_json_file_tmp = $this->createJsonFileName('page-history-tmp', $info[1], $lang);
-        						if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
-        							unlink($path_json_file_tmp);
-        						}
-        					}
-        				}
-        				fclose($reading);
-        				// we delete the json file cache
-        				if (!$delete_cache_only) {
-        					unlink($path_json_file_sluggify);
-        				}
-        			}
-        			// we delete the cache of all esi tag urls of the page.
-        			$path_json_file_esi = $this->createJsonFileName('esi', $entity->getId(), $lang);
-        			if (file_exists($path_json_file_sluggify)) {
-        				$reading  = fopen($path_json_file_sluggify, 'r');
-        				while (!feof($reading)) {
-        					$info = explode('|', fgets($reading));
-        					if (isset($info[1])) {
-        						$this->cacheRefreshByname($info[1]);
-        						$path_json_file_tmp = $this->createJsonFileName('esi-tmp', $info[1], $lang);
-        						if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
-        							unlink($path_json_file_tmp);
-        						}
-        					}
-        				}
-        				fclose($reading);
-        				// we delete the json file cache
-        				if (!$delete_cache_only) {
-        					unlink($path_json_file_esi);
-        				}
-        			}
-        		} elseif ($type == 'widget') {
-        		    // we delete the cache of all history urls of the page.
-        		    $path_json_file_sluggify = $this->createJsonFileName('widget-history', $entity->getId(), $lang);
-        		    if (file_exists($path_json_file_sluggify)) {
-        		    	$reading  = fopen($path_json_file_sluggify, 'r');
-        		    	while (!feof($reading)) {
-        		    		$info = explode('|', fgets($reading));
-        		    		if (isset($info[1])) {
-        		    			$this->cacheRefreshByname($info[1]);
-        		    			$path_json_file_tmp = $this->createJsonFileName('widget-history-tmp', $info[1], $lang);
-        		    			if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
-        		    				unlink($path_json_file_tmp);
-        		    			}
-        		    		}
-        		    	}
-        		    	fclose($reading);
-        		    	// we delete the json file cache
-        		    	if (!$delete_cache_only) {
-        		    		unlink($path_json_file_sluggify);
-        		    	}
-        		    }
-        		}
-        	}
+            if ($entity instanceof \Sfynx\CmfBundle\Entity\TranslationPage) {
+                $entity = $entity->getPage();
+            }
+            // we set the persist of the Page entity
+            if ($entity instanceof \Sfynx\CmfBundle\Entity\Page) {
+                $type = 'page';
+            } elseif ($entity instanceof \Sfynx\CmfBundle\Entity\Widget) {
+                $type = 'widget';
+            }
+            $names = array();
+            $all_locales = $this->container->get('sfynx.auth.locale_manager')->getAllLocales();
+            foreach ($all_locales as $key => $lang) {
+                // we delete the cache of the page or the widget
+                $path_json_file = $this->createJsonFileName($type, $entity->getId(), $lang);
+                if (file_exists($path_json_file)) {
+                    $info = explode('|', file_get_contents($path_json_file));
+                    if (isset($info[1])) {
+                        $this->cacheRefreshByname($info[1]);
+                        // we delete the json file cache
+                        if (!$delete_cache_only) {
+                            unlink($path_json_file);
+                        }
+                    }
+                }
+                if ($type == 'page') {
+                    // we delete the cache of all sluggify urls of the page.
+                    $path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $entity->getId(), $lang);
+                    if (file_exists($path_json_file_sluggify)) {
+                        $reading  = fopen($path_json_file_sluggify, 'r');
+                        while (!feof($reading)) {
+                            $info = explode('|', fgets($reading));
+                            if (isset($info[1])) {
+                                $this->cacheRefreshByname($info[1]);
+                                $path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $info[1], $lang);
+                                if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
+                                        unlink($path_json_file_tmp);
+                                }
+                            }
+                        }
+                        fclose($reading);
+                        // we delete the json file cache
+                        if (!$delete_cache_only) {
+                                unlink($path_json_file_sluggify);
+                        }
+                    }
+                    // we delete the cache of all history urls of the page.
+                    $path_json_file_sluggify = $this->createJsonFileName('page-history', $entity->getId(), $lang);
+                    if (file_exists($path_json_file_sluggify)) {
+                        $reading  = fopen($path_json_file_sluggify, 'r');
+                        while (!feof($reading)) {
+                            $info = explode('|', fgets($reading));
+                            if (isset($info[1])) {
+                                $this->cacheRefreshByname($info[1]);
+                                $path_json_file_tmp = $this->createJsonFileName('page-history-tmp', $info[1], $lang);
+                                if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
+                                        unlink($path_json_file_tmp);
+                                }
+                            }
+                        }
+                        fclose($reading);
+                        // we delete the json file cache
+                        if (!$delete_cache_only) {
+                            unlink($path_json_file_sluggify);
+                        }
+                    }
+                    // we delete the cache of all esi tag urls of the page.
+                    $path_json_file_esi = $this->createJsonFileName('esi', $entity->getId(), $lang);
+                    if (file_exists($path_json_file_sluggify)) {
+                        $reading  = fopen($path_json_file_sluggify, 'r');
+                        while (!feof($reading)) {
+                            $info = explode('|', fgets($reading));
+                            if (isset($info[1])) {
+                                $this->cacheRefreshByname($info[1]);
+                                $path_json_file_tmp = $this->createJsonFileName('esi-tmp', $info[1], $lang);
+                                if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
+                                        unlink($path_json_file_tmp);
+                                }
+                            }
+                        }
+                        fclose($reading);
+                        // we delete the json file cache
+                        if (!$delete_cache_only) {
+                            unlink($path_json_file_esi);
+                        }
+                    }
+                } elseif ($type == 'widget') {
+                    // we delete the cache of all history urls of the page.
+                    $path_json_file_sluggify = $this->createJsonFileName('widget-history', $entity->getId(), $lang);
+                    if (file_exists($path_json_file_sluggify)) {
+                        $reading  = fopen($path_json_file_sluggify, 'r');
+                        while (!feof($reading)) {
+                            $info = explode('|', fgets($reading));
+                            if (isset($info[1])) {
+                                $this->cacheRefreshByname($info[1]);
+                                $path_json_file_tmp = $this->createJsonFileName('widget-history-tmp', $info[1], $lang);
+                                if (!$delete_cache_only && file_exists($path_json_file_tmp)) {
+                                        unlink($path_json_file_tmp);
+                                }
+                            }
+                        }
+                        fclose($reading);
+                        // we delete the json file cache
+                        if (!$delete_cache_only) {
+                                unlink($path_json_file_sluggify);
+                        }
+                    }
+                }
+            }
         }        
     }
         
@@ -1355,87 +1355,87 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     {
     	$em = $this->getContainer()->get('doctrine')->getManager();    	
     	if (empty($locale)) {
-    		$locale       = $this->getContainer()->get('request')->getLocale();
+            $locale = $this->getContainer()->get('request')->getLocale();
     	}
     	// we get the current page.
     	$page = $this->getCurrentPage();
     	$id = $page->getId();
     	if (!is_null($page) && !is_null($this->translations[$id])) {    
-    		$eventManager = $em->getEventManager();
-    		$eventManager->removeEventListener(
-    				array('prePersist'),
-    				$this->getContainer()->get('pi_app_admin.prepersist_listener')
-    		);
-    		$eventManager->removeEventListener(
-    				array('postPersist'),
-    				$this->getContainer()->get('pi_app_admin.postpersist_listener')
-    		);
-    		$eventManager->removeEventListener(
-    				array('preUpdate'),
-    				$this->getContainer()->get('pi_app_admin.preupdate_listener')
-    		);
-    		$eventManager->removeEventListener(
-    				array('postUpdate'),
-    				$this->getContainer()->get('pi_app_admin.postupdate_listener')
-    		);
-			//    		
-    		$new_page = clone($page);
-    		$new_page->setId(null);
-    		// we copy all translations.
-    		foreach ($this->translations[$id] as $translation) {
-    			$new_translation = clone($translation);
-    			$new_translation->setId(null);
-    			$new_page->addTranslation($new_translation);
-    		}
-			// we clone all blocks and all widgets.   		
-    		if (isset($this->blocks[$id]) && !empty($this->blocks[$id])) {
-    			$all_blocks = $this->blocks[$id];
-    			foreach ($all_blocks as $block) {
-    				$new_block = clone($block);
-    				$new_block->setId(null);
-    				// if the block is not disabled.
-    				if ($block->getEnabled()) {    	
-    					// we set all widget of the block
-    					if (isset($this->widgets[$id][$block->getId()]) && !empty($this->widgets[$id][$block->getId()])){
-    						$all_widgets      = $this->widgets[$id][$block->getId()];
-    						foreach ($all_widgets as $widget) {
-    							if ($widget->getEnabled()) {
-    								$new_widget = clone($widget);
-    								$new_widget->setId(null);
-    								$new_block->addWidget($new_widget);
-    							}
-    						}
-    					}
-    				}
-    				$new_page->addBlock($new_block);
-    			}
-    		}
-    		// we change the route name of the new page.
-    		$randome = new \DateTime();
-    		$new_page->setRouteName($page->getRouteName() . '_copy_' . $randome->getTimeStamp());
-    		$new_page->setUrl($page->getUrl() . '/copy/' . $randome->getTimeStamp());
-    		// we persist.
-    		$em->persist($new_page);
-    		$em->flush();
-    		// we register the new page in the route cache manager.
-    		$routeCacheManager = $this->getContainer()->get('sfynx.tool.route.cache');
-    		$routeCacheManager->setGenerator();
-    		$routeCacheManager->setMatcher();
-    		// we set the new url in the locale.
-    		$entity_translate_page = $this->translations[$id][$locale];
-    		if (
-    			($entity_translate_page instanceof \Sfynx\CmfBundle\Entity\TranslationPage)
-    			&&
-    			($entity_translate_page->getSlug() != "")
-    		) {
-    			$new_url = $new_page->getUrl() . '/' . $entity_translate_page->getSlug();
-    		} else {
-    			$new_url = $new_page->getUrl();
-    		}
-    		$new_url = str_replace("//", "/", $new_url);
-    		$new_url = preg_replace("/{[a-zA-Z0-9]+}/i", 'testValue', $new_url);
-    		
-    		return $new_url;
+            $eventManager = $em->getEventManager();
+            $eventManager->removeEventListener(
+                array('prePersist'),
+                $this->getContainer()->get('pi_app_admin.prepersist_listener')
+            );
+            $eventManager->removeEventListener(
+                array('postPersist'),
+                $this->getContainer()->get('pi_app_admin.postpersist_listener')
+            );
+            $eventManager->removeEventListener(
+                array('preUpdate'),
+                $this->getContainer()->get('pi_app_admin.preupdate_listener')
+            );
+            $eventManager->removeEventListener(
+                array('postUpdate'),
+                $this->getContainer()->get('pi_app_admin.postupdate_listener')
+            );
+            //    		
+            $new_page = clone($page);
+            $new_page->setId(null);
+            // we copy all translations.
+            foreach ($this->translations[$id] as $translation) {
+                $new_translation = clone($translation);
+                $new_translation->setId(null);
+                $new_page->addTranslation($new_translation);
+            }
+                    // we clone all blocks and all widgets.   		
+            if (isset($this->blocks[$id]) && !empty($this->blocks[$id])) {
+                $all_blocks = $this->blocks[$id];
+                foreach ($all_blocks as $block) {
+                    $new_block = clone($block);
+                    $new_block->setId(null);
+                    // if the block is not disabled.
+                    if ($block->getEnabled()) {    	
+                        // we set all widget of the block
+                        if (isset($this->widgets[$id][$block->getId()]) && !empty($this->widgets[$id][$block->getId()])){
+                            $all_widgets      = $this->widgets[$id][$block->getId()];
+                            foreach ($all_widgets as $widget) {
+                                if ($widget->getEnabled()) {
+                                    $new_widget = clone($widget);
+                                    $new_widget->setId(null);
+                                    $new_block->addWidget($new_widget);
+                                }
+                            }
+                        }
+                    }
+                    $new_page->addBlock($new_block);
+                }
+            }
+            // we change the route name of the new page.
+            $randome = new \DateTime();
+            $new_page->setRouteName($page->getRouteName() . '_copy_' . $randome->getTimeStamp());
+            $new_page->setUrl($page->getUrl() . '/copy/' . $randome->getTimeStamp());
+            // we persist.
+            $em->persist($new_page);
+            $em->flush();
+            // we register the new page in the route cache manager.
+            $routeCacheManager = $this->getContainer()->get('sfynx.tool.route.cache');
+            $routeCacheManager->setGenerator();
+            $routeCacheManager->setMatcher();
+            // we set the new url in the locale.
+            $entity_translate_page = $this->translations[$id][$locale];
+            if (
+                ($entity_translate_page instanceof \Sfynx\CmfBundle\Entity\TranslationPage)
+                &&
+                ($entity_translate_page->getSlug() != "")
+            ) {
+                $new_url = $new_page->getUrl() . '/' . $entity_translate_page->getSlug();
+            } else {
+                $new_url = $new_page->getUrl();
+            }
+            $new_url = str_replace("//", "/", $new_url);
+            $new_url = preg_replace("/{[a-zA-Z0-9]+}/i", 'testValue', $new_url);
+
+            return $new_url;
     	}
     	
     	return $this->getContainer()->get('sfynx.tool.route.factory')->getRoute('home_page', array('locale' => $locale));
@@ -1614,6 +1614,5 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         }
 
         return $urls;
-    }  
-    
+    }      
 }

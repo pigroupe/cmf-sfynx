@@ -43,6 +43,18 @@ class SfynxCmfExtension extends Extension
         // we load config
         $configuration = new Configuration();
         $config  = $this->processConfiguration($configuration, $config);
+        
+        /**
+         * Cache config parameter
+         */
+        if (isset($config['cache_dir'])){
+            if (isset($config['cache_dir']['etag'])) {
+                $container->setParameter('pi_app_admin.cache_dir.etag', $config['cache_dir']['etag']);
+            }
+            if (isset($config['cache_dir']['indexation'])) {
+                $container->setParameter('pi_app_admin.cache_dir.indexation', $config['cache_dir']['indexation']);
+            }            
+        }            
 
         /**
          * Admin config parameter
@@ -150,6 +162,5 @@ class SfynxCmfExtension extends Extension
     public function getAlias()
     {
         return 'sfynx_cmf';
-    }    
-   
+    }   
 }

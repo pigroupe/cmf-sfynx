@@ -484,7 +484,14 @@ knp_menu:
 # SfynxCmfBundle configuration
 #
 sfynx_cmf:
+    cache_dir:
+        etag: "%kernel.root_dir%/cachesfynx/Etag/"
+        indexation: "%kernel.root_dir%/cachesfynx/Indexation/"
     seo:
+        redirection_oldurl_to_new_url:
+            authorized: false
+            repository : "%kernel.root_dir%/cachesfynx/seo"
+            file_name : seo_links.yml         
         meta_head:
             author: Sfynx
             copyright: http://www.sfynx.fr
@@ -511,10 +518,6 @@ sfynx_cmf:
                  
                  ### Empécher Microsoft de générer des "smart tags" sur notre page web.
                  #8: "<meta name='MSSmartTagsPreventParsing' content='TRUE'/>"
-        redirection_oldurl_to_new_url:
-            authorized: true
-            repository : "%kernel.root_dir%/cache/seo"
-            file_name : seo_links.yml                 
     page:
         homepage_deletewidget: true
         page_management_by_user_only: true
@@ -579,8 +582,11 @@ sfynx_core:
 # SfynxAuthBundle configuration
 #  
 sfynx_auth:
+    loginfailure:
+        cache_dir: "%kernel.root_dir%/cachesfynx/loginfailure/"
     locale:
         authorized: ~ #[fr_FR, en_GB]
+        cache_file: "%kernel.root_dir%/cachesfynx/languages.json"
     browser:
         switch_language_authorized: true
         switch_layout_mobile_authorized: true
@@ -638,7 +644,6 @@ sfynx_auth:
             login: "SfynxSmoothnessBundle::Login\\Security\\login-layout.html.twig"
             widget : "SfynxSmoothnessBundle::Login\\Security\\connexion-widget.html.twig" 
 
-     
         
 #
 # SfynxTemplateBundle configuration
@@ -655,6 +660,8 @@ sfynx_template:
 sfynx_tool: 
     mail:
         overloading_mail: ~ # test@gmail.com  
+    date:
+        cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"        
         
 #
 # SfynxMediaBundle configuration
@@ -705,7 +712,7 @@ sfynx_browser:
     browscap:
         remote_ini_url:       http://browscap.org/stream?q=Full_PHP_BrowsCapINI
         remote_ver_url:       http://browscap.org/version
-        cache_dir:            "%kernel.root_dir%/cache/browscap" # null : If null, use your application cache directory
+        cache_dir:            "%kernel.root_dir%/cachesfynx/browscap" # null : If null, use your application cache directory
         timeout:              5
         update_interval:      432000
         error_interval:       7200

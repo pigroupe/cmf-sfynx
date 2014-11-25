@@ -199,21 +199,21 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
     /**
      * return query in cache
      *
-     * @param \Doctrine\ORM\Query 	$query
+     * @param Query 	$query
      * @param int					$time
      * @param string 				$MODE	[MODE_GET, MODE_PUT , MODE_NORMAL , MODE_REFRESH]	
      * @param boolean               $setCacheable
      * @param string                $namespace
      * @param string                $input_hash
+     * 
      * @return \Doctrine\ORM\Query
      * @access    public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function cacheQuery(Query $query, $time = 3600, $MODE = 3 /* \Doctrine\ORM\Cache::MODE_NORMAL */, $setCacheable = true, $namespace = '', $input_hash = '')
     {
     	if (!$query) {
-    		throw new \Gedmo\Exception\InvalidArgumentException('Invalide query instance');
+            throw new \Gedmo\Exception\InvalidArgumentException('Invalide query instance');
     	}
         // create single file from all input
         if (empty($input_hash)) {

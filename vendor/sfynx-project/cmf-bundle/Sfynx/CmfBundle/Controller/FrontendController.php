@@ -47,6 +47,10 @@ class FrontendController extends CmfabstractController
      */
     public function pageAction()
     {
+//        $time_start = microtime();
+//        $time_end = microtime();
+//        $time = $time_end - $time_start;
+//        print_r($time);        
         // we get the route name of the page
         $route   = $this->container->get('request')->get('route_name');
         // we get the page manager
@@ -56,9 +60,10 @@ class FrontendController extends CmfabstractController
             $route = $this->container->get('request')->get('_route');
         }
         // we set the object Translation Page by route
-        $pageManager->setPageByRoute($route);
+        $pageManager->setPageByRoute($route, false);
         // we return the render (cache or not)
-        $response = $pageManager->render();
+        $response = $pageManager->render('', false);
+
         
         return $response;
     }
@@ -73,11 +78,11 @@ class FrontendController extends CmfabstractController
      */
     public function esipageAction($method, $serviceName, $id, $lang, $params, $server, $key)
     {
-    	$method 	 = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($method, $key);
+    	$method      = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($method, $key);
     	$serviceName = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($serviceName, $key);
-    	$id 		 = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($id, $key);
-    	$lang 		 = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($lang, $key);
-    	$params		 = json_decode($this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($params, $key), true);
+    	$id          = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($id, $key);
+    	$lang        = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($lang, $key);
+    	$params      = json_decode($this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($params, $key), true);
     	$options     = json_decode($this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($server, $key), true);
     	// we get the page manager
     	$pageManager = $this->get('pi_app_admin.manager.page');
@@ -104,25 +109,24 @@ class FrontendController extends CmfabstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2013-12-017
      */
     public function copypageAction()
     {
     	try {
-    		$locale      = $this->container->get('request')->getLocale();
-    		$data        = $this->container->get('sfynx.tool.route.factory')->getRefererRoute($locale, array('result' => 'match'));
-    		// we get the page manager
-    		$pageManager = $this->get('pi_app_admin.manager.page');
-    		// we get the object Page by route
-    		$page        = $pageManager->setPageByRoute($data['_route'], true);
-    		// we set the result
-    		if ($page instanceof Page){
-    			$new_url = $pageManager->copyPage();
-    		}
+            $locale = $this->container->get('request')->getLocale();
+            $data   = $this->container->get('sfynx.tool.route.factory')->getRefererRoute($locale, array('result' => 'match'));
+            // we get the page manager
+            $pageManager = $this->get('pi_app_admin.manager.page');
+            // we get the object Page by route
+            $page   = $pageManager->setPageByRoute($data['_route'], true);
+            // we set the result
+            if ($page instanceof Page){
+                $new_url = $pageManager->copyPage();
+            }
     	} catch (\Exception $e) {
-    		$new_url = $this->container->get('router')->generate('home_page');
+            $new_url = $this->container->get('router')->generate('home_page');
     	}
     	
     	return new RedirectResponse($new_url);
@@ -133,9 +137,8 @@ class FrontendController extends CmfabstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-02
+     * @since  2012-04-02
      */
     public function refreshpageAction()
     {
@@ -164,9 +167,8 @@ class FrontendController extends CmfabstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-06-02
+     * @since  2012-06-02
      */
     public function indexationAction($action)
     {
@@ -202,9 +204,8 @@ class FrontendController extends CmfabstractController
      * 
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-05-04
+     * @since  2012-05-04
      */    
     public function urlmanagementAction()
     {
@@ -350,7 +351,5 @@ class FrontendController extends CmfabstractController
         return $this->render('SfynxCmfBundle:Frontend:contact.html.twig', array(
                 'form' => $form->createView()
         ));
-    
-    }    
-        
+    }            
 }

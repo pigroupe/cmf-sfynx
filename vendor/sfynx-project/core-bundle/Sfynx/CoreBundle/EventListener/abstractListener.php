@@ -18,6 +18,7 @@ use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Sfynx\AuthBundle\Entity\Role;
 
 /**
  * abstract listener manager.
@@ -64,34 +65,34 @@ abstract class abstractListener
     protected function setParams()
     {
     	if ($this->container->hasParameter('sfynx.core.permission.restriction_by_roles')) {
-    		$this->is_permission_restriction_by_roles                = $this->container->getParameter('sfynx.core.permission.restriction_by_roles');
+            $this->is_permission_restriction_by_roles                = $this->container->getParameter('sfynx.core.permission.restriction_by_roles');
     	} else {
-    		$this->is_permission_restriction_by_roles                = false;
+            $this->is_permission_restriction_by_roles                = false;
     	}
     	if ($this->container->hasParameter('sfynx.core.permission.authorization.prepersist')) {
-    		$this->is_permission_authorization_prepersist_authorized  = $this->container->getParameter('sfynx.core.permission.authorization.prepersist');
+            $this->is_permission_authorization_prepersist_authorized  = $this->container->getParameter('sfynx.core.permission.authorization.prepersist');
     	} else {
-    		$this->is_permission_authorization_prepersist_authorized  = false;
+            $this->is_permission_authorization_prepersist_authorized  = false;
     	}
     	if ($this->container->hasParameter('sfynx.core.permission.authorization.preupdate')) {
-    		$this->is_permission_authorization_preupdate_authorized   = $this->container->getParameter('sfynx.core.permission.authorization.preupdate');
+            $this->is_permission_authorization_preupdate_authorized   = $this->container->getParameter('sfynx.core.permission.authorization.preupdate');
     	} else {
-    		$this->is_permission_authorization_preupdate_authorized   = false;
+            $this->is_permission_authorization_preupdate_authorized   = false;
     	}
     	if ($this->container->hasParameter('sfynx.core.permission.authorization.preremove')) {
-    		$this->is_permission_authorization_preremove_authorized   = $this->container->getParameter('sfynx.core.permission.authorization.preremove');
+            $this->is_permission_authorization_preremove_authorized   = $this->container->getParameter('sfynx.core.permission.authorization.preremove');
     	} else {
-    		$this->is_permission_authorization_preremove_authorized   = false;
+            $this->is_permission_authorization_preremove_authorized   = false;
     	}
     	if ($this->container->hasParameter('sfynx.core.permission.prohibition.preupdate')) {
-    		$this->is_permission_prohibition_preupdate_authorized     = $this->container->getParameter('sfynx.core.permission.prohibition.preupdate');
+            $this->is_permission_prohibition_preupdate_authorized     = $this->container->getParameter('sfynx.core.permission.prohibition.preupdate');
     	} else {
-    		$this->is_permission_prohibition_preupdate_authorized     = false;
+            $this->is_permission_prohibition_preupdate_authorized     = false;
     	}
     	if ($this->container->hasParameter('sfynx.core.permission.prohibition.preremove')) {
-    		$this->is_permission_prohibition_preremove_authorized     = $this->container->getParameter('sfynx.core.permission.prohibition.preremove');
+            $this->is_permission_prohibition_preremove_authorized     = $this->container->getParameter('sfynx.core.permission.prohibition.preremove');
     	} else {
-    		$this->is_permission_prohibition_preremove_authorized     = false;
+            $this->is_permission_prohibition_preremove_authorized     = false;
     	}
     }    
     
@@ -156,7 +157,9 @@ abstract class abstractListener
             }
         }
         //update heritage field when method setHeritage exists in entity object
-        if (method_exists($entity, 'setHeritage')) {
+        if (method_exists($entity, 'setHeritage')
+                && !($entity instanceof Role)
+        ) {
             // we modify the heritage value
             if ($isUsernamePasswordToken && $this->isUsernamePasswordToken()) {
                 $entity->setHeritage($this->container->get('sfynx.auth.role.factory')->getBestRoles($this->getUserRoles()));

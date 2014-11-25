@@ -37,53 +37,64 @@ class SfynxAuthExtension extends Extension{
         $configuration = new Configuration();
         $config  = $this->processConfiguration($configuration, $config);
         
+        
+        /**
+         * Login failure config parameter
+         */        
+        if (isset($config['loginfailure']['cache_dir'])) {
+            $container->setParameter('sfynx.auth.loginfailure.cache_dir', $config['loginfailure']['cache_dir']);
+        } 
+        
         /**
          * Locale config parameter
          */
         if (isset($config['locale']['authorized'])) {
-        	$container->setParameter('sfynx.auth.locale.authorized', $config['locale']['authorized']);
+            $container->setParameter('sfynx.auth.locale.authorized', $config['locale']['authorized']);
         } else {
-        	$container->setParameter('sfynx.auth.locale.authorized', array());
-        }    
+            $container->setParameter('sfynx.auth.locale.authorized', array());
+        } 
+        if (isset($config['locale']['cache_file'])) {
+            $container->setParameter('sfynx.auth.locale.cache_file', $config['locale']['cache_file']);
+        }   
 
         /**
          * Browser config parameter
          */
         if (isset($config['browser'])){
-        	if (isset($config['browser']['switch_language_authorized'])) {
-        		$container->setParameter('sfynx.auth.browser.switch_language_authorized', $config['browser']['switch_language_authorized']);
-        	}
-        	if (isset($config['browser']['switch_layout_mobile_authorized'])) {
-        		$container->setParameter('sfynx.auth.browser.switch_layout_mobile_authorized', $config['browser']['switch_layout_mobile_authorized']);
-        	}
+            if (isset($config['browser']['switch_language_authorized'])) {
+                $container->setParameter('sfynx.auth.browser.switch_language_authorized', $config['browser']['switch_language_authorized']);
+            }
+            if (isset($config['browser']['switch_layout_mobile_authorized'])) {
+                $container->setParameter('sfynx.auth.browser.switch_layout_mobile_authorized', $config['browser']['switch_layout_mobile_authorized']);
+            }
         }           
         
         /**
          * Redirection login config
          */
         if (isset($config['default_login_redirection'])){
-        	if (isset($config['default_login_redirection']['redirection'])) {
-        		$container->setParameter('sfynx.auth.login.redirect', $config['default_login_redirection']['redirection']);
-        	}
-        	if (isset($config['default_login_redirection']['template'])) {
-        		$container->setParameter('sfynx.auth.login.template', $config['default_login_redirection']['template']);
-        	}
+            if (isset($config['default_login_redirection']['redirection'])) {
+                $container->setParameter('sfynx.auth.login.redirect', $config['default_login_redirection']['redirection']);
+            }
+            if (isset($config['default_login_redirection']['template'])) {
+                $container->setParameter('sfynx.auth.login.template', $config['default_login_redirection']['template']);
+            }
         }
         
         /**
          * Layout config parameter
          */        
         if (isset($config['default_layout'])){
-        	if (isset($config['default_layout']['init_pc'])){
-        		if (isset($config['default_layout']['init_pc']['template'])) {
-        			$container->setParameter('sfynx.auth.layout.init.pc.template', $config['default_layout']['init_pc']['template']);
-        		}
-        	}        
-        	if (isset($config['default_layout']['init_mobile'])){
-        		if (isset($config['default_layout']['init_mobile']['template'])) {
-        			$container->setParameter('sfynx.auth.layout.init.mobile.template', $config['default_layout']['init_mobile']['template']);
-        		}
-        	}
+            if (isset($config['default_layout']['init_pc'])){
+                if (isset($config['default_layout']['init_pc']['template'])) {
+                    $container->setParameter('sfynx.auth.layout.init.pc.template', $config['default_layout']['init_pc']['template']);
+                }
+            }        
+            if (isset($config['default_layout']['init_mobile'])){
+                if (isset($config['default_layout']['init_mobile']['template'])) {
+                    $container->setParameter('sfynx.auth.layout.init.mobile.template', $config['default_layout']['init_mobile']['template']);
+                }
+            }
         }    
 
         /**

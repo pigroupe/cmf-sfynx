@@ -128,25 +128,21 @@ class HandlerRequest
      */
     protected function setParams()
     {
-    	$this->date_expire                              = $this->container->getParameter('sfynx.core.cookies.date_expire');
-    	$this->date_interval                            = $this->container->getParameter('sfynx.core.cookies.date_interval');
-    	$this->is_switch_redirection_seo_authorized     = $this->container->getParameter('pi_app_admin.seo.redirection.authorized');
-    	$this->seo_redirection_repository     			= $this->container->getParameter('pi_app_admin.seo.redirection.repository');
-    	$this->seo_redirection_file_name			    = $this->container->getParameter('pi_app_admin.seo.redirection.file_name');
-    	if (empty($this->seo_redirection_repository)) {
-    		$this->seo_redirection_repository = $this->container->getParameter("kernel.root_dir") . "/cache/seo";
-    	}
-    	if (empty($this->seo_redirection_file_name)) {
-    		$this->seo_redirection_file_name = "seo_links.yml";
-    	}
-    	$this->is_prefix_locale                         = $this->container->getParameter("pi_app_admin.page.route.with_prefix_locale");
-    	$this->is_scop_authorized                       = $this->container->getParameter("pi_app_admin.page.scop.authorized");
-    	$this->scop_globals                             = $this->container->getParameter("pi_app_admin.page.scop.globals");
+    	$this->date_expire                          = $this->container->getParameter('sfynx.core.cookies.date_expire');
+    	$this->date_interval                        = $this->container->getParameter('sfynx.core.cookies.date_interval');
+    	$this->is_switch_redirection_seo_authorized = $this->container->getParameter('pi_app_admin.seo.redirection.authorized');
+    	$this->seo_redirection_repository           = $this->container->getParameter('pi_app_admin.seo.redirection.repository');
+    	$this->seo_redirection_file_name            = $this->container->getParameter('pi_app_admin.seo.redirection.file_name');
+    	$this->is_prefix_locale                     = $this->container->getParameter("pi_app_admin.page.route.with_prefix_locale");
+    	$this->is_scop_authorized                   = $this->container->getParameter("pi_app_admin.page.scop.authorized");
+    	$this->scop_globals                         = $this->container->getParameter("pi_app_admin.page.scop.globals");
         //
-    	if ($this->container->has("sfynx.browser.lib.mobiledetect") && $this->container->hasParameter("sfynx.browser.browscap.cache_dir")) {
-    		$this->browscap_cache_dir  = $this->container->getParameter("sfynx.browser.browscap.cache_dir");
+    	if ($this->container->has("sfynx.browser.lib.mobiledetect") 
+                && $this->container->hasParameter("sfynx.browser.browscap.cache_dir")
+        ) {
+            $this->browscap_cache_dir  = $this->container->getParameter("sfynx.browser.browscap.cache_dir");
     	} else {
-    		$this->browscap_cache_dir  = null;
+            $this->browscap_cache_dir  = null;
     	}
     }   
 
@@ -160,18 +156,25 @@ class HandlerRequest
     protected function isPrefixLocale()
     {
         if ($this->is_prefix_locale) {
-        	$route = $this->container->get('request')->get('route_name');
-        	$url   = $this->container->get('request')->getRequestUri();
-        	if (($route != 'home_page') && ($url == '/')) {
-        		$url_homepage = $this->container->get('sfynx.tool.route.factory')->getRoute('home_page');
-        		$response     = new RedirectResponse($url_homepage, 301);
-        		// we apply all events allowed to change the redirection response
-        		$event_response = new ResponseEvent($response, $this->date_expire);
-        		$this->container->get('event_dispatcher')->dispatch(SfynxCmfEvents::HANDLER_REQUEST_CHANGERESPONSE_PREFIX_LOCALE_REDIRECTION, $event_response);
-        		$response = $event_response->getResponse();
-        		
-        		return $response;
-        	}
+            $route = $this->container->get('request')->get('route_name');
+            $url   = $this->container->get('request')->getRequestUri();
+            if (($route != 'home_page') && ($url == '/')) {
+                $url_homepage = $this->container
+                        ->get('sfynx.tool.route.factory')
+                        ->getRoute('home_page');
+                $response     = new RedirectResponse($url_homepage, 301);
+                // we apply all events allowed to change the redirection response
+                $event_response = new ResponseEvent($response, $this->date_expire);
+                $this->container
+                    ->get('event_dispatcher')
+                    ->dispatch(
+                        SfynxCmfEvents::HANDLER_REQUEST_CHANGERESPONSE_PREFIX_LOCALE_REDIRECTION,
+                        $event_response
+                    );
+                $response = $event_response->getResponse();
+
+                return $response;
+            }
         }
         
         return false;
@@ -191,53 +194,58 @@ class HandlerRequest
             \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
             $fileSeo  = $this->seo_redirection_repository . "/" . $this->seo_redirection_file_name;
             
-        	//$is_cache_not_created = \Sfynx\ToolBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
+            //$is_cache_not_created = \Sfynx\ToolBundle\Util\PiFileManager::isEmptyDir($dossier); // very fast
             //if (file_exists($fileSeo) && $is_cache_not_created) {
             
             //$path_tmp_file = $dossier.'tmp.file';
             //if (file_exists($fileSeo) && !file_exists($path_tmp_file)) {
-            	// we set the tmp file
-            	//$result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_tmp_file, "", 0777, LOCK_EX);
+            // we set the tmp file
+            //$result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_tmp_file, "", 0777, LOCK_EX);
 
             // if all cache seo files are not created from the seo file, we create them.
             $all_cache_files = \Sfynx\ToolBundle\Util\PiFileManager::GlobFiles($dossier . '*.cache' ); // more fast in linux but not in windows
             if ( file_exists($fileSeo) && (count($all_cache_files) == 0) ) {
-        		$this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
-        		$file_handle = fopen($fileSeo, "r");
-        		while (!feof($file_handle)) {
-        			$line = (string) fgets($file_handle);
-        			$line_infos = explode(':', $line);
-        			if (
-        				isset( $line_infos[0]) && !empty( $line_infos[0])
-        				&&
-        				isset( $line_infos[1]) && !empty( $line_infos[1])
-        			) {
-        				$this->container->get("sfynx.cache.filecache")->set(str_replace(PHP_EOL, '', $line_infos[0]), str_replace(PHP_EOL, '', $line_infos[1]), 0);
-        			}
-        		}
-        		fclose($file_handle);
-        	}
-        	//
-	    	$filename = $this->request->getPathInfo();
-	        $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
-	        if (!$this->container->get("sfynx.cache.filecache")->get($filename)) {
-	        	$SEOUrl =  false;
-	        } else {
-	        	$SEOUrl = $this->container->get("sfynx.cache.filecache")->get($filename);
-	        }
+                $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
+                $file_handle = fopen($fileSeo, "r");
+                while (!feof($file_handle)) {
+                    $line = (string) fgets($file_handle);
+                    $line_infos = explode(':', $line);
+                    if (
+                        isset( $line_infos[0]) && !empty( $line_infos[0])
+                        &&
+                        isset( $line_infos[1]) && !empty( $line_infos[1])
+                    ) {
+                        $this->container->get("sfynx.cache.filecache")->set(str_replace(PHP_EOL, '', $line_infos[0]), str_replace(PHP_EOL, '', $line_infos[1]), 0);
+                    }
+                }
+                fclose($file_handle);
+            }
+            //
+            $filename = $this->request->getPathInfo();
+            $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
+            if (!$this->container->get("sfynx.cache.filecache")->get($filename)) {
+                $SEOUrl =  false;
+            } else {
+                $SEOUrl = $this->container->get("sfynx.cache.filecache")->get($filename);
+            }
     	} else {
-    		$SEOUrl = false;
+            $SEOUrl = false;
     	}
     	if ($SEOUrl) {
-    		// we set response
-    		$response = new RedirectResponse($SEOUrl, 301);
-    		// we apply all events allowed to change the redirection response
-    		$event_response = new ResponseEvent($response, $this->date_expire);
-    		$this->container->get('event_dispatcher')->dispatch(SfynxCmfEvents::HANDLER_REQUEST_CHANGERESPONSE_SEO_REDIRECTION, $event_response);
-    		$response = $event_response->getResponse();
-    		
-    		return $response;
-    		//$response->setResponse(new Response(\Sfynx\ToolBundle\Util\PiFileManager::getCurl($SEOUrl, null, null, $this->request->getUriForPath(''))));
+            // we set response
+            $response = new RedirectResponse($SEOUrl, 301);
+            // we apply all events allowed to change the redirection response
+            $event_response = new ResponseEvent($response, $this->date_expire);
+            $this->container
+                ->get('event_dispatcher')
+                ->dispatch(
+                    SfynxCmfEvents::HANDLER_REQUEST_CHANGERESPONSE_SEO_REDIRECTION, 
+                    $event_response
+                );
+            $response = $event_response->getResponse();
+
+            return $response;
+            //$response->setResponse(new Response(\Sfynx\ToolBundle\Util\PiFileManager::getCurl($SEOUrl, null, null, $this->request->getUriForPath(''))));
     	}
     	
     	return false;
@@ -321,6 +329,5 @@ class HandlerRequest
         }
 
         return false;
-    }    
-      
+    }          
 }

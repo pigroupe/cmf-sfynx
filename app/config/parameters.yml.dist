@@ -24,7 +24,7 @@ parameters:
     
     #pi_app_admin 
     pi_cookie_lifetime: 604800    
-    pi_session_name: "PHPSESSID"
+    pi_session_name: "SFYNXID"
 
     #boot_strap_ws
     ws_key: 0A1TG4GO

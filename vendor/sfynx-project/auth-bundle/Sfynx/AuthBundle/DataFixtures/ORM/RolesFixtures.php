@@ -63,7 +63,23 @@ class RolesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $field3->setComment('Utilisateur disposant d\'un accès à un espace.');
         $field3->setEnabled(true);
         $field3->setHeritage(array('ROLE_ALLOWED_TO_SWITCH'));
-        $manager->persist($field3);  
+        $manager->persist($field3); 
+        
+        $field31 = new Role();
+        $field31->setLabel('User');
+        $field31->setName('ROLE_CUSTOMER');
+        $field31->setComment('Utilisateur client disposant d\'un accès à un espace.');
+        $field31->setEnabled(true);
+        $field31->setHeritage(array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'));
+        $manager->persist($field31);    
+        
+        $field32 = new Role();
+        $field32->setLabel('User');
+        $field32->setName('ROLE_PROVIDER');
+        $field32->setComment('Utilisateur fournisseur disposant d\'un accès à un espace.');
+        $field32->setEnabled(true);
+        $field32->setHeritage(array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'));
+        $manager->persist($field32);         
 
         $field4 = new Role();
         $field4->setLabel('Editor');
@@ -102,7 +118,7 @@ class RolesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $field8->setName('ROLE_ADMIN');
         $field8->setComment('Utilisateur ayant un accès total du backoffice sans l\'accès à l\'admin SONATA.');
         $field8->setEnabled(true);
-        $field8->setHeritage(array('ROLE_CONTENT_MANAGER', 'ROLE_ALLOWED_TO_SWITCH'));
+        $field8->setHeritage(array('ROLE_CONTENT_MANAGER', 'ROLE_CUSTOMER', 'ROLE_PROVIDER', 'ROLE_ALLOWED_TO_SWITCH'));
         $manager->persist($field8);   
 
         $field9 = new Role();
@@ -121,13 +137,14 @@ class RolesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $field10->setHeritage(array('ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_SONATA_ADMIN', 'SONATA'));
         $manager->persist($field10);        
 
-
         $manager->flush();
         
         $this->addReference('role-default', $field0);
         $this->addReference('role-subscriber', $field1);
         $this->addReference('role-member', $field2);
         $this->addReference('role-user', $field3);
+        $this->addReference('role-customer', $field31);
+        $this->addReference('role-provider', $field32);
         $this->addReference('role-editor', $field4);
         $this->addReference('role-moderator', $field5);
         $this->addReference('role-designer', $field6);

@@ -46,7 +46,7 @@ class SfynxAuthBundle extends Bundle
     {
         parent::build($container);
         // we get the heritage.jon file if it's created
-        $path_heritages_file         = realpath($container->getParameter("kernel.cache_dir"). '/../heritage.json');
+        $path_heritages_file         = realpath($container->getParameter("kernel.root_dir"). '/cachesfynx/heritage.json');
         if ($path_heritages_file){
             $roles_json = file_get_contents($path_heritages_file);
         } else {
@@ -59,24 +59,24 @@ class SfynxAuthBundle extends Bundle
         } else {
             $heritage_role  = array(
                     'ROLE_SUBSCRIBER'       => array('ROLE_ALLOWED_TO_SWITCH'),
-                    'ROLE_MEMBER'            => array('ROLE_SUBSCRIBER', 'ROLE_ALLOWED_TO_SWITCH'),
+                    'ROLE_MEMBER'           => array('ROLE_SUBSCRIBER', 'ROLE_ALLOWED_TO_SWITCH'),
                     
                     'ROLE_USER'             => array('ROLE_ALLOWED_TO_SWITCH'),
             		
-            		'ROLE_CUSTOMER'         => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
-            		'ROLE_PROVIDER'         => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+                    'ROLE_CUSTOMER'         => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+                    'ROLE_PROVIDER'         => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
                         
-                    'ROLE_EDITOR'              => array('ROLE_MEMBER', 'ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
-                    'ROLE_MODERATOR'           => array('ROLE_EDITOR',  'ROLE_ALLOWED_TO_SWITCH'),
+                    'ROLE_EDITOR'           => array('ROLE_MEMBER', 'ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+                    'ROLE_MODERATOR'        => array('ROLE_EDITOR',  'ROLE_ALLOWED_TO_SWITCH'),
                         
-                    'ROLE_DESIGNER'          => array('ROLE_MEMBER', 'ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+                    'ROLE_DESIGNER'         => array('ROLE_MEMBER', 'ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
             
                     'ROLE_CONTENT_MANAGER'  => array('ROLE_DESIGNER', 'ROLE_MODERATOR', 'ROLE_ALLOWED_TO_SWITCH'),
-                    'ROLE_ADMIN'               => array('ROLE_CONTENT_MANAGER', 'ROLE_CUSTOMER', 'ROLE_PROVIDER','ROLE_ALLOWED_TO_SWITCH'),
+                    'ROLE_ADMIN'            => array('ROLE_CONTENT_MANAGER', 'ROLE_CUSTOMER', 'ROLE_PROVIDER','ROLE_ALLOWED_TO_SWITCH'),
             
-                    'SONATA'                   => array('ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT ', 'ROLE_SONATA_PAGE_ADMIN_BLOCK_EDIT', 'ROLE_ALLOWED_TO_SWITCH'),
+                    'SONATA'                => array('ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT ', 'ROLE_SONATA_PAGE_ADMIN_BLOCK_EDIT', 'ROLE_ALLOWED_TO_SWITCH'),
             
-                    'ROLE_SUPER_ADMIN'         => array('ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_SONATA_ADMIN', 'SONATA'),
+                    'ROLE_SUPER_ADMIN'      => array('ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_SONATA_ADMIN', 'SONATA'),
             );
         }
         $heritage_role['SONATA'] = array('ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT ', 'ROLE_SONATA_PAGE_ADMIN_BLOCK_EDIT', 'ROLE_ALLOWED_TO_SWITCH');

@@ -49,6 +49,13 @@ class SfynxToolExtension extends Extension{
         }
         
         /**
+         * Date config parameter
+         */        
+        if (isset($config['date']['cache_file'])) {
+            $container->setParameter('sfynx.tool.date.cache_file', $config['date']['cache_file']);
+        }         
+        
+        /**
          * LayoutHead config parameter
          */
         $container->setParameter('js_files', array());
