@@ -310,7 +310,7 @@ sub vcl_fetch {
 
         ### Pour que tous les utilisateurs reçoivent la page commune cachée et qu’elle reste dynamique en fonction des utilisateurs il faut enlever la session des cookies pour les pages/parties #communes et la laisser pour les pages/parties individuelles.
             if ( ! req.url ~ "^/esi-widget-page" ) {
-                set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
+                set req.http.Cookie = regsuball(req.http.Cookie, "SFYNXSESSID=[^;]+(; )?", "");
                 if (req.http.Cookie ~ "^$") {
                     unset req.http.Cookie;
                 }
