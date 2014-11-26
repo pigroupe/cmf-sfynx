@@ -23,6 +23,8 @@ use Sfynx\CmfBundle\Entity\Page;
 use Sfynx\CmfBundle\Entity\TranslationPage;
 use Sfynx\CmfBundle\Entity\Widget;
 use Sfynx\CmfBundle\Entity\TranslationWidget;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
 /**
  * Description of the Page manager
@@ -214,52 +216,40 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      * @since 2014-04-03
      */    
-    public function createJsonFileName($type, $id, $lang) 
+    public function createJsonFileName($type, $id, $lang = '') 
     {
         // we set the path
         $path  = $this->container->getParameter("pi_app_admin.cache_dir.etag");
-        // we set the path
-        switch ($type) {
-            case ('esi') :
-                $path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
-                break;
-            case ('esi-tmp') :
-              	$path_json_file = $path . "esi/tmp/" . md5($id) ."-{$lang}.json";
-               	break;                
-            case ('page') :
-                $path_json_file = $path . "page/p-{$id}-{$lang}.json";
-                break;
-            case ('page-sluggify') :
-                $path_json_file = $path . "page/s-{$id}-{$lang}-sluggify.json";
-                break; 
-            case ('page-sluggify-tmp') :
-              	$path_json_file = $path . "page/tmp/s-" . md5($id) ."-{$lang}.json";
-               	break;                
-            case ('page-history') :
-               	$path_json_file = $path . "page/h-{$id}-{$lang}-history.json";
-               	break;     
-            case ('page-history-tmp') :
-          		$path_json_file = $path . "page/tmp/h-" . md5($id) ."-{$lang}.json";
-           		break;
-            case ('widget') :
-                $path_json_file = $path . "widget/w-{$id}-{$lang}.json";
-                break;  
-            case ('widget-history') :
-            	$path_json_file = $path . "widget/h-{$id}-{$lang}-history.json";
-            	break;
-            case ('widget-history-tmp') :
-            	$path_json_file = $path . "widget/tmp/" . md5($id) ."-{$lang}.json";
-            	break;                
-            case ('default') :
-              	$path_json_file = $path . "etag-{$id}-{$lang}.json";
-               	break;
-            case ('default-tmp') :
-            	$path_json_file = $path . "tmp/" . md5($id) ."-{$lang}.json";
-            	break;               	                                  
-            default :
-                throw new \InvalidArgumentException("you have to config correctely the attibute type");
-                break;
-        }       
+        if ($type == 'page-json') {
+            $path_json_file = $path . "page-json-entity/p-{$id}.json";
+        } else
+        if ($type == 'esi') {
+            $path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
+        } elseif ($type == 'esi-tmp') {
+            $path_json_file = $path . "esi/tmp/" . md5($id) ."-{$lang}.json";
+        } elseif ($type == 'page') {
+            $path_json_file = $path . "page/p-{$id}-{$lang}.json";
+        } elseif ($type == 'page-sluggify') {
+            $path_json_file = $path . "page/s-{$id}-{$lang}-sluggify.json";
+        } elseif ($type == 'page-sluggify-tmp') {
+            $path_json_file = $path . "page/tmp/s-" . md5($id) ."-{$lang}.json";
+        } elseif ($type == 'page-history') {
+            $path_json_file = $path . "page/h-{$id}-{$lang}-history.json";
+        } elseif ($type == 'page-history-tmp') {
+            $path_json_file = $path . "page/tmp/h-" . md5($id) ."-{$lang}.json";
+        } elseif ($type == 'widget') {
+            $path_json_file = $path . "widget/w-{$id}-{$lang}.json";
+        } elseif ($type == 'widget-history') {
+            $path_json_file = $path . "widget/h-{$id}-{$lang}-history.json";
+        } elseif ($type == 'widget-history-tmp') {
+            $path_json_file = $path . "widget/tmp/" . md5($id) ."-{$lang}.json";
+        } elseif ($type == 'default') {
+            $path_json_file = $path . "etag-{$id}-{$lang}.json";
+        } elseif ($type == 'default-tmp') {
+            $path_json_file = $path . "tmp/" . md5($id) ."-{$lang}.json";
+        } else {
+            throw new \InvalidArgumentException("you have to config correctely the attibute type");
+        }
         
         return $path_json_file;
     }
@@ -723,14 +713,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the page with this id.
      *
-     * @param int    $idpage    id page
-     * @param bool    $isForce
+     * @param int     $idpage  id page
+     * @param boolean $isForce True to force setting page 
      * 
-     * @return \Sfynx\CmfBundle\Entity\Page
+     * @return Page
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function getPageById($idpage, $isForce = false)
     {
@@ -744,6 +733,43 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             return false;
         }
     }    
+    
+    /**
+     * Returns the page with this id.
+     *
+     * @param string  $route   Route page value
+     * @param boolean $isForce True to force setting page 
+     * 
+     * @return Page
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since  2012-01-31
+     */
+    public function getPageByRoute($route, $isForce = false)
+    {
+        if ($this->isJsonPageFileExisted($route)) {
+            $path_page_json_file = $this->createJsonFileName('page-json', $route);
+            $report = file_get_contents($path_page_json_file);            
+//            $serializer = $this->container->get('serializer');
+//            if ($serializer instanceof \JMS\Serializer\Serializer) {
+//                print_r("coicn");exit;
+//            }
+            $page = $this->container
+                    ->get('serializer')
+                    ->deserialize($report, 'Sfynx\CmfBundle\Entity\Page', 'json');
+            print_r($page);exit;            
+        } else {
+            $page = $this->getRepository('Page')->getPageByRoute($route);
+        } 
+        if ($isForce 
+                && ($page instanceof Page)
+        ) {
+            $this->setCurrentPage($page);
+            return $page;
+        }
+        
+        return false;        
+    }      
     
     /**
      * Returns the blocks of a page.
@@ -908,8 +934,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the response given in param.
      *
-     * @param string     $type    values = ['layout', 'page', 'widget']
-     * @param int        $id        id of the type entity given in param
+     * @param string $type values = ['layout', 'page', 'widget']
+     * @param int    $id   id of the type entity given in param
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      * @access public
@@ -929,11 +955,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the params given in the render response of the service template.
      *
-     * @param string     $RenderResponseParam
+     * @param string $RenderResponseParam
      * 
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-01-31
      */    
@@ -961,13 +986,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the script due to the type. Return false if script argument is empty or script param doesn't exist.
      *
-     * @param string $script
-     * @param string $type        = ['array', 'implode', 'collection']
+     * @param string $script The script content
+     * @param string $type   = ['array', 'implode', 'collection']
+     * 
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-16
+     * @since  2012-02-16
      */
     public function getScript($script, $type = 'string')
     {
@@ -977,7 +1002,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         if ($type == "implode") {
             return implode("\n", array_unique($this->script[$script]));
         } elseif ($type == "array") {
-        	return array_unique($this->script[$script]);
+            return array_unique($this->script[$script]);
         } else {
             return false;
         }
@@ -988,9 +1013,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * 
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     protected function setRepository()
     {
@@ -1002,9 +1026,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * 
      * @return ObjectRepository
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     protected function getRepository($nameEntity = '')
     {
@@ -1021,30 +1044,45 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Return the token object.
      *
-     * @return \Sfynx\AuthBundle\Entity\user
+     * @return object Token class
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getToken()
     {
         return  $this->container->get('security.context')->getToken();
     }
+    
+    /**
+     * Return treu if the json page file existed
+     * 
+     * @param string $route Route page value
+     * 
+     * @return boolean
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function isJsonPageFileExisted($route)
+    {
+        $path_page_json_file = $this->createJsonFileName('page-json', $route); 
+        if (file_exists($path_page_json_file)) {
+            return true;
+        }
+        
+        return false;
+    }      
 
     /**
      * Return if yes or no the user is anonymous token.
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isAnonymousToken()
     {
-        if (
-            ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\AnonymousToken)
-            ||
-            ($this->getToken() === null)
+        if (($this->getToken() instanceof AnonymousToken)
+            || ($this->getToken() === null)
         ) {
             return true;
         } else {
@@ -1057,12 +1095,11 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isUsernamePasswordToken()
     {
-        if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
+        if ($this->getToken() instanceof UsernamePasswordToken) {
             return true;
         } else {
             return false;
@@ -1072,9 +1109,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Return the user roles.
      *
-     * @return array    user roles
+     * @return array user roles
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserRoles()
@@ -1085,11 +1121,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Return if yes or no the widget given in param is supported.
      *
-     * @param \Sfynx\CmfBundle\Entity\Widget $widget
+     * @param Widget $widget A Widget entity
      * 
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isWidgetSupported(Widget $widget)
@@ -1104,12 +1139,11 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Sets the flash message.
      *
-     * @param string $message
-     * @param string $type
+     * @param string $message Message value
+     * @param string $type    Type value
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setFlash($message, $type = "notice")
@@ -1132,16 +1166,16 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * );     
      * </code>
      *
-     * @param string    $lang
-     * @param string	$title
-     * @param string	$description
-     * @param string	$keywords
-     * @param string    $pathinfo
+     * @param string $lang        Lang value
+     * @param string $title       Title value
+     * @param string $description Desc value
+     * @param string $keywords    Keuword value
+     * @param string $pathinfo    Path value
+     * 
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-04-03
+     * @since  2014-04-03
      */
     public function getPageMetaInfo($lang = '', $title = '', $description = '', $keywords = '', $pathInfo = "")
     {
@@ -1266,12 +1300,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Return true if the page is sluggify.
      *
-     * @param string    $pathinfo
+     * @param string $pathinfo Path value
+     * 
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-04-03
+     * @since  2014-04-03
      */	
     public function isSluggifyPage($pathInfo = "") 
     {
@@ -1297,9 +1331,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      *
      * @return boolean
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-04-03
+     * @since  2014-04-03
      */
     public function isQueryStringPage()
     {

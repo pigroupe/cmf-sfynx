@@ -97,14 +97,18 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // we redirect to the public url home page.
             return $this->redirectHomePublicPage();
         }
+        //
+        $id_page = $page->getId();
+        $isEnabled_page = $page->getEnabled();
         // if the page is enabled.
-        if ($page && $page->getEnabled()) {
+        if ($page && $isEnabled_page) {
+            $url_    = $this->container->get('request')->getRequestUri();
             // Initialize response
-            $response = $this->getResponseByIdAndType('page', $page->getId());            
+            $response = $this->getResponseByIdAndType('page', $id_page);            
             // we register only the translation page asked in the $lang value.
             $this->setTranslations($page, $lang);
             // we get the translation of the current page in terms of the lang value.
-            $pageTrans	= $this->getTranslationByPageId($page->getId(), $lang);
+            $pageTrans	= $this->getTranslationByPageId($id_page, $lang);
             // If the translation page is secure and the user is not connected, we return to the home page.
             if ($pageTrans 
                     && $pageTrans->getSecure() 
@@ -153,7 +157,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 // we register all translations page linked to one page.
                 $this->setTranslations($page);
                 // we get the translation of the current page in another language if it exists.
-                $pageTrans	= $this->getTranslationByPageId($page->getId(), $lang);
+                $pageTrans	= $this->getTranslationByPageId($id_page, $lang);
                 if (!$pageTrans) {
                     $page	= $this->setPageByRoute('error_404', true);
                     if (!$page) {
@@ -162,11 +166,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                     $response->setStatusCode(404);
                 }
             }
-            // We set the Etag value
-            $id	  = $page->getId();
-            $url_ = $this->container->get('request')->getRequestUri();
-            // we register the tag value in the json file if does not exist.
-            $this->setJsonFileEtag('page', $id, $lang, array('page-url'=>$url_));
+            // we register the Etag value in the json file if does not exist.
+            $this->setJsonFileEtag('page', $id_page, $lang, array('page-url'=>$url_));
             // Create a Response with a Last-Modified header.
             $response = $this->configureCache($page, $response);
             // Check that the Response is not modified for the given Request.
@@ -553,7 +554,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Sets and return a page by a route name.
      *
-     * @param string  $route     Route page
+     * @param string  $route     Route page value
      * @param boolean $isSetPage True to force the setting page
      *
      * @return false|Page
@@ -567,7 +568,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         if (!$route || empty($route)) {
             $page = $this->getRepository('page')->getHomepage();
         } else {
-            $page = $this->getRepository('page')->getPageByRoute($route);
+            $page = $this->getPageByRoute($route, false);
         }
         if ($page instanceof Page) {
             // we set the result
@@ -896,7 +897,12 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     private function getPagesByRub($idRubrique)
     {
         $pages_content   = "";
-        $pagesByRubrique =  $this->container->get('pi_app_admin.repository')->getRepository('Page')->getAllPageByRubriqueId($idRubrique)->getQuery()->getResult();
+        $pagesByRubrique =  $this->container
+                ->get('pi_app_admin.repository')
+                ->getRepository('Page')
+                ->getAllPageByRubriqueId($idRubrique)
+                ->getQuery()
+                ->getResult();
         if (is_array($pagesByRubrique)) {
             foreach($pagesByRubrique as $key => $page) {
                 if ($page instanceof Page) {
@@ -944,8 +950,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             return $htmlTree;
         }
         //print_r($htmlTree);
-        $htmlTree             = $this->container->get('sfynx.tool.string_manager')->trimUltime($htmlTree);
-        $matches_balise_rub    = preg_split('#<li>(?P<num>(.*))#sU', $htmlTree);
+        $htmlTree           = $this->container->get('sfynx.tool.string_manager')->trimUltime($htmlTree);
+        $matches_balise_rub = preg_split('#<li>(?P<num>(.*))#sU', $htmlTree);
         $max_key            = 1;
         if ($matches_balise_rub) {
             //print_r($matches_balise_il);
@@ -983,24 +989,24 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      *
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-05-11
      */
     public function cacheTreeChartPageRefresh()
     {
+        $em = $this->container->get('doctrine')->getManager();
         // we manage the "tree chart page"
         $params_treechart = array();
         $params_treechart['action']  = "renderByClick";
-        $params_treechart['id']          = ".org-chart-page";
-        $params_treechart['menu']      = "page";
+        $params_treechart['id']      = ".org-chart-page";
+        $params_treechart['menu']    = "page";
         // we sort an array by key in reverse order
         krsort($params_treechart);
         // we create de Etag cache
-        $params_treechart      = json_encode($params_treechart);
-        $params_treechart     = str_replace(':', '#', $params_treechart);
+        $params_treechart = json_encode($params_treechart);
+        $params_treechart = str_replace(':', '#', $params_treechart);
         // we refresh all caches 
-        $all_lang    = $this->getRepository('Langue')->findByEnabled(true);
+        $all_lang    = $em->getRepository('SfynxAuthBundle:Langue')->findByEnabled(true);
         foreach($all_lang as $key => $lang) {
             $id_lang = $lang->getId();
             $Etag_treechart = "organigram:Rubrique~org-chart-page:$id_lang:$params_treechart";
@@ -1229,27 +1235,57 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Delete the cache of all elements of an entity (Page, TranslationPages, widgets)
      *
-     * @params object $entity
+     * @param object $entity Page or TranslationPage entity
+     * @param string $type   ['persist', 'update', 'remove']
+     * 
      * @return string
      * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since  2014-06-07
+     */
+    public function cachePage($entity, $type)
+    {
+        if ($entity instanceof TranslationPage) {
+            $entity = $entity->getPage();
+        }
+        if ($entity instanceof Page) {
+            $path_page_json_file = $this->createJsonFileName('page-json', $entity->getRouteName());
+            if (in_array($type, array('persist', 'update'))) {
+                $reports = $this->container
+                        ->get('serializer')
+                        ->serialize($entity, 'json');
+                $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_page_json_file, $reports, 0777, LOCK_EX);
+            } elseif ($type == 'remove') {
+                if (file_exists($path_page_json_file)) {
+                    unlink($path_page_json_file);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Delete the cache of all elements of an entity (Page, TranslationPages, widgets)
      *
+     * @params object $entity An entity class
+     * 
+     * @return string
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2014-06-07
      */
     public function cacheDelete($entity, $delete_cache_only)
     {
-        if (
-            $entity instanceof \Sfynx\CmfBundle\Entity\Page 
-                || $entity instanceof \Sfynx\CmfBundle\Entity\TranslationPage 
-                || $entity instanceof \Sfynx\CmfBundle\Entity\Widget
+        if ($entity instanceof Page 
+                || $entity instanceof TranslationPage 
+                || $entity instanceof Widget
         ) {
-            if ($entity instanceof \Sfynx\CmfBundle\Entity\TranslationPage) {
+            if ($entity instanceof TranslationPage) {
                 $entity = $entity->getPage();
             }
             // we set the persist of the Page entity
-            if ($entity instanceof \Sfynx\CmfBundle\Entity\Page) {
+            if ($entity instanceof Page) {
                 $type = 'page';
-            } elseif ($entity instanceof \Sfynx\CmfBundle\Entity\Widget) {
+            } elseif ($entity instanceof Widget) {
                 $type = 'widget';
             }
             $names = array();
@@ -1367,9 +1403,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      */
     public function copyPage($locale = '')
     {
-    	$em = $this->getContainer()->get('doctrine')->getManager();    	
+    	$em = $this->getContainer()
+                ->get('doctrine')
+                ->getManager();    	
     	if (empty($locale)) {
-            $locale = $this->getContainer()->get('request')->getLocale();
+            $locale = $this->getContainer()
+                    ->get('request')
+                    ->getLocale();
     	}
     	// we get the current page.
     	$page = $this->getCurrentPage();
@@ -1438,9 +1478,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // we set the new url in the locale.
             $entity_translate_page = $this->translations[$id][$locale];
             if (
-                ($entity_translate_page instanceof \Sfynx\CmfBundle\Entity\TranslationPage)
-                &&
-                ($entity_translate_page->getSlug() != "")
+                ($entity_translate_page instanceof TranslationPage)
+                && ($entity_translate_page->getSlug() != "")
             ) {
                 $new_url = $new_page->getUrl() . '/' . $entity_translate_page->getSlug();
             } else {
@@ -1615,7 +1654,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                         $urls[$locale] = "";
                         break;
                 }
-                $is_prefix_locale = $this->container->getParameter("pi_app_admin.page.route.with_prefix_locale");
+                $is_prefix_locale = $this->container
+                        ->getParameter("pi_app_admin.page.route.with_prefix_locale");
                 if ($is_prefix_locale) {
                     $locale_tmp = explode('_', $locale);
                     $urls[$locale] = $locale_tmp[0] . '/' . $urls[$locale];

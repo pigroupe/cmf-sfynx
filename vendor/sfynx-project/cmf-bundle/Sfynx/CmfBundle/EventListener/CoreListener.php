@@ -14,11 +14,8 @@ namespace Sfynx\CmfBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\Common\Cache\ArrayCache;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Sfynx\CoreBundle\EventListener\abstractListener;
-use BootStrap\MediaBundle\Entity\Media;
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Entity\Langue;
 use Sfynx\AuthBundle\Entity\Layout;
@@ -88,7 +85,7 @@ abstract class CoreListener extends abstractListener
     	// If  autentication user, we set the persist of the Page entity
     	if ($this->isUsernamePasswordToken() 
                 && ($entity instanceof Langue)
-        ){
+        ) {
             $this->_container()
                 ->get('sfynx.auth.locale_manager')
                 ->setJsonFileLocales();
@@ -109,20 +106,42 @@ abstract class CoreListener extends abstractListener
     final protected function _deleteJsonFileEtag($eventArgs, $delete_cache_only = false)
     {
     	$entity = $eventArgs->getEntity();
-    	if (	
-            $this->isUsernamePasswordToken() 
-            && 
-            (
-                $entity instanceof Page ||
-                $entity instanceof TranslationPage ||
-                $entity instanceof Widget
+    	if ($this->isUsernamePasswordToken() 
+            && ($entity instanceof Page 
+                || $entity instanceof TranslationPage 
+                || $entity instanceof Widget
             )
     	) {
     	    $this->_container()
                 ->get('pi_app_admin.manager.page')
                 ->cacheDelete($entity, $delete_cache_only);
 	}
-    }    
+    }   
+    
+    /**
+     * We remove json file Etag of Page and Widget.
+     *
+     * @param object $eventArgs The LifecycleEventArgs class
+     * @param string $type      ['insert', 'update', 'remove']
+     * 
+     * @return void
+     * @access protected
+     * @final
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    final protected function _JsonFilePage($eventArgs, $type)
+    {
+    	$entity = $eventArgs->getEntity();
+    	if ($this->isUsernamePasswordToken() 
+            && ($entity instanceof Page
+                || $entity instanceof TranslationPage 
+            )
+    	) {
+    	    $this->_container()
+                ->get('pi_app_admin.manager.page')
+                ->cachePage($entity, $type);
+	}
+    }      
     
     /**
      * We remove twig cached file of Page, Widget and translationWidget template.
@@ -139,15 +158,12 @@ abstract class CoreListener extends abstractListener
         $entity = $eventArgs->getEntity();
         $is_refresh_authorized = $this->_container()
                 ->getParameter('pi_app_admin.page.refresh.allpage');        
-        if (
-            $this->isUsernamePasswordToken() 
+        if ($this->isUsernamePasswordToken() 
             && $is_refresh_authorized 
-            &&
-            (
-                $entity instanceof Page ||
-            	$entity instanceof TranslationPage ||
-                $entity instanceof Widget ||
-                $entity instanceof TranslationWidget
+            && (  $entity instanceof Page
+                || $entity instanceof TranslationPage
+                || $entity instanceof Widget
+                || $entity instanceof TranslationWidget
             )
         ) {
             $all_locales = $this->_container()

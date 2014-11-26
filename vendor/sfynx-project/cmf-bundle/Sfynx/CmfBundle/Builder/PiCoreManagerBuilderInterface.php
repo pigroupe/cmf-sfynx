@@ -31,6 +31,7 @@ interface PiCoreManagerBuilderInterface
     public function cacheRefreshByname($name);
     
     public function getPageById($idpage);
+    public function getPageByRoute($route, $isForce = false);
     public function getBlocksByPageId($idpage);
     public function getWidgetById($idWidget);
     public function getBlockById($idBlock);
@@ -46,7 +47,7 @@ interface PiCoreManagerBuilderInterface
     public function parseTemplateParam($RenderResponseParam);
     public function getScript($script, $type = 'string');
     
-    public function createJsonFileName($type, $id, $lang);
+    public function createJsonFileName($type, $id, $lang = '');
     public function setJsonFileEtag($tag, $id, $lang, $params = null);
     
     public function getPageMetaInfo($lang = '', $title = '', $description = '', $keywords = '', $pathInfo = "");

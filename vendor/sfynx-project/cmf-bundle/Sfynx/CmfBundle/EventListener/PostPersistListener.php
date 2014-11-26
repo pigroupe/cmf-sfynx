@@ -58,6 +58,9 @@ class PostPersistListener extends CoreListener
         // we set the PostPersist block page management
         $this->_Create_Block_Page($eventArgs);
         
+        // we set the PostPersist json page information
+        $this->_JsonFilePage($eventArgs, 'persist');        
+        
         // Method which will be called when we remove twig cached file of Page, Widget and translationWidget template.
         $this->_TwigCache($eventArgs);        
         
