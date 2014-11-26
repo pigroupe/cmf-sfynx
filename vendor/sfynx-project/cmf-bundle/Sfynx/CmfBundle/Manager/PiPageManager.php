@@ -52,14 +52,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Returns the render of the current page.
      * 
-     * @param string $lang
-     * @param bool        $isSetPage
+     * @param string  $lang      The locale value
+     * @param boolean $isSetPage True to force the setting page
      * 
      * @return string
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     public function render($lang = '', $isSetPage = false)
     {
@@ -107,24 +106,37 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // we get the translation of the current page in terms of the lang value.
             $pageTrans	= $this->getTranslationByPageId($page->getId(), $lang);
             // If the translation page is secure and the user is not connected, we return to the home page.
-            if ($pageTrans && $pageTrans->getSecure() && $this->isAnonymousToken()) {
+            if ($pageTrans 
+                    && $pageTrans->getSecure() 
+                    && $this->isAnonymousToken()
+            ) {
                 return $this->redirectHomePublicPage();
             }    
             // If the translation page is not authorized to publish, we return to the home page.
-            if ($pageTrans && ($pageTrans->getStatus() != TranslationPageRepository::STATUS_PUBLISH) && $this->isAnonymousToken()) {
+            if ($pageTrans 
+                    && ($pageTrans->getStatus() != TranslationPageRepository::STATUS_PUBLISH) 
+                    && $this->isAnonymousToken()
+            ) {
                 return $this->redirectHomePublicPage();
             }        
             // If the translation page is secure and the user is not authorized, we return to the home page.
-            if ($pageTrans && $pageTrans->getSecure() && $this->isUsernamePasswordToken()) {
+            if ($pageTrans 
+                    && $pageTrans->getSecure() 
+                    && $this->isUsernamePasswordToken()
+            ) {
                 // Gets all user roles.
-                $user_roles            = $this->container->get('sfynx.auth.role.factory')->getAllUserRoles();
+                $user_roles            = $this->container->
+                        get('sfynx.auth.role.factory')
+                        ->getAllUserRoles();
                 // Gets the best role authorized to access to the entity.
-                $authorized_page_roles = $this->container->get('sfynx.auth.role.factory')->getBestRoles($pageTrans->getHeritage());                
+                $authorized_page_roles = $this->container
+                        ->get('sfynx.auth.role.factory')
+                        ->getBestRoles($pageTrans->getHeritage());                
                 $right = false;
                 if (is_null($authorized_page_roles)) {
                     $right = true;
                 } else {
-                    foreach ($authorized_page_roles as $key=>$role_page) {
+                    foreach ($authorized_page_roles as $key => $role_page) {
                         if (in_array($role_page, $user_roles))
                             $right = true;
                     }
@@ -151,8 +163,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 }
             }
             // We set the Etag value
-            $id	   = $page->getId();
-            $url_  = $this->container->get('request')->getRequestUri();
+            $id	  = $page->getId();
+            $url_ = $this->container->get('request')->getRequestUri();
             // we register the tag value in the json file if does not exist.
             $this->setJsonFileEtag('page', $id, $lang, array('page-url'=>$url_));
             // Create a Response with a Last-Modified header.
@@ -166,7 +178,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             } else {
                 // or render a template with the $response you've already started
                 //$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
-                $response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
+                $response = $this->container
+                        ->get('pi_app_admin.caching')
+                        ->renderResponse($this->Etag, array(), $response);
                 
                 return $response;
             }
@@ -539,13 +553,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Sets and return a page by a route name.
      *
-     * @param string    $route        route page
-     * @param bool        $isSetPage
-     *L
-     * @return \Sfynx\CmfBundle\Entity\Page
+     * @param string  $route     Route page
+     * @param boolean $isSetPage True to force the setting page
+     *
+     * @return false|Page
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     public function setPageByRoute($route = '', $isSetPage = false)
     {
