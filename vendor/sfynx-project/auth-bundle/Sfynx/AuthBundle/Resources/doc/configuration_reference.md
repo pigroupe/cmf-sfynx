@@ -14,7 +14,7 @@ sfynx_auth:
         cache_file: "%kernel.root_dir%/cachesfynx/languages.json"
     browser:
         switch_language_authorized: true
-        switch_layout_mobile_authorized: true
+        switch_layout_mobile_authorized: false
     default_layout:
         init_pc:
             template: layout-pi-sfynx.html.twig

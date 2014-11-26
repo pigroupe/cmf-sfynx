@@ -69,7 +69,6 @@ sfynx_cmf:
             allpage_containing_snippet: true
             css_js_cache_file: true
         indexation_authorized_automatically: false
-        switch_layout_mobile_authorized: true
         memcache_enable_all: false
         scop:
             authorized: true    

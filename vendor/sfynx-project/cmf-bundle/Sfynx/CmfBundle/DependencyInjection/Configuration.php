@@ -110,7 +110,6 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode('homepage_deletewidget')->isRequired()->defaultValue(true)->end()                        
                     ->booleanNode('page_management_by_user_only')->isRequired()->defaultValue(false)->end()    
                     ->booleanNode('indexation_authorized_automatically')->isRequired()->defaultValue(false)->end()                       
-                    ->booleanNode('switch_layout_mobile_authorized')->isRequired()->defaultValue(false)->end()
                     ->booleanNode('memcache_enable_all')->isRequired()->defaultValue(false)->end()
                         
                     ->arrayNode('refresh')->isRequired()

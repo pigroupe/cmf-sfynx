@@ -248,7 +248,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         $javascript  = $this->getPageById($id)->getPageJs();
         // we create the source page.
         $source  = "{% set layout_screen = app.request.attributes.get('sfynx-screen') %}\n";
-        $source .= "{% set is_switch_layout_mobile_authorized = getParameter('pi_app_admin.page.switch_layout_mobile_authorized') %}\n";
+        $source .= "{% set is_switch_layout_mobile_authorized = getParameter('sfynx.auth.browser.switch_layout_mobile_authorized') %}\n";
         $source .= "{% set is_esi_disable_after_post_request = getParameter('pi_app_admin.page.esi.disable_after_post_request') %}\n";
         $source .= "{% set is_widget_ajax_disable_after_post_request = getParameter('pi_app_admin.page.widget.ajax_disable_after_post_request') %}\n";
         $source .= "{% set app_request_request_count = app.request.request.count() %}\n";
@@ -1251,9 +1251,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         if ($entity instanceof Page) {
             $path_page_json_file = $this->createJsonFileName('page-json', $entity->getRouteName());
             if (in_array($type, array('persist', 'update'))) {
-                $reports = $this->container
-                        ->get('serializer')
-                        ->serialize($entity, 'json');
+                $reports = serialize($entity);
                 $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_page_json_file, $reports, 0777, LOCK_EX);
             } elseif ($type == 'remove') {
                 if (file_exists($path_page_json_file)) {

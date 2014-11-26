@@ -102,11 +102,10 @@ class HandlerRequest
         } else {
             $this->screen = "layout";
         }
-        if (
-            !$this->request->cookies->has('sfynx-layout')
-            && $this->is_browser_authorized 
-            && $this->container->has("sfynx.browser.lib.mobiledetect") 
-            && $this->container->has("sfynx.browser.lib.browscap")
+        if ($this->is_browser_authorized 
+                && !$this->request->cookies->has('sfynx-layout')
+                && $this->container->has("sfynx.browser.lib.mobiledetect") 
+                && $this->container->has("sfynx.browser.lib.browscap")
         ) {
             // we get the browser
             \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($this->browscap_cache_dir, 0777);
@@ -120,21 +119,21 @@ class HandlerRequest
             } else {
             	$this->mobiledetect = $this->container->get("sfynx.browser.lib.mobiledetect");
             }
-        	//
-        	$this->request->attributes->set('sfynx-browser', $this->browser);
-        	$this->request->attributes->set('sfynx-mobiledetect', $this->mobiledetect);
-        	//
-        	if ($this->browser->isMobileDevice) {
-        		if (!$this->mobiledetect->isTablet()) {
-        			$this->screen = "layout-poor";
-        		} elseif ($this->mobiledetect->isTablet()) {
-        			$this->screen = "layout-medium";
-        		} else {
-        			$this->screen = 'layout-medium';
-        		}
-        		$this->layout = $this->container->getParameter('sfynx.auth.theme.layout.front.mobile') . $this->init_mobile_layout.'\\' . $this->screen . '.html.twig';
-        		$this->request->setRequestFormat('mobile');
-        	}
+            //
+            $this->request->attributes->set('sfynx-browser', $this->browser);
+            $this->request->attributes->set('sfynx-mobiledetect', $this->mobiledetect);
+            //
+            if ($this->browser->isMobileDevice) {
+                if (!$this->mobiledetect->isTablet()) {
+                    $this->screen = "layout-poor";
+                } elseif ($this->mobiledetect->isTablet()) {
+                    $this->screen = "layout-medium";
+                } else {
+                    $this->screen = 'layout-medium';
+                }
+                $this->layout = $this->container->getParameter('sfynx.auth.theme.layout.front.mobile') . $this->init_mobile_layout.'\\' . $this->screen . '.html.twig';
+                $this->request->setRequestFormat('mobile');
+            }
         }        
         // we add sfynx-layout and sfynx-screen info in the request
         $this->request->attributes->set('sfynx-layout', $this->layout);

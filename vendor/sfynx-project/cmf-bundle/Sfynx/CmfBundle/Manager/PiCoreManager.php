@@ -747,17 +747,11 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      */
     public function getPageByRoute($route, $isForce = false)
     {
+        $page = false;
         if ($this->isJsonPageFileExisted($route)) {
             $path_page_json_file = $this->createJsonFileName('page-json', $route);
             $report = file_get_contents($path_page_json_file);            
-//            $serializer = $this->container->get('serializer');
-//            if ($serializer instanceof \JMS\Serializer\Serializer) {
-//                print_r("coicn");exit;
-//            }
-            $page = $this->container
-                    ->get('serializer')
-                    ->deserialize($report, 'Sfynx\CmfBundle\Entity\Page', 'json');
-            print_r($page);exit;            
+            $page = unserialize($report);       
         } else {
             $page = $this->getRepository('Page')->getPageByRoute($route);
         } 
@@ -765,10 +759,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
                 && ($page instanceof Page)
         ) {
             $this->setCurrentPage($page);
-            return $page;
         }
         
-        return false;        
+        return $page;       
     }      
     
     /**

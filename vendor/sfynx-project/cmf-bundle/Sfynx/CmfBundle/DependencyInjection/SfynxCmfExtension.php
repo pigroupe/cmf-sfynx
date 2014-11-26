@@ -129,9 +129,6 @@ class SfynxCmfExtension extends Extension
             if (isset($config['page']['indexation_authorized_automatically'])) {
                 $container->setParameter('pi_app_admin.page.indexation_authorized_automatically', $config['page']['indexation_authorized_automatically']);
             }
-            if (isset($config['page']['switch_layout_mobile_authorized'])) {
-                $container->setParameter('pi_app_admin.page.switch_layout_mobile_authorized', $config['page']['switch_layout_mobile_authorized']);
-            }
             if (isset($config['page']['memcache_enable_all']))  {
             	$container->setParameter('pi_app_admin.page.memcache_enable_all', $config['page']['memcache_enable_all']);
             }
