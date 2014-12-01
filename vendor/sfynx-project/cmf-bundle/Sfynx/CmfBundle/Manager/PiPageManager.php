@@ -106,7 +106,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // Initialize response
             $response = $this->getResponseByIdAndType('page', $id_page);            
             // we register only the translation page asked in the $lang value.
-            $this->setTranslations($page, $lang);
+            $this->setTranslations($page, false);
             // we get the translation of the current page in terms of the lang value.
             $pageTrans	= $this->getTranslationByPageId($id_page, $lang);
             // If the translation page is secure and the user is not connected, we return to the home page.
@@ -155,7 +155,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // * the translation doesn't have a published status.
             if (!$pageTrans) {
                 // we register all translations page linked to one page.
-                $this->setTranslations($page);
+                $this->setTranslations($page, $lang);
                 // we get the translation of the current page in another language if it exists.
                 $pageTrans	= $this->getTranslationByPageId($id_page, $lang);
                 if (!$pageTrans) {
@@ -168,6 +168,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             }
             // we register the Etag value in the json file if does not exist.
             $this->setJsonFileEtag('page', $id_page, $lang, array('page-url'=>$url_));
+            //print_r($this->Etag);exit;
             // Create a Response with a Last-Modified header.
             $response = $this->configureCache($page, $response);
             // Check that the Response is not modified for the given Request.
@@ -391,7 +392,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 	{
 	    // we set the langue
 	    if (empty($lang))    $lang = $this->language;
-        // we initialize
+                // we initialize
 		$this->initializeRequest($lang, $options);
 		// we set the result widget
 		$result = $this->container->get($serviceName)->$method($id, $lang, $params);

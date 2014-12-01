@@ -69,7 +69,7 @@ class HandlerRequest
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container        = $container; 
+        $this->container = $container; 
     }    
 
     /**

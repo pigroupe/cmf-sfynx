@@ -28,9 +28,6 @@ use Sfynx\AuthBundle\Entity\Role;
 use Sfynx\CmfBundle\Entity\HistoricalStatus;
 use Sfynx\CmfBundle\Repository\PageRepository;
 
-use Sfynx\CmfBundle\Manager\PiSearchLuceneManager;
-use Sfynx\CmfBundle\Manager\SearchLucene\Indexation;
-
 /**
  * abstract listener manager.
  * This event is called after an entity is constructed by the EntityManager.

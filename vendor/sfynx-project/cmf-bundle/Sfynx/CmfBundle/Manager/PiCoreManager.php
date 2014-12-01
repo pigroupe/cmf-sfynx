@@ -751,7 +751,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         if ($this->isJsonPageFileExisted($route)) {
             $path_page_json_file = $this->createJsonFileName('page-json', $route);
             $report = file_get_contents($path_page_json_file);            
-            $page = unserialize($report);       
+            $page = unserialize($report);  
         } else {
             $page = $this->getRepository('Page')->getPageByRoute($route);
         } 
@@ -762,7 +762,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         }
         
         return $page;       
-    }      
+    }  
     
     /**
      * Returns the blocks of a page.
@@ -837,21 +837,15 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     public function getTranslationByPageId($idpage, $lang = '')
     {
         if (isset($this->translations[$idpage]) && !empty($this->translations[$idpage])) {
-            if ( 
-            	!empty($lang) 
-            	&&
-            	isset($this->translations[$idpage][$lang]) 
-            	&&
-            	!empty($this->translations[$idpage][$lang]) 
+            if (!empty($lang) 
+                    && isset($this->translations[$idpage][$lang]) 
+                    && !empty($this->translations[$idpage][$lang]) 
             ) {
                 $result         = $this->translations[$idpage][$lang];
                 $this->language = $lang;
-            } elseif ( 
-            		!empty($this->language) 
-            		&&
-            		isset($this->translations[$idpage][$this->language]) 
-            		&&
-            		!empty($this->translations[$idpage][$this->language]) 
+            } elseif (!empty($this->language) 
+                    && isset($this->translations[$idpage][$this->language]) 
+                    && !empty($this->translations[$idpage][$this->language]) 
             ) {
                 $result         = $this->translations[$idpage][$this->language];
             } else {
@@ -885,24 +879,18 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     {
         // we set the langue
         if (empty($lang)) {
-        	$lang = $this->language;
+            $lang = $this->language;
         }        
         if (isset($this->translationsWidget[$idwidget]) && !empty($this->translationsWidget[$idwidget])){
-            if ( 
-            	!empty($lang) 
-            	&& 
-            	isset($this->translationsWidget[$idwidget][$lang]) 
-            	&& 
-            	!empty($this->translationsWidget[$idwidget][$lang]) 
+            if (!empty($lang) 
+                    && isset($this->translationsWidget[$idwidget][$lang]) 
+                    && !empty($this->translationsWidget[$idwidget][$lang]) 
             ) {
                 $result = $this->translationsWidget[$idwidget][$lang];
-            } elseif ( 
-            		!empty($this->language) 
-            		&& 
-            		isset($this->translationsWidget[$idwidget][$this->language]) 
-            		&& 
-            		!empty($this->translationsWidget[$idwidget][$this->language]) 
-           	) {
+            } elseif (!empty($this->language) 
+            		&& isset($this->translationsWidget[$idwidget][$this->language]) 
+            		&& !empty($this->translationsWidget[$idwidget][$this->language]) 
+            ) {
                 $result = $this->translationsWidget[$idwidget][$this->language];
             } else {
                 $result =  $this->translationsWidget[$idwidget];

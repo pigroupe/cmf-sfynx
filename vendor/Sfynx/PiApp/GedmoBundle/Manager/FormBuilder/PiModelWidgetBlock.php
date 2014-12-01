@@ -119,7 +119,7 @@ class PiModelWidgetBlock extends PiFormBuilderManager
                             "class"=>"pi_simpleselect",
                     ),
                     "label_attr" => array(
-                            "class"=>"insert_collection",
+                            "class"=>"block_insert_collection",
                     ),                    
             ))
             ->add('template', 'choice', array(
@@ -189,10 +189,10 @@ class PiModelWidgetBlock extends PiFormBuilderManager
         ?>
             jQuery(document).ready(function(){        
                 var  create_content_form  = $(".block_collection");
-                var  insert_content_form  = $(".insert_collection");
+                var  insert_content_form  = $(".block_insert_collection");
 
                 create_content_form.parents('.clearfix').hide();
-
+                
                 $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_id_block").attr("required", "required");
                 $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_title").removeAttr("required");
 

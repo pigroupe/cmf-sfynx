@@ -56,20 +56,20 @@ class PiScriptManager extends AbstractFactory
     	$file       = $TEMP_FILES_DIR . $input_hash . '.js';
     	// we compress the content
     	if ( !file_exists($file) ) {
-    		$this->getContainer()->get('sfynx.tool.file_manager')->save($file, $content_js, 0777);
+            $this->getContainer()->get('sfynx.tool.file_manager')->save($file, $content_js, 0777);
     	}
     	// we set result
     	$this->getContainer()->get('sfynx.tool.twig.extension.layouthead')->addJsFile("yui/js/".$input_hash. '.js');
     	$resultScript = '<script type="text/javascript" src="/yui/js/' . $path_prefix . $input_hash .'.js" ></script>';
     	// we return the result
     	if ($result == "both") {
-    		return $content_html . $resultScript;
+            return $content_html . $resultScript;
     	} elseif ($result == "html") {
-    		return $content_html;
+            return $content_html;
     	} elseif ($result == "linkJs") {
-    		return $resultScript;
+            return $resultScript;
     	} else {
-    		return $content_html .
+            return $content_html .
     		"
             <script type='text/javascript'>
             //<![CDATA[
