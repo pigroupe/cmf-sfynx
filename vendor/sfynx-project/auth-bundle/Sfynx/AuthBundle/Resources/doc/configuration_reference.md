@@ -7,11 +7,14 @@ All available configuration options are listed below with their default values.
 # SfynxAuthBundle configuration
 #  
 sfynx_auth:
+    loginfailure:
+        cache_dir: "%kernel.root_dir%/cachesfynx/loginfailure"
     locale:
         authorized: ~ #[fr_FR, en_GB]
+        cache_file: "%kernel.root_dir%/cachesfynx/languages.json"
     browser:
         switch_language_authorized: true
-        switch_layout_mobile_authorized: true
+        switch_layout_mobile_authorized: false
     default_layout:
         init_pc:
             template: layout-pi-sfynx.html.twig

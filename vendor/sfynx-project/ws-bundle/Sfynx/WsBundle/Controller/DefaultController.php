@@ -64,35 +64,35 @@ class DefaultController extends abstractController
     	$em      = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
     	//
-    	if ($request->get('ws_key') == '') {
-    		throw new \Exception('ws_key not specified');
-    	}
-    	if ($request->get('ws_user_id') == '') {
-    		throw new \Exception('ws_user_id not specified');
-    	}
-    	if ($request->get('ws_application') == '') {
-    		throw new \Exception('ws_application not specified');
-    	}
+        if ($request->get('ws_key') == '') {
+            throw new \Exception('ws_key not specified');
+        }
+        if ($request->get('ws_user_id') == '') {
+            throw new \Exception('ws_user_id not specified');
+        }
+        if ($request->get('ws_application') == '') {
+            throw new \Exception('ws_application not specified');
+        }
     	if (!$request->get('ws_key', false) || !$request->get('ws_format', false) || !$request->get('ws_user_id', false) || !$request->get('ws_application', false)) {
-    		//-----we initialize de logger-----
-    		$logger = $this->container->get('sfynx.tool.log_manager');
-    		$logger->setInit('log_client_auth', date("YmdH"));
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET BAD VALIDATE TOKEN AUTH REQUEST]");
-    		//-----we set errors in the logger-----
-    		$logger->setErr(date("Y-m-d H:i:s") . " [LOG] problem : missing parameter");
-    		$logger->setErr(date("Y-m-d H:i:s") . " [LOG] url :" . $request->getUri());
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [END]");
-    		//-----we save in the file log-----
-    		$env = $this->container->get("kernel")->getEnvironment();
-    		$config = $this->container->getParameter("ws.auth");
+            //-----we initialize de logger-----
+            $logger = $this->container->get('sfynx.tool.log_manager');
+            $logger->setInit('log_client_auth', date("YmdH"));
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET BAD VALIDATE TOKEN AUTH REQUEST]");
+            //-----we set errors in the logger-----
+            $logger->setErr(date("Y-m-d H:i:s") . " [LOG] problem : missing parameter");
+            $logger->setErr(date("Y-m-d H:i:s") . " [LOG] url :" . $request->getUri());
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [END]");
+            //-----we save in the file log-----
+            $env = $this->container->get("kernel")->getEnvironment();
+            $config = $this->container->getParameter("ws.auth");
     	    if (isset($config['log'][$env])) {
-	    		$is_debug = $config['log'][$env];
-	    		if ($is_debug){
-	    			$logger->save();
-	    		}   		
-    		}
+                $is_debug = $config['log'][$env];
+                if ($is_debug){
+                        $logger->save();
+                }   		
+            }
     	    throw ClientException::callBadAuthRequest(__CLASS__);
     	}
     	$key            = $request->get('ws_key', '');
@@ -102,25 +102,25 @@ class DefaultController extends abstractController
     	// we check if the user ID exists in the authentication service.
     	// If the user ID doesn't exist, we generate.
     	if (!$this->isUserdIdExisted($userId)) {
-    		//-----we initialize de logger-----
-    		$logger = $this->container->get('sfynx.tool.log_manager');
-    		$logger->setInit('log_client_auth', date("YmdH"));
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET BAD VALIDATE TOKEN AUTH REQUEST]");
-    		//-----we set errors in the logger-----
-    		$logger->setErr(date("Y-m-d H:i:s") . " [LOG] problem : userID '".$userId."' does not existed in the database.");
-    		$logger->setErr(date("Y-m-d H:i:s") . " [LOG] url :" . $request->getUri());
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [END]");
-    		//-----we save in the file log-----
-    		$env = $this->container->get("kernel")->getEnvironment();
-    		$config = $this->container->getParameter("ws.auth");
-    		if (isset($config['log'][$env])) {
-	    		$is_debug = $config['log'][$env];
-	    		if ($is_debug){
-	    			$logger->save();
-	    		}   		
-    		}
+            //-----we initialize de logger-----
+            $logger = $this->container->get('sfynx.tool.log_manager');
+            $logger->setInit('log_client_auth', date("YmdH"));
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET BAD VALIDATE TOKEN AUTH REQUEST]");
+            //-----we set errors in the logger-----
+            $logger->setErr(date("Y-m-d H:i:s") . " [LOG] problem : userID '".$userId."' does not existed in the database.");
+            $logger->setErr(date("Y-m-d H:i:s") . " [LOG] url :" . $request->getUri());
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [END]");
+            //-----we save in the file log-----
+            $env = $this->container->get("kernel")->getEnvironment();
+            $config = $this->container->getParameter("ws.auth");
+            if (isset($config['log'][$env])) {
+                    $is_debug = $config['log'][$env];
+                    if ($is_debug){
+                            $logger->save();
+                    }   		
+            }
     	    throw ClientException::callBadAuthRequest(__CLASS__);
     	} else {
     	    // else we get the token associated to the user ID.
@@ -142,22 +142,22 @@ class DefaultController extends abstractController
     	    //-----we set info in the logger-----
     	    $logger->setInfo(date("Y-m-d H:i:s") . " [END]");
     	    //-----we save in the file log-----
-    		$env = $this->container->get("kernel")->getEnvironment();
-    		$config = $this->container->getParameter("ws.auth");
-    	   	if (isset($config['log'][$env])) {
-	    		$is_debug = $config['log'][$env];
-	    		if ($is_debug){
-	    			$logger->save();
-	    		}   		
-    		}  	    
+            $env = $this->container->get("kernel")->getEnvironment();
+            $config = $this->container->getParameter("ws.auth");
+            if (isset($config['log'][$env])) {
+                    $is_debug = $config['log'][$env];
+                    if ($is_debug){
+                            $logger->save();
+                    }   		
+            }  	    
     	}    	
     	if ($format == 'json') {
-        	$tab                  = array();
-        	$tab['authorization'] = $isAuthorization;
-        	$tab['token']         = $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($token, $key);
-        	//
-        	$response = new Response(json_encode($tab));
-        	$response->headers->set('Content-Type', 'application/json');            
+            $tab                  = array();
+            $tab['authorization'] = $isAuthorization;
+            $tab['token']         = $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($token, $key);
+            //
+            $response = new Response(json_encode($tab));
+            $response->headers->set('Content-Type', 'application/json');            
     	    //-----we initialize de logger-----
     	    $logger = $this->container->get('sfynx.tool.log_manager');
     	    $logger->setInit('log_client_auth_result', date("YmdH"));
@@ -168,14 +168,14 @@ class DefaultController extends abstractController
     	    //-----we set info in the logger-----
     	    $logger->setInfo(date("Y-m-d H:i:s") . " [END]");
     	    //-----we save in the file log-----
-    		$env = $this->container->get("kernel")->getEnvironment();
-    		$config = $this->container->getParameter("ws.auth");
-    	   	if (isset($config['log'][$env])) {
-	    		$is_debug = $config['log'][$env];
-	    		if ($is_debug){
-	    			$logger->save();
-	    		}   		
-    		}             
+            $env = $this->container->get("kernel")->getEnvironment();
+            $config = $this->container->getParameter("ws.auth");
+            if (isset($config['log'][$env])) {
+                    $is_debug = $config['log'][$env];
+                    if ($is_debug){
+                            $logger->save();
+                    }   		
+            }             
     	}
     	
     	return $response;    	
@@ -199,7 +199,7 @@ class DefaultController extends abstractController
         $request = $this->container->get('request');
     	//
     	if ($request->get('ws_key') == '') {
-    		throw new \Exception('ws_key not specified');
+            throw new \Exception('ws_key not specified');
     	}
     	if ($request->get('ws_user_id') == '') {
     		throw new \Exception('ws_user_id not specified');
@@ -293,10 +293,10 @@ class DefaultController extends abstractController
     	$userManager = $this->container->get('fos_user.user_manager');
     	//
     	if ($request->get('ws_key') == '') {
-    		throw new \Exception('ws_key not specified');
+            throw new \Exception('ws_key not specified');
     	}
     	if ($request->get('ws_user_id') == '') {
-    		throw new \Exception('ws_user_id not specified');
+            throw new \Exception('ws_user_id not specified');
     	}
         //
     	$key         = $request->get('ws_key', '');
@@ -304,21 +304,21 @@ class DefaultController extends abstractController
     	$userId      = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_user_id', null), $key);
     	//
     	if (!empty($referer_url)) {
-    		$response = new RedirectResponse($referer_url);
+            $response = new RedirectResponse($referer_url);
     	} else {
-    		$response = new Response();
+            $response = new Response();
     	}
     	//
     	$entity   = $em->getRepository('SfynxUserBundle:User')->find($userId);
     	if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-    		return $this->authenticateUser($entity, false,  $response);
+            return $this->authenticateUser($entity, $response, false);
     	} else {
-    		$tab = array();
-    		$tab['succes_authenticate'] = false;
-    		$response = new Response(json_encode($tab));
-    		$response->headers->set('Content-Type', 'application/json');
-    			
-    		return $response;
+            $tab = array();
+            $tab['succes_authenticate'] = false;
+            $response = new Response(json_encode($tab));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
     	}
     }  
     
@@ -372,19 +372,40 @@ class DefaultController extends abstractController
         $referer_url  = $request->get('ws_redirect_uri', '');
     	$referer_host = $request->get('ws_redirect_host', '');
     	$application  = $request->get('ws_application', null);
-    	if ($this->get('security.context')->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
-        	// we get user
-			$token = $this->getTokenByUserIdAndApplication($this->get('security.context')->getToken()->getUser(), $application);
-			// we set url redirection
-			$redirectUri  = rawurldecode($referer_host) . $this->container->get('router')->generate('ws_auth_authenticate_user_by_token');
-			$redirectUri .= sprintf('?ws_redirect_uri=%s', rawurldecode($referer_url));
-   			$redirectUri .= sprintf('&ws_application=%s', $application);
-   			$redirectUri .= sprintf('&ws_token=%s', $token);
-   		} else {
-    		$redirectUri  = rawurldecode($referer_host) . $this->container->get('router')->generate('ws_auth_authenticate_user_by_token');
-    		$redirectUri .= sprintf('?ws_redirect_uri=%s', rawurldecode($referer_url));
-		}
-		$response = new RedirectResponse($redirectUri);
+    	if ($this->get('security.context')->getToken() 
+                instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
+            // we get user
+            $token = $this->getTokenByUserIdAndApplication(
+                $this->get('security.context')->getToken()->getUser(),
+                $application
+            );
+            // we set url redirection
+            $redirectUri  = rawurldecode($referer_host) .
+            $this->container->get('router')->generate('ws_auth_authenticate_user_by_token');
+            $redirectUri .= sprintf('?ws_redirect_uri=%s', rawurldecode($referer_url));
+            $redirectUri .= sprintf('&ws_application=%s', $application);
+            $redirectUri .= sprintf('&ws_token=%s', $token);
+            $redirectUri .= sprintf('&ws_locale=%s', $locale);
+            // --------------------
+            // SSO TEST
+            // --------------------  
+            $this->container->get('logger')->info("[LOG-SSO-2: authenticateProxyAction]: authentication");
+            // --------------------
+            // END SSO TEST
+            // --------------------        
+        } else {
+            $redirectUri  = rawurldecode($referer_host) .
+            $this->container->get('router')->generate('ws_auth_authenticate_user_by_token');
+            $redirectUri .= sprintf('?ws_redirect_uri=%s', rawurldecode($referer_url));
+            // --------------------
+            // SSO TEST
+            // --------------------  
+            $this->container->get('logger')->info("[LOG-SSO-2: authenticateProxyAction] : no authentication");
+            // --------------------
+            // END SSO TEST
+            // --------------------      
+        }
+        $response = new RedirectResponse($redirectUri);
 
     	return $response;
      }    
@@ -404,82 +425,75 @@ class DefaultController extends abstractController
     public function authenticateByTokenAction()
     {
     	$em          = $this->getDoctrine()->getManager();
-    	$request     = $this->container->get('request');
-    	$userManager = $this->container->get('fos_user.user_manager');
-    	//
-    	if (
-    	    ($request->get('ws_token') == '') && ($request->get('ws_redirect_uri') != '')
-    	) {
-    		$response = new RedirectResponse($request->get('ws_redirect_uri'));
-    		$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('ws-sfynx-sso-connected', false, 0));
-    	
-    		return $response;
-    	}
-    	if ($request->get('ws_key') == '') {
-    		throw new \Exception('ws_key not specified');
-    	}
-    	if ($request->get('ws_token') == '') {
-    		throw new \Exception('ws_token not specified');
-    	}
-    	if ($request->get('ws_application') == '') {
-    		throw new \Exception('ws_application not specified');
-    	}
-    	//
-        $key         = $request->get('ws_key', '');
-        $referer_url = $request->get('ws_redirect_uri', '');
-    	$token       = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_token', null), $key);
-    	$application = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_application', null), $key);
-    	//
-    	if (!empty($referer_url)) {
-    		$response = new RedirectResponse($referer_url);
-    	} else {
-    		$response = new Response();
-    	}
-        //    	
-   		$entity = $this->getUserByTokenAndApplication($token, $application);
-    	if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-    	    $this->authenticateUser($entity, false, $response);
-    	    if ($response instanceof Response) {
-    	    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('ws-sfynx-sso-connected', true, 0));
-    	    }
-    	    
-    	    return $response;
-    	} else {
-        	$response = new Response(json_encode(array('succes_authenticate' => false))); 
-    	    $response->headers->set('Content-Type', 'application/json');        	 
-    	    
-    	    return $response;
-    	}    	
-    }    
-    
-   /**
-    * We connect user by his id value.
-	*
-	* <code>
-	*  <a href="{{ path('ws_auth_authenticate_user_proxy_login') }}" >connexion</a>
-	* </code>
-	*
-	* @Route("/ws/auth/authenticate/proxy/login", name="ws_auth_authenticate_user_proxy_login")
-	* @return \Symfony\Component\HttpFoundation\Response
-	* @access  public
-	* @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-	*/
-	public function authenticateProxyLoginAction()
-	{
-    	$em          = $this->getDoctrine()->getManager();
-    	$request     = $this->container->get('request');
-    	//
-    	if ($request->get('ws_redirect_proxy_login') == '') {
-            $redirectUri  = $this->container->get('router')->generate('ws_auth_authenticate_user_proxy_login');
-            $redirectUri .= sprintf('?ws_redirect_proxy_login=%s', '1');
-        } else {
-            $redirectUri = $this->container->getParameter("ws.sso.uri_proxy_login");
-        }
-        $response = new RedirectResponse($redirectUri);
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('ws-sfynx-sso-connected', '', time() - 3600));
+        $request     = $this->container->get('request');
+        $userManager = $this->container->get('fos_user.user_manager');
+        //
+        if (($request->get('ws_token') == '')
+            && ($request->get('ws_redirect_uri') != '')
+        ) {
+            $response = new RedirectResponse($request->get('ws_redirect_uri'));
+            // we do not remove the cookie due to avoid a rollback from SSO connexion in HandlerRequest
+            $response->headers->setCookie(
+                new \Symfony\Component\HttpFoundation\Cookie(
+                    'findmrmiles-connected',
+                    0,
+                    time() + 8640000
+                )
+            );
+            // --------------------
+            // SSO TEST
+            // --------------------   
+            $this->container->get('logger')->info("[LOG-SSO-3: authenticateByTokenAction] no authentication : url redirection : ".$request->get('ws_redirect_uri'));
+            // --------------------
+            // END SSO TEST
+            // --------------------             
 
-        return $response;
-    }  
+            return $response;
+        }
+        if ($request->get('ws_token') == '') {
+            throw new \Exception('ws_application not specified');
+        }
+        if ($request->get('ws_application') == '') {
+            throw new \Exception('ws_application not specified');
+        }
+        //
+        $referer_url = $request->get('ws_redirect_uri', '');
+        $token       = $request->get('ws_token', null);
+        $application = $request->get('ws_application', null);
+        $locale      = $request->get('ws_locale', null);
+        //
+        if (!empty($referer_url)) {
+            $response = new RedirectResponse($referer_url);
+            // --------------------
+            // SSO TEST
+            // -------------------- 
+            $this->container->get('logger')->info("[LOG-SSO-3: authenticateByTokenAction] authentication : url redirection : ".$referer_url);
+            // --------------------
+            // END SSO TEST
+            // --------------------              
+        } else {
+            $response = new Response();
+        }
+        // we set the locale country value egal to the locale .com value
+        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $locale, time() + 8640000));
+        // we get user by token
+        $user = $this->getUserByTokenAndApplication($token, $application);
+        if ($user instanceof \FindMrMiles\UserBundle\Entity\User) {
+            return $this->authenticateUser($user, $response, false);
+        } else {
+            $response = new RedirectResponse($request->get('ws_redirect_uri'));
+            // we do not remove the cookie due to avoid a rollback from SSO connexion in HandlerRequest
+            $response->headers->setCookie(
+                new \Symfony\Component\HttpFoundation\Cookie(
+                    'findmrmiles-connected',
+                    0,
+                    time() + 8640000
+                )
+            );            
+
+            return $response;
+        }
+    }    
     
     /**
      * Check the result request of a url.
@@ -498,35 +512,35 @@ class DefaultController extends abstractController
     	$handler     = $request->get('handler', '');
     	$getParams   = $request->get('getParams', null);
     	// we set the ws request
-   	    $result = $this->container->get('sfynx.ws.client.auth')->getPermission($handler, $getParams);
+   	$result = $this->container->get('sfynx.ws.client.auth')->getPermission($handler, $getParams);
     	// we throw an exception if ws return false
     	$get_http_response_code = intval(substr($result['header'][0], 9, 3));
     	if ($get_http_response_code != 200){
-    		//-----we initialize de logger-----
-    		$logger = $this->container->get('sfynx.tool.log_manager');
-    		$logger->setInit('log_client_auth_bad_request', date("YmdH"));
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN BAD AUTH REQUEST]");
-    		//-----we set errors in the logger-----
-    		$loggerr->setErr(date("Y-m-d H:i:s") . " [LOG] WS url :" . $request->getUri());
-    		$logger->setErr(date("Y-m-d H:i:s") . " [LOG] param url :" . $result['url']);
-    		//-----we set info in the logger-----
-    		$logger->setInfo(date("Y-m-d H:i:s") . " [END]");
-    		//-----we save in the file log-----
-    		$logger->save();
-    		throw ClientException::callBadAuthRequest(__CLASS__);
+            //-----we initialize de logger-----
+            $logger = $this->container->get('sfynx.tool.log_manager');
+            $logger->setInit('log_client_auth_bad_request', date("YmdH"));
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN BAD AUTH REQUEST]");
+            //-----we set errors in the logger-----
+            $loggerr->setErr(date("Y-m-d H:i:s") . " [LOG] WS url :" . $request->getUri());
+            $logger->setErr(date("Y-m-d H:i:s") . " [LOG] param url :" . $result['url']);
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [END]");
+            //-----we save in the file log-----
+            $logger->save();
+            throw ClientException::callBadAuthRequest(__CLASS__);
     	} else {
-    		// we hide the value of the url
-    		if (isset($result['url'])) {
-    			unset($result['url']);
-    		}
-    		if (isset($result['header'])) {
-    			unset($result['header']);
-    		}
-    		$response = new Response(json_encode($result));
-    		$response->headers->set('Content-Type', 'application/json');
-    
-    		return $response;
+            // we hide the value of the url
+            if (isset($result['url'])) {
+                unset($result['url']);
+            }
+            if (isset($result['header'])) {
+                unset($result['header']);
+            }
+            $response = new Response(json_encode($result));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
     	}
     }    
 }

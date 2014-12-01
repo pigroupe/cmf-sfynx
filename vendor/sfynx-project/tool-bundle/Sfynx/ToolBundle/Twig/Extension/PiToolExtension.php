@@ -261,12 +261,13 @@ class PiToolExtension extends \Twig_Extension
      * @author riad hellal <hellal.riad@gmail.com>
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getDatePatternByLocalFunction($locale, $fileName = 'i18n_date.json')
+    public function getDatePatternByLocalFunction($locale)
     {
-        $root_file         = realpath($this->container->getParameter("kernel.cache_dir") . '/../'.$fileName);
+        $fileName  = $this->container->getParameter("sfynx.tool.date.cache_file");
+        $root_file = realpath($fileName);
         if (!$root_file) {
-        	$isGood = $this->updateCulturesJsFilesFunction($fileName);
-        	$root_file  = realpath($this->container->getParameter("kernel.cache_dir") . '/../'.$fileName);
+            $isGood = $this->updateCulturesJsFilesFunction($fileName);
+            $root_file  = realpath($fileName);
         }
         // we parse the data file of all formats
         $dates         = array();
@@ -291,12 +292,14 @@ class PiToolExtension extends \Twig_Extension
      * @author riad hellal <hellal.riad@gmail.com>
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    private function updateCulturesJsFilesFunction($fileName = 'i18n_date.json')
+    private function updateCulturesJsFilesFunction($fileName = "")
     {
-        $root_dir = realpath($this->container->getParameter("kernel.cache_dir"). '/../');
+        if (empty($fileName)) {
+            $fileName  = $this->container->getParameter("sfynx.tool.date.cache_file");
+        }
         $rout_i18n_files = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/");
         $MyDirectory = opendir($rout_i18n_files) or die('Erreur');
-        $fp = fopen($root_dir.'/'.$fileName, 'w');
+        $fp = fopen($fileName, 'w');
         while($Entry = @readdir($MyDirectory)) {
             if ($Entry != '.' && $Entry != '..') {
                 $ch = file_get_contents($rout_i18n_files."/".$Entry, FILE_USE_INCLUDE_PATH);

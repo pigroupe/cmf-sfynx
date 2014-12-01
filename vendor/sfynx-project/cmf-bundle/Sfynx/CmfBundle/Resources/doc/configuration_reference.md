@@ -7,7 +7,14 @@ All available configuration options are listed below with their default values.
 # SfynxCmfBundle configuration
 #
 sfynx_cmf:
+    cache_dir:
+        etag: "%kernel.root_dir%/cachesfynx/Etag/"
+        indexation: "%kernel.root_dir%/cachesfynx/Indexation/"
     seo:
+        redirection_oldurl_to_new_url:
+            authorized: false
+            repository : "%kernel.root_dir%/cachesfynx/seo"
+            file_name : seo_links.yml 
         meta_head:
             author: Sfynx
             copyright: http://www.sfynx.fr
@@ -34,10 +41,6 @@ sfynx_cmf:
                  
                  ### Empécher Microsoft de générer des "smart tags" sur notre page web.
                  #8: "<meta name='MSSmartTagsPreventParsing' content='TRUE'/>"
-        redirection_oldurl_to_new_url:
-            authorized: true
-            repository : "%kernel.root_dir%/cache/seo"
-            file_name : seo_links.yml                 
     page:
         homepage_deletewidget: true
         page_management_by_user_only: true
@@ -66,7 +69,6 @@ sfynx_cmf:
             allpage_containing_snippet: true
             css_js_cache_file: true
         indexation_authorized_automatically: false
-        switch_layout_mobile_authorized: true
         memcache_enable_all: false
         scop:
             authorized: true    

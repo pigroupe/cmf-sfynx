@@ -37,6 +37,7 @@ class Configuration implements ConfigurationInterface
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
+        $this->addLoginFailureConfig($rootNode);
         $this->addLocaleConfig($rootNode);
         $this->addBrowserConfig($rootNode);
         $this->addRedirectionLoginConfig($rootNode);
@@ -45,6 +46,29 @@ class Configuration implements ConfigurationInterface
 
         return $treeBuilder;
     }
+    
+    /**
+     * Login failure config
+     *
+     * @param $rootNode \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     *
+     * @return void
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function addLoginFailureConfig(ArrayNodeDefinition $rootNode)
+    {
+    	$rootNode
+    	->children()
+        	->arrayNode('loginfailure')
+        	    ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('cache_dir')->defaultValue('%kernel.root_dir%/cachesfynx/loginfailure/')->cannotBeEmpty()->end()
+                ->end()
+            ->end()
+    	->end();
+    }      
     
     /**
      * Locale config
@@ -63,10 +87,8 @@ class Configuration implements ConfigurationInterface
         	->arrayNode('locale')
         	    ->addDefaultsIfNotSet()
                 ->children()
-                    ->arrayNode('authorized')
-                    ->prototype('scalar')->end()
-                    ->defaultValue(array('fr_FR', 'en_GB', 'ar_SA'))
-                    ->end()
+                    ->arrayNode('authorized')->prototype('scalar')->end()->defaultValue(array('fr_FR', 'en_GB', 'ar_SA'))->end()
+                    ->scalarNode('cache_file')->defaultValue('%kernel.root_dir%/cachesfynx/languages.json')->cannotBeEmpty()->end()
                 ->end()
             ->end()
     	->end();

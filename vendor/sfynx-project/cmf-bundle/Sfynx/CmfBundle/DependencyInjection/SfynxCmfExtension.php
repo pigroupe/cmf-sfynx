@@ -43,6 +43,18 @@ class SfynxCmfExtension extends Extension
         // we load config
         $configuration = new Configuration();
         $config  = $this->processConfiguration($configuration, $config);
+        
+        /**
+         * Cache config parameter
+         */
+        if (isset($config['cache_dir'])){
+            if (isset($config['cache_dir']['etag'])) {
+                $container->setParameter('pi_app_admin.cache_dir.etag', $config['cache_dir']['etag']);
+            }
+            if (isset($config['cache_dir']['indexation'])) {
+                $container->setParameter('pi_app_admin.cache_dir.indexation', $config['cache_dir']['indexation']);
+            }            
+        }            
 
         /**
          * Admin config parameter
@@ -117,9 +129,6 @@ class SfynxCmfExtension extends Extension
             if (isset($config['page']['indexation_authorized_automatically'])) {
                 $container->setParameter('pi_app_admin.page.indexation_authorized_automatically', $config['page']['indexation_authorized_automatically']);
             }
-            if (isset($config['page']['switch_layout_mobile_authorized'])) {
-                $container->setParameter('pi_app_admin.page.switch_layout_mobile_authorized', $config['page']['switch_layout_mobile_authorized']);
-            }
             if (isset($config['page']['memcache_enable_all']))  {
             	$container->setParameter('pi_app_admin.page.memcache_enable_all', $config['page']['memcache_enable_all']);
             }
@@ -150,6 +159,5 @@ class SfynxCmfExtension extends Extension
     public function getAlias()
     {
         return 'sfynx_cmf';
-    }    
-   
+    }   
 }

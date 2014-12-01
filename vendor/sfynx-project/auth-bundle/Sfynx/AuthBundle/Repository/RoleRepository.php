@@ -63,9 +63,8 @@ class RoleRepository extends TranslationRepository
      *
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-03-16
+     * @since  2012-03-16
      */
     public function getAllHeritageRoles()
     {
@@ -75,8 +74,7 @@ class RoleRepository extends TranslationRepository
         ->setParameters(array(
                 'enabled'    => 1,
         ));
-        //return $query->getQuery()->setMaxResults(1)->getArrayResult();
-    
+        //return $query->getQuery()->setMaxResults(1)->getArrayResult();    
         $result = array();
         $data    = $query->getQuery()->getArrayResult();
         if ($data && is_array($data) && count($data)) {

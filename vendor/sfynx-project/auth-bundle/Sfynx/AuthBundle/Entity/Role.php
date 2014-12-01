@@ -207,10 +207,9 @@ class Role
     public function setHeritage( array $heritage)
     {
         $this->heritage = array();
-        
         foreach ($heritage as $role) {
             $this->addRoleInHeritage($role);
-        }        
+        } 
     }
 
     /**
@@ -220,8 +219,7 @@ class Role
      */
     public function getHeritage()
     {
-        $roles = $this->heritage;
-    
+        $roles = $this->heritage;    
         // we need to make sure to have at least one role
         $roles[] = RoleRepository::ShowDefaultRole();
     
@@ -235,8 +233,7 @@ class Role
      */
     public function addRoleInHeritage($role)
     {
-        $role = strtoupper($role);
-    
+        $role = strtoupper($role);    
         if (!in_array($role, $this->heritage, true)) {
             $this->heritage[] = $role;
         }

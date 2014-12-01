@@ -79,12 +79,12 @@
 			<div class="clearer"><!-- --></div>
 			
 			<div class="footer">
-                {% set widget_service_params = {"template":"SfynxSmoothnessBundle:Login@@@@@@@@Security:connexion-ajax.html.twig"} %} 
- 	            {{ getService('pi_app_admin.manager.authentication').renderSource('SfynxAuthBundle:User~_connexion_default', 'fr_FR', widget_service_params)|raw }}
-				<p>
-					<a href="{{ path('pi_layout_choisir_langue', {'langue' : 'fr_FR'}) }}" title="">FR</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'en_GB'}) }}" title="">EN</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'ar_SA'}) }}" title="">AR</a> | - All rights reserved
-				</p>
-				{#<p><a href="{{ path('pi_layout_choisir_langue', {'langue' : 'fr'}) }}" title="">FR</a> | {{ app.request.locale }}</p>#}
+                            {% set widget_service_params = {"template":"SfynxSmoothnessBundle:Login@@@@@@@@Security:connexion-ajax.html.twig"} %} 
+                            {{ getService('pi_app_admin.manager.authentication').renderSource('SfynxAuthBundle:User~_connexion_default', 'fr_FR', widget_service_params)|raw }}
+                            <p>
+                                <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'fr_FR'}) }}" title="">FR</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'en_GB'}) }}" title="">EN</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'ar_SA'}) }}" title="">AR</a> | - All rights reserved
+                            </p>
+                            {#<p><a href="{{ path('pi_layout_choisir_langue', {'langue' : 'fr'}) }}" title="">FR</a> | {{ app.request.locale }}</p>#}
 			</div>
 		</div>
 				     

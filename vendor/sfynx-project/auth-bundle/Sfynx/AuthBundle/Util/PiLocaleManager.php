@@ -44,7 +44,7 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container      = $container;
-        $this->path_json_file = $container->getParameter("kernel.cache_dir") . "/../languages.json";
+        $this->path_json_file = $container->getParameter('sfynx.auth.locale.cache_file');
     }
         
     /**
@@ -59,11 +59,11 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
      */    
     public function parseDefaultLanguage($deflang = "fr")
     {
-        if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"]))
+        if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
             $http_accept = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-        else
+        } else {
             $http_accept = NULL;
-        
+        }        
         if (isset($http_accept) && strlen($http_accept) > 1)  {
             # Split possible languages into array
             $x = explode(",",$http_accept);
@@ -137,17 +137,16 @@ class PiLocaleManager implements PiLocaleManagerBuilderInterface
     {
         $allLocales = $this->container->getParameter('sfynx.auth.locale.authorized');
         if (is_array($allLocales) && (count($allLocales) >= 1)) {
-        	return $allLocales;
+            return $allLocales;
         } else {
             $db = $this->container->get('sfynx.tool.manager.db');
-            //
             $req = "
                 SELECT
                     *
                 FROM
                     pi_langue as a
-    			WHERE
-    			    a.enabled = 1
+                WHERE
+    		    a.enabled = 1
     		";
             $entities     = $db->executeQuery($req, array());
             

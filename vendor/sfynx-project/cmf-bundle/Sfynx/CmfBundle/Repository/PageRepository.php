@@ -313,4 +313,30 @@ class PageRepository extends TranslationRepository
         return $query;
     }    
     
+    /**
+     * Return all pages of a rubrique by id.
+     * 
+     * @param string $route_name Route name value
+     * 
+     * @return \Sfynx\CmfBundle\Entity\Page
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since  2012-01-23
+     */
+    public function getPageByRoute($route_name)
+    {
+        $query = $this->createQueryBuilder('p')
+        ->select('p')
+        ->where('p.route_name = :routeNameID')
+        ->setParameters(array(
+            'routeNameID' => $route_name,
+        ))->getQuery();
+        $query = $this->cacheQuery($query, 84600);    
+        try {
+            return $query->getOneOrNullResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }      
+    
 }

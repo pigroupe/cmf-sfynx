@@ -15,12 +15,13 @@ namespace Sfynx\CmfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\Index;
 
 
 /**
  * Sfynx\CmfBundle\Entity\Page
  *
- * @ORM\Table(name="pi_page")
+ * @ORM\Table(name="pi_page", indexes={@ORM\Index(name="route_name_idx", columns={"route_name"})})
  * @ORM\Entity(repositoryClass="Sfynx\CmfBundle\Repository\PageRepository")
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("route_name")

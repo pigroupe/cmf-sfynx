@@ -41,7 +41,7 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
-        $this->path_json_file = $container->getParameter("kernel.cache_dir") . "/../heritage.json";
+        $this->path_json_file = $container->getParameter("kernel.root_dir") . "/cachesfynx/heritage.json";
     }
     
     /**
@@ -60,13 +60,15 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
     	}
     	$all_roles              = array_keys($this->getContainer()->getParameter('security.role_hierarchy.roles'));
       	if (($key = array_search('ROLE_ALLOWED_TO_SWITCH', $all_roles)) !== false) {
-       		unset($all_roles[$key]);
+            unset($all_roles[$key]);
        	}
        	$all_roles_authorized    = array_merge($heritage, $this->getAllHeritageByRoles($heritage));
        	$all_roles_no_authorized = array_diff($all_roles, $all_roles_authorized);
        	//
-       	if ( (count($all_roles_authorized) == 0) && (count($all_roles_no_authorized) == 0) ) {
-       		return null;
+       	if ( (count($all_roles_authorized) == 0) 
+            && (count($all_roles_no_authorized) == 0)
+        ) {
+            return null;
        	}
        	//
        	$all_roles_authorized = array_map(function($value) {
@@ -140,8 +142,8 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
     public function setJsonFileRoles()
     {
     	// we register the hierarchy roles in the heritage.jon file in the cache
-    	$em         = $this->getContainer()->get('doctrine')->getManager();
-        $roles      = $em->getRepository('SfynxAuthBundle:role')->getAllHeritageRoles();
+    	$em    = $this->getContainer()->get('doctrine')->getManager();
+        $roles = $em->getRepository('SfynxAuthBundle:Role')->getAllHeritageRoles();
         // we delete cache files
         $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php");
         $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appDevDebugProjectContainer.php.meta");
@@ -150,9 +152,9 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
         $path_files[] = realpath($this->getContainer()->getParameter("kernel.cache_dir") . "/appProdProjectContainer.php");
         $path_files = array_unique($path_files);
         foreach ($path_files as $key=>$file) {
-        	if (!empty($file)) {
-        		unlink($file);
-        	}
+            if (!empty($file)) {
+                unlink($file);
+            }
         }        
         
         return file_put_contents($this->path_json_file, json_encode(array('HERITAGE_ROLES'=>$roles), JSON_UNESCAPED_UNICODE));  

@@ -2,10 +2,13 @@
 ## SfynxCmfBundle configuration
 ##
 #pi_app_admin:
+#    cache_dir:
+#        etag: "%kernel.root_dir%/cachesfynx/Etag/"  
+#        indexation: "%kernel.root_dir%/cachesfynx/Indexation/"
 #    seo:
 #        redirection_oldurl_to_new_url:
-#            authorized: true
-#            repository : "%kernel.root_dir%/cache/seo"
+#            authorized: false
+#            repository : "%kernel.root_dir%/cachesfynx/seo"
 #            file_name : seo_links.yml 
 #        meta_head:
 #            author: Sfynx
@@ -53,7 +56,6 @@
 #            allpage_containing_snippet: true
 #            css_js_cache_file: true        
 #        indexation_authorized_automatically: false
-#        switch_layout_mobile_authorized: false
 #        memcache_enable_all: false
 #        scop:
 #            authorized: false    

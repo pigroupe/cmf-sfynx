@@ -23,6 +23,9 @@ if [ "$RESP" = "y" ]; then
   echo "9- Reset project cache"
   php app/console cache:clear --env=prod --no-debug
   php app/console cache:clear --env=dev --no-debug
+  sudo service apache2 reload
+  sudo chmod -R 777 app/logs/
+  sudo chmod -R 777 app/cache/
   echo "10 - we generate documentations"
   rm -rf doc/phpdocumentor/*
   rm -rf web/phpdocumentor/*
@@ -30,25 +33,23 @@ if [ "$RESP" = "y" ]; then
   rm -rf doc/uml/html/*
   rm -rf doc/uml/php/*
   rm -rf doc/uml/xmi/*
-  mkdir -p doc/uml/xmi
-  mkdir -p doc/uml/php
-  mkdir -p doc/uml/html
-  mkdir -p doc/uml/htmlnew
-  mkdir -p doc/phpdocumentor
-  mkdir -p web/phpdocumentor
-  mkdir -p doc/phpmd
-  mkdir -p doc/phpcpd
-  sudo service apache2 reload
-  sudo chmod -R 777 app/logs/
-  sudo chmod -R 777 app/cache/
-  phpuml src -n UMLMrMile -o doc/uml/xmi
-  phpuml src -f php -o doc/uml/php/
-  phpuml src -f htmlnew -o doc/uml/htmlnew
-  phpuml src -f html -o doc/uml/html
-  phpdoc -d src -t doc/phpdocumentor --template responsive
+
+  mkdir -p doc/uml/xmi/auth-bundle
+  mkdir -p doc/uml/php/auth-bundle
+  mkdir -p doc/uml/html/auth-bundle
+  mkdir -p doc/uml/htmlnew/auth-bundle
+  mkdir -p doc/phpdocumentor/auth-bundle
+  mkdir -p web/phpdocumentor/auth-bundle
+  mkdir -p doc/phpmd/auth-bundle
+  mkdir -p doc/phpcpd/auth-bundle
+  phpuml vendor/sfynx-project/auth-bundle/Sfynx -n UMLsfynx_AUTH -o doc/uml/xmi
+  phpuml vendor/sfynx-project/auth-bundle/Sfynx -f php -o doc/uml/php/auth-bundle
+  phpuml vendor/sfynx-project/auth-bundle/Sfynx -f htmlnew -o doc/uml/htmlnew/auth-bundle
+  phpuml vendor/sfynx-project/auth-bundle/Sfynx -f html -o doc/uml/html/auth-bundle
+  phpdoc -d vendor/sfynx-project/auth-bundle/Sfynx -t doc/phpdocumentor --template responsive
   cp -r doc/phpdocumentor/*  web/phpdocumentor/
-  bin/phpmd src html unusedcode,codesize,design,naming > doc/phpmd/report.html
-  bin/phpcpd src > doc/phpcpd/report.txt
+  bin/phpmd vendor/sfynx-project/auth-bundle/Sfynx html unusedcode,codesize,design,naming > doc/phpmd/auth-bundle/report.html
+  bin/phpcpd vendor/sfynx-project/auth-bundle/Sfynx > doc/phpcpd/auth-bundle/report.txt
 else
   echo "Canceled"
 fi

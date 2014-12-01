@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
         $this->addMailConfig($rootNode);
+        $this->addDateConfig($rootNode);
 
         return $treeBuilder;
     }
@@ -60,6 +61,29 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('overloading_mail')->defaultValue('')->end()
+                ->end()
+            ->end()
+    	->end();
+    }     
+    
+    /**
+     * Login failure config
+     *
+     * @param $rootNode \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     *
+     * @return void
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function addDateConfig(ArrayNodeDefinition $rootNode)
+    {
+    	$rootNode
+    	->children()
+        	->arrayNode('date')
+        	    ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('cache_file')->defaultValue('%kernel.root_dir%/cachesfynx/i18n_date.json')->cannotBeEmpty()->end()
                 ->end()
             ->end()
     	->end();

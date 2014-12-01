@@ -32,27 +32,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class PiMailerManager implements PiMailerManagerBuilderInterface 
 {    
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface Service container
      */
     protected $container;
-    
+
     /**
-     * @var \Swift_Mailer
+     * @var \Swift_Mailer Service mailer
      */
-    protected $mailer;    
-    
+    protected $mailer;
+
     /**
-     * @var \Swift_Mailer
+     * @var \Swift_Message Service message
      */
     protected $message;
-        
+
     /**
-     * @var array
+     * @var array Options
      */
-    protected $options = array();    
-    
+    protected $options = array();
+
     /**
-     * @var array
+     * @var array Files definition
      */
     public $files = array();
     
@@ -60,7 +60,7 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      * Constructor.
      *
      * @param ContainerInterface $container The service container
-     * 
+     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function __construct(ContainerInterface $container)
@@ -84,7 +84,6 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
      *
      * @return \Swift_Mime_Message
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getMessage()
@@ -94,26 +93,39 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     
     /**
      * Instantiates the mailer
-     * @param string    $from
-     * @param mixed     $to
-     * @param string    $subject
-     * @param string    $body
-     * @param mixed     $cc
-     * @param mixed     $bcc
-     * @param string    $replayto
-     * @param array     $filespath
-     * @param boolean   $is_pictureEmbed
-     * @param boolean   $is_Html2Text
-     * @param mixed     $sender
-     * @return void
      *
+     * @param string  $from            The from value
+     * @param mixed   $to              The to value
+     * @param string  $subject         The subject value
+     * @param string  $body            The body value
+     * @param mixed   $cc              The cc value
+     * @param mixed   $bcc             The bcc value
+     * @param string  $replayto        The replayto value
+     * @param array   $filespath       The filespath value
+     * @param boolean $is_pictureEmbed The is_pictureEmbed value
+     * @param boolean $is_Html2Text    THe is_Html2Text value
+     * @param mixed   $sender          The sender value
+     *
+     * @access public
+     * @return false|true
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */    
-    public function send($from, $to, $subject, $body, $cc = null, $bcc = null, $replayto = null, $filespath = null, $is_pictureEmbed = false, $is_Html2Text = false, $sender = null)
-    {
+     */  
+    public function send(
+        $from,
+        $to,
+        $subject,
+        $body,
+        $cc = null,
+        $bcc = null,
+        $replayto = null,
+        $filespath = null,
+        $is_pictureEmbed = false,
+        $is_Html2Text = false,
+        $sender = null            
+    ) {
     	$parameters = $this->container->getParameter('sfynx.tool.mail.overloading_mail');
     	if (!empty($parameters)) {
-    		$to = $this->container->getParameter('sfynx.tool.mail.overloading_mail');
+            $to = $this->container->getParameter('sfynx.tool.mail.overloading_mail');
     	}    	
         try {
             $this->init($this->message, $from, $to, $cc, $bcc, $replayto, $subject, $body, $sender);            
@@ -137,14 +149,36 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     
     /**
      * init the mailer into mail queue
-     * @param \Swift_Mime_Message $mail E-mail message
      *
+     * @param \Swift_Mime_Message $message  E-mail message
+     * @param string              $from     The from value
+     * @param mixed               $to       The to value
+     * @param mixed               $cc       The cc value
+     * @param mixed               $bcc      The bcc value
+     * @param string              $replayto The replayto value
+     * @param string              $subject  The subject value
+     * @param array               $body     The body value
+     * @param mixed               $sender   The sender value
+     *
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function init(\Swift_Mime_Message $message, $from, $to, $cc, $bcc, $replayto, $subject, $body, $sender)
-    {
+    public function init(
+        \Swift_Mime_Message &$message,
+        $from,
+        $to,
+        $cc,
+        $bcc,
+        $replayto,
+        $subject,
+        $body,
+        $sender
+    ) {
         if (is_string($cc)) {
-            $cc_new    = $this->container->get('sfynx.tool.regex_manager')->verifByRegularExpression($cc, 'mail', PREG_SPLIT_NO_EMPTY);
+            $cc_new    = $this->container
+                    ->get('sfynx.tool.regex_manager')
+                    ->verifByRegularExpression($cc, 'mail', PREG_SPLIT_NO_EMPTY);
             if ( is_array($cc_new) && (count($cc_new)==1) && (count($cc_new[0])>=1) ) {
                 $cc = $cc_new[0];
             } else {
@@ -152,7 +186,9 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
             }
         }
         if (is_string($bcc)) {
-            $bcc_new = $this->container->get('sfynx.tool.regex_manager')->verifByRegularExpression($bcc, 'mail', PREG_SPLIT_NO_EMPTY);
+            $bcc_new = $this->container
+                    ->get('sfynx.tool.regex_manager')
+                    ->verifByRegularExpression($bcc, 'mail', PREG_SPLIT_NO_EMPTY);
             if ( is_array($bcc_new) && (count($bcc_new)==1) && (count($bcc_new[0])>=1) ) {
                 $bcc = $bcc_new[0];
             } else {
@@ -176,36 +212,48 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
         
     /**
      * Pushes mail into mail queue
-     * @param \Swift_Mime_Message $mail E-mail message
-     * 
+     *
+     * @param \Swift_Mime_Message $message E-mail message
+     *
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function push(\Swift_Mime_Message $message)
+    public function push(\Swift_Mime_Message &$message)
     {
         return $this->mailer->send($message);
     }    
     
     /**
      * attach file
-     * @param \Swift_Mime_Message $mail E-mail message
      *
+     * @param \Swift_Mime_Message $message E-mail message
+     * @param string              $file    The file value
+     *
+     * @access public
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function attach(\Swift_Mime_Message $message, $file)
+    public function attach(\Swift_Mime_Message &$message, $file)
     {
         $message->attach(\Swift_Attachment::fromPath($file));
     }    
     
     /**
      * upload attached files
-     * @param \Swift_Mime_Message $mail E-mail message
      *
+     * @param void|array $files The files value
+     *
+     * @access public
+     * @return array
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function uploadAttached($files = array())
     {
         $list_files = array();
-        $dir = $this->container->get('kernel')->getRootDir(). '/../web/uploads/attachements/';
+        $dir = $this->container
+                ->get('kernel')
+                ->getRootDir(). '/../web/uploads/attachements/';
         \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dir);
         foreach ($files as $inputname => $file) {
             $list_files[$inputname] = $dir.$file['name'];
@@ -215,10 +263,14 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
         
         return $list_files;
     }    
+    
     /**
      * delete attached files
-     * @param array
      *
+     * @param void|array $files The files value
+     *
+     * @access public
+     * @return array
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteAttached($files = array())
@@ -235,51 +287,74 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     }    
     
     /**
-     * {@inheritdoc)
+     * Embed pictures
+     *
+     * @param \Swift_Mime_Message $message E-mail message
+     *
+     * @access public
+     * @return void
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function pictureEmbed(\Swift_Mime_Message $message)
+    public function pictureEmbed(\Swift_Mime_Message &$message)
     {
-        $body = $message->getBody();    
-        $body = preg_replace_callback('/(src|background)="(http[^"]*)"/',
-                function($matches) use ($message) {
-                    $attribute = $matches[1];
-                    $imagePath = $matches[2];
-    
-                    if ($fp = fopen($imagePath, "r" )) {
-                        $imagePath = $message->embed(\Swift_Image::fromPath($imagePath));
-                        fclose($fp);
-                    }
-    
-                    return sprintf('%s="%s"', $attribute, $imagePath);
-                }, $body);    
-        $body = preg_replace_callback('/url\((http[^"]*)\)/',
-                function($matches) use ($message) {
-                    $imagePath = $matches[1];
-    
-                    if ($fp = fopen($imagePath, "r" )) {
-                        $imagePath = $message->embed(\Swift_Image::fromPath($imagePath));
-                        fclose($fp);
-                    }
-    
-                    return sprintf('url(%s)', $imagePath);
-                }, $body);
-    
+        $body = $message->getBody();
+        $body = preg_replace_callback(
+            '/(src|background)="(http[^"]*)"/',
+            function ($matches) use ($message) {
+                $attribute = $matches[1];
+                $imagePath = $matches[2];
+                if ($fp = fopen($imagePath, "r")) {
+                    // You can embed files from a URL if allow_url_fopen is on in php.ini
+                    $imagePath = $message->embed(\Swift_Image::fromPath($imagePath));
+                    fclose($fp);
+                }
+
+                return sprintf('%s="%s"', $attribute, $imagePath);
+            },
+            $body
+        );
+        $body = preg_replace_callback(
+            '/url\((http[^"]*)\)/',
+            function ($matches) use ($message) {
+                $imagePath = $matches[1];
+                if ($fp = fopen($imagePath, "r")) {
+                    // You can embed files from a URL if allow_url_fopen is on in php.ini
+                    $imagePath = $message->embed(\Swift_Image::fromPath($imagePath));
+                    fclose($fp);
+                }
+
+                return sprintf('url(%s)', $imagePath);
+            },
+            $body
+        );
         $message->setBody($body, 'text/html');
     }    
     
     /**
-     * {@inheritdoc)
+     * Define email to text/plain
+     *
+     * @param \Swift_Mime_Message $message E-mail message
+     *
+     * @access public
+     * @return void
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function Html2Text(\Swift_Mime_Message $message)
+    public function Html2Text(\Swift_Mime_Message &$message)
     {
         $text = strip_tags($message->getBody());
-		$message->addPart($text, 'text/plain');
+        $message->addPart($text, 'text/plain');
     }    
     
     /**
-     * {@inheritdoc)
+     * Add multipart/mixed suports
+     *
+     * @param \Swift_Mime_Message $message E-mail message
+     *
+     * @access public
+     * @return array
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function supports(\Swift_Mime_Message $message)
+    protected function supports(\Swift_Mime_Message &$message)
     {
         // why multipart/mixed, because if you attach a file, it'll be the contentType
         // So be careful to not use this transformer if you don't use text/html and attach a file
@@ -287,7 +362,11 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     }    
     
     /**
+     * Return command value
+     *
+     * @access protected
      * @return string
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getCommand()
     {

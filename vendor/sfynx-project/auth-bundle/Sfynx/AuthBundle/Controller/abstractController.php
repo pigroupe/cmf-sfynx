@@ -677,24 +677,24 @@ abstract class abstractController extends Controller
     {
     	$errors = array();
     	foreach ($form->getErrors() as $key => $error) {
-    		if($error->getMessagePluralization() !== null) {
-    			$errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->transChoice($error->getMessage(), $error->getMessagePluralization(), $error->getMessageParameters()));
-    		} else {
-    			$errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->trans($error->getMessage()));
-    		}    		
+            if($error->getMessagePluralization() !== null) {
+                $errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->transChoice($error->getMessage(), $error->getMessagePluralization(), $error->getMessageParameters()));
+            } else {
+                $errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->trans($error->getMessage()));
+            }    		
     	}
     	$all = $form->all();
     	if (is_array($all)) {
-    		foreach ($all as $child) {
-    			if (!$child->isValid()) {
-    				$errors[$child->getName()] = $this->getErrorMessages($child, 'array');
-    			}
-    		}
+            foreach ($all as $child) {
+                if (!$child->isValid()) {
+                    $errors[$child->getName()] = $this->getErrorMessages($child, 'array');
+                }
+            }
     	}
     	if ($type == 'array') {
-      		return $errors;
+            return $errors;
      	} else {
-     		return \Sfynx\ToolBundle\Util\PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
+            return \Sfynx\ToolBundle\Util\PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
      	}
     }
     
@@ -735,7 +735,7 @@ abstract class abstractController extends Controller
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function authenticateUser(UserInterface $user = null, $deleteToken = true, &$response = null)
+    protected function authenticateUser(UserInterface $user = null, &$response = null, $deleteToken = false)
     {
     	$em 		 = $this->getDoctrine()->getManager();
     	$request     = $this->container->get('request');
@@ -743,83 +743,83 @@ abstract class abstractController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
         // set user
         if (is_null($user)) {
-        	$token 		= $request->query->get('token');
-        	$user       = $userManager->findUserByConfirmationToken($token);
+            $token   = $request->query->get('token');
+            $user    = $userManager->findUserByConfirmationToken($token);
         }
         //
         $token       = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
         $this->container->get('security.context')->setToken($token); //now the user is logged in
         $request->getSession()->set('_security_'.$providerKey, serialize($token));
         $request->getSession()->set('_security_secured_area', serialize($token));
-	    // we delete token user
+	// we delete token user
         if ($deleteToken) {
-	        $user->setConfirmationToken(null);
-	        $userManager->updateUser($user);
-	        $em->persist($user);
-	        $em->flush();	                
+            $user->setConfirmationToken(null);
+            $userManager->updateUser($user);
+            $em->persist($user);
+            $em->flush();	                
         }
         //
         if ($response instanceof Response) {
-	        // Record all cookies in relation with ws.
-	        $dateExpire          = $this->container->getParameter('sfynx.core.cookies.date_expire');
-	        $date_interval       = $this->container->getParameter('sfynx.core.cookies.date_interval');
-	        $app_id			     = $this->container->getParameter('sfynx.core.cookies.application_id');
-	        $is_browser_authorized  = $this->container->getParameter("sfynx.auth.browser.switch_layout_mobile_authorized");
-	        $redirect       = $this->container->getParameter('sfynx.auth.login.redirect');
-	        $template       = $this->container->getParameter('sfynx.auth.login.template');
-	        // Record the layout variable in cookies.
-	        if ($dateExpire && !empty($date_interval)) {
-	        	if (is_numeric($date_interval)) {
-	        		$dateExpire = time() + intVal($date_interval);
-	        	} else {
-	        		$dateExpire = new \DateTime("NOW");
-	        		$dateExpire->add(new \DateInterval($date_interval));
-	        	}
-	        } else {
-	        	$dateExpire = 0;
-	        }
-	        if($app_id && !empty($app_id) && $this->container->hasParameter('ws.auth')) {
-	        	$response->headers->set('Content-Type', 'application/json');
-	        	$config_ws 		= $this->container->getParameter('ws.auth');
-	        	$key       		= $config_ws['handlers']['getpermisssion']['key'];
-	        	$userId    		= $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($this->getUser()->getId(), $key);
-	        	$applicationId  = $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($app_id, $key);
-	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', $userId, $dateExpire));
-	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', $applicationId, $dateExpire));
-	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-key', $key, $dateExpire));
-	        	// $response->headers->getCookies();
-	        }
-	        // we get the best role of the user.
-	        $BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
-	        if (!empty($BEST_ROLE_NAME)) {
-	        	$role         = $em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $BEST_ROLE_NAME));
-	        	if ($role instanceof \Sfynx\AuthBundle\Entity\Role) {
-	        		$RouteLogin = $role->getRouteLogin();
-	        		if (!empty($RouteLogin) && !is_null($RouteLogin)) {
-	        			$redirect = $RouteLogin;
-	        		}
-	        		if ($role->getLayout() instanceof \Sfynx\AuthBundle\Entity\Layout) {
-	        			$FilePc = $role->getLayout()->getFilePc();
-	        			if (!empty($FilePc)  && !is_null($FilePc)) {
-	        				$template = $FilePc;
-	        			}
-	        		}
-	        	}
-	        }	        
-	        // Sets layout
-	        if (
-	            $is_browser_authorized
-	            && $request->attributes->has('sfynx-browser')
-	            && $request->attributes->get('sfynx-browser')->isMobileDevice
-	        ) {
-	        	$screen = $request->attributes->get('sfynx-screen');
-	        	$layout = $this->container->getParameter('sfynx.auth.theme.layout.admin.mobile') . $screen . '.html.twig';
-	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $layout, $dateExpire));
-	        } else {
-	        	$layout = $this->container->getParameter('sfynx.auth.theme.layout.admin.pc') . $template;
-	        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $layout, $dateExpire));
-	        }
-	        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', $redirect, $dateExpire));	        
+            // Record all cookies in relation with ws.
+            $dateExpire     = $this->container->getParameter('sfynx.core.cookies.date_expire');
+            $date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
+            $app_id	    = $this->container->getParameter('sfynx.core.cookies.application_id');
+            $is_browser_authorized  = $this->container->getParameter("sfynx.auth.browser.switch_layout_mobile_authorized");
+            $redirect       = $this->container->getParameter('sfynx.auth.login.redirect');
+            $template       = $this->container->getParameter('sfynx.auth.login.template');
+            // Record the layout variable in cookies.
+            if ($dateExpire && !empty($date_interval)) {
+                if (is_numeric($date_interval)) {
+                    $dateExpire = time() + intVal($date_interval);
+                } else {
+                    $dateExpire = new \DateTime("NOW");
+                    $dateExpire->add(new \DateInterval($date_interval));
+                }
+            } else {
+                $dateExpire = 0;
+            }
+            if($app_id && !empty($app_id) && $this->container->hasParameter('ws.auth')) {
+                $response->headers->set('Content-Type', 'application/json');
+                $config_ws 		= $this->container->getParameter('ws.auth');
+                $key       		= $config_ws['handlers']['getpermisssion']['key'];
+                $userId    		= $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($this->getUser()->getId(), $key);
+                $applicationId  = $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($app_id, $key);
+                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', $userId, $dateExpire));
+                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', $applicationId, $dateExpire));
+                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-key', $key, $dateExpire));
+                // $response->headers->getCookies();
+            }
+            // we get the best role of the user.
+            $BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
+            if (!empty($BEST_ROLE_NAME)) {
+                $role         = $em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $BEST_ROLE_NAME));
+                if ($role instanceof \Sfynx\AuthBundle\Entity\Role) {
+                    $RouteLogin = $role->getRouteLogin();
+                    if (!empty($RouteLogin) && !is_null($RouteLogin)) {
+                        $redirect = $RouteLogin;
+                    }
+                    if ($role->getLayout() instanceof \Sfynx\AuthBundle\Entity\Layout) {
+                        $FilePc = $role->getLayout()->getFilePc();
+                        if (!empty($FilePc)  && !is_null($FilePc)) {
+                            $template = $FilePc;
+                        }
+                    }
+                }
+            }	        
+            // Sets layout
+            if (
+                $is_browser_authorized
+                && $request->attributes->has('sfynx-browser')
+                && $request->attributes->get('sfynx-browser')->isMobileDevice
+            ) {
+                $screen = $request->attributes->get('sfynx-screen');
+                $layout = $this->container->getParameter('sfynx.auth.theme.layout.admin.mobile') . $screen . '.html.twig';
+                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $layout, $dateExpire));
+            } else {
+                $layout = $this->container->getParameter('sfynx.auth.theme.layout.admin.pc') . $template;
+                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $layout, $dateExpire));
+            }
+            $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', $redirect, $dateExpire));	        
         }  
 
         return $response;
@@ -997,17 +997,56 @@ abstract class abstractController extends Controller
      */
     protected function getUserByTokenAndApplication($token, $application)
     {
-    	$em     = $this->getDoctrine()->getManager();
-    	$like   = strtoupper($application.'::'.$token);
-    	$entity = $em->getRepository('SfynxAuthBundle:User')
-    	->createQueryBuilder('a')
-    	->select('a')
-    	->andWhere("a.applicationTokens LIKE '%{$like}%'")
-    	->getQuery()
-    	->getOneOrNullResult();
+    	$em    = $this->getDoctrine()->getManager();
+    	$like_app = array(strtoupper($application.'::'.$token));
+        $like = serialize($like_app);
+    	$query = $em->getRepository('SfynxAuthBundle:User')
+            ->createQueryBuilder('a')
+            ->select('a')
+            ->andWhere("a.applicationTokens = '{$like}'")
+            ->getQuery();  
+        // ATTENTION avec a.applicationTokens LIKE "%..%" empeche l'utilisation de 'index sur la recherceh par la valeur de application_token
+        // Avec un site à très fort traffic, cela explose alors la bdd si pas d'index sur application token.
+        // create cache tag of the query
+        $input_hash = (string) (sha1(serialize($query->getParameters()) . $query->getSQL()));
+        $query->useResultCache(true, 84600, $input_hash); 
+        $query->useQueryCache(true); 
+        //
+        $user = $query->getOneOrNullResult();
     	
-    	return $entity;
+    	return $user;
     }    
+    
+    /**
+     * we return the user enity associated to the user token and the application.
+     *
+     * @param string    $token
+     * @param string    $application
+     * @return string
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function getUserByTokenAndApplicationMultiple($token, $application)
+    {
+    	$em    = $this->getDoctrine()->getManager();
+    	$like  = strtoupper($application.'::'.$token);
+    	$query = $em->getRepository('SfynxAuthBundle:User')
+            ->createQueryBuilder('a')
+            ->select('a')
+            ->andWhere("a.applicationTokens LIKE '%{$like}%'")
+            ->getQuery();  
+        // ATTENTION avec a.applicationTokens LIKE "%..%" empeche l'utilisation de 'index sur la recherceh par la valeur de application_token
+        // Avec un site à très fort traffic, cela explose alors la bdd si pas d'index sur application token.
+        // create cache tag of the query
+        $input_hash = (string) (sha1(serialize($query->getParameters()) . $query->getSQL()));
+        $query->useResultCache(true, 84600, $input_hash); 
+        $query->useQueryCache(true); 
+        //
+        $user = $query->getOneOrNullResult();
+    	
+    	return $user;
+    }       
 
     /**
      * we return the token associated to the user ID.

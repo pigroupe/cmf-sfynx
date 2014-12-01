@@ -58,6 +58,9 @@ class PostUpdateListener extends CoreListener
         // we set the PostUpdate block page management
         $this->_Create_Block_Page($eventArgs);
         
+        // we set the PostUpdate json page information
+        $this->_JsonFilePage($eventArgs, 'update');          
+        
         // We remove json file Etag of Page and Widget.
         $this->_deleteJsonFileEtag($eventArgs, false);
         

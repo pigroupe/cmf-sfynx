@@ -22,7 +22,15 @@ $loader->register(true);
 //apc_clear_cache('sf2'); 
 //
 //var_dump(realpath_cache_get());
-//exit;
+ * 
+ //  sudo varnishadm "ban req.http.host ~ www.beforemistermilesin.com/"
+ //  sudo varnishadm "ban req.http.host ~ recette.beforemistermilesin.fr/"
+ 
+$m = new \Memcached();
+$m->addServer('localhost', 11211);
+
+// invalide tous les éléments dans 0 secondes
+$m->flush(0);
 */
 
 require_once __DIR__.'/../app/AppKernel.php';
@@ -33,7 +41,7 @@ if(preg_match("/app_dev.php/",$_SERVER['REQUEST_URI']) || preg_match("/app.php/"
 } else {
     $kernel = new AppKernel('prod', false);
     $kernel->loadClassCache();
-	$kernel = new AppCache($kernel); // si Appcache activé, activer alors aussi Esi dans config.yml
+    //$kernel = new AppCache($kernel); // si Appcache activé, activer alors aussi Esi dans config.yml
     Request::enableHttpMethodParameterOverride();
     $request = Request::createFromGlobals();
     $response = $kernel->handle($request);

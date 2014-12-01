@@ -52,8 +52,8 @@ class LangueController extends abstractController
     public function indexAction()
     {
         $em         = $this->getDoctrine()->getManager();
-        $locale        = $this->container->get('request')->getLocale();
-        $entities     = $em->getRepository("SfynxAuthBundle:Langue")->findAllByEntity($locale, 'object', false);        
+        $locale     = $this->container->get('request')->getLocale();
+        $entities   = $em->getRepository("SfynxAuthBundle:Langue")->findAllByEntity($locale, 'object', false);        
         
         return $this->render('SfynxAuthBundle:Langue:index.html.twig', array(
             'entities' => $entities,
@@ -149,31 +149,29 @@ class LangueController extends abstractController
      * 
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access    public
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function showAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $entity = $em->getRepository("SfynxAuthBundle:Langue")->findOneByEntity($locale, $id, 'object');        
-
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Langue');
         }
         $deleteForm = $this->createDeleteForm($id);
-        
-        $locale_id         = explode('_', strtolower($entity->getId()));
-        if (count($locale_id)==2)
+        $locale_id = explode('_', strtolower($entity->getId()));
+        if (count($locale_id)==2) {
             $locale_id = $locale_id[1];
-        else
+        } else {
             $locale_id = strtolower($entity->getId());
+        }
         
         return $this->render('SfynxAuthBundle:Langue:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-            'locale_id'      => $locale_id,
+            'locale_id'   => $locale_id,
         ));
     }
 
@@ -182,8 +180,7 @@ class LangueController extends abstractController
      * 
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access    public
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()

@@ -20,6 +20,8 @@ vendor/*
 !vendor/Zend/
 */logs/*
 */cache/*
+*/Etag/*
+*/Indexation/*
 web/uploads/*
 web/bundles/*
 web/yui/*

@@ -133,9 +133,8 @@ class DispatcherLoginFailureResponse
    public function setCachePath()
    {
        // we create path
-       $dossier = $this->container->getParameter("kernel.root_dir")."/cache/loginfailure/";
+       $dossier = $this->container->getParameter("sfynx.auth.loginfailure.cache_dir");
        \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
        $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
    }
-
 }

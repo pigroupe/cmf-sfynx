@@ -24,6 +24,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use Sfynx\CmfBundle\Entity\Enquiry;
 use Sfynx\CmfBundle\Form\EnquiryType;
+use Sfynx\AuthBundle\Entity\User;
 use Sfynx\CmfBundle\Entity\Page as Page;
 use Sfynx\CmfBundle\Entity\TranslationPage;
 
@@ -50,7 +51,7 @@ class FrontendController extends abstractController
      */
     public function indexAction()
     {
-   	    return $this->render($this->container->getParameter('sfynx.auth.theme.layout.admin.home'), array());
+        return $this->render($this->container->getParameter('sfynx.auth.theme.layout.admin.home'), array());
     }    
     
     /**
@@ -95,6 +96,15 @@ class FrontendController extends abstractController
         	$dateExpire = 0;
         }
         $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $langue, $dateExpire));
+        // we register the new local value
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if ($user instanceof User) {
+            $em     = $this->getDoctrine()->getManager();
+            $userManager = $this->container->get('fos_user.user_manager');
+            $entity = $em->getRepository("SfynxAuthBundle:Langue")->find($langue);
+            $user->setLangCode($entity);
+            $userManager->updateUser($user);
+        }        
         
         return $response;
     }    
@@ -124,22 +134,25 @@ class FrontendController extends abstractController
      * Login failure function
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2014-07-26
      */
     public function loginfailureAction()
     {
         if ( $this->getRequest()->isXmlHttpRequest() ) {
-        	$response = new Response(json_encode('error'));
-        	$response->headers->set('Content-Type', 'application/json');
+            $response = new Response(json_encode('error'));
+            $response->headers->set('Content-Type', 'application/json');
         } else {
             // we create the redirection request.
-            $response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute('fos_user_security_login'));
-       		// we apply all events allowed to change the redirection response
-       		$event_response = new ResponseEvent($response);
-       		$this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_FAILURE, $event_response);
-       		$response = $event_response->getResponse();
+            $response     = $this->redirect(
+                $this->container
+                    ->get('sfynx.tool.route.factory')
+                    ->getRoute('fos_user_security_login')
+            );
+            // we apply all events allowed to change the redirection response
+            $event_response = new ResponseEvent($response);
+            $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_FAILURE, $event_response);
+            $response = $event_response->getResponse();
         }
     
     	return $response;

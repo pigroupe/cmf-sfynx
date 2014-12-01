@@ -10,7 +10,7 @@ sfynx_browser:
     browscap:
         remote_ini_url:       http://browscap.org/stream?q=Full_PHP_BrowsCapINI
         remote_ver_url:       http://browscap.org/version
-        cache_dir:            "%kernel.root_dir%/cache/browscap" # null : If null, use your application cache directory
+        cache_dir:            "%kernel.root_dir%/cachesfynx/browscap" # null : If null, use your application cache directory
         timeout:              5
         update_interval:      432000
         error_interval:       7200
