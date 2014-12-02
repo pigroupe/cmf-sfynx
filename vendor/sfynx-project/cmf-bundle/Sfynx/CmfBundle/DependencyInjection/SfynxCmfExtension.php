@@ -83,6 +83,9 @@ class SfynxCmfExtension extends Extension
             	$container->setParameter('pi_app_admin.page.route.single_slug', $config['page']['route']['single_slug']);
             }
             //
+            if (isset($config['page']['esi']) && isset($config['page']['esi']['authorized'])) {
+            	$container->setParameter('pi_app_admin.page.esi.authorized', $config['page']['esi']['authorized']);
+            }
             if (isset($config['page']['esi']) && isset($config['page']['esi']['encrypt_key'])) {
             	$container->setParameter('pi_app_admin.page.esi.encrypt_key', $config['page']['esi']['encrypt_key']);
             }

@@ -168,7 +168,6 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             }
             // we register the Etag value in the json file if does not exist.
             $this->setJsonFileEtag('page', $id_page, $lang, array('page-url'=>$url_));
-            //print_r($this->Etag);exit;
             // Create a Response with a Last-Modified header.
             $response = $this->configureCache($page, $response);
             // Check that the Response is not modified for the given Request.
@@ -179,7 +178,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 return $response;
             } else {
                 // or render a template with the $response you've already started
-                //$response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
+                // $response->setContent($this->container->get('twig')->render($this->renderSource($id, $lang_), array()));
                 $response = $this->container
                         ->get('pi_app_admin.caching')
                         ->renderResponse($this->Etag, array(), $response);

@@ -13,7 +13,6 @@
 namespace Sfynx\ToolBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\ToolBundle\Exception\ExtensionException;
 use Sfynx\ToolBundle\Exception\ServiceException;
 
 /**
