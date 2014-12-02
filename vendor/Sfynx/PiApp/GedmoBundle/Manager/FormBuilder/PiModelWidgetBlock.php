@@ -68,8 +68,8 @@ class PiModelWidgetBlock extends PiFormBuilderManager
     public static function getContents()
     {
         return array(
-                PiFormBuilderManager::CONTENT_RENDER_TITLE    => "Widget Block",
-                PiFormBuilderManager::CONTENT_RENDER_DESC   => "Call for inserting or creating a block.",
+            PiFormBuilderManager::CONTENT_RENDER_TITLE => "Widget Block",
+            PiFormBuilderManager::CONTENT_RENDER_DESC  => "Call for inserting or creating a block.",
         );
     }
 
@@ -83,21 +83,24 @@ class PiModelWidgetBlock extends PiFormBuilderManager
      */    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
-        $query        = $this->_em->getRepository("PiAppGedmoBundle:Block")->getAllByCategory('', null, "DESC", '', true)->getQuery();
-        $choiceList = $this->_em->getRepository("PiAppGedmoBundle:Block")->findTranslationsByQuery($this->_locale, $query, 'object', false);
-        
+        $query = $this->_em->
+                getRepository("PiAppGedmoBundle:Block")
+                ->getAllByCategory('', null, "DESC", '', true)->getQuery();
+        $choiceList = $this->_em
+                ->getRepository("PiAppGedmoBundle:Block")
+                ->findTranslationsByQuery($this->_locale, $query, 'object', false);        
         $result = array();
         if (is_array($choiceList)) {
             foreach ($choiceList as $key => $field) {
                 $title = $field->getTitle();
-                if (!empty($title) && is_object($field->getCategory()))
+                if (!empty($title) && is_object($field->getCategory())) {
                     $result[ $field->getId() ] = $field->getCategory()->getName() .  " >> " . $field->getTitle() . ' ('.$field->getId().')';
-                elseif (!empty($title))
+                } elseif (!empty($title)) {
                     $result[ $field->getId() ] = $field->getTitle() . ' ('.$field->getId().')';
+                }
             }
         }
         sort($result);
-
         $builder
             ->add('choice', 'choice', array(
                     'choices'   => array("insert"=>"Insert", "create"=>"Create"),

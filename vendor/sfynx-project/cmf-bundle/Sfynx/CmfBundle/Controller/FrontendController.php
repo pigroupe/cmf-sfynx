@@ -46,12 +46,9 @@ class FrontendController extends CmfabstractController
      */
     public function pageAction()
     {
-//        $time_start = microtime();
-//        $time_end = microtime();
-//        $time = $time_end - $time_start;
-//        print_r($time);        
+        // $timer = $this->container->get('sfynx.tool.timer_manager')->flush();
         // we get the route name of the page
-        $route   = $this->container->get('request')->get('route_name');
+        $route = $this->container->get('request')->get('route_name');
         // we get the page manager
         $pageManager = $this->get('pi_app_admin.manager.page');
         // we get the route name
@@ -59,10 +56,12 @@ class FrontendController extends CmfabstractController
             $route = $this->container->get('request')->get('_route');
         }
         // we set the object Translation Page by route
+        // $timer->start('timer_setPageByRoute');
         $pageManager->setPageByRoute($route, false);
         // we return the render (cache or not)
+        // $timer->start('timer_pageManager_render', 'timer_setPageByRoute');
         $response = $pageManager->render('', false);
-
+        // print_r($timer->reporting());
         
         return $response;
     }

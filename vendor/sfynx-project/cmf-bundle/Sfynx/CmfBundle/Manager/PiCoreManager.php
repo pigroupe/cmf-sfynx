@@ -537,16 +537,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         }    
         if (method_exists($object, 'getLifetime') && $object->getLifetime()) {
             $response->setSharedMaxAge($object->getLifetime());
-            // Une fois que ESI est utilisée, il ne faut pas oublier de toujours utiliser la directive s-maxage à la place de max-age. 
-            // Comme le navigateur ne reçoit que la réponse « agrégée » de la ressource, il n'est pas conscient de son « sous-contenu », 
-            // il suit la directive max-age et met toute la page en cache. Et ce n'est pas ce que vous voulez.
-            // we get instances of parser and dumper component yaml files.
-            $yaml   = new \Symfony\Component\Yaml\Parser();
-            //$dumper = new \Symfony\Component\Yaml\Dumper();
-            // we get config.yml content in array
-            $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
-            $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']['enabled']) && ($parsed_yaml_file['framework']['esi']['enabled'] == 1)) {
+            $isEsi = $this->container->getParameter('pi_app_admin.page.esi.authorized');
+            if ($isEsi) {
             } else {
             	$response->setMaxAge($object->getLifetime());
             }

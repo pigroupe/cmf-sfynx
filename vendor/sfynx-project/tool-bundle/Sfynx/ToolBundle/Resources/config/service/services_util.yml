@@ -11,6 +11,7 @@ parameters:
     sfynx.tool.manager.mailer.class: Sfynx\ToolBundle\Util\PiMailerManager
     sfynx.tool.manager.rest.class: Sfynx\ToolBundle\Util\PiRestManager
     sfynx.tool.manager.log.class: Sfynx\ToolBundle\Util\PiLogManager
+    sfynx.tool.manager.timer.class: Sfynx\ToolBundle\Util\PiTimerManager
     sfynx.tool.manager.encryption.class: Sfynx\ToolBundle\Util\PiEncryption
 
 services:
@@ -55,6 +56,10 @@ services:
     sfynx.tool.log_manager:
         class: %sfynx.tool.manager.log.class%      
         arguments: ['@service_container']    
+        
+    sfynx.tool.timer_manager:
+        class: %sfynx.tool.manager.timer.class%      
+        arguments: ['@service_container']         
         
     sfynx.tool.encryption_manager:
         class: %sfynx.tool.manager.encryption.class%      

@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Here is an inline example:
  * <code>
- * $logger = $this->cointainer->get('sfynx.tool.log_manager');
+ * $logger = $this->container->get('sfynx.tool.log_manager');
  * $logger->setInit('log_test_myfunct');
  * $logger->setInfo("[LOG TEST] Begin launch"); 
  * $logger->setErr("[LOG TEST] Error info description");
@@ -67,26 +67,29 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Constructor.
     * 
-    * @param    ContainerInterface $container The service container
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param ContainerInterface $container The service container
+    * 
+    * @return void
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function __construct(ContainerInterface $container)
    {
         $this->container= $container;
         $this->_logger    = $this->container->get('logger');           
         if ($this->container->hasParameter("kernel.logs_dir")) {
-               $this->setPath($this->container->getParameter("kernel.logs_dir"));
+            $this->setPath($this->container->getParameter("kernel.logs_dir"));
         }
    }   
 
    /**
     * Sets the log file path.
     *
-    * @param    string    $path
-    * @return    \Sfynx\ToolBundle\Util\PiLogManager
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param  string    $path
+    * 
+    * @return \Sfynx\ToolBundle\Util\PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
    public function setPath($path)
    {
@@ -101,10 +104,11 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Sets the log file name.
     *
-    * @param    string    $name
-    * @return    \Sfynx\ToolBundle\Util\PiLogManager
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param string $name
+    * 
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function setName($name)
    {
@@ -119,11 +123,12 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Sets the file.
     *
-    * @param    string    $filePath
-    * @param    octal        $mode    mode file
-    * @return    \Sfynx\ToolBundle\Util\PiLogManager
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param string $filePath
+    * @param octal  $mode    mode file
+    * 
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function setFile($filePath, $mode = 0777)
    {
@@ -137,13 +142,14 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Sets the log file by id.
     *
-    * @param    string    $id
-    * @param    string    $format
-    * @param    int        $flag
-    * @param    string    $path
-    * @return    \Sfynx\ToolBundle\Util\PiLogManager
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param string  $id
+    * @param string  $format
+    * @param integer $flag
+    * @param string  $path
+    * 
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function setInit($id, $format = "", $flag = FILE_APPEND, $path = "")
    {
@@ -154,8 +160,8 @@ class PiLogManager implements PiLogManagerInterface
                $format = date('YmdHis');
         }
         // we create names of all files.
-        $log_import     = $id . "." . $format.".log";    
-        $date_import     = $id . ".last_import.txt";
+        $log_import  = $id . "." . $format.".log";    
+        $date_import = $id . ".last_import.txt";
         // we clear the container info
         $this->clearInfo();
         // we set the file name
@@ -169,11 +175,12 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Add a info in the container.
     *
-    * @param    string    $info
-    * @param    boolean    $inLogger
-    * @return    \Sfynx\ToolBundle\Util\PiLogManager
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param string  $info
+    * @param boolean $inLogger
+    * 
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function setInfo($info, $inLogger = true)
    {
@@ -188,9 +195,9 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Clear the container info.
     *
-    * @return    \Sfynx\ToolBundle\Util\PiLogManager
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function clearInfo()
    {
@@ -202,17 +209,18 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Add an error in the container.
     *
-    * @param    string    $err
-    * @param    boolean    $inLogger
-    * @return    \Sfynx\ToolBundle\Util\PiLogManager
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param string  $err
+    * @param boolean $inLogger
+    * 
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function setErr($err, $inLogger = true)
    {
         $this->_info[] = $err;
         if ($inLogger) {
-               $this->_logger->err($err);
+            $this->_logger->err($err);
         }
         
         return $this;
@@ -221,9 +229,9 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Delete the log file.
     *
-    * @return    mixed    return 0 if the file is deleted correctly, otherwise return the instance.
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @return mixed    return 0 if the file is deleted correctly, otherwise return the instance.
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function delete()
    {
@@ -235,7 +243,7 @@ class PiLogManager implements PiLogManagerInterface
             unlink($path);
             $result = true;
         } else {
-               $result = false;
+            $result = false;
         }
         if ($result) {
             return $this;
@@ -247,11 +255,12 @@ class PiLogManager implements PiLogManagerInterface
    /**
     * Save a content in the log file.
     *
-    * @param    int    $flag
-    * @param    octal    $mode    mode file
-    * @return    mixed    return 0 if the file is save correctly, otherwise return the instance.
-    * @access    public
-    * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @param integer $flag Flag value
+    * @param octal   $mode mode file
+    * 
+    * @return mixed    return 0 if the file is save correctly, otherwise return the instance.
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function save($flag = FILE_APPEND, $mode = 0777)
    {
@@ -265,6 +274,5 @@ class PiLogManager implements PiLogManagerInterface
         } else {
             return false;
         }
-   }   
- 
+   }    
 }

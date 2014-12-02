@@ -48,6 +48,7 @@ sfynx_cmf:
             with_prefix_locale: true
             single_slug: false
         esi:
+            authorized: false
             encrypt_key: %esi_key%
             force_widget_tag_esi_for_varnish: false # true to remplace render_esi function to the esi tag used by varnish
             force_private_response_for_all: false # true if you want that all responses will have a private Cache-control without max-age

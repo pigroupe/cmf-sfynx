@@ -13,11 +13,12 @@
 namespace Sfynx\CmfBundle\Manager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response as Response;
+use Symfony\Component\HttpFoundation\Response;
 
 use Sfynx\CmfBundle\Builder\PiWidgetManagerBuilderInterface;
 use Sfynx\CmfBundle\Manager\PiCoreManager;
 use Sfynx\CmfBundle\Entity\Widget;
+use Sfynx\CmfBundle\Entity\TranslationWidget;
 
 /**
  * Description of the Widget manager
@@ -281,22 +282,21 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                 'key'           =>$esi_key,
                 'server'        =>$esi_server
             ));
-            // we get instances of parser and dumper component yaml files.
-            $yaml   = new \Symfony\Component\Yaml\Parser();
-            //$dumper = new \Symfony\Component\Yaml\Dumper();
             // we get config.yml content in array
-            $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
-            $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']['enabled'])) {
-                $is_esi_activate = ((int) $parsed_yaml_file['framework']['esi']['enabled']) ? true : false;
+            $isEsi = $this->container->getParameter('pi_app_admin.page.esi.authorized');
+            if ($isEsi) {
+                $is_esi_activate = true;
             } else {
-                $is_esi_activate = false;
-            }      
+            	$is_esi_activate = false;
+            }
             $ttl = (int) $params['widget-lifetime'];
-            if (
-            	( $ttl > 0 )
-            	&&
-            	( $is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) )
+            if (($ttl > 0)
+            	&& ($is_esi_activate
+                        || $is_render_service_with_ajax
+                        || (isset($params['widget-ajax'])
+                                && ($params['widget-ajax'] == true)
+                           ) 
+                    )
             ) {
                 if ($is_esi_activate) {
                     $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
@@ -404,22 +404,20 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                     'key'           =>$esi_key,
                     'server'        =>$esi_server
             ));
-            // we get instances of parser and dumper component yaml files.
-            $yaml   = new \Symfony\Component\Yaml\Parser();
-            //$dumper = new \Symfony\Component\Yaml\Dumper();
-            // we get config.yml content in array
-            $path_config_yml  = $this->container->get('kernel')->getRootDir().'/config/config.yml';
-            $parsed_yaml_file = $yaml->parse(file_get_contents($path_config_yml));
-            if (isset($parsed_yaml_file['framework']['esi']['enabled'])) {
-                $is_esi_activate = ((int) $parsed_yaml_file['framework']['esi']['enabled']) ? true : false;
+            $isEsi = $this->container->getParameter('pi_app_admin.page.esi.authorized');
+            if ($isEsi) {
+                $is_esi_activate = true;
             } else {
-                $is_esi_activate = false;
-            }   
+            	$is_esi_activate = false;
+            }            
             $ttl = (int) $params['widget-lifetime'];
-            if (
-            	( $ttl > 0 )
-            	&&
-            	( $is_esi_activate || $is_render_service_with_ajax || (isset($params['widget-ajax']) && ($params['widget-ajax'] == true)) )
+            if (($ttl > 0)
+            	&& ($is_esi_activate 
+                        || $is_render_service_with_ajax
+                        || (isset($params['widget-ajax'])
+                                && ($params['widget-ajax'] == true)
+                           )
+                    )
             ) {
                 if($is_esi_activate) {
                     $set  = "{% if is_esi_disable_after_post_request and (app_request_request_count >= 1) %}\n";
@@ -473,7 +471,9 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         $container  = strtoupper($this->getCurrentWidget()->getPlugin());
         $NameAction = strtolower($this->getCurrentWidget()->getAction());        
         // If the widget is a "gedmo snippet"
-        if ( ($container == 'CONTENT') && ($NameAction == 'snippet') )    {
+        if (($container == 'CONTENT') 
+                && ($NameAction == 'snippet')
+        ) {
             // if the configXml field of the widget is configured correctly.
             try {
                 $xmlConfig    = new \Zend_Config_Xml($this->getCurrentWidget()->getConfigXml());
@@ -486,7 +486,9 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
             }             
         }
         // If the widget is a "gedmo snippet"
-        elseif ( ($container == 'GEDMO') && ($NameAction == 'snippet') )    {
+        elseif (($container == 'GEDMO') 
+                && ($NameAction == 'snippet')
+        ) {
             // if the configXml field of the widget is configured correctly.
             try {
                 $xmlConfig    = new \Zend_Config_Xml($this->getCurrentWidget()->getConfigXml());
@@ -498,8 +500,10 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
             } catch (\Exception $e) {
             }
         }      
-        $this->script['js'][$container.$NameAction]     = $this->extensionWidget->ScriptJsFunction($container, $NameAction);
-        $this->script['css'][$container.$NameAction]    = $this->extensionWidget->ScriptCssFunction($container, $NameAction);
+        $this->script['js'][$container.$NameAction]  = $this->extensionWidget
+                ->ScriptJsFunction($container, $NameAction);
+        $this->script['css'][$container.$NameAction] = $this->extensionWidget
+                ->ScriptCssFunction($container, $NameAction);
     }
 
     /**
@@ -527,18 +531,18 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         if ( $xmlConfig->widgets->get('css') ){
         	if (is_object($xmlConfig->widgets->css)) {
         		$all_css = $xmlConfig->widgets->css->toArray();
-        		$this->script['init'][$container.$NameAction.$method.'css']    =  "{% initWidget('css:".json_encode($all_css, JSON_UNESCAPED_UNICODE)."') %}";
+        		$this->script['init'][$container.$NameAction.$method.'css'] =  "{% initWidget('css:".json_encode($all_css, JSON_UNESCAPED_UNICODE)."') %}";
         	} elseif (is_string($xmlConfig->widgets->css)) {
-        		$this->script['init'][$container.$NameAction.$method.'css']    =  "{% initWidget('css:".json_encode(array($xmlConfig->widgets->css), JSON_UNESCAPED_UNICODE)."') %}";
+        		$this->script['init'][$container.$NameAction.$method.'css'] =  "{% initWidget('css:".json_encode(array($xmlConfig->widgets->css), JSON_UNESCAPED_UNICODE)."') %}";
         	}
         }
         // we add all js files.
             if ( $xmlConfig->widgets->get('js') ){
         	if (is_object($xmlConfig->widgets->js)) {
         		$all_js = $xmlConfig->widgets->js->toArray();
-        		$this->script['init'][$container.$NameAction.$method.'js']    =  "{% initWidget('js:".json_encode($all_js, JSON_UNESCAPED_UNICODE)."') %}";
+        		$this->script['init'][$container.$NameAction.$method.'js'] =  "{% initWidget('js:".json_encode($all_js, JSON_UNESCAPED_UNICODE)."') %}";
         	} elseif (is_string($xmlConfig->widgets->js)) {
-        		$this->script['init'][$container.$NameAction.$method.'js']    =  "{% initWidget('js:".json_encode(array($xmlConfig->widgets->js), JSON_UNESCAPED_UNICODE)."') %}";
+        		$this->script['init'][$container.$NameAction.$method.'js'] =  "{% initWidget('js:".json_encode(array($xmlConfig->widgets->js), JSON_UNESCAPED_UNICODE)."') %}";
         	}
         }
         // we apply init methods of the applyed service.
@@ -547,34 +551,33 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
             $values     = explode(':', $controller);
             $entity     = strtolower($values[1]);
             $method    .= strtolower($values[2]);
-            $this->script['init'][$container.$NameAction.$method]    =  "{% initWidget('". $container . ":" . $NameAction . $method ."') %}";
+            $this->script['init'][$container.$NameAction.$method] =  "{% initWidget('". $container . ":" . $NameAction . $method ."') %}";
         }elseif ( $xmlConfig->widgets->get('content') && $xmlConfig->widgets->content->get('controller') ) {
             $controller    = $xmlConfig->widgets->content->controller;
             str_replace(':', ':', $controller, $count);
             if ($count == 1) {
-                $this->script['init'][$container.$NameAction.$method]    =  "{% initWidget('". $container . ":" . $NameAction . ":" . $controller ."') %}";
+                $this->script['init'][$container.$NameAction.$method] =  "{% initWidget('". $container . ":" . $NameAction . ":" . $controller ."') %}";
             }
         }elseif ( $xmlConfig->widgets->get('search') && $xmlConfig->widgets->search->get('controller') ) {
             $controller    = $xmlConfig->widgets->search->controller;
             str_replace(':', ':', $controller, $count);
             if ($count == 1) {
-                $this->script['init'][$container.$NameAction.$method]    =  "{% initWidget('". $container . ":" . $NameAction . ":" . $controller ."') %}";
+                $this->script['init'][$container.$NameAction.$method] =  "{% initWidget('". $container . ":" . $NameAction . ":" . $controller ."') %}";
             }
         } else {
-            $this->script['init'][$container.$NameAction.$method]    =  "{% initWidget('". $container . ":" . $NameAction . $method ."') %}";
+            $this->script['init'][$container.$NameAction.$method] =  "{% initWidget('". $container . ":" . $NameAction . $method ."') %}";
         }
     }    
     
     /**
      * Sets widget translations.
      *
-     * @param \Sfynx\CmfBundle\Entity\Widget $widget
+     * @param Widget $widget A widget entity
      *
-     * @return array\Sfynx\CmfBundle\Entity\TranslationWidget
+     * @return array|TranslationWidget
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-13
+     * @since  2012-02-13
      */
     protected function setWidgetTranslations(Widget $widget)
     {
@@ -593,14 +596,13 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
     /**
      * Sets the response to one widget.
      * 
-     * @param \Sfynx\CmfBundle\Entity\Widget $widget
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param Widget   $widget   A widget entity
+     * @param Response $response The response instance
      *
      * @return void
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     private function setResponse($widget, Response $response)
     {
