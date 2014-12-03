@@ -49,40 +49,38 @@
 
 {% block form_errors %}
 {% spaceless %}
-
 	{% if compound %}
-		{#... form code ...#}
-		{% if error_delay is defined %}
-		    {% for child in form %}
-		        {% if loop.index == 1 %}
-                    {% if child.vars|merge({'errors': errors}) %}{% endif %}
-		        {% endif %}
-		    {% endfor %}
-		{% else %}
-			{# prevent deep nesting wrong context copy error #}
-			{% from "SfynxTemplateBundle:Template\\Flash:flash.html.twig" import flash %}
-			<div class="symfony-form-errors" title="Alert Errors">
-			{% if errors|length > 0 %}
-				{{ flash('error', 'pi.session.flash.form.errors') }}
-		    	{% for error in errors %}
-		    		{% if error.messageTemplate|trans(error.messageParameters, 'validators')|length > 0 %}
-					{{ flash('error', error.messageTemplate|trans(error.messageParameters, 'validators')) }}
-					{% endif %}
-				{% endfor %}
-			{% endif %}
-			</div>
-		{% endif %}
-		
+            {#... form code ...#}
+            {% if error_delay is defined %}
+                {% for child in form %}
+                    {% if loop.index == 1 %}
+                {% if child.vars|merge({'errors': errors}) %}{% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {# prevent deep nesting wrong context copy error #}
+                {% from "SfynxTemplateBundle:Template\\Flash:flash.html.twig" import flash %}
+                <div class="symfony-form-errors" title="Alert Errors">
+                {% if errors|length > 0 %}
+                        {{ flash('error', 'pi.session.flash.form.errors') }}
+                {% for error in errors %}
+                        {% if error.messageTemplate|trans(error.messageParameters, 'validators')|length > 0 %}
+                                {{ flash('error', error.messageTemplate|trans(error.messageParameters, 'validators')) }}
+                                {% endif %}
+                        {% endfor %}
+                {% endif %}
+                </div>
+            {% endif %}		
 	{% else %}
-    {#... field  code ...#}
+        {#... field  code ...#}
 	    {% if errors|length > 0 %}
-		    <span class="help-{{ block('error_type') }}">
-		        {% for error in errors %}
-		            {{ error.messageTemplate|trans(error.messageParameters, 'validators') }} <br>
-		        {% endfor %}
-	    	</span>
+            <span class="help-{{ block('error_type') }}">
+                {% for error in errors %}
+                    {{ error.messageTemplate|trans(error.messageParameters, 'validators') }} <br>
+                {% endfor %}
+            </span>
 	    {% endif %}
-    {% endif %}
+        {% endif %}
 				
 {% endspaceless %}
 {% endblock form_errors %}
@@ -134,7 +132,7 @@
     {% set count = 0 %}
     {% for child in form %}
     	<div id="{{ name }}_{{ count }}">
-        	{{ form_row(child) }}
+        {{ form_row(child) }}
         </div>
         {% set count = count +1 %}
     {% endfor %}
@@ -162,13 +160,13 @@
     <div class="clearfix {% if errors|length > 0 %}errors{% endif %}">
     {% endif %}
 				
-        {% if (form.vars.types is defined)  and 'form' in form.vars.types and ( form.parent is not empty) %}
-            {% if show_child_legend %}
-                {{ block('form_legend') }}
-            {% endif %}
-    	{% else %}
-        	{{ block('field_label_attr_aware_label') }}
-        {% endif %} 
+    {% if (form.vars.types is defined)  and 'form' in form.vars.types and ( form.parent is not empty) %}
+        {% if show_child_legend %}
+            {{ block('form_legend') }}
+        {% endif %}
+    {% else %}
+        {{ block('field_label_attr_aware_label') }}
+    {% endif %} 
         
     {% if (form.vars.types is not defined) or not ('form' in form.vars.types) %}
         <div class="input">
@@ -202,14 +200,14 @@
     	{{ form_label(form, label) }}
         <div class="input">
             {% set attr = attr|merge({'class': attr.class|default('') ~ ' inline-inputs'}) %}
-	        <div {{ block('widget_container_attributes')  }}>
-	            {{ date_pattern|replace({
-                    '{{ year }}':  form_widget(form.year, {'attr': {'class': attr.widget_class|default('')}}),
-                    '{{ month }}': form_widget(form.month, {'attr': {'class': attr.widget_class|default('')}}),
-                    '{{ day }}':   form_widget(form.day, {'attr': {'class': attr.widget_class|default('')}}),
-	            })|raw }}
-	        </div>
-	        {{ block('help') }}
+            <div {{ block('widget_container_attributes')  }}>
+                {{ date_pattern|replace({
+                '{{ year }}':  form_widget(form.year, {'attr': {'class': attr.widget_class|default('')}}),
+                '{{ month }}': form_widget(form.month, {'attr': {'class': attr.widget_class|default('')}}),
+                '{{ day }}':   form_widget(form.day, {'attr': {'class': attr.widget_class|default('')}}),
+                })|raw }}
+            </div>
+            {{ block('help') }}
         </div>
     </div>
     {% endif %}
@@ -222,7 +220,7 @@
         {{ block('form_widget_simple') }}
     {% else %}
     <div class="clearfix {% if errors|length > 0 %}error{% endif %}">
-                {{ form_label(form, label) }}
+        {{ form_label(form, label) }}
         <div class="input time">
             {% set attr = attr|merge({'class': attr.class|default('') ~ ' inline-inputs'}) %}
             <div {{ block('widget_container_attributes') }}>
@@ -241,7 +239,7 @@
 {% spaceless %}
     <div class="{% if errors|length > 0 %}error{% endif %}">
     	<div id="{{ id }}" class="media" ></div>
-		{{ form_widget(form) }}
+	{{ form_widget(form) }}
     </div>
 {% endspaceless %}
 {% endblock file_widget %}
@@ -255,13 +253,13 @@
     	{{ form_label(form, label) }}
         <div class="input">
             {% set attr = attr|merge({'class': attr.class|default('') ~ ' inline-inputs'}) %}
-	        <div {{ block('widget_container_attributes') }}>
-	            {{ form_errors(form.date) }}
-	            {{ form_errors(form.time) }}
-	            {{ form_widget(form.date, {'attr': {'class': attr.widget_class|default('')}}) }}
-	            {{ form_widget(form.time, {'attr': {'class': attr.widget_class|default('')}}) }}
-	        </div>
-	        {{ block('field_help') }}
+            <div {{ block('widget_container_attributes') }}>
+            {{ form_errors(form.date) }}
+            {{ form_errors(form.time) }}
+            {{ form_widget(form.date, {'attr': {'class': attr.widget_class|default('')}}) }}
+            {{ form_widget(form.time, {'attr': {'class': attr.widget_class|default('')}}) }}
+            </div>
+            {{ block('field_help') }}
         </div>
     </div>
     {% endif %}
@@ -289,24 +287,24 @@
 
 {% block choice_widget_expanded %}
 {% spaceless %}
-    <div class="clearfix">
-		<div class="input choice">
-			{% set attr = attr|merge({'class': attr.class|default('') ~ ' inputs-list'}) %}
-        	<ul {{ block('widget_container_attributes') }}>
-	        {% for child in form %}
-                <li>
-                	<label>
-		            	{{ form_widget(child, {'attr': {'class': attr.widget_class|default('')}}) }}
-		            	<span>{{ child.vars.label|trans|replace({'<p>': '', '</p>': ''})|raw }}</span>
-	                </label>
-                </li>
-	        {% endfor %}
-			</ul>
-		</div>
-		<div class="input choice">
-			{{ block('field_errors') }}
-		</div>
-	</div>
+<div class="clearfix">
+    <div class="input choice">
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' inputs-list'}) %}
+        <ul {{ block('widget_container_attributes') }}>
+            {% for child in form %}
+            <li>
+                <label>
+                    {{ form_widget(child, {'attr': {'class': attr.widget_class|default('')}}) }}
+                    <span>{{ child.vars.label|trans|replace({'<p>': '', '</p>': ''})|raw }}</span>
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="input choice">
+        {{ block('field_errors') }}
+    </div>
+</div>
 {% endspaceless %}
 {% endblock choice_widget_expanded %}
 

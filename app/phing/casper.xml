@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="casperjs" description="CasperJS tests build definition" default="info" basedir=".">
+
+    <target name="test:casper">
+        <exec executable="casperjs" passthru="true">
+            <arg line="test" />
+            <arg line="${dir.app}/Tests/casperjs" />
+            <arg line="--base-url=${url.test}" />
+            <arg line="--xunit=${dir.reports}/casperjs.xml" />
+            <arg line="--pre=${dir.app}/Resources/casperjs/pre.js" />
+            <arg line="--no-colors" />
+        </exec>
+    </target>
+
+    <target name="test:casper-no-timeout">
+        <exec executable="casperjs" passthru="true">
+            <arg line="test" />
+            <arg line="${dir.app}/Tests/casperjs" />
+            <arg line="--base-url=${url.test}" />
+            <arg line="--xunit=${dir.reports}/casperjs.xml" />
+            <arg line="--pre=${dir.app}/Resources/casperjs/pre.js" />
+            <arg line="--disable-timeout" />
+            <arg line="--no-colors" />
+        </exec>
+    </target>
+
+    <target name="info">
+        <echo>This file contains the central configuration for running casper tests</echo>
+    </target>
+
+</project>

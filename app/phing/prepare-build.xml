@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="prepare" description="Prepare build" default="prepare:info" basedir=".">
+
+    <target name="prepare:local"
+          depends="prepare:clean-local, prepare:folders"
+          description="Prepare folder for a local build (dont manage dependancy and configuration file)" />
+
+    <target name="prepare:jenkins"
+          depends="prepare:clean-jenkins, prepare:folders, prepare:configuration, composer:get, composer:install"
+          description="Prepare folder for a jenkins build" />
+
+    <!-- Project build clean -->
+    <target name="prepare:clean-local" description="Clean up build directories.">
+        <echo msg="Cleaning build directories ..." />
+        <delete dir="${dir.build}" verbose="true" />
+    </target>
+
+    <target name="prepare:clean-jenkins" description="Clean up build directories.">
+        <echo msg="Cleaning build directories ..." />
+        <delete dir="${dir.build}" verbose="true" />
+        <delete dir="${dir.app}/cache"/>
+        <delete file="${project.basedir}/composer.phar"/>
+        <delete file="${dir.app}/config/parameters.yml"/>
+        <delete dir="${dir.app}/logs" />
+    </target>
+
+    <!-- Project build prepare -->
+    <target name="prepare:folders" description="Create build directories.">
+        <echo msg="Creating build directories ..." />
+        <mkdir dir="${dir.build}" />
+        <mkdir dir="${dir.docs}" />
+        <mkdir dir="${dir.browser}" />
+        <mkdir dir="${dir.reports}" />
+        <mkdir dir="${dir.reports.coverage}" />
+        <mkdir dir="${dir.reports.pdepend}" />
+    </target>
+
+    <!-- Project build prepare -->
+    <!-- build must be launch with parameters ex :  -->
+    <!-- phing -f build.xml build:xx -logger phing.listener.DefaultLogger -DdbUser=xx -DdbPw=xx -DdbName=nbi-x -DtestDbName=xx -->
+    <target name="prepare:configuration" description="Prepare files configuration.">
+        <echo msg="Prepare files configuration..." />
+        <copy file="app/config/parameters.yml.dist" tofile="app/config/parameters.yml" overwrite="true">
+            <filterchain>
+                    <replacetokens begintoken="%%" endtoken="%%">
+                        <token key="database_name" value="${dbName}" />
+                        <token key="database_user" value="${dbUser}" />
+                        <token key="database_password" value="${dbPw}" />
+                        <token key="test_database_name" value="${dbName}" />
+                        <token key="test_database_user" value="${dbUser}" />
+                        <token key="test_database_password" value="${dbPw}" />
+                    </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- Get Composer -->
+    <target name="composer:get" description="Get composer">
+        <echo msg="Get composer.phar ..." />
+        <exec executable="wget">
+          <arg value="-nc" />
+          <arg value="http://getcomposer.org/composer.phar" />
+        </exec>
+    </target>
+
+    <!-- Install vendors -->
+    <target name="composer:install" description="Installing vendors with composer">
+      <echo msg="Installing vendors with composer ..." />
+      <exec executable="php" passthru="true">
+          <arg value="composer.phar" />
+          <arg value="install" />
+          <arg value="--dev" />
+        </exec>
+    </target>
+
+    <!-- Update vendors -->
+    <target name="composer:update" description="Updating vendors with composer">
+      <echo msg="Updating vendors with composer ..." />
+      <exec executable="php">
+          <arg value="composer.phar" />
+          <arg value="update" />
+        </exec>
+    </target>
+
+    <target name="prepare:info">
+        <echo>This file contains the central configuration for prepare build</echo>
+    </target>
+</project>

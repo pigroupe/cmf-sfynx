@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="initialize" description="Frontend build" default="info" basedir=".">
+    <import file="app/phing/doctrine.xml" />
+    <import file="app/phing/frontend.xml" />
+
+    <target name="rebuild"
+        depends="clean-cache, composer:install, doctrine:rebuild, solr:update, cache:clear, frontend:assets"
+        description="Rebuild dev environement from the scratch"
+        />
+
+    <target name="clean-cache">
+        <exec command="rm -rf app/cache/*"/>
+    </target>
+
+    <target name="clear-cache">
+        <exec command="app/console cache:clear"/>
+    </target>
+
+    <target name="composer:install" description="Installing vendors with composer">
+        <exec command="composer install" passthru="true" />
+    </target>
+
+    <target name="phpcr:fixtures">
+        <exec command="echo 'Y' | php app/console doctrine:phpcr:fixtures:load" passthru="true"/>
+    </target>
+
+    <target name="cache:clear">
+        <exec command="php app/console cache:clear" passthru="true"/>
+    </target>
+
+    <target name="info">
+        <echo>This file is a shortcut for dev environment initialization. Keep in mind that is dangerous!</echo>
+    </target>
+</project>

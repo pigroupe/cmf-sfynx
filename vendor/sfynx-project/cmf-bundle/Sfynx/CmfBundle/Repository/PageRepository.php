@@ -337,6 +337,5 @@ class PageRepository extends TranslationRepository
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
         }
-    }      
-    
+    }     
 }

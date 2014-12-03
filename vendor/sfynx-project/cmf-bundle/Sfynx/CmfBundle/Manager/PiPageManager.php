@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @subpackage   Admin_Managers
+ * @subpackage Admin_Managers
  * @package    Manager
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-23
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-23
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,10 +27,9 @@ use Sfynx\CmfBundle\Entity\Widget;
 /**
  * Description of the Page manager
  *
- * @subpackage   Admin_Managers
+ * @subpackage Admin_Managers
  * @package    Manager
- * 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterface 
 {    
@@ -173,7 +172,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             // Check that the Response is not modified for the given Request.
             if ($response->isNotModified($this->container->get('request'))){
                 // We set the reponse
-                $this->setResponse($page, $response);
+                $this->setResponsePage($page, $response);
                 // return the 304 Response immediately
                 return $response;
             } else {
@@ -193,14 +192,14 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Returns the render source of one page.
      *
-     * @param string $id
-     * @param string $lang
-     * @param array     $params
+     * @param string $id     id value
+     * @param string $lang   lang value
+     * @param array  $params params value
+     * 
      * @return string
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function renderSource($id, $lang = '', $params = null)
     {
@@ -371,107 +370,106 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         return $source;
     }
     
-	/**
-	 * Returns the render ESI source of a widget.
-	 *
-	 * @param string $serviceName
-	 * @param string $method
-	 * @param string $id
-	 * @param string $lang
-	 * @param array  $params
-	 * @param array  $options
-	 * @param mixed  $response
-	 * @return string
-	 * @access    public
-	 *
-	 * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-	 * @since 2012-01-31
-	 */
-	public function renderESISource($serviceName, $method, $id, $lang = '', $params = null, $options = null, Response $response = null)
-	{
-	    // we set the langue
-	    if (empty($lang))    $lang = $this->language;
-                // we initialize
-		$this->initializeRequest($lang, $options);
-		// we set the result widget
-		$result = $this->container->get($serviceName)->$method($id, $lang, $params);
-		// set response
-		if (is_null($response)) {
-			$response = new Response($result);
-		} else {
-			$response->setContent($result);
-		}
-		// Allows proxies to cache the same content for different visitors.
-		if (isset($options['public']) && $options['public']) {
-			$response->setPublic();
-		} 
-		if (isset($options['lifetime']) && $options['lifetime']) {
-			$response->setSharedMaxAge($options['lifetime']);
-			$response->setMaxAge($options['lifetime']);
-		}
-		// Returns a 304 "not modified" status, when the template has not changed since last visit.
-		if (
-		    isset($options['cacheable']) && $options['cacheable']
-		    &&
-		    isset($options['update']) && $options['update']
-		) {
-			$response->setLastModified(new \DateTime(date('Y-m-d H:i:s', $options['update'])));
-		} else {
-			$response->setLastModified(new \DateTime());
-		}
-		//
-		$is_force_private_response           = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_for_all");
-		$is_force_private_response_with_auth = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_only_with_authentication");
-		if ( 
-		    $is_force_private_response
-		    ||
-		    ($this->isUsernamePasswordToken() && $is_force_private_response_with_auth)		
-		) {
-			$response->headers->set('Pragma', "no-cache");
-			$response->headers->set('Cache-control', "private");
-		} elseif ( isset($options['lifetime']) && ($options['lifetime'] == 0) ) {
-			$response->setSharedMaxAge(0);
-			$response->setMaxAge(0);
-		}
-	
-		return $response;
-	}	
-	
-	/**
-	 * Initialize the request with a new uri.
-	 *
-	 * @param $options    ['REQUEST_URI', 'REDIRECT_URL']
-	 * @return void
-	 * @access public
-	 *
-	 * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-	 * @since 2012-02-16
-	 */
-	public function initializeRequest($lang = '', array $options = array())
-	{
-	    // we set the langue
-	    if (empty($lang))    $lang = $this->language;
-		// we duplicate the current request
-		$clone_request = $this->container->get('request')->duplicate();
-		// we modify the header request
-		if (isset($options['REQUEST_URI']) && !empty($options['REQUEST_URI'])) {
-			$clone_request->server->set('REQUEST_URI', $options['REQUEST_URI']);
-			$_SERVER['REQUEST_URI'] = $options['REQUEST_URI'];
-		}
-		if (isset($options['REDIRECT_URL']) && !empty($options['REDIRECT_URL'])) {
-			$clone_request->server->set('REDIRECT_URL', $options['REDIRECT_URL']);
-			$_SERVER['REDIRECT_URL'] = $options['REDIRECT_URL'];
-		}
-		// we initialize the request with new values.
-		$query      = $clone_request->query->all();
-		$request    = $clone_request->request->all();
-		$attributes = $clone_request->attributes->all();
-		$cookies    = $clone_request->cookies->all();
-		$files      = $clone_request->files->all();
-		$server     = $clone_request->server->all();
-		$this->container->get('request')->initialize($query, $request, $attributes, $cookies, $files, $server);
-		// we get the _route value of the new uri
-		$match = $this->container->get('sfynx.tool.route.factory')->getLocaleRoute($lang, array('result'=>'match') );
+    /**
+     * Returns the render ESI source of a widget.
+     *
+     * @param string $serviceName serviceName value
+     * @param string $method      method value
+     * @param string $id          id value
+     * @param string $lang        lang value
+     * @param array  $params      params value
+     * @param array  $options     options value
+     * @param mixed  $response    a response instance
+     * 
+     * @return string
+     * @access public
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @since  2012-01-31
+     */
+    public function renderESISource($serviceName, $method, $id, $lang = '', $params = null, $options = null, Response $response = null)
+    {
+        // we set the langue
+        if (empty($lang))    $lang = $this->language;
+            // we initialize
+            $this->initializeRequest($lang, $options);
+            // we set the result widget
+            $result = $this->container->get($serviceName)->$method($id, $lang, $params);
+            // set response
+            if (is_null($response)) {
+                    $response = new Response($result);
+            } else {
+                    $response->setContent($result);
+            }
+            // Allows proxies to cache the same content for different visitors.
+            if (isset($options['public']) && $options['public']) {
+                    $response->setPublic();
+            } 
+            if (isset($options['lifetime']) && $options['lifetime']) {
+                    $response->setSharedMaxAge($options['lifetime']);
+                    $response->setMaxAge($options['lifetime']);
+            }
+            // Returns a 304 "not modified" status, when the template has not changed since last visit.
+            if (
+                isset($options['cacheable']) && $options['cacheable']
+                &&
+                isset($options['update']) && $options['update']
+            ) {
+                    $response->setLastModified(new \DateTime(date('Y-m-d H:i:s', $options['update'])));
+            } else {
+                    $response->setLastModified(new \DateTime());
+            }
+            //
+            $is_force_private_response           = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_for_all");
+            $is_force_private_response_with_auth = $this->container->getParameter("pi_app_admin.page.esi.force_private_response_only_with_authentication");
+            if ( 
+                $is_force_private_response
+                ||
+                ($this->isUsernamePasswordToken() && $is_force_private_response_with_auth)		
+            ) {
+                    $response->headers->set('Pragma', "no-cache");
+                    $response->headers->set('Cache-control', "private");
+            } elseif ( isset($options['lifetime']) && ($options['lifetime'] == 0) ) {
+                    $response->setSharedMaxAge(0);
+                    $response->setMaxAge(0);
+            }
+
+            return $response;
+    }	
+
+    /**
+     * Initialize the request with a new uri.
+     *
+     * @param $options    ['REQUEST_URI', 'REDIRECT_URL']
+     * @return void
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since 2012-02-16
+     */
+    public function initializeRequest($lang = '', array $options = array())
+    {
+        // we set the langue
+        if (empty($lang))    $lang = $this->language;
+            // we duplicate the current request
+            $clone_request = $this->container->get('request')->duplicate();
+            // we modify the header request
+            if (isset($options['REQUEST_URI']) && !empty($options['REQUEST_URI'])) {
+                    $clone_request->server->set('REQUEST_URI', $options['REQUEST_URI']);
+                    $_SERVER['REQUEST_URI'] = $options['REQUEST_URI'];
+            }
+            if (isset($options['REDIRECT_URL']) && !empty($options['REDIRECT_URL'])) {
+                    $clone_request->server->set('REDIRECT_URL', $options['REDIRECT_URL']);
+                    $_SERVER['REDIRECT_URL'] = $options['REDIRECT_URL'];
+            }
+            // we initialize the request with new values.
+            $query      = $clone_request->query->all();
+            $request    = $clone_request->request->all();
+            $attributes = $clone_request->attributes->all();
+            $cookies    = $clone_request->cookies->all();
+            $files      = $clone_request->files->all();
+            $server     = $clone_request->server->all();
+            $this->container->get('request')->initialize($query, $request, $attributes, $cookies, $files, $server);
+            // we get the _route value of the new uri
+            $match = $this->container->get('sfynx.tool.route.factory')->getLocaleRoute($lang, array('result'=>'match') );
 // 		if ($match && is_array($match)) {
 // 			foreach($match as $k => $v) {
 // 				$_GET[$k] = $v;
@@ -480,24 +478,23 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
 // 			}
 // 		}
 //      $request = Request::createFromGlobals();  =>  $request = new Request($_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER);
-		// we set the _route value
-		$this->container->get('request')->query->set('_route', $match['_route']);
-		$this->container->get('request')->attributes->set('_route', $match['_route']);
-		$this->container->get('request')->attributes->set('_locale', $lang);
-		$this->container->get('request')->setLocale($lang);
-		$_GET['_locale'] = $lang;
-	} 
+            // we set the _route value
+            $this->container->get('request')->query->set('_route', $match['_route']);
+            $this->container->get('request')->attributes->set('_route', $match['_route']);
+            $this->container->get('request')->attributes->set('_locale', $lang);
+            $this->container->get('request')->setLocale($lang);
+            $_GET['_locale'] = $lang;
+    } 
     
     /**
      * Sets and return a page by id.
      *
-     * @param int    $idPage
+     * @param integer $idPage Id of a page entity
      *
      * @return void
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-16
+     * @since  2012-02-16
      */
     public function setPageById($idPage)
     {
@@ -517,15 +514,14 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Sets and return a page by url and slug.
      *
-     * @param string    $url    url value of a page
-     * @param string    $slug    slug value of a translation of a page
-     * @param bool        $isSetPage
+     * @param string  $url       url value of a page
+     * @param string  $slug      slug value of a translation of a page
+     * @param boolean $isSetPage True to set all information of a page in the container
      * 
-     * @return \Sfynx\CmfBundle\Entity\Page
+     * @return Page
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     public function setPageByParams($url, $slug, $isSetPage = false) 
     {
@@ -588,9 +584,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      * Redirect to the url by his route name.
      *
      * @param string $route_name Route name of a page
-     * @param string $lang       Language value 
      * 
-     * @return string    content page
+     * @return string content page
      * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      * @since  2012-06-11
@@ -630,13 +625,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Sets all the related translations linked to one page.
      *
-     * @param \Sfynx\CmfBundle\Entity\Page $page
+     * @param Page         $page   Page entity
+     * @param false|string $locale THe locale value
      *
      * @return void
      * @access private
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     private function setTranslations(Page $page, $locale = false)
     {
@@ -659,13 +654,12 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Sets all the related block linked to one page.
      *
-     * @param \Sfynx\CmfBundle\Entity\Page $page
+     * @param Page $page Page entity
      * 
      * @return void
      * @access private
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     private function setBlocks(Page $page)
     {
@@ -681,13 +675,12 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Sets all the related block linked to one page.
      *
-     * @param \Sfynx\CmfBundle\Entity\Page $page
+     * @param Page $page Page entity
      *
      * @return void
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     private function setWidgets(Page $page)
     {
@@ -706,16 +699,15 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Sets the response to one page.
      * 
-     * @param \Sfynx\CmfBundle\Entity\Page $page
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param Page     $page     Page entity
+     * @param Response $response Response instance
      *
      * @return void
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-01-31
      */
-    private function setResponse($page, Response $response)
+    private function setResponsePage(Page $page, Response $response)
     {
         $this->responses['page'][$page->getId()] = $response;
     }    
@@ -725,9 +717,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      *
      * @return void
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     private function setWidgetManager()
     {
@@ -737,11 +728,10 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Gets the Widget manager service
      *
-     * @return \Sfynx\CmfBundle\Manager\PiWidgetManager
+     * @return PiWidgetManager
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     private function getWidgetManager()
     {
@@ -757,9 +747,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      *
      * @return void
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-14
+     * @since  2012-02-14
      */
     private function redirectHomePublicPage(){
         // It tries to redirect to the original page.
@@ -777,9 +766,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      *
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-29
+     * @since  2012-02-29
      */
     public function getChildrenHierarchyRub()
     {
@@ -805,12 +793,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     
     /**
      * Modify the tree result with the pages blocks.
-     *
+     * 
+     * @param string $htmlTree Content value
+     * 
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-29
+     * @since  2012-02-29
      */
     public function setTreeWithPages($htmlTree)
     {
@@ -849,12 +838,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     
     /**
      * Sets the home page.
-     *
+     * 
+     * @param string $htmlTree Content value
+     * 
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-29
+     * @since  2012-02-29
      */
     public function setHomePage($htmlTree)
     {
@@ -887,12 +877,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     
     /**
      * Gets all page of a rubrique.
-     *
+     * 
+     * @param integer $idRubrique Id rubrique
+     * 
      * @return string
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-28
+     * @since  2012-02-28
      */
     private function getPagesByRub($idRubrique)
     {
@@ -937,12 +928,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     
     /**
      * Add node numeber in the <li>.
-     *
+     * 
+     * @param string $htmlTree Content value
+     * 
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-29
+     * @since  2012-02-29
      */
     public function setNode($htmlTree)
     {
@@ -990,7 +982,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      * @return string
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-05-11
+     * @since  2012-05-11
      */
     public function cacheTreeChartPageRefresh()
     {
@@ -1018,14 +1010,14 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Refresh all cache of a page.
      *
-     * @param mixed    $page	entity page or the id of the page
-     * @param string   $lang
-     * @param string   $referer_url
+     * @param mixed       $page	       entity page or the id of the page
+     * @param string      $lang        lang value
+     * @param null|string $referer_url referer url value
+     * 
      * @return void
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-04-08
+     * @since  2014-04-08
      */
     public function cacheRefreshPage($page, $lang, $referer_url = null)
     {
@@ -1085,15 +1077,15 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Refresh the cache of a widget.
      *
-     * @param \Sfynx\CmfBundle\Entity\Widget    $widget
-     * @param string   $lang
+     * @param Widget $widget Widget entity
+     * @param string $lang   Lang value
+     * 
      * @return void
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-04-08
+     * @since  2014-04-08
      */
-    public function cacheRefreshWidget(\Sfynx\CmfBundle\Entity\Widget $widget, $lang)
+    public function cacheRefreshWidget(Widget $widget, $lang)
     {
     	// we get the id of the widget.
     	$id = $widget->getId();
@@ -1178,7 +1170,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                     // we get the esi url
                     $info[1] = \Sfynx\ToolBundle\Util\PiStringManager::cleanWhitespace($info[1]);
                     // we delete the cache widget file
-                    $this->container->get("sfynx.cache.filecache")->getClient()->setPath($this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository());
+                    $this->container->get("sfynx.cache.filecache")->getClient()->setPath($this->createCacheWidgetRepository());
                     $this->container->get("sfynx.cache.filecache")->clear($info[1]);
                     //print_r($id);print_r($info[1]);
                     //print_r('<br />');print_r('<br />');
@@ -1193,9 +1185,8 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      *
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-03
+     * @since  2012-04-03
      */    
     public function cacheRefresh()
     {
@@ -1264,12 +1255,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Delete the cache of all elements of an entity (Page, TranslationPages, widgets)
      *
-     * @params object $entity An entity class
+     * @param object  $entity            An entity class
+     * @param boolean $delete_cache_only True to delete only cache
      * 
      * @return string
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-06-07
+     * @since  2014-06-07
      */
     public function cacheDelete($entity, $delete_cache_only)
     {
@@ -1392,12 +1384,12 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Copy the page with all elements of a page (TranslationPages, widgets, translationWidgets, block)
      * 
-     * @param string	locale value.
-     * @return string	the new url of the page.
+     * @param string $locale locale value
+     * 
+     * @return string the new url of the page
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-03
+     * @since  2012-04-03
      */
     public function copyPage($locale = '')
     {
@@ -1495,13 +1487,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Refresh the cache of all elements of a page (TranslationPages, widgets, translationWidgets)
      *
-     * @param  string    $type        ['page', 'block', 'widget']
-     * @param  string    $entity
-     * @return string                Returns the requested url.
+     * @param string $type   ['page', 'block', 'widget']
+     * @param string $entity Entity
+     * 
+     * @return string Returns the requested url.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-03
+     * @since  2012-04-03
      */
     public function getUrlByType($type, $entity = null)
     {
@@ -1621,15 +1613,15 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
     /**
      * Return all urls of a page
      * 
-     * @param  \Sfynx\CmfBundle\Entity\Page
-     * @param  string    $type        ['sql']
+     * @param Page   $page Page entity
+     * @param string $type ['sql']
+     * 
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-06-21
      */
-    public function getUrlByPage(\Sfynx\CmfBundle\Entity\Page $page, $type = '')
+    public function getUrlByPage(Page $page, $type = '')
     {        
         $urls = array();
         // we register all urls of the page
@@ -1638,19 +1630,22 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 $locale = $translationPage->getLangCode()->getId();
                 $url    = $page->getUrl();
                 $slug   = $translationPage->getSlug();
-                switch (true) {
-                    case ( !empty($url) && !empty($slug) ):
-                        $urls[$locale] = $url . "/" .$slug;
-                        break;
-                    case (!empty($url) && empty($slug)) :
-                        $urls[$locale] = $url;
-                        break;
-                    case (empty($url) && !empty($slug)) :
-                        $urls[$locale] = $slug;
-                        break;
-                    case (empty($url) && empty($slug)) :
-                        $urls[$locale] = "";
-                        break;
+                if (!empty($url)
+                        && !empty($slug)
+                ) {
+                    $urls[$locale] = $url . "/" .$slug;
+                } elseif (!empty($url)
+                        && empty($slug)
+                ) {
+                    $urls[$locale] = $url;
+                } elseif (empty($url)
+                        && !empty($slug)
+                ) {
+                    $urls[$locale] = $slug;
+                } elseif (empty($url)
+                        && empty($slug)
+                ) {
+                    $urls[$locale] = "";
                 }
                 $is_prefix_locale = $this->container
                         ->getParameter("pi_app_admin.page.route.with_prefix_locale");
@@ -1666,5 +1661,5 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
         }
 
         return $urls;
-    }      
+    }        
 }

@@ -136,12 +136,12 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
      *
      * @param string $id
      * @param string $lang
-     * @param array     $params
+     * @param array  $params
+     * 
      * @return string
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2014-07-21
+     * @since  2014-07-21
      */
     public function renderSource($id, $lang = '', $params = null)
     {
@@ -151,15 +151,15 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         $NameAction      = $this->getCurrentWidget()->getAction();
         $id              = $this->getCurrentWidget()->getId();
         $cssClass        = $this->container->get('sfynx.tool.string_manager')->slugify($this->getCurrentWidget()->getConfigCssClass());
-        $lifetime  		 = $this->getCurrentWidget()->getLifetime();
-        $cacheable 		 = strval($this->getCurrentWidget()->getCacheable());
-        $update    		 = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
-        $public    		 = strval($this->getCurrentWidget()->getPublic());
+        $lifetime  	 = $this->getCurrentWidget()->getLifetime();
+        $cacheable 	 = strval($this->getCurrentWidget()->getCacheable());
+        $update    	 = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
+        $public    	 = strval($this->getCurrentWidget()->getPublic());
         $cachetemplating = strval($this->getCurrentWidget()->getCacheTemplating());
-        $sluggify  		 = strval($this->getCurrentWidget()->getSluggify());
-        $ajax      		 = strval($this->getCurrentWidget()->getAjax());
-        $is_secure		 = $this->getCurrentWidget()->getSecure();
-        $heritage		 = $this->getCurrentWidget()->getHeritage();
+        $sluggify  	 = strval($this->getCurrentWidget()->getSluggify());
+        $ajax      	 = strval($this->getCurrentWidget()->getAjax());
+        $is_secure	 = $this->getCurrentWidget()->getSecure();
+        $heritage	 = $this->getCurrentWidget()->getHeritage();
         
 //        $configureXml    = $this->container->get('sfynx.tool.string_manager')->filtreString($this->getCurrentWidget()->getConfigXml());
 //        $options = array(
@@ -171,11 +171,11 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         $if_script    = "";
         $endif_script = "";
         if ( $is_secure && !is_null($heritage) && (count($heritage) > 0) ) {
-        	$heritages_info = array_merge($heritage, $this->container->get('sfynx.auth.role.factory')->getNoAuthorizeRoles($heritage));
-        	if ( !is_null($heritages_info) ) {
-        		$if_script      = $heritages_info['twig_if'];
-        		$endif_script   = $heritages_info['twig_endif'];
-        	}
+            $heritages_info = array_merge($heritage, $this->container->get('sfynx.auth.role.factory')->getNoAuthorizeRoles($heritage));
+            if ( !is_null($heritages_info) ) {
+                $if_script      = $heritages_info['twig_if'];
+                $endif_script   = $heritages_info['twig_endif'];
+            }
         }
         $source  = $if_script;
         if (!empty($cssClass)) {
@@ -194,16 +194,15 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
     /**
      * Returns the render source of a tag by the twig cache service.
      *
-     * @param string    $tag
-     * @param string    $id
-     * @param string    $lang
-     * @param array     $params
+     * @param string $tag
+     * @param string $id
+     * @param string $lang
+     * @param array  $params
      *
      * @return string    extension twig result
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-04-19
+     * @since  2012-04-19
      */
     public function renderCache($serviceName, $tag, $id, $lang, $params = null)
     {
@@ -226,15 +225,14 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
     /**
      * Returns the render source of a service manager.
      *
-     * @param string    $id
-     * @param string    $lang
-     * @param array        $params
+     * @param string $id
+     * @param string $lang
+     * @param array  $params
      *
-     * @return string    extension twig result
-     * @access    public
-     *
+     * @return string extension twig result
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-04-19
+     * @since  2012-04-19
      */
     public function renderService($serviceName, $id, $lang, $params = null)
     {
@@ -282,7 +280,7 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
                 'key'           =>$esi_key,
                 'server'        =>$esi_server
             ));
-            // we get config.yml content in array
+            //
             $isEsi = $this->container->getParameter('pi_app_admin.page.esi.authorized');
             if ($isEsi) {
                 $is_esi_activate = true;
