@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="unit" description="tests unit build definition" default="unit:info" basedir=".">
+
+    <target name="unit:info">
+        <echo>This file contains the central configuration for unit test with phpunit</echo>
+    </target>
+
+    <target name="unit:quick"
+          depends="unit:unit_withoutcover"
+          description="Launch phpunit without code covering" />
+
+    <target name="unit:normal"
+          depends="unit:unit"
+          description="Launch phpunit with code covering." />
+
+
+    <!-- Unit tests -->
+    <target name="unit:unit" 
+        description="Executes unit tests.">
+        <echo msg="Running unit tests ..." />
+        <exec command="phpunit --log-junit ${dir.reports}/phpunit.xml --coverage-clover ${dir.reports.coverage}/clover.xml --coverage-html ${dir.reports.coverage}/ -c ${dir.app} --debug" passthru="true" />
+    </target>
+
+    <target name="unit:unit_withoutcover" 
+        description="Executes unit tests without code coverage.">
+        <echo msg="Running unit tests ..." />
+        <exec command="phpunit --log-junit ${dir.reports}/phpunit.xml -c ${dir.app} --debug" passthru="true" />
+    </target>
+
+</project>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Symfony2 project" basedir="." default="info">
+
+    <!-- use test tools from composer instalation -->
+    <php function="putenv">
+        <param value="PATH=${env.PATH}:./bin" />
+    </php>
+  
+    <!-- ****************** -->
+    <!-- Project properties -->
+    <!-- ****************** -->
+
+    <property name="dir.app" value="${project.basedir}/app" />
+    <property name="dir.src" value="${project.basedir}/src" />
+    <property name="dir.bin" value="${project.basedir}/bin" />
+    <property name="dir.build" value="${project.basedir}/build" />
+    <property name="dir.docs" value="${dir.build}/docs" />
+    <property name="dir.browser" value="${dir.build}/browser" />
+    <property name="dir.reports" value="${dir.build}/logs" />
+    <property name="dir.reports.pdepend" value="${dir.reports}/pdepend" />
+    <property name="dir.reports.coverage" value="${dir.reports}/coverage" />
+    <property name="url.test" value="http://www.sfynx.fr" />
+
+    <!-- Filesets -->
+    <fileset id="sourcecode" dir="${dir.src}">
+        <include name="**/*.php" />
+        <exclude name="**/map/*"/>
+        <exclude name="**/om/*"/>
+    </fileset>
+
+    <!-- Imported tasks -->
+    <import file="${dir.app}/phing/prepare-build.xml" />
+    <import file="${dir.app}/phing/doctrine.xml" />
+    <import file="${dir.app}/phing/static-analysis.xml" />
+    <import file="${dir.app}/phing/test-php-unit.xml" />
+    <import file="${dir.app}/phing/documentation.xml" />
+
+    <!-- ************ -->
+    <!-- Main Targets -->
+    <!-- ************ -->
+
+    <target name="info">
+        <echo>This file contains all tasks used for a symfony2 project for CI with Jenkins or local build</echo>
+        <echo>You can launch:</echo>
+        <echo> * build:local =>                     Launch test, code analysis and tests locally</echo>
+        <echo> * build:local-documentation =>       Build documentation locally</echo>
+        <echo> * build:jenkins-quick =>             Quick build for CI on Jenkins (on dev fork)</echo>
+        <echo> * build:jenkins-normal =>            Build on dev branch for CI on Jenkins</echo>
+        <echo> * build:jenkins-documentation =>     Generate documentation on Jenkins</echo>
+    </target>
+
+    <target name="build:local"
+          depends="prepare:local, static:quick, unit:quick"
+          description="Launch test, code analysis and tests locally" />
+
+    <target name="build:local-documentation"
+          depends="prepare:local, documentation:phpdoc"
+          description="Build documentation locally" />  
+
+    <target name="build:test-deploy"
+          depends="prepare:jenkins, doctrine:update, unit:quick"
+          description="Launch phpunit test before deploy" />
+
+    <target name="build:jenkins-quick"
+          depends="prepare:jenkins, doctrine:update, static:quick, unit:quick"
+          description="Quick build (for example for fork, or test Pull Request) with rapide static analyse, and unit test without code coverage" />
+
+    <target name="build:jenkins-normal"
+          depends="prepare:jenkins, doctrine:update, static:all, unit:normal"
+          description="Build for CI on Jenkins, with static analyse, unit test with code coverage" />
+
+    <target name="build:jenkins-documentation"
+          depends="prepare:jenkins, static:all, documentation:create"
+          description="Generate documentation on Jenkins" />
+</project>

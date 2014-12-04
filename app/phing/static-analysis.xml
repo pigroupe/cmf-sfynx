@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="static" description="Php static code analysis build definition" default="static:info" basedir=".">
+
+    <target name="static:all"
+        depends="static:cs, static:cpd, static:md, static:depend"
+        description="Static analysis of code with Php code sniffer, copy/paste detector, PHP Mess Detector and PhpDepend is not used" />
+
+    <target name="static:quick"
+        depends="static:cs, static:cpd"
+        description="Static analysis of code with Php code sniffer and copy/paste detecto" />
+
+    <!-- Php code sniffer -->
+    <target name="static:cs" description="statics coding standard.">
+        <echo msg="staticing coding standard ..." />
+        <phpcodesniffer standard="PSR2"
+                        showSniffs="false"
+                        showWarnings="true">
+            <fileset refid="sourcecode" />
+            <formatter type="checkstyle" outfile="${dir.reports}/checkstyle.xml" />
+        </phpcodesniffer>
+    </target>
+
+    <!-- copy/paste detector-->
+    <target name="static:cpd" description="statics similar code blocks.">
+        <echo msg="staticing similar code blocks ..." />
+        <exec command="bin/phpcpd --min-tokens=50 --min-lines=5 --names-exclude=Base*.php,**/map/*,**/om/* --log-pmd ${dir.reports}/pmd-cpd.xml ${dir.src}" passthru="false" />
+    </target>
+
+    <!-- PhpDepend -->
+    <target name="static:depend" description="Analyse du couplage et des dépendances du code.">
+        <echo msg="analyse du couplage et des dépendances du code ..." />
+        <exec command="bin/pdepend --jdepend-xml=${dir.reports.pdepend}/jdepend.xml --jdepend-chart=${dir.reports.pdepend}/dependencies.svg --overview-pyramid=${dir.reports.pdepend}/overview-pyramid.svg ${dir.src}" passthru="false" />
+    </target>
+    
+    <!-- PHP Mess Detector -->
+    <target name="static:md" description="Analyse du code mort.">
+        <echo msg="Analyse du code mort ..." />
+        <exec command="bin/phpmd  ${dir.src} xml codesize,unusedcode,naming,design --exclude **/map/*,**/om/* --reportfile ${dir.reports}/pmd.xml" passthru="true" />
+    </target>
+
+    <target name="static:info">
+        <echo>This file contains the central configuration for Php static code analysis</echo>
+    </target>
+
+</project>

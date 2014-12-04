@@ -149,16 +149,15 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Create the Etag and returns the render source it.
      *
-     * @param string    $tag
-     * @param string    $id
-     * @param string    $lang
-     * @param array     $params
+     * @param string $tag
+     * @param string $id
+     * @param string $lang
+     * @param array  $params
      *
-     * @return string    translation widget content
-     * @access    public
-     *
+     * @return string translation widget content
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-04-19
+     * @since  2012-04-19
      */
     public function run($tag, $id, $lang, $params = null, $isCreateJsonFile = false)
     {
@@ -207,14 +206,14 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Create the json path name
      *
-     * @param string    $type
-     * @param string    $id
-     * @param string    $lang
+     * @param string $type Type value
+     * @param string $id   id value 
+     * @param string $lang lang value
+     * 
      * @return string   path value
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2014-04-03
+     * @since  2014-04-03
      */    
     public function createJsonFileName($type, $id, $lang = '') 
     {
@@ -222,8 +221,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         $path  = $this->container->getParameter("pi_app_admin.cache_dir.etag");
         if ($type == 'page-json') {
             $path_json_file = $path . "page-json-entity/p-{$id}.json";
-        } else
-        if ($type == 'esi') {
+        } elseif ($type == 'esi') {
             $path_json_file = $path . "esi/etag-{$id}-{$lang}.json";
         } elseif ($type == 'esi-tmp') {
             $path_json_file = $path . "esi/tmp/" . md5($id) ."-{$lang}.json";
@@ -257,15 +255,15 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Create/update json file Etag with the tag value.
      *
-     * @param string    $tag
-     * @param string    $id
-     * @param string    $lang
-     * @param array     $params
-     * @return boolean    true if the tag have been insert corectly in the json file.
-     * @access    public
-     *
+     * @param string $tag
+     * @param string $id
+     * @param string $lang
+     * @param array  $params
+     * 
+     * @return boolean true if the tag have been insert corectly in the json file.
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2014-04-03
+     * @since  2014-04-03
      */
     public function setJsonFileEtag($tag, $id, $lang, $params = null)
     {
@@ -339,10 +337,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * Create the repository of the cache widget files
      *
      * @return string   path value
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2014-06-21
+     * @since  2014-06-21
      */
     public function createCacheWidgetRepository()
     {
@@ -356,11 +353,11 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * Refresh the cache by name
      *
      * @param string $name    the name of the cache file.
+     * 
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-03
+     * @since  2012-04-03
      */
     public function cacheRefreshByname($name, $onlyDelete = true)
     {
@@ -451,7 +448,6 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-03-20
      */
@@ -466,10 +462,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * @param string $lang
      * 
      * @return string
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-04-18
+     * @since  2012-04-18
      */
     public function render($lang = '')
     {
@@ -498,13 +493,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      *
      * @param string $id
      * @param string $lang
-     * @param array     $params
+     * @param array  $params
      * 
      * @return string
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function renderSource($id, $lang = '', $params = null){}
     
@@ -514,14 +508,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * Responses with neither a freshness lifetime (Expires, max-age) nor cache
      * validator (Last-Modified, ETag) are considered uncacheable.
      *
-     * @param object $object
+     * @param object   $object
      * @param Response $response
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-05
+     * @since  2012-01-05
      */
     protected function configureCache($object, Response $response)
     {
@@ -537,6 +530,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         }    
         if (method_exists($object, 'getLifetime') && $object->getLifetime()) {
             $response->setSharedMaxAge($object->getLifetime());
+            // Une fois que ESI est utilisée, il ne faut pas oublier de toujours utiliser la directive s-maxage à la place de max-age. 
+            // Comme le navigateur ne reçoit que la réponse « agrégée » de la ressource, il n'est pas conscient de son « sous-contenu », 
+            // il suit la directive max-age et met toute la page en cache. Et ce n'est pas ce que vous voulez.
+            // we get instances of parser and dumper component yaml files.
             $isEsi = $this->container->getParameter('pi_app_admin.page.esi.authorized');
             if ($isEsi) {
             } else {
@@ -569,14 +566,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Sets the response to one tree.
      *
-     * @param strgin $Etag
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param strgin   $Etag
+     * @param Response $response
      *
      * @return void
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-19
+     * @since  2012-04-19
      */
     private function setResponse($Etag, Response $response)
     {
@@ -586,9 +582,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Gets the container instance.
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getContainer()
@@ -599,9 +594,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the current page
      *
-     * @return \Sfynx\CmfBundle\Entity\Page
+     * @return Page
      * @access public
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-01-23
      */
@@ -613,13 +607,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Sets the current page.
      * 
-     * @param null\Sfynx\CmfBundle\Entity\Page $page
+     * @param null|Page $page
      *
      * @return void
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     public function setCurrentPage(Page $page = null)
     {
@@ -629,12 +622,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the current Widget
      *
-     * @param int $id    id widget
-     * @return \Sfynx\CmfBundle\Entity\Widget
+     * @param int $id id widget
+     * 
+     * @return Widget
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function getCurrentWidget()
     {
@@ -644,13 +637,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Sets the current Widget.
      *
-     * @param null\Sfynx\CmfBundle\Entity\Widget $widget
+     * @param null|Widget $widget
      *
      * @return void
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function setCurrentWidget(Widget $widget = null)
     {
@@ -662,11 +654,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the current Widget
      *
-     * @return \Sfynx\CmfBundle\Entity\TranslationWidget
+     * @return TranslationWidget
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-15
+     * @since  2012-02-15
      */
     public function getCurrentTransWidget()
     {
@@ -676,13 +667,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Sets the current Widget.
      *
-     * @param null\Sfynx\CmfBundle\Entity\TranslationWidget $transWidget
+     * @param null|TranslationWidget $transWidget
      *
      * @return void
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-15
+     * @since  2012-02-15
      */
     public function setCurrentTransWidget(TranslationWidget $transWidget = null)
     {
@@ -692,13 +682,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Sets widget translations.
      *
-     * @param \Sfynx\CmfBundle\Entity\Widget $widget
+     * @param Widget $widget
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-13
+     * @since  2012-02-13
      */
     protected function setWidgetTranslations(Widget $widgets){}
     
@@ -759,13 +748,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the blocks of a page.
      *
-     * @param int $idpage    id page
+     * @param int $idpage id page
      * 
      * @return array of \Sfynx\CmfBundle\Entity\Block
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     public function getBlocksByPageId($idpage)
     {
@@ -779,13 +767,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the widget with this id.
      *
-     * @param int $idWidget    id widget
+     * @param int $idWidget id widget
      *
-     * @return \Sfynx\CmfBundle\Entity\Widget
+     * @return Widget
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function getWidgetById($idWidget)
     {
@@ -801,13 +788,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the block with this id.
      *
-     * @param int $id    id block
+     * @param int $id id block
      *
-     * @return \Sfynx\CmfBundle\Entity\Block
+     * @return Block
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-05-09
+     * @since  2012-05-09
      */
     public function getBlockById($idBlock)
     {
@@ -817,14 +803,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the translation of a page.
      *
-     * @param int         $idpage        id page
-     * @param string     $lang
+     * @param int    $idpage id page
+     * @param string $lang   lang value
      * 
-     * @return \Sfynx\CmfBundle\Entity\TranslationPage
+     * @return TranslationPage
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     public function getTranslationByPageId($idpage, $lang = '')
     {
@@ -858,14 +843,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the translation of a widget.
      *
-     * @param int         $idwidget        id widget
-     * @param string     $lang
+     * @param int    $idwidget id widget
+     * @param string $lang     lang vlue
      *
-     * @return \Sfynx\CmfBundle\Entity\TranslationWidget
+     * @return TranslationWidget
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-13
+     * @since  2012-02-13
      */
     public function getTranslationByWidgetId($idwidget, $lang = '')
     {
@@ -907,14 +891,13 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     /**
      * Returns the response given in param.
      *
-     * @param string $type values = ['layout', 'page', 'widget']
-     * @param int    $id   id of the type entity given in param
+     * @param string  $type values = ['layout', 'page', 'widget']
+     * @param integer $id   id of the type entity given in param
      * 
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */
     public function getResponseByIdAndType($type, $id)
     {
@@ -933,7 +916,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * @return array
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-31
+     * @since  2012-01-31
      */    
     public function parseTemplateParam($RenderResponseParam)
     {

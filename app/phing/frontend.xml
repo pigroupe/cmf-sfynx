@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="casperjs" description="Frontend build" default="info" basedir=".">
+    
+    <target name="build:main" depends="build:cache, frontend:assets" />
+
+    <target name="build:cache">
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="cache:clear" />
+        </exec>
+    </target>
+
+    <target name="frontend:assets">
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="assetic:dump" />
+        </exec>
+
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="assets:install" />
+            <arg line="--symlink" />
+        </exec>
+    </target>
+
+    <target name="info">
+        <echo>This file is a shortcut build for frontend-ers</echo>
+    </target>
+</project>

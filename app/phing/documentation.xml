@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="documentation" description="Documentation build definition" default="documentation:info" basedir=".">
+
+    <target name="documentation:create"
+          depends="documentation:browser, documentation:phpdoc"
+          description="Generate project documentation with PHP Documentor and PHP Code Browser" />
+
+    <!-- PHP Code Browser -->
+    <target name="documentation:browser" description="Generating code browser..."> 
+        <exec command="phpcb
+            --log ${dir.reports} 
+            --source ${project.basedir}/src 
+            --output ${dir.browser}" />
+    </target>
+
+    <!-- PHP Documentor -->
+    <target name="documentation:phpdoc" description="Generate API documentation."> 
+        <echo msg="Generating API documentation with PHPDoc..." />
+        <exec command="phpdoc -d ${dir.src} -t ${dir.docs} --template responsive" />
+    </target>
+
+    <target name="documentation:info">
+        <echo>This file contains the central configuration for generate documentation</echo>
+    </target>
+
+</project>

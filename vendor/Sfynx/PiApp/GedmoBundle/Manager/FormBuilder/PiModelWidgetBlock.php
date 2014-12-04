@@ -179,10 +179,10 @@ class PiModelWidgetBlock extends PiFormBuilderManager
     /**
      * Sets JS script.
      *
-     * @param    array $options
+     * @param array $options
+     * 
      * @access public
      * @return void
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function renderScript(array $option) 
