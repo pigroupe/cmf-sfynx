@@ -11,11 +11,6 @@
         depends="doctrine:rebuild-db, doctrine:build, doctrine:fixtures"
         />
 
-    <target name="doctrine:build" description="Create Doctrine Schemas">
-        <exec command="php app/console doctrine:schema:update --force"
-            passthru="true"/>
-    </target>
-
     <target name="doctrine:rebuild-db">
         <exec executable="php" passthru="true">
             <arg line="app/console" />
@@ -28,6 +23,11 @@
             <arg line="doctrine:database:create" />
         </exec>
     </target>
+    
+    <target name="doctrine:build" description="Create Doctrine Schemas">
+        <exec command="php app/console doctrine:schema:update --force"
+            passthru="true"/>
+    </target>    
 
     <target name="doctrine:fixtures">
         <exec executable="php" passthru="true">
