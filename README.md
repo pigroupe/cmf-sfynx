@@ -510,7 +510,7 @@ To connect as default super administrator:
 
 **The password must be changed at the first use.**
 
-### Run the tests
+### Step 7: Run the tests
 
 ``` bash
     
