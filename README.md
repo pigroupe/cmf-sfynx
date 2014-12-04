@@ -392,6 +392,7 @@ Many systems allow you to use ACL chmod a +.
 Then you must add the uploads/media folder to allow specific users to load :
 
 ``` bash
+chmod –R 0777 app/cachesfynx
 chmod –R 0777 app/cache
 chmod –R 0777 app/log
 
@@ -420,11 +421,19 @@ http://getcomposer.org/ or just run the following command:
 ``` bash
 
     php  composer.phar install
-    php  composer.phar selfupdate
 
 ```
 
-### Step 5: Create database, tables and fixtures
+### Step 5: Create database, tables and fixtures with phing
+
+**Execute initialize.xml configuration**
+``` bash
+
+    phing -f app/phing/initialize.xml rebuild
+
+```
+
+### Step 5: Create database, tables and fixtures without phing
 
 - There's no way to configure these defaults inside Doctrine, as it tries to be as agnostic as possible in terms of environment configuration. 
 - One way to solve this problem is to configure server-level defaults.
@@ -500,3 +509,12 @@ To connect as default super administrator:
 ```
 
 **The password must be changed at the first use.**
+
+### Run the tests
+
+``` bash
+    
+    phpunit -c app/
+    casperjs test app/Tests/casperjs/ --base-url=127.0.0.1:4042 --pre=app/Resources/casperjs/pre.js
+
+```

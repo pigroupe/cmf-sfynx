@@ -4,7 +4,7 @@
     <import file="app/phing/frontend.xml" />
 
     <target name="rebuild"
-        depends="clean-cache, composer:install, doctrine:rebuild, solr:update, cache:clear, frontend:assets"
+        depends="clean-cache, composer:install, doctrine:rebuild, cache:clear, frontend:assets"
         description="Rebuild dev environement from the scratch"
         />
 
@@ -18,10 +18,6 @@
 
     <target name="composer:install" description="Installing vendors with composer">
         <exec command="composer install" passthru="true" />
-    </target>
-
-    <target name="phpcr:fixtures">
-        <exec command="echo 'Y' | php app/console doctrine:phpcr:fixtures:load" passthru="true"/>
     </target>
 
     <target name="cache:clear">
