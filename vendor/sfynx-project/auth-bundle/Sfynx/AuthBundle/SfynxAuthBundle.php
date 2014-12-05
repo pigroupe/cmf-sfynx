@@ -2,9 +2,9 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage   Sfynx
+ * @subpackage Sfynx
  * @package    Bundle
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,9 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * BootStrap configuration and managment of the user Bundle
  *
- * @subpackage   Sfynx
+ * @subpackage Sfynx
  * @package    Bundle
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class SfynxAuthBundle extends Bundle
 {
@@ -84,23 +84,6 @@ class SfynxAuthBundle extends Bundle
         // Security
         $container->loadFromExtension('security', array(
                 'role_hierarchy' => $heritage_role,
-//                 'providers' => array(
-//                         'in_memory' => array(
-//                                 'memory' => array(
-//                                     'users' => array(
-//                                             'etienne' => array('password' => 'coincoin', 'roles' => 'ROLE_USER'),
-//                                             'admin'   => array('password' => 'adminpsw', 'roles' => 'ROLE_ADMIN'),
-//                                     ),
-//                                 ),
-//                         ),
-//                         #
-//                         # the bundle's packaged user provider service available
-//                         # The id of the bundle's user provider service is fos_user.user_manager.
-//                         #
-//                         'fos_userbundle' => array(
-//                         'id'             => 'fos_user.user_manager'
-//                         ),    
-//                 ),
                 #
                 # The access_control section is where you specify the credentials necessary for users trying to access specific parts of your application.
                 #

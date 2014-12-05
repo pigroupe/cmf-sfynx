@@ -1,7 +1,6 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }    
-    - { resource: "@SfynxAuthBundle/Resources/config/security.yml" }
     - { resource: "@SfynxAclManagerBundle/Resources/config/security.yml" }
     - { resource: "@SfynxAdminBundle/Resources/config/security.yml" }
 
@@ -32,7 +31,7 @@ framework:
 #        gc_divisor:           ~
 #        gc_probability:       ~
 #        gc_maxlifetime:       ~
-        save_path:            %kernel.cache_dir%/sessions               
+#        save_path:            %kernel.cache_dir%/sessions               
     #esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php       
     fragments:  { path: /_proxy  } # Pour utiliser les tags ESI dans les templates Twig 
     
