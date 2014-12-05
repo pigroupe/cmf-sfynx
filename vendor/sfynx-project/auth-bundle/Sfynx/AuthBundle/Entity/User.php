@@ -60,7 +60,7 @@ class User extends AbstractUser
     /**
      * @Assert\Length(max=50, groups={"registration"}, maxMessage="user.first_name.max_length")
      * @Assert\NotBlank(groups={"registration"}, message="user.field_required")
-     * @Assert\Regex(pattern="/^[\p{L} ,\'-]+$/u",groups={"registration"}, message="user.first_name.regex")
+     * @Assert\Regex(pattern="/^[[:alpha:]\s'\x22\-_&@!?()\[\]-]*$/u",groups={"registration"}, message="user.first_name.regex")
      */
     protected $username;    
     
@@ -70,7 +70,7 @@ class User extends AbstractUser
      * @ORM\Column(name="name", type="string", nullable = true)
      * @Assert\Length(max=50, groups={"registration"}, maxMessage="user.first_name.max_length")
      * @Assert\NotBlank(groups={"registration"}, message="user.field_required")
-     * @Assert\Regex(pattern="/^[\p{L} ,\'-]+$/u",groups={"registration"}, message="user.first_name.regex")
+     * @Assert\Regex(pattern="/^[[:alpha:]\s'\x22\-_&@!?()\[\]-]*$/u",groups={"registration"}, message="user.first_name.regex")
      */
     protected $name;
         
@@ -80,7 +80,7 @@ class User extends AbstractUser
      * @ORM\Column(name="nickname", type="string", nullable = true)
      * @Assert\Length(max=50, groups={"registration"}, maxMessage="user.first_name.max_length")
      * @Assert\NotBlank(groups={"registration"}, message="user.field_required")
-     * @Assert\Regex(pattern="/^[\p{L} ,\'-]+$/u",groups={"registration"}, message="user.first_name.regex")
+     * @Assert\Regex(pattern="/^[[:alpha:]\s'\x22\-_&@!?()\[\]-]*$/u",groups={"registration"}, message="user.first_name.regex")
      */
     protected $nickname;   
 
@@ -314,9 +314,9 @@ class User extends AbstractUser
     /**
      * Set langCode
      *
-     * @param \Sfynx\AuthBundle\Entity\Langue $langCode
+     * @param Langue $langCode Language entity
      */
-    public function setLangCode(\Sfynx\AuthBundle\Entity\Langue $langCode)
+    public function setLangCode(Langue $langCode)
     {
         $this->langCode = $langCode;
     }
@@ -324,7 +324,7 @@ class User extends AbstractUser
     /**
      * Get langCode
      *
-     * @return \Sfynx\AuthBundle\Entity\Langue 
+     * @return Langue 
      */
     public function getLangCode()
     {

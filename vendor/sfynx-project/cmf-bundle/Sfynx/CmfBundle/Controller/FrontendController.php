@@ -12,17 +12,13 @@
  */
 namespace Sfynx\CmfBundle\Controller;
 
-use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
+use Sfynx\CmfBundle\Controller\CmfabstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 use Sfynx\CmfBundle\Entity\Enquiry;
 use Sfynx\CmfBundle\Form\EnquiryType;
 use Sfynx\CmfBundle\Entity\Page as Page;
@@ -30,16 +26,15 @@ use Sfynx\CmfBundle\Entity\Page as Page;
 /**
  * Frontend controller.
  *
- * @subpackage   Admin_Controllers
+ * @subpackage Admin_Controllers
  * @package    Controller
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class FrontendController extends CmfabstractController
 {
     /**
      * Displays a page
-     *
+     * 
      * @return Response
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since  2012-01-24
@@ -266,7 +261,7 @@ class FrontendController extends CmfabstractController
         }
         
         return $this->render("SfynxCmfBundle:Frontend:$template", array(
-                'NoLayout'    => $NoLayout,
+            'NoLayout'    => $NoLayout,
         ));        
     }  
 
@@ -277,7 +272,7 @@ class FrontendController extends CmfabstractController
      * 
      * @return string content of the file
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-12
+     * @since  2012-01-12
      */
     public function contentfileAction($file)
     {

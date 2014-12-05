@@ -31,10 +31,9 @@ use Sfynx\CmfBundle\Form\PageByTransType as PageType;
 /**
  * PageByTrans controller.
  * 
- * @subpackage   Admin_Controllers
+ * @subpackage Admin_Controllers
  * @package    Controller
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PageByTransController extends CmfabstractController
 {
