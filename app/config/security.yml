@@ -1,4 +1,18 @@
 security:
+    
+#    role_hierarchy:
+#        ROLE_ADMIN:       ROLE_USER
+#        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]            
+#
+#    access_control:
+#        - { path: ^/_wdt/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/_profiler/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/js/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/css/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/login_check$, roles: ROLE_USER }
+#        #- { path: ^/admin/, roles: ROLE_ADMIN }
+#        - { path: ^/dashboard/, roles: ROLE_USER }    
 
     access_denied_url: /unauthorized
     
@@ -46,28 +60,9 @@ security:
                 invalidate_session: false
             anonymous: true
             
-        # -> end custom configuration  
-        
-        secured_area:
-            pattern: ^/front/secured/
-            form_login:
-                provider: fos_userbundle
-                login_path: /front/secured/login
-                check_path: /front/secured/login_check
-                #default_target_path: /home
-            logout:
-                path: /front/secured/logout
-                target: /
-            anonymous: true
-        # -> end custom configuration          
-                
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        login:
-            pattern:  ^/demo/secured/login$
-            security: false      
 
 
 # jms_security_extra Configuration

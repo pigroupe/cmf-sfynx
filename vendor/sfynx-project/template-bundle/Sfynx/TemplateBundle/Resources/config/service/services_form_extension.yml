@@ -1,6 +1,16 @@
 services:
+
+    sfynx.template.form.field_error_type:
+           class: Sfynx\TemplateBundle\Form\Extension\ErrorTypeFormTypeExtension
+           arguments:
+                - { error_type: %sfynx.template.form.extension.error_type% }
+           tags:
+                - { name: form.type_extension, alias: form }
+                
     sfynx.template.form.help_extension:
-           class: Sfynx\TemplateBundle\Form\Extension\HelpFieldTypeExtension
+           class: Sfynx\TemplateBundle\Form\Extension\HelpFormTypeExtension
+           arguments:
+                - { tooltip_icon: %sfynx.template.form.extension.tooltip.icon%, tooltip_placement: %sfynx.template.form.extension.tooltip.placement% }           
            tags:
                 - { name: form.type_extension, alias: form }
 
@@ -9,27 +19,19 @@ services:
            tags:
                 - { name: form.type_extension, alias: form }
 
-    sfynx.template.form.addinfo_extension:
-           class: Sfynx\TemplateBundle\Form\Extension\AddinfoFieldTypeExtension
-           tags:
-                - { name: form.type_extension, alias: form }
-                
-    sfynx.template.form.field_error_type:
-           class: Sfynx\TemplateBundle\Form\Extension\ErrorTypeFieldTypeExtension
-           tags:
-                - { name: form.type_extension, alias: form }
 
     sfynx.template.form.legend_extension:
            class: Sfynx\TemplateBundle\Form\Extension\LegendFormTypeExtension
            arguments:
-                - { show_legend: %sfynx.template.form.extension.show_legend%, show_child_legend: %sfynx.template.form.extension.show_child_legend% }
+                - { show_legend: %sfynx.template.form.extension.show_legend%, show_child_legend: %sfynx.template.form.extension.show_child_legend%, render_fieldset: %sfynx.template.form.extension.render_fieldset%, render_required_asterisk: %sfynx.template.form.extension.render_required_asterisk%, render_optional_text: %sfynx.template.form.extension.render_optional_text%, errors_on_forms: %sfynx.template.form.extension.errors_on_forms%}
            tags:
                 - { name: form.type_extension, alias: form }
 
-    sfynx.template.form.error_type_extension:
-           class: Sfynx\TemplateBundle\Form\Extension\ErrorTypeFormTypeExtension
+    sfynx.template.form.widget_type_extension:
+           class: Sfynx\TemplateBundle\Form\Extension\WidgetFormTypeExtension
            arguments:
-                - { error_type: %sfynx.template.form.extension.error_type% }
+                - { checkbox_label: %sfynx.template.form.extension.checkbox_label% }           
            tags:
-                - { name: form.type_extension, alias: form }
+                - { name: form.type_extension, alias: form }      
+                
                 

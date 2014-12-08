@@ -11,4 +11,12 @@ sfynx_template:
         show_legend: true
         show_child_legend: false
         error_type: inline  
+        render_fieldset: true
+        render_required_asterisk: false
+        render_optional_text: true
+        errors_on_forms: false
+        checkbox_label: 'both'
+        tooltip:
+            icon: 'icon-info-sign'
+            placement: 'top' 
 ```

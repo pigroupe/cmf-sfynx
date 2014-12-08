@@ -71,62 +71,62 @@ class PiToolExtension extends \Twig_Extension
      */    
     public function getFilters() {
         return array(
-                
-                // default
-                'php_funct'        => new \Twig_Filter_Method($this, 'phpFilter'),
-                
-                // debug
-                'dump'             => new \Twig_Filter_Method($this, 'dumpFilter'),
-                'print_r'         => new \Twig_Filter_Method($this, 'print_rFilter'),
-                'get_class'     => new \Twig_Filter_Method($this, 'get_classFilter'),
-    
-                // markup
-                'nl2br'         => new \Twig_Filter_Method($this, 'nl2brFilter'),
-                'join'             => new \Twig_Filter_Method($this, 'joinFilter'),
-    
-                // escape
-                'htmlspecialchars'     => new \Twig_Filter_Method($this, 'htmlspecialcharsFilter'),
-                'addslashes'         => new \Twig_Filter_Method($this, 'addslashesFilter'),
-                'htmlentities'        => new \Twig_Filter_Method($this, 'htmlentitiesFilter'),
-                
-                // text
-                'substr'            => new \Twig_Filter_Method($this, 'substrFilter'),
-                'ucfirst'            => new \Twig_Filter_Method($this, 'ucfirstFilter'),
-                'ucwords'            => new \Twig_Filter_Method($this, 'ucwordsFilter'),
-                'cleanWhitespace'    => new \Twig_Filter_Method($this, 'cleanWhitespaceFilter'),
-                'sanitize'            => new \Twig_Filter_Method($this, 'sanitizeFilter'),    
-                'slugify'            => new \Twig_Filter_Method($this, 'slugifyFilter'),
-                'departement'       => new \Twig_Filter_Method($this, 'departementFilter'),
 
-                'limite'            => new \Twig_Filter_Method($this, 'limitecaractereFilter'),
-                'splitText'         => new \Twig_Filter_Method($this, 'splitTextFilter'),
-                'splitHtml'         => new \Twig_Filter_Method($this, 'splitHtmlFilter'),
-                'truncateText'        => new \Twig_Filter_Method($this, 'truncateFilter'),
-                'cutText'            => new \Twig_Filter_Method($this, 'cutTextFilter'),
-        		'renderResponse'	=> new \Twig_Filter_Method($this, 'renderResponseFilter'),
-                
-                //array
-                'count'                => new \Twig_Filter_Method($this, 'countFilter'),
-                'reset'                => new \Twig_Filter_Method($this, 'resetFilter'),
-                'steps'                => new \Twig_Filter_Method($this, 'stepsFilter'),
-                'sliceTab'            => new \Twig_Filter_Method($this, 'arraysliceFilter'),
-                'end'                => new \Twig_Filter_Method($this, 'endFilter'),
-                'XmlString2array'    => new \Twig_Filter_Method($this, 'XmlString2arrayFilter'),
-                'orderBy'   		 => new \Twig_Filter_Method($this, 'orderByFilter'),
-        		'unset'                => new \Twig_Filter_Method($this, 'unsetFilter'),
-                
-                //translation
-                'translate_plural'    => new \Twig_Filter_Method($this, 'translatepluralFilter'),
-                'pluralize'            => new \Twig_Filter_Method($this, 'pluralizeFilter'),
-                'depluralize'        => new \Twig_Filter_Method($this, 'depluralizeFilter'),
-                
-                // cryptage
-                'encrypt'            => new \Twig_Filter_Method($this, 'encryptFilter'),
-                'decrypt'            => new \Twig_Filter_Method($this, 'decryptFilter'),
-        		'obfuscateLink'     => new \Twig_Filter_Method($this, 'obfuscateLinkFilter'),
-        		
-                // status
-                'status'         => new \Twig_Filter_Method($this, 'statusFilter'),
+            // default
+            'php_funct'        => new \Twig_Filter_Method($this, 'phpFilter'),
+
+            // debug
+            'dump'             => new \Twig_Filter_Method($this, 'dumpFilter'),
+            'print_r'         => new \Twig_Filter_Method($this, 'print_rFilter'),
+            'get_class'     => new \Twig_Filter_Method($this, 'get_classFilter'),
+
+            // markup
+            'nl2br'         => new \Twig_Filter_Method($this, 'nl2brFilter'),
+            'joinphp'             => new \Twig_Filter_Method($this, 'joinphpFilter'),
+
+            // escape
+            'htmlspecialchars'     => new \Twig_Filter_Method($this, 'htmlspecialcharsFilter'),
+            'addslashes'         => new \Twig_Filter_Method($this, 'addslashesFilter'),
+            'htmlentities'        => new \Twig_Filter_Method($this, 'htmlentitiesFilter'),
+
+            // text
+            'substr'            => new \Twig_Filter_Method($this, 'substrFilter'),
+            'ucfirst'            => new \Twig_Filter_Method($this, 'ucfirstFilter'),
+            'ucwords'            => new \Twig_Filter_Method($this, 'ucwordsFilter'),
+            'cleanWhitespace'    => new \Twig_Filter_Method($this, 'cleanWhitespaceFilter'),
+            'sanitize'            => new \Twig_Filter_Method($this, 'sanitizeFilter'),    
+            'slugify'            => new \Twig_Filter_Method($this, 'slugifyFilter'),
+            'departement'       => new \Twig_Filter_Method($this, 'departementFilter'),
+
+            'limite'            => new \Twig_Filter_Method($this, 'limitecaractereFilter'),
+            'splitText'         => new \Twig_Filter_Method($this, 'splitTextFilter'),
+            'splitHtml'         => new \Twig_Filter_Method($this, 'splitHtmlFilter'),
+            'truncateText'        => new \Twig_Filter_Method($this, 'truncateFilter'),
+            'cutText'            => new \Twig_Filter_Method($this, 'cutTextFilter'),
+            'renderResponse'	=> new \Twig_Filter_Method($this, 'renderResponseFilter'),
+
+            //array
+            'count'                => new \Twig_Filter_Method($this, 'countFilter'),
+            'reset'                => new \Twig_Filter_Method($this, 'resetFilter'),
+            'steps'                => new \Twig_Filter_Method($this, 'stepsFilter'),
+            'sliceTab'            => new \Twig_Filter_Method($this, 'arraysliceFilter'),
+            'end'                => new \Twig_Filter_Method($this, 'endFilter'),
+            'XmlString2array'    => new \Twig_Filter_Method($this, 'XmlString2arrayFilter'),
+            'orderBy'   		 => new \Twig_Filter_Method($this, 'orderByFilter'),
+            'unset'                => new \Twig_Filter_Method($this, 'unsetFilter'),
+
+            //translation
+            'translate_plural'    => new \Twig_Filter_Method($this, 'translatepluralFilter'),
+            'pluralize'            => new \Twig_Filter_Method($this, 'pluralizeFilter'),
+            'depluralize'        => new \Twig_Filter_Method($this, 'depluralizeFilter'),
+
+            // cryptage
+            'encrypt'            => new \Twig_Filter_Method($this, 'encryptFilter'),
+            'decrypt'            => new \Twig_Filter_Method($this, 'decryptFilter'),
+            'obfuscateLink'     => new \Twig_Filter_Method($this, 'obfuscateLinkFilter'),
+
+            // status
+            'status'         => new \Twig_Filter_Method($this, 'statusFilter'),
         );
     }
 
@@ -144,14 +144,14 @@ class PiToolExtension extends \Twig_Extension
      */
     public function getFunctions() {
         return array(
-                'link'                    => new \Twig_Function_Method($this, 'linkFunction'),
-                'in_paths'                => new \Twig_Function_Method($this, 'inPathsFunction'),
-                'get_img_flag_By_country' => new \Twig_Function_Method($this, 'getImgFlagByCountryFunction'),
-                'get_pattern_by_local'    => new \Twig_Function_Method($this, 'getDatePatternByLocalFunction'),  
-                'clean_name'              => new \Twig_Function_Method($this, 'getCleanNameFunction'),
-                
-        		// cryptage
-        		'obfuscateLinkJS'         => new \Twig_Function_Method($this, 'obfuscateLinkFunction'),
+            'link'                    => new \Twig_Function_Method($this, 'linkFunction'),
+            'in_paths'                => new \Twig_Function_Method($this, 'inPathsFunction'),
+            'get_img_flag_By_country' => new \Twig_Function_Method($this, 'getImgFlagByCountryFunction'),
+            'get_pattern_by_local'    => new \Twig_Function_Method($this, 'getDatePatternByLocalFunction'),  
+            'clean_name'              => new \Twig_Function_Method($this, 'getCleanNameFunction'),
+
+            // cryptage
+            'obfuscateLinkJS'         => new \Twig_Function_Method($this, 'obfuscateLinkFunction'),
         );
     }   
      
@@ -351,7 +351,7 @@ class PiToolExtension extends \Twig_Extension
         return $function($var);
     }
         
-    public function joinFilter( $objects, $glue = ', ', $lastGlue = null ) {
+    public function joinphpFilter( $objects, $glue = ', ', $lastGlue = null ) {
         null === $lastGlue && $lastGlue = $glue;
         $last = '';
         if ( 2 < count($objects) ) {

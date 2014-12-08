@@ -12,13 +12,10 @@
  */
 namespace Sfynx\TemplateBundle\Form\Extension;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormBuilderInterface;
-
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\OptionsResolver\Options;
 
 /**
  * ErrorTypeForm Extension
@@ -29,26 +26,24 @@ use Symfony\Component\OptionsResolver\Options;
  */
 class ErrorTypeFormTypeExtension extends AbstractTypeExtension
 {
-    private $error_type;
+    protected $error_type;
     
-    public function __construct(array $options){
+    public function __construct(array $options)
+    {
         $this->error_type = $options['error_type'];
     }
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->setAttribute('error_type', $options['error_type']);
-    }
-    
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['error_type'] = $form->getConfig()->getAttribute('error_type');
+        $view->vars['error_type'] = $options['error_type'];
+        $view->vars['error_delay'] = $options['error_delay'];
     }
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'error_type' => $this->error_type,
-        ));
-    }    
+            'error_delay'=> false
+       ));
+    }
     public function getExtendedType()
     {
         return 'form';

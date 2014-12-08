@@ -58,15 +58,14 @@ class AppKernel extends Kernel
             new Sfynx\BrowserBundle\SfynxBrowserBundle(),
             new Sfynx\EncryptBundle\SfynxEncryptBundle(),
             new Sfynx\PositionBundle\SfynxPositionBundle(),
-            new Sfynx\AuthBundle\SfynxAuthBundle(),
             new Sfynx\MediaBundle\SfynxMediaBundle(),
             new Sfynx\AdminBundle\SfynxAdminBundle(),
-            new Sfynx\CmfBundle\SfynxCmfBundle(),
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
-
             new BootStrap\MediaBundle\BootStrapMediaBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
+            new Sfynx\AuthBundle\SfynxAuthBundle(),
+            new Sfynx\CmfBundle\SfynxCmfBundle(),
 
             #override Sfynx bundles
             new OrApp\OrCmfBundle\OrAppOrCmfBundle(),

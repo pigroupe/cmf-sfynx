@@ -12,18 +12,12 @@
  */
 namespace Sfynx\CmfBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
-
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Response;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-
+use Sfynx\CmfBundle\Controller\CmfabstractController;
+use Sfynx\ToolBundle\Exception\ControllerException;
 use Sfynx\CmfBundle\Entity\Translation\TagTranslation;
 use Sfynx\CmfBundle\Entity\Tag;
 use Sfynx\CmfBundle\Form\TagType;
@@ -31,10 +25,9 @@ use Sfynx\CmfBundle\Form\TagType;
 /**
  * Tag controller.
  * 
- * @subpackage   Admin_Controllers
+ * @subpackage Admin_Controllers
  * @package    Controller
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class TagController extends CmfabstractController
 {
@@ -44,16 +37,15 @@ class TagController extends CmfabstractController
      * Lists all Tag entities.
      * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function indexAction()
     {
-        $em         = $this->getDoctrine()->getManager();
-        $locale        = $this->container->get('request')->getLocale();
-        $entities     = $em->getRepository("SfynxCmfBundle:Tag")->findAllByEntity($locale, 'object');      
+        $em       = $this->getDoctrine()->getManager();
+        $locale   = $this->container->get('request')->getLocale();
+        $entities = $em->getRepository("SfynxCmfBundle:Tag")->findAllByEntity($locale, 'object');      
 
         return $this->render('SfynxCmfBundle:Tag:index.html.twig', array(
             'entities' => $entities
@@ -65,9 +57,8 @@ class TagController extends CmfabstractController
      *
      * @Route("/admin/tag/enabled", name="admin_tag_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function enabledajaxAction()
@@ -80,9 +71,8 @@ class TagController extends CmfabstractController
      *
      * @Route("/admin/tag/disable", name="admin_tag_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function disableajaxAction()
@@ -95,9 +85,8 @@ class TagController extends CmfabstractController
      *
      * @Route("/admin/content/tag/select", name="admin_content_tag_selectentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function selectajaxAction()
@@ -110,7 +99,8 @@ class TagController extends CmfabstractController
     	$keyword    = $this->container->get('request')->get('keyword', '');
     	$MaxResults = $this->container->get('request')->get('max', 10);
     	// we set query
-    	$query  = $em->getRepository("SfynxCmfBundle:Tag")->getAllByCategory('', null, '', '', false);
+    	$query  = $em->getRepository("SfynxCmfBundle:Tag")
+                ->getAllByCategory('', null, '', '', false);
     	$query
     	->leftJoin('a.translations', 'trans');
     	//
@@ -129,8 +119,7 @@ class TagController extends CmfabstractController
     /**
      * Select all entities.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
+     * @return Response
      * @access  protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -138,13 +127,13 @@ class TagController extends CmfabstractController
     {
     	$tab = array();
     	foreach ($entities as $obj) {
-    		$content   = $obj->translate($locale)->getTitle();
-    		if (!empty($content)) {
-    			$tab[] = array(
-    					'id' => $obj->getId(),
-    					'text' =>$this->container->get('twig')->render($content, array())
-    			);
-    		}
+            $content   = $obj->translate($locale)->getTitle();
+            if (!empty($content)) {
+                $tab[] = array(
+                    'id' => $obj->getId(),
+                    'text' =>$this->container->get('twig')->render($content, array())
+                );
+            }
     	}
     	 
     	return $tab;
@@ -155,14 +144,13 @@ class TagController extends CmfabstractController
      * 
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access    public
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function showAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $entity = $em->getRepository("SfynxCmfBundle:Tag")->findOneByEntity($locale, $id, 'object');        
 
         if (!$entity) {

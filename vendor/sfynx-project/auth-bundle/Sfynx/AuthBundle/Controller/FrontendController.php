@@ -12,31 +12,21 @@
  */
 namespace Sfynx\AuthBundle\Controller;
 
-use Sfynx\AuthBundle\Controller\abstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-
-use Sfynx\CmfBundle\Entity\Enquiry;
-use Sfynx\CmfBundle\Form\EnquiryType;
 use Sfynx\AuthBundle\Entity\User;
-use Sfynx\CmfBundle\Entity\Page as Page;
-use Sfynx\CmfBundle\Entity\TranslationPage;
-
+use Sfynx\AuthBundle\Controller\abstractController;
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
 
 /**
  * Frontend controller.
  *
- * @subpackage   Auth
+ * @subpackage Auth
  * @package    Controller
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class FrontendController extends abstractController
 {
@@ -45,9 +35,8 @@ class FrontendController extends abstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
+     * @since  2012-01-24
      */
     public function indexAction()
     {
@@ -58,9 +47,8 @@ class FrontendController extends abstractController
      * Licence page
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
+     * @since  2012-01-24
      */
     public function licenceAction()
     {
@@ -70,11 +58,11 @@ class FrontendController extends abstractController
     /**
      * Configures the local language
      *
-     * @param string $langue
+     * @param string $langue Lang value
+     * 
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-      * @since 2011-12-29
+     * @since  2011-12-29
      */    
     public function setLocalAction($langue = '')
     {
@@ -95,7 +83,7 @@ class FrontendController extends abstractController
         } else {
         	$dateExpire = 0;
         }
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $langue, $dateExpire));
+        $response->headers->setCookie(new Cookie('_locale', $langue, $dateExpire));
         // we register the new local value
         $user = $this->container->get('security.context')->getToken()->getUser();
         if ($user instanceof User) {
@@ -112,19 +100,18 @@ class FrontendController extends abstractController
     /**
      * Redirection function
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
+     * @return Response
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-24
+     * @since  2012-01-24
      */
     public function redirectionuserAction()
     {
     	if ($this->getRequest()->cookies->has('sfynx-redirection')) {
-    		$parameters   = array();
-    		$redirection  = $this->getRequest()->cookies->get('sfynx-redirection');
-    		$response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute($redirection, $parameters));
+            $parameters   = array();
+            $redirection  = $this->getRequest()->cookies->get('sfynx-redirection');
+            $response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute($redirection, $parameters));
     	} else {
-    		$response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute('home_page'));
+            $response     = $this->redirect($this->container->get('sfynx.tool.route.factory')->getRoute('home_page'));
     	}
     	 
     	return $response;
@@ -135,7 +122,7 @@ class FrontendController extends abstractController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2014-07-26
+     * @since  2014-07-26
      */
     public function loginfailureAction()
     {
@@ -156,6 +143,5 @@ class FrontendController extends abstractController
         }
     
     	return $response;
-    }    
-        
+    }   
 }

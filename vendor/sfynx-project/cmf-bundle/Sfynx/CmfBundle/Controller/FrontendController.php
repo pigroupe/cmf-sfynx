@@ -14,7 +14,6 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use Sfynx\CmfBundle\Controller\CmfabstractController;
