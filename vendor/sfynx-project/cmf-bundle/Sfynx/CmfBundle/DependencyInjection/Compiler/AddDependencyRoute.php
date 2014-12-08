@@ -18,9 +18,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * route cache management.
  *
- * @subpackage   CMF
+ * @subpackage CMF
  * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class AddDependencyRoute implements CompilerPassInterface
 {

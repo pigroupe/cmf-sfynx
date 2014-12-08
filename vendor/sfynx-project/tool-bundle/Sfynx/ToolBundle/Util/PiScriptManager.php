@@ -48,7 +48,7 @@ class PiScriptManager extends AbstractFactory
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function renderScript($content_js, $content_html, $path_prefix = '/', $result = "")
+    public function renderScript($content_js, $content_html, $path_prefix = '/', $result = "both")
     {
     	$TEMP_FILES_DIR = $this->getContainer()->getParameter("kernel.root_dir") . "/../web/yui/js/" . $path_prefix;
     	// we create repository if does not exit

@@ -39,15 +39,23 @@ class SfynxTemplateExtension extends Extension{
          * Form config parameter
          */
         if (isset($config['form'])){
-        	if (isset($config['form']['show_legend'])) {
-        		$container->setParameter('sfynx.template.form.extension.show_legend', $config['form']['show_legend']);
-        	}
-        	if (isset($config['form']['show_child_legend'])) {
-        		$container->setParameter('sfynx.template.form.extension.show_child_legend',$config['form']['show_child_legend']);
-        	}
-        	if (isset($config['form']['error_type'])) {
-        		$container->setParameter('sfynx.template.form.extension.error_type',$config['form']['error_type']);
-        	}
+            if (isset($config['form'])) {
+                foreach ($config['form'] as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($config['form'][$key] as $subkey => $subvalue) {
+                            $container->setParameter(
+                                    'sfynx.template.form.extension.'.$key.'.'.$subkey,
+                                    $subvalue
+                            );
+                        }
+                    } else {
+                        $container->setParameter(
+                            'sfynx.template.form.extension.'.$key,
+                            $value
+                        );
+                    }
+                }
+            }                
         }
     }
     

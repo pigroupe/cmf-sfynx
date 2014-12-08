@@ -3,7 +3,7 @@
 #
 annotation_sfynx_cmf:
     resource: "@SfynxCmfBundle/Controller"
-    type: annotation
+    type:     annotation    
     
 #
 #    SfynxCoreBundle customer route loader 

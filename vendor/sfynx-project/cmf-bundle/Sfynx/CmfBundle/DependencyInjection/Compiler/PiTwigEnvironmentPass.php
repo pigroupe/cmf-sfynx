@@ -19,9 +19,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * Adds tagged twig.extension services to the twig service
  *
- * @subpackage   CMF
+ * @subpackage CMF
  * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiTwigEnvironmentPass implements CompilerPassInterface
 {

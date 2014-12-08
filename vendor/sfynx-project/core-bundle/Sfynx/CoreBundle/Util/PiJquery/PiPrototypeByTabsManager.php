@@ -131,8 +131,6 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             $(ui.panel).append('<p>' + $prototype_content + '</p>');
                         },
                         select: function (event, ui) {
-                            //$(".pi_simpleselect").delay(2000).data("wijdropdown").refresh();
-                             //$(".pi_simpleselect").wijdropdown();
                         }
                     });
 
@@ -296,7 +294,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
 
                                                 // The following variable $$name$$ or __name__ is replaced by the number of field.
                                                 //var $dataprototype = $prototype.html().replace(/\$\$name\$\$/g, index);
-                                                var $dataprototype = $prototype.html().replace('<label class="required">__name__label__</label>', '');
+                                                var $dataprototype = $prototype.html().replace('<label class="  required">__name__label__</label>', '');
                                                 $dataprototype     = $dataprototype.replace(/__name__/g, index);
 
                                                 // We tag the prototype with the corresponding class.

@@ -14,32 +14,31 @@ namespace Sfynx\WsBundle\Controller;
 
 use Sfynx\WsBundle\Exception\ClientException;
 use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\ToolBundle\Util\PiStringManager;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * This controller is made for define all webservices.
  * 
- * @subpackage   WS
+ * @subpackage WS
  * @package    Controller
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class DefaultController extends abstractController
 {
     /**
      * Template : test
-     *
+     * 
+     * @Secure(roles="ROLE_EDITOR")
      * @Route("/ws/test", name="ws_request_test")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function indexAction()
@@ -55,8 +54,8 @@ class DefaultController extends abstractController
      * </code>
      *  
      * @Route("/ws/auth/get/permisssion", name="ws_auth_getpermission")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getAuthPermisssionAction()
@@ -129,7 +128,7 @@ class DefaultController extends abstractController
     	        $isAuthorization = true;
     	    } else {
     	    	$now = new \Datetime();
-    	        $token            = md5($now->getTimestamp()) . strtoupper(\Sfynx\ToolBundle\Util\PiStringManager::random(24));
+    	        $token            = md5($now->getTimestamp()) . strtoupper(PiStringManager::random(24));
     	        $isAuthorization  = false;
     	    }
     	    //-----we initialize de logger-----
@@ -189,8 +188,8 @@ class DefaultController extends abstractController
      * </code>
      * 
      * @Route("/ws/auth/validate/token", name="ws_auth_validatetoken")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function validateTokenAction()
@@ -282,8 +281,8 @@ class DefaultController extends abstractController
      * </code>
      *
      * @Route("/ws/auth/authenticate/id", name="ws_auth_authenticate_user_by_id")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function authenticateByIdAction()
@@ -349,8 +348,8 @@ class DefaultController extends abstractController
      * </code> 
      * 
      * @Route("/ws/auth/authenticate/proxy", name="ws_auth_authenticate_proxy")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function authenticateProxyAction()
@@ -373,7 +372,7 @@ class DefaultController extends abstractController
     	$referer_host = $request->get('ws_redirect_host', '');
     	$application  = $request->get('ws_application', null);
     	if ($this->get('security.context')->getToken() 
-                instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
+                instanceof UsernamePasswordToken) {
             // we get user
             $token = $this->getTokenByUserIdAndApplication(
                 $this->get('security.context')->getToken()->getUser(),
@@ -434,7 +433,7 @@ class DefaultController extends abstractController
             $response = new RedirectResponse($request->get('ws_redirect_uri'));
             // we do not remove the cookie due to avoid a rollback from SSO connexion in HandlerRequest
             $response->headers->setCookie(
-                new \Symfony\Component\HttpFoundation\Cookie(
+                new Cookie(
                     'findmrmiles-connected',
                     0,
                     time() + 8640000
@@ -475,7 +474,7 @@ class DefaultController extends abstractController
             $response = new Response();
         }
         // we set the locale country value egal to the locale .com value
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $locale, time() + 8640000));
+        $response->headers->setCookie(new Cookie('_locale', $locale, time() + 8640000));
         // we get user by token
         $user = $this->getUserByTokenAndApplication($token, $application);
         if ($user instanceof \FindMrMiles\UserBundle\Entity\User) {

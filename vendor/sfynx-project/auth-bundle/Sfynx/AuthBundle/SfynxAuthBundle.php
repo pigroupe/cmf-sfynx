@@ -125,7 +125,6 @@ class SfynxAuthBundle extends Bundle
                         #array('path' => '^/', 'role' => 'ROLE_USER', 'requires_channel' => self::HTTP_TYPE),
                 ),                
         ));
-        
     }
     
     /**
@@ -141,5 +140,4 @@ class SfynxAuthBundle extends Bundle
     public function shutdown()
     {
     }
-    
 }
