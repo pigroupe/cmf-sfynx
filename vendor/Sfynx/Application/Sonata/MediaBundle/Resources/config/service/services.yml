@@ -1,0 +1,38 @@
+parameters:
+    bootstrap.media.event_subscriber.media.class: Application\Sonata\MediaBundle\EventSubscriber\EventSubscriberMedia
+    bootstrap.media.provider.image.class: Application\Sonata\MediaBundle\Provider\ImageProvider
+    bootstrap.media.provider.file.class: Application\Sonata\MediaBundle\Provider\FileProvider
+    bootstrap.media.thumbnail.format.class: Application\Sonata\MediaBundle\Thumbnail\FormatThumbnail    
+    
+services:
+    #
+    # configuration of the event subscriber of entities
+    #         
+    bootstrap_media.event_subscriber.media:
+        class: %bootstrap.media.event_subscriber.media.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_subscriber }         
+            
+    #
+    # configuration of the event subscriber surcharge
+    #               
+    bootstrap.media.thumbnail.format:
+      class: %bootstrap.media.thumbnail.format.class%
+      arguments: ['bootstrap.media.provider.image']
+            
+    bootstrap.media.provider.image:
+      class: %bootstrap.media.provider.image.class%
+      arguments: ['bootstrap.media.provider.image', '@sonata.media.filesystem.local', '@sonata.media.cdn.server', '@sonata.media.generator.default', '@bootstrap.media.thumbnail.format', {}, {}, '@sonata.media.adapter.image.gd','@sonata.media.metadata.proxy']
+      tags:
+            - { name: sonata.media.provider }
+      calls:
+        - [ setTemplates, [ {'helper_thumbnail':'SonataMediaBundle:Provider:thumbnail.html.twig', 'helper_view':'SonataMediaBundle:Provider:view_file.html.twig'} ] ]             
+            
+    bootstrap.media.provider.file:
+      class: %bootstrap.media.provider.file.class%
+      arguments: ['bootstrap.media.provider.file', '@sonata.media.filesystem.local', '@sonata.media.cdn.server', '@sonata.media.generator.default', '@bootstrap.media.thumbnail.format', {}, {},'@sonata.media.metadata.proxy']
+      tags:
+            - { name: sonata.media.provider }
+      calls:
+        - [ setTemplates, [ {'helper_thumbnail':'SonataMediaBundle:Provider:thumbnail.html.twig', 'helper_view':'SonataMediaBundle:Provider:view_image.html.twig'} ] ]            

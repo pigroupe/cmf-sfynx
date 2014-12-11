@@ -772,12 +772,12 @@ abstract class abstractListener
                    }                        
                }
                if ( 
-                   ( (get_class($entity) == 'Proxies\BootStrapMediaBundleEntityMediaProxy') || get_class($entity) == 'Proxies\PiAppGedmoBundleEntityMediaProxy')
+                   ( (get_class($entity) == 'Proxies\ApplicationSonataMediaBundleEntityMediaProxy') || get_class($entity) == 'Proxies\PiAppGedmoBundleEntityMediaProxy')
                    	&& isset($GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA']) 
                   	&& is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA'])
                ) {
                    $methods_authorized = $GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA'];
-                   if (get_class($entity) == 'Proxies\BootStrapMediaBundleEntityMediaProxy') {
+                   if (get_class($entity) == 'Proxies\ApplicationSonataMediaBundleEntityMediaProxy') {
                        $media    = $this->_container()->get('pi_app_gedmo.repository')->getRepository('Media')->findOneByMediaId($entity->getId());
                    } else {
                        $media    = $entity;

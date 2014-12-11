@@ -141,7 +141,7 @@ Register all bundle in your `app/AppKernel.php` file:
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
 
-            new BootStrap\MediaBundle\BootStrapMediaBundle(),
+            new Application\MediaBundle\BootStrapMediaBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
 
             #override Sfynx bundles

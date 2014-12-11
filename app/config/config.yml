@@ -175,12 +175,12 @@ doctrine:
             SonataClassificationBundle: ~
             ApplicationSonataClassificationBundle: ~
             SonataMediaBundle: ~
+            ApplicationSonataMediaBundle: ~
             OrAppOrCmfBundle: ~
             OrAppOrGedmoBundle: ~
             SfynxTranslatorBundle: ~
             SfynxCmfBundle: ~
             PiAppGedmoBundle: ~
-            BootStrapMediaBundle: ~        
             SfynxAuthBundle: ~
             #SfynxAuthBundle:
             #    type: xml
@@ -364,10 +364,25 @@ sonata_media:
     default_context: default
     db_driver: doctrine_orm
     class:
-        media:              BootStrap\MediaBundle\Entity\Media
-        gallery:            BootStrap\MediaBundle\Entity\Gallery
-        gallery_has_media:  BootStrap\MediaBundle\Entity\GalleryHasMedia
+        media:              Application\MediaBundle\Entity\Media
+        gallery:            Application\MediaBundle\Entity\Gallery
+        gallery_has_media:  Application\MediaBundle\Entity\GalleryHasMedia
     contexts:
+        sonata_collection:
+            providers:
+              - sonata.media.provider.image
+
+            formats:
+                preview: { width: 100, quality: 100}
+                wide:    { width: 820, quality: 100}
+
+        sonata_category:
+            providers:
+              - sonata.media.provider.image
+
+            formats:
+                preview: { width: 100, quality: 100}
+                wide:    { width: 820, quality: 100}        
         default:  # the default context is mandatory
             download:
                 #strategy: sonata.media.security.session_strategy # a media can be downloaded only once per session.            

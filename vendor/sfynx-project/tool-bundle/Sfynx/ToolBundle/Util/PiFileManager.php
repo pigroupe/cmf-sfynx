@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-18
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-18
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,6 @@
 namespace Sfynx\ToolBundle\Util;
 
 use Sfynx\ToolBundle\Builder\PiFileManagerBuilderInterface;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,9 +23,9 @@ use Symfony\Component\HttpFoundation\Response;
  *     $fileFormatter    = $this-container->get('sfynx.tool.file_manager');
  * </code>
  * 
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiFileManager implements PiFileManagerBuilderInterface 
 {    
@@ -48,11 +47,10 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns the file in binary.
      *
-     * @param  str    $path  path du fichier
+     * @param string $path Path du fichier
      *
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getFileContent($path)
@@ -65,11 +63,10 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns the content by curl.
      *
-     * @param  str    $path  url link
+     * @param string $path Url link
      *
      * @return string
      * @access public
-     *
      * @author Riad HELLAL <hellal.riad@gmail.com>
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -105,11 +102,10 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Retrieves the dirname of a file.
      *
-     * @param  $filename    $filename  nom du fichier
+     * @param string $filename Nom du fichier
      *
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getFileDirname($filename)
@@ -120,11 +116,10 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Retrieves the extension of a file.
      *
-     * @param  $filename    $filename  nom du fichier
+     * @param string $filename Nom du fichier
      * 
      * @return string
      * @access public
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getFileExtension($filename)
@@ -135,11 +130,10 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns the file name from full path.
      *
-     * @param  str    $path  path du fichier
+     * @param string $path  path du fichier
      * 
      * @return string
      * @access public
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getFileName($path)
@@ -152,8 +146,8 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Find pathnames matching a pattern
      *
-     * @param string $dirRegex    regex path (ex: 'my/dir/*.xml', 'my/dir/*.[cC][sS][vV]', "/path/to/images/{*.jpg,*.JPG}", '[a-z]+\.txt', "upload/.*\.php")
-     * @param string $options    option value :
+     * @param string $dirRegex Regex path (ex: 'my/dir/*.xml', 'my/dir/*.[cC][sS][vV]', "/path/to/images/{*.jpg,*.JPG}", '[a-z]+\.txt', "upload/.*\.php")
+     * @param string $options  Option value :
      * GLOB_MARK - Adds a slash to each directory returned
      * GLOB_NOSORT - Return files as they appear in the directory (no sorting)
      * GLOB_NOCHECK - Return the search pattern if no files matching it were found
@@ -164,7 +158,6 @@ class PiFileManager implements PiFileManagerBuilderInterface
      *
      * @return array    array list of all files.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function GlobFiles($dirRegex, $options = null)
@@ -179,11 +172,10 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns if a directory is empty.
      *
-     * @param    string    $dir  path
+     * @param string $dir Path
      *
      * @return array    array list of all files.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public static function isEmptyDir($dir){
@@ -193,14 +185,13 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns the names of files contained in a directory.
      *
-     * @param    string    $path  path
-     * @param    string    $type
-     * @param    string    $appendPath
-     * @param    boolean    $includeExtension
+     * @param string       $path             Path value
+     * @param boolean      $type Extension   Value of files that we want to search. 
+     * @param false|string $appendPath       A append path value
+     * @param boolean      $includeExtension The extension value
      *
      * @return array    array list of all files.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public static function getFilesByType($path, $type = false, $appendPath = false, $includeExtension = true)
@@ -215,8 +206,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
                             $fileParts = explode('.', $file);
                             if (is_array($fileParts)) {
                                 $fileType = array_pop($fileParts);
-                                $file = implode('.', $fileParts);
-                                    
+                                $file = implode('.', $fileParts);                                    
                                 //check whether the filetypes were passed as an array or string
                                 if (is_array($type)) {
                                     if (in_array($fileType, $type)) {
@@ -252,12 +242,11 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns the names of files contained in a directory and all subdirectories.
      *
-     * @param    string    $dir  path
-     * @param    string    $type
+     * @param string       $dir  Path
+     * @param false|string $type Extension Value of files that we want to search.
      *
      * @return array    array list of all files.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public static function ListFiles($dir, $type = false)
@@ -269,14 +258,14 @@ class PiFileManager implements PiFileManagerBuilderInterface
                 if ($file != "." && $file != ".." && $file[0] != '.') {
                     if (is_dir($dir . "/" . $file)) {
                         $inner_files = self::ListFiles($dir . "/" . $file, $type);
-                        if (is_array($inner_files)) 
+                        if (is_array($inner_files)) {
                             $files = array_merge($files, $inner_files);
+                        }
                     } else {
                         if ($type) { //validate the type
                             $fileParts = explode('.', $file);
                             if (is_array($fileParts)) {
-                                $fileType = array_pop($fileParts);
-                                
+                                $fileType = array_pop($fileParts);                                
                                 //check whether the filetypes were passed as an array or string
                                 if (is_array($type)) {
                                     if (in_array($fileType, $type)) {
@@ -303,10 +292,10 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns the names of files contained in a directory and all subdirectories of a bundle.
      *
-     * @param    string    $dir  path
+     * @param string $dir Path
+     * 
      * @return array    array list of all files.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function ListFilesBundle($dir)
@@ -323,15 +312,14 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Returns the names of all directories ans all subdirectories.
      *
-     * @param    string    $dir
-     * @param    string    $onlyfiles
-     * @param    string    $onlyDir
-     * @param    string    $fullpath
-     * @param    string    $ignorDirName
+     * @param string $dir
+     * @param string $onlyfiles
+     * @param string $onlyDir
+     * @param string $fullpath
+     * @param string $ignorDirName
      *
      * @return array    array list of all directories and subdirectories.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function directoryScan($dir, $onlyfiles = false, $onlyDir = false, $fullpath = false, $ignorDirName = array()) 
@@ -365,12 +353,11 @@ class PiFileManager implements PiFileManagerBuilderInterface
      /**
      * Parse a file and returns the contents
      * 
-     * @param string $file_code        file name consists of: bundle_sfynxtemplate_css_screen__css for express this path : bundle/sfynxtemplate/css/screen.css
+     * @param string $file_code File name consists of: bundle_sfynxtemplate_css_screen__css for express this path : bundle/sfynxtemplate/css/screen.css
      *  
      * @return string content of the file given in parameter.
      * @access public
      * @throws \InvalidArgumentException If fails parsing the string
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getContentCodeFile($file_code)
@@ -396,12 +383,11 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Parse a file name coded and returns the real path
      *
-     * @param string $file_code        file name consists of: web_bundle_sfynxtemplate_css_screen__css for express this path : web/bundle/sfynxtemplate/css/screen.css
+     * @param string $file_code File name consists of: web_bundle_sfynxtemplate_css_screen__css for express this path : web/bundle/sfynxtemplate/css/screen.css
      * 
      * @return string
      * @access private
      * @throws \Exception If fails parsing the string
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     private function decodeFilePath($file_code)
@@ -480,14 +466,13 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Save a content in the file given in parameter.
      *
-     * @param  string    $path      path file
-     * @param  string    $content      content to push in th file
-     * @param  int       $mode      mode file
-     * @param  int		 [FILE_APPEND, LOCK_EX, FILE_APPEND | LOCK_EX]
+     * @param string  $path    Path file
+     * @param string  $content Content to push in th file
+     * @param integer $mode    mode file
+     * @param integer $flags   [FILE_APPEND, LOCK_EX, FILE_APPEND | LOCK_EX]
      *
      * @return booean    return 0 if the file is save correctly.    
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function save($path, $content = '',  $mode = 0777, $flags = LOCK_EX)
@@ -504,15 +489,15 @@ class PiFileManager implements PiFileManagerBuilderInterface
      *
      * @param string $source
      * @param string $newName
+     * 
      * @access public
      * @static
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     public static function rename($source, $newName)
     {
     	if (file_exists($source)) {
-    		rename($source, $newName);
+            rename($source, $newName);
     	}
     }
     
@@ -521,16 +506,16 @@ class PiFileManager implements PiFileManagerBuilderInterface
      *
      * @param string $source
      * @param string $target
+     * 
      * @return bool
      * @access public
      * @static
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     public static function copy( $source, $target)
     {
     	if (file_exists( $source )) {
-    		return copy($source, $target);
+            return copy($source, $target);
     	}
     }
     
@@ -539,26 +524,25 @@ class PiFileManager implements PiFileManagerBuilderInterface
      *
      * @param string $source
      * @param string $target
+     * 
      * @access public
      * @static
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     public static function move($source, $target)
     {
     	if (file_exists($source)) {
-    		rename($source, $target);
+            rename($source, $target);
     	}
     }
     
     /**
      * Delete a file.
      *
-     * @param  string    $path  path du fichier
+     * @param string $path Path du fichier
      *
      * @return boolean
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function delete($path)
@@ -576,40 +560,42 @@ class PiFileManager implements PiFileManagerBuilderInterface
     /**
      * Create a file.
      *
-     * @param  string    $path  path du fichier
-     * @param  string	 content à inserer
+     * @param string $path        Path du fichier
+     * @param string $filecontent Content à inserer
+     * @param string $mode        Mode parameter of the fopen php function
+     * 
      * @return void
      * @access public
      * @static
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
-    public static function create($path, $filecontent = '')
+    public static function create($path, $filecontent = '', $mode = "w+")
     {
     	$dirpath = dirname($path);
     	if(@mkdir("$dirpath", 0777, true)) {}    
     	if(!file_exists("$path")) {
-    		$fp = fopen($path,"w+");
-    		fwrite($fp,$filecontent,strlen($filecontent));
-    		fclose($fp);
+            $fp = fopen($path, $mode);
+            fwrite($fp,$filecontent,strlen($filecontent));
+            fclose($fp);
     	}
     }    
     
     /**
      * Insert content in file.
      *
-     * @param  str $path         path du fichier
-     * @param  str $filecontent  Contenu à injecter dans le fichier
+     * @param string  $path        Path du fichier
+     * @param string  $filecontent Contenu à injecter dans le fichier
+     * @param string  $mode        Mode parameter of the fopen php function
+     * 
      * @return void
      * @access public
      * @static
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
-    public static function InsererContent($path, $filecontent)
+    public static function InsererContent($path, $filecontent, $mode = "w+")
     {
     	$contents = file_get_contents($path);    	 
-    	$fp = fopen($path,"w+");
+    	$fp = fopen($path, $mode);
     	fwrite($fp,$contents . $contenu,strlen($contents . $contenu));
     	fclose($fp);
     }    

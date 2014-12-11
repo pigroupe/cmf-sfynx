@@ -246,7 +246,7 @@ class Contact extends AbstractDefault
     //     /**
     //      * @var integer $image
     //      *
-    //      * @ORM\ManyToOne(targetEntity="BootStrap\MediaBundle\Entity\Media", cascade={"persist"})
+    //      * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"})
     //      * @ORM\JoinColumn(name="image2", referencedColumnName="id", nullable=true)
     //      */
     //     protected $image2;

@@ -86,7 +86,7 @@ class PiCropExtension extends \Twig_Extension
      */
     public function getFileFormFunction($media, $nameForm, $style = "display: block; text-align:center;margin: 30px auto;z-index:99999999999", $is_by_mimetype = true)
     {
-        if ($media instanceof \BootStrap\MediaBundle\Entity\Media){
+        if ($media instanceof \Application\Sonata\MediaBundle\Entity\Media){
             $id         = $media->getId();
             try {
                     $file_url = $this->container->get('sonata.media.twig.extension')->path($id, "reference");
@@ -130,7 +130,7 @@ class PiCropExtension extends \Twig_Extension
      */
     public function getPictureFormFunction($media, $nameForm, $format = 'reference', $style = "display: block; text-align:center;margin: 30px auto;", $idForm = "", $ClassName = '')
     {
-    	if ($media instanceof \BootStrap\MediaBundle\Entity\Media) {
+    	if ($media instanceof \Application\Sonata\MediaBundle\Entity\Media) {
     		$id = $media->getId();
     		if ($format != 'reference') {
     			$mediaCrop = $this->container->get('sonata.media.twig.extension')->path($media, $format);
@@ -181,7 +181,7 @@ class PiCropExtension extends \Twig_Extension
     	if ($format == "default") {
     		$format = "SfynxTemplateBundle:Template\\Crop:default.html.twig";
     	}
-    	if ($media instanceof \BootStrap\MediaBundle\Entity\Media) {            
+    	if ($media instanceof \Application\Sonata\MediaBundle\Entity\Media) {            
     		$crop     = $this->container->getParameter('sfynx.media.crop');
     		$globals  = $this->container->get('twig')->getGlobals();
             if (!empty($type) && (in_array($type, array('input', 'script')))) {
@@ -236,7 +236,7 @@ class PiCropExtension extends \Twig_Extension
      */    
     public function getPictureIndexFunction($media, $format = '', $width='', $height='')
     {
-        if ($media instanceof \BootStrap\MediaBundle\Entity\Media) {
+        if ($media instanceof \Application\Sonata\MediaBundle\Entity\Media) {
             $id = $media->getId();
             $mediaCrop = $this->container->get('sonata.media.twig.extension')->path($media, $format);
             if(file_exists($src = $this->container->get('kernel')->getRootDir() . '/../web'.$mediaCrop)) {
