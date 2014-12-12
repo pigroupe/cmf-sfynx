@@ -16,8 +16,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Sfynx\CmfBundle\Repository\PageRepository;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -53,18 +51,21 @@ class PageByTransType extends AbstractType
      */
     public function __construct($locale, $roles_user = array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_CONTENT_MANAGER'), ContainerInterface $container)
     {
-        $this->_roles_user     = $roles_user;
-        $this->_container     = $container;
-        $this->_locale        = $locale;
+        $this->_roles_user = $roles_user;
+        $this->_container  = $container;
+        $this->_locale     = $locale;
     }
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (in_array('ROLE_ADMIN', $this->_roles_user) || in_array('ROLE_SUPER_ADMIN', $this->_roles_user) || in_array('ROLE_CONTENT_MANAGER', $this->_roles_user))
+        if (in_array('ROLE_ADMIN', $this->_roles_user) 
+                || in_array('ROLE_SUPER_ADMIN', $this->_roles_user) 
+                || in_array('ROLE_CONTENT_MANAGER', $this->_roles_user)
+        ) {
             $read_only = false;
-        else
+        } else {
             $read_only = true;
-        
+        }
         $builder
             ->add('enabled', 'checkbox', array(
                     'data'  => true,
@@ -73,13 +74,13 @@ class PageByTransType extends AbstractType
             ->add('user', 'entity', array(
                     'class'     => 'SfynxAuthBundle:User',
             		'query_builder' => function(EntityRepository $er) {
-            			return $er->createQueryBuilder('k')
-            			->select('k')
-            			->where("k.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_MEMBER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_PROVIDER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_CUSTOMER%'")
-            			->orderBy('k.name', 'ASC');
+                            return $er->createQueryBuilder('k')
+                            ->select('k')
+                            ->where("k.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
+                            ->andWhere("k.roles NOT LIKE '%ROLE_MEMBER%'")
+                            ->andWhere("k.roles NOT LIKE '%ROLE_PROVIDER%'")
+                            ->andWhere("k.roles NOT LIKE '%ROLE_CUSTOMER%'")
+                            ->orderBy('k.name', 'ASC');
             		},
                     'read_only'    => $read_only,
                     'label'    => 'pi.form.label.field.user',
@@ -182,7 +183,7 @@ class PageByTransType extends AbstractType
                     'by_reference' => true,                    
                     'type'   => new TranslationPageType($this->_locale, $this->_container),
                     'options'  => array(
-                            'attr'      => array('class' => 'translation_widget')
+                        'attr'      => array('class' => 'translation_widget')
                     ),    
                     'label'    => ' '
             )) 
@@ -200,5 +201,4 @@ class PageByTransType extends AbstractType
                 'data_class' => 'Sfynx\CmfBundle\Entity\Page',
         ));
     }    
-  
 }

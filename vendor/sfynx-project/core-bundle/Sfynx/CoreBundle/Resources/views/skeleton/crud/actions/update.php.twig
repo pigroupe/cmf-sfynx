@@ -1,11 +1,12 @@
 
     /**
      * Edits an existing {{ entity }} entity.
+     * 
+     * @param integer $id Id value
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
+     * @return Response
+     * @access public
      */
     public function updateAction($id)
     {
@@ -31,7 +32,7 @@
 
             return $this->redirect($this->generateUrl('{{ route_name_prefix }}_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         } else {
-        	$this->setFlashErrorMessages($editForm);
+            $this->setFlashErrorMessages($editForm);
         }
 
 {% if 'annotation' == format %}

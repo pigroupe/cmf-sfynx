@@ -1,11 +1,12 @@
 
     /**
      * Displays a form to edit an existing {{ entity }} entity.
+     * 
+     * @param integer $id Id value
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
+     * @return Response
+     * @access public
      */
     public function editAction($id)
     {
@@ -16,10 +17,14 @@
         $NoLayout   = $request->query->get('NoLayout');
         // we get entity object
         if (!empty($id)) {
-            $entity = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($locale, $id, 'object');
+            $entity = $em->getRepository("{{ bundle }}:{{ entity }}")
+                ->findOneByEntity($locale, $id, 'object');
         } else {
-            $slug   = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('slug', $locale, true);
-            $entity = $this->container->get('doctrine')->getManager()->getRepository("{{ bundle }}:{{ entity }}")->getEntityByField($locale, array('content_search' => array('slug' =>$slug)), 'object');
+            $slug   = $this->container->get('sfynx.tool.route.factory')
+                ->getMatchParamOfRoute('slug', $locale, true);
+            $entity = $this->container->get('doctrine')
+                ->getManager()->getRepository("{{ bundle }}:{{ entity }}")
+                ->getEntityByField($locale, array('content_search' => array('slug' =>$slug)), 'object');
         }        
         if (!$entity) {
             $entity = $em->getRepository("{{ bundle }}:{{ entity }}")->find($id);

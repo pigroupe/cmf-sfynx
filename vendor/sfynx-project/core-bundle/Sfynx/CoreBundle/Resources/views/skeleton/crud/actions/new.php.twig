@@ -3,19 +3,18 @@
      * Displays a form to create a new {{ entity }} entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
+     * @return Response
+     * @access public
      */
     public function newAction()
     {
-        $em         = $this->getDoctrine()->getManager();
+        $em       = $this->getDoctrine()->getManager();
         // we get params
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
         // we create the entity 
-        $entity     = new {{ entity_class }}();
+        $entity   = new {{ entity_class }}();
         // we generate the form  
-        $form       = $this->createForm(new {{ entity_class }}Type($em, $this->container), $entity, array('show_legend' => false));
+        $form     = $this->createForm(new {{ entity_class }}Type($em, $this->container), $entity, array('show_legend' => false));
             
 {% if 'annotation' == format %}
         return array(

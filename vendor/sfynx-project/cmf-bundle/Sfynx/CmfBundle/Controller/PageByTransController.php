@@ -12,18 +12,13 @@
  */
 namespace Sfynx\CmfBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
 use Sfynx\ToolBundle\Exception\ControllerException;
-
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-
 use Sfynx\CmfBundle\Entity\Page;
 use Sfynx\CmfBundle\Repository\PageRepository;
 use Sfynx\CmfBundle\Form\PageByTransType as PageType;
@@ -43,8 +38,8 @@ class PageByTransController extends CmfabstractController
      * Lists all Page entities.
      * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function indexAction()
@@ -62,9 +57,8 @@ class PageByTransController extends CmfabstractController
      *
      * @Route("/admin/pagebytrans/enabled", name="admin_pagebytrans_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function enabledajaxAction()
@@ -77,9 +71,8 @@ class PageByTransController extends CmfabstractController
      *
      * @Route("/admin/pagebytrans/disable", name="admin_pagebytrans_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * 
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function disableajaxAction()
@@ -92,9 +85,8 @@ class PageByTransController extends CmfabstractController
      *
      * @Route("/admin/pagebytrans/delete", name="admin_pagebytrans_deletentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteajaxAction()
@@ -104,12 +96,13 @@ class PageByTransController extends CmfabstractController
 
     /**
      * Delete twig cache Page
-     *
+     * 
+     * @param string $type Type value
+     * 
      * @Route("/admin/pagebytrans/deletetwigcache", name="admin_pagebytrans_deletetwigcache_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deletetwigcacheajaxAction($type = 'page')
@@ -119,31 +112,47 @@ class PageByTransController extends CmfabstractController
     
     /**
      * Lists all Page entities.
-     *
+     * 
+     * @param string $status Status value
+     * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function wizardAction($status)
     {
-        $locale        = $this->container->get('request')->getLocale();
-        $em         = $this->getDoctrine()->getManager();
-        $token         = $this->get('security.context')->getToken();
-        
-           $idUser        = $token->getUser()->getId();
-           $RolesUser     = $token->getUser()->getRoles();
-
-        if (in_array('ROLE_ADMIN', $RolesUser) || in_array('ROLE_SUPER_ADMIN', $RolesUser) || in_array('ROLE_CONTENT_MANAGER', $RolesUser)){
+        $locale    = $this->container->get('request')->getLocale();
+        $em        = $this->getDoctrine()->getManager();
+        $token     = $this->get('security.context')->getToken();
+        $idUser    = $token->getUser()->getId();
+        $RolesUser = $token->getUser()->getRoles();
+        if (in_array('ROLE_ADMIN', $RolesUser) 
+                || in_array('ROLE_SUPER_ADMIN', $RolesUser) 
+                || in_array('ROLE_CONTENT_MANAGER', $RolesUser)
+        ){
             if ($status != "all")
-                $entities = $em->getRepository('SfynxCmfBundle:Page')->getAllPageByStatus($locale, $status)->getQuery()->getResult();
+                $entities = $em->getRepository('SfynxCmfBundle:Page')
+                    ->getAllPageByStatus($locale, $status)
+                    ->getQuery()
+                    ->getResult();
             else
-                $entities = $em->getRepository('SfynxCmfBundle:Page')->getAllPageHtml()->getQuery()->getResult();
+                $entities = $em->getRepository('SfynxCmfBundle:Page')
+                    ->getAllPageHtml()
+                    ->getQuery()
+                    ->getResult();
         } else {
-            if ($status != "all")
-                $entities = $em->getRepository('SfynxCmfBundle:Page')->getAllPageByStatus($locale, $status, $idUser)->getQuery()->getResult();
-            else
-                $entities = $em->getRepository('SfynxCmfBundle:Page')->getAllPageHtml($idUser)->getQuery()->getResult();
+            if ($status != "all") {
+                $entities = $em->getRepository('SfynxCmfBundle:Page')
+                        ->getAllPageByStatus($locale, $status, $idUser)
+                        ->getQuery()
+                        ->getResult();
+            } else {
+                $entities = $em->getRepository('SfynxCmfBundle:Page')
+                        ->getAllPageHtml($idUser)
+                        ->getQuery()
+                        ->getResult();
+            }
         }
     
         return $this->render('SfynxCmfBundle:PageByTrans:wizard.html.twig', array(
@@ -155,16 +164,18 @@ class PageByTransController extends CmfabstractController
     /**
      * Finds and displays a Page entity.
      * 
+     * @param integer $id Id value
+     * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function showAction($id)
     {
-        $em     = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $em       = $this->getDoctrine()->getManager();
+        $entity   = $em->getRepository('SfynxCmfBundle:Page')->find($id);
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Page');
         }
@@ -173,7 +184,7 @@ class PageByTransController extends CmfabstractController
         return $this->render("SfynxCmfBundle:PageByTrans:show.html.twig", array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'       => $NoLayout,                
+            'NoLayout'    => $NoLayout,                
         ));
     }
 
@@ -181,19 +192,19 @@ class PageByTransController extends CmfabstractController
      * Displays a form to create a new Page entity.
      * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()
     {
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $User   = $this->get('security.context')->getToken()->getUser();
         $entity = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
         $form   = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
         
         //$form->remove('page_css');
         //$form->remove('page_js');
@@ -201,7 +212,7 @@ class PageByTransController extends CmfabstractController
         return $this->render("SfynxCmfBundle:PageByTrans:new.html.twig", array(
             'entity' => $entity,
             'form'   => $form->createView(),
-            'NoLayout'       => $NoLayout,                
+            'NoLayout' => $NoLayout,                
         ));
     }
 
@@ -209,26 +220,24 @@ class PageByTransController extends CmfabstractController
      * Creates a new Page entity.
      * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAction()
     {
-        $locale     = $this->container->get('request')->getLocale();
-        $User      = $this->get('security.context')->getToken()->getUser();
+        $locale  = $this->container->get('request')->getLocale();
+        $User    = $this->get('security.context')->getToken()->getUser();
         $entity  = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
         $request = $this->getRequest();
         $form    = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
         $form->bind($request);
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
         if ('POST' === $request->getMethod()) {
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-    
+                $em = $this->getDoctrine()->getManager();    
                 // We persist all page translations
                 foreach($entity->getTranslations() as $translationPage) {
                     $entity->addTranslation($translationPage);
@@ -252,50 +261,46 @@ class PageByTransController extends CmfabstractController
     /**
      * Displays a form to edit an existing Page entity.
      * 
+     * @param Request $request The request instance
+     * @param Page    $entity  A page entity
+     * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function editAction($id)
+    public function editAction(Request $request, Page $entity)
     {
-        $locale    = $this->container->get('request')->getLocale();
-        $User     = $this->get('security.context')->getToken()->getUser();
-        $em     = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
-        if (!$entity) {
-            throw ControllerException::NotFoundEntity('Page');
-        }
+        $locale = $this->container->get('request')->getLocale();
+        $User   = $this->get('security.context')->getToken()->getUser();
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
         $editForm = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getId());
         
         return $this->render("SfynxCmfBundle:PageByTrans:edit.html.twig", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'       => $NoLayout,                
+            'NoLayout'    => $NoLayout,                
         ));
     }
 
     /**
      * Edits an existing Page entity.
      * 
+     * @param Request $request The request instance
+     * @param Page    $entity  A page entity
+     * 
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, Page $entity)
     {
-        $locale    = $this->container->get('request')->getLocale();
+        $locale   = $this->container->get('request')->getLocale();
         $User     = $this->get('security.context')->getToken()->getUser();
-        $em     = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
-        if (!$entity) {
-            throw ControllerException::NotFoundEntity('Page');
-        }
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
         if ($this->container->get('security.context')->isGranted("ROLE_SUPER_ADMIN")) {
             $originalTranslations = array();
             // Create an array of the current Widget objects in the database
@@ -305,8 +310,7 @@ class PageByTransController extends CmfabstractController
         }        
         $editForm   = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-        $editForm->bind($this->getRequest());
-        
+        $editForm->bind($this->getRequest());        
         if ($editForm->isValid()) {
             if ($this->container->get('security.context')->isGranted("ROLE_SUPER_ADMIN")) {
                 // filter $originalWidgets to contain tags no longer present
@@ -330,41 +334,34 @@ class PageByTransController extends CmfabstractController
             $em->persist($entity);
             $em->flush();
             
-            return $this->redirect($this->generateUrl('admin_pagebytrans_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
+            return $this->redirect($this->generateUrl('admin_pagebytrans_edit', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
         }
 
         return $this->render("SfynxCmfBundle:PageByTrans:edit.html.twig", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'       => $NoLayout,                
+            'NoLayout'    => $NoLayout,                
         ));
     }
 
     /**
      * Deletes a Page entity.
      * 
-     * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @param Request $request The request instance
+     * @param Page    $entity  A page entity
      * 
-     * @access    public
+     * @Secure(roles="ROLE_EDITOR")
+     * @return RedirectResponse
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, Page $entity)
     {
-        $form = $this->createDeleteForm($id);
+        $form = $this->createDeleteForm($entity->getId());
         $request = $this->getRequest();
-
         $form->bind($request);
-
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
-
-            if (!$entity) {
-                throw ControllerException::NotFoundEntity('Page');
-            }
-           
             try {
                 $em->remove($entity);
                 $em->flush();

@@ -1,11 +1,12 @@
 
     /**
      * Deletes a {{ entity }} entity.
+     * 
+     * @param integer $id Id value
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
+     * @return RedirectResponse
+     * @access public
      */
     public function deleteAction($id)
     {
@@ -18,7 +19,8 @@
         $form     = $this->createDeleteForm($id);
         $form->bind($request);
         if ($form->isValid()) {
-            $entity = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($locale, $id, 'object');
+            $entity = $em->getRepository("{{ bundle }}:{{ entity }}")
+                ->findOneByEntity($locale, $id, 'object');
             if (!$entity) {
                 throw ControllerException::NotFoundEntity('{{ entity }}');
             }
@@ -28,8 +30,12 @@
                 // to delete cache list query
                 $this->deleteAllCacheQuery('hash_{{ route_name_prefix }}');
             } catch (\Exception $e) {
-                $request->getSession()->getFlashBag()->clear();
-                $request->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
+                $request->getSession()
+                    ->getFlashBag()
+                    ->clear();
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('notice', 'pi.session.flash.wrong.undelete');
             }
         }
 
