@@ -126,7 +126,7 @@
 #            #    alias: SfynxAuthBundle
 #            #    is_bundle: false             
 #            SfynxTranslatorBundle: ~
-#            BootStrapMediaBundle: ~        
+#            ApplicationSonataMediaBundle: ~        
 #            SfynxCmfBundle: ~
 #            PiAppGedmoBundle: ~
 #            translatable:

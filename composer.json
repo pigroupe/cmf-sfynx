@@ -3,9 +3,6 @@
     "license": "MIT",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
-    "autoload": {
-        "psr-0": { "": "src/" }
-    },
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.19",
@@ -62,8 +59,7 @@
         "behat/mink-browserkit-driver": "1.2.*@dev",
         "jns/xhprof-bundle": "1.0.*@dev",
         "facebook/xhprof": "dev-master@dev",
-        "phpcasperjs/phpcasperjs": "dev-master",
-        "phpdocumentor/phpdocumentor": "dev-master"
+        "phpcasperjs/phpcasperjs": "dev-master"
     },       
     "scripts": {
         "post-install-cmd": [
@@ -98,9 +94,8 @@
     },
     "autoload": {
         "psr-0": {
-            "OrApp" : "src",
+            "" : "src",
             "PiApp": "vendor/Sfynx",
-            "BootStrap": "vendor/Sfynx",
             "Application": "vendor/Sfynx",
             "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
             "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",

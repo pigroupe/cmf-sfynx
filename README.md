@@ -141,7 +141,7 @@ Register all bundle in your `app/AppKernel.php` file:
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
 
-            new BootStrap\MediaBundle\BootStrapMediaBundle(),
+            new Application\MediaBundle\BootStrapMediaBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
 
             #override Sfynx bundles
@@ -169,9 +169,6 @@ Register all bundle in your `app/AppKernel.php` file:
     "license": "MIT",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
-    "autoload": {
-        "psr-0": { "": "src/" }
-    },
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.19",
@@ -228,8 +225,7 @@ Register all bundle in your `app/AppKernel.php` file:
         "behat/mink-browserkit-driver": "1.2.*@dev",
         "jns/xhprof-bundle": "1.0.*@dev",
         "facebook/xhprof": "dev-master@dev",
-        "phpcasperjs/phpcasperjs": "dev-master",
-        "phpdocumentor/phpdocumentor": "dev-master"
+        "phpcasperjs/phpcasperjs": "dev-master"
     },       
     "scripts": {
         "post-install-cmd": [
@@ -264,9 +260,8 @@ Register all bundle in your `app/AppKernel.php` file:
     },
     "autoload": {
         "psr-0": {
-            "OrApp" : "src",
+            "" : "src",
             "PiApp": "vendor/Sfynx",
-            "BootStrap": "vendor/Sfynx",
             "Application": "vendor/Sfynx",
             "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
             "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",
@@ -288,7 +283,6 @@ Register all bundle in your `app/AppKernel.php` file:
         }
     }    
 }
-
 
 ```
 
@@ -434,34 +428,6 @@ http://getcomposer.org/ or just run the following command:
 ```
 
 ### Step 5: Create database, tables and fixtures without phing
-
-- There's no way to configure these defaults inside Doctrine, as it tries to be as agnostic as possible in terms of environment configuration. 
-- One way to solve this problem is to configure server-level defaults.
-
-**Setting UTF8 defaults for MySQL is as simple as adding a few lines to your configuration file (typically my.cnf)**
-
-``` bash
-
-    [mysqld]
-    collation-server     = utf8_general_ci
-    character-set-server = utf8
-
-```
-
-**or open file \Doctrine\DBAL\Platforms\AbstractPlatform in getCreateTableSQL method and add this following line**
-
-``` bash
-    
-    $options = $table->getOptions();
-    ...
-    $options['charset'] = 'utf8';
-    $options['collate'] = 'utf8_general_ci';
-
-```
-
-
-- Open your console (cmd) or Putty.
-- Go to the root of the application cmfpi_project.
 
 **Type the following command to create the database**
 

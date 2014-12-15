@@ -108,17 +108,17 @@ class Media extends AbstractDefault
     protected $url;    
     
     /**
-     * @var \BootStrap\MediaBundle\Entity\Media $image
+     * @var \Application\Sonata\MediaBundle\Entity\Media $image
      *
-     * @ORM\ManyToOne(targetEntity="BootStrap\MediaBundle\Entity\Media", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"})
      * @ORM\JoinColumn(name="media", referencedColumnName="id", nullable=true)
      */
     protected $file;
     
     /**
-     * @var \BootStrap\MediaBundle\Entity\Media $image2
+     * @var \Application\Sonata\MediaBundle\Entity\Media $image2
      *
-     * @ORM\ManyToOne(targetEntity="BootStrap\MediaBundle\Entity\Media", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"})
      * @ORM\JoinColumn(name="media2", referencedColumnName="id", nullable=true)
      */
     protected $image2;    
@@ -176,7 +176,7 @@ class Media extends AbstractDefault
     	if (!is_null($cat)) {
     		$content .=  '('. $cat->translate($locale)->getName() .')';
     	}
-    	if ( ($this->getStatus() == 'image') && ($this->getImage() instanceof \BootStrap\MediaBundle\Entity\Media)) {
+    	if ( ($this->getStatus() == 'image') && ($this->getImage() instanceof \Application\Sonata\MediaBundle\Entity\Media)) {
     		$content .= "<img width='100px' src=\"{{ media_url('".$this->getImage()->getId()."', 'small', true, '".$this->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
     	}
     	
@@ -309,7 +309,7 @@ class Media extends AbstractDefault
     /**
      * Set image
      *
-     * @param \BootStrap\MediaBundle\Entity\Media $image
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
      */
     public function setImage($image)
     {
@@ -320,7 +320,7 @@ class Media extends AbstractDefault
     /**
      * Get image
      *
-     * @return \BootStrap\MediaBundle\Entity\Media
+     * @return \Application\Sonata\MediaBundle\Entity\Media
      */
     public function getImage()
     {
@@ -330,7 +330,7 @@ class Media extends AbstractDefault
     /**
      * Set image2
      *
-     * @param \BootStrap\MediaBundle\Entity\Media $image2
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image2
      */
     public function setImage2($image2)
     {
@@ -341,7 +341,7 @@ class Media extends AbstractDefault
     /**
      * Get image2
      *
-     * @return \BootStrap\MediaBundle\Entity\Media
+     * @return \Application\Sonata\MediaBundle\Entity\Media
      */
     public function getImage2()
     {

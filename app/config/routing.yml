@@ -7,10 +7,10 @@ PiAppGedmoBundle:
     
     
 #
-#   Import BootStrapMediaBundle routing files
+#   Import ApplicationSonataMediaBundle routing files
 #     
-BootStrapMediaBundle:
-    resource: "@BootStrapMediaBundle/Resources/config/routing.yml"
+ApplicationSonataMediaBundle:
+    resource: "@ApplicationSonataMediaBundle/Resources/config/routing.yml"
     prefix:   /   
     
          
