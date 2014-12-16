@@ -64,27 +64,27 @@ parameters:
     # ENTITY AUTHORISATION
     #           
     pi_app_admin.config.entity.authorization.prepersist : 
-        Application\Sonata\MediaBundle\Entity\Media:  true
-        Proxies\__CG__\Application\Sonata\MediaBundle\Entity\Media: true       
-        Proxies\ApplicationSonataMediaBundleEntityMediaProxy: true
+        Sfynx\MediaBundle\Entity\Media:  true
+        Proxies\__CG__\Sfynx\MediaBundle\Entity\Media: true       
+        Proxies\SfynxMediaBundleEntityMediaProxy: true
 
         Sfynx\AuthBundle\Entity\User: true
         Proxies\__CG__\Sfynx\AuthBundle\Entity\User: true
         Proxies\SfynxAuthBundleEntityUserProxy: true
         
     pi_app_admin.config.entity.authorization.preupdate : 
-        Application\Sonata\MediaBundle\Entity\Media:  true
-        Proxies\__CG__\Application\Sonata\MediaBundle\Entity\Media: true       
-        Proxies\ApplicationSonataMediaBundleEntityMediaProxy: true
+        Sfynx\MediaBundle\Entity\Media:  true
+        Proxies\__CG__\Sfynx\MediaBundle\Entity\Media: true       
+        Proxies\SfynxMediaBundleEntityMediaProxy: true
 
         Sfynx\AuthBundle\Entity\User: true
         Proxies\__CG__\Sfynx\AuthBundle\Entity\User: true
         Proxies\SfynxAuthBundleEntityUserProxy: true
         
     pi_app_admin.config.entity.authorization.preremove : 
-        Application\Sonata\MediaBundle\Entity\Media:  true
-        Proxies\__CG__\Application\Sonata\MediaBundle\Entity\Media: true       
-        Proxies\ApplicationSonataMediaBundleEntityMediaProxy: true
+        Sfynx\MediaBundle\Entity\Media:  true
+        Proxies\__CG__\Sfynx\MediaBundle\Entity\Media: true       
+        Proxies\SfynxMediaBundleEntityMediaProxy: true
 
         Sfynx\AuthBundle\Entity\User: true
         Proxies\__CG__\Sfynx\AuthBundle\Entity\User: true

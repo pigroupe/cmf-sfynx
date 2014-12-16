@@ -180,7 +180,7 @@ class MediaController extends abstractController
     			if (!is_null($cat)) {
     				$content .=  '('. $cat->translate($locale)->getName() .')';
     			}
-    			if ( ($this->type == 'image') && ($obj->getImage() instanceof \Application\Sonata\MediaBundle\Entity\Media)) {
+    			if ( ($this->type == 'image') && ($obj->getImage() instanceof \Sfynx\MediaBundle\Entity\Media)) {
     				$content .= "<img width='100px' src=\"{{ media_url('".$obj->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
     			}
     			$tab[] = array(

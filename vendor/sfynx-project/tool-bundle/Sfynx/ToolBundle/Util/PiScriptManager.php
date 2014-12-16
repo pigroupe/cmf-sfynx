@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-11-14
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2013-11-14
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,9 +19,9 @@ use Sfynx\ToolBundle\Route\AbstractFactory;
 /**
  * Script manager tool
  * 
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiScriptManager extends AbstractFactory
 {
@@ -45,7 +45,6 @@ class PiScriptManager extends AbstractFactory
      * 
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function renderScript($content_js, $content_html, $path_prefix = '/', $result = "both")
