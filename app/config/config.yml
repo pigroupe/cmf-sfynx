@@ -392,10 +392,10 @@ sonata_block:
 sonata_classification:
     class:
         tag:          Sfynx\ClassificationBundle\Entity\Tag
-        category:     Sfynx\ClassificationBundle\Entity\Category
         collection:   Sfynx\ClassificationBundle\Entity\Collection
         context:      Sfynx\ClassificationBundle\Entity\context
         media:        Sfynx\MediaBundle\Entity\Media
+        category:     Sfynx\ClassificationBundle\Entity\Category
 
     admin:
         tag:
@@ -423,6 +423,7 @@ sonata_media:
     db_driver: doctrine_orm
     class:
         media:              Sfynx\MediaBundle\Entity\Media
+        category:           Sfynx\ClassificationBundle\Entity\Category
         gallery:            Sfynx\MediaBundle\Entity\Gallery
         gallery_has_media:  Sfynx\MediaBundle\Entity\GalleryHasMedia
     contexts:

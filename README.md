@@ -115,9 +115,8 @@ Register all bundle in your `app/AppKernel.php` file:
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),        		
             new Sonata\BlockBundle\SonataBlockBundle(),        		
-            new Sonata\MediaBundle\SonataMediaBundle(),        		
+            new Sonata\MediaBundle\SonataMediaBundle(),    
             new Sonata\ClassificationBundle\SonataClassificationBundle(), 
-            new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
 
             # tools
             new FOS\UserBundle\FOSUserBundle(),
@@ -134,15 +133,14 @@ Register all bundle in your `app/AppKernel.php` file:
             new Sfynx\BrowserBundle\SfynxBrowserBundle(),
             new Sfynx\EncryptBundle\SfynxEncryptBundle(),
             new Sfynx\PositionBundle\SfynxPositionBundle(),
-            new Sfynx\AuthBundle\SfynxAuthBundle(),
-            new Sfynx\MediaBundle\SfynxMediaBundle(),
             new Sfynx\AdminBundle\SfynxAdminBundle(),
-            new Sfynx\CmfBundle\SfynxCmfBundle(),
+            new Sfynx\MediaBundle\SfynxMediaBundle(),
+            new Sfynx\ClassificationBundle\SfynxClassificationBundle(),                
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
-
-            new Application\MediaBundle\BootStrapMediaBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
+            new Sfynx\AuthBundle\SfynxAuthBundle(),
+            new Sfynx\CmfBundle\SfynxCmfBundle(),
 
             #override Sfynx bundles
             new OrApp\OrCmfBundle\OrAppOrCmfBundle(),
@@ -262,7 +260,9 @@ Register all bundle in your `app/AppKernel.php` file:
         "psr-0": {
             "" : "src",
             "PiApp": "vendor/Sfynx",
-            "Application": "vendor/Sfynx",
+            "Sfynx\\ClassificationBundle": "vendor/sfynx-project/sonata-bundle",
+            "Sfynx\\AdminBundle": "vendor/sfynx-project/sonata-bundle",
+            "Sfynx\\MediaBundle": "vendor/sfynx-project/sonata-bundle",
             "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
             "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",
             "Sfynx\\WsBundle": "vendor/sfynx-project/ws-bundle",
@@ -271,9 +271,7 @@ Register all bundle in your `app/AppKernel.php` file:
             "Sfynx\\ToolBundle": "vendor/sfynx-project/tool-bundle",
             "Sfynx\\CoreBundle": "vendor/sfynx-project/core-bundle",
             "Sfynx\\CmfBundle": "vendor/sfynx-project/cmf-bundle",
-            "Sfynx\\AdminBundle": "vendor/sfynx-project/admin-bundle",
             "Sfynx\\AuthBundle": "vendor/sfynx-project/auth-bundle",
-            "Sfynx\\MediaBundle": "vendor/sfynx-project/media-bundle",
             "Sfynx\\BrowserBundle": "vendor/sfynx-project/browser-bundle",
             "Sfynx\\EncryptBundle": "vendor/sfynx-project/annotation-bundle",
             "Sfynx\\PositionBundle": "vendor/sfynx-project/annotation-bundle",

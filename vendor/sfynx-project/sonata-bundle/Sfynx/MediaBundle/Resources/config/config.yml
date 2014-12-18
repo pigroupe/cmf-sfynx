@@ -1,28 +1,4 @@
 ##
-## SonataClassificationBundle configuration
-##            
-#sonata_classification:
-#    class:
-#        tag:          Sfynx\ClassificationBundle\Entity\Tag
-#        category:     Sfynx\ClassificationBundle\Entity\Category
-#        collection:   Sfynx\ClassificationBundle\Entity\Collection
-#
-#    admin:
-#        tag:
-#            class:        Sonata\ClassificationBundle\Admin\TagAdmin
-#            controller:   SonataAdminBundle:CRUD
-#            translation:  SonataClassificationBundle
-#        category:
-#            class:        Sonata\ClassificationBundle\Admin\CategoryAdmin
-#            controller:   SonataAdminBundle:CRUD
-#            translation:  SonataClassificationBundle
-#        collection:
-#            class:        Sonata\ClassificationBundle\Admin\CollectionAdmin
-#            controller:   SonataAdminBundle:CRUD
-#            translation:  SonataClassificationBundle  
-#
-#
-##
 ## SonataBlockBundle configuration
 ##
 #sonata_block:
@@ -46,22 +22,41 @@
 ##
 ## SonataMediaBundle configuration
 ##
+#
+# SonataMediaBundle configuration
+#
 #sonata_media:
 #    default_context: default
 #    db_driver: doctrine_orm
 #    class:
 #        media:              Sfynx\MediaBundle\Entity\Media
+#        category:           Sfynx\ClassificationBundle\Entity\Category
 #        gallery:            Sfynx\MediaBundle\Entity\Gallery
 #        gallery_has_media:  Sfynx\MediaBundle\Entity\GalleryHasMedia
 #    contexts:
+#        sonata_collection:
+#            providers:
+#              - sonata.media.provider.image
+#
+#            formats:
+#                preview: { width: 100, quality: 100}
+#                wide:    { width: 820, quality: 100}
+#
+#        sonata_category:
+#            providers:
+#              - sonata.media.provider.image
+#
+#            formats:
+#                preview: { width: 100, quality: 100}
+#                wide:    { width: 820, quality: 100}        
 #        default:  # the default context is mandatory
 #            download:
-#                #strategy: sonata.media.security.session_strategy # a media can be downloaded only once per session.
-#                #strategy: sonata.media.security.public_strategy         # ROLE_USER
+#                #strategy: sonata.media.security.session_strategy # a media can be downloaded only once per session.            
+#                strategy: sonata.media.security.public_strategy         # ROLE_USER
 #                #strategy: sonata.media.security.superadmin_strategy  # ROLE_SUPER_ADMIN or ROLE_ADMIN
 #                #strategy: sonata.media.security.public_strategy      # no restriction, files are public
 #                #strategy: sonata.media.security.forbidden_strategy   # not possible to retrieve the original file
-#                strategy: sonata.media.security.connected_strategy   # IS_AUTHENTICATED_FULLY or IS_AUTHENTICATED_REMEMBERED
+#                #strategy: sonata.media.security.connected_strategy   # IS_AUTHENTICATED_FULLY or IS_AUTHENTICATED_REMEMBERED
 #                mode: http              # use php to send the file
 #                #mode: X-Sendfile        # use the X-Sendfile flag (Apache + mod_xsendfile : https://tn123.org/mod_xsendfile/)
 #                #mode: X-Accel-Redirect  # use the X-Accel-Redirect flag (Nginx : http://wiki.nginx.org/X-accel)
@@ -75,8 +70,7 @@
 #                small: { width: 100 , quality: 70}
 #                #big:   { width: 500 , quality: 70}
 #                #cinema:     { width: 1850 , quality: 768}
-#                #grandmatv:  { width: 640 , quality: 480}
-#                
+#                #grandmatv:  { width: 640 , quality: 480}                
 #                
 #    cdn:
 #        server:
@@ -106,7 +100,7 @@
 #            thumbnail:  sonata.media.thumbnail.format
 #
 #        image:
-#            resizer:    sonata.media.resizer.simple # sonata.media.resizer.square
+#            resizer:    sonata.media.resizer.square # sonata.media.resizer.simple
 #            filesystem: sonata.media.filesystem.local
 #            cdn:        sonata.media.cdn.server
 #            generator:  sonata.media.generator.default
@@ -132,7 +126,6 @@
 #            cdn:        sonata.media.cdn.server
 #            generator:  sonata.media.generator.default
 #            thumbnail:  sonata.media.thumbnail.format  
-#            
 ##
 ## MenuBundle configuration
 ##

@@ -476,7 +476,7 @@ inline
 {% block widget_control_group_start %}
 {% spaceless %}
 {% if widget_control_group|default(false) or form.parent == null %}
-    {% set widget_control_group_attr = widget_control_group_attr|merge({'id': id ~ '', 'class': widget_control_group_attr.class|default('') ~ ' clearfix'}) %}
+    {% set widget_control_group_attr = widget_control_group_attr|merge({'class': widget_control_group_attr.class|default('') ~ ' clearfix'}) %}
     {% if errors|length > 0 %}
         {% set widget_control_group_attr = widget_control_group_attr|merge({'class': widget_control_group_attr.class|default('') ~ ' error'}) %}
     {% endif %}
