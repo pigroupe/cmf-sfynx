@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-11
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,9 +19,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * Adds tagged twig.extension services to the twig service
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiTwigEnvironmentPass implements CompilerPassInterface
 {

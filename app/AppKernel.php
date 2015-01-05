@@ -40,9 +40,7 @@ class AppKernel extends Kernel
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),        		
             new Sonata\BlockBundle\SonataBlockBundle(),        		
             new Sonata\MediaBundle\SonataMediaBundle(),    
-            new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),                
             new Sonata\ClassificationBundle\SonataClassificationBundle(), 
-            new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
 
             # tools
             new FOS\UserBundle\FOSUserBundle(),
@@ -59,8 +57,10 @@ class AppKernel extends Kernel
             new Sfynx\BrowserBundle\SfynxBrowserBundle(),
             new Sfynx\EncryptBundle\SfynxEncryptBundle(),
             new Sfynx\PositionBundle\SfynxPositionBundle(),
-            new Sfynx\MediaBundle\SfynxMediaBundle(),
             new Sfynx\AdminBundle\SfynxAdminBundle(),
+            new Sfynx\LibraryBundle\SfynxLibraryBundle(),
+            new Sfynx\MediaBundle\SfynxMediaBundle(),
+            new Sfynx\ClassificationBundle\SfynxClassificationBundle(),                
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),

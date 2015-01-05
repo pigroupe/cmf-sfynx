@@ -66,28 +66,32 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
             $langue = $request->getLocale();
         }
         if ($setLocale)    {
-        	// Record the language
-        	$request->setLocale($langue);
+            // Record the language
+            $request->setLocale($langue);
         }        
         // It tries to redirect to the original page.
-        $old_url_path = $request->headers->get('referer');
-        $old_url     = str_replace($request->getUriForPath(''), '', $old_url_path);
-        $old_info    = explode('?', $old_url);
+        $referer  = $request->headers->get('referer');
+        $old_url  = str_replace($request->getUriForPath(''), '', $referer);
+        $old_info = explode('?', $old_url);
         try {
             $data    = $this->getRouterTranslator()->match($old_info[0]);
-            $new_url = $this->getContainer()->get('router')->generate($data['_route'], array('locale' => $langue), UrlGeneratorInterface::ABSOLUTE_PATH);
+            $new_url = $this->getContainer()
+                    ->get('router')
+                    ->generate($data['_route'], array('locale' => $langue), UrlGeneratorInterface::ABSOLUTE_PATH);
         } catch (\Exception $e) {
             $data    = null;
-            $new_url = $old_url_path;
+            $new_url = $referer;
         }        
         if (empty($new_url) || ($new_url == "/")) {
-            $new_url = $this->getContainer()->get('router')->generate('home_page', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
+            $new_url = $this->getContainer()
+                    ->get('router')
+                    ->generate('home_page', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
         }   
     	if (isset($options['result']) && ($options['result'] == 'match')) {
-			return	$data;
-		} else {
-		    return $new_url;
-		}
+            return $data;
+        } else {
+            return $new_url;
+        }
     }
     
     /**

@@ -130,7 +130,10 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                             // On enregistre le contenu du prototype dans le nouveau tab.
                             $(ui.panel).append('<p>' + $prototype_content + '</p>');
                         },
-                        select: function (event, ui) {
+                        activate: function(event, ui) {
+                                //console.log(ui)
+                                var curTab = $('.ui-tabs-selected'); 
+                                var curTabPanel = $('.ui-tabs-panel:not(.ui-tabs-hide)');                              
                         }
                     });
 

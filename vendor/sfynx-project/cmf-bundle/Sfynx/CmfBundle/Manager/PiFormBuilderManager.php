@@ -357,7 +357,6 @@ class PiFormBuilderManager extends AbstractType implements PiFormBuilderManagerI
             throw ServiceException::optionValueNotSpecified($options['formAction']);
         }
         self::$_content = $options;
-        //return $this->_execute();
         try{
             return $this->_execute();
         } catch (\Exception $e) {

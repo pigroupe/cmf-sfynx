@@ -5,24 +5,20 @@ PiAppGedmoBundle:
     resource: "@PiAppGedmoBundle/Resources/config/routing.yml"
     prefix: / 
     
-    
-#
-#   Import ApplicationSonataMediaBundle routing files
-#     
-ApplicationSonataMediaBundle:
-    resource: "@ApplicationSonataMediaBundle/Resources/config/routing.yml"
-    prefix:   /   
-    
-         
-         
-         
 #
 #   Import SfynxMediaBundle routing files
 #     
 SfynxMediaBundle:
     resource: "@SfynxMediaBundle/Resources/config/routing.yml"
-    prefix:   /
-
+    prefix:   /   
+    
+#
+#   Import SfynxAdminBundle routing files
+#     
+SfynxAdminBundle:
+    resource: "@SfynxAdminBundle/Resources/config/routing.yml"
+    prefix:   /    
+    
 #
 #   Import SfynxCmfBundle routing files
 #     
@@ -35,13 +31,6 @@ SfynxCmfBundle:
 #       
 SfynxAuthBundle:
     resource: "@SfynxAuthBundle/Resources/config/routing.yml"
-    prefix:   /
-    
-#
-#   Import SfynxAdminBundle routing files
-#     
-SfynxAdminBundle:
-    resource: "@SfynxAdminBundle/Resources/config/routing.yml"
     prefix:   /
     
 #

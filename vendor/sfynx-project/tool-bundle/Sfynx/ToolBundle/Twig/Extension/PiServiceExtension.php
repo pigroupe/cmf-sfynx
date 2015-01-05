@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Extension
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-03
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-03
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,9 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Action Functions used in twig
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Extension
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiServiceExtension extends \Twig_Extension
 {
@@ -43,7 +43,6 @@ class PiServiceExtension extends \Twig_Extension
      *
      * @return string The extension name
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getName()
@@ -60,14 +59,13 @@ class PiServiceExtension extends \Twig_Extension
      *
      * @return array An array of functions
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getFunctions()
     {
         return array(
-                'getService'      => new \Twig_Function_Method($this, 'getServiceFunction'),
-                'getParameter'  => new \Twig_Function_Method($this, 'getParameterFunction'),
+                'getService'   => new \Twig_Function_Method($this, 'getServiceFunction'),
+                'getParameter' => new \Twig_Function_Method($this, 'getParameterFunction'),
         );
     }    
 
@@ -78,32 +76,32 @@ class PiServiceExtension extends \Twig_Extension
      * 
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getServiceFunction($service)
     {
-        if ($this->container->has($service))
+        if ($this->container->has($service)) {
             return $this->container->get($service);
-        else
+        } else {
             throw new \InvalidArgumentException("The service given in param isn't register !");
+        }
     }
     
     /**
      * Returns the service instance given in param.
      *
-     * @param  string $name The parameter name
+     * @param string $name The parameter name
      *
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getParameterFunction($name)
     {
-        if ($this->container->hasParameter($name))
+        if ($this->container->hasParameter($name)) {
             return $this->container->getParameter($name);
-        else
+        } else {
             throw new \InvalidArgumentException("The parameter given in param isn't register !");
+        }
     }    
 }

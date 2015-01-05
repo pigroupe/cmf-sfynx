@@ -163,9 +163,8 @@ class MediaController extends abstractController
     /**
      * Select all entities.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  protected
+     * @return Response
+     * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function renderselectajaxQuery($entities, $locale)
@@ -181,7 +180,7 @@ class MediaController extends abstractController
     			if (!is_null($cat)) {
     				$content .=  '('. $cat->translate($locale)->getName() .')';
     			}
-    			if ( ($this->type == 'image') && ($obj->getImage() instanceof \Application\Sonata\MediaBundle\Entity\Media)) {
+    			if ( ($this->type == 'image') && ($obj->getImage() instanceof \Sfynx\MediaBundle\Entity\Media)) {
     				$content .= "<img width='100px' src=\"{{ media_url('".$obj->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
     			}
     			$tab[] = array(
@@ -197,9 +196,8 @@ class MediaController extends abstractController
      * Lists all Media entities.
      *
      * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function indexAction()
@@ -334,7 +332,7 @@ class MediaController extends abstractController
         return $this->render("PiAppGedmoBundle:Media:index.html.twig", array(
             'isServerSide' => $is_Server_side,
             'entities' => $entities,
-            'NoLayout'    => $NoLayout,
+            'NoLayout' => $NoLayout,
             'category' => $category,
         ));
     }

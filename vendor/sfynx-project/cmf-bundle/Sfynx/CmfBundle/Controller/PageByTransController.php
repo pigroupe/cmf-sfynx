@@ -130,7 +130,7 @@ class PageByTransController extends CmfabstractController
         if (in_array('ROLE_ADMIN', $RolesUser) 
                 || in_array('ROLE_SUPER_ADMIN', $RolesUser) 
                 || in_array('ROLE_CONTENT_MANAGER', $RolesUser)
-        ){
+        ) {
             if ($status != "all")
                 $entities = $em->getRepository('SfynxCmfBundle:Page')
                     ->getAllPageByStatus($locale, $status)
@@ -156,8 +156,8 @@ class PageByTransController extends CmfabstractController
         }
     
         return $this->render('SfynxCmfBundle:PageByTrans:wizard.html.twig', array(
-                'entities'  => $entities,
-                'id_grid'    => 'grid_' . $status,
+                'entities' => $entities,
+                'id_grid'  => 'grid_' . $status,
         ));
     }
 
@@ -251,7 +251,7 @@ class PageByTransController extends CmfabstractController
             return $this->render("SfynxCmfBundle:PageByTrans:new.html.twig", array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
-                'NoLayout'       => $NoLayout,                    
+                'NoLayout' => $NoLayout,                    
             ));
         }
         
@@ -309,9 +309,10 @@ class PageByTransController extends CmfabstractController
             }
         }        
         $editForm   = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getId());
         $editForm->bind($this->getRequest());        
         if ($editForm->isValid()) {
+            $em       = $this->getDoctrine()->getManager(); 
             if ($this->container->get('security.context')->isGranted("ROLE_SUPER_ADMIN")) {
                 // filter $originalWidgets to contain tags no longer present
                 foreach ($entity->getTranslations() as $Translation) {
@@ -362,6 +363,7 @@ class PageByTransController extends CmfabstractController
         $request = $this->getRequest();
         $form->bind($request);
         if ($form->isValid()) {
+            $em   = $this->getDoctrine()->getManager();  
             try {
                 $em->remove($entity);
                 $em->flush();
