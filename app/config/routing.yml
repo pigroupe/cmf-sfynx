@@ -20,13 +20,6 @@ SfynxAdminBundle:
     prefix:   /    
     
 #
-#   Import SfynxMediaBundle routing files
-#     
-SfynxMediaBundle:
-    resource: "@SfynxMediaBundle/Resources/config/routing.yml"
-    prefix:   /
-
-#
 #   Import SfynxCmfBundle routing files
 #     
 SfynxCmfBundle:

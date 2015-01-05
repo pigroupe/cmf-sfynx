@@ -393,7 +393,7 @@ sonata_classification:
     class:
         tag:          Sfynx\ClassificationBundle\Entity\Tag
         collection:   Sfynx\ClassificationBundle\Entity\Collection
-        context:      Sfynx\ClassificationBundle\Entity\context
+        context:      Sfynx\ClassificationBundle\Entity\Context
         media:        Sfynx\MediaBundle\Entity\Media
         category:     Sfynx\ClassificationBundle\Entity\Category
 
@@ -745,9 +745,9 @@ sfynx_tool:
         cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"        
         
 #
-# SfynxMediaBundle configuration
+# SfynxLibraryBundle configuration
 #       
-sfynx_media:        
+sfynx_library:        
     crop:
         formats:
             0:

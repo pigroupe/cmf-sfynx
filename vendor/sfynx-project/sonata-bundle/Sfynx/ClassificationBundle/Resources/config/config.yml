@@ -4,8 +4,10 @@
 #sonata_classification:
 #    class:
 #        tag:          Sfynx\ClassificationBundle\Entity\Tag
-#        category:     Sfynx\ClassificationBundle\Entity\Category
 #        collection:   Sfynx\ClassificationBundle\Entity\Collection
+#        context:      Sfynx\ClassificationBundle\Entity\Context
+#        media:        Sfynx\MediaBundle\Entity\Media
+#        category:     Sfynx\ClassificationBundle\Entity\Category
 #
 #    admin:
 #        tag:

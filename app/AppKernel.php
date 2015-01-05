@@ -58,6 +58,7 @@ class AppKernel extends Kernel
             new Sfynx\EncryptBundle\SfynxEncryptBundle(),
             new Sfynx\PositionBundle\SfynxPositionBundle(),
             new Sfynx\AdminBundle\SfynxAdminBundle(),
+            new Sfynx\LibraryBundle\SfynxLibraryBundle(),
             new Sfynx\MediaBundle\SfynxMediaBundle(),
             new Sfynx\ClassificationBundle\SfynxClassificationBundle(),                
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),

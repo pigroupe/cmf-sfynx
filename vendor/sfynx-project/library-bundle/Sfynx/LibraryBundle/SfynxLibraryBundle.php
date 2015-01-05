@@ -1,29 +1,28 @@
 <?php
 /**
- * This file is part of the <Tool> project.
+ * This file is part of the <Library> project.
  *
- * @subpackage   Sfynx
+ * @subpackage Library
  * @package    Bundle
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\ToolBundle;
+namespace Sfynx\LibraryBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Sfynx\ToolBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
+use Sfynx\LibraryBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
 
 /**
- * Sfynx configuration and managment of the Tool Bundle
+ * BootStrap configuration and managment of the user Bundle
  *
- * @subpackage   Sfynx
+ * @subpackage Library
  * @package    Bundle
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class SfynxToolBundle extends Bundle
+class SfynxLibraryBundle extends Bundle
 {
     /**
      * Builds the bundle.
@@ -34,6 +33,8 @@ class SfynxToolBundle extends Bundle
      * other extensions, ...
      *
      * @param ContainerBuilder $container A ContainerBuilder instance
+     * 
+     * @author <etienne de Longeaux> <etienne.delongeaux@gmail.com>
      */
     public function build(ContainerBuilder $container)
     {
@@ -47,7 +48,7 @@ class SfynxToolBundle extends Bundle
      */
     public function boot()
     {
-    }    
+    }
     
     /**
      * Shutdowns the Bundle.

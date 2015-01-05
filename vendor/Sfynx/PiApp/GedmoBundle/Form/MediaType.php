@@ -2,10 +2,10 @@
 /**
  * This file is part of the <PI_CRUD> project.
  *
- * @category   PI_CRUD_Form
- * @package    Form
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 20XX-XX-XX
+ * @category PI_CRUD_Form
+ * @package  Form
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since    20XX-XX-XX
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,9 +18,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Symfony\Component\Validator\Constraints;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Description of the MediaType form.

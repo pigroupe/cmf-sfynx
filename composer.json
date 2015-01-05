@@ -99,6 +99,7 @@
             "Sfynx\\ClassificationBundle": "vendor/sfynx-project/sonata-bundle",
             "Sfynx\\AdminBundle": "vendor/sfynx-project/sonata-bundle",
             "Sfynx\\MediaBundle": "vendor/sfynx-project/sonata-bundle",
+            "Sfynx\\LibraryBundle": "vendor/sfynx-project/library-bundle",
             "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
             "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",
             "Sfynx\\WsBundle": "vendor/sfynx-project/ws-bundle",
