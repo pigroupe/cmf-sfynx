@@ -36,5 +36,4 @@ class PiAppGedmoExtension extends Extension{
         $loaderYaml->load('services_twig_extension.yml');
         $loaderYaml->load('services_util.yml');
     }
-
 }

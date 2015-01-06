@@ -15,8 +15,9 @@ namespace Sfynx\AuthBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Form\Form;
 use FOS\UserBundle\Model\UserInterface;
 
 use Sfynx\ToolBundle\Exception\ControllerException;
@@ -34,9 +35,8 @@ abstract class abstractController extends Controller
     /**
      * Enabled entities.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function enabledajaxAction()
@@ -95,9 +95,8 @@ abstract class abstractController extends Controller
     /**
      * Disable entities.
      * 
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function disableajaxAction()
@@ -150,9 +149,8 @@ abstract class abstractController extends Controller
     /**
      * Deletes a entity.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deletajaxAction()
@@ -199,9 +197,8 @@ abstract class abstractController extends Controller
     /**
      * Archive entities.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function archiveajaxAction()
@@ -260,9 +257,8 @@ abstract class abstractController extends Controller
     /**
      * Change the posistion of a entity .
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function positionajaxAction()
@@ -309,130 +305,129 @@ abstract class abstractController extends Controller
     /**
      * get entities in ajax request for select form.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  protected
+     * @return Response
+     * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function selectajaxQuery($pagination, $MaxResults, $keywords = null, $query = null, $locale = '', $only_enabled  = true, $cacheQuery_hash = null)
     {
     	$request = $this->container->get('request');
-    	$em		 = $this->getDoctrine()->getManager();
+    	$em      = $this->getDoctrine()->getManager();
     	//
     	if (empty($locale)) {
-    		$locale = $this->container->get('request')->getLocale();
+            $locale = $this->container->get('request')->getLocale();
     	}
     	//
     	if ($request->isXmlHttpRequest()) {
-    		if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder) ) {
-    			$query    = $em->getRepository($this->_entityName)->getAllByCategory('', null, '', '', false);
-    		}
-    		if ($only_enabled) {
-    			$query    			
-    			->andWhere('a.enabled = 1');
-    		}
-    		// groupe by
-    		$query->groupBy('a.id');
-    		// autocompletion
-    		$array_params = array();
-    		if (is_array($keywords) && (count($keywords) >= 1)) {
-    			$i = 0;
-    			foreach ($keywords as $info) {
-    				$is_trans = false;
-    				if (isset($info['field_trans']) && !empty($info['field_trans'])) {
-    					$is_trans = $info['field_trans'];
-    					if (!isset($info['field_trans_name']) || empty($info['field_trans_name'])) {
-    						$is_trans = false;
-    					}
-    				}
-    				if ($is_trans && isset($info['field_trans_name']) && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
-    					$current_encoding = mb_detect_encoding($info['field_value'], 'auto');
-    					$info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
-    					$info['field_value'] = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
-    						
-    					$trans_name = $info['field_trans_name'];
-		    			$andModule_title = $query->expr()->andx();
-		    			$andModule_title->add($query->expr()->eq("LOWER({$trans_name}.locale)", "'{$locale}'"));
-		    			$andModule_title->add($query->expr()->eq("LOWER({$trans_name}.field)", "'".$info['field_name']."'"));
-		    			//$andModule_title->add($query->expr()->like("LOWER({$trans_name}.content)", $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
-		    			$andModule_title->add("LOWER({$trans_name}.content) LIKE :var1".$i."");
-		    			$array_params["var1".$i] = '%'.strtolower($info['field_value']).'%';
-		    			 
-		    			$andModule_id = $query->expr()->andx();
-		    			//$andModule_id->add($query->expr()->like('LOWER(a.id)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
-		    			$andModule_id->add("LOWER(a.id) LIKE :var2".$i."");
-		    			$array_params["var2".$i] = '%'.strtolower($info['field_value']).'%';
-		    			 
-		    			$orModule  = $query->expr()->orx();
-		    			$orModule->add($andModule_title);
-		    			$orModule->add($andModule_id);
-		    			 
-		    			$query->andWhere($orModule);
-    				} elseif (!$is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
-    					$current_encoding = mb_detect_encoding($info['field_value'], 'auto');
-    					$info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
-    					$info['field_value'] = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
-    					
-    					//$query->add($query->expr()->like('LOWER('.$info['field_name'].')', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
-    					$query->add("LOWER(".$info['field_name'].") LIKE :var3".$i."");
-    					$array_params["var3".$i] = '%'.strtolower($info['field_value']).'%';
-    				}
-    				$i++;
-    			}
-    			$query->setParameters($array_params);
-    		}    		
-    		// pagination
-    		if (!is_null($pagination)) {
-    			$query->setFirstResult((intVal($pagination)-1)*intVal($MaxResults));
-    			$query->setMaxResults(intVal($MaxResults));
-    			//$query_sql = $query->getQuery()->getSql();
-    			//var_dump($query_sql);
-    		}
-    		//
-    		if (is_null($cacheQuery_hash)) {
-    			$query = $query->getQuery();
-    		} elseif (is_array($cacheQuery_hash)) {
-    			// we define all options
-    			if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
-    			if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = 3; // \Doctrine\ORM\Cache::MODE_NORMAL;
-    			if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
-    			if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
-    			if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
-    			// we set the query result
-    			$query     = $em->getRepository($this->_entityName)->cacheQuery($query->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
-    		}    		
-    		// result
-    		$entities = $em->getRepository($this->_entityName)->findTranslationsByQuery($locale, $query, 'object', false);
-    		$tab      = $this->renderselectajaxQuery($entities, $locale);
-    		// response
-    		$response = new Response(json_encode($tab));
-    		$response->headers->set('Content-Type', 'application/json');
-    		 
-    		return $response;    		 	
+            if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder) ) {
+                $query    = $em->getRepository($this->_entityName)
+                        ->getAllByCategory('', null, '', '', false);
+            }
+            if ($only_enabled) {
+                $query    			
+                ->andWhere('a.enabled = 1');
+            }
+            // groupe by
+            $query->groupBy('a.id');
+            // autocompletion
+            $array_params = array();
+            if (is_array($keywords) && (count($keywords) >= 1)) {
+                $i = 0;
+                foreach ($keywords as $info) {
+                    $is_trans = false;
+                    if (isset($info['field_trans']) && !empty($info['field_trans'])) {
+                        $is_trans = $info['field_trans'];
+                        if (!isset($info['field_trans_name']) || empty($info['field_trans_name'])) {
+                                $is_trans = false;
+                        }
+                    }
+                    if ($is_trans && isset($info['field_trans_name']) && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+                        $current_encoding = mb_detect_encoding($info['field_value'], 'auto');
+                        $info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
+                        $info['field_value'] = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+
+                        $trans_name = $info['field_trans_name'];
+                        $andModule_title = $query->expr()->andx();
+                        $andModule_title->add($query->expr()->eq("LOWER({$trans_name}.locale)", "'{$locale}'"));
+                        $andModule_title->add($query->expr()->eq("LOWER({$trans_name}.field)", "'".$info['field_name']."'"));
+                        //$andModule_title->add($query->expr()->like("LOWER({$trans_name}.content)", $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+                        $andModule_title->add("LOWER({$trans_name}.content) LIKE :var1".$i."");
+                        $array_params["var1".$i] = '%'.strtolower($info['field_value']).'%';
+
+                        $andModule_id = $query->expr()->andx();
+                        //$andModule_id->add($query->expr()->like('LOWER(a.id)', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+                        $andModule_id->add("LOWER(a.id) LIKE :var2".$i."");
+                        $array_params["var2".$i] = '%'.strtolower($info['field_value']).'%';
+
+                        $orModule  = $query->expr()->orx();
+                        $orModule->add($andModule_title);
+                        $orModule->add($andModule_id);
+
+                        $query->andWhere($orModule);
+                    } elseif (!$is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
+                        $current_encoding = mb_detect_encoding($info['field_value'], 'auto');
+                        $info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
+                        $info['field_value'] = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+
+                        //$query->add($query->expr()->like('LOWER('.$info['field_name'].')', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
+                        $query->add("LOWER(".$info['field_name'].") LIKE :var3".$i."");
+                        $array_params["var3".$i] = '%'.strtolower($info['field_value']).'%';
+                    }
+                    $i++;
+                }
+                $query->setParameters($array_params);
+            }    		
+            // pagination
+            if (!is_null($pagination)) {
+                $query->setFirstResult((intVal($pagination)-1)*intVal($MaxResults));
+                $query->setMaxResults(intVal($MaxResults));
+                //$query_sql = $query->getQuery()->getSql();
+                //var_dump($query_sql);
+            }
+            //
+            if (is_null($cacheQuery_hash)) {
+                    $query = $query->getQuery();
+            } elseif (is_array($cacheQuery_hash)) {
+                // we define all options
+                if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
+                if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = 3; // \Doctrine\ORM\Cache::MODE_NORMAL;
+                if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
+                if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
+                if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
+                // we set the query result
+                $query = $em->getRepository($this->_entityName)->cacheQuery($query->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
+            }    		
+            // result
+            $entities = $em->getRepository($this->_entityName)->findTranslationsByQuery($locale, $query, 'object', false);
+            $tab      = $this->renderselectajaxQuery($entities, $locale);
+            // response
+            $response = new Response(json_encode($tab));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;    		 	
     	} else {
-    		throw ControllerException::callAjaxOnlySupported(' selectajax');
+            throw ControllerException::callAjaxOnlySupported(' selectajax');
     	}    	
     }   
     
     /**
      * Select all entities.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  protected
+     * @return Response
+     * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function renderselectajaxQuery($entities, $locale)
     {
     	$tab = array();
     	foreach ($entities as $obj) {
-    		$content   = $obj->translate($locale)->getTitle();
-    		if (!empty($content)) {
-    			$tab[] = array(
-    					'id' => $obj->getId(),
-    					'text' =>$this->container->get('twig')->render($content, array())
-    			);
-    		}
+            $content   = $obj->translate($locale)->getTitle();
+            if (!empty($content)) {
+                $tab[] = array(
+                    'id' => $obj->getId(),
+                    'text' =>$this->container->get('twig')->render($content, array())
+                );
+            }
     	}
     	
     	return $tab;
@@ -441,15 +436,15 @@ abstract class abstractController extends Controller
     /**
      * Create Ajax query
      *
-     * @param string $type        ["select","count"]
+     * @param string $type            ["select","count"]
      * @param string $table
      * @param string $aColumns
      * @param string $table
      * @param array  $dateSearch
      * @param array  $cacheQuery_hash
+     * 
      * @return array
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAjaxQuery($type, $aColumns, $qb = null, $tablecode = 'u', $table = null, $dateSearch = null, $cacheQuery_hash = null)
@@ -530,20 +525,20 @@ abstract class abstractController extends Controller
         
         $or = $qb->expr()->orx();
         for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
-        	if ( $request->get('bSearchable_'.$i) == "true" && $request->get('sSearch') != '' ) {
-        		$search_tab = explode("|", $request->get('sSearch'));
-        		foreach ($search_tab as $s) {
-        			if(!empty($s)){
-        			    $or->add("LOWER(".$aColumns[$i].") LIKE :var2".$i."");
-        			    //
-        			    $current_encoding = mb_detect_encoding($s, 'auto');
-        			    $s = iconv($current_encoding, 'UTF-8', $s);
-        			    $s = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($s);
-        			    //
-        			    $array_params["var2".$i] = '%'.strtolower($s).'%';
-        			}
-        		}
-        	}
+            if ( $request->get('bSearchable_'.$i) == "true" && $request->get('sSearch') != '' ) {
+                $search_tab = explode("|", $request->get('sSearch'));
+                foreach ($search_tab as $s) {
+                    if(!empty($s)){
+                        $or->add("LOWER(".$aColumns[$i].") LIKE :var2".$i."");
+                        //
+                        $current_encoding = mb_detect_encoding($s, 'auto');
+                        $s = iconv($current_encoding, 'UTF-8', $s);
+                        $s = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($s);
+                        //
+                        $array_params["var2".$i] = '%'.strtolower($s).'%';
+                    }
+                }
+            }
         }
         if ($or!= "") {
         	$qb->andWhere($or);
@@ -584,16 +579,16 @@ abstract class abstractController extends Controller
         //var_dump($query_sql);
         //exit;
         if (is_null($cacheQuery_hash)) {
-        	$qb = $qb->getQuery();
+            $qb = $qb->getQuery();
         } elseif (is_array($cacheQuery_hash)) {
-        	// we define all options
-        	if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
-        	if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = 3; // \Doctrine\ORM\Cache::MODE_NORMAL;
-        	if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
-        	if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
-        	if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
-        	// we set the query result
-        	$qb     = $em->getRepository($this->_entityName)->cacheQuery($qb->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
+            // we define all options
+            if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
+            if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = 3; // \Doctrine\ORM\Cache::MODE_NORMAL;
+            if (!isset($cacheQuery_hash['setCacheable'])) $cacheQuery_hash['setCacheable'] = true;
+            if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
+            if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
+            // we set the query result
+            $qb     = $em->getRepository($this->_entityName)->cacheQuery($qb->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
         }
         $result = $em->getRepository($this->_entityName)->setTranslatableHints($qb, $locale, false, true)->getResult();
         if ($type == 'count') {
@@ -607,14 +602,14 @@ abstract class abstractController extends Controller
      * Delete the query cache of a id hash.
      *
      * @param string $input_hash
+     * 
      * @return array
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteCacheQuery($input_hash)
     {
-    	$em     = $this->getDoctrine()->getManager();
+    	$em = $this->getDoctrine()->getManager();
     	$cacheDriver = $em->getConfiguration()->getResultCacheImpl();
     	$cacheDriver->delete($input_hash);
     }    
@@ -623,14 +618,14 @@ abstract class abstractController extends Controller
      * Delete all query cache ids of a namespace.
      *
      * @param string $namespace
+     * 
      * @return array
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteAllCacheQuery($namespace = '')
     {
-    	$em     = $this->getDoctrine()->getManager();
+    	$em = $this->getDoctrine()->getManager();
     	$cacheDriver = $em->getConfiguration()->getResultCacheImpl();
     	$cacheDriver->setNamespace($namespace);
     	$cacheDriver->deleteAll();
@@ -646,19 +641,20 @@ abstract class abstractController extends Controller
      *     $this->checkCsrf('listword'); // name of the generated token, must be equal to the one from Twig
      * </code>
      * 
-     * @param \Symfony\Component\Form\Form $form
-     * @return array	The list of all the errors
+     * @param string $name
+     * @param string $query
+     * 
+     * @return array The list of all the errors
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     protected function checkCsrf($name, $query = '_token')
     {
     	$request = $this->getRequest();
     	$csrfProvider = $this->get('form.csrf_provider');
-    	
+        //
     	if (!$csrfProvider->isCsrfTokenValid($name, $request->query->get($query))) {
-    		throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('CSRF token is invalid.');
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('CSRF token is invalid.');
     	}
     
     	return true;
@@ -667,20 +663,32 @@ abstract class abstractController extends Controller
     /**
      * Get all error messages after binding form.
      *
-     * @param \Symfony\Component\Form\Form $form	
-     * @return array	The list of all the errors
+     * @param Form   $form
+     * @param string $type
+     * @param string $delimiter
+     * 	
+     * @return array The list of all the errors
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function getErrorMessages(\Symfony\Component\Form\Form $form, $type = 'array', $delimiter = "<br />")
+    protected function getErrorMessages(Form $form, $type = 'array', $delimiter = "<br />")
     {
     	$errors = array();
     	foreach ($form->getErrors() as $key => $error) {
             if($error->getMessagePluralization() !== null) {
-                $errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->transChoice($error->getMessage(), $error->getMessagePluralization(), $error->getMessageParameters()));
+                $errors[$key] = array(
+                    'id'    => $error->getMessage(),
+                    'trans' => $this->get('translator')->transChoice(
+                        $error->getMessage(), 
+                        $error->getMessagePluralization(), 
+                        $error->getMessageParameters()
+                    )
+                );
             } else {
-                $errors[$key] = array('id'=>$error->getMessage(), 'trans'=>$this->get('translator')->trans($error->getMessage()));
+                $errors[$key] = array(
+                    'id'    => $error->getMessage(),
+                    'trans' => $this->get('translator')->trans($error->getMessage())
+                );
             }    		
     	}
     	$all = $form->all();
@@ -701,43 +709,52 @@ abstract class abstractController extends Controller
     /**
      * Set all error messages in flash.
      *
-     * @param \Symfony\Component\Form\Form $form
-     * @return array	The list of all the errors
+     * @param Form $form
+     * 
+     * @return array The list of all the errors
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function setFlashErrorMessages(\Symfony\Component\Form\Form $form)
+    protected function setFlashErrorMessages(Form $form)
     {
-    	return $this->container->get('request')->getSession()->getFlashBag()->add('errorform', $this->getErrorMessages($form, 'string' ));
+    	return $this->container->get('request')
+                ->getSession()
+                ->getFlashBag()
+                ->add('errorform', $this->getErrorMessages($form, 'string' ));
     }    
     
     /**
      * Set all messages in flash.
      *
-     * @param \Symfony\Component\Form\Form $form
+     * @param string $messages
+     * @param string $param
+     * 
      * @return array	The list of all the errors
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setFlashMessages($messages, $param = 'notice')
     {
-    	return $this->container->get('request')->getSession()->getFlashBag()->add($param, $messages);
+    	return $this->container->get('request')
+                ->getSession()
+                ->getFlashBag()
+                ->add($param, $messages);
     }    
         
     /**
      * Authenticate a user with Symfony Security.
      *
-     * @param $user
+     * @param UserInterface $user
+     * @param null|Response $response
+     * @param boolean       $deleteToken
+     * 
      * @return void
      * @access protected
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function authenticateUser(UserInterface $user = null, &$response = null, $deleteToken = false)
     {
-    	$em 		 = $this->getDoctrine()->getManager();
+    	$em          = $this->getDoctrine()->getManager();
     	$request     = $this->container->get('request');
         $providerKey = $this->container->getParameter('fos_user.firewall_name');
         $userManager = $this->container->get('fos_user.user_manager');
@@ -828,10 +845,8 @@ abstract class abstractController extends Controller
     /**
      * Disconnect a user with Symfony Security.
      *
-     * @param $user
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function disconnectUser()
@@ -842,9 +857,8 @@ abstract class abstractController extends Controller
     /**
      * Return the token object.
      *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+     * @return UsernamePasswordToken
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getToken()
@@ -855,9 +869,8 @@ abstract class abstractController extends Controller
     /**
      * Return the token object.
      *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+     * @return UsernamePasswordToken
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function tokenUser(UserInterface $user)
@@ -867,8 +880,8 @@ abstract class abstractController extends Controller
     
     /**
      * Send mail to reset user password (return link with url)
+     * 
      * @return string
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function sendResettingEmailMessage(UserInterface $user, $route_reset_connexion, $title = '', $parameters = array())
@@ -878,8 +891,8 @@ abstract class abstractController extends Controller
     
     /**
      * Send mail to reset user password (return URL)
+     * 
      * @return string
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function sendResettingEmailMessageURL(UserInterface $user, $route_reset_connexion, $parameters = array())
@@ -890,9 +903,8 @@ abstract class abstractController extends Controller
     /**
      * Return the connected user name.
      *
-     * @return string    user name
+     * @return string User name
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserName()
@@ -903,9 +915,8 @@ abstract class abstractController extends Controller
     /**
      * Return the user permissions.
      *
-     * @return array    user permissions
+     * @return array User permissions
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserPermissions()
@@ -918,7 +929,6 @@ abstract class abstractController extends Controller
      *
      * @return array    user roles
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserRoles()
@@ -931,13 +941,12 @@ abstract class abstractController extends Controller
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isAnonymousToken()
     {
         if (
-            ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\AnonymousToken)
+            ($this->getToken() instanceof AnonymousToken)
             ||
             ($this->getToken() === null)
         ) {
@@ -952,12 +961,11 @@ abstract class abstractController extends Controller
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isUsernamePasswordToken()
     {
-        if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
+        if ($this->getToken() instanceof UsernamePasswordToken) {
             return true;
         } else {
             return false;
@@ -967,11 +975,10 @@ abstract class abstractController extends Controller
     /**
      * we check if the user ID exists in the authentication service.
      *
-     * @param integer    $userId
+     * @param integer $userId
+     * 
      * @return boolean
      * @access protected
-     *
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isUserdIdExisted($userId)
@@ -988,11 +995,11 @@ abstract class abstractController extends Controller
     /**
      * we return the user enity associated to the user token and the application.
      *
-     * @param string    $token
-     * @param string    $application
+     * @param string $token
+     * @param string $application
+     * 
      * @return string
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserByTokenAndApplication($token, $application)
@@ -1020,11 +1027,11 @@ abstract class abstractController extends Controller
     /**
      * we return the user enity associated to the user token and the application.
      *
-     * @param string    $token
-     * @param string    $application
+     * @param string $token
+     * @param string $application
+     * 
      * @return string
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserByTokenAndApplicationMultiple($token, $application)
@@ -1051,11 +1058,11 @@ abstract class abstractController extends Controller
     /**
      * we return the token associated to the user ID.
      * 
-     * @param integer    $userId
-     * @param string    $application
+     * @param integer $userId
+     * @param string  $application
+     * 
      * @return string
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getTokenByUserIdAndApplication($userId, $application)
@@ -1076,12 +1083,12 @@ abstract class abstractController extends Controller
     /**
      * we associate the token to the userId.
      * 
-     * @param integer    $userId
-     * @param string    $token
-     * @param string    $application
+     * @param integer $userId
+     * @param string  $token
+     * @param string  $application
+     * 
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setAssociationUserIdWithApplicationToken($userId, $token, $application)

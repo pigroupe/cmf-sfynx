@@ -6,33 +6,6 @@ parameters:
     
 services:
     #
-    # configuration of the forms
-    #            
-    sfynx_mediabundle_mediatype_file:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'file' ]
-        tags:
-            - { name: form.type }      
-            
-    sfynx_mediabundle_mediatype_image:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'image' ]
-        tags:
-            - { name: form.type }
-            
-    sfynx_mediabundle_mediatype_youtube:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'youtube' ]
-        tags:
-            - { name: form.type }        
-            
-    sfynx_mediabundle_mediatype_dailymotion:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'dailymotion' ]
-        tags:
-            - { name: form.type }  
-            
-    #
     # configuration of the event subscriber of entities
     #         
     bootstrap_media.event_subscriber.media:

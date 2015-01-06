@@ -72,15 +72,15 @@ class MediaType extends AbstractType
      * @param string $status    ['file', 'image', 'youtube', 'dailymotion']
      * @return void
      */
-    public function __construct(ContainerInterface $container, EntityManager $em, $status = "image", $class =  "media_collection", $simpleLink = "all", $labelLink = "", $context = "default")
+    public function __construct(ContainerInterface $container, EntityManager $em, $status = "image", $class =  "media_collection", $simpleLink = "all", $labelLink = "", $context = "")
     {
-        $this->_em            = $em;
-        $this->_container     = $container;
-        $this->_status        = $status;
+        $this->_em           = $em;
+        $this->_container    = $container;
+        $this->_status       = $status;
         $this->_class        = $class;
-        $this->_simpleLink    = $simpleLink;
+        $this->_simpleLink   = $simpleLink;
         $this->_labelLink    = $labelLink;
-        $this->_context        = $context;
+        $this->_context      = $context;
     }
         
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -241,7 +241,7 @@ class MediaType extends AbstractType
         }
         if ($this->_status == "file") {
             if ($this->_labelLink == "")    $this->_labelLink    = 'pi.form.label.media.file';
-            if ($this->_context == "")    $this->_context        = 'file';
+            if ($this->_context == "")    $this->_context        = 'default';
              $builder->add('image', 'sonata_media_type', array(
                      'provider'  => 'sonata.media.provider.file',
                      'context'   => $this->_context,
@@ -255,7 +255,7 @@ class MediaType extends AbstractType
              ));        
          } elseif ($this->_status == "image") {
              if ($this->_labelLink == "") $this->_labelLink = 'pi.form.label.media.picture';     
-             if ($this->_context == "")    $this->_context        = 'image';
+             if ($this->_context == "")    $this->_context        = 'default';
              $builder->add('image', 'sonata_media_type', array(
                      'provider'     => 'sonata.media.provider.image',
                      'context'      => $this->_context,
@@ -269,7 +269,7 @@ class MediaType extends AbstractType
              ));   
              if ($this->_simpleLink == "simpleWithIcon"){
              	if ($this->_labelLink == "") $this->_labelLink = 'miniature';
-             	if ($this->_context == "")    $this->_context        = 'image';
+             	if ($this->_context == "")    $this->_context        = 'default';
              	$builder->add('image2', 'sonata_media_type', array(
              			'provider'     => 'sonata.media.provider.image',
              			'context'      => $this->_context,
@@ -284,7 +284,7 @@ class MediaType extends AbstractType
              }         
          } elseif ($this->_status == "youtube") {
              if ($this->_labelLink == "") $this->_labelLink     = 'pi.form.label.media.youtube';
-             if ($this->_context == "")    $this->_context        = 'youtube';
+             if ($this->_context == "")    $this->_context        = 'default';
              $builder->add('image', 'sonata_media_type', array(
                      'provider'     => 'sonata.media.provider.youtube',
                      'context'      => $this->_context,
@@ -298,7 +298,7 @@ class MediaType extends AbstractType
              ));
          }elseif ($this->_status == "dailymotion"){
              if ($this->_labelLink == "") $this->_labelLink     = 'pi.form.label.media.dailymotion';
-             if ($this->_context == "")    $this->_context        = 'dailymotion';
+             if ($this->_context == "")    $this->_context        = 'default';
              $builder->add('image', 'sonata_media_type', array(
                      'provider'     => 'sonata.media.provider.dailymotion',
                      'context'      => $this->_context,

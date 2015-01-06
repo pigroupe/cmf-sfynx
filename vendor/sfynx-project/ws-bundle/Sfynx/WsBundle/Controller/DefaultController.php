@@ -63,16 +63,11 @@ class DefaultController extends abstractController
     	$em      = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
     	//
-        if ($request->get('ws_key') == '') {
-            throw new \Exception('ws_key not specified');
-        }
-        if ($request->get('ws_user_id') == '') {
-            throw new \Exception('ws_user_id not specified');
-        }
-        if ($request->get('ws_application') == '') {
-            throw new \Exception('ws_application not specified');
-        }
-    	if (!$request->get('ws_key', false) || !$request->get('ws_format', false) || !$request->get('ws_user_id', false) || !$request->get('ws_application', false)) {
+    	if (!$request->headers->has('x-auth-ws_key') 
+                || !$request->headers->has('x-auth-ws_format') 
+                || !$request->headers->has('x-auth-ws_user_id') 
+                || !$request->headers->has('x-auth-ws_application')
+        ) {
             //-----we initialize de logger-----
             $logger = $this->container->get('sfynx.tool.log_manager');
             $logger->setInit('log_client_auth', date("YmdH"));
@@ -94,10 +89,10 @@ class DefaultController extends abstractController
             }
     	    throw ClientException::callBadAuthRequest(__CLASS__);
     	}
-    	$key            = $request->get('ws_key', '');
-    	$format         = $request->get('ws_format', 'json');
-    	$userId         = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_user_id', null), $key);
-    	$application    = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_application', null), $key);    	
+    	$key            = $request->headers->get('x-auth-ws_key', '');
+    	$format         = $request->headers->get('x-auth-ws_format', 'json');
+    	$userId         = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_user_id', null), $key);
+    	$application    = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_application', null), $key);    	
     	// we check if the user ID exists in the authentication service.
     	// If the user ID doesn't exist, we generate.
     	if (!$this->isUserdIdExisted($userId)) {
@@ -115,15 +110,15 @@ class DefaultController extends abstractController
             $env = $this->container->get("kernel")->getEnvironment();
             $config = $this->container->getParameter("ws.auth");
             if (isset($config['log'][$env])) {
-                    $is_debug = $config['log'][$env];
-                    if ($is_debug){
-                            $logger->save();
-                    }   		
+                $is_debug = $config['log'][$env];
+                if ($is_debug){
+                        $logger->save();
+                }   		
             }
     	    throw ClientException::callBadAuthRequest(__CLASS__);
     	} else {
     	    // else we get the token associated to the user ID.
-    	    $token           = $this->getTokenByUserIdAndApplication($userId, $application);
+    	    $token = $this->getTokenByUserIdAndApplication($userId, $application);
     	    if ($token) {
     	        $isAuthorization = true;
     	    } else {
@@ -170,10 +165,10 @@ class DefaultController extends abstractController
             $env = $this->container->get("kernel")->getEnvironment();
             $config = $this->container->getParameter("ws.auth");
             if (isset($config['log'][$env])) {
-                    $is_debug = $config['log'][$env];
-                    if ($is_debug){
-                            $logger->save();
-                    }   		
+                $is_debug = $config['log'][$env];
+                if ($is_debug){
+                        $logger->save();
+                }   		
             }             
     	}
     	
@@ -197,51 +192,43 @@ class DefaultController extends abstractController
     	$em      = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
     	//
-    	if ($request->get('ws_key') == '') {
-            throw new \Exception('ws_key not specified');
-    	}
-    	if ($request->get('ws_user_id') == '') {
-    		throw new \Exception('ws_user_id not specified');
-    	}
-    	if ($request->get('ws_token') == '') {
-    		throw new \Exception('ws_token not specified');
-    	}
-    	if ($request->get('ws_application') == '') {
-    		throw new \Exception('ws_application not specified');
-    	}
-    	//
-        if (!$request->get('ws_key', false) || !$request->get('ws_format', false) || !$request->get('ws_user_id', false) || !$request->get('ws_token', false) || !$request->get('ws_application', false)) {
-        	//-----we initialize de logger-----
-        	$logger = $this->container->get('sfynx.tool.log_manager');
-        	$logger->setInit('log_client_auth', date("YmdH"));
-        	//-----we set info in the logger-----
-        	$logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET BAD VALIDATE TOKEN AUTH REQUEST]");
-        	//-----we set errors in the logger-----
-        	$logger->setErr(date("Y-m-d H:i:s") . " [LOG] url :" . $request->getUri());
-        	//-----we set info in the logger-----
-        	$logger->setInfo(date("Y-m-d H:i:s") . " [END]");
-        	//-----we save in the file log-----
-        	$env = $this->container->get("kernel")->getEnvironment();
-    		$config = $this->container->getParameter("ws.auth");
-        	if (isset($config['log'][$env])) {
-	    		$is_debug = $config['log'][$env];
-	    		if ($is_debug){
-	    			$logger->save();
-	    		}   		
-    		}
+        if (!$request->headers->has('x-auth-ws_key') 
+                || !$request->headers->has('x-auth-ws_format') 
+                || !$request->headers->has('x-auth-ws_user_id')
+                || !$request->headers->has('x-auth-ws_token') 
+                || !$request->headers->has('x-auth-ws_application')
+        ) {
+            //-----we initialize de logger-----
+            $logger = $this->container->get('sfynx.tool.log_manager');
+            $logger->setInit('log_client_auth', date("YmdH"));
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [BEGIN SET BAD VALIDATE TOKEN AUTH REQUEST]");
+            //-----we set errors in the logger-----
+            $logger->setErr(date("Y-m-d H:i:s") . " [LOG] url :" . $request->getUri());
+            //-----we set info in the logger-----
+            $logger->setInfo(date("Y-m-d H:i:s") . " [END]");
+            //-----we save in the file log-----
+            $env = $this->container->get("kernel")->getEnvironment();
+            $config = $this->container->getParameter("ws.auth");
+            if (isset($config['log'][$env])) {
+                $is_debug = $config['log'][$env];
+                if ($is_debug){
+                        $logger->save();
+                }   		
+            }
     	    throw ClientException::callBadAuthRequest(__CLASS__);
     	}  
-    	$key     = $request->get('ws_key', '');
-    	$format  = $request->get('ws_format', 'json');
-    	$userId  = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_user_id', null), $key);
-    	$token   = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_token', null), $key);
-    	$application    = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_application', null), $key);    	
+    	$key     = $request->headers->get('x-auth-ws_key', '');
+    	$format  = $request->headers->get('x-auth-ws_format', 'json');
+    	$userId  = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_user_id', null), $key);
+    	$token   = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_token', null), $key);
+    	$application    = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_application', null), $key);    	
     	// If the user ID exists,
     	// we associate the token to the userId
     	if ($this->isUserdIdExisted($userId)) {
-    		$success = $this->setAssociationUserIdWithApplicationToken($userId, $token, $application);
+            $success = $this->setAssociationUserIdWithApplicationToken($userId, $token, $application);
     	} else {
-    		$success = false;
+            $success = false;
     	}
     	//-----we initialize de logger-----
     	$logger = $this->container->get('sfynx.tool.log_manager');
@@ -266,7 +253,7 @@ class DefaultController extends abstractController
     	    $tab= array();
     	    $tab['access_token'] = true;
     
-        	$response = new Response(json_encode($tab)); 
+            $response = new Response(json_encode($tab)); 
     	    $response->headers->set('Content-Type', 'application/json');
     	}
     	 
@@ -291,16 +278,16 @@ class DefaultController extends abstractController
     	$request     = $this->container->get('request');
     	$userManager = $this->container->get('fos_user.user_manager');
     	//
-    	if ($request->get('ws_key') == '') {
-            throw new \Exception('ws_key not specified');
+    	if ($request->headers->get('x-auth-ws_key') == '') {
+            throw new \Exception('x-auth-ws_key not specified');
     	}
-    	if ($request->get('ws_user_id') == '') {
-            throw new \Exception('ws_user_id not specified');
+    	if ($request->headers->get('x-auth-ws_user_id') == '') {
+            throw new \Exception('x-auth-ws_user_id not specified');
     	}
         //
-    	$key         = $request->get('ws_key', '');
-    	$referer_url = $request->get('ws_redirect_uri', '');
-    	$userId      = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->get('ws_user_id', null), $key);
+    	$key         = $request->headers->get('x-auth-ws_key', '');
+    	$referer_url = $request->headers->get('x-auth-ws_redirect_uri', '');
+    	$userId      = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_user_id', null), $key);
     	//
     	if (!empty($referer_url)) {
             $response = new RedirectResponse($referer_url);

@@ -1,4 +1,5 @@
 parameters:
+    sfynx.tool.manager.mapper.class: Sfynx\ToolBundle\Util\PiMapperManager
     sfynx.tool.manager.db.class: Sfynx\ToolBundle\Util\PiDbManager
     sfynx.tool.manager.config.class: Sfynx\ToolBundle\Util\PiConfigManager
     sfynx.tool.manager.array.class: Sfynx\ToolBundle\Util\PiArrayManager
@@ -18,6 +19,9 @@ services:
     #
     # configuration of the Util classes
     # 
+    sfynx.tool.mapper_collection:
+        class: %sfynx.tool.manager.mapper.class%  
+        
     sfynx.tool.manager.db:
         class: %sfynx.tool.manager.db.class%
         arguments: ['@service_container'] 
