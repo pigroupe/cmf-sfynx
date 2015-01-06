@@ -29,10 +29,9 @@ use Sfynx\PositionBundle\Annotation as PI;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\TranslationEntity(class="PiApp\GedmoBundle\Entity\Translation\MediaTranslation")
  *
- * @category   Gedmo_Entities
- * @package    Entity
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category Gedmo_Entities
+ * @package  Entity
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class Media extends AbstractDefault 
 {

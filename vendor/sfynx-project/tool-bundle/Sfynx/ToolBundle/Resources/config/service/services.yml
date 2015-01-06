@@ -1,8 +1,21 @@
 parameters:
     sfynx.tool.route.factory.class: Sfynx\ToolBundle\Route\RouteTranslatorFactory
     sfynx.tool.route.cache.class: Sfynx\ToolBundle\Route\CacheRoute
+    sfynx.tool.http_transport.config:
+        verify: false
+        connect_timeout: 2
+        timeout: 4
 
 services:  
+    #               
+    # Transport HTTP Configuration
+    # ex: $response = $this->container->get('sfynx.tool.http_transport')->get($url);
+    #
+    sfynx.tool.http_transport:
+        class: GuzzleHttp\Client
+        calls:
+            - [ setDefaultOption, ['query', %sfynx.tool.http_transport.config%] ] 
+            
     #
     # configuration of the route manager
     # 

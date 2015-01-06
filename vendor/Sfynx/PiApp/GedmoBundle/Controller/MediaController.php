@@ -129,34 +129,34 @@ class MediaController extends abstractController
     public function selectajaxAction($type)
     {
     	$request = $this->container->get('request');
-    	$em		 = $this->getDoctrine()->getManager();
+    	$em      = $this->getDoctrine()->getManager();
     	$locale  = $this->container->get('request')->getLocale();
     	//
     	$pagination = $this->container->get('request')->get('pagination', null);
     	$keyword    = $this->container->get('request')->get('keyword', '');
     	$MaxResults = $this->container->get('request')->get('max', 10);
     	// we set query
-   		$query  = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory('', null, '', '', false);
-   		$query
-   		->leftJoin('a.translations', 'trans')
-   		->leftJoin('a.image', 'm')
-   		->andWhere('a.image IS NOT NULL')
-   		->andWhere("a.status = '{$type}'");    		
-   		//
-  		$keyword = array(
-			0 => array(
-				'field_name' => 'title',
-   				'field_value' => $keyword,
-			    'field_trans' => true,
-			    'field_trans_name' => 'trans',
-			),
-   		);
-  		// we set type value
-  		$this->type = $type;
-    		
-   		return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true, array(
-              'time'      => 3600,  
-              'namespace' => 'hash_list_gedmomedia'
+        $query  = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory('', null, '', '', false);
+        $query
+        ->leftJoin('a.translations', 'trans')
+        ->leftJoin('a.image', 'm')
+        ->andWhere('a.image IS NOT NULL')
+        ->andWhere("a.status = '{$type}'");    		
+        //
+        $keyword = array(
+            0 => array(
+                'field_name' => 'title',
+                'field_value' => $keyword,
+                'field_trans' => true,
+                'field_trans_name' => 'trans',
+            ),
+        );
+        // we set type value
+        $this->type = $type;
+
+        return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true, array(
+            'time'      => 3600,  
+            'namespace' => 'hash_list_gedmomedia'
         ));
     }   
 
@@ -169,25 +169,25 @@ class MediaController extends abstractController
      */
     protected function renderselectajaxQuery($entities, $locale)
     {
-    		$tab = array();
-    		foreach ($entities as $obj) {
-    			$content = $obj->getId();
-    			$title   = $obj->translate($locale)->getTitle();
-    			$cat     = $obj->getCategory();
-    			if ($title) {
-    				$content .=  " - " .$title;
-    			}
-    			if (!is_null($cat)) {
-    				$content .=  '('. $cat->translate($locale)->getName() .')';
-    			}
-    			if ( ($this->type == 'image') && ($obj->getImage() instanceof \Sfynx\MediaBundle\Entity\Media)) {
-    				$content .= "<img width='100px' src=\"{{ media_url('".$obj->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
-    			}
-    			$tab[] = array(
-    					'id' => $obj->getId(),
-    					'text' =>$this->container->get('twig')->render($content, array())
-    			);
-    		}
+        $tab = array();
+        foreach ($entities as $obj) {
+            $content = $obj->getId();
+            $title   = $obj->translate($locale)->getTitle();
+            $cat     = $obj->getCategory();
+            if ($title) {
+                $content .=  " - " .$title;
+            }
+            if (!is_null($cat)) {
+                $content .=  '('. $cat->translate($locale)->getName() .')';
+            }
+            if ( ($this->type == 'image') && ($obj->getImage() instanceof \Sfynx\MediaBundle\Entity\Media)) {
+                $content .= "<img width='100px' src=\"{{ media_url('".$obj->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
+            }
+            $tab[] = array(
+                'id' => $obj->getId(),
+                'text' =>$this->container->get('twig')->render($content, array())
+            );
+        }
     
     	return $tab;
     }    
@@ -225,20 +225,20 @@ class MediaController extends abstractController
            $q1 = clone $query;
            $q2 = clone $query;
            $result    = $this->createAjaxQuery('select',$aColumns, $q1, 'a', null, array(
-                            0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
-                            1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
-                      ), array(
-                            'time'      => 3600,  
-                            'namespace' => 'hash_list_gedmomedia'
-                      )                      
+                    0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
+                    1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
+                ), array(
+                      'time'      => 3600,  
+                      'namespace' => 'hash_list_gedmomedia'
+                )                      
            );
            $total    = $this->createAjaxQuery('count',$aColumns, $q2, 'a', null, array(
-                            0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
-                            1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
-                      ), array(
-                            'time'      => 3600,
-                            'namespace' => 'hash_list_gedmomedia'
-                      )
+                    0 =>array('column'=>'a.created_at', 'format'=>'Y-m-d', 'idMin'=>'minc', 'idMax'=>'maxc'),
+                    1 =>array('column'=>'a.updated_at', 'format'=>'Y-m-d', 'idMin'=>'minu', 'idMax'=>'maxu')
+                ), array(
+                      'time'      => 3600,
+                      'namespace' => 'hash_list_gedmomedia'
+                )
            );
         
            $output = array(
@@ -342,7 +342,6 @@ class MediaController extends abstractController
      *
      * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
      * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
@@ -378,7 +377,6 @@ class MediaController extends abstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -414,7 +412,6 @@ class MediaController extends abstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -423,20 +420,16 @@ class MediaController extends abstractController
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
         $status = $this->container->get('request')->query->get('status');
-    
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new.html.twig";
-        
         $category   = $this->container->get('request')->query->get('category');
-        if (is_array($category) && isset($category['__isInitialized__']))
+        if (is_array($category) && isset($category['__isInitialized__'])) {
             $category = $category['__isInitialized__'];
-    
+        }
         $entity  = new Media();
         $entity->setStatus($status);
         $request = $this->getRequest();
         $form    = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
-        $form->bind($request);
-    
+        $form->bind($request);    
         if ($form->isValid()) {
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
@@ -447,7 +440,7 @@ class MediaController extends abstractController
             return $this->redirect($this->generateUrl('admin_gedmo_media_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout, 'category' => $category)));
         }
     
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("PiAppGedmoBundle:Media:new.html.twig", array(
                 'entity'     => $entity,
                 'form'       => $form->createView(),
                 'NoLayout'  => $NoLayout,

@@ -441,7 +441,7 @@ sonata_media:
 
             formats:
                 preview: { width: 100, quality: 100}
-                wide:    { width: 820, quality: 100}        
+                wide:    { width: 820, quality: 100}  
         default:  # the default context is mandatory
             download:
                 #strategy: sonata.media.security.session_strategy # a media can be downloaded only once per session.            
