@@ -53,6 +53,12 @@ class SfynxCmfExtension extends Extension
             }
             if (isset($config['cache_dir']['indexation'])) {
                 $container->setParameter('pi_app_admin.cache_dir.indexation', $config['cache_dir']['indexation']);
+            }      
+            if (isset($config['cache_dir']['widget'])) {
+                $container->setParameter('pi_app_admin.cache_dir.widget', $config['cache_dir']['widget']);
+            }             
+            if (isset($config['cache_dir']['seo'])) {
+            	$container->setParameter('pi_app_admin.seo.redirection.repository', $config['cache_dir']['seo']);
             }            
         }            
 
@@ -148,9 +154,6 @@ class SfynxCmfExtension extends Extension
             }  
             if (isset($config['seo']['redirection_oldurl_to_new_url']) && isset($config['seo']['redirection_oldurl_to_new_url']['authorized'])) {
             	$container->setParameter('pi_app_admin.seo.redirection.authorized', $config['seo']['redirection_oldurl_to_new_url']['authorized']);
-            }
-            if (isset($config['seo']['redirection_oldurl_to_new_url']) && isset($config['seo']['redirection_oldurl_to_new_url']['repository'])) {
-            	$container->setParameter('pi_app_admin.seo.redirection.repository', $config['seo']['redirection_oldurl_to_new_url']['repository']);
             }
             if (isset($config['seo']['redirection_oldurl_to_new_url']) && isset($config['seo']['redirection_oldurl_to_new_url']['file_name'])) {
             	$container->setParameter('pi_app_admin.seo.redirection.file_name', $config['seo']['redirection_oldurl_to_new_url']['file_name']);

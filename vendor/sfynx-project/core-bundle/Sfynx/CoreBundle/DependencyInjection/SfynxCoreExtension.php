@@ -39,6 +39,15 @@ class SfynxCoreExtension extends Extension{
         $config        = $this->processConfiguration($configuration, $config);
         
         /**
+         * Cache config parameter
+         */
+        if (isset($config['cache_dir'])){
+            if (isset($config['cache_dir']['media'])) {
+                $container->setParameter('sfynx.core.cache_dir.media', $config['cache_dir']['media']);
+            }
+        }         
+        
+        /**
          * Cookies config parameter
          */
         if (isset($config['cookies'])) {

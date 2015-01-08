@@ -54,10 +54,6 @@ class PiRouteExtension extends \Twig_Extension
     /**
      * Returns a list of functions to add to the existing list.
      *
-     * <code>
-     *  {{ media_url(id, 'default_small') }}
-     * </code>
-     * 
      * @return array An array of functions
      * @access public
      *
@@ -66,7 +62,6 @@ class PiRouteExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'media_url'       => new \Twig_Function_Method($this, 'getMediaUrlFunction'),
             'path_url'        => new \Twig_Function_Method($this, 'getUrlByRouteFunction'),
             'match_url'       => new \Twig_Function_Method($this, 'getMatchUrlFunction'),
         );
@@ -77,52 +72,6 @@ class PiRouteExtension extends \Twig_Extension
      */    
 
     /**
-     * Return the url of a media (and put the result in cache).
-     *
-     * @param string $id
-     * @param string $format        ["default_small", "default_big", "reference"]
-     * @param string $cachable
-     *
-     * @return string
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */    
-    public function getMediaUrlFunction($id, $format = "small", $cachable = true, $modifdate = false, $pattern = "media_")
-    {
-        if ($modifdate instanceof \Datetime) {
-            $timestamp = $modifdate->getTimestamp();
-        } elseif(is_string($modifdate)) {
-            $timestamp = $modifdate;
-        } else {
-        	$timestamp = 0;
-        }        
-        try {
-            if (!$cachable){
-                $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
-            } else {
-                $dossier = $this->container->getParameter("kernel.root_dir")."/cache/media/";
-                \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
-                $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
-                if ( !$this->container->get("sfynx.cache.filecache")->get($format.$pattern.$id.'_'.$timestamp) ) {
-                    $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
-                    $this->container->get("sfynx.cache.filecache")->set($format.$pattern.$id.'_'.$timestamp, $url_public_media, 0);
-                } else {
-                    $url_public_media = $this->container->get("sfynx.cache.filecache")->get($format.$pattern.$id.'_'.$timestamp);
-                }                 
-            }            
-        } catch (\Exception $e) {
-            $url_public_media = "";
-        }
-        $src = $this->container->get('kernel')->getRootDir() . '/../web' . $url_public_media;
-        if ((empty($url_public_media) || !file_exists($src)) && ($format != 'reference')) {
-            return $this->getMediaUrlFunction($id, "reference", $cachable, $modifdate, $pattern);
-        } else {
-            return $url_public_media;
-        }
-    }
-    
-    /**
      * Return the url of a route, with or without a locale value
      *
      * @param string $routeName
@@ -130,7 +79,6 @@ class PiRouteExtension extends \Twig_Extension
      *
      * @return string
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getUrlByRouteFunction($routeName, $params = null)

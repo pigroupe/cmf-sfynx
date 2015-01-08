@@ -7,6 +7,8 @@ All available configuration options are listed below with their default values.
 # SfynxCoreBundle configuration
 #       
 sfynx_core:  
+    cache_dir:
+        media: "%kernel.root_dir%/cachesfynx/Media/" 
     cookies:
         date_expire: true
         date_interval:  %pi_cookie_lifetime% # 604800 PT4H  604800

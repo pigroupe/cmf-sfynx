@@ -1,32 +1,32 @@
 <?php
 /**
- * This file is part of the <Core> project.
+ * This file is part of the <Tool> project.
  *
- * @subpackage BootStrap_phpunit
- * @package PhpUnit
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-03-29
+ * @subpackage Tool
+ * @package    PhpUnit
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2013-03-29
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  */
-namespace Sfynx\CoreBundle\Tests\Controller;
+namespace Sfynx\ToolBundle\Tests\Command;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-use Sfynx\CoreBundle\Command\RoutesCommand;
+use Sfynx\ToolBundle\Command\RoutesCommand;
 
 /**
  * Default Controller Test
  *
- * @subpackage BootStrap_phpunit
- * @package PhpUnit
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Tool
+ * @package    PhpUnit
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class DefaultControllerTest extends WebTestCase
+class CommandTest extends WebTestCase
 {
     /**
      * Sets the result of the route Command.
@@ -40,26 +40,25 @@ class DefaultControllerTest extends WebTestCase
     public function testCommandeRoute()
     {
         //$container = $this->getApplication()->getKernel()->getContainer();
-        
+        //-----we initialize kernel-----
         $kernel = $this->createKernel();
         $kernel->boot();
-        
-        $application     = new Application($kernel);
+        //-----we initialize application-----
+        $application = new Application($kernel);
         $application->add(new RoutesCommand($kernel));
-        
         //-----we initialize command value-----
-        $command         = $application->find('sfynx:database:routes:parse');  //   --env=test
-        $commandTester     = new CommandTester($command);
+        $command       = $application->find('sfynx:routes:parse');  //   --env=test
+        $commandTester = new CommandTester($command);
         //-----we executes the command-----
         $commandTester->execute(
-                array(
-                        'command'     => $command->getName(),
-                        //'arg1'        => 'val1',
-                        //'arg2'        => 'val2'
-                )
+            array(
+                'command'     => $command->getName(),
+                //'arg1'        => 'val1',
+                //'arg2'        => 'val2'
+            )
         );
         
-        $this->assertRegExp('/END/', $commandTester->getDisplay());
+        $this->assertRegExp('/Command completed successfully/', $commandTester->getDisplay());
         
         return true;
     }    

@@ -10,10 +10,11 @@ sfynx_cmf:
     cache_dir:
         etag: "%kernel.root_dir%/cachesfynx/Etag/"
         indexation: "%kernel.root_dir%/cachesfynx/Indexation/"
+        widget: "%kernel.root_dir%/cachesfynx/Widget/"
+        seo : "%kernel.root_dir%/cachesfynx/Seo"
     seo:
         redirection_oldurl_to_new_url:
             authorized: false
-            repository : "%kernel.root_dir%/cachesfynx/seo"
             file_name : seo_links.yml 
         meta_head:
             author: Sfynx
