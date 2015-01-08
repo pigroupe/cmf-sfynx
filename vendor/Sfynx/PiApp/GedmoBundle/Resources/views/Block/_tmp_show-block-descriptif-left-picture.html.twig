@@ -6,15 +6,15 @@
 	{% set url = "#" %}
 {% endif %}                                                         
 <section class="bloc-generic tpl-1 cf">
-	<div class="wrap">
-		<a href="{{ url }}">
-			<figure>
-				{% if entity.media.image.id is defined %}
-				<img src="{{ media_url(entity.media.image.id, 'reference', true, entity.media.getUpdatedAt(), 'block_') }}" title="" alt="" />
-				{% endif %}
-			</figure>
-			<h4>{{ entity.getTitle()|replace({'<p>': '', '</p>': ''})|raw }}</h4>
-			{{ entity.getDescriptif()|raw }}
-		</a>
-	</div>
+    <div class="wrap">
+        <a href="{{ url }}">
+            <figure>
+                {% if entity.media.image.id is defined %}
+                <img src="{{ media_url(entity.media.image.id, 'reference', true, entity.media.getUpdatedAt(), 'block_') }}" title="" alt="" />
+                {% endif %}
+            </figure>
+            <h4>{{ entity.getTitle()|replace({'<p>': '', '</p>': ''})|raw }}</h4>
+            {{ entity.getDescriptif()|raw }}
+        </a>
+    </div>
 </section>			
