@@ -400,7 +400,7 @@ class BlockController extends abstractController
         return $this->render("PiAppGedmoBundle:Block:$template", array(
                 'entity'   => $entity,
                 'locale'   => $lang,
-                'lang'       => $lang,
+                'lang'     => $lang,
         ));
     }
 

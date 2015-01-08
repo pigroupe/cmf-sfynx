@@ -323,12 +323,11 @@ class PiCropExtension extends \Twig_Extension
                 $dossier = $this->container->getParameter("sfynx.core.cache_dir.media");
                 \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
                 $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
-                if ( !$this->container->get("sfynx.cache.filecache")->get($format.$pattern.$id.'_'.$timestamp) ) {
+                $url_public_media = $this->container->get("sfynx.cache.filecache")->get($format.$pattern.$id.'_'.$timestamp);
+                if ( !$url_public_media ) {
                     $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
                     $this->container->get("sfynx.cache.filecache")->set($format.$pattern.$id.'_'.$timestamp, $url_public_media, 0);
-                } else {
-                    $url_public_media = $this->container->get("sfynx.cache.filecache")->get($format.$pattern.$id.'_'.$timestamp);
-                }                 
+                }         
             }            
         } catch (\Exception $e) {
             $url_public_media = "";
