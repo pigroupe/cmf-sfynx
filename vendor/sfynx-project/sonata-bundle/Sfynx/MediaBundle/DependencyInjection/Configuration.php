@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   BootStrap
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-03-10
+ * @category Media
+ * @package  Configuration
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since    2012-03-10
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,9 +21,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  * 
- * @category   BootStrap
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category Media
+ * @package  Configuration
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class Configuration implements ConfigurationInterface
 {
@@ -33,13 +33,46 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('bootstrap_media');
+        $rootNode = $treeBuilder->root('sfynx_media');
         
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
-
+        $this->addCropConfig($rootNode);
+        
         return $treeBuilder;
     }      
     
+    /**
+     * Crop config
+     *
+     * @param ArrayNodeDefinition $rootNode An ArrayNodeDefinition instance
+     * 
+     * @return void
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function addCropConfig(ArrayNodeDefinition $rootNode) {
+    	$rootNode
+    	->children()
+        	->arrayNode('crop')
+                ->addDefaultsIfNotSet()
+                ->children()
+                        ->arrayNode('formats')
+                        ->isRequired()
+                            ->prototype('array')
+                                ->children()
+                                	->scalarNode('prefix')->cannotBeEmpty()->isRequired()->end()
+                                    ->scalarNode('legend')->cannotBeEmpty()->isRequired()->end()
+                                    ->scalarNode('width')->cannotBeEmpty()->isRequired()->end()
+                                    ->scalarNode('height')->cannotBeEmpty()->isRequired()->end()
+                                    ->scalarNode('ratio')->cannotBeEmpty()->isRequired()->end()
+                                    ->scalarNode('quality')->cannotBeEmpty()->isRequired()->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                ->end()
+            ->end()
+    	->end();
+    }     
 }

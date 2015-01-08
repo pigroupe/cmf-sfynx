@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @subpackage   Translator_Entities
+ * @subpackage Translator_Entities
  * @package    Entity
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-11-14
+ * @author     Riad HELLAL <hellal.riad@gmail.com>
+ * @since      2012-11-14
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.

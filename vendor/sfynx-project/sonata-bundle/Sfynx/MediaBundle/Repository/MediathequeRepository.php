@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <Gedmo> project.
+ * This file is part of the <Media> project.
  *
  * @category   Gedmo_Repositories
  * @package    Repository
@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\GedmoBundle\Repository;
+namespace Sfynx\MediaBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Sfynx\CoreBundle\Repository\TranslationRepository;
@@ -26,6 +26,6 @@ use Sfynx\CoreBundle\Repository\TranslationRepository;
  * 
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class MediaRepository extends TranslationRepository
+class MediathequeRepository extends TranslationRepository
 {
 }

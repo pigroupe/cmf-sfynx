@@ -224,7 +224,7 @@ class UsersController extends abstractController
         if (!$is_Server_side) {
             if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
             } else {
-                $query    = $em->getRepository("PiAppGedmoBundle:Media")->setContainer($this->container)->checkRoles($query);
+                $query    = $em->getRepository("SfynxMediaBundle:Mediatheque")->setContainer($this->container)->checkRoles($query);
             }
         	$entities = $em->getRepository("SfynxAuthBundle:User")->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
         } else {

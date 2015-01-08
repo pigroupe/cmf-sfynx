@@ -10,13 +10,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\GedmoBundle\Entity\Translation;
+namespace Sfynx\MediaBundle\Entity\Translation;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
 
 /**
- * @ORM\Entity(repositoryClass="PiApp\GedmoBundle\Repository\MediaRepository")
+ * @ORM\Entity(repositoryClass="Sfynx\MediaBundle\Repository\MediathequeRepository")
  * @ORM\Table(
  *         name="gedmo_media_translations",
  *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
@@ -24,7 +24,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  *         })}
  * )
  */
-class MediaTranslation extends AbstractTranslationEntity
+class MediathequeTranslation extends AbstractTranslationEntity
 {
     /**
      * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque", inversedBy="translations")
@@ -47,6 +47,5 @@ class MediaTranslation extends AbstractTranslationEntity
             $this->setField($field);
         if (!is_null($value))
             $this->setContent($value);
-    }    
-        
+    }          
 }

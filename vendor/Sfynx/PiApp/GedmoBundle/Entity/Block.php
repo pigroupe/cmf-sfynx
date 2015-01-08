@@ -133,7 +133,7 @@ class Block extends AbstractDefault
     /**
      * @var integer $media
      *
-     * @ORM\ManyToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , inversedBy="block");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , inversedBy="block");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;    
@@ -141,7 +141,7 @@ class Block extends AbstractDefault
     /**
      * @var integer $media1
      *
-     * @ORM\ManyToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , inversedBy="block2");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , inversedBy="block2");
      * @ORM\JoinColumn(name="media1_id", referencedColumnName="id", nullable=true)
      */
     protected $media1;   
@@ -376,7 +376,7 @@ class Block extends AbstractDefault
     /**
      * Set media
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      */
     public function setMedia($media)
     {
@@ -387,7 +387,7 @@ class Block extends AbstractDefault
     /**
      * Get media
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia()
     {
@@ -397,7 +397,7 @@ class Block extends AbstractDefault
     /**
      * Set media1
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      */
     public function setMedia1($media)
     {
@@ -408,7 +408,7 @@ class Block extends AbstractDefault
     /**
      * Get media1
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia1()
     {

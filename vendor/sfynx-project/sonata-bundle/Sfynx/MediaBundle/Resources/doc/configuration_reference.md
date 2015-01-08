@@ -4,9 +4,9 @@ All available configuration options are listed below with their default values.
 
 ``` yaml
 #
-# SfynxLibraryBundle configuration
+# SfynxmediaBundle configuration
 #       
-sfynx_library:
+sfynx_media:
     crop:
         formats:
             0:

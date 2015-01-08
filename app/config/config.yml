@@ -605,7 +605,7 @@ sfynx_cmf:
             force_private_response_only_with_authentication: false # true if you want that all responses will have a private Cache-control without max-age after authentification
             disable_after_post_request: true
         widget:
-            render_service_with_ttl: true
+            render_service_with_ttl: false
             render_service_with_ajax: false
             ajax_disable_after_post_request: true
         refresh:
@@ -745,9 +745,9 @@ sfynx_tool:
         cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"        
         
 #
-# SfynxLibraryBundle configuration
+# SfynxMediaBundle configuration
 #       
-sfynx_library:        
+sfynx_media:        
     crop:
         formats:
             0:

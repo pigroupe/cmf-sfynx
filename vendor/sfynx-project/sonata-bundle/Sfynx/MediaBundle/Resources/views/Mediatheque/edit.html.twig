@@ -22,7 +22,7 @@
 		    <div id="tabs-1">
 			{{ form_widget(edit_form) }}
 			{% if entity.image is defined and entity.status == "image" %}
-                {{ picture_crop(entity.image, "default", "piapp_gedmobundle_mediatype_image_image_binaryContent")|raw}}
+                {{ picture_crop(entity.image, "default", "sfynx_mediabundle_mediatype_image_image_binaryContent")|raw}}
             {% endif %}
 		    </div>
 		    <ul class="ui-widget-header">
@@ -53,7 +53,7 @@
     {% endif %}
 	
 	{% if entity.image is defined and entity.status == "file" %}
-	{{ file_form(entity.image, "piapp_gedmobundle_mediatype_file_image_binaryContent",  'reference', 'display: block; text-align:left;')|raw }}
+	{{ file_form(entity.image, "sfynx_mediabundle_mediatype_file_image_binaryContent",  'reference', 'display: block; text-align:left;')|raw }}
 	{% endif %}
 	
 {% endblock %}		

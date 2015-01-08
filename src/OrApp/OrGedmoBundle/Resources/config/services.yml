@@ -9,19 +9,19 @@ services:
             - { name: form.type }      
             
     orapp_orgedmobundle_mediatype_image:
-        class: PiApp\GedmoBundle\Form\MediaType
+        class: Sfynx\MediaBundle\Form\MediaType
         arguments: ['@service_container', '@doctrine.orm.entity_manager', 'image' ]
         tags:
             - { name: form.type }
             
     orapp_orgedmobundle_mediatype_youtube:
-        class: PiApp\GedmoBundle\Form\MediaType
+        class: Sfynx\MediaBundle\Form\MediaType
         arguments: ['@service_container', '@doctrine.orm.entity_manager', 'youtube' ]
         tags:
             - { name: form.type }        
             
     orapp_orgedmobundle_mediatype_dailymotion:
-        class: PiApp\GedmoBundle\Form\MediaType
+        class: Sfynx\MediaBundle\Form\MediaType
         arguments: ['@service_container', '@doctrine.orm.entity_manager', 'dailymotion' ]
         tags:
             - { name: form.type } 

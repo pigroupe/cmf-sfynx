@@ -95,9 +95,9 @@ class Category extends AbstractDefault
     protected $descriptif;
 
     /**
-     * @var \PiApp\GedmoBundle\Entity\Media $media
+     * @var \Sfynx\MediaBundle\Entity\Mediatheque $media
      *
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , cascade={"all"}, inversedBy="entitycategory");
+     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="entitycategory");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;    
@@ -119,7 +119,7 @@ class Category extends AbstractDefault
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="PiApp\GedmoBundle\Entity\Media", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque", mappedBy="category")
      */
     protected $items_media; 
 
@@ -264,11 +264,11 @@ class Category extends AbstractDefault
     /**
      * Set media
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      */
     public function setMedia($media)
     {
-        //         if (($media instanceof \PiApp\GedmoBundle\Entity\Media) && ($media->getImage()->getName() == ""))
+        //         if (($media instanceof \Sfynx\MediaBundle\Entity\Mediatheque) && ($media->getImage()->getName() == ""))
             //             $this->media = null;
             //         else{
             //             $this->media = $media;
@@ -280,7 +280,7 @@ class Category extends AbstractDefault
     /**
      * Get media
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia()
     {
@@ -332,9 +332,9 @@ class Category extends AbstractDefault
     /**
      * Add items_media
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $itemsMedias
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $itemsMedias
      */
-    public function addMedia(\PiApp\GedmoBundle\Entity\Media $itemsMedias)
+    public function addMedia(\Sfynx\MediaBundle\Entity\Mediatheque $itemsMedias)
     {
         $this->items_media[] = $itemsMedias;
     }

@@ -64,7 +64,7 @@ class BlockType extends AbstractType
         $id_media1 = null;
         // get the id of media
         if (
-        		($builder->getData()->getMedia() instanceof \PiApp\GedmoBundle\Entity\Media)
+        		($builder->getData()->getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
         ) {
         	$id_media = $builder->getData()->getMedia()->getId();
         }
@@ -73,7 +73,7 @@ class BlockType extends AbstractType
         }
         // get the id of media1
         if (
-        		($builder->getData()->getMedia1() instanceof \PiApp\GedmoBundle\Entity\Media)
+        		($builder->getData()->getMedia1() instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
         ) {
         	$id_media1 = $builder->getData()->getMedia1()->getId();
         }
@@ -276,7 +276,7 @@ class BlockType extends AbstractType
              $builder
              //->add('media', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'));
              ->add('media', 'entity', array(
-             		'class' => 'PiAppGedmoBundle:Media',
+             		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media) {
             			$translatableListener = $this->_container->get('gedmo.listener.translatable');
             			$translatableListener->setTranslationFallback(true);            			
@@ -311,8 +311,8 @@ class BlockType extends AbstractType
              				title="Ajouter une image à la médiatheque"
              				data-title="Mediatheque"
              				data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
-             				data-selectid="#piapp_gedmobundle_mediatype_id"
-             				data-selecttitle="#piapp_gedmobundle_mediatype_title"
+             				data-selectid="#sfynx_mediabundle_mediatype_id"
+             				data-selecttitle="#sfynx_mediabundle_mediatype_title"
              				data-insertid="#piapp_gedmobundle_blocktype_media"
              				data-inserttype="multiselect"
              				></a>',            		
@@ -322,7 +322,7 @@ class BlockType extends AbstractType
              $builder
              //->add('media', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "hidden", 'pi.form.label.media.picture'));
              ->add('media', 'entity', array(
-             		'class' => 'PiAppGedmoBundle:Media',
+             		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media) {
             			$translatableListener = $this->_container->get('gedmo.listener.translatable');
             			$translatableListener->setTranslationFallback(true);            			
@@ -344,7 +344,7 @@ class BlockType extends AbstractType
              $builder
              //->add('media1', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'));
              ->add('media1', 'entity', array(
-             		'class' => 'PiAppGedmoBundle:Media',
+             		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media1) {
             			$translatableListener = $this->_container->get('gedmo.listener.translatable');
             			$translatableListener->setTranslationFallback(true);            			
@@ -379,8 +379,8 @@ class BlockType extends AbstractType
              				title="Ajouter une image à la médiatheque"
              				data-title="Mediatheque"
              				data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
-             				data-selectid="#piapp_gedmobundle_mediatype_id"
-             				data-selecttitle="#piapp_gedmobundle_mediatype_title"
+             				data-selectid="#sfynx_mediabundle_mediatype_id"
+             				data-selecttitle="#sfynx_mediabundle_mediatype_title"
              				data-insertid="#piapp_gedmobundle_blocktype_media1"
              				data-inserttype="multiselect"
              				></a>',            		
@@ -390,7 +390,7 @@ class BlockType extends AbstractType
              $builder
              //->add('media1', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "hidden", 'pi.form.label.media.picture'));
              ->add('media1', 'entity', array(
-             		'class' => 'PiAppGedmoBundle:Media',
+             		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media1) {
             			$translatableListener = $this->_container->get('gedmo.listener.translatable');
             			$translatableListener->setTranslationFallback(true);            			

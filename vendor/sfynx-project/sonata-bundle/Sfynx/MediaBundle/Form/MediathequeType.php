@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <PI_CRUD> project.
+ * This file is part of the <Media> project.
  *
  * @category PI_CRUD_Form
  * @package  Form
@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\GedmoBundle\Form;
+namespace Sfynx\MediaBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,12 +23,11 @@ use Symfony\Component\Validator\Constraints;
 /**
  * Description of the MediaType form.
  *
- * @category   PI_CRUD_Form
- * @package    Form
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category Media
+ * @package  Form
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class MediaType extends AbstractType
+class MediathequeType extends AbstractType
 {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -340,13 +339,13 @@ class MediaType extends AbstractType
 
     public function getName()
     {
-        return 'piapp_gedmobundle_mediatype_' . $this->_status;
+        return 'sfynx_mediabundle_mediatype_' . $this->_status;
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
     	$resolver->setDefaults(array(
-    			'data_class' => 'PiApp\GedmoBundle\Entity\Media',
+    			'data_class' => 'Sfynx\MediaBundle\Entity\Mediatheque',
     	));
     }    
 }

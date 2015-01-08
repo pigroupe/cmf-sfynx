@@ -261,7 +261,7 @@ class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterfa
                         }
                         // we get the image of the menu if it exists.
                         $img_balise = "";
-                        if (method_exists($menu, 'getMedia')  && ($menu->getMedia() instanceof \PiApp\GedmoBundle\Entity\Media)) {
+                        if (method_exists($menu, 'getMedia')  && ($menu->getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque)) {
                             $id      = $menu->getMedia()->getId();
                             if ( !is_null($menu->getMedia()) && ($menu->getMedia()->getImage()->getName() != $self->getContainer()->getParameter("pi_app_admin.page.media_pixel")) ) {
                                 $img_balise = $self->getContainer()->get('sonata.media.twig.extension')->media($menu->getMedia()->getImage(), 'default_small', array('width'=>'20', 'alt'=>"") );

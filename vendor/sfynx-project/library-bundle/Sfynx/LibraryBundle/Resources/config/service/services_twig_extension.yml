@@ -1,0 +1,11 @@
+parameters:
+    
+
+services:
+    #
+    # configuration of the Twig and Template
+    #  
+    sfynx.library.twig:
+        class: %twig.class%
+        calls:
+             - [ addGlobal, ['app', '@templating.globals'] ]

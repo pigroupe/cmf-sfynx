@@ -17,10 +17,6 @@ piapp_gedmo_sicap_block:
 piapp_gedmo_content:
     resource: "@PiAppGedmoBundle/Resources/config/routing/content.xml"
     prefix: /admin/gedmo/content
-#PiAppGedmoBundle:Media
-piapp_gedmo_media:
-    resource: "@PiAppGedmoBundle/Resources/config/routing/media.xml"
-    prefix: /admin/gedmo/media        
 #PiAppGedmoBundle:Menu
 piapp_gedmo_menu:
     resource: "@PiAppGedmoBundle/Resources/config/routing/menu.xml"

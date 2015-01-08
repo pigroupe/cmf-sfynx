@@ -2,11 +2,11 @@
 /**
  * This file is part of the <Translator> project.
  * 
- * @uses abstractController
- * @subpackage   Translator
+ * @uses       abstractController
+ * @subpackage Translator
  * @package    Controller
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-11-14
+ * @author     Riad HELLAL <hellal.riad@gmail.com>
+ * @since      2012-11-14
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,10 +33,10 @@ use Sfynx\TranslatorBundle\Entity\Translation\WordTranslation;
 /**
  * Word controller.
  *
- * @uses abstractController
- * @subpackage   Translator
+ * @uses       abstractController
+ * @subpackage Translator
  * @package    Controller
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Riad HELLAL <hellal.riad@gmail.com>
  */
 class WordController extends abstractController
 {
@@ -47,10 +47,9 @@ class WordController extends abstractController
      *
      * @Route("/bootstrap/translator/enabled", name="bootstrap_translator_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     public function enabledajaxAction()
     {
@@ -62,10 +61,9 @@ class WordController extends abstractController
      * 
      * @Route("/bootstrap/translator/disable", name="bootstrap_translator_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     public function disableajaxAction()
     {
@@ -77,10 +75,9 @@ class WordController extends abstractController
      *
      * @Route("/bootstrap/translator/position", name="bootstrap_translator_position_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     public function positionajaxAction()
     {
@@ -92,10 +89,9 @@ class WordController extends abstractController
      *
      * @Route("/bootstrap/translator/delete", name="bootstrap_translator_deletentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     public function deleteajaxAction()
     {
@@ -105,10 +101,9 @@ class WordController extends abstractController
      * Lists all Word entities.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>   
      */
     public function indexAction()
     {
@@ -133,10 +128,9 @@ class WordController extends abstractController
      * Finds and displays a Word entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>    
      */
     public function showAction($id)
     {
@@ -167,10 +161,9 @@ class WordController extends abstractController
      * Displays a form to create a new Word entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>    
      */
     public function newAction()
     {
@@ -193,10 +186,9 @@ class WordController extends abstractController
      * Creates a new Word entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>     
      */
     public function createAction()
     {
@@ -231,10 +223,9 @@ class WordController extends abstractController
      * Displays a form to edit an existing Word entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>    
      */
     public function editAction($id)
     {
@@ -268,10 +259,9 @@ class WordController extends abstractController
      * Edits an existing Word entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>   
      */
     public function updateAction($id)
     {
@@ -310,10 +300,9 @@ class WordController extends abstractController
      * Lists all Word entities.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>   
      */
     public function translateAction($id)
     {
@@ -337,10 +326,9 @@ class WordController extends abstractController
      * Displays a form to edit an existing Word entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>    
      */
     public function editTranslateAction($id, $lang)
     {
@@ -375,10 +363,9 @@ class WordController extends abstractController
      * Edits an existing Word entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>   
      */
     public function updateTranslateAction($id, $lang)
     {
@@ -418,9 +405,8 @@ class WordController extends abstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *     
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>     
      */
     public function deleteAction($id)
     {
@@ -456,10 +442,9 @@ class WordController extends abstractController
      * 
      * @Route("/bootstrap/translator/sync", name="bootstrap_translator_sync")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @return Response
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     public function syncAction()
     {
@@ -511,6 +496,5 @@ class WordController extends abstractController
         $this->container->get('request')->getSession()->getFlashBag()->set('success', 'pi.session.flash.right.update');
         
         return $this->redirect($this->generateUrl('admin_word'));
-    }    
-  
+    }      
 }

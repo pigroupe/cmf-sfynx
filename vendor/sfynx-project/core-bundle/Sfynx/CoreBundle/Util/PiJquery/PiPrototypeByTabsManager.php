@@ -457,7 +457,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
 
                                                /*
                                                 *  ->add('media', 'entity', array(
-                                                *           'class' => 'PiAppGedmoBundle:Media',
+                                                *           'class' => 'SfynxMediaBundle:Mediatheque',
                                                 *           'query_builder' => function(EntityRepository $er) use ($id_media) {
                                                 *               $translatableListener = $this->_container->get('gedmo.listener.translatable');
                                                 *               $translatableListener->setTranslationFallback(true);
@@ -492,8 +492,8 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                 *                   title="Ajouter une image à la médiatheque"
                                                 *                   data-title="Mediatheque"
                                                 *                   data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
-                                                *                   data-selectid="#piapp_gedmobundle_mediatype_id"
-                                                *                   data-selecttitle="#piapp_gedmobundle_mediatype_title"
+                                                *                   data-selectid="#sfynx_mediabundle_mediatype_id"
+                                                *                   data-selecttitle="#sfynx_mediabundle_mediatype_title"
                                                 *                   data-insertid="#m1m_providerbundle_rubbloctype_media"
                                                 *                   data-inserttype="multiselect"
                                                 *                   ></a>',
