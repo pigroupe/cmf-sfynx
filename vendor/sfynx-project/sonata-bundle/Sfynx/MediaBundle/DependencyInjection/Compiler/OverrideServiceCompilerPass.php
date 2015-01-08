@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is part of the <Admin> project.
+ * This file is part of the <Media> project.
  *
- * @category   BootStrap
- * @package    OverrideService
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @category Media
+ * @package  OverrideService
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since    2012-01-11
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,9 +18,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 /**
  * Adds tagged twig.extension services to the pi_app_admin twig service
  *
- * @category   BootStrap
- * @package    OverrideService
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category Media
+ * @package  OverrideService
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class OverrideServiceCompilerPass implements CompilerPassInterface
 {

@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\LibraryBundle\Twig\Extension;
+namespace Sfynx\MediaBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -74,7 +74,7 @@ class PiCropExtension extends \Twig_Extension
      * 
      * <code>
      * {% if entity.media.image is defined %}
-	 *   {{ file_form(entity.image, "piapp_gedmobundle_mediatype_file_image_binaryContent",  'reference', 'display: block; text-align:left;')|raw }}
+	 *   {{ file_form(entity.image, "sfynx_mediabundle_mediatype_file_image_binaryContent",  'reference', 'display: block; text-align:left;')|raw }}
 	 * {% endif %}
      * </code>
      *
@@ -177,7 +177,7 @@ class PiCropExtension extends \Twig_Extension
     		$format = "SfynxTemplateBundle:Template\\Crop:default.html.twig";
     	}
     	if ($media instanceof \Sfynx\MediaBundle\Entity\Media) {            
-    		$crop     = $this->container->getParameter('sfynx.library.crop');
+    		$crop     = $this->container->getParameter('sfynx.media.crop');
     		$globals  = $this->container->get('twig')->getGlobals();
             if (!empty($type) && (in_array($type, array('input', 'script')))) {
                 $templateContent = $this->container->get('twig')->loadTemplate($format);
@@ -290,5 +290,4 @@ class PiCropExtension extends \Twig_Extension
             }            
         }
     }    
-    
 }

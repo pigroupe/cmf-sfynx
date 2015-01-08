@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <Gedmo> project.
+ * This file is part of the <Media> project.
  *
  * @category   Gedmo_Entities
  * @package    Entity
@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\GedmoBundle\Entity;
+namespace Sfynx\MediaBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,18 +22,18 @@ use Sfynx\CoreBundle\Model\AbstractDefault;
 use Sfynx\PositionBundle\Annotation as PI;
 
 /**
- * PiApp\GedmoBundle\Entity\Media
+ * Sfynx\MediaBundle\Entity\Mediatheque
  *
  * @ORM\Table(name="gedmo_media")
- * @ORM\Entity(repositoryClass="PiApp\GedmoBundle\Repository\MediaRepository")
+ * @ORM\Entity(repositoryClass="Sfynx\MediaBundle\Repository\MediathequeRepository")
  * @ORM\HasLifecycleCallbacks()
- * @Gedmo\TranslationEntity(class="PiApp\GedmoBundle\Entity\Translation\MediaTranslation")
+ * @Gedmo\TranslationEntity(class="Sfynx\MediaBundle\Entity\Translation\MediathequeTranslation")
  *
  * @category Gedmo_Entities
  * @package  Entity
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class Media extends AbstractDefault 
+class Mediatheque extends AbstractDefault 
 {
     /**
      * List of al translatable fields
@@ -41,7 +41,7 @@ class Media extends AbstractDefault
      * @var array
      * @access  protected
      */
-    protected $_fields    = array('title');
+    protected $_fields    = array('title', 'descriptif');
     
     /**
      * Name of the Translation Entity
@@ -49,12 +49,12 @@ class Media extends AbstractDefault
      * @var array
      * @access  protected
     */
-    protected $_translationClass = 'PiApp\GedmoBundle\Entity\Translation\MediaTranslation';
+    protected $_translationClass = 'Sfynx\MediaBundle\Entity\Translation\MediathequeTranslation';
     
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="PiApp\GedmoBundle\Entity\Translation\MediaTranslation", mappedBy="object", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Sfynx\MediaBundle\Entity\Translation\MediathequeTranslation", mappedBy="object", cascade={"persist", "remove"})
      */
     protected $translations;
         
@@ -78,7 +78,7 @@ class Media extends AbstractDefault
     /**
      * @var string $status
      *
-     * @ORM\Column(name="status", type="string", nullable=false)
+     * @ORM\Column(name="status", type="string", length=25, nullable=true)
      * @Assert\NotBlank(message = "erreur.status.notblank")
      */
     protected $status;    
@@ -131,6 +131,8 @@ class Media extends AbstractDefault
     
     /**
      * @var string $copyright
+     * 
+     * @ORM\Column(name="copyright", type="string", length=255, nullable=true)
      */
     protected $copyright;    
     

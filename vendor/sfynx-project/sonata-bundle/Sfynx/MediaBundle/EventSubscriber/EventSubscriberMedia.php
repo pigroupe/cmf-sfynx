@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   BootStrap
- * @package    EventSubscriber 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-07-20
+ * @category Media
+ * @package  EventSubscriber 
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since    2012-07-20
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,16 +18,14 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Sfynx\CoreBundle\EventListener\abstractListener;
 
 /**
  * Media entity Subscriber.
  *
- * @category   BootStrap
- * @package    EventSubscriber 
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category Media
+ * @package  EventSubscriber 
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class EventSubscriberMedia  extends abstractListener implements EventSubscriber
 {
@@ -114,23 +112,22 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
     /**
      * We are setting the Gedmo Media to null if removing the Media was checked. 
      *
-     * @param $eventArgs
+     * @param object $eventArgs
      *
      * @return void
      * @access private
      * @final
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     private function _MediaGedmo($eventArgs)
     {
-        $entity            = $eventArgs->getEntity();
-        $entityManager     = $eventArgs->getEntityManager();
+        $entity        = $eventArgs->getEntity();
+        $entityManager = $eventArgs->getEntityManager();
         
         if ( $this->isUsernamePasswordToken() 
-        		&& ( ($entity instanceof \Proxies\__CG__\PiApp\GedmoBundle\Entity\Media) || ($entity instanceof \PiApp\GedmoBundle\Entity\Media) ) 
-        		&& !$this->isRestrictionByRole($entity) 
-        		&& ($entity->getMediadelete() == true) )
+                && ( ($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) || ($entity instanceof \Sfynx\MediaBundle\Entity\Mediatheque) ) 
+                && !$this->isRestrictionByRole($entity) 
+                && ($entity->getMediadelete() == true) )
         {
             try {
                 $entity_table = $this->getOwningTable($eventArgs, $entity);
@@ -146,21 +143,21 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
         } 
         // we clean the filename.
         if ( $this->isUsernamePasswordToken() 
-        		&& ( ($entity instanceof \Proxies\__CG__\PiApp\GedmoBundle\Entity\Media) || ($entity instanceof \PiApp\GedmoBundle\Entity\Media) ) 
+        		&& ( ($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) || ($entity instanceof \Sfynx\MediaBundle\Entity\Mediatheque) ) 
         ){
-        	if ( $entity->getImage() instanceof \BootSTrap\MediaBundle\Entity\Media) {
-            	$entity->getImage()->setName($this->_cleanName($entity->getImage()->getName()));
-        	}
+            if ( $entity->getImage() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) {
+                $entity->getImage()->setName($this->_cleanName($entity->getImage()->getName()));
+            }
         }        
     }
 
     /**
      * We return the clean of a string.
      *
-     * @param    string    $string
-     * @return     string    name
+     * @param string $string
+     * 
+     * @return string name
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     private function _cleanName($string)
@@ -174,13 +171,12 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
     /**
      * We link the entity widget type to the page.
      *
-     * @param $eventArgs
+     * @param object $eventArgs
      *
      * @return void
      * @access protected
      * @final
-     *
-     * @author (c) <Adel Oustad> <a.oustad@gmail.com>
+     * @author Riad HELLAL <hellal.riad@gmail.com>
      */
     private function _cropImage($eventArgs) 
     {
@@ -191,7 +187,7 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
 	    		$entity = $eventArgs->getEntity();
 	    		$getMedia = "getMedia";
 	    		$setMedia = "setMedia";
-	    		if ($this->isUsernamePasswordToken() && method_exists($entity, $getMedia) && method_exists($entity, $setMedia)&& ( ($entity->$getMedia() instanceof \PiApp\GedmoBundle\Entity\Media) ) ) {
+	    		if ($this->isUsernamePasswordToken() && method_exists($entity, $getMedia) && method_exists($entity, $setMedia)&& ( ($entity->$getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) ) ) {
 	    			$mediaPath = $this->_container()->get('sonata.media.twig.extension')->path($entity->$getMedia()->getImage()->getId(), 'reference');
 	    			$src = $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
 	    			if (file_exists($src)) {

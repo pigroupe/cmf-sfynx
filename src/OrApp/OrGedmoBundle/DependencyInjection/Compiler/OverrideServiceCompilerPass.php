@@ -28,7 +28,7 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_file');
+        $definition = $container->getDefinition('sfynx_mediabundle_mediatype_file');
         $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
         $definition->setArguments(array(
         		new \Symfony\Component\DependencyInjection\Reference('service_container'),
@@ -38,7 +38,7 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
         		'all'
         ));
          
-        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_image');
+        $definition = $container->getDefinition('sfynx_mediabundle_mediatype_image');
         $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
         $definition->setArguments(array(
         		new \Symfony\Component\DependencyInjection\Reference('service_container'),
@@ -48,7 +48,7 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
         		'all'
         ));
          
-        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_youtube');
+        $definition = $container->getDefinition('sfynx_mediabundle_mediatype_youtube');
         $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
         $definition->setArguments(array(
         		new \Symfony\Component\DependencyInjection\Reference('service_container'),
@@ -58,7 +58,7 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
         		'all'
         ));
         
-        $definition = $container->getDefinition('piapp_gedmobundle_mediatype_dailymotion');
+        $definition = $container->getDefinition('sfynx_mediabundle_mediatype_dailymotion');
         $definition->setClass('OrApp\OrGedmoBundle\Form\MediaType');
         $definition->setArguments(array(
         		new \Symfony\Component\DependencyInjection\Reference('service_container'),

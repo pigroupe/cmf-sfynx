@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <PI_CRUD> project.
+ * This file is part of the <Media> project.
  *
  * @category   PI_CRUD_Controllers
  * @package    Controller
@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PiApp\GedmoBundle\Controller;
+namespace Sfynx\MediaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\AuthBundle\Controller\abstractController;
@@ -24,9 +24,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use PiApp\GedmoBundle\Entity\Media;
-use PiApp\GedmoBundle\Form\MediaType;
-use PiApp\GedmoBundle\Entity\Translation\MediaTranslation;
+use Sfynx\MediaBundle\Entity\Mediatheque;
+use Sfynx\MediaBundle\Form\MediathequeType;
+use Sfynx\MediaBundle\Entity\Translation\MediaTranslation;
 
 /**
  * Media controller.
@@ -37,18 +37,17 @@ use PiApp\GedmoBundle\Entity\Translation\MediaTranslation;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class MediaController extends abstractController
+class MediathequeController extends abstractController
 {
-    protected $_entityName = "PiAppGedmoBundle:Media";
+    protected $_entityName = "SfynxMediaBundle:Mediatheque";
 
     /**
      * Enabled Media entities.
      *
      * @Route("/content/gedmo/media/enabled", name="admin_gedmo_media_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function enabledajaxAction()
@@ -61,9 +60,8 @@ class MediaController extends abstractController
      * 
      * @Route("/content/gedmo/media/disable", name="admin_gedmo_media_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function disableajaxAction()
@@ -76,9 +74,8 @@ class MediaController extends abstractController
      *
      * @Route("/content/gedmo/media/position", name="admin_gedmo_media_position_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *     
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function positionajaxAction()
@@ -91,9 +88,8 @@ class MediaController extends abstractController
      *
      * @Route("/content/gedmo/media/delete", name="admin_gedmo_media_deletentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteajaxAction()
@@ -106,9 +102,8 @@ class MediaController extends abstractController
      *
      * @Route("/content/gedmo/media/archive", name="admin_gedmo_media_archiveentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function archiveajaxAction()
@@ -121,9 +116,8 @@ class MediaController extends abstractController
      *
      * @Route("/content/gedmo/media/select/{type}", name="admin_gedmo_media_selectentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access  public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function selectajaxAction($type)
@@ -136,7 +130,7 @@ class MediaController extends abstractController
     	$keyword    = $this->container->get('request')->get('keyword', '');
     	$MaxResults = $this->container->get('request')->get('max', 10);
     	// we set query
-        $query  = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory('', null, '', '', false);
+        $query  = $em->getRepository("SfynxMediaBundle:Mediatheque")->getAllByCategory('', null, '', '', false);
         $query
         ->leftJoin('a.translations', 'trans')
         ->leftJoin('a.image', 'm')
@@ -212,7 +206,7 @@ class MediaController extends abstractController
             $category = $category['__isInitialized__'];
         }
         // weg set query
-        $query = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory($category, null, '', '', false);
+        $query = $em->getRepository("SfynxMediaBundle:Mediatheque")->getAllByCategory($category, null, '', '', false);
         $query
         ->leftJoin('a.image', 'm')
         ->leftJoin('a.category', 'c')
@@ -321,15 +315,15 @@ class MediaController extends abstractController
         if (!$is_Server_side) {
             if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
             } else {
-                $query = $em->getRepository("PiAppGedmoBundle:Media")->setContainer($this->container)->checkRoles($query);
+                $query = $em->getRepository("SfynxMediaBundle:Mediatheque")->setContainer($this->container)->checkRoles($query);
             }
-            $query     = $em->getRepository("PiAppGedmoBundle:Media")->cacheQuery($query->getQuery(), 3600, 3 /*\Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_list_gedmomedia');
-            $entities  = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($locale, $query, 'object', false);
+            $query     = $em->getRepository("SfynxMediaBundle:Mediatheque")->cacheQuery($query->getQuery(), 3600, 3 /*\Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_list_gedmomedia');
+            $entities  = $em->getRepository("SfynxMediaBundle:Mediatheque")->findTranslationsByQuery($locale, $query, 'object', false);
         } else {
             $entities  = null;
         }
         
-        return $this->render("PiAppGedmoBundle:Media:index.html.twig", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:index.html.twig", array(
             'isServerSide' => $is_Server_side,
             'entities' => $entities,
             'NoLayout' => $NoLayout,
@@ -341,15 +335,15 @@ class MediaController extends abstractController
      * Finds and displays a Media entity.
      *
      * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
     public function showAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($locale, $id, 'object');
+        $locale = $this->container->get('request')->getLocale();
+        $entity = $em->getRepository("SfynxMediaBundle:Mediatheque")->findOneByEntity($locale, $id, 'object');
         
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)     $template = "show.html.twig"; else $template = "show.html.twig";
@@ -364,10 +358,10 @@ class MediaController extends abstractController
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:$template", array(
             'entity'      => $entity,
-            'NoLayout'      => $NoLayout,
-            'category'      => $category,
+            'NoLayout'    => $NoLayout,
+            'category'    => $category,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -376,20 +370,20 @@ class MediaController extends abstractController
      * Displays a form to create a new Media entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $status = $this->container->get('request')->query->get('status');
-        $entity = new Media();
+        $entity = new Mediatheque();
         $entity->setStatus($status);
         $entity->setUpdatedAt(new \Datetime());
         //$form   = $this->createForm(new MediaType($this->container, $em, $status), $entity, array('show_legend' => false));
-        $form   = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
+        $form   = $this->createForm('sfynx_mediabundle_mediatype_' . $status, $entity, array('show_legend' => false));
     
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new.html.twig";
@@ -398,7 +392,7 @@ class MediaController extends abstractController
         if (is_array($category) && isset($category['__isInitialized__']))
             $category = $category['__isInitialized__'];
     
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:$template", array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
                 'NoLayout'  => $NoLayout,
@@ -411,8 +405,8 @@ class MediaController extends abstractController
      * Creates a new Media entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAction()
@@ -425,10 +419,10 @@ class MediaController extends abstractController
         if (is_array($category) && isset($category['__isInitialized__'])) {
             $category = $category['__isInitialized__'];
         }
-        $entity  = new Media();
+        $entity  = new Mediatheque();
         $entity->setStatus($status);
         $request = $this->getRequest();
-        $form    = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
+        $form    = $this->createForm('sfynx_mediabundle_mediatype_' . $status, $entity, array('show_legend' => false));
         $form->bind($request);    
         if ($form->isValid()) {
             $entity->setTranslatableLocale($locale);
@@ -440,7 +434,7 @@ class MediaController extends abstractController
             return $this->redirect($this->generateUrl('admin_gedmo_media_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout, 'category' => $category)));
         }
     
-        return $this->render("PiAppGedmoBundle:Media:new.html.twig", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:new.html.twig", array(
                 'entity'     => $entity,
                 'form'       => $form->createView(),
                 'NoLayout'  => $NoLayout,
@@ -453,16 +447,15 @@ class MediaController extends abstractController
      * Displays a form to edit an existing Media entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
     public function editAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($locale, $id, 'object');
+        $entity = $em->getRepository("SfynxMediaBundle:Mediatheque")->findOneByEntity($locale, $id, 'object');
         
         $status        = $this->container->get('request')->query->get('status');
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
@@ -473,15 +466,15 @@ class MediaController extends abstractController
             $category = $category['__isInitialized__'];
 
         if (!$entity) {
-            $entity = $em->getRepository("PiAppGedmoBundle:Media")->find($id);
+            $entity = $em->getRepository("SfynxMediaBundle:Mediatheque")->find($id);
             $entity->addTranslation(new MediaTranslation($locale));            
         }
 
         $entity->setUpdatedAt(new \Datetime());
-        $editForm   = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
+        $editForm   = $this->createForm('sfynx_mediabundle_mediatype_' . $status, $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:$template", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -495,16 +488,15 @@ class MediaController extends abstractController
      * Edits an existing Media entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
      */
     public function updateAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
         $locale = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($locale, $id, "object"); 
+        $entity = $em->getRepository("SfynxMediaBundle:Mediatheque")->findOneByEntity($locale, $id, "object"); 
         
         $status        = $this->container->get('request')->query->get('status');
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
@@ -515,10 +507,10 @@ class MediaController extends abstractController
             $category = $category['__isInitialized__'];
 
         if (!$entity) {
-            $entity = $em->getRepository("PiAppGedmoBundle:Media")->find($id);
+            $entity = $em->getRepository("SfynxMediaBundle:Mediatheque")->find($id);
         }
 
-        $editForm   = $this->createForm('piapp_gedmobundle_mediatype_' . $status, $entity, array('show_legend' => false));
+        $editForm   = $this->createForm('sfynx_mediabundle_mediatype_' . $status, $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
 
         $editForm->bind($this->getRequest(), $entity);
@@ -532,7 +524,7 @@ class MediaController extends abstractController
             return $this->redirect($this->generateUrl('admin_gedmo_media_edit', array('id' => $id, 'NoLayout' => $NoLayout, 'category' => $category, 'status' => $status)));
         }
 
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:$template", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -546,9 +538,8 @@ class MediaController extends abstractController
      * Deletes a Media entity.
      *
      * @Secure(roles="ROLE_EDITOR")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *     
-     * @access    public
+     * @return RedirectResponse
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>     
      */
     public function deleteAction($id)
@@ -565,7 +556,7 @@ class MediaController extends abstractController
         $form->bind($request);
 
         if ($form->isValid()) {
-            $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($locale, $id, 'object');
+            $entity = $em->getRepository("SfynxMediaBundle:Mediatheque")->findOneByEntity($locale, $id, 'object');
             if (!$entity) {
                 throw ControllerException::NotFoundEntity('Media');
             }
@@ -595,9 +586,8 @@ class MediaController extends abstractController
      * Template : Finds and displays a Media entity.
      * 
      * @Cache(maxage="86400")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com> 
      */
     public function _template_showAction($id, $template = '_tmp_show.html.twig', $lang = "")
@@ -607,13 +597,13 @@ class MediaController extends abstractController
         if (empty($lang))
             $lang    = $this->container->get('request')->getLocale();
         
-        $entity = $em->getRepository("PiAppGedmoBundle:Media")->findOneByEntity($lang, $id, 'object', false);
+        $entity = $em->getRepository("SfynxMediaBundle:Mediatheque")->findOneByEntity($lang, $id, 'object', false);
         
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Media');
         }
     
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:$template", array(
                 'entity'      => $entity,
                 'locale'   => $lang,
                 'lang'       => $lang,
@@ -624,9 +614,8 @@ class MediaController extends abstractController
      * Template : Finds and displays a list of Media entity.
      * 
      * @Cache(maxage="86400")
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @return Response
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com> 
      */
     public function _template_listAction($category = '', $MaxResults = null, $template = '_tmp_list.html.twig', $order = 'DESC', $lang = "")
@@ -636,15 +625,14 @@ class MediaController extends abstractController
         if (empty($lang))
             $lang   = $this->container->get('request')->getLocale();
         
-        $query      = $em->getRepository("PiAppGedmoBundle:Media")->getAllByCategory($category, $MaxResults, '', $order)->getQuery();
-        $entities   = $em->getRepository("PiAppGedmoBundle:Media")->findTranslationsByQuery($lang, $query, 'object', false);                   
+        $query      = $em->getRepository("SfynxMediaBundle:Mediatheque")->getAllByCategory($category, $MaxResults, '', $order)->getQuery();
+        $entities   = $em->getRepository("SfynxMediaBundle:Mediatheque")->findTranslationsByQuery($lang, $query, 'object', false);                   
 
-        return $this->render("PiAppGedmoBundle:Media:$template", array(
+        return $this->render("SfynxMediaBundle:Mediatheque:$template", array(
             'entities' => $entities,
             'cat'       => ucfirst($category),
             'locale'   => $lang,
             'lang'       => $lang,
         ));
-    }     
-    
+    }         
 }

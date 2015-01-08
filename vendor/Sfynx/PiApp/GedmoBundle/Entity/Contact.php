@@ -238,7 +238,7 @@ class Contact extends AbstractDefault
     /**
      * @var integer $media
      *
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , cascade={"all"}, inversedBy="contact1");
+     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="contact1");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;
@@ -254,7 +254,7 @@ class Contact extends AbstractDefault
     /**
      * @var integer $media1
      *
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , cascade={"all"}, inversedBy="contact2");
+     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="contact2");
      * @ORM\JoinColumn(name="media1_id", referencedColumnName="id", nullable=true)
      */
     protected $media1;
@@ -815,11 +815,11 @@ class Contact extends AbstractDefault
     /**
      * Set media
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      */
     public function setMedia($media)
     {
-        //         if (($media instanceof \PiApp\GedmoBundle\Entity\Media) && ($media->getImage()->getName() == ""))
+        //         if (($media instanceof \Sfynx\MediaBundle\Entity\Mediatheque) && ($media->getImage()->getName() == ""))
             //             $this->media = null;
             //         else{
             //             $this->media = $media;
@@ -831,7 +831,7 @@ class Contact extends AbstractDefault
     /**
      * Get media
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia()
     {
@@ -841,11 +841,11 @@ class Contact extends AbstractDefault
     /**
      * Set media1
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      */
     public function setMedia1($media)
     {
-        //         if (($media instanceof \PiApp\GedmoBundle\Entity\Media) && ($media->getImage()->getName() == ""))
+        //         if (($media instanceof \Sfynx\MediaBundle\Entity\Mediatheque) && ($media->getImage()->getName() == ""))
             //             $this->media1 = null;
             //         else{
             //             $this->media1 = $media;
@@ -857,7 +857,7 @@ class Contact extends AbstractDefault
     /**
      * Get media1
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia1()
     {

@@ -141,9 +141,9 @@ class Slider extends AbstractDefault
     protected $pagecssclass;    
     
     /**
-     * @var \PiApp\GedmoBundle\Entity\Media $media
+     * @var \Sfynx\MediaBundle\Entity\Mediatheque $media
      *
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , cascade={"all"}, inversedBy="slider");
+     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="slider");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media; 
@@ -412,7 +412,7 @@ class Slider extends AbstractDefault
     /**
      * Set media
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      */
     public function setMedia($media)
     {
@@ -423,7 +423,7 @@ class Slider extends AbstractDefault
     /**
      * Get media
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia()
     {

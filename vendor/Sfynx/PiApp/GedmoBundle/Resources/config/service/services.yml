@@ -18,30 +18,4 @@ services:
         arguments: [@service_container]
         tags:
             - { name: doctrine.event_subscriber }
-              
-    #
-    # configuration of the forms
-    #            
-    piapp_gedmobundle_mediatype_file:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'file' ]
-        tags:
-            - { name: form.type }      
             
-    piapp_gedmobundle_mediatype_image:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'image' ]
-        tags:
-            - { name: form.type }
-            
-    piapp_gedmobundle_mediatype_youtube:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'youtube' ]
-        tags:
-            - { name: form.type }        
-            
-    piapp_gedmobundle_mediatype_dailymotion:
-        class: PiApp\GedmoBundle\Form\MediaType
-        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'dailymotion' ]
-        tags:
-            - { name: form.type }               

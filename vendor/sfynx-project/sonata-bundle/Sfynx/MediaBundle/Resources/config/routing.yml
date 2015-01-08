@@ -8,4 +8,16 @@ media:
     
 pixlr:
     resource: '@SonataMediaBundle/Resources/config/routing/pixlr.xml'
-    prefix: /    
+    prefix: /   
+    
+#
+#   import routes from a controller directory
+#
+annotation_gedmo:
+    resource: "@SfynxMediaBundle/Controller"
+    type:     annotation    
+    
+#SfynxMediaBundle:Mediatheque
+piapp_gedmo_media:
+    resource: "@SfynxMediaBundle/Resources/config/routing/media.xml"
+    prefix: /admin/gedmo/media     

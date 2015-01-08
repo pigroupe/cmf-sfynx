@@ -41,37 +41,4 @@ class Configuration implements ConfigurationInterface
  
         return $treeBuilder;
     }
-    
-    /**
-     * Crop config
-     *
-     * @param ArrayNodeDefinition $rootNode An ArrayNodeDefinition instance
-     * 
-     * @return void
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function addCropConfig(ArrayNodeDefinition $rootNode) {
-    	$rootNode
-    	->children()
-        	->arrayNode('crop')
-                ->addDefaultsIfNotSet()
-                ->children()
-                        ->arrayNode('formats')
-                        ->isRequired()
-                            ->prototype('array')
-                                ->children()
-                                	->scalarNode('prefix')->cannotBeEmpty()->isRequired()->end()
-                                    ->scalarNode('legend')->cannotBeEmpty()->isRequired()->end()
-                                    ->scalarNode('width')->cannotBeEmpty()->isRequired()->end()
-                                    ->scalarNode('height')->cannotBeEmpty()->isRequired()->end()
-                                    ->scalarNode('ratio')->cannotBeEmpty()->isRequired()->end()
-                                    ->scalarNode('quality')->cannotBeEmpty()->isRequired()->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                ->end()
-            ->end()
-    	->end();
-    }        
 }

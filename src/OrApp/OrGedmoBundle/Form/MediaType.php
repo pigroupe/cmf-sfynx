@@ -2,35 +2,35 @@
 /**
  * This file is part of the <PI_CRUD> project.
  *
- * @category   PI_CRUD_Form
- * @package    Form
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 20XX-XX-XX
+ * @category PI_CRUD_Form
+ * @package  Form
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since    20XX-XX-XX
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace OrApp\OrGedmoBundle\Form;
 
-use \PiApp\GedmoBundle\Form\MediaType as PiMediaType;
+use \Sfynx\MediaBundle\Form\MediathequeType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
 
 /**
  * Description of the MediaType form.
  *
- * @category   PI_CRUD_Form
- * @package    Form
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category PI_CRUD_Form
+ * @package  Form
+ * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class MediaType extends PiMediaType
+class MediaType extends MediathequeType
 {
     /**
      * Constructor.
      *
-     * @param \Doctrine\ORM\EntityManager $em
-     * @param string $status    ['file', 'image', 'youtube', 'dailymotion']
+     * @param EntityManager $em     The em service
+     * @param string        $status ['file', 'image', 'youtube', 'dailymotion']
+     * 
      * @return void
      */
     public function __construct(ContainerInterface $container, EntityManager $em, $status = "image", $class =  "media_collection", $simpleLink = "all", $labelLink = "", $context = "")

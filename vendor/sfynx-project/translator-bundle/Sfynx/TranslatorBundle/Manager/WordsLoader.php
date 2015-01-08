@@ -2,10 +2,9 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @subpackage   Sfynx_Manager
+ * @subpackage Sfynx_Manager
  * @package    translator
- * @author Riad HELLAL <hellal.riad@gmail.com>
- * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Riad HELLAL <hellal.riad@gmail.com>
  * @since 2012-11-14
  *
  * For the full copyright and license information, please view the LICENSE
@@ -16,15 +15,14 @@ namespace Sfynx\TranslatorBundle\Manager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\MessageCatalogue;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Words translator management.
  *
- * @subpackage   Sfynx_Manager
+ * @subpackage Sfynx_Manager
  * @package    translator
- * @author Riad HELLAL <hellal.riad@gmail.com>
- * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
- * 
+ * @author     Riad HELLAL <hellal.riad@gmail.com>
  */
 class WordsLoader implements LoaderInterface
 {
@@ -46,12 +44,12 @@ class WordsLoader implements LoaderInterface
     /**
      * @param string $resource
      * @param null $type
-     * @return \Symfony\Component\Routing\RouteCollection
+     * 
+     * @return RouteCollection
      * @access public
-     *
      * @author Riad HELLAL <hellal.riad@gmail.com>
      * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-11-14
+     * @since  2012-11-14
      */    
     public function load($resource, $userLocale, $domain = 'messages')
     {

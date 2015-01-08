@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @subpackage   Sfynx
+ * @subpackage Translator
  * @package    Bundle
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-11-14
+ * @author     Riad HELLAL <hellal.riad@gmail.com>
+ * @since      2012-11-14
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,10 +18,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the translor Bundle
  *
- * @subpackage   Sfynx
+ * @subpackage Translator
  * @package    Bundle
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Riad HELLAL <hellal.riad@gmail.com>
  */
 class SfynxTranslatorBundle extends Bundle
 {
