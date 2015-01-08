@@ -343,10 +343,10 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      */
     public function createCacheWidgetRepository()
     {
-    	$dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
-    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+        $path  = $this->container->getParameter("pi_app_admin.cache_dir.widget");
+    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($path, 0777);
     
-    	return $dossier;
+    	return $path;
     }    
 
     /**

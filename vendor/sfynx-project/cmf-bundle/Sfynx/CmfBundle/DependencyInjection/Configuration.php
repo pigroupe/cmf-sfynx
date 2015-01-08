@@ -61,6 +61,8 @@ class Configuration implements ConfigurationInterface
                 ->children()                
                     ->scalarNode('etag')->defaultValue('%kernel.root_dir%/cachesfynx/Etag/')->cannotBeEmpty()->end()
                     ->scalarNode('indexation')->defaultValue('%kernel.root_dir%/cachesfynx/Indexation')->cannotBeEmpty()->end()
+                    ->scalarNode('widget')->isRequired()->defaultValue("%kernel.root_dir%/cachesfynx/Widget")->cannotBeEmpty()->end()
+                    ->scalarNode('seo')->isRequired()->defaultValue("%kernel.root_dir%/cachesfynx/Seo")->cannotBeEmpty()->end()
                 ->end()        
             ->end()
         ->end();
@@ -220,7 +222,6 @@ class Configuration implements ConfigurationInterface
                         ->isRequired()
                             ->children()
                                 ->booleanNode('authorized')->isRequired()->defaultValue(false)->end()
-                                ->scalarNode('repository')->isRequired()->defaultValue("%kernel.root_dir%/cachesfynx/seo")->cannotBeEmpty()->end()
                                 ->scalarNode('file_name')->isRequired()->defaultValue("seo_links.yml")->cannotBeEmpty()->end()
                             ->end()
                         ->end()                        

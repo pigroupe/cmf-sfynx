@@ -21,8 +21,9 @@ vendor/*
 */logs/*
 */cache/*
 */cachesfynx/Etag/*
-*/Etag/*
-*/Indexation/*
+*/cachesfynx/Seo/old_urls*
+*/cachesfynx/Widget/*
+*/cachesfynx/Indexation/*
 web/uploads/*
 web/bundles/*
 web/yui/*

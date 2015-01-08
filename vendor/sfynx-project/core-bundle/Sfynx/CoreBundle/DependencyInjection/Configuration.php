@@ -37,21 +37,43 @@ class Configuration implements ConfigurationInterface
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
+        $this->addCacheConfig($rootNode);
         $this->addCookiesConfig($rootNode);
         $this->addTranslationConfig($rootNode);
         $this->addPermissionConfig($rootNode);
 
         return $treeBuilder;
     }
+    
+    /**
+     * Admin config
+     *
+     * @param $rootNode ArrayNodeDefinition Class
+     *
+     * @return void
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */    
+    protected function addCacheConfig(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+        ->children()
+            ->arrayNode('cache_dir')
+                ->addDefaultsIfNotSet()
+                ->children()                
+                    ->scalarNode('media')->defaultValue('%kernel.root_dir%/cachesfynx/Media/')->cannotBeEmpty()->end()
+                ->end()        
+            ->end()
+        ->end();
+    }        
 
     /**
      * Cookies config
      *
-     * @param $rootNode \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     * @param ArrayNodeDefinition $rootNode
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function addCookiesConfig(ArrayNodeDefinition $rootNode)
