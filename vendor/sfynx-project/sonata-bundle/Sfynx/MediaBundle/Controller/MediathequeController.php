@@ -262,14 +262,14 @@ class MediathequeController extends abstractController
               	  } else {
               			$row[] = (string) $e->getImage()->getName();
               	  }
-                  $url = $this->container->get('sfynx.tool.twig.extension.route')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'media_');
+                  $url = $this->container->get('sfynx.media.twig.extension.crop')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'media_');
               } else {
                   $row[] = "";
                   $url = "#";
               }
               
               if ($e->getStatus() == 'image') {
-              	$UrlPicture = $this->container->get('sfynx.tool.twig.extension.route')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'gedmo_media_');
+              	$UrlPicture = $this->container->get('sfynx.media.twig.extension.crop')->getMediaUrlFunction($e->getImage(), 'reference', true, $e->getUpdatedAt(), 'gedmo_media_');
               	$row[] = (string) '<a href="#" title=\'<img src="'.$UrlPicture.'" class="info-tooltip-image" >\' class="info-tooltip"><img width="20px" src="'.$UrlPicture.'"></a>';
               } else {
               	$row[] = "";
