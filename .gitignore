@@ -24,6 +24,7 @@ vendor/*
 */cachesfynx/Seo/old_urls*
 */cachesfynx/Widget/*
 */cachesfynx/Indexation/*
+*/cachesfynx/Media/*
 web/uploads/*
 web/bundles/*
 web/yui/*
