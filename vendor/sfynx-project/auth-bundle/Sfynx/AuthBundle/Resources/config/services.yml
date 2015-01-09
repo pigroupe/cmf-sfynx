@@ -59,6 +59,10 @@ services:
     sfynx.auth.dispatcher.login_failure.change_response:
         class: %sfynx.auth.dispatcher.loginfailure.changeresponse.class%
         arguments: [@service_container]
+        properties:
+            login_failure: %sfynx.auth.loginfailure.authorized%
+            login_failure_time_expire: %sfynx.auth.loginfailure.time_expire%        
+            login_failure_connection_attempts: %sfynx.auth.loginfailure.connection_attempts%   
         tags:
             - { name: kernel.event_listener, event: pi.handler.login.failure, method: onPiLoginFailureResponse, priority: 1 }          
         

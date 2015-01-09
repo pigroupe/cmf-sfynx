@@ -39,11 +39,11 @@ class DispatcherLoginFailureResponse
    /**
     * Constructor.
     *
-    * @param string $defaultLocale	Locale value
+    * @param string $defaultLocale Locale value
     */   
    public function __construct(ContainerInterface $container)
    {
-       $this->container     = $container;  
+       $this->container = $container;  
    }
 
    /**
