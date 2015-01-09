@@ -40,7 +40,16 @@ class SfynxAuthExtension extends Extension{
         
         /**
          * Login failure config parameter
-         */        
+         */    
+        if (isset($config['loginfailure']['authorized'])) {
+            $container->setParameter('sfynx.auth.loginfailure.authorized', $config['loginfailure']['authorized']);
+        } 
+        if (isset($config['loginfailure']['time_expire'])) {
+            $container->setParameter('sfynx.auth.loginfailure.time_expire', $config['loginfailure']['time_expire']);
+        } 
+        if (isset($config['loginfailure']['connection_attempts'])) {
+            $container->setParameter('sfynx.auth.loginfailure.connection_attempts', $config['loginfailure']['connection_attempts']);
+        }         
         if (isset($config['loginfailure']['cache_dir'])) {
             $container->setParameter('sfynx.auth.loginfailure.cache_dir', $config['loginfailure']['cache_dir']);
         } 

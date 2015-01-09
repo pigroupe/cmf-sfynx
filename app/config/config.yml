@@ -659,6 +659,9 @@ sfynx_core:
 #  
 sfynx_auth:
     loginfailure:
+        authorized: true
+        time_expire: 3600
+        connection_attempts: 5
         cache_dir: "%kernel.root_dir%/cachesfynx/loginfailure/"
     locale:
         authorized: ~ #[fr_FR, en_GB]
