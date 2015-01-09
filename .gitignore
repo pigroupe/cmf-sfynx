@@ -25,6 +25,7 @@ vendor/*
 */cachesfynx/Widget/*
 */cachesfynx/Indexation/*
 */cachesfynx/Media/*
+*/cachesfynx/loginfailure/*
 web/uploads/*
 web/bundles/*
 web/yui/*

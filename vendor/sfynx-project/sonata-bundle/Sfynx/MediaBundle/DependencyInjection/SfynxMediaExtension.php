@@ -76,7 +76,6 @@ class SfynxMediaExtension extends Extension{
                     'remove',
                 ),
                 'mappedBy'      => 'object',
-                'orphanRemoval' => true,
                 'orderBy'       => array(
                     'locale'  => 'ASC',
                 ),
@@ -93,7 +92,6 @@ class SfynxMediaExtension extends Extension{
                         'onDelete' => 'CASCADE'
                     ),
                 ),
-                'orphanRemoval' => false,
             ));
         }   
         
