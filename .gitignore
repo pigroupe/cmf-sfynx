@@ -9,6 +9,7 @@ doc/phpmd/*
 doc/phpcpd/*
 
 # Bootstrap
+app/bootstrap_tests.php
 app/bootstrap*
 
 # Symfony directories
