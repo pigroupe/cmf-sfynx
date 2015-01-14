@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Core> project.
+ * This file is part of the <Auth> project.
  *
- * @subpackage Core
+ * @subpackage Auth
  * @package    Tests
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2012-03-08
@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\CoreBundle\Tests;
+namespace Sfynx\AuthBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -23,16 +23,18 @@ use Symfony\Bundle\FrameworkBundle\Client;
  * @todo Decide if this shouldn't go to bootstrap ?
  *       Maybe replace the database by a SQLite in memory ?
  *
- * @subpackage Core
+ * @subpackage Auth
  * @package    Tests
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
     const USER_EMAIL = 'user@gmail.com';
+    const USER_USERNAME = 'user';
     const USER_PASS = 'user';
     
     const ADMIN_EMAIL = 'admin@hotmail.com';
+    const ADMIN_USERNAME = 'admin';
     const ADMIN_PASS = 'admin';
 
     const URL_CONNECTION = '/login';
@@ -61,16 +63,16 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
 
-    protected static function loadUser()
+    protected static function loadFixtures()
     {
-        self::runCommand('doctrine:fixtures:load @SfynxAuthBundle --yml');
+        self::runCommand('doctrine:fixtures:load @SfynxAuthBundle --env=test');
     }
 
     protected static function emptyDatabase()
     {
-        self::runCommand('doctrine:database:drop --force');
-        self::runCommand('doctrine:database:create');
-        self::runCommand('doctrine:schema:create');
+        self::runCommand('doctrine:database:drop --force --env=test');
+        self::runCommand('doctrine:database:create --env=test');
+        self::runCommand('doctrine:schema:create --env=test');
     }
 
     /**
@@ -83,12 +85,12 @@ abstract class WebTestCase extends BaseWebTestCase
             $client = static::createClient();
         }
         $client->request('GET', self::URL_CONNECTION);
-        $form = $client->getCrawler()->filter('#login_form input[type=submit]')->first()->form();
+        $form = $client->getCrawler()->filter('form input[type=submit]')->first()->form();
         $client->submit(
             $form,
             array(
                 'roles' => '{"0":"ROLE_USER"}',
-                '_username' => self::USER_EMAIL,
+                '_username' => self::USER_USERNAME,
                 '_password' => self::USER_PASS
             )
         );
@@ -107,12 +109,13 @@ abstract class WebTestCase extends BaseWebTestCase
             $client = static::createClient();
         }
         $client->request('GET', self::URL_CONNECTION);
-        $form = $client->getCrawler()->filter('#login_form input[type=submit]')->first()->form();
+        
+        $form = $client->getCrawler()->filter('form input[type=submit]')->first()->form();
         $client->submit(
             $form,
             array(
                 'roles' => '{"0":"ROLE_ADMIN","1":"ROLE_SUPER_ADMIN"}',
-                '_username' => self::ADMIN_EMAIL,
+                '_username' => self::ADMIN_USERNAME,
                 '_password' => self::ADMIN_PASS
             )
         );

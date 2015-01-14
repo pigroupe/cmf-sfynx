@@ -42,7 +42,7 @@ class PagesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $field1->setUser($this->getReference('user-admin'));
         $field1->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $field1->setCacheable(false);
-        $field1->setLifetime("86400");
+        $field1->setLifetime("0");
         $field1->setPublic(false);
         $field1->setEnabled(true);
         $manager->persist($field1);
@@ -66,7 +66,7 @@ class PagesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $field3->setUser($this->getReference('user-admin'));
         $field3->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $field3->setCacheable(false);
-        $field3->setLifetime("86400");
+        $field3->setLifetime("0");
         $field3->setPublic(false);
         $field3->setEnabled(true);
         $manager->persist($field3);        
