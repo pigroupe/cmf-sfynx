@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Route
- * @package    Tool
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-02-27
+ * @subpackage Tool
+ * @package    Route
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-02-27
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,9 +25,9 @@ use Sfynx\CmfBundle\Route\DoctrineRoute;
 /**
  * route page management.
  *
- * @subpackage   Route
- * @package    Tool
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Tool
+ * @package    Route
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class RouteLoader implements LoaderInterface
 {

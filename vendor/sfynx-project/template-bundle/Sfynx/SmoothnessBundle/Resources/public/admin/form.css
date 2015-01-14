@@ -79,6 +79,10 @@
     color: #000;
     clear: left;
 }
+.myform .clearfix label.radio {
+    display: inline-block;
+    width: 83px;
+}
 .clearfix {
     margin-bottom: 11px;
 }

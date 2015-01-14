@@ -85,7 +85,7 @@ class DoctrineRoute implements DoctrineRouteInterface
     		$this->parseRoutePages();
     		$all_route_values = $this->getAllRouteValues();
     	}
-    
+        
     	return $all_route_values;
     }
     
