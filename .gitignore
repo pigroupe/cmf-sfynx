@@ -9,8 +9,8 @@ doc/phpmd/*
 doc/phpcpd/*
 
 # Bootstrap
-!app/bootstrap_tests.php
 app/bootstrap*
+!app/bootstrap_tests.php
 
 # Symfony directories
 nbproject/*
