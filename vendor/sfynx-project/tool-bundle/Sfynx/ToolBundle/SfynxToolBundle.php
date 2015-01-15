@@ -2,9 +2,9 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Sfynx
+ * @subpackage Sfynx
  * @package    Bundle
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,14 +14,14 @@ namespace Sfynx\ToolBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Sfynx\ToolBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
+use Sfynx\ToolBundle\DependencyInjection\Compiler\MapperCollectionPass;
 
 /**
  * Sfynx configuration and managment of the Tool Bundle
  *
- * @subpackage   Sfynx
+ * @subpackage Sfynx
  * @package    Bundle
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class SfynxToolBundle extends Bundle
 {
@@ -40,6 +40,7 @@ class SfynxToolBundle extends Bundle
         parent::build($container);
         // register extension
         $container->addCompilerPass(new PiTwigEnvironmentPass());
+        $container->addCompilerPass(new MapperCollectionPass());
     }
     
     /**

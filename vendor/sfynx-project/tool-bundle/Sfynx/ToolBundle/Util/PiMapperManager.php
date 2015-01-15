@@ -13,7 +13,6 @@
 namespace Sfynx\ToolBundle\Util;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\ToolBundle\Route\AbstractFactory;
 use Sfynx\ToolBundle\Builder\PiMapperManagerBuilderInterface;
 
 /**
@@ -23,7 +22,7 @@ use Sfynx\ToolBundle\Builder\PiMapperManagerBuilderInterface;
  * @package    Util
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class PiMapperManager extends AbstractFactory
+class PiMapperManager
 {
     private $mappers = array();
     
@@ -32,10 +31,7 @@ class PiMapperManager extends AbstractFactory
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
+    public function __construct()    {}
 
     /**
      * Return a JS file in the container in links.

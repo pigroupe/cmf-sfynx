@@ -5,7 +5,7 @@
  * @subpackage Auth
  * @package    Tests
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2012-03-08
+ * @since      2015-01-08
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,9 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Client;
 /**
  * This is the base test case for all functional tests.
  * It bootstraps the database before each test class.
- *
- * @todo Decide if this shouldn't go to bootstrap ?
- *       Maybe replace the database by a SQLite in memory ?
  *
  * @subpackage Auth
  * @package    Tests
