@@ -85,15 +85,15 @@ class WordsLoader implements LoaderInterface
             ->getResult();
             // we create for all languages
             $this->container->get('sfynx.annotation.subscriber.encrypters')->_load_enabled = true;
-            $all_locales = $this->container->get('sfynx.auth.locale_manager')->getAllLocales();
-            foreach ($all_locales as $key => $lang) {
-                foreach ($Words as $word) {
-                    if ($lang != $locale) {
-                        $word->setTranslatableLocale($lang);
-                        $entityManager->refresh($word);
-                    }
-                    $catalogue->set($word->getKeyword(), $word->translate($lang)->getLabel() ? $word->translate($lang)->getLabel():' ', $domain);
-                }
+            foreach ($Words as $word) {
+//                print_r("\n");
+//                print_r($word->getId());
+//                print_r("-");
+//                print_r($word->getKeyword());
+//                print_r("-");                    
+//                print_r($word->getLabel());
+//                print_r("\n");
+                $catalogue->set($word->getKeyword(), $word->getLabel() ? $word->getLabel():' ', $domain);
             }
         }
         
@@ -124,7 +124,7 @@ class WordsLoader implements LoaderInterface
                         foreach ($locales as $locale => $data) {
                             if ($locale !== $userLocale) {
                                 continue;
-                            }                            
+                            }           
                             list($format, $file) = $data;
                             // merge catalogues
                             $loader = $this->loadFile($file, $format, $locale, $domain);
@@ -133,7 +133,7 @@ class WordsLoader implements LoaderInterface
                     }
                 }    
             }        
-        }        
+        }     
         
         return $catalogue;
     }        

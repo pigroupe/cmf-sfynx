@@ -15,10 +15,9 @@ namespace Sfynx\TranslatorBundle\EventSubscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sfynx\CoreBundle\EventListener\abstractListener;
+use Sfynx\TranslatorBundle\Entity\Word;
 
 /**
  * Position Subscriber.
@@ -85,7 +84,7 @@ class WordSubscriber  extends abstractListener implements EventSubscriber
      */
     public function postUpdate(EventArgs $eventArgs)
     {
-        $this->deleteCacheTranslationFiles();
+        $this->deleteCacheTranslationFiles($eventArgs);
     }
     
     /**
@@ -96,7 +95,7 @@ class WordSubscriber  extends abstractListener implements EventSubscriber
      */
     public function postRemove(EventArgs $eventArgs)
     {
-        $this->deleteCacheTranslationFiles();
+        $this->deleteCacheTranslationFiles($eventArgs);
     }
     
     /**
@@ -107,7 +106,7 @@ class WordSubscriber  extends abstractListener implements EventSubscriber
      */
     public function postPersist(EventArgs $eventArgs)
     {
-        $this->deleteCacheTranslationFiles();
+        $this->deleteCacheTranslationFiles($eventArgs);
     }
     
     /**
@@ -117,8 +116,11 @@ class WordSubscriber  extends abstractListener implements EventSubscriber
      * @access private
      * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    private function deleteCacheTranslationFiles()
+    private function deleteCacheTranslationFiles(EventArgs $eventArgs)
     {
-        $this->container->get("sfynx.translator.wordsloader")->deleteCacheTranslationFiles();
+        $entity = $eventArgs->getEntity();        
+        if ($entity instanceof Word) {
+            $this->container->get("sfynx.translator.wordsloader")->deleteCacheTranslationFiles();
+        }
     }      
 }
