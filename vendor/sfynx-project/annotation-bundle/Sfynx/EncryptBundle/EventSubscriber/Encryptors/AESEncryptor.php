@@ -2,11 +2,11 @@
 /**
  * This file is part of the <Encrypt> project.
  * 
- * @uses PiEncryptorInterface
- * @subpackage   Encrypt
+ * @uses       PiEncryptorInterface
+ * @subpackage Encrypt
  * @package    EventSubscriber 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2014-06-02
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2014-06-02
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,10 +18,10 @@ use Sfynx\EncryptBundle\Builder\PiEncryptorInterface;
 /**
  * Class for AES encryption
  * 
- * @uses PiEncryptorInterface
- * @subpackage   Encrypt
+ * @uses       PiEncryptorInterface
+ * @subpackage Encrypt
  * @package    EventSubscriber 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class AESEncryptor implements PiEncryptorInterface 
 {

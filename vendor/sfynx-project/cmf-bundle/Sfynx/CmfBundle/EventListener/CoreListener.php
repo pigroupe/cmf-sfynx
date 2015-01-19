@@ -275,43 +275,43 @@ abstract class CoreListener extends abstractListener
                 if ($entity instanceof TranslationWidget
                     && ($entity->getWidget() instanceof Widget))
                 {
-                        // if the widget of the TranslationWidget is a snippet,
-                        // and if the language of the TranslationWidget has been changed or not,
-                        // we have to warm up all pages which are used by the snippet 
-                        if (!($entity->getWidget()->getBlock() instanceof Block) ) {                            
-                            // We check the permission in config.
-                            $is_refresh_snippet_authorized = $this->_container()
-                                    ->getParameter('pi_app_admin.page.refresh.allpage_containing_snippet');
-                            if ($is_refresh_snippet_authorized) {
-                                // we get all widgets which use the content snippet 
-                                $all_widget_used_snippet = $this->getRepository('Widget')
-                                        ->getWidgetByOptions('content', 'snippet', '<id>'.$entity->getWidget()->getId().'</id>')->getQuery()->getResult();
-                                if ( is_array($all_widget_used_snippet) ) {
-                                    foreach ($all_widget_used_snippet as $k => $widget){
-                                        // if the entity is linked to a page
-                                        if ($widget->getBlock() instanceof Block){
-                                            $names = array_merge(
-                                                $names,
-                                                $this->_recursive(
-                                                    $eventArgs,
-                                                    $widget->getBlock()->getPage(), 
-                                                    $all_locales
-                                                )
-                                            );
-                                        }                                    
-                                    }
+                    // if the widget of the TranslationWidget is a snippet,
+                    // and if the language of the TranslationWidget has been changed or not,
+                    // we have to warm up all pages which are used by the snippet 
+                    if (!($entity->getWidget()->getBlock() instanceof Block) ) {                            
+                        // We check the permission in config.
+                        $is_refresh_snippet_authorized = $this->_container()
+                                ->getParameter('pi_app_admin.page.refresh.allpage_containing_snippet');
+                        if ($is_refresh_snippet_authorized) {
+                            // we get all widgets which use the content snippet 
+                            $all_widget_used_snippet = $this->getRepository('Widget')
+                                    ->getWidgetByOptions('content', 'snippet', '<id>'.$entity->getWidget()->getId().'</id>')->getQuery()->getResult();
+                            if ( is_array($all_widget_used_snippet) ) {
+                                foreach ($all_widget_used_snippet as $k => $widget){
+                                    // if the entity is linked to a page
+                                    if ($widget->getBlock() instanceof Block){
+                                        $names = array_merge(
+                                            $names,
+                                            $this->_recursive(
+                                                $eventArgs,
+                                                $widget->getBlock()->getPage(), 
+                                                $all_locales
+                                            )
+                                        );
+                                    }                                    
                                 }
                             }
-                        } else {
-                            $names = array_merge(
-                                $names, 
-                                $this->_recursive(
-                                    $eventArgs,
-                                    $entity->getWidget(), 
-                                    $all_locales
-                                )
-                            );
-                        }                        
+                        }
+                    } else {
+                        $names = array_merge(
+                            $names, 
+                            $this->_recursive(
+                                $eventArgs,
+                                $entity->getWidget(), 
+                                $all_locales
+                            )
+                        );
+                    }                        
                 }                
             }            
         }

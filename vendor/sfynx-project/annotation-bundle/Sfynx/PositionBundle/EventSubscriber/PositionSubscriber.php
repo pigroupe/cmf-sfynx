@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Position> project.
  *
- * @subpackage   Position
+ * @subpackage Position
  * @package    EventSubscriber 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-10-08
+ * @author    Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since     2012-10-08
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,9 +25,9 @@ use Sfynx\CoreBundle\EventListener\abstractListener;
 /**
  * Position Subscriber.
  *
- * @subpackage   Position
+ * @subpackage Position
  * @package    EventSubscriber 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PositionSubscriber  extends abstractListener implements EventSubscriber
 {
@@ -50,6 +50,7 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     
     /**
      * Initialization of subscriber
+     * 
      * @param string $encryptorClass  The encryptor class.  This can be empty if
      * a service is being provided.
      * @param string $secretKey The secret key.
@@ -64,7 +65,6 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
         
     /**
      * @return array
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getSubscribedEvents()
@@ -81,8 +81,8 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
 
     /**
      * @param \Doctrine\Common\EventArgs $args
-     * @return void
      * 
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function recomputeSingleEntityChangeSet(EventArgs $args)
@@ -97,8 +97,8 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     
     /**
      * @param \Doctrine\Common\EventArgs $args
-     * @return void
      * 
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function postUpdate(EventArgs $eventArgs)
@@ -107,8 +107,8 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     
     /**
      * @param \Doctrine\Common\EventArgs $args
-     * @return void
      * 
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function postRemove(EventArgs $eventArgs)
@@ -117,8 +117,8 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     
     /**
      * @param \Doctrine\Common\EventArgs $args
-     * @return void
      * 
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function postPersist(EventArgs $eventArgs)
@@ -127,8 +127,8 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     
     /**
      * @param \Doctrine\Common\EventArgs $args
-     * @return void
      * 
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function preUpdate(PreUpdateEventArgs $eventArgs)
@@ -204,8 +204,8 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     
     /**
      * @param \Doctrine\Common\EventArgs $args
-     * @return void
      * 
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function preRemove(EventArgs $eventArgs)
@@ -227,8 +227,8 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     
     /**
      * @param \Doctrine\Common\EventArgs $args
-     * @return void
      * 
+     * @return void
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function prePersist(EventArgs $eventArgs)
@@ -282,10 +282,10 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
     /**
      * Sets the specific sortOrders.
      *
-     * @param EventArgs        $eventArgs
+     * @param EventArgs $eventArgs
+     * 
      * @access private
      * @return array
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     private function getSortableOrders($eventArgs)
@@ -301,28 +301,28 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
         $results['sort_position_by_where']    = " ";
         //
        	foreach ($properties as $refProperty) {
-    		if ($this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass)) {
-    			// we have annotation and if it decrypt operation, we must avoid duble decryption
-    			$propName = $refProperty->getName();
-    			$methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
-    			if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
-    				$properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);
-    				if (is_array($properties->SortableOrders) && isset($properties->SortableOrders['field']) && isset($properties->SortableOrders['type'])) {
-    				    $field      = $properties->SortableOrders['field'];    
-    				    $columnName = $properties->SortableOrders['columnName'];
-    				    $methode    = 'get' . \Sfynx\ToolBundle\Util\PiStringManager::capitalize($field);
-    				    $type       = $properties->SortableOrders['type'];
-    				    if (method_exists($entity, $methode) && ($type == 'relationship') && !is_null($entity->$methode())) {        				    
-        				    $results['sort_position_by_and']   = " AND (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
-        				    $results['sort_position_by_where'] = " WHERE (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
-        				} elseif (method_exists($entity, $methode)) {        		
-        				    $results['sort_position_by_and']   = " AND (mytable.{$columnName} = '{$entity->$methode()}')";
-        				    $results['sort_position_by_where'] = " WHERE (mytable.{$columnName} = '{$entity->$methode()}')";
-        				}        				
-    				}
-        		}
-    		}
-   		}         
+            if ($this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass)) {
+                // we have annotation and if it decrypt operation, we must avoid duble decryption
+                $propName = $refProperty->getName();
+                $methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
+                if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
+                    $properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);
+                    if (is_array($properties->SortableOrders) && isset($properties->SortableOrders['field']) && isset($properties->SortableOrders['type'])) {
+                        $field      = $properties->SortableOrders['field'];    
+                        $columnName = $properties->SortableOrders['columnName'];
+                        $methode    = 'get' . \Sfynx\ToolBundle\Util\PiStringManager::capitalize($field);
+                        $type       = $properties->SortableOrders['type'];
+                        if (method_exists($entity, $methode) && ($type == 'relationship') && !is_null($entity->$methode())) {        				    
+                            $results['sort_position_by_and']   = " AND (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
+                            $results['sort_position_by_where'] = " WHERE (mytable.{$columnName} = '{$entity->$methode()->getId()}')";
+                        } elseif (method_exists($entity, $methode)) {        		
+                            $results['sort_position_by_and']   = " AND (mytable.{$columnName} = '{$entity->$methode()}')";
+                            $results['sort_position_by_where'] = " WHERE (mytable.{$columnName} = '{$entity->$methode()}')";
+                        }        				
+                    }
+                }
+            }
+   	}         
    		
 //    Exemple :   	
 //   		@PI\Positioned(SortableOrders = {"type":"relationship","field":"page","columnName":"page_id"})
@@ -355,41 +355,40 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
         //
         $_is_change_position = false;
         if (isset($GLOBALS['ENTITIES'][$type]) && isset($GLOBALS['ENTITIES'][$type][$entity_name])) {
-        	if (is_array($GLOBALS['ENTITIES'][$type][$entity_name])) {
-        		$route = $this->_container()->get('request')->get('_route');
-        		if ((empty($route) || ($route == "_internal"))) {
-        			$route = $this->_container()->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
-        		}
-        		if (in_array($route, $GLOBALS['ENTITIES'][$type][$entity_name])) {
-        			$_is_change_position = true;
-        		}
-        	} elseif ($GLOBALS['ENTITIES'][$type][$entity_name] == true) {
-        		$_is_change_position =  true;
-        	}
+            if (is_array($GLOBALS['ENTITIES'][$type][$entity_name])) {
+                $route = $this->_container()->get('request')->get('_route');
+                if ((empty($route) || ($route == "_internal"))) {
+                        $route = $this->_container()->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+                }
+                if (in_array($route, $GLOBALS['ENTITIES'][$type][$entity_name])) {
+                        $_is_change_position = true;
+                }
+            } elseif ($GLOBALS['ENTITIES'][$type][$entity_name] == true) {
+                $_is_change_position =  true;
+            }
         } else {
-        	foreach ($properties as $refProperty) {
-        		//print_r($this->annReader->getPropertyAnnotations($refProperty));
-        		if ($this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass)) {
-        			// we have annotation and if it decrypt operation, we must avoid duble decryption
-        			$propName = $refProperty->getName();
-        			$methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
-        			if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
-        				// we get the route name
-        				$route = $this->_container()->get('request')->get('_route');
-        				if ((empty($route) || ($route == "_internal"))) {
-        					$route = $this->_container()->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
-        				}
-        				//
-        				$properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);
-        				if (($properties->routes === true) || (is_array($properties->routes) && in_array($route, $properties->routes))) {
-        				    $_is_change_position = true;
-        			    }
-        			}
-        		}
-        	}
+            foreach ($properties as $refProperty) {
+                //print_r($this->annReader->getPropertyAnnotations($refProperty));
+                if ($this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass)) {
+                    // we have annotation and if it decrypt operation, we must avoid duble decryption
+                    $propName = $refProperty->getName();
+                    $methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
+                    if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
+                        // we get the route name
+                        $route = $this->_container()->get('request')->get('_route');
+                        if ((empty($route) || ($route == "_internal"))) {
+                                $route = $this->_container()->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+                        }
+                        //
+                        $properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);
+                        if (($properties->routes === true) || (is_array($properties->routes) && in_array($route, $properties->routes))) {
+                            $_is_change_position = true;
+                        }
+                    }
+                }
+            }
         }  
 
         return $_is_change_position;
-    }
-    
+    }    
 }

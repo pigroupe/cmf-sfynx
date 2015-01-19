@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Encrypt> project.
  *
- * @subpackage   Encrypt
+ * @subpackage Encrypt
  * @package    EventSubscriber
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2014-06-27
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2014-06-27
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,24 +13,20 @@
 namespace Sfynx\EncryptBundle\EventSubscriber;
 
 use Doctrine\ORM\Events;
-use Doctrine\Common\EventSubscriber;
 use Gedmo\Mapping\MappedEventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Common\Annotations\Reader;
-use \Doctrine\ORM\EntityManager;
 use \ReflectionClass;
 use Sfynx\CoreBundle\Builder\PiEncryptorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\DBAL\Types\StringType;
 
 /**
  * Doctrine event subscriber which encrypt/decrypt entities
  * 
- * @subpackage   Encrypt
+ * @subpackage Encrypt
  * @package    EventSubscriber 
- * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class EncryptSubscriber extends MappedEventSubscriber
 {
@@ -95,6 +91,7 @@ class EncryptSubscriber extends MappedEventSubscriber
 
     /**
      * Initialization of subscriber
+     * 
      * @param string $encryptorClass  The encryptor class.  This can be empty if 
      * a service is being provided.
      * @param string $secretKey The secret key. 
@@ -113,9 +110,9 @@ class EncryptSubscriber extends MappedEventSubscriber
      */
     public function getSubscribedEvents() {
     	return array(
-    			Events::prePersist,
-    			Events::preUpdate,
-    			Events::postLoad,
+            Events::prePersist,
+            Events::preUpdate,
+            Events::postLoad,
     	);
     }    
 
@@ -123,16 +120,18 @@ class EncryptSubscriber extends MappedEventSubscriber
      * Listen a preUpdate lifecycle event. Checking and encrypt entities fields
      * which have @Encrypted annotation. Using changesets to avoid preUpdate event
      * restrictions
+     * 
      * @param LifecycleEventArgs $args 
+     * 
      * @return void
      * @access public
-     * 
      * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function preUpdate(PreUpdateEventArgs $args) {
         if ($this->_update_enabled == true) {
             $entity = $args->getEntity();
             $em     = $args->getEntityManager();
+            $uow    = $em->getUnitOfWork();
             $reflectionClass = new ReflectionClass($args->getEntity());
             $properties      = $reflectionClass->getProperties();
             $className = get_class($entity);
@@ -147,13 +146,13 @@ class EncryptSubscriber extends MappedEventSubscriber
                     ) {
                         $this->encryptor = $this->getEncryptorService($key);
                         if ($this->annReader->getPropertyAnnotation($refProperty, $encrypter['encryptor_annotation_name'])) {
-                        	// we have annotation and if it decrypt operation, we must avoid duble decryption
-                        	$propName = $refProperty->getName();
-                        	// we encrypt the field
-                    		if ($refProperty->isPublic()) {
-                    			$entity->$propName = $this->encryptor->encrypt($refProperty->getValue());
-                    		} else {
-                        		$methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
+                            // we have annotation and if it decrypt operation, we must avoid duble decryption
+                            $propName = $refProperty->getName();
+                            // we encrypt the field
+                            if ($refProperty->isPublic()) {
+                                    $entity->$propName = $this->encryptor->encrypt($refProperty->getValue());
+                            } else {
+                                $methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
                                 if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
                                     // we get the locale value
                                     $locale = false;                                
@@ -162,26 +161,29 @@ class EncryptSubscriber extends MappedEventSubscriber
                                     $meta   = $om->getClassMetadata(get_class($object));
                                     $config = $this->getConfiguration($om, $meta->name);
                                     if (isset($config['fields'])) {
-                                    	$locale = $this->getTranslatableLocale($object, $meta);
+                                        $locale = $this->getTranslatableLocale($object, $meta);
                                     }
                                     // we set the encrypt value
-                                    $currentPropValue        = $entity->$getter();
+                                    $currentPropValue     = $entity->$getter();
                                     if (!empty($currentPropValue)) {
-                                    	$currentPropValue        = $this->encryptor->encrypt($currentPropValue);
+                                        $currentPropValue = $this->encryptor->encrypt($currentPropValue);
                                     }
                                     // we set locale value
                                     if (
                                         $locale
                                     ) {
-                                    	if ($locale == $this->locale) {
-                                    		$entity->$setter($currentPropValue);
-                                    	}
-                                   	    $entity->translate($locale)->$setter($currentPropValue);
+//                                        if ($locale == $this->locale) {
+//                                            $entity->$setter($currentPropValue);
+//                                        }
+                                        $entity->$setter($currentPropValue);
+                                        $entity->translate($locale)->$setter($currentPropValue);
+                                        //$uow->persist($entity);
+                                        //$uow->computeChangeSets();
                                     }      
                                 } else {
                                     throw new \RuntimeException(sprintf("Property %s isn't public and doesn't has getter/setter"));
                                 }
-                    		}  
+                            }  
                         }
                     } else {
                     	throw new \RuntimeException(sprintf("encrypter is not correctly configured"));
@@ -194,6 +196,7 @@ class EncryptSubscriber extends MappedEventSubscriber
     /**
      * Listen a prePersist lifecycle event. Checking and encrypt entities
      * which have @Encrypted annotation
+     * 
      * @param LifecycleEventArgs $args
      */
     public function prePersist(LifecycleEventArgs $args) {
@@ -203,6 +206,7 @@ class EncryptSubscriber extends MappedEventSubscriber
     /**
      * Listen a postLoad lifecycle event. Checking and decrypt entities
      * which have @Encrypted annotations (This event is called after an entity is constructed by the EntityManager)
+     * 
      * @param LifecycleEventArgs $args 
      */
     public function postLoad(LifecycleEventArgs $args) {
@@ -211,14 +215,16 @@ class EncryptSubscriber extends MappedEventSubscriber
 
     /**
      * Process (encrypt/decrypt) entities fields
+     * 
      * @param LifecycleEventArgs $args 
      * @param Boolean $isEncryptOperation If true - encrypt, false - decrypt entity 
+     * 
      * @return void
      * @access protected
-     * 
      * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function processFields(LifecycleEventArgs $args, $isEncryptOperation = true) {
+    protected function processFields(LifecycleEventArgs $args, $isEncryptOperation = true)
+    {
         if ($this->_load_enabled == true) {
             $entity = $args->getEntity();
             $em     = $args->getEntityManager();
@@ -229,15 +235,15 @@ class EncryptSubscriber extends MappedEventSubscriber
             $properties      = $reflectionClass->getProperties();
             foreach ($properties as $refProperty) {            
                 foreach ($this->options as $key => $encrypter) {
-                	if (
-                	    isset($encrypter['encryptor_annotation_name'])
-                	    &&
-                	    isset($encrypter['encryptor_class'])
-                	    &&
-                	    isset($encrypter['encryptor_options'])
-                	) {
-                		$this->encryptor = $this->getEncryptorService($key);
-                    	if ($this->annReader->getPropertyAnnotation($refProperty, $encrypter['encryptor_annotation_name'])) {
+                    if (
+                        isset($encrypter['encryptor_annotation_name'])
+                        &&
+                        isset($encrypter['encryptor_class'])
+                        &&
+                        isset($encrypter['encryptor_options'])
+                    ) {
+                        $this->encryptor = $this->getEncryptorService($key);
+                        if ($this->annReader->getPropertyAnnotation($refProperty, $encrypter['encryptor_annotation_name'])) {
                             // we have annotation and if it decrypt operation, we must avoid duble decryption
                             $propName = $refProperty->getName();
                             if ($refProperty->isPublic()) {
@@ -246,55 +252,46 @@ class EncryptSubscriber extends MappedEventSubscriber
                                 $methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
                                 if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
                                     if ($isEncryptOperation) {
-                                        // we get the locale value
-                                        if (isset($_GET['_locale'])) {
-                                        	$locale = $_GET['_locale'];
-                                        } else {
-                                        	$locale = $this->locale;
-                                        }
                                         // we set the encrypt value
-                                        $currentPropValue        = $entity->$getter();
+                                        $currentPropValue = $entity->$getter();
                                         if (!empty($currentPropValue)) {
-                                        	$currentPropValue        = $this->encryptor->$encryptorMethod($currentPropValue);
+                                            $currentPropValue = $this->encryptor->$encryptorMethod($currentPropValue);
                                         }
                                         // we set locale value
                                         $entity->$setter($currentPropValue);
-                                        // we set translatable locale value
-                                        $entity->translate($locale)->$setter($currentPropValue);
                                     } else {
                                         // we get the locale value
                                         $locale = $entity->getTranslatableLocale();
                                         //
                                         if (!empty($locale) && !is_null($locale)) {
                                         } elseif (isset($_GET['_locale'])) {
-                                        	$locale = $_GET['_locale'];
+                                            $locale = $_GET['_locale'];
                                         } else {
-                                        	$locale = $this->locale;
+                                            $locale = $this->locale;
                                         }
                                         //
                                         if (!$this->annReader->getPropertyAnnotation($refProperty, 'Gedmo\Mapping\Annotation\Translatable')) {
                                             if (!$this->hasInDecodedRegistry($className, $entity->getId(), $locale, $methodName)) {
-                                                $currentPropValue        = $entity->$getter();
+                                                $currentPropValue = $entity->$getter();
                                                 if (!empty($currentPropValue)) {
-                                                	$currentPropValue        = $this->encryptor->$encryptorMethod($currentPropValue);
+                                                    $currentPropValue = $this->encryptor->$encryptorMethod($currentPropValue);
                                                 }
                                                 $entity->$setter($currentPropValue);
                                                 $this->addToDecodedRegistry($className, $entity->getId(), $locale, $methodName, $currentPropValue);
-                                                //print_r($this->decodedRegistry);
                                             }
                                         } else{
-                                            $locales        = $this->container->get('sfynx.auth.locale_manager')->getAllLocales(true);
+                                            $locales = $this->container->get('sfynx.auth.locale_manager')->getAllLocales(true);
                                             foreach( $locales as $key => $lang) {
                                                 if ($lang['enabled'] == 1) {
                                                     if (!$this->hasInDecodedRegistry($className, $entity->getId(), $lang['id'], $methodName)) {
                                                         $currentPropValue_locale = $entity->translate($lang['id'])->$getter();
                                                         if (!empty($currentPropValue_locale)) {
-                                                        	$currentPropValue_locale = $this->encryptor->$encryptorMethod($currentPropValue_locale);
+                                                            $currentPropValue_locale = $this->encryptor->$encryptorMethod($currentPropValue_locale);
                                                         } 
                                                         if ($locale ==  $lang['id']) {
                                                             $entity->$setter($currentPropValue_locale);
                                                         }
-                                                        $entity->translate( $lang['id'])->$setter($currentPropValue_locale);
+                                                        $entity->translate($lang['id'])->$setter($currentPropValue_locale);
                                                         $this->addToDecodedRegistry($className, $entity->getId(), $lang['id'], $methodName, $currentPropValue_locale);
                                                         //print_r($this->decodedRegistry);
                                                     }
@@ -307,9 +304,9 @@ class EncryptSubscriber extends MappedEventSubscriber
                                 }
                             }
                         }
-                	} else {
-                		throw new \RuntimeException(sprintf("encrypter %s is not correctly configured", $key));
-                	}
+                    } else {
+                        throw new \RuntimeException(sprintf("encrypter %s is not correctly configured", $key));
+                    }
                 } 
             }
         }
@@ -319,18 +316,18 @@ class EncryptSubscriber extends MappedEventSubscriber
      * Encryptor factory. Checks and create needed encryptor
      * @param string $classFullName Encryptor namespace and name
      * @param string $secretKey Secret key for encryptor
+     * 
      * @return EncryptorInterface
      * @throws \RuntimeException
      * @access protected
-     * 
      * @author etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function encryptorFactory($classFullName, $encryptor_options) {
     	$refClass = new \ReflectionClass($classFullName);
     	if ($refClass->implementsInterface($this->interfaceclass)) {
-    		return new $classFullName($encryptor_options);
+            return new $classFullName($encryptor_options);
     	} else {
-    		throw new \RuntimeException('Encryptor must implements interface EncryptorInterface');
+            throw new \RuntimeException('Encryptor must implements interface EncryptorInterface');
     	}
     }
     
@@ -352,13 +349,14 @@ class EncryptSubscriber extends MappedEventSubscriber
      * Validates the given locale
      *
      * @param string $locale - locale to validate
+     * 
      * @throws \Gedmo\Exception\InvalidArgumentException if locale is not valid
      * @return void
      */
     protected function validateLocale($locale)
     {
     	if (!is_string($locale) || !strlen($locale)) {
-    		throw new \Gedmo\Exception\InvalidArgumentException('Locale or language cannot be empty and must be set through Listener or Entity');
+            throw new \Gedmo\Exception\InvalidArgumentException('Locale or language cannot be empty and must be set through Listener or Entity');
     	}
     }    
         
@@ -368,8 +366,8 @@ class EncryptSubscriber extends MappedEventSubscriber
      *
      * @param object $object
      * @param object $meta
-     * @throws \Gedmo\Exception\RuntimeException - if language or locale property is not
-     *         found in entity
+     * 
+     * @throws \Gedmo\Exception\RuntimeException - if language or locale property is not found in entity
      * @return string
      * @access protected
      */
@@ -377,19 +375,19 @@ class EncryptSubscriber extends MappedEventSubscriber
     {
     	$locale = $this->locale;
     	if (isset(self::$configurations[$this->name][$meta->name]['locale'])) {
-    		/** @var \ReflectionClass $class */
-    		$class = $meta->getReflectionClass();
-    		$reflectionProperty = $class->getProperty(self::$configurations[$this->name][$meta->name]['locale']);
-    		if (!$reflectionProperty) {
-    			$column = self::$configurations[$this->name][$meta->name]['locale'];
-    			throw new \Gedmo\Exception\RuntimeException("There is no locale or language property ({$column}) found on object: {$meta->name}");
-    		}
-    		$reflectionProperty->setAccessible(true);
-    		$value = $reflectionProperty->getValue($object);
-    		try {
-    			$this->validateLocale($value);
-    			$locale = $value;
-    		} catch(\Gedmo\Exception\InvalidArgumentException $e) {}
+            /** @var \ReflectionClass $class */
+            $class = $meta->getReflectionClass();
+            $reflectionProperty = $class->getProperty(self::$configurations[$this->name][$meta->name]['locale']);
+            if (!$reflectionProperty) {
+                $column = self::$configurations[$this->name][$meta->name]['locale'];
+                throw new \Gedmo\Exception\RuntimeException("There is no locale or language property ({$column}) found on object: {$meta->name}");
+            }
+            $reflectionProperty->setAccessible(true);
+            $value = $reflectionProperty->getValue($object);
+            try {
+                $this->validateLocale($value);
+                $locale = $value;
+            } catch(\Gedmo\Exception\InvalidArgumentException $e) {}
     	}
     	    
     	return $locale;
@@ -397,6 +395,7 @@ class EncryptSubscriber extends MappedEventSubscriber
     
     /**
      * Check if we have entity in decoded registry
+     * 
      * @param LifecycleEventArgs $args 
      * @return boolean
      */
@@ -406,11 +405,12 @@ class EncryptSubscriber extends MappedEventSubscriber
     
     /**
      * Adds entity to decoded registry
+     * 
      * @param LifecycleEventArgs $args 
+     * 
      * @return void
      */
     protected function addToDecodedRegistry($className, $id, $locale, $methodeName, $currentPropValue) {
     	$this->decodedRegistry[$className][$id][$locale][$methodeName] = $currentPropValue;
     }    
-
 }

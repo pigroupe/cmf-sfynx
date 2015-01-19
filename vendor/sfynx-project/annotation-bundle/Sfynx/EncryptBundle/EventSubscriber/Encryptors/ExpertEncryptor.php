@@ -177,7 +177,6 @@ class ExpertEncryptor implements PiEncryptorInterface
      * @param mixed $data
      *
      * @return string
-     *
      * @throws \InvalidArgumentException
      */
     public static function convertToString($data)

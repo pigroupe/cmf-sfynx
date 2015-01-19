@@ -43,7 +43,7 @@ class TranslationProxy
     {
         $this->translatable = $translatable;
         $this->locale       = $locale;
-        $this->fields        = $fields;
+        $this->fields       = $fields;
         $this->class        = $class;
         $this->coll         = $coll;
 

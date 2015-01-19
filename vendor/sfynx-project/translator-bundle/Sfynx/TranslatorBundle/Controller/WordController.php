@@ -109,16 +109,14 @@ class WordController extends abstractController
     {
         $em         = $this->getDoctrine()->getManager();
         $locale     = $this->container->get('request')->getLocale();
+        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         
         $this->checkCsrf('listword'); // name of the generated token, must be equal to the one from Twig
 
         $this->get('sfynx.annotation.subscriber.encrypters')->_load_enabled = true;
         $entities   = $em->getRepository("SfynxTranslatorBundle:Word")->setContainer($this->container)->findAllByEntity($locale, 'object');        
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)     $template = "index.html.twig"; else $template = "index.html.twig";
 
-        return $this->render("SfynxTranslatorBundle:Word:$template", array(
+        return $this->render("SfynxTranslatorBundle:Word:index.html.twig", array(
             'entities' => $entities,
             'NoLayout'    => $NoLayout,
         ));
@@ -136,9 +134,7 @@ class WordController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
-
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)     $template = "show.html.twig"; else $template = "show.html.twig";
         
         $this->get('sfynx.annotation.subscriber.encrypters')->_load_enabled = true;
         $entity = $em->getRepository("SfynxTranslatorBundle:Word")->findOneByEntity($locale, $id, 'object');
@@ -149,7 +145,7 @@ class WordController extends abstractController
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render("SfynxTranslatorBundle:Word:$template", array(
+        return $this->render("SfynxTranslatorBundle:Word:show.html.twig", array(
             'entity'      => $entity,
             'NoLayout'      => $NoLayout,
             'delete_form' => $deleteForm->createView(),
@@ -169,13 +165,11 @@ class WordController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $entity = new Word();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $form   = $this->createForm(new WordType($em, $locale, $this->container), $entity, array('show_legend' => false));
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new.html.twig";       
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
 
-        return $this->render("SfynxTranslatorBundle:Word:$template", array(
+        return $this->render("SfynxTranslatorBundle:Word:new.html.twig", array(
             'entity' => $entity,
             'form'   => $form->createView(),
             'NoLayout'  => $NoLayout,
@@ -194,10 +188,8 @@ class WordController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
-        
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "new.html.twig";  else     $template = "new.html.twig";        
-
+        //
         $this->get('sfynx.annotation.subscriber.encrypters')->_load_enabled = true;
         $entity  = new Word();
         $request = $this->getRequest();
@@ -212,7 +204,7 @@ class WordController extends abstractController
             return $this->redirect($this->generateUrl('admin_word_edit', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
         }
 
-        return $this->render("SfynxTranslatorBundle:Word:$template", array(
+        return $this->render("SfynxTranslatorBundle:Word:new.html.twig", array(
             'entity' => $entity,
             'form'   => $form->createView(),
             'NoLayout'  => $NoLayout,
@@ -231,9 +223,7 @@ class WordController extends abstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $locale = $this->container->get('request')->getLocale();
-        
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "edit.html.twig";  else    $template = "edit.html.twig";        
 
         $this->get('sfynx.annotation.subscriber.encrypters')->_load_enabled = true;
         $entity = $em->getRepository("SfynxTranslatorBundle:Word")->findOneByEntity($locale, $id, 'object');
@@ -245,13 +235,11 @@ class WordController extends abstractController
         $editForm   = $this->createForm(new WordType($em, $locale, $this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
         
-        $this->container->get("sfynx.translator.wordsloader")->wordsTranslation();
-
-        return $this->render("SfynxTranslatorBundle:Word:$template", array(
+        return $this->render("SfynxTranslatorBundle:Word:edit.html.twig", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'       => $NoLayout,
+            'NoLayout'    => $NoLayout,
         ));
     }
 
@@ -266,11 +254,9 @@ class WordController extends abstractController
     public function updateAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
+        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         $locale    = $this->container->get('request')->getLocale();
         $entity = $em->getRepository("SfynxTranslatorBundle:Word")->findOneByEntity($locale, $id, "object"); 
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        if (!$NoLayout)    $template = "edit.html.twig";  else    $template = "edit.html.twig";        
 
         $this->get('sfynx.annotation.subscriber.encrypters')->_update_enabled = true;
         if (!$entity) {
@@ -287,12 +273,12 @@ class WordController extends abstractController
             
             return $this->redirect($this->generateUrl('admin_word_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         }
-
-        return $this->render("SfynxTranslatorBundle:Word:$template", array(
+        
+        return $this->render("SfynxTranslatorBundle:Word:edit.html.twig", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'       => $NoLayout,
+            'NoLayout'    => $NoLayout,
         ));
     }
     
@@ -352,10 +338,10 @@ class WordController extends abstractController
         //exit;
 
         return $this->render("SfynxTranslatorBundle:Word:editTranslate.html.twig", array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'NoLayout'       => $NoLayout,         
-            'lang'             => $lang,         
+            'entity'    => $entity,
+            'edit_form' => $editForm->createView(),
+            'NoLayout'  => $NoLayout,         
+            'lang'      => $lang,         
         ));
     }
 
@@ -386,8 +372,6 @@ class WordController extends abstractController
             $em->persist($entity);
             $em->flush();
                         
-            $this->container->get("sfynx.translator.wordsloader")->wordsTranslation();
-            
             return $this->redirect($this->generateUrl('admin_word_edit_translate', array('id' => $id, 'lang' => $lang, 'NoLayout' => $NoLayout)));
         }
 

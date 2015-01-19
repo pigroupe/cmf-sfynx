@@ -31,8 +31,8 @@ class SfynxTranslatorExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loaderYaml  = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loaderYaml  = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/service'));
         $loaderYaml->load('services.yml');
-    }
-    
+        $loaderYaml->load('services_subscriber.yml');
+    }    
 }
