@@ -380,15 +380,13 @@ class MenuController extends abstractController
     {
         $em        = $this->getDoctrine()->getManager();
         $locale    = $this->container->get('request')->getLocale();
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout  = $this->container->get('request')->query->get('NoLayout');
         if (!$NoLayout)     $template = "tree.html.twig"; else $template = "tree_ajax.html.twig";
 
         // from search category management
-        $form_search        = $this->createForm(new CategorySearchForm($em, "menu", $this->container));
-        $data                 = array();
-        $data['category']     = $em->getRepository("PiAppGedmoBundle:Category")->find($category);
-        
+        $form_search      = $this->createForm(new CategorySearchForm($em, "menu", $this->container));
+        $data             = array();
+        $data['category'] = $em->getRepository("PiAppGedmoBundle:Category")->find($category);        
         $form_search->setData($data);
         if ($this->getRequest()->getMethod() == 'POST') {
             $form_search->bind($this->getRequest());
@@ -400,8 +398,6 @@ class MenuController extends abstractController
             else
                 return $this->redirect($this->generateUrl('admin_gedmo_menu_tree', array('NoLayout' => $NoLayout, 'category' => '')));
         }
-        
-        //print_r($category);exit;
         
         // tree management
         $self = &$this;
@@ -465,10 +461,10 @@ class MenuController extends abstractController
         $tree        = $em->getRepository("PiAppGedmoBundle:Menu")->buildTree($nodes, $options);        
         
         return $this->render("PiAppGedmoBundle:Menu:$template", array(
-            'tree'          => $tree,
+            'tree'        => $tree,
             'form_search' => $form_search->createView(),
             'category'    => $category,
-            'NoLayout'      => $NoLayout,
+            'NoLayout'    => $NoLayout,
         ));
     }  
     

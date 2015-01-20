@@ -15,6 +15,7 @@ namespace Sfynx\ToolBundle\Util;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sfynx\ToolBundle\Exception\ServiceException;
 use Sfynx\ToolBundle\Route\AbstractFactory;
+use Sfynx\ToolBundle\Util\PiFileManager;
 
 /**
  * Script manager tool
@@ -51,16 +52,20 @@ class PiScriptManager extends AbstractFactory
     {
     	$TEMP_FILES_DIR = $this->getContainer()->getParameter("kernel.root_dir") . "/../web/yui/js/" . $path_prefix;
     	// we create repository if does not exit
-    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($TEMP_FILES_DIR, 0777);
+    	PiFileManager::mkdirr($TEMP_FILES_DIR, 0777);
     	//  we create single file from all input
     	$input_hash = sha1($content_js);
     	$file       = $TEMP_FILES_DIR . $input_hash . '.js';
     	// we compress the content
     	if ( !file_exists($file) ) {
-            $this->getContainer()->get('sfynx.tool.file_manager')->save($file, $content_js, 0777);
+            $this->getContainer()
+                    ->get('sfynx.tool.file_manager')
+                    ->save($file, $content_js, 0777);
     	}
     	// we set result
-    	$this->getContainer()->get('sfynx.tool.twig.extension.layouthead')->addJsFile("yui/js/".$input_hash. '.js');
+    	$this->getContainer()
+                ->get('sfynx.tool.twig.extension.layouthead')
+                ->addJsFile("yui/js/".$input_hash. '.js');
     	$resultScript = '<script type="text/javascript" src="/yui/js/' . $path_prefix . $input_hash .'.js" ></script>';
     	// we return the result
     	if ($result == "both") {

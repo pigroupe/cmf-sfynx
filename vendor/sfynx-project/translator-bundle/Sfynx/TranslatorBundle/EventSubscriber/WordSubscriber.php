@@ -5,7 +5,7 @@
  * @subpackage Translator
  * @package    EventSubscriber 
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2012-10-08
+ * @since      2015-10-08
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.

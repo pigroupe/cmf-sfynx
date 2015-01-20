@@ -84,7 +84,7 @@ class CategoryType extends AbstractType
                      ),
                      'required'  => false,
              ))
-             ->add('media', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'))
+             ->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'))
         ;
     }
 

@@ -274,7 +274,7 @@ class BlockType extends AbstractType
              
          if ($is_media) {
              $builder
-             //->add('media', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'));
+             //->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'));
              ->add('media', 'entity', array(
              		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media) {
@@ -320,7 +320,7 @@ class BlockType extends AbstractType
              ;
          } else {
              $builder
-             //->add('media', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "hidden", 'pi.form.label.media.picture'));
+             //->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "hidden", 'pi.form.label.media.picture'));
              ->add('media', 'entity', array(
              		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media) {
@@ -342,7 +342,7 @@ class BlockType extends AbstractType
                                                
          if ($is_media1) {
              $builder
-             //->add('media1', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'));
+             //->add('media1', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'));
              ->add('media1', 'entity', array(
              		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media1) {
@@ -388,7 +388,7 @@ class BlockType extends AbstractType
              ;
          } else {
              $builder
-             //->add('media1', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "hidden", 'pi.form.label.media.picture'));
+             //->add('media1', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "hidden", 'pi.form.label.media.picture'));
              ->add('media1', 'entity', array(
              		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media1) {

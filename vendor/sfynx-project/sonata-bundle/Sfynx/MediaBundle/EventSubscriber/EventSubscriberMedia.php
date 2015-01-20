@@ -143,7 +143,9 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
         } 
         // we clean the filename.
         if ( $this->isUsernamePasswordToken() 
-        		&& ( ($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) || ($entity instanceof \Sfynx\MediaBundle\Entity\Mediatheque) ) 
+                && (($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) 
+                        || ($entity instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
+                ) 
         ){
             if ( $entity->getImage() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) {
                 $entity->getImage()->setName($this->_cleanName($entity->getImage()->getName()));

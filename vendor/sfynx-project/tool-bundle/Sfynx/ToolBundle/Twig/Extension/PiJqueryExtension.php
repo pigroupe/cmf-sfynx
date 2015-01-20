@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Extension
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-11
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,9 +20,9 @@ use Sfynx\ToolBundle\Exception\ServiceException;
 /**
  * Jquery Matrix used in twig
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Extension
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiJqueryExtension extends \Twig_Extension
 {
@@ -72,7 +72,6 @@ class PiJqueryExtension extends \Twig_Extension
      *
      * @return string The extension name
      * @access public
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     final public function getName()
@@ -90,7 +89,6 @@ class PiJqueryExtension extends \Twig_Extension
      *
      * @return array An array of functions
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     final public function getFunctions()
@@ -109,7 +107,6 @@ class PiJqueryExtension extends \Twig_Extension
      *
      * @return string The extension name
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     final public function getTokenParsers()
@@ -126,13 +123,13 @@ class PiJqueryExtension extends \Twig_Extension
     /**
      * Factory ! We check that the requested class is a valid service.
      *
+     * @param string $container          name of jquery container.
+     * @param string $NameClassValidator name of validator.
+     * @param array  $options            validator options.
+     * 
      * @static
-     * @param  string         $container            name of jquery container.
-     * @param  string         $NameClassValidator    name of validator.
-     * @param  array        $options            validator options.
      * @return service
      * @access public
-     * 
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     final public function FactoryFunction($container, $NameServiceValidator, $options = null)
@@ -144,11 +141,11 @@ class PiJqueryExtension extends \Twig_Extension
     /**
      * execute the jquery service init method.
      *
+     * @param string $InfoService service information ex : "contenaireName:NameServiceValidator"
+     * 
      * @static
-     * @param  string         $InfoService    service information ex : "contenaireName:NameServiceValidator"
      * @return void
      * @access public
-     * 
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     final public function initJquery($InfoService)
@@ -174,14 +171,13 @@ class PiJqueryExtension extends \Twig_Extension
     /**
      * Gets the service name.
      *
-     * @static
-     * @param  string         $container                name of jquery container.
-     * @param  string         $NameServiceValidator    name of validator.
+     * @param string $container            name of jquery container.
+     * @param string $NameServiceValidator name of validator.
      *
+     * @static
      * @return boolean
      * @access public
-     *
-     * @author (c) Etienne de Longeaux <etienne_delongeaux@hotmail.com>
+     * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     private function isServiceSupported($container, $NameServiceValidator)
     {
@@ -199,8 +195,7 @@ class PiJqueryExtension extends \Twig_Extension
      * Call the render function of the child class called by service.
      *
      * @return string
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     final public function run($options = null)
@@ -218,17 +213,18 @@ class PiJqueryExtension extends \Twig_Extension
     /**
      * Return a JS file in the container in links.
      *
-     * @param    $content_js string    content js value
-     * @param    $content_html string    content html value
-     * @param    $path_prefix string    prefix repository value
+     * @param string $content_js   content js value
+     * @param string $content_html content html value
+     * @param string $path_prefix  prefix repository value
+     * 
      * @return string
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function renderScript($content_js, $content_html, $path_prefix = '/', $result = "both")
     {
-        return $this->container->get('sfynx.tool.script_manager')->renderScript($content_js, $content_html, $path_prefix, $result);
-    }    
-
+        return $this->container
+                ->get('sfynx.tool.script_manager')
+                ->renderScript($content_js, $content_html, $path_prefix, $result);
+    } 
 }

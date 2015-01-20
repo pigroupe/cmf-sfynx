@@ -195,8 +195,8 @@ class ContactType extends AbstractType
                      'required'  => false,
              ))
              
-             ->add('media', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'pictures', "simpleLink", 'pi.contact.form.picture.left'))
-             ->add('media1', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'pictures', "simpleLink",'pi.contact.form.picture.right'))
+             ->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'pictures', "simpleLink", 'pi.contact.form.picture.left'))
+             ->add('media1', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'pictures', "simpleLink",'pi.contact.form.picture.right'))
         ;
     }
 

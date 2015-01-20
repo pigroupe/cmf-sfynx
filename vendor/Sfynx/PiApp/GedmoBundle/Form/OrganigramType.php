@@ -118,7 +118,7 @@ class OrganigramType extends AbstractType
                             "class"    =>"pi_editor_simple_easy",
                     ),
             ))            
-            ->add('media', new \PiApp\GedmoBundle\Form\MediaType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'))
+            ->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'))
         ;
     }
 
