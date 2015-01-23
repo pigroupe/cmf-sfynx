@@ -5,6 +5,6 @@ This bundle is responsible for :
 * set handlers for login behavior
 * set handler for logout behavior and failure connection behavior
 
-The following documents are available:
+The following documents are available :
 
 * [Configuration reference](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/sonata-bundle/Sfynx/MediaBundle/Resources/doc/configuration_reference.md)
