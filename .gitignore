@@ -1,3 +1,6 @@
+#tmp
+tmp/*
+
 # documentation
 doc/uml/xmi/*
 doc/uml/php/*
