@@ -74,220 +74,7 @@ SFYNX is a free software distributed under the GPL license. This license guarant
 
 - In French law, SFYNX falls under the regulations stipulated in the code of intellectual property rights (CPI). The SFYNX kernel is a collaborative work by its authors, listed above as per article L 113-1 of the CPI. The entire SFYNX project is comprised of a collective work in respect of articles L 113-2 and L 113-5 of the CPI. The authors release the work to the public in accordance with the rights and obligations as defined by the GNU public license.
 
-
-## Dependencies
-
-Register all bundle in your `app/AppKernel.php` file:
-
-``` php
-
-    public function registerBundles()
-    {
-            $bundles = array(
-                
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new Symfony\Bundle\MonologBundle\MonologBundle(),
-            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-
-            # secure
-            new JMS\AopBundle\JMSAopBundle(),
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),  
-            new JMS\TranslationBundle\JMSTranslationBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle(),
-
-            # doctrine
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),        		
-
-            # route
-            new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),        		
-
-            # sonata
-            new Sonata\CoreBundle\SonataCoreBundle(),
-            new Sonata\AdminBundle\SonataAdminBundle(),
-            new Sonata\NotificationBundle\SonataNotificationBundle(),
-            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
-            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),        		
-            new Sonata\BlockBundle\SonataBlockBundle(),        		
-            new Sonata\MediaBundle\SonataMediaBundle(),    
-            new Sonata\ClassificationBundle\SonataClassificationBundle(), 
-
-            # tools
-            new FOS\UserBundle\FOSUserBundle(),
-            new Knp\Bundle\MenuBundle\KnpMenuBundle(),	       
-
-            # Sfynx
-            new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
-            new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
-            new Sfynx\WsBundle\SfynxWsBundle(),
-            new Sfynx\CacheBundle\SfynxCacheBundle(),
-            new Sfynx\ToolBundle\SfynxToolBundle(),
-            new Sfynx\CoreBundle\SfynxCoreBundle(),
-            new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
-            new Sfynx\BrowserBundle\SfynxBrowserBundle(),
-            new Sfynx\EncryptBundle\SfynxEncryptBundle(),
-            new Sfynx\PositionBundle\SfynxPositionBundle(),
-            new Sfynx\AdminBundle\SfynxAdminBundle(),
-            new Sfynx\MediaBundle\SfynxMediaBundle(),
-            new Sfynx\LibraryBundle\SfynxLibraryBundle(),
-            new Sfynx\ClassificationBundle\SfynxClassificationBundle(),                
-            new Sfynx\TemplateBundle\SfynxTemplateBundle(),
-            new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
-            new PiApp\GedmoBundle\PiAppGedmoBundle(),
-            new Sfynx\AuthBundle\SfynxAuthBundle(),
-            new Sfynx\CmfBundle\SfynxCmfBundle(),
-
-            #override Sfynx bundles
-            new OrApp\OrCmfBundle\OrAppOrCmfBundle(),
-            new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
-            new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(), 
-        );
-
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
-        }
-
-        return $bundles;
-    }
-        
-```
-## composer.json
-
-``` json
-
-{
-    "name": "symfony/framework-standard-edition",
-    "license": "MIT",
-    "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
-    "require": {
-        "php": ">=5.3.3",
-        "symfony/symfony": "2.3.19",
-        "doctrine/orm": "~2.2,>=2.2.3",
-        "doctrine/doctrine-bundle": "1.2.*",
-        "twig/extensions": "1.0.*",
-        "symfony/assetic-bundle": "2.3.*",
-        "symfony/swiftmailer-bundle": "2.3.*",
-        "symfony/monolog-bundle": "2.3.*",
-        "sensio/distribution-bundle": "2.3.*",
-        "sensio/framework-extra-bundle": "2.3.*",
-        "sensio/generator-bundle": "2.3.*",
-        "incenteev/composer-parameter-handler": "~2.0",
-        
-        "jms/security-extra-bundle": "1.5.*",
-        "jms/di-extra-bundle": "1.4.*",  
-        "jms/serializer-bundle": "0.13.*@dev",
-        
-        "symfony/translation": "2.6.*@dev",
-        "jms/translation-bundle": "1.1.*@dev",
-        
-        "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "doctrine/data-fixtures": "1.0.*",
-        "doctrine/doctrine-cache-bundle": "1.0.*",    
-        "gedmo/doctrine-extensions": "2.3.*@dev",
-        "stof/doctrine-extensions-bundle": "1.1.*@dev",
-        
-        "friendsofsymfony/user-bundle": "2.0.*@dev",
-        "besimple/i18n-routing-bundle": "2.3.0",
-        
-        "sonata-project/admin-bundle": "2.4.*@dev",
-        "sonata-project/media-bundle": "2.4.*@dev",
-        "sonata-project/classification-bundle": "2.3.*@dev",
-        "sonata-project/datagrid-bundle": "2.2.*@dev"
-    },
-    "require-dev": {
-        "benjam1/symfttpd": "2.1.*",
-        "phpunit/phpunit": "4.0.20",
-        "phploc/phploc": "2.1.*@dev",
-        "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
-        "squizlabs/php_codesniffer": "2.0.*@dev",
-        "phpmd/phpmd": "2.1.*",
-        "guzzlehttp/guzzle": "~4.0",
-        "sebastian/phpcpd": "2.0.*@dev",
-        "pdepend/pdepend": "2.0.*",
-        "phpunit/php-invoker": "dev-master",
-        "phake/phake": "*",
-        "phing/phing": "dev-master",
-        "behat/behat": "3.0.*@dev",
-        "behat/mink": "1.6.*@dev",
-        "behat/symfony2-extension": "*@dev",
-        "behat/mink-extension":  "*@dev",
-        "behat/mink-selenium2-driver":  "*@dev",
-        "behat/mink-browserkit-driver": "1.2.*@dev",
-        "jns/xhprof-bundle": "1.0.*@dev",
-        "facebook/xhprof": "dev-master@dev",
-        "phpcasperjs/phpcasperjs": "dev-master"
-    },       
-    "scripts": {
-        "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ],
-        "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ]
-    },
-    "config": {
-        "bin-dir": "bin"
-    },
-    "minimum-stability": "stable",
-    "extra": {
-        "symfony-app-dir": "app",
-        "symfony-web-dir": "web",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        },
-        "branch-alias": {
-            "dev-master": "2.3-dev",
-            "bin-dir": "bin/"
-        }
-    },
-    "autoload": {
-        "psr-0": {
-            "" : "src",
-            "PiApp": "vendor/Sfynx",
-            "Sfynx\\ClassificationBundle": "vendor/sfynx-project/sonata-bundle",
-            "Sfynx\\AdminBundle": "vendor/sfynx-project/sonata-bundle",
-            "Sfynx\\MediaBundle": "vendor/sfynx-project/sonata-bundle",
-            "Sfynx\\LibraryBundle": "vendor/sfynx-project/library-bundle",
-            "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
-            "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",
-            "Sfynx\\WsBundle": "vendor/sfynx-project/ws-bundle",
-            "Sfynx\\TranslatorBundle": "vendor/sfynx-project/translator-bundle",
-            "Sfynx\\CacheBundle": "vendor/sfynx-project/cache-bundle",
-            "Sfynx\\ToolBundle": "vendor/sfynx-project/tool-bundle",
-            "Sfynx\\CoreBundle": "vendor/sfynx-project/core-bundle",
-            "Sfynx\\CmfBundle": "vendor/sfynx-project/cmf-bundle",
-            "Sfynx\\AuthBundle": "vendor/sfynx-project/auth-bundle",
-            "Sfynx\\BrowserBundle": "vendor/sfynx-project/browser-bundle",
-            "Sfynx\\EncryptBundle": "vendor/sfynx-project/annotation-bundle",
-            "Sfynx\\PositionBundle": "vendor/sfynx-project/annotation-bundle",
-            "Sfynx\\TemplateBundle": "vendor/sfynx-project/template-bundle",
-            "Sfynx\\SmoothnessBundle": "vendor/sfynx-project/template-bundle",
-            "Zend_": "vendor/Zend/library"
-        }
-    }    
-}
-
-```
-
 ## Installation
-
 
 ### Step 0: Configuring Serveur
 
@@ -313,13 +100,13 @@ Execute the `check.php` script from the command line:
 - PHP.ini must have the extensions:
 
     * php-pear php5-dev php5-gd  php5-curl  php5-imap php5-mcrypt 
-    * php5-geoip avec la database GeoLiteCountry/GeoIP.dat.gz
+    * php5-geoip avec la database GeoLiteCountry/GeoIP.dat.gz (optional)
     * php-apc avec APC 3.0.17+ 
     * Intl (php5-intl) doit être installé avec ICU 4+
     * timezonedb pour le parametre date.timezone
     * JSON doit être activé
     * pdo, pdo_mysql 
-    * php5-memcache / php5-memcached
+    * php5-memcache / php5-memcached (optional)
     * activation d'envoi de mail
          - sous windows : 
               - SMTP = smtp-host-value
@@ -333,7 +120,7 @@ To use Doctrine, you will need to have installed PDO. And you must have installe
 
 ### Step 1: Configuring parameters  BDD and mailer
 
-* Open the file cmfpi_project / app / config / parameters.ini.
+* Open the file app / config / parameters.ini
 * Give the name "mydatabase" for example in the database and choose the type pdo_mysql to use a MySQL database.
 * Give your user and password of your Gmail count.
 * Change the secret code that will be used to protect your application from XSS attacks.
@@ -346,6 +133,13 @@ parameters:
     database_name:     symfsfynx22
     database_user:     root
     database_password: ~
+
+    test_database_driver:   pdo_mysql
+    test_database_host:     127.0.0.1
+    test_database_port:     null
+    test_database_name:     symfsfynx23_test
+    test_database_user:     root
+    test_database_password: pacman 
 
     mailer_transport:  sendmail
     mailer_host:       127.0.0.1
@@ -376,28 +170,26 @@ parameters:
 
 ### Step 2: Setting up Permissions
 
-* The directories app / cache app / logs should be writable by both the web server and the user.
+* The directories below should be writable by both the web server and the user.
 * On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. 
 * We must change www-data on your web server.
 
 Many systems allow you to use ACL chmod a +.
 **For more information** : http://symfony.com/doc/current/book/installation.html
 
-Then you must add the uploads/media folder to allow specific users to load :
-
 ``` bash
-chmod –R 0777 app/cachesfynx
-chmod –R 0777 app/cache
-chmod –R 0777 app/log
-
 mkdir web/uploads
 mkdir web/uploads/media
 mkdir web/yui
+
+chmod –R 0777 app/cachesfynx
+chmod –R 0777 app/cache
+chmod –R 0777 app/log
 chmod –R 0777 web/uploads
 chmod –R 0777 web/yui
 ```
 
-### Step 4: Installing the vendor
+### Step 3: Installing the vendor
 
 As Symfony uses [Composer][2] to manage its dependencies, the recommended way
 to create a new project is to use it.
@@ -418,7 +210,7 @@ http://getcomposer.org/ or just run the following command:
 
 ```
 
-### Step 5: Create database, tables and fixtures with phing
+### Step 4: Create database, tables and fixtures with phing
 
 **Execute initialize.xml configuration**
 ``` bash
