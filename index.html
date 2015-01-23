@@ -79,7 +79,7 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/template-bundle/Sfynx/TemplateBundle/Resources/doc/index.md">Example of Template usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/core-bundle/Sfynx/CoreBundle/Resources/doc/index.md">Example of Core usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/tool-bundle/Sfynx/ToolBundle/Resources/doc/index.md">Example of Tool usage</a></li>
-<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/media-bundle/Sfynx/MediaBundle/Resources/doc/index.md">Example of Media usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/sonata-bundle/Sfynx/MediaBundle/Resources/doc/index.md">Example of Media usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/EncryptBundle/Resources/doc/index.md">Example of Encrypt annotation usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/PositionBundle/Resources/doc/index.md">Example of Position annotation usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsBundle/Resources/doc/index.md">Example of Ws usage</a></li>
@@ -106,216 +106,6 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <li><p>You can download this software from <a href="http://pigroupe.github.io/cmf-sfynx/">http://pigroupe.github.io/cmf-sfynx/</a>; you will also find a complete user manual and additional information on this site.</p></li>
 <li><p>In French law, SFYNX falls under the regulations stipulated in the code of intellectual property rights (CPI). The SFYNX kernel is a collaborative work by its authors, listed above as per article L 113-1 of the CPI. The entire SFYNX project is comprised of a collective work in respect of articles L 113-2 and L 113-5 of the CPI. The authors release the work to the public in accordance with the rights and obligations as defined by the GNU public license.</p></li>
 </ul>
-
-<h2>
-<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
-
-<p>Register all bundle in your <code>app/AppKernel.php</code> file:</p>
-
-<div class="highlight highlight-php"><pre><span class="pl-s2"></span>
-<span class="pl-s2">    <span class="pl-s">public</span> <span class="pl-st">function</span> <span class="pl-en">registerBundles</span>()</span>
-<span class="pl-s2">    {</span>
-<span class="pl-s2">            <span class="pl-vo">$bundles</span> <span class="pl-k">=</span> <span class="pl-s3">array</span>(</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Symfony\Bundle\FrameworkBundle\</span><span class="pl-s3">FrameworkBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Symfony\Bundle\SecurityBundle\</span><span class="pl-s3">SecurityBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Symfony\Bundle\TwigBundle\</span><span class="pl-s3">TwigBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Symfony\Bundle\MonologBundle\</span><span class="pl-s3">MonologBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Symfony\Bundle\SwiftmailerBundle\</span><span class="pl-s3">SwiftmailerBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Symfony\Bundle\AsseticBundle\</span><span class="pl-s3">AsseticBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sensio\Bundle\FrameworkExtraBundle\</span><span class="pl-s3">SensioFrameworkExtraBundle</span>(),</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-c"># secure</span></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">JMS\AopBundle\</span><span class="pl-s3">JMSAopBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">JMS\DiExtraBundle\</span><span class="pl-s3">JMSDiExtraBundle</span>(<span class="pl-vo">$this</span>),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">JMS\SecurityExtraBundle\</span><span class="pl-s3">JMSSecurityExtraBundle</span>(),  </span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">JMS\TranslationBundle\</span><span class="pl-s3">JMSTranslationBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">JMS\SerializerBundle\</span><span class="pl-s3">JMSSerializerBundle</span>(),</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-c"># doctrine</span></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Doctrine\Bundle\DoctrineBundle\</span><span class="pl-s3">DoctrineBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Doctrine\Bundle\FixturesBundle\</span><span class="pl-s3">DoctrineFixturesBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Stof\DoctrineExtensionsBundle\</span><span class="pl-s3">StofDoctrineExtensionsBundle</span>(),               </span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-c"># route</span></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">BeSimple\I18nRoutingBundle\</span><span class="pl-s3">BeSimpleI18nRoutingBundle</span>(),             </span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-c"># sonata</span></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\CoreBundle\</span><span class="pl-s3">SonataCoreBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\AdminBundle\</span><span class="pl-s3">SonataAdminBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\NotificationBundle\</span><span class="pl-s3">SonataNotificationBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\EasyExtendsBundle\</span><span class="pl-s3">SonataEasyExtendsBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\DoctrineORMAdminBundle\</span><span class="pl-s3">SonataDoctrineORMAdminBundle</span>(),               </span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\BlockBundle\</span><span class="pl-s3">SonataBlockBundle</span>(),             </span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\MediaBundle\</span><span class="pl-s3">SonataMediaBundle</span>(),             </span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sonata\ClassificationBundle\</span><span class="pl-s3">SonataClassificationBundle</span>(), </span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Application\Sonata\ClassificationBundle\</span><span class="pl-s3">ApplicationSonataClassificationBundle</span>(),</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-c"># tools</span></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">FOS\UserBundle\</span><span class="pl-s3">FOSUserBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Knp\Bundle\MenuBundle\</span><span class="pl-s3">KnpMenuBundle</span>(),         </span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-c"># Sfynx</span></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\AclManagerBundle\</span><span class="pl-s3">SfynxAclManagerBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\DatabaseBundle\</span><span class="pl-s3">SfynxDatabaseBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\WsBundle\</span><span class="pl-s3">SfynxWsBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\CacheBundle\</span><span class="pl-s3">SfynxCacheBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\ToolBundle\</span><span class="pl-s3">SfynxToolBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\CoreBundle\</span><span class="pl-s3">SfynxCoreBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\TranslatorBundle\</span><span class="pl-s3">SfynxTranslatorBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\BrowserBundle\</span><span class="pl-s3">SfynxBrowserBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\EncryptBundle\</span><span class="pl-s3">SfynxEncryptBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\PositionBundle\</span><span class="pl-s3">SfynxPositionBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\AuthBundle\</span><span class="pl-s3">SfynxAuthBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\MediaBundle\</span><span class="pl-s3">SfynxMediaBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\AdminBundle\</span><span class="pl-s3">SfynxAdminBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\CmfBundle\</span><span class="pl-s3">SfynxCmfBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\TemplateBundle\</span><span class="pl-s3">SfynxTemplateBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Sfynx\SmoothnessBundle\</span><span class="pl-s3">SfynxSmoothnessBundle</span>(),</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">Application\MediaBundle\</span><span class="pl-s3">BootStrapMediaBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">PiApp\GedmoBundle\</span><span class="pl-s3">PiAppGedmoBundle</span>(),</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">            <span class="pl-c">#override Sfynx bundles</span></span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">OrApp\OrCmfBundle\</span><span class="pl-s3">OrAppOrCmfBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">OrApp\OrGedmoBundle\</span><span class="pl-s3">OrAppOrGedmoBundle</span>(),</span>
-<span class="pl-s2">            <span class="pl-k">new</span> <span class="pl-s3">OrApp\OrTemplateBundle\</span><span class="pl-s3">OrAppOrTemplateBundle</span>(), </span>
-<span class="pl-s2">        );</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">        <span class="pl-k">if</span> (<span class="pl-s3">in_array</span>(<span class="pl-vo">$this</span><span class="pl-k">-&gt;</span>getEnvironment(), <span class="pl-s3">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>dev<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>))) {</span>
-<span class="pl-s2">            <span class="pl-vo">$bundles</span>[] <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Symfony\Bundle\WebProfilerBundle\</span><span class="pl-s3">WebProfilerBundle</span>();</span>
-<span class="pl-s2">            <span class="pl-vo">$bundles</span>[] <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Sensio\Bundle\DistributionBundle\</span><span class="pl-s3">SensioDistributionBundle</span>();</span>
-<span class="pl-s2">            <span class="pl-vo">$bundles</span>[] <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Sensio\Bundle\GeneratorBundle\</span><span class="pl-s3">SensioGeneratorBundle</span>();</span>
-<span class="pl-s2">        }</span>
-<span class="pl-s2"></span>
-<span class="pl-s2">        <span class="pl-k">return</span> <span class="pl-vo">$bundles</span>;</span>
-<span class="pl-s2">    }</span>
-<span class="pl-s2"></span></pre></div>
-
-<h2>
-<a id="composerjson" class="anchor" href="#composerjson" aria-hidden="true"><span class="octicon octicon-link"></span></a>composer.json</h2>
-
-<div class="highlight highlight-json"><pre>
-{
-    <span class="pl-s1"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>symfony/framework-standard-edition<span class="pl-pds">"</span></span>,
-    <span class="pl-s1"><span class="pl-pds">"</span>license<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>MIT<span class="pl-pds">"</span></span>,
-    <span class="pl-s1"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>project<span class="pl-pds">"</span></span>,
-    <span class="pl-s1"><span class="pl-pds">"</span>description<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>The <span class="pl-cce">\"</span>Symfony Standard Edition<span class="pl-cce">\"</span> distribution<span class="pl-pds">"</span></span>,
-    <span class="pl-s1"><span class="pl-pds">"</span>require<span class="pl-pds">"</span></span>: {
-        <span class="pl-s1"><span class="pl-pds">"</span>php<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>&gt;=5.3.3<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>symfony/symfony<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.19<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>doctrine/orm<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~2.2,&gt;=2.2.3<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>doctrine/doctrine-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.2.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>twig/extensions<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.0.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>symfony/assetic-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>symfony/swiftmailer-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>symfony/monolog-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>sensio/distribution-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>sensio/framework-extra-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>sensio/generator-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>incenteev/composer-parameter-handler<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~2.0<span class="pl-pds">"</span></span>,
-
-        <span class="pl-s1"><span class="pl-pds">"</span>jms/security-extra-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.5.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>jms/di-extra-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.4.*<span class="pl-pds">"</span></span>,  
-        <span class="pl-s1"><span class="pl-pds">"</span>jms/serializer-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>0.13.*@dev<span class="pl-pds">"</span></span>,
-
-        <span class="pl-s1"><span class="pl-pds">"</span>symfony/translation<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.6.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>jms/translation-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.1.*@dev<span class="pl-pds">"</span></span>,
-
-        <span class="pl-s1"><span class="pl-pds">"</span>doctrine/doctrine-fixtures-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>dev-master<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>doctrine/data-fixtures<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.0.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>doctrine/doctrine-cache-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.0.*<span class="pl-pds">"</span></span>,    
-        <span class="pl-s1"><span class="pl-pds">"</span>gedmo/doctrine-extensions<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>stof/doctrine-extensions-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.1.*@dev<span class="pl-pds">"</span></span>,
-
-        <span class="pl-s1"><span class="pl-pds">"</span>friendsofsymfony/user-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.0.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>besimple/i18n-routing-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.0<span class="pl-pds">"</span></span>,
-
-        <span class="pl-s1"><span class="pl-pds">"</span>sonata-project/admin-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.4.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>sonata-project/media-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.4.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>sonata-project/classification-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>sonata-project/datagrid-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.2.*@dev<span class="pl-pds">"</span></span>
-    },
-    <span class="pl-s1"><span class="pl-pds">"</span>require-dev<span class="pl-pds">"</span></span>: {
-        <span class="pl-s1"><span class="pl-pds">"</span>benjam1/symfttpd<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.1.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>phpunit/phpunit<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>4.0.20<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>phploc/phploc<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.1.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>whatthejeff/nyancat-phpunit-resultprinter<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~1.2<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>squizlabs/php_codesniffer<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.0.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>phpmd/phpmd<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.1.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>guzzlehttp/guzzle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~4.0<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>sebastian/phpcpd<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.0.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>pdepend/pdepend<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.0.*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>phpunit/php-invoker<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>dev-master<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>phake/phake<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>*<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>phing/phing<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>dev-master<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>behat/behat<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>3.0.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>behat/mink<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.6.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>behat/symfony2-extension<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>behat/mink-extension<span class="pl-pds">"</span></span>:  <span class="pl-s1"><span class="pl-pds">"</span>*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>behat/mink-selenium2-driver<span class="pl-pds">"</span></span>:  <span class="pl-s1"><span class="pl-pds">"</span>*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>behat/mink-browserkit-driver<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.2.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>jns/xhprof-bundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>1.0.*@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>facebook/xhprof<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>dev-master@dev<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>phpcasperjs/phpcasperjs<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>dev-master<span class="pl-pds">"</span></span>
-    },       
-    <span class="pl-s1"><span class="pl-pds">"</span>scripts<span class="pl-pds">"</span></span>: {
-        <span class="pl-s1"><span class="pl-pds">"</span>post-install-cmd<span class="pl-pds">"</span></span>: [
-            <span class="pl-s1"><span class="pl-pds">"</span>Incenteev<span class="pl-cce">\\</span>ParameterHandler<span class="pl-cce">\\</span>ScriptHandler::buildParameters<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::buildBootstrap<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::clearCache<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::installAssets<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::installRequirementsFile<span class="pl-pds">"</span></span>
-        ],
-        <span class="pl-s1"><span class="pl-pds">"</span>post-update-cmd<span class="pl-pds">"</span></span>: [
-            <span class="pl-s1"><span class="pl-pds">"</span>Incenteev<span class="pl-cce">\\</span>ParameterHandler<span class="pl-cce">\\</span>ScriptHandler::buildParameters<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::buildBootstrap<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::clearCache<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::installAssets<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sensio<span class="pl-cce">\\</span>Bundle<span class="pl-cce">\\</span>DistributionBundle<span class="pl-cce">\\</span>Composer<span class="pl-cce">\\</span>ScriptHandler::installRequirementsFile<span class="pl-pds">"</span></span>
-        ]
-    },
-    <span class="pl-s1"><span class="pl-pds">"</span>config<span class="pl-pds">"</span></span>: {
-        <span class="pl-s1"><span class="pl-pds">"</span>bin-dir<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>bin<span class="pl-pds">"</span></span>
-    },
-    <span class="pl-s1"><span class="pl-pds">"</span>minimum-stability<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>stable<span class="pl-pds">"</span></span>,
-    <span class="pl-s1"><span class="pl-pds">"</span>extra<span class="pl-pds">"</span></span>: {
-        <span class="pl-s1"><span class="pl-pds">"</span>symfony-app-dir<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>app<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>symfony-web-dir<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>web<span class="pl-pds">"</span></span>,
-        <span class="pl-s1"><span class="pl-pds">"</span>incenteev-parameters<span class="pl-pds">"</span></span>: {
-            <span class="pl-s1"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>app/config/parameters.yml<span class="pl-pds">"</span></span>
-        },
-        <span class="pl-s1"><span class="pl-pds">"</span>branch-alias<span class="pl-pds">"</span></span>: {
-            <span class="pl-s1"><span class="pl-pds">"</span>dev-master<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>2.3-dev<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>bin-dir<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>bin/<span class="pl-pds">"</span></span>
-        }
-    },
-    <span class="pl-s1"><span class="pl-pds">"</span>autoload<span class="pl-pds">"</span></span>: {
-        <span class="pl-s1"><span class="pl-pds">"</span>psr-0<span class="pl-pds">"</span></span>: {
-            <span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span> : <span class="pl-s1"><span class="pl-pds">"</span>src<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>PiApp<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/Sfynx<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Application<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/Sfynx<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>AclManagerBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/acl-manager-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>DatabaseBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/database-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>WsBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/ws-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>TranslatorBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/translator-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>CacheBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/cache-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>ToolBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/tool-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>CoreBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/core-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>CmfBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/cmf-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>AdminBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/admin-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>AuthBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/auth-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>MediaBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/media-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>BrowserBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/browser-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>EncryptBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/annotation-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>PositionBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/annotation-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>TemplateBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/template-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Sfynx<span class="pl-cce">\\</span>SmoothnessBundle<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/sfynx-project/template-bundle<span class="pl-pds">"</span></span>,
-            <span class="pl-s1"><span class="pl-pds">"</span>Zend_<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>vendor/Zend/library<span class="pl-pds">"</span></span>
-        }
-    }    
-}
-</pre></div>
 
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
@@ -346,13 +136,13 @@ configured for Symfony.</p>
 
 <ul>
 <li>php-pear php5-dev php5-gd  php5-curl  php5-imap php5-mcrypt </li>
-<li>php5-geoip avec la database GeoLiteCountry/GeoIP.dat.gz</li>
+<li>php5-geoip avec la database GeoLiteCountry/GeoIP.dat.gz (optional)</li>
 <li>php-apc avec APC 3.0.17+ </li>
 <li>Intl (php5-intl) doit être installé avec ICU 4+</li>
 <li>timezonedb pour le parametre date.timezone</li>
 <li>JSON doit être activé</li>
 <li>pdo, pdo_mysql </li>
-<li>php5-memcache / php5-memcached</li>
+<li>php5-memcache / php5-memcached (optional)</li>
 <li>activation d'envoi de mail
 
 <ul>
@@ -384,7 +174,7 @@ configured for Symfony.</p>
 <a id="step-1-configuring-parameters--bdd-and-mailer" class="anchor" href="#step-1-configuring-parameters--bdd-and-mailer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 1: Configuring parameters  BDD and mailer</h3>
 
 <ul>
-<li>Open the file cmfpi_project / app / config / parameters.ini.</li>
+<li>Open the file app / config / parameters.ini</li>
 <li>Give the name "mydatabase" for example in the database and choose the type pdo_mysql to use a MySQL database.</li>
 <li>Give your user and password of your Gmail count.</li>
 <li>Change the secret code that will be used to protect your application from XSS attacks.</li>
@@ -397,6 +187,13 @@ configured for Symfony.</p>
     database_name:     symfsfynx22
     database_user:     root
     database_password: <span class="pl-k">~</span>
+
+    test_database_driver:   pdo_mysql
+    test_database_host:     127.0.0.1
+    test_database_port:     null
+    test_database_name:     symfsfynx23_test
+    test_database_user:     root
+    test_database_password: pacman 
 
     mailer_transport:  sendmail
     mailer_host:       127.0.0.1
@@ -428,7 +225,7 @@ configured for Symfony.</p>
 <a id="step-2-setting-up-permissions" class="anchor" href="#step-2-setting-up-permissions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 2: Setting up Permissions</h3>
 
 <ul>
-<li>The directories app / cache app / logs should be writable by both the web server and the user.</li>
+<li>The directories below should be writable by both the web server and the user.</li>
 <li>On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. </li>
 <li>We must change www-data on your web server.</li>
 </ul>
@@ -436,20 +233,18 @@ configured for Symfony.</p>
 <p>Many systems allow you to use ACL chmod a +.
 <strong>For more information</strong> : <a href="http://symfony.com/doc/current/book/installation.html">http://symfony.com/doc/current/book/installation.html</a></p>
 
-<p>Then you must add the uploads/media folder to allow specific users to load :</p>
-
-<div class="highlight highlight-bash"><pre>chmod –R 0777 app/cachesfynx
-chmod –R 0777 app/cache
-chmod –R 0777 app/log
-
-mkdir web/uploads
+<div class="highlight highlight-bash"><pre>mkdir web/uploads
 mkdir web/uploads/media
 mkdir web/yui
+
+chmod –R 0777 app/cachesfynx
+chmod –R 0777 app/cache
+chmod –R 0777 app/log
 chmod –R 0777 web/uploads
 chmod –R 0777 web/yui</pre></div>
 
 <h3>
-<a id="step-4-installing-the-vendor" class="anchor" href="#step-4-installing-the-vendor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 4: Installing the vendor</h3>
+<a id="step-3-installing-the-vendor" class="anchor" href="#step-3-installing-the-vendor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 3: Installing the vendor</h3>
 
 <p>As Symfony uses [Composer][2] to manage its dependencies, the recommended way
 to create a new project is to use it.</p>
@@ -468,7 +263,7 @@ to create a new project is to use it.</p>
 </pre></div>
 
 <h3>
-<a id="step-5-create-database-tables-and-fixtures-with-phing" class="anchor" href="#step-5-create-database-tables-and-fixtures-with-phing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 5: Create database, tables and fixtures with phing</h3>
+<a id="step-4-create-database-tables-and-fixtures-with-phing" class="anchor" href="#step-4-create-database-tables-and-fixtures-with-phing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 4: Create database, tables and fixtures with phing</h3>
 
 <p><strong>Execute initialize.xml configuration</strong></p>
 
