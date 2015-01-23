@@ -1053,7 +1053,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
 
                             var accordionId = "accordion_" + tabProcessedId + "_" + addClass +"_"+ className;
                             $("<fieldset id='"+accordionId+"' class='accordion'><legend>"+title+"</legend></fieldset>").appendTo("#"+tabProcessedId+" .accordion-form");
-
+                            
                             $("#"+tabProcessedId+" "+addClassBis+" ."+className).each(function(indClass) {
                                 //$(this).parent('.clearfix').detach().appendTo("#"+accordionId);
                                 $(this).closest('.clearfix').detach().appendTo("#"+accordionId);

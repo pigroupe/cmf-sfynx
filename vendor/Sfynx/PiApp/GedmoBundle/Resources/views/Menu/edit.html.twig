@@ -23,15 +23,15 @@
 		    	{{ form_widget(edit_form) }}
 		    </div>
 		    <ul class="ui-widget-header">
-			    <li>
-			    	<!-- <input id="add_tab" type="button" value="{{ 'pi.grid.action.add-tab'|trans }}" /> -->
-			    	<button type="submit" class="button-ui-save">{{ 'pi.grid.action.save'|trans }}</button>
-		            <a href="{{ path('admin_gedmo_menu_tree', { 'category': '', 'NoLayout': NoLayout}) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
-					{% if app.request.query.get('NoLayout') == false and is_granted('ROLE_ADMIN') %} 
-		            <a data-id="delete-form" class="button-ui-delete">{{ 'pi.grid.action.delete'|trans }}</a> 
-				    {% endif %}
-			    </li>
-			</ul>		    
+                        <li>
+                            <!-- <input id="add_tab" type="button" value="{{ 'pi.grid.action.add-tab'|trans }}" /> -->
+                            <button type="submit" class="button-ui-save">{{ 'pi.grid.action.save'|trans }}</button>
+                            <a href="{{ path('admin_gedmo_menu_tree', { 'category': '', 'NoLayout': NoLayout}) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+                            {% if app.request.query.get('NoLayout') == false and is_granted('ROLE_ADMIN') %} 
+                            <a data-id="delete-form" class="button-ui-delete">{{ 'pi.grid.action.delete'|trans }}</a> 
+                            {% endif %}
+                        </li>
+                    </ul>		    
 		</form>
 		{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:edit-footer.html.twig" %}
 	</div>
@@ -50,12 +50,12 @@
     {% endif %}	
 	
 	{% if entity.media.image is defined %}
-	{{ picture_form(entity.media.image, 'piapp_gedmobundle_menutype_media_image_binaryContent', 'reference')|raw }}
+	{{ picture_form(entity.media.image, 'piapp_gedmobundle_menutype_media_image_binaryContent', 'reference', 'display: block; text-align:left;')|raw }}
 	{% endif %}
 	
 	<script type="text/javascript">
 	//<![CDATA[
-			j_prototype_bytabs.ftc_accordion_form("image_collection", "{{ 'pi.menu.form.group.pictures'|trans }}", ".myform");								
+            j_prototype_bytabs.ftc_accordion_form("image_collection", "{{ 'pi.menu.form.group.pictures'|trans }}", ".myform");								
 	//]]>
 	</script>	
 

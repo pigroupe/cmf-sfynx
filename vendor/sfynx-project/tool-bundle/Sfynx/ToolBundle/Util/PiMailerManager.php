@@ -384,5 +384,4 @@ class PiMailerManager implements PiMailerManagerBuilderInterface
     
         return $command;
     }    
-        
 }

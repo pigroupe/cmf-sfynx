@@ -43,17 +43,19 @@
 
 {% block form_widget_compound %}
 {% spaceless %}
-    {% if form.parent == null %}
-        {% if render_fieldset %}
+    {% if form.parent is empty %}
         <div {{ block('widget_container_attributes') }}>
+        {% if render_fieldset %}
             <fieldset>
         {% endif %}
         {% if show_legend %}{{ block('form_legend') }}{% endif %}
     {% endif %}
-    {{ block('form_rows_visible') }}
-    {{ form_rest(form) }}
-    {% if form.parent == null %}
-        {% if render_fieldset %}</fieldset>{% endif %}
+            {{ block('form_rows_visible') }}
+            {{ form_rest(form) }}
+    {% if form.parent is empty %}
+            {% if render_fieldset %}
+            </fieldset>
+            {% endif %}
         </div>
     {% endif %}
 {% endspaceless %}
@@ -464,7 +466,7 @@
 {% spaceless %}
 {% if error_type %}
     {{ error_type }}
-{% elseif form.parent == null %}
+{% elseif form.parent is empty %}
     {{ form.vars.error_type | default('inline') }}
 {% else %}
 inline
@@ -476,7 +478,7 @@ inline
 
 {% block widget_control_group_start %}
 {% spaceless %}
-{% if widget_control_group|default(false) or form.parent == null %}
+{% if widget_control_group|default(false) or form.parent is empty %}
     {% set widget_control_group_attr = widget_control_group_attr|merge({'class': widget_control_group_attr.class|default('') ~ ' clearfix'}) %}
     {% if errors|length > 0 %}
         {% set widget_control_group_attr = widget_control_group_attr|merge({'class': widget_control_group_attr.class|default('') ~ ' error'}) %}
@@ -508,7 +510,7 @@ inline
 
 {% block widget_control_group_end %}
 {% spaceless %}
-{% if widget_control_group|default(false) or form.parent == null %}
+{% if widget_control_group|default(false) or form.parent is empty %}
     </div>
 {% endif %}
 {% endspaceless %}

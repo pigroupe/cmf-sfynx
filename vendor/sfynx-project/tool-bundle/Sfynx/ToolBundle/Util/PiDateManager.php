@@ -385,6 +385,5 @@ class PiDateManager implements PiDateManagerBuilderInterface
             }
         }
         return $results;
-    }    
-
+    }   
 }

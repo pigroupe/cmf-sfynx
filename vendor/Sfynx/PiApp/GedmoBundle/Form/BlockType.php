@@ -299,7 +299,7 @@ class BlockType extends AbstractType
              				//new Constraints\NotBlank(),
              		),
             		"label_attr" => array(
-            				"class"=> 'bg_image_collection',
+                            "class"=> 'bg_image_collection',
             		),
             		"attr" => array(
             				"class"=>"pi_simpleselect ajaxselect", // ajaxselect
@@ -335,7 +335,7 @@ class BlockType extends AbstractType
             		'required'  => false,
              		'attr'=>array('style'=>'display:none;'),
              		"label_attr" => array(
-             				"style"=> 'display:none;',
+                            "style"=> 'display:none;',
              		),
              ));
          }
@@ -367,7 +367,7 @@ class BlockType extends AbstractType
              				//new Constraints\NotBlank(),
              		),
             		"label_attr" => array(
-            				"class"=> 'bg_image_collection',
+                            "class"=> 'bg_image_collection',
             		),
             		"attr" => array(
             				"class"=>"pi_simpleselect ajaxselect", // ajaxselect
@@ -390,21 +390,21 @@ class BlockType extends AbstractType
              $builder
              //->add('media1', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "hidden", 'pi.form.label.media.picture'));
              ->add('media1', 'entity', array(
-             		'class' => 'SfynxMediaBundle:Mediatheque',
-            		'query_builder' => function(EntityRepository $er) use ($id_media1) {
-            			$translatableListener = $this->_container->get('gedmo.listener.translatable');
-            			$translatableListener->setTranslationFallback(true);            			
-            			return $er->createQueryBuilder('a')
-            			->select('a')
-            			->where("a.id IN (:id)")
-            			->setParameter('id', $id_media1)
-            			;
-            		},
-            		'required'  => false,
-             		'attr'=>array('style'=>'display:none;'),
-             		"label_attr" => array(
-             				"style"=> 'display:none;',
-             		),
+                    'class' => 'SfynxMediaBundle:Mediatheque',
+                    'query_builder' => function(EntityRepository $er) use ($id_media1) {
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);            			
+                        return $er->createQueryBuilder('a')
+                        ->select('a')
+                        ->where("a.id IN (:id)")
+                        ->setParameter('id', $id_media1)
+                        ;
+                    },
+                    'required'  => false,
+                    'attr'=>array('style'=>'display:none;'),
+                    "label_attr" => array(
+                        "style"=> 'display:none;',
+                    ),
              ));
          }
         
