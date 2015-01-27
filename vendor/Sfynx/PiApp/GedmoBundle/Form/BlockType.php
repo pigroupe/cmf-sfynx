@@ -63,121 +63,114 @@ class BlockType extends AbstractType
         $id_media = null;
         $id_media1 = null;
         // get the id of media
-        if (
-        		($builder->getData()->getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
+        if ($builder->getData()->getMedia()
+                instanceof \Sfynx\MediaBundle\Entity\Mediatheque
         ) {
         	$id_media = $builder->getData()->getMedia()->getId();
         }
         if (isset($_POST['piapp_gedmobundle_blocktype']['media'])) {
-        	$id_media = $_POST['piapp_gedmobundle_blocktype']['media'];
+            $id_media = $_POST['piapp_gedmobundle_blocktype']['media'];
         }
         // get the id of media1
-        if (
-        		($builder->getData()->getMedia1() instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
+        if ($builder->getData()->getMedia1() 
+                instanceof \Sfynx\MediaBundle\Entity\Mediatheque
         ) {
-        	$id_media1 = $builder->getData()->getMedia1()->getId();
+            $id_media1 = $builder->getData()->getMedia1()->getId();
         }
         if (isset($_POST['piapp_gedmobundle_blocktype']['media1'])) {
-        	$id_media1 = $_POST['piapp_gedmobundle_blocktype']['media1'];
-        }        
-        
-        $is_enabled        = true;
-        $is_category    = true;
-        $is_title        = true;
-        $is_descriptif    = true;
-        $is_content        = true;
-        $is_author        = true;
-        $is_page        = true;
-        $is_media        = true;
-        $is_media1        = true;
-                
-        $template       = $this->_container->get('request')->query->get('template');
-        
+            $id_media1 = $_POST['piapp_gedmobundle_blocktype']['media1'];
+        }       
+        $is_enabled    = true;
+        $is_category   = true;
+        $is_title      = true;
+        $is_descriptif = true;
+        $is_content    = true;
+        $is_author     = true;
+        $is_page       = true;
+        $is_media      = true;
+        $is_media1     = true;
+        $template      = $this->_container->get('request')->query->get('template');
         if (in_array($template, array('_tmp_show-block-tpl1.html.twig','_tmp_show-block-tpl3.html.twig','_tmp_show-block-tpl4.html.twig'))){
-            $is_enabled        = false;
-            $is_category    = false;
-            $is_title        = false;
-            $is_descriptif    = false;
-            $is_author        = false;
-            $is_page        = false;
-            $is_media1        = false;
+            $is_enabled    = false;
+            $is_category   = false;
+            $is_descriptif = false;
+            $is_author     = false;
+            $is_page       = false;
+            $is_media1     = false;
         }
         if (in_array($template, array('_tmp_show-block-tpl2.html.twig','_tmp_show-block-tpl5.html.twig'))){
-            $is_enabled        = false;
-            $is_category    = false;
-            $is_title        = false;
-            $is_descriptif    = false;
-            $is_author        = false;
-            $is_page        = false;
+            $is_enabled    = false;
+            $is_category   = false;
+            $is_descriptif = false;
+            $is_author     = false;
+            $is_page       = false;
         }   
         if (in_array($template, array('_tmp_show-block-descriptif-left-picture.html.twig','_tmp_show-block-descriptif-right-picture.html.twig','_tmp_lamelee_block_share.html.twig'))){
-            $is_enabled        = false;
-            $is_category    = false;
-            $is_content        = false;
-            $is_author        = false;
-            $is_media1        = false;
+            $is_enabled    = false;
+            $is_category   = false;
+            $is_content    = false;
+            $is_author     = false;
+            $is_media1     = false;
         }             
         if (in_array($template, array('_tmp_show-block-video-left.html.twig','_tmp_show-block-video-right.html.twig','_tmp_mid_block_abo.html.twig','_tmp_mid_block_annonce.html.twig','_tmp_lamelee_block_register_auth.html.twig','_tmp_lamelee_block_register.html.twig'))){
-            $is_enabled        = false;
-            $is_category    = false;
-            $is_content        = false;
-            $is_author        = false;
-            $is_media        = false;
-            $is_media1        = false;
+            $is_enabled    = false;
+            $is_category   = false;
+            $is_content    = false;
+            $is_author     = false;
+            $is_media      = false;
+            $is_media1     = false;
         }
         if (in_array($template, array('_tmp_lamelee_block_pub_cubic.html.twig','_tmp_lamelee_block_pub_horiz.html.twig'))){
-            $is_enabled        = false;
-            $is_category    = false;
-            $is_descriptif    = false;
-            $is_content        = false;
-            $is_author        = false;
-            $is_media1        = false;
+            $is_enabled    = false;
+            $is_category   = false;
+            $is_descriptif = false;
+            $is_content    = false;
+            $is_author     = false;
+            $is_media1     = false;
         } 
         if (in_array($template, array('_tmp_lamelee_block_header_thematic.html.twig','_tmp_lamelee_block_header_partner.html.twig'))){
-            $is_enabled        = false;
-            $is_category    = false;
-            $is_content        = false;
-            $is_author        = false;
-            $is_page        = false;
-            $is_media        = false;
-            $is_media1        = false;
+            $is_enabled    = false;
+            $is_category   = false;
+            $is_content    = false;
+            $is_author     = false;
+            $is_page       = false;
+            $is_media      = false;
+            $is_media1     = false;
         }
         if (in_array($template, array('_tmp_mid_block_header_archive.html.twig'))){
-            $is_enabled        = false;
-            $is_category    = false;
-            $is_title        = false;
-            $is_descriptif    = false;
-            $is_content        = false;
-            $is_author        = false;
-            $is_media        = false;
-            $is_media1        = false;
+            $is_enabled    = false;
+            $is_category   = false;
+            $is_descriptif = false;
+            $is_content    = false;
+            $is_author     = false;
+            $is_media      = false;
+            $is_media1     = false;
         }        
-        
-        if ($is_enabled)
+        if ($is_enabled) {
             $builder            
              ->add('enabled', 'checkbox', array(
-                    'data'  => true,
-                     'label'    => 'pi.form.label.field.enabled',
-                     "label_attr" => array(
-                             "class"=>"block_collection",
-                     ),
+                'data'  => true,
+                 'label'    => 'pi.form.label.field.enabled',
+                 "label_attr" => array(
+                    "class"=>"block_collection",
+                 ),
             )); 
-         else
+        } else {
              $builder            
              ->add('enabled', 'hidden');      
-        
-         if ($is_category)
+        }
+        if ($is_category) {
              $builder
              ->add('category', 'entity', array(
                     'class' => 'PiAppGedmoBundle:Category',
                     'query_builder' => function(EntityRepository $er) {
-                         $translatableListener = $this->_container->get('gedmo.listener.translatable');
-                         $translatableListener->setTranslationFallback(true);
-                         return $er->createQueryBuilder('k')
-                         ->select('k')
-                         ->where('k.type = :type')
-                         ->orderBy('k.name', 'ASC')
-                         ->setParameter('type', 1);
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);
+                        return $er->createQueryBuilder('k')
+                        ->select('k')
+                        ->where('k.type = :type')
+                        ->orderBy('k.name', 'ASC')
+                        ->setParameter('type', 1);
                      },
                     'property' => 'name',
                     'empty_value' => 'pi.form.label.select.choose.category',
@@ -185,50 +178,50 @@ class BlockType extends AbstractType
                     'multiple'    => false,
                     'required'  => false,
                     "attr" => array(
-                            "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect",
                     ),
                     "label_attr" => array(
-                             "class"=>"block_collection",
+                        "class"=>"block_collection",
                     ),
             ));
-         
-         if ($is_title)
+        }
+        if ($is_title) {
              $builder
              ->add('title', 'text', array(
                      'label'    => "pi.form.label.field.title",
              		 'required'  => true,
                      "label_attr" => array(
-                             "class"=>"block_collection",
+                        "class"=>"block_collection",
                      ),
              ));
-
-         if ($is_descriptif)
+        }
+        if ($is_descriptif) {
              $builder
              ->add('descriptif', 'textarea', array(
                      'required'  => false,
                      'label'    => 'pi.form.label.field.description',
                      "attr" => array(
-                             "class"    =>"pi_editor_simple_easy",
+                        "class"    =>"pi_editor_simple_easy",
                      ),
                      "label_attr" => array(
-                             "class"=>"block_collection",
+                        "class"=>"block_collection",
                      ),
              ));
-
-         if ($is_content)
+        }
+        if ($is_content) {
              $builder
              ->add('content', 'textarea', array(
                      'required'  => false,
                     "attr" => array(
-                            "class"    =>"pi_editor_simple_easy",
+                        "class"    =>"pi_editor_simple_easy",
                     ),
                      'label'    => "pi.form.label.field.content",
                      "label_attr" => array(
-                             "class"=>"block_collection",
+                        "class"=>"block_collection",
                      ),
             ));
-
-         if ($is_author)
+        }
+        if ($is_author) {
              $builder
              ->add('author', 'text', array(
                      'required'  => false,
@@ -237,8 +230,8 @@ class BlockType extends AbstractType
                              "class"=>"block_collection",
                      ),                     
              ));
-
-         if ($is_page)
+        }
+        if ($is_page) {
              $builder
              ->add('pageurl', 'entity', array(
                      'class' => 'SfynxCmfBundle:Page',
@@ -251,61 +244,61 @@ class BlockType extends AbstractType
                      'required'  => false,
                      "label"     => "pi.form.label.field.url",
                      "attr" => array(
-                             "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect",
                      ),
                      "label_attr" => array(
-                             "class"=>"url_collection",
+                        "class"=>"url_collection",
                      ),
              ))                        
              ->add('url', 'text', array(
                      'required'  => false,
                      "label"     => "pi.form.label.field.or",
                      "label_attr" => array(
-                             "class"=>"url_collection",
+                        "class"=>"url_collection",
                      ),                     
              ))  
              ->add('url_title', 'text', array(
                      "label" => 'pi.form.label.field.title',
                      "label_attr" => array(
-                             "class"=>"url_collection",
+                        "class"=>"url_collection",
                      ),
                      'required'  => false,
              ));
-             
-         if ($is_media) {
+        }
+        if ($is_media) {
              $builder
              //->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'));
              ->add('media', 'entity', array(
              		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media) {
-            			$translatableListener = $this->_container->get('gedmo.listener.translatable');
-            			$translatableListener->setTranslationFallback(true);            			
-            			return $er->createQueryBuilder('a')
-            			->select('a')
-            			->where("a.id IN (:id)")
-            			->setParameter('id', $id_media)
-            			//->where("a.status = 'image'")
-            			//->andWhere("a.image IS NOT NULL")
-            			//->andWhere("a.enabled = 1")
-            			//->orderBy('a.id', 'ASC')
-            			;
+                            $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                            $translatableListener->setTranslationFallback(true);            			
+                            return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->setParameter('id', $id_media)
+                            //->where("a.status = 'image'")
+                            //->andWhere("a.image IS NOT NULL")
+                            //->andWhere("a.enabled = 1")
+                            //->orderBy('a.id', 'ASC')
+                            ;
             		},
             		//'property' => 'id',
             		'empty_value' => 'pi.form.label.select.choose.media',
             		'label' => "Media",
             		'multiple' => false,
-					'required'  => false,
+                            'required'  => false,
              		'constraints' => array(
-             				//new Constraints\NotBlank(),
+                            //new Constraints\NotBlank(),
              		),
             		"label_attr" => array(
                             "class"=> 'bg_image_collection',
             		),
             		"attr" => array(
-            				"class"=>"pi_simpleselect ajaxselect", // ajaxselect
-            				"data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
-            				"data-selectid" => $id_media,
-            		        "data-max" => 50,
+                            "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                            "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
+                            "data-selectid" => $id_media,
+                            "data-max" => 50,
             		),
             		'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
              				title="Ajouter une image à la médiatheque"
@@ -324,13 +317,13 @@ class BlockType extends AbstractType
              ->add('media', 'entity', array(
              		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media) {
-            			$translatableListener = $this->_container->get('gedmo.listener.translatable');
-            			$translatableListener->setTranslationFallback(true);            			
-            			return $er->createQueryBuilder('a')
-            			->select('a')
-            			->where("a.id IN (:id)")
-            			->setParameter('id', $id_media)
-            			;
+                            $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                            $translatableListener->setTranslationFallback(true);            			
+                            return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->setParameter('id', $id_media)
+                            ;
             		},
             		'required'  => false,
              		'attr'=>array('style'=>'display:none;'),
@@ -346,34 +339,34 @@ class BlockType extends AbstractType
              ->add('media1', 'entity', array(
              		'class' => 'SfynxMediaBundle:Mediatheque',
             		'query_builder' => function(EntityRepository $er) use ($id_media1) {
-            			$translatableListener = $this->_container->get('gedmo.listener.translatable');
-            			$translatableListener->setTranslationFallback(true);            			
-            			return $er->createQueryBuilder('a')
-            			->select('a')
-            			->where("a.id IN (:id)")
-            			->setParameter('id', $id_media1)
-            			//->where("a.status = 'image'")
-            			//->andWhere("a.image IS NOT NULL")
-            			//->andWhere("a.enabled = 1")
-            			//->orderBy('a.id', 'ASC')
-            			;
+                            $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                            $translatableListener->setTranslationFallback(true);            			
+                            return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->setParameter('id', $id_media1)
+                            //->where("a.status = 'image'")
+                            //->andWhere("a.image IS NOT NULL")
+                            //->andWhere("a.enabled = 1")
+                            //->orderBy('a.id', 'ASC')
+                            ;
             		},
             		//'property' => 'id',
             		'empty_value' => 'pi.form.label.select.choose.media',
             		'label' => "Media",
             		'multiple' => false,
-					'required'  => false,
+                            'required'  => false,
              		'constraints' => array(
-             				//new Constraints\NotBlank(),
+                            //new Constraints\NotBlank(),
              		),
             		"label_attr" => array(
                             "class"=> 'bg_image_collection',
             		),
             		"attr" => array(
-            				"class"=>"pi_simpleselect ajaxselect", // ajaxselect
-            				"data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
-            				"data-selectid" => $id_media1,
-            		        "data-max" => 50,
+                            "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                            "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
+                            "data-selectid" => $id_media1,
+                            "data-max" => 50,
             		),
             		'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
              				title="Ajouter une image à la médiatheque"
@@ -407,7 +400,6 @@ class BlockType extends AbstractType
                     ),
              ));
          }
-        
     }
 
     public function getName()
@@ -418,8 +410,7 @@ class BlockType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
     	$resolver->setDefaults(array(
-    			'data_class' => 'PiApp\GedmoBundle\Entity\Block',
+            'data_class' => 'PiApp\GedmoBundle\Entity\Block',
     	));
     }
-        
 }

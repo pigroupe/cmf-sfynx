@@ -48,8 +48,16 @@ class RoutesCommand extends ContainerAwareCommand
         parent::__construct();
     
         //-----we initialize the container-----
-        if (is_object($kernel) && method_exists($kernel, 'getContainer'))
+        if (is_object($kernel) 
+                && method_exists($kernel, 'getContainer')
+        ) {
             $this->setContainer($kernel->getContainer());
+        } else {
+            try {
+                $this->setContainer($this->getApplication()->getKernel()->getContainer());
+            } catch (\Exception $ex) {
+            }
+        }
     }
     
     /**
