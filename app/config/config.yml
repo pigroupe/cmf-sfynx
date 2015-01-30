@@ -31,7 +31,6 @@ framework:
 #        gc_divisor:           ~
 #        gc_probability:       ~
 #        gc_maxlifetime:       ~
-#        save_path:            %kernel.cache_dir%/sessions               
     #esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php       
     fragments:  { path: /_proxy  } 
     

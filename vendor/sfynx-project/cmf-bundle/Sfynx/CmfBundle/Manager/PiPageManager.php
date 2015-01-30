@@ -870,7 +870,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 $pages_content .= "</ul></li>";
             }
         }
-        $pages_content      = preg_replace('#<ul>#sU', '<ul>'.$pages_content, $htmlTree, 1);
+        $pages_content = preg_replace_callback(
+            '#<ul>#sU', '<ul>'.$pages_content, 
+            function($matches) use ($htmlTree) {
+                return $htmlTree;
+            },
+            1
+        );
         
         return $pages_content;
     }
@@ -1476,7 +1482,13 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 $new_url = $new_page->getUrl();
             }
             $new_url = str_replace("//", "/", $new_url);
-            $new_url = preg_replace("/{[a-zA-Z0-9]+}/i", 'testValue', $new_url);
+            $new_url = preg_replace_callback(
+                "/{[a-zA-Z0-9]+}/i", 
+                function($matches) {
+                    return 'testValue';
+                },
+                $new_url
+            );       
 
             return $new_url;
     	}

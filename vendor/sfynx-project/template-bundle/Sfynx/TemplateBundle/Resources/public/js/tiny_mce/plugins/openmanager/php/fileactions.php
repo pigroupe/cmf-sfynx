@@ -44,7 +44,13 @@
 				
 				//do some crude cleaning/sanitizing of the name (needs to be improved)
 				$name = strtr($tname, '����������������������������������������������������', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
-				$name = preg_replace('/\s+/', '-', $name); //remove spaces
+                                $name = preg_replace_callback(
+                                    '/\s+/',
+                                    function($matches) {
+                                        return "-";
+                                    },
+                                    $name
+                                ); // remove spaces
 				
 				
 				$fileext = strtolower(pathinfo($name, PATHINFO_EXTENSION));// get file extension and force lower case

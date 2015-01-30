@@ -82,20 +82,46 @@ class PiDbManager extends AbstractFactory
     public function executeQuery($query, $tabParams = array(), $log = false)
     {
     	if (is_array($tabParams)) {
-    		foreach ($tabParams as $nom => $param) {
-    			$nameParam  = $param["NAME"];
-    			$valueParam = $param["VALUE"];
-    			$typeParam  = $param["TYPE"];
-    			if ($typeParam == self::BIND_TYPE_NUM || $typeParam == self::BIND_TYPE_INT) {
-    				$query = preg_replace('/:' . $nameParam . '/i', $valueParam, $query);
-    			} elseif ($typeParam == self::BIND_TYPE_STR) {
-    				$query = preg_replace('/:' . $nameParam . '/i', $this->quoteSql($valueParam), $query);
-    			} elseif (is_numeric($valueParam) || ($valueParam == "NULL")) {
-    				$query = preg_replace('/:' . $nameParam . '/i', $valueParam, $query);
-    			} else {
-    				$query = preg_replace('/:' . $nameParam . '/i', $this->quoteSql($valueParam), $query);
-    			}
-    		}
+            foreach ($tabParams as $nom => $param) {
+                $nameParam  = $param["NAME"];
+                $valueParam = $param["VALUE"];
+                $typeParam  = $param["TYPE"];
+                if ($typeParam == self::BIND_TYPE_NUM || $typeParam == self::BIND_TYPE_INT) {
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ($valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                } elseif ($typeParam == self::BIND_TYPE_STR) {
+                    $valueParam = $this->quoteSql($valueParam);
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ( $valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                } elseif (is_numeric($valueParam) || ($valueParam == "NULL")) {
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ($valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                } else {
+                    $valueParam = $this->quoteSql($valueParam);
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ($valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                }
+            }
     	}
     	
     	str_replace('select', 'select', strtolower($query), $cont_select);

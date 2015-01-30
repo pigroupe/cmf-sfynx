@@ -729,8 +729,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     public function getPageByRoute($route, $isForce = false)
     {
         $page = false;
-        if ($this->isJsonPageFileExisted($route)) {
-            $path_page_json_file = $this->createJsonFileName('page-json', $route);
+        if ($path_page_json_file = $this->isJsonPageFileExisted($route)) {
             $report = file_get_contents($path_page_json_file);            
             $page = unserialize($report);  
         } else {
@@ -1022,7 +1021,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     {
         $path_page_json_file = $this->createJsonFileName('page-json', $route); 
         if (file_exists($path_page_json_file)) {
-            return true;
+            return $path_page_json_file;
         }
         
         return false;

@@ -325,7 +325,13 @@ class PiLayoutHeadExtension extends \Twig_Extension
             }
         }       
         if (preg_match_all('/@import "([^`]*?)";/i', $this->string, $allImports, PREG_SET_ORDER)) {
-            $this->string = preg_replace('/@import "([^`]*?)";/i', '', $this->string);
+            $this->string = preg_replace_callback(
+                '/@import "([^`]*?)";/i',
+                function($matches) {
+                    return "";
+                },
+                $this->string
+            );
             foreach ($allImports as $k => $import) {
                 $this->string = $import[0] . "  " . $this->string;
             }

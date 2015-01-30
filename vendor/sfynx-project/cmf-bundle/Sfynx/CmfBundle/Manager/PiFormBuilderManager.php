@@ -500,7 +500,13 @@ class PiFormBuilderManager extends AbstractType implements PiFormBuilderManagerI
     private function load()
     {
         $buildFormContents = $this->buildFormZend();
-        $cleanContent      = preg_replace('/(<\?{1}[pP\s]{1}.+\?>)/', '', $buildFormContents);
+        $cleanContent      = preg_replace_callback(
+            '/(<\?{1}[pP\s]{1}.+\?>)/', 
+            function($matches) {
+                return "";
+            },
+            $buildFormContents
+        );
         
         return simplexml_load_string($cleanContent);
     }

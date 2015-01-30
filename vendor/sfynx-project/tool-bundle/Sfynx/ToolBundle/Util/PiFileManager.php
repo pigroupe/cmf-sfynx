@@ -795,6 +795,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
     
     /**
      * returns encode a sring in url
+     * 
      * @param string $value
      * @return string
      */
@@ -813,7 +814,14 @@ class PiFileManager implements PiFileManagerBuilderInterface
         // ponctuation
         $value = strtr($value, utf8_decode("'\""), "__");
         // autres caracteres
-        $value = preg_replace("/[^a-z0-9\-\_]/","-",$value);
+        $value = preg_replace_callback(
+            "/[^a-z0-9\-\_]/",
+            function($matches) {
+                return "-";
+            },
+            $value
+        );
+        
         return $value;
     }
     
