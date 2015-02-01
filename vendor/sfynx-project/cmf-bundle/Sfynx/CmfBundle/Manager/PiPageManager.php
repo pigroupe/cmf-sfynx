@@ -871,10 +871,11 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             }
         }
         $pages_content = preg_replace_callback(
-            '#<ul>#sU', '<ul>'.$pages_content, 
+            '#<ul>#sU', 
             function($matches) use ($htmlTree) {
                 return $htmlTree;
             },
+            '<ul>'.$pages_content,
             1
         );
         

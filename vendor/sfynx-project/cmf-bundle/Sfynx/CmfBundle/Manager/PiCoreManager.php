@@ -730,7 +730,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     {
         $page = false;
         if ($path_page_json_file = $this->isJsonPageFileExisted($route)) {
-            $report = file_get_contents($path_page_json_file);            
+            $report = file_get_contents($path_page_json_file); 
             $page = unserialize($report);  
         } else {
             $page = $this->getRepository('Page')->getPageByRoute($route);

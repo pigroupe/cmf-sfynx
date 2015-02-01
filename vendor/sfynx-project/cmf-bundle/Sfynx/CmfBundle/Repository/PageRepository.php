@@ -311,7 +311,11 @@ class PageRepository extends TranslationRepository
     public function getPageByRoute($route_name)
     {
         $query = $this->createQueryBuilder('p')
-        ->select('p')
+        ->select('p, t, l, b, w')
+        ->leftJoin('p.blocks', 'b')
+        ->leftjoin('b.widgets', 'w')
+        ->leftJoin('p.translations', 't')
+        ->leftJoin('t.langCode', 'l')
         ->where('p.route_name = :routeNameID')
         ->setParameters(array(
             'routeNameID' => $route_name,
