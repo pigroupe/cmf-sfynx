@@ -546,8 +546,6 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         } else {
             $response->setLastModified(new \DateTime());
         }    
-        // set header tags.
-        $response->setETag($this->Etag);
         //
         if ( $this->isUsernamePasswordToken() ) {
             $response->headers->set('Pragma', "no-cache");

@@ -177,7 +177,7 @@ class PiToolExtension extends \Twig_Extension
     	$string = substr($fileName, 0, strlen($fileName)- 4);
     	$code_entities_match 	= array( '-' ,'_' ,'.');
     	$code_entities_replace 	= array(' ' ,' ' ,' ');
-    	$name 					= str_replace($code_entities_match, $code_entities_replace, $string);
+    	$name = str_replace($code_entities_match, $code_entities_replace, $string);
     
     	return $name;
     }    
@@ -269,13 +269,13 @@ class PiToolExtension extends \Twig_Extension
             $root_file  = realpath($fileName);
         }
         // we parse the data file of all formats
-        $dates         = array();
-        $dates        = json_decode(file_get_contents($root_file));
+        $dates  = array();
+        $dates  = json_decode(file_get_contents($root_file));
         // we set the locale value
         $locale = strtolower(substr($locale, 0, 2));
-        $root_file         = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
+        $root_file = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
-        	$locale = "en-GB";
+            $locale = "en-GB";
         }
         // we return the locale format of the date
         if (isset($dates->{$locale})) {
@@ -328,20 +328,20 @@ class PiToolExtension extends \Twig_Extension
     public function statusFilter($entity)
     {
     	if (is_object($entity)) {
-    		$enabled = $entity->getEnabled();
-    		$archivedAt = $entity->getArchiveAt();
-    		$archived = $entity->getArchived();
+            $enabled = $entity->getEnabled();
+            $archivedAt = $entity->getArchiveAt();
+            $archived = $entity->getArchived();
     	} else {
-    		$enabled = $entity['enabled'];
-    		$archivedAt = $entity['archive_at'];
-    		$archived = $entity['archived'];
+            $enabled = $entity['enabled'];
+            $archivedAt = $entity['archive_at'];
+            $archived = $entity['archived'];
     	}
-    	if ( ($enabled  == true ) && ($archived == false) ) {
-    		$status =  $this->container->get('translator')->trans('pi.grid.action.active');
-    	} elseif(!empty($archivedAt) && ($archived == true)) {
-    		$status = $this->container->get('translator')->trans('pi.grid.action.row_archived');
-    	} elseif ( ($enabled  == false ) && ($archived == false) ) {
-    		$status = $this->container->get('translator')->trans('pi.grid.action.activation.waiting');
+    	if (($enabled  == true ) && ($archived == false)) {
+            $status =  $this->container->get('translator')->trans('pi.grid.action.active');
+    	} elseif (!empty($archivedAt) && ($archived == true)) {
+            $status = $this->container->get('translator')->trans('pi.grid.action.row_archived');
+    	} elseif (($enabled  == false ) && ($archived == false)) {
+            $status = $this->container->get('translator')->trans('pi.grid.action.activation.waiting');
     	}
     
     	return $status;
@@ -354,7 +354,7 @@ class PiToolExtension extends \Twig_Extension
     public function joinphpFilter( $objects, $glue = ', ', $lastGlue = null ) {
         null === $lastGlue && $lastGlue = $glue;
         $last = '';
-        if ( 2 < count($objects) ) {
+        if (2 < count($objects)) {
             $last = $lastGlue . array_pop($objects);
         }
 
@@ -397,10 +397,11 @@ class PiToolExtension extends \Twig_Extension
     }    
     
     public function substrFilter( $string, $first, $last = null){
-        if (is_null($last))
+        if (is_null($last)) {
             return substr($string, $first);
-        else
+        } else {
             return substr($string, $first, $last);
+        }
     }
     
     /**
@@ -421,28 +422,29 @@ class PiToolExtension extends \Twig_Extension
     }    
 
     public function stepsFilter($array, $step) {
-        $count = count($array);
-        
+        $count = count($array);        
         if ($count >= $step){
             reset($array);
-            for ($i=1; $i<=$step; $i++) {
+            for ($i=1; $i <= $step; $i++) {
                 next($array);
             }
             return current($array);
-        }else
+        } else {
             return '';
+        }
     }    
     
     public function arraysliceFilter($array, $first, $last = null) {
-        if (is_null($last))
+        if (is_null($last)) {
             $result = array_slice($array, $first); 
-        else
+        } else {
             $result = array_slice($array, $first, $last);
-        
-        if (count($result) >= 1)
+        }        
+        if (count($result) >= 1) {
             return $result;
-        else
+        } else {
             return '';
+        }
     }
 
     public function XmlString2arrayFilter($string){
@@ -473,7 +475,7 @@ class PiToolExtension extends \Twig_Extension
     
     public function unsetFilter(array $array, array $unset_keys) {
     	foreach ($unset_keys as $key) {
-    		unset($array[$key]);
+            unset($array[$key]);
     	}
     	
     	return $array;
@@ -490,7 +492,7 @@ class PiToolExtension extends \Twig_Extension
      */
     public function renderResponseFilter($content, $params = array())
     {
-   		return $this->container->get('twig')->render($content, $params);
+        return $this->container->get('twig')->render($content, $params);
     }    
     
     /**
@@ -507,19 +509,20 @@ class PiToolExtension extends \Twig_Extension
     }    
     
     public function pluralizeFilter($string, $number = null) {
-        if ($number && ($number == 1))
+        if ($number && ($number == 1)) {
             return $string;
-        else
+        } else {
             return $this->container->get('sfynx.tool.string_manager')->pluralize($string);
+        }
     }    
     
     public function depluralizeFilter($string, $number = null) {
-        if ($number && ($number > 1))
+        if ($number && ($number > 1)) {
             return $string;
-        else
+        } else {
             return $this->container->get('sfynx.tool.string_manager')->depluralize($string);
+        }
     }    
-    
     
     /**
      * text filters
@@ -546,30 +549,37 @@ class PiToolExtension extends \Twig_Extension
 
     public function departementFilter($id) {
         $em = $this->container->get('doctrine')->getManager();
-        $departement  = $em->getRepository('M1MProviderBundle:Region')->findOneBy(array('id' => $id));
+        $departement  = $em->getRepository('M1MProviderBundle:Region')
+                ->findOneBy(array('id' => $id));
+        
         return $departement;
     }
 
 
     public function limitecaractereFilter($string, $mincara, $nbr_cara) {
-        return $this->container->get('sfynx.tool.string_manager')->LimiteCaractere($string, $mincara, $nbr_cara);
+        return $this->container->get('sfynx.tool.string_manager')
+                ->LimiteCaractere($string, $mincara, $nbr_cara);
     }    
     
     public function splitTextFilter($string){
-        return $this->container->get('sfynx.tool.string_manager')->splitText($string);
+        return $this->container->get('sfynx.tool.string_manager')
+                ->splitText($string);
     }
     public function splitHtmlFilter($string){
-        return $this->container->get('sfynx.tool.string_manager')->splitHtml($string);
+        return $this->container->get('sfynx.tool.string_manager')
+                ->splitHtml($string);
     }
     
     public function truncateFilter($string, $length = 100, $ending = "...", $exact = false, $html = true) {
-        return $this->container->get('sfynx.tool.string_manager')->truncate($string, $length, $ending, $exact, $html);
+        return $this->container->get('sfynx.tool.string_manager')
+                ->truncate($string, $length, $ending, $exact, $html);
     }    
     
     public function cutTextFilter($string, $intCesurePos, $otherText = false, $strCaractereCesure = ' ', $intDecrementationCesurePos = 5){
         $HtmlCutter    = $this->container->get('sfynx.tool.string_cut_manager');
         $HtmlCutter->setOptions($string, $intCesurePos, $otherText);
         $HtmlCutter->setParams($strCaractereCesure, $intDecrementationCesurePos);
+        
         return $HtmlCutter->run();
     }
     
@@ -582,6 +592,7 @@ class PiToolExtension extends \Twig_Extension
     public function encryptFilter($string, $key = "0A1TG4GO")
     {
         $encryption    = $this->container->get('sfynx.tool.encryption_manager');
+        
         return $encryption->encryptFilter($string, $key);
     }
     
@@ -594,6 +605,7 @@ class PiToolExtension extends \Twig_Extension
     public function decryptFilter($string, $key = "0A1TG4GO")
     {
         $encryption    = $this->container->get('sfynx.tool.encryption_manager');
+        
         return $encryption->decryptFilter($string, $key);
     }  
     
@@ -605,6 +617,7 @@ class PiToolExtension extends \Twig_Extension
     public function obfuscateLinkFilter($url, $base16 = "0A12B34C56D78E9F")
     {
         $encryption    = $this->container->get('sfynx.tool.encryption_manager');
+        
         return $encryption->obfuscateLinkEncrypt($url, $base16);
     }    
     
@@ -620,7 +633,7 @@ class PiToolExtension extends \Twig_Extension
     public function obfuscateLinkFunction($balise = "a", $class = "hiddenLink", $base16 = "0A12B34C56D78E9F")
     {
     	$encryption    = $this->container->get('sfynx.tool.encryption_manager');
+        
         return $encryption->obfuscateLinkDecrypt($balise, $class, $base16);                         
     }        
-    
 }

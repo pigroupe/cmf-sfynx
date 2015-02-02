@@ -316,7 +316,7 @@ class PiEncryption implements PiEncryptionBuilderInterface
     public static function obfuscateLinkEncrypt($url, $_base16 = "0A12B34C56D78E9F")
     {
     	$output = "";
-    	for ($i = 0; $i < strlen($url); $i++) {
+    	for ($i = 0, $size = strlen($url); $i < $size; $i++) {
     		$cc = ord($url[$i]);
     		$ch = $cc >> 4;
     		$cl = $cc - ($ch * 16);

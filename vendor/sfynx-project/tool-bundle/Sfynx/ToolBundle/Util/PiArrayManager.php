@@ -160,7 +160,7 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
         $hash = null;
 
         if (is_array($array) && count($array) > 1) {
-            for ($i = 0; $i <= count($array); $i+= 2) {
+            for ($i = 0, $size = count($array); $i <= $size; $i+= 2) {
                 if (isset($array[$i])) {
                     $key = $array[$i];
                     $value = $array[$i + 1];
