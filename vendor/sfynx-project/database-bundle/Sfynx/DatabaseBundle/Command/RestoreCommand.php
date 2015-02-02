@@ -55,11 +55,6 @@ class RestoreCommand extends ContainerAwareCommand
                 && method_exists($kernel, 'getContainer')
         ) {
             $this->setContainer($kernel->getContainer());
-        } else {
-            try {
-                $this->setContainer($this->getApplication()->getKernel()->getContainer());
-            } catch (\Exception $ex) {
-            }
         }
     }
     

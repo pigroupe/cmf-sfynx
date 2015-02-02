@@ -58,7 +58,7 @@
         "behat/mink-selenium2-driver":  "*@dev",
         "behat/mink-browserkit-driver": "1.2.*@dev",
         "jns/xhprof-bundle": "1.0.*@dev",
-        "facebook/xhprof": "dev-master@dev",
+        "facebook/xhprof": "dev-master@dev",        
         "phpcasperjs/phpcasperjs": "dev-master"
     },       
     "scripts": {
