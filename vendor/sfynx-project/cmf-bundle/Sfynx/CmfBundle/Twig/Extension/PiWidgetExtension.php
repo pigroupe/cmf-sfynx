@@ -37,7 +37,7 @@ class PiWidgetExtension extends \Twig_Extension
     protected static $_content;    
     
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      * @access  protected
      */
     protected $container;

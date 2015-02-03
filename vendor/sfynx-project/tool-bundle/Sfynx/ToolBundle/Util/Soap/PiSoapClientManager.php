@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Common> project.
+ * This file is part of the <Tool> project.
  *
- * @subpackage Common
+ * @subpackage Tool
  * @package    Soap
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-18
@@ -10,42 +10,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\ToolBundle\Util;
+namespace Sfynx\ToolBundle\Util\Soap;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Container;
+use \Sfynx\ToolBundle\Util\Soap\PiSoapManagerInterface;
 
 /**
  * Construct a PHP SOAP client
  *
- * <code>
- *     $soapManager = $this->getContainer()->get('sfynx.tool.soapclient_manager');
- *     $soapManager->setWsdl('http://...');
- *     $soapManager->setOptions(array(
- *            "trace" => true,
- *            "soap_version" => SOAP_1_2)
- *     );
- *     $soapManager->setHeaders(array(
- *             0 => array(
- *                'url' => "http://...",
- *                'stringrequest' => "userName",
- *                'content' => "userNameValue"
- *            ),
- *            1 => array(
- *                'url' => "...",
- *                'stringrequest' => "password",
- *                'content' => "passwordValue"
- *            )
- *     )); 
- * 
- *     $soapManager->create();
- *     $oReturn = $soapManager->call("ClassName",array($ClassNameInstance));
- *     var_dump($oReturn);
- * </code>
- * 
- * @subpackage Common
+ * @subpackage Tool
  * @package    Soap
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class PiSoapClientManager
+class PiSoapClientManager implements PiSoapManagerInterface
 {
+    /**
+     * @var ContainerInterface
+     * @access  protected
+     */
+    private $container;
+    
     /**
      * @var \SoapClient $soapClient
      */       
@@ -99,22 +84,21 @@ class PiSoapClientManager
     /**
      * Constructor.
      *
-     * @param string $cacheDir
-     * @param Object $logger
+     * @param ContainerInterface $containerService
      * 
      * @return void
      */    
-    public function __construct()
+    public function __construct(ContainerInterface $containerService)
     {
+        $this->container = $containerService;
     }
     
     /**
-     * Set authentication for accessing the WSDL itself, if that is protected
-     * with a password
+     * Set wsdl
      *
      * @param string $wsdl URI to the WSDL
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */
     public function setWsdl($wsdl)
     {
@@ -131,16 +115,24 @@ class PiSoapClientManager
     public function getSoapClient()
     {
         return $this->soapClient;
-    }        
+    }  
     
     /**
-     * Set authentication for accessing the WSDL itself, if that is protected
-     * with a password
+     * Get the conatiner service
      *
-     * @param string $username
-     * @param string $password
+     * @return Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }     
+    
+    /**
+     * Set soap options
+     *
+     * @param array $options
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */
     public function setOptions(array $options)
     {
@@ -156,7 +148,7 @@ class PiSoapClientManager
      * @param string $username
      * @param string $password
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */
     public function setAuth($username, $password)
     {
@@ -167,11 +159,11 @@ class PiSoapClientManager
     }    
     
     /**
-     * Set headers
+     * Set soap headers
      *
      * @param array $headers
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */    
     public function setHeaders(array $headers)
     {
@@ -184,14 +176,14 @@ class PiSoapClientManager
     }       
     
     /**
-     * Set cookie
+     * Set soap cookie
      *
      * @param string $name
      * @param string $value
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */    
-    public function setCookie(string $name , string $value )
+    public function setCookie(string $name , string $value)
     {
         if ($this->soapClient instanceof \SoapClient) {
             $this->soapClient->__setCookie($name, $value);
@@ -201,11 +193,11 @@ class PiSoapClientManager
     }    
     
     /**
-     * Set localtion
+     * Set soap localtion
      *
      * @param string $location
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */    
     public function setLocation($location)
     {
@@ -219,7 +211,7 @@ class PiSoapClientManager
      *
      * @param array $converters
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */        
     public function setConverters(array $converters)
     {
@@ -235,7 +227,7 @@ class PiSoapClientManager
      * @param array $classMap
      * @param type  $debug
      * 
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */
     public function setClassMap(array $classMap = array(), $debug = false)
     {
@@ -258,7 +250,7 @@ class PiSoapClientManager
     /**
      * Create a PHP SOAP client and configure it
      *
-     * @return PiSoapManager
+     * @return PiSoapClientManager
      */
     public function create()
     {
@@ -282,7 +274,7 @@ class PiSoapClientManager
      * Return result of the SOAP call
      *
      * @param string $method
-     * @param  array $parameters
+     * @param array  $parameters
      * 
      * @return string|object
      */    
