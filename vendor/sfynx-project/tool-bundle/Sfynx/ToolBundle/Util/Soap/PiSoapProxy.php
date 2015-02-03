@@ -52,7 +52,7 @@ class PiSoapProxy
      * 
      * @return object the soap call result
      */       
-    public function send(PiSoapModelInterface $object, $option)
+    public function send(PiSoapModelInterface $object, $option = null)
     {
         $object->setSoapManager($this->soapmanager);
         $object->setOption($option);

@@ -183,7 +183,7 @@ class PiSoapClientManager implements PiSoapManagerInterface
      * 
      * @return PiSoapClientManager
      */    
-    public function setCookie(string $name , string $value)
+    public function setCookie($name, $value)
     {
         if ($this->soapClient instanceof \SoapClient) {
             $this->soapClient->__setCookie($name, $value);

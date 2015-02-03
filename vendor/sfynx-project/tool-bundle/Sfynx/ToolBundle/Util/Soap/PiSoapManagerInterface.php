@@ -56,7 +56,7 @@ interface PiSoapManagerInterface
      * 
      * @return PiSoapManager
      */    
-    public function setCookie(string $name , string $value);
+    public function setCookie($name, $value);
     
     /**
      * Set soap localtion
