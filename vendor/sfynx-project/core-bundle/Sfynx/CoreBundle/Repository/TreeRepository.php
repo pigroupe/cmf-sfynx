@@ -250,7 +250,7 @@ class TreeRepository extends NestedTreeRepository
         $query = $this->_em->createQuery("SELECT node FROM {$this->_entityName} node WHERE node.id = :id");
         $query->setParameter('id', $id);
         $query->setMaxResults(1);
-    
+        
         return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading));
     }
     

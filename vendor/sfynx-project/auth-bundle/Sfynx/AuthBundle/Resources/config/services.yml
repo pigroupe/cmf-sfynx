@@ -9,6 +9,7 @@ parameters:
     sfynx.auth.dispatcher.loginfailure.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherLoginFailureResponse
     sfynx.auth.dispatcher.authenticate.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherAuthenticateResponse
 
+    sfynx.auth.manager.user.class: Sfynx\AuthBundle\Manager\PiAuthenticateManager
     sfynx.auth.manager.locale.class: Sfynx\AuthBundle\Util\PiLocaleManager
     sfynx.auth.role.factory.class: Sfynx\AuthBundle\Role\RoleFactory
     sfynx.auth.repository.class: Sfynx\AuthBundle\Repository\Repository
@@ -76,6 +77,13 @@ services:
             login_failure_connection_attempts: %sfynx.auth.loginfailure.connection_attempts%   
         tags:
             - { name: kernel.event_listener, event: pi.handler.login.failure, method: onPiLoginFailureResponse, priority: 1 }          
+     
+    #
+    # configuration of the user manager
+    #    
+    sfynx.auth.user_manager:
+        class: %sfynx.auth.manager.user.class%  
+        arguments: ['@service_container']
         
     #
     # configuration of the locale manager

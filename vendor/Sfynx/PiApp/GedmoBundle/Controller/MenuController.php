@@ -147,9 +147,9 @@ class MenuController extends abstractController
      */
     public function showAction($id)
     {
-        $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $em       = $this->getDoctrine()->getManager();
+        $locale   = $this->container->get('request')->getLocale();
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
 
         $entity = $em->getRepository("PiAppGedmoBundle:Menu")->findNodeOr404($id, $locale);
         if (!$entity) {
@@ -161,7 +161,7 @@ class MenuController extends abstractController
         return $this->render("PiAppGedmoBundle:Menu:show.html.twig", array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'       => $NoLayout,
+            'NoLayout'    => $NoLayout,
         ));
     }
 
@@ -412,7 +412,7 @@ class MenuController extends abstractController
                 'childClose' => "    </li> \n",
                 'nodeDecorator' => function($node) use (&$self) {
                     
-                    $tree   = $self->getContainer()->get('doctrine')->getManager()->getRepository($self->_entityName)->findOneById($node['id']);
+                    $tree   = $self->container->get('doctrine')->getManager()->getRepository($self->_entityName)->findOneById($node['id']);
                 
                     // define of all url images
                     $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');

@@ -135,7 +135,7 @@
 					<li><a href="{{ path("admin_sfynx_auth_role_list") }}"  target="_blank">{{ 'pi.dashboard.menu1.group_role'|trans }}</a></li>
 					<li><a href="{{ path("admin_sfynx_auth_permission_list") }}" target="_blank" >{{ 'pi.dashboard.menu1.group_permission'|trans }}</a></li>
 					<li><a style="color:#238BDB" >&#187;</a></li>
-					<li><a href="{{ path("admin_sfynx_auth__historicalstatus_list") }}" target="_blank" >{{ 'pi.dashboard.menu1.cms_historicalpage'|trans }}</a></li>
+					<li><a href="{{ path("admin_sfynx_cmf_historicalstatus_list") }}" target="_blank" >{{ 'pi.dashboard.menu1.cms_historicalpage'|trans }}</a></li>
 				</ul>
 			</div>
 			<!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -149,7 +149,7 @@
 			<!--[if lte IE 6]><table><tr><td><![endif]-->
 			<div class="select_sub {{ in_paths("admin_layout:admin_pagebytrans:admin_pagecssjs", 'show')|raw }}">
 				<ul class="sub">
-					<li {{ in_paths("admin_layout", 'class="sub_show"')|raw }}		><a href="{{ path("admin_layout") }}" >{{ 'pi.dashboard.menu2.layout'|trans }}</a></li>
+					<li {{ in_paths("admin_layout", 'class="sub_show"')|raw }}      ><a href="{{ path("admin_layout") }}" >{{ 'pi.dashboard.menu2.layout'|trans }}</a></li>
 					<li {{ in_paths("admin_pagebytrans", 'class="sub_show"')|raw }}	><a href="{{ path("admin_pagebytrans") }}" >{{ 'pi.dashboard.menu2.page'|trans }}</a></li>
 					<li {{ in_paths("admin_pagecssjs", 'class="sub_show"')|raw }}	><a href="{{ path("admin_pagecssjs") }}" >{{ 'pi.dashboard.menu2.cssjs'|trans }}</a></li>
 				</ul>
@@ -169,7 +169,7 @@
 					<li {{ in_paths("admin_tag", 'class="sub_show"')|raw }}			><a href="{{ path("admin_tag") }}" >{{ 'pi.dashboard.menu3.tag'|trans }}</a></li>
 					<li {{ in_paths("admin_keyword", 'class="sub_show"')|raw }}		><a href="{{ path("admin_keyword") }}" >{{ 'pi.dashboard.menu3.keyword'|trans }}</a></li>
 					<li {{ in_paths("admin_word", 'class="sub_show"')|raw }}		><a href="{{ path("admin_word", { '_token': csrf_token('listword') }) }}" >{{ 'pi.dashboard.menu3.word'|trans }}</a></li>
-					<li {{ in_paths("admin_gedmo_category", 'class="sub_show"')|raw }}			><a href="{{ path("admin_gedmo_category") }}" >{{ 'pi.dashboard.menu3.category'|trans }}</a></li>	
+					<li {{ in_paths("admin_gedmo_category", 'class="sub_show"')|raw }}	><a href="{{ path("admin_gedmo_category") }}" >{{ 'pi.dashboard.menu3.category'|trans }}</a></li>	
 				</ul>
 			</div>
 			<!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -184,13 +184,13 @@
 				<ul class="sub">
 					<li {{ in_paths("admin_snippet", 'class="sub_show"')|raw }}		><a href="{{ path("admin_snippet") }}" >{{ 'pi.dashboard.menu2.snippet'|trans }}</a></li>
 					<li><a style="color:#238BDB" >&#187;</a></li>
-					<li {{ in_paths("admin_gedmo_slider", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_slider") }}" >{{ 'pi.dashboard.menu4.slider'|trans }}</a></li>
-					<li {{ in_paths("admin_gedmo_menu_tree", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_menu_tree", { 'category': ''}) }}" >{{ 'pi.dashboard.menu4.menu'|trans }}</a></li>
-					<li {{ in_paths("admin_gedmo_organigram_tree", 'class="sub_show"')|raw }}	><a href="{{ path("admin_gedmo_organigram_tree", { 'category': ''}) }}" >{{ 'pi.dashboard.menu4.organigram'|trans }}</a></li>
+					<li {{ in_paths("admin_gedmo_slider", 'class="sub_show"')|raw }}	><a href="{{ path("admin_gedmo_slider") }}" >{{ 'pi.dashboard.menu4.slider'|trans }}</a></li>
+					<li {{ in_paths("admin_gedmo_menu_tree", 'class="sub_show"')|raw }}	><a href="{{ path("admin_gedmo_menu_tree", { 'category': ''}) }}" >{{ 'pi.dashboard.menu4.menu'|trans }}</a></li>
+					<li {{ in_paths("admin_gedmo_organigram_tree", 'class="sub_show"')|raw }} ><a href="{{ path("admin_gedmo_organigram_tree", { 'category': ''}) }}" >{{ 'pi.dashboard.menu4.organigram'|trans }}</a></li>
 					<li><a style="color:#238BDB" >&#187;</a></li>
-					<li {{ in_paths("admin_gedmo_block", 'class="sub_show"')|raw }}			><a href="{{ path("admin_gedmo_block") }}" >{{ 'pi.dashboard.menu4.block'|trans }}</a></li>
-					<li {{ in_paths("admin_gedmo_content", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_content") }}" >{{ 'pi.dashboard.menu4.content'|trans }}</a></li>
-					<li {{ in_paths("admin_gedmo_contact", 'class="sub_show"')|raw }}				><a href="{{ path("admin_gedmo_contact") }}" >{{ 'pi.dashboard.menu6.contact'|trans }}</a></li>	
+					<li {{ in_paths("admin_gedmo_block", 'class="sub_show"')|raw }}		><a href="{{ path("admin_gedmo_block") }}" >{{ 'pi.dashboard.menu4.block'|trans }}</a></li>
+					<li {{ in_paths("admin_gedmo_content", 'class="sub_show"')|raw }}	><a href="{{ path("admin_gedmo_content") }}" >{{ 'pi.dashboard.menu4.content'|trans }}</a></li>
+					<li {{ in_paths("admin_gedmo_contact", 'class="sub_show"')|raw }}	><a href="{{ path("admin_gedmo_contact") }}" >{{ 'pi.dashboard.menu6.contact'|trans }}</a></li>	
 				</ul>
 			</div>
 			<!--[if lte IE 6]></td></tr></table></a><![endif]-->

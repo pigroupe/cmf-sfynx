@@ -19,7 +19,7 @@ namespace Sfynx\CmfBundle\Builder;
  * @package    Builder
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-interface PiTreeManagerBuilderInterface
+interface PiAuthenticationManagerInterface
 {
     /**
      * Call the tree render source method.
@@ -38,32 +38,20 @@ interface PiTreeManagerBuilderInterface
     /**
      * Return the build tree result of a gedmo tree entity, with class options.
      *
-     * @param string    $locale
-     * @param string    $entity
-     * @param string    $category
-     * @param string    $separatorClass
-     * @param string    $ulClass
-     * @param string    $liClass
-     * @param array        $options
+     * @param string    $template
      * @access    public
      * @return string
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function defaultNavigation($locale, $entity, $category, $template, $separatorClass = "", $ulClass = "", $liClass = "", $params = null);
+    public function defaultConnexion($params = null);
     
     /**
-     * Return the build tree result of a gedmo tree entity, without class options.
+     * Reset user password
      * 
-     * @param string    $locale
-     * @param string    $entity
-     * @param string    $category
-     * @param array        $params
-     * @return string
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-19
+     * @param null|array $params
+     * 
+     * @return Response
      */
-    public function defaultOrganigram($locale, $entity, $category, $params = null);    
+    public function resetConnexion($params = null);
 }

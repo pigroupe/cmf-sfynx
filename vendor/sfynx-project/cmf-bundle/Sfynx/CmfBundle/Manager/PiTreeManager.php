@@ -470,8 +470,7 @@ class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterfa
             //$left = $em->getRepository($entity)->children($node);
             //print_r($left);exit;
             $tree = $em->getRepository($entity)->buildTree($nodes, $options);
-        }
-       
+        }       
         
         return $tree;
     }    

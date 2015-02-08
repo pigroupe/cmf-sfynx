@@ -149,7 +149,7 @@ class OrganigramController extends abstractController
     public function showAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale = $this->container->get('request')->getLocale();
         $entity = $em->getRepository("PiAppGedmoBundle:Organigram")->findNodeOr404($id, $locale);
         
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
@@ -411,7 +411,7 @@ class OrganigramController extends abstractController
                 'childClose' => "    </li> \n",
                 'nodeDecorator' => function($node) use (&$self) {
                     
-                    $tree   = $self->getContainer()->get('doctrine')->getManager()->getRepository($self->_entityName)->findOneById($node['id']);
+                    $tree   = $self->container->get('doctrine')->getManager()->getRepository($self->_entityName)->findOneById($node['id']);
                 
                     // define of all url images
                     $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');

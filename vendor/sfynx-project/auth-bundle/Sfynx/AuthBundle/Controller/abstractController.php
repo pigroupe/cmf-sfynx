@@ -14,16 +14,12 @@
 namespace Sfynx\AuthBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Form\Form;
-use FOS\UserBundle\Model\UserInterface;
 
 use Sfynx\ToolBundle\Exception\ControllerException;
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\AuthBundle\SfynxAuthEvents;
+use Sfynx\ToolBundle\Util\PiArrayManager;
+use Sfynx\ToolBundle\Util\PiStringManager;
 
 /**
  * abstract controller.
@@ -322,7 +318,7 @@ abstract class abstractController extends Controller
     	}
     	//
     	if ($request->isXmlHttpRequest()) {
-            if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder) ) {
+            if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder)) {
                 $query    = $em->getRepository($this->_entityName)
                         ->getAllByCategory('', null, '', '', false);
             }
@@ -347,7 +343,7 @@ abstract class abstractController extends Controller
                     if ($is_trans && isset($info['field_trans_name']) && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
                         $current_encoding = mb_detect_encoding($info['field_value'], 'auto');
                         $info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
-                        $info['field_value'] = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+                        $info['field_value'] = PiStringManager::withoutaccent($info['field_value']);
 
                         $trans_name = $info['field_trans_name'];
                         $andModule_title = $query->expr()->andx();
@@ -370,7 +366,7 @@ abstract class abstractController extends Controller
                     } elseif (!$is_trans && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
                         $current_encoding = mb_detect_encoding($info['field_value'], 'auto');
                         $info['field_value'] = iconv($current_encoding, 'UTF-8', $info['field_value']);
-                        $info['field_value'] = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($info['field_value']);
+                        $info['field_value'] = PiStringManager::withoutaccent($info['field_value']);
 
                         //$query->add($query->expr()->like('LOWER('.$info['field_name'].')', $query->expr()->literal('%'.strtolower(addslashes($info['field_value'])).'%')));
                         $query->add("LOWER(".$info['field_name'].") LIKE :var3".$i."");
@@ -398,10 +394,18 @@ abstract class abstractController extends Controller
                 if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
                 if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
                 // we set the query result
-                $query = $em->getRepository($this->_entityName)->cacheQuery($query->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
+                $query = $em->getRepository($this->_entityName)->cacheQuery(
+                    $query->getQuery(), 
+                    $cacheQuery_hash['time'], 
+                    $cacheQuery_hash['mode'], 
+                    $cacheQuery_hash['setCacheable'], 
+                    $cacheQuery_hash['namespace'], 
+                    $cacheQuery_hash['input_hash']
+                );
             }    		
             // result
-            $entities = $em->getRepository($this->_entityName)->findTranslationsByQuery($locale, $query, 'object', false);
+            $entities = $em->getRepository($this->_entityName)
+                    ->findTranslationsByQuery($locale, $query, 'object', false);
             $tab      = $this->renderselectajaxQuery($entities, $locale);
             // response
             $response = new Response(json_encode($tab));
@@ -515,7 +519,7 @@ abstract class abstractController extends Controller
                     //
                     $current_encoding = mb_detect_encoding($s, 'auto');
                     $s = iconv($current_encoding, 'UTF-8', $s);
-                    $s = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($s);
+                    $s = PiStringManager::withoutaccent($s);
                     //
                     $array_params["var".$i] = '%'.strtolower($s).'%';
                 }
@@ -536,7 +540,7 @@ abstract class abstractController extends Controller
                         //
                         $current_encoding = mb_detect_encoding($s, 'auto');
                         $s = iconv($current_encoding, 'UTF-8', $s);
-                        $s = \Sfynx\ToolBundle\Util\PiStringManager::withoutaccent($s);
+                        $s = PiStringManager::withoutaccent($s);
                         //
                         $array_params["var2".$i] = '%'.strtolower($s).'%';
                     }
@@ -591,9 +595,17 @@ abstract class abstractController extends Controller
             if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
             if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
             // we set the query result
-            $qb     = $em->getRepository($this->_entityName)->cacheQuery($qb->getQuery(), $cacheQuery_hash['time'], $cacheQuery_hash['mode'], $cacheQuery_hash['setCacheable'], $cacheQuery_hash['namespace'], $cacheQuery_hash['input_hash']);
+            $qb     = $em->getRepository($this->_entityName)->cacheQuery(
+                $qb->getQuery(), 
+                $cacheQuery_hash['time'], 
+                $cacheQuery_hash['mode'], 
+                $cacheQuery_hash['setCacheable'],
+                $cacheQuery_hash['namespace'], 
+                $cacheQuery_hash['input_hash']
+            );
         }
-        $result = $em->getRepository($this->_entityName)->setTranslatableHints($qb, $locale, false, true)->getResult();
+        $result = $em->getRepository($this->_entityName)
+                ->setTranslatableHints($qb, $locale, false, true)->getResult();
         if ($type == 'count') {
             $result = count($result);
         } 
@@ -705,7 +717,7 @@ abstract class abstractController extends Controller
     	if ($type == 'array') {
             return $errors;
      	} else {
-            return \Sfynx\ToolBundle\Util\PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
+            return PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
      	}
     }
     
@@ -743,337 +755,4 @@ abstract class abstractController extends Controller
                 ->getFlashBag()
                 ->add($param, $messages);
     }    
-        
-    /**
-     * Authenticate a user with Symfony Security.
-     *
-     * @param UserInterface $user
-     * @param null|Response $response
-     * @param boolean       $deleteToken
-     * 
-     * @return void
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function authenticateUser(UserInterface $user = null, &$response = null, $deleteToken = false)
-    {
-    	$em          = $this->getDoctrine()->getManager();
-        $locale      = $this->getRequest()->getLocale();
-    	$request     = $this->container->get('request');
-        $providerKey = $this->container->getParameter('fos_user.firewall_name');
-        $userManager = $this->container->get('fos_user.user_manager');
-        // set user
-        if (is_null($user)) {
-            $token   = $request->query->get('token');
-            $user    = $userManager->findUserByConfirmationToken($token);
-        }
-        //
-        $token       = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-        $this->container->get('security.context')->setToken($token); //now the user is logged in
-        $request->getSession()->set('_security_'.$providerKey, serialize($token));
-        $request->getSession()->set('_security_secured_area', serialize($token));
-	// we delete token user
-        if ($deleteToken) {
-            $user->setConfirmationToken(null);
-            $userManager->updateUser($user);
-            $em->persist($user);
-            $em->flush();	                
-        }
-        //
-        if ($response instanceof Response) {
-            // Record all cookies in relation with ws.
-            $dateExpire     = $this->container->getParameter('sfynx.core.cookies.date_expire');
-            $date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
-            // Record the layout variable in cookies.
-            if ($dateExpire && !empty($date_interval)) {
-                if (is_numeric($date_interval)) {
-                    $dateExpire = time() + intVal($date_interval);
-                } else {
-                    $dateExpire = new \DateTime("NOW");
-                    $dateExpire->add(new \DateInterval($date_interval));
-                }
-            } else {
-                $dateExpire = 0;
-            }
-            // we apply all events allowed to change the redirection response
-            $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $this->getUser(), $locale);
-            $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
-            $response = $event_response->getResponse();
-        }  
-
-        return $response;
-    }   
-    
-    /**
-     * Disconnect a user with Symfony Security.
-     *
-     * @return void
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function disconnectUser()
-    {
-    	$this->get('request')->getSession()->invalidate();
-    }   
-    
-    /**
-     * Return the token object.
-     *
-     * @return UsernamePasswordToken
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getToken()
-    {
-        return  $this->container->get('security.context')->getToken();
-    }  
-    
-    /**
-     * Return the token object.
-     *
-     * @return UsernamePasswordToken
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function tokenUser(UserInterface $user)
-    {
-    	return $this->container->get("pi_app_admin.manager.authentication")->tokenUser($user);
-    }    
-    
-    /**
-     * Send mail to reset user password (return link with url)
-     * 
-     * @return string
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function sendResettingEmailMessage(UserInterface $user, $route_reset_connexion, $title = '', $parameters = array())
-    {  
-    	return $this->container->get("pi_app_admin.manager.authentication")->sendResettingEmailMessage($user, $route_reset_connexion, $title, $parameters);
-    }  
-    
-    /**
-     * Send mail to reset user password (return URL)
-     * 
-     * @return string
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function sendResettingEmailMessageURL(UserInterface $user, $route_reset_connexion, $parameters = array())
-    {
-    	return $this->container->get("pi_app_admin.manager.authentication")->sendResettingEmailMessageURL($user, $route_reset_connexion, $parameters);
-    }    
-
-    /**
-     * Return the connected user name.
-     *
-     * @return string User name
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getUserName()
-    {
-        return $this->getToken()->getUser()->getUsername();
-    }
-    
-    /**
-     * Return the user permissions.
-     *
-     * @return array User permissions
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getUserPermissions()
-    {
-        return $this->getToken()->getUser()->getPermissions();
-    }
-    
-    /**
-     * Return the user roles.
-     *
-     * @return array    user roles
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getUserRoles()
-    {
-        return $this->getToken()->getUser()->getRoles();
-    }
-
-    /**
-     * Return if yes or no the user is anonymous token.
-     *
-     * @return boolean
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function isAnonymousToken()
-    {
-        if (
-            ($this->getToken() instanceof AnonymousToken)
-            ||
-            ($this->getToken() === null)
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /**
-     * Return if yes or no the user is UsernamePassword token.
-     *
-     * @return boolean
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function isUsernamePasswordToken()
-    {
-        if ($this->getToken() instanceof UsernamePasswordToken) {
-            return true;
-        } else {
-            return false;
-        }
-    }    
-    
-    /**
-     * we check if the user ID exists in the authentication service.
-     *
-     * @param integer $userId
-     * 
-     * @return boolean
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function isUserdIdExisted($userId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
-        if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /**
-     * we return the user enity associated to the user token and the application.
-     *
-     * @param string $token
-     * @param string $application
-     * 
-     * @return string
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getUserByTokenAndApplication($token, $application)
-    {
-    	$em    = $this->getDoctrine()->getManager();
-    	$like_app = array(strtoupper($application.'::'.$token));
-        $like = serialize($like_app);
-    	$query = $em->getRepository('SfynxAuthBundle:User')
-            ->createQueryBuilder('a')
-            ->select('a')
-            ->andWhere("a.applicationTokens = '{$like}'")
-            ->getQuery();  
-        // ATTENTION avec a.applicationTokens LIKE "%..%" empeche l'utilisation de 'index sur la recherceh par la valeur de application_token
-        // Avec un site à très fort traffic, cela explose alors la bdd si pas d'index sur application token.
-        // create cache tag of the query
-        $input_hash = (string) (sha1(serialize($query->getParameters()) . $query->getSQL()));
-        $query->useResultCache(true, 84600, $input_hash); 
-        $query->useQueryCache(true); 
-        //
-        $user = $query->getOneOrNullResult();
-    	
-    	return $user;
-    }    
-    
-    /**
-     * we return the user enity associated to the user token and the application.
-     *
-     * @param string $token
-     * @param string $application
-     * 
-     * @return string
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getUserByTokenAndApplicationMultiple($token, $application)
-    {
-    	$em    = $this->getDoctrine()->getManager();
-    	$like  = strtoupper($application.'::'.$token);
-    	$query = $em->getRepository('SfynxAuthBundle:User')
-            ->createQueryBuilder('a')
-            ->select('a')
-            ->andWhere("a.applicationTokens LIKE '%{$like}%'")
-            ->getQuery();  
-        // ATTENTION avec a.applicationTokens LIKE "%..%" empeche l'utilisation de 'index sur la recherceh par la valeur de application_token
-        // Avec un site à très fort traffic, cela explose alors la bdd si pas d'index sur application token.
-        // create cache tag of the query
-        $input_hash = (string) (sha1(serialize($query->getParameters()) . $query->getSQL()));
-        $query->useResultCache(true, 84600, $input_hash); 
-        $query->useQueryCache(true); 
-        //
-        $user = $query->getOneOrNullResult();
-    	
-    	return $user;
-    }       
-
-    /**
-     * we return the token associated to the user ID.
-     * 
-     * @param integer $userId
-     * @param string  $application
-     * 
-     * @return string
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getTokenByUserIdAndApplication($userId, $application)
-    {
-    	$em = $this->getDoctrine()->getManager();
-    	if ($userId instanceof \Sfynx\AuthBundle\Entity\User) {
-            $entity = $userId;
-    	} else {
-            $entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
-    	}
-        if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-            return $entity->getTokenByApplicationName($application);
-        }
-        
-        return false;
-    }
-
-    /**
-     * we associate the token to the userId.
-     * 
-     * @param integer $userId
-     * @param string  $token
-     * @param string  $application
-     * 
-     * @return boolean
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function setAssociationUserIdWithApplicationToken($userId, $token, $application)
-    {
-    	$em = $this->getDoctrine()->getManager();
-        if ($userId instanceof \Sfynx\AuthBundle\Entity\User) {
-            $entity = $userId;
-        } else {
-            $entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
-        }
-        if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-            $entity->addTokenByApplicationName($application, $token);
-            $em->persist($entity);
-            $em->flush();
-            
-            return true;
-        } else {
-            return false;
-        }
-    }    
-    
-    public function getContainer()
-    {
-        return $this->container;
-    }
 }

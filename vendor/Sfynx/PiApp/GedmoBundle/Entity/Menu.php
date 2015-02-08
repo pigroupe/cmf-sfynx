@@ -133,7 +133,7 @@ class Menu extends AbstractDefault
     /**
      * @var \Sfynx\MediaBundle\Entity\Mediatheque $media
      *
-     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque", inversedBy="menu", cascade={"all"});
+     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque", cascade={"all"}, inversedBy="menu");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;  

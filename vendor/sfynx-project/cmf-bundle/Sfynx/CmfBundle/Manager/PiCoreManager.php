@@ -111,7 +111,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     protected $extensionWidget;
     
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     protected $container;
 
