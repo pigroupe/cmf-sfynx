@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage   Dispatcher
+ * @subpackage Dispatcher
  * @package    Event
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2014-07-26
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2014-07-26
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,22 +13,20 @@
 namespace Sfynx\AuthBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\HttpKernel;
-
 use Sfynx\AuthBundle\Event\ResponseEvent;
+use Sfynx\ToolBundle\Util\PiFileManager;
 
 /**
  * Response handler of login failure connection
  *
- * @subpackage   Dispatcher
+ * @subpackage Dispatcher
  * @package    Event
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class DispatcherLoginFailureResponse
 {
    /**
-    * @var \Symfony\Component\DependencyInjection\ContainerInterface
+    * @var ContainerInterface $container
     */
    protected $container;  
 
@@ -39,7 +37,7 @@ class DispatcherLoginFailureResponse
    /**
     * Constructor.
     *
-    * @param string $defaultLocale Locale value
+    * @param ContainerInterface $container
     */   
    public function __construct(ContainerInterface $container)
    {
@@ -49,8 +47,9 @@ class DispatcherLoginFailureResponse
    /**
     * Invoked to modify the controller that should be executed.
     *
-    * @param FilterControllerEvent $event The event
-    *
+    * @param ResponseEvent $event The event
+    * 
+    * @return void
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
    public function onPiLoginFailureResponse(ResponseEvent $event)
@@ -75,8 +74,7 @@ class DispatcherLoginFailureResponse
    /**
     * We return the value of the key of the failure connection.
     *
-    * @return int
-    *
+    * @return integer
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function getKeyValue()
@@ -84,21 +82,23 @@ class DispatcherLoginFailureResponse
        // we create path
        $this->setCachePath();
        // we return the value of the failure cache file
-       return $this->container->get("sfynx.cache.filecache")->get($this->setKey(), $this->getTtl());
+       return $this->container->get("sfynx.cache.filecache")
+               ->get($this->setKey(), $this->getTtl());
    }
    
    /**
     * We return the the key of the failure connection.
     *
     * @return string
-    *
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function setKey()
    {
        // we get the username login
        if ($this->container->get('request')->getSession()->has('login-username')) {
-           $username = $this->container->get('request')->getSession()->get('login-username') . '-';
+           $username = $this->container->get('request')
+                   ->getSession()
+                   ->get('login-username') . '-';
        } else {
            $username = "";
        }
@@ -109,8 +109,7 @@ class DispatcherLoginFailureResponse
    /**
     * We return the ttl of the configuration.
     *
-    * @return int
-    *
+    * @return integer
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
    public function getTtl()
@@ -127,14 +126,15 @@ class DispatcherLoginFailureResponse
     * We set the path of the all failure login filecache.
     *
     * @return void
-    *
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
    public function setCachePath()
    {
        // we create path
        $dossier = $this->container->getParameter("sfynx.auth.loginfailure.cache_dir");
-       \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
-       $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
+       PiFileManager::mkdirr($dossier, 0777);
+       $this->container->get("sfynx.cache.filecache")
+               ->getClient()
+               ->setPath($dossier);
    }
 }

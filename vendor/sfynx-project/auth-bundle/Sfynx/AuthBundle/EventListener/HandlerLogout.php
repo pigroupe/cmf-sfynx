@@ -137,9 +137,9 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     protected function redirection()
     {
     	if (!empty($this->redirection)) {
-    		$response = new RedirectResponse($this->router->getRoute($this->redirection));
+    		$response = new RedirectResponse($this->router->getRoute($this->redirection), 302);
     	} else {
-    		$response = new RedirectResponse($this->router->getRoute('home_page'));
+    		$response = new RedirectResponse($this->router->getRoute('home_page'), 302);
     	}
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', '', time() - 3600));

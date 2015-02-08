@@ -3,10 +3,10 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage   Object
+ * @subpackage Object
  * @package    Event
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2014-07-23
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2014-07-23
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,18 +14,19 @@
 namespace Sfynx\AuthBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Sfynx\ToolBundle\Builder\RouteTranslatorFactoryInterface;
 
 /**
  * Redirection event of connection user.
  *
- * @subpackage   Object
+ * @subpackage Object
  * @package    Event
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class RedirectionEvent extends Event
-{
+{    
     /**
      * @var \Sfynx\ToolBundle\Route\RouteTranslatorFactory $router
      */
@@ -51,6 +52,22 @@ class RedirectionEvent extends Event
         $this->router     = $router;
         $this->route_name = $routeName;
         $this->params     = $params;
+    }
+    
+    /**
+     * @return Response
+     */
+    public function getResponse() 
+    {
+        $redirection = $this->getRedirection();
+        // we deal with the general case with a non ajax connection.
+        if (!empty($redirection)) {
+            $response = new RedirectResponse($redirection);
+        } elseif (!empty($this->redirect)) {
+            $response = new RedirectResponse($this->router->getRoute($this->getRouteName()));
+    	}   
+        
+        return $response;
     }
 
     /**
@@ -104,7 +121,7 @@ class RedirectionEvent extends Event
     public function getRedirection() 
     {
         if (empty($this->url) && !empty($this->route_name)) {
-            return   $this->router->getRoute($this->getRouteName(), $this->getParams());
+            return $this->router->getRoute($this->getRouteName(), $this->getParams());
         } else {
             return $this->url;
         }

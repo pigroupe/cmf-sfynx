@@ -3,7 +3,9 @@ parameters:
     
     sfynx.ws.client.auth.class: Sfynx\WsBundle\Manager\Client\AuthClient
     sfynx.ws.helper.auth.class: Sfynx\WsBundle\Helper\AuthHelper
-    sfynx.ws.twig.extension.auth.class : Sfynx\WsBundle\Extension\AuthExtension    
+    sfynx.ws.twig.extension.auth.class : Sfynx\WsBundle\Extension\AuthExtension   
+    
+    sfynx.ws.dispatcher.authenticate.changeresponse.class: Sfynx\WsBundle\EventListener\DispatcherWsAuthenticateResponse
     
 services:
     #
@@ -38,4 +40,13 @@ services:
       class: %sfynx.ws.factory.class%
       arguments: ['@service_container'] 
       calls:
-             - [ setClient, ['@sfynx.ws.client.auth'] ]             
+             - [ setClient, ['@sfynx.ws.client.auth'] ]   
+             
+    #               
+    # Event dispatchers Configuration
+    # 
+    sfynx.ws.dispatcher.authenticate.change_response:
+        class: %sfynx.ws.dispatcher.authenticate.changeresponse.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: pi.handler.login.changeresponse, method: onPiWsAuthenticateResponse, priority: 9 }                

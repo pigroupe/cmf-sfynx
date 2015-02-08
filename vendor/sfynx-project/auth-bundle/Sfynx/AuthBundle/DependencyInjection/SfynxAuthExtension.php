@@ -31,7 +31,6 @@ class SfynxAuthExtension extends Extension{
         // we load all services
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services_cmfconfig.yml');
-        $loader->load('mail_blacklist.yml');
         $loader->load('services.yml');
         // we load config
         $configuration = new Configuration();

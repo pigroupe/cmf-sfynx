@@ -7,6 +7,7 @@ parameters:
     sfynx.auth.handler.authenticationHandler.class: Sfynx\AuthBundle\EventListener\HandlerAuthentication
     
     sfynx.auth.dispatcher.loginfailure.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherLoginFailureResponse
+    sfynx.auth.dispatcher.authenticate.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherAuthenticateResponse
 
     sfynx.auth.manager.locale.class: Sfynx\AuthBundle\Util\PiLocaleManager
     sfynx.auth.role.factory.class: Sfynx\AuthBundle\Role\RoleFactory
@@ -56,6 +57,16 @@ services:
     #               
     # Event dispatchers Configuration
     # 
+    sfynx.auth.dispatcher.authenticate.change_response:
+        class: %sfynx.auth.dispatcher.authenticate.changeresponse.class%
+        arguments: [@service_container]
+        properties:
+            is_browser_authorized: %sfynx.auth.browser.switch_layout_mobile_authorized%
+            redirect: %sfynx.auth.login.redirect%
+            template: %sfynx.auth.login.template%
+        tags:
+            - { name: kernel.event_listener, event: pi.handler.login.changeresponse, method: onPiAuthenticateResponse, priority: 10 }    
+            
     sfynx.auth.dispatcher.login_failure.change_response:
         class: %sfynx.auth.dispatcher.loginfailure.changeresponse.class%
         arguments: [@service_container]
@@ -142,9 +153,9 @@ services:
     #
     # configuration of IP address allowed for the Admin and user access control
     #    
-    #security.access.blacklist_voter:
-    #    class:      Sfynx\AuthBundle\Security\Authorization\Voter\ClientIpVoter
-    #    arguments:  [@service_container, [127.0.0.1, ::1, 188.165.248.255]]
-    #    public:     false
-    #    tags:
-    #        -       { name: security.voter } 
+    security.access.blacklist_voter:
+        class:      Sfynx\AuthBundle\Security\Authorization\Voter\ClientIpVoter
+        arguments:  [@service_container, %security_ip_blacklist% ]   # [127.0.0.1, ::1, 188.165.248.255]
+        public:     false
+        tags:
+            -       { name: security.voter } 

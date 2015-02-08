@@ -112,7 +112,7 @@ class DefaultController extends abstractController
             if (isset($config['log'][$env])) {
                 $is_debug = $config['log'][$env];
                 if ($is_debug){
-                        $logger->save();
+                    $logger->save();
                 }   		
             }
     	    throw ClientException::callBadAuthRequest(__CLASS__);
@@ -139,10 +139,10 @@ class DefaultController extends abstractController
             $env = $this->container->get("kernel")->getEnvironment();
             $config = $this->container->getParameter("ws.auth");
             if (isset($config['log'][$env])) {
-                    $is_debug = $config['log'][$env];
-                    if ($is_debug){
-                            $logger->save();
-                    }   		
+                $is_debug = $config['log'][$env];
+                if ($is_debug){
+                        $logger->save();
+                }   		
             }  	    
     	}    	
     	if ($format == 'json') {

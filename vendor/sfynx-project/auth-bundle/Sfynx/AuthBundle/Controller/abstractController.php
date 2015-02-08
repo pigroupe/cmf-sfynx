@@ -17,10 +17,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Form\Form;
 use FOS\UserBundle\Model\UserInterface;
 
 use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\AuthBundle\Event\ResponseEvent;
+use Sfynx\AuthBundle\SfynxAuthEvents;
 
 /**
  * abstract controller.
@@ -755,6 +758,7 @@ abstract class abstractController extends Controller
     protected function authenticateUser(UserInterface $user = null, &$response = null, $deleteToken = false)
     {
     	$em          = $this->getDoctrine()->getManager();
+        $locale      = $this->getRequest()->getLocale();
     	$request     = $this->container->get('request');
         $providerKey = $this->container->getParameter('fos_user.firewall_name');
         $userManager = $this->container->get('fos_user.user_manager');
@@ -780,10 +784,6 @@ abstract class abstractController extends Controller
             // Record all cookies in relation with ws.
             $dateExpire     = $this->container->getParameter('sfynx.core.cookies.date_expire');
             $date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
-            $app_id	    = $this->container->getParameter('sfynx.core.cookies.application_id');
-            $is_browser_authorized  = $this->container->getParameter("sfynx.auth.browser.switch_layout_mobile_authorized");
-            $redirect       = $this->container->getParameter('sfynx.auth.login.redirect');
-            $template       = $this->container->getParameter('sfynx.auth.login.template');
             // Record the layout variable in cookies.
             if ($dateExpire && !empty($date_interval)) {
                 if (is_numeric($date_interval)) {
@@ -795,48 +795,10 @@ abstract class abstractController extends Controller
             } else {
                 $dateExpire = 0;
             }
-            if($app_id && !empty($app_id) && $this->container->hasParameter('ws.auth')) {
-                $response->headers->set('Content-Type', 'application/json');
-                $config_ws 		= $this->container->getParameter('ws.auth');
-                $key       		= $config_ws['handlers']['getpermisssion']['key'];
-                $userId    		= $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($this->getUser()->getId(), $key);
-                $applicationId  = $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($app_id, $key);
-                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', $userId, $dateExpire));
-                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', $applicationId, $dateExpire));
-                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-key', $key, $dateExpire));
-                // $response->headers->getCookies();
-            }
-            // we get the best role of the user.
-            $BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
-            if (!empty($BEST_ROLE_NAME)) {
-                $role         = $em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $BEST_ROLE_NAME));
-                if ($role instanceof \Sfynx\AuthBundle\Entity\Role) {
-                    $RouteLogin = $role->getRouteLogin();
-                    if (!empty($RouteLogin) && !is_null($RouteLogin)) {
-                        $redirect = $RouteLogin;
-                    }
-                    if ($role->getLayout() instanceof \Sfynx\AuthBundle\Entity\Layout) {
-                        $FilePc = $role->getLayout()->getFilePc();
-                        if (!empty($FilePc)  && !is_null($FilePc)) {
-                            $template = $FilePc;
-                        }
-                    }
-                }
-            }	        
-            // Sets layout
-            if (
-                $is_browser_authorized
-                && $request->attributes->has('sfynx-browser')
-                && $request->attributes->get('sfynx-browser')->isMobileDevice
-            ) {
-                $screen = $request->attributes->get('sfynx-screen');
-                $layout = $this->container->getParameter('sfynx.auth.theme.layout.admin.mobile') . $screen . '.html.twig';
-                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $layout, $dateExpire));
-            } else {
-                $layout = $this->container->getParameter('sfynx.auth.theme.layout.admin.pc') . $template;
-                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $layout, $dateExpire));
-            }
-            $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', $redirect, $dateExpire));	        
+            // we apply all events allowed to change the redirection response
+            $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $this->getUser(), $locale);
+            $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
+            $response = $event_response->getResponse();
         }  
 
         return $response;

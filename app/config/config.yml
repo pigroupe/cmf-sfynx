@@ -1,5 +1,7 @@
 imports:
     - { resource: parameters.yml }
+    - { resource: mail_blacklist.yml }
+    - { resource: securityips_blacklist.yml }
     - { resource: security.yml }    
     - { resource: "@SfynxAclManagerBundle/Resources/config/security.yml" }
     - { resource: "@SfynxAdminBundle/Resources/config/security.yml" }
