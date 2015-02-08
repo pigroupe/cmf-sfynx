@@ -29,4 +29,4 @@ services:
         class: Sfynx\AdminBundle\Admin\HistoricalPageAdmin
         tags:
            - { name: sonata.admin, manager_type: orm, group: gestion_cms, label: historical page }
-        arguments: [null, PiApp\AdminBundle\Entity\HistoricalStatus, SfynxAdminBundle:HistoricalPageCMS]
+        arguments: [null, Sfynx\CmfBundle\Entity\HistoricalStatus, SfynxAdminBundle:HistoricalPageCMS]

@@ -66,7 +66,7 @@ class RolesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($field3); 
         
         $field31 = new Role();
-        $field31->setLabel('User');
+        $field31->setLabel('Customer');
         $field31->setName('ROLE_CUSTOMER');
         $field31->setComment('Utilisateur client disposant d\'un accès à un espace.');
         $field31->setEnabled(true);
@@ -74,7 +74,7 @@ class RolesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($field31);    
         
         $field32 = new Role();
-        $field32->setLabel('User');
+        $field32->setLabel('Provider');
         $field32->setName('ROLE_PROVIDER');
         $field32->setComment('Utilisateur fournisseur disposant d\'un accès à un espace.');
         $field32->setEnabled(true);

@@ -207,7 +207,7 @@ abstract class abstractListener
             if ( in_array('CREATE', $this->getUserPermissions()) || in_array('ROLE_SUPER_ADMIN', $this->getUserRoles()) || $isAllPermissions) {
                 $entityManager->initializeObject($entity);
                 // we throw the message.
-                if ($entity instanceof \PiApp\AdminBundle\Entity\HistoricalStatus) {
+                if ($entity instanceof \Sfynx\CmfBundle\Entity\HistoricalStatus) {
                 } else {
                     $this->setFlash('pi.session.flash.right.create');
                 }
