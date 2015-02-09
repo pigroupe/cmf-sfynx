@@ -66,7 +66,7 @@ class BlockType extends AbstractType
         if ($builder->getData()->getMedia()
                 instanceof \Sfynx\MediaBundle\Entity\Mediatheque
         ) {
-        	$id_media = $builder->getData()->getMedia()->getId();
+            $id_media = $builder->getData()->getMedia()->getId();
         }
         if (isset($_POST['piapp_gedmobundle_blocktype']['media'])) {
             $id_media = $_POST['piapp_gedmobundle_blocktype']['media'];
@@ -79,7 +79,8 @@ class BlockType extends AbstractType
         }
         if (isset($_POST['piapp_gedmobundle_blocktype']['media1'])) {
             $id_media1 = $_POST['piapp_gedmobundle_blocktype']['media1'];
-        }       
+        }  
+        
         $is_enabled    = true;
         $is_category   = true;
         $is_title      = true;

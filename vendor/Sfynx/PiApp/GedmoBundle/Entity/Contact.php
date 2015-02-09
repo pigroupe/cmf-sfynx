@@ -238,27 +238,18 @@ class Contact extends AbstractDefault
     /**
      * @var integer $media
      *
-     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="contact1");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque", inversedBy="contact1");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;
     
-    //     /**
-    //      * @var integer $image
-    //      *
-    //      * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Media", cascade={"persist"})
-    //      * @ORM\JoinColumn(name="image2", referencedColumnName="id", nullable=true)
-    //      */
-    //     protected $image2;
-    
     /**
      * @var integer $media1
      *
-     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="contact2");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque", inversedBy="contact2");
      * @ORM\JoinColumn(name="media1_id", referencedColumnName="id", nullable=true)
      */
-    protected $media1;
-     
+    protected $media1;     
     
     /**
      * @var string $coordinates

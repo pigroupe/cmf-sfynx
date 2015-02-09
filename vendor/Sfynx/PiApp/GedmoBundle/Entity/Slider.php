@@ -143,7 +143,7 @@ class Slider extends AbstractDefault
     /**
      * @var \Sfynx\MediaBundle\Entity\Mediatheque $media
      *
-     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="slider");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , inversedBy="slider");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media; 

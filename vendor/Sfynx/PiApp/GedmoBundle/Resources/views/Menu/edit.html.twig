@@ -50,12 +50,12 @@
     {% endif %}	
 	
 	{% if entity.media.image is defined %}
-	{{ picture_form(entity.media.image, 'piapp_gedmobundle_menutype_media_image_binaryContent', 'reference', 'display: block; text-align:left;')|raw }}
+	{{ picture_form(entity.media.image, 'piapp_gedmobundle_menutype_media', 'reference', 'display: block; text-align:left;')|raw }}
 	{% endif %}
 	
 	<script type="text/javascript">
 	//<![CDATA[
-            j_prototype_bytabs.ftc_accordion_form("image_collection", "{{ 'pi.menu.form.group.pictures'|trans }}", ".myform");								
+            j_prototype_bytabs.ftc_accordion_form("bg_image_collection", "{{ 'pi.menu.form.group.pictures'|trans }}", ".myform");								
 	//]]>
 	</script>	
 

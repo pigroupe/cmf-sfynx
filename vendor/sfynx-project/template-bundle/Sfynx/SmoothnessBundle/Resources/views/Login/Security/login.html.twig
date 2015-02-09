@@ -1,43 +1,43 @@
 {% extends  getParameter('sfynx.auth.theme.login') ~ "Layout\\layout.html.twig" %}
 
 {% block content %}
-	<form action="{{ path("fos_user_security_check") }}" method="post">
-		<table border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<th style="padding:0 5px 0px 0;width:177px">&nbsp;</th>
-				<td>
-					<h3 class="uppercase bold tt-10">Administration</h3>
-					{% if error %}
-					    <br/>{{ error|trans }}<br/>
-					{% endif %}						
-				</td>
-			</tr>				
-			<tr>
-				<th style="padding:0 5px 0px 0;width:177px">{{ 'security.login.username'|trans([], 'FOSUserBundle') }}</th>
-				<td><input type="text" id="username" name="_username" value="{{ last_username }}"  class="login-inp" /></td>
-			</tr>
-			<tr>
-				<th style="padding:0 5px 0px 0;width:177px"><label for="password">{{ 'security.login.password'|trans([], 'FOSUserBundle') }}</label></th>
-				<td><input type="password" id="password" name="_password" class="login-inp" /></td>
-			</tr>
-			<tr>
-				<th></th>
-				<td valign="top">
-	                <input type="checkbox" id="remember_me" name="_remember_me" checked />
-	                <label for="login-check">{{ 'security.login.remember_me'|trans([], 'FOSUserBundle') }}</label>
-	                <a href="{{ path('fos_user_resetting_request') }}" class="reset-pwd" title="">{{ 'resetting.request.submit'|trans([], 'FOSUserBundle') }}</a>
-	            </td>
-			</tr>
-			<tr>
-				<th><input type="hidden" name="roles" value='{"0":"ROLE_EDITOR","1":"ROLE_ADMIN","2":"ROLE_SUPER_ADMIN"}' /></th>
-				<td><input type="submit" name="Connexion" class="btn-black" value="{{ 'security.login.submit'|trans([], 'FOSUserBundle') }}" /></td>
-			</tr>
-		</table>
-	</form>	
-	<p>
-	    {#<a href="{{ path('fos_user_resetting_request') }}" class="reset-pwd" title="">{{ 'resetting.request.submit'|trans([], 'FOSUserBundle') }}</a>
-	    <a href="{{ path('fos_user_registration_register') }}" class="user-register" title="">{{ 'layout.register'|trans([], 'FOSUserBundle') }}</a>
-	    #}
-	</p>
-	
+    <form action="{{ path("fos_user_security_check") }}" method="post">
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="padding:0 5px 0px 0;width:177px">&nbsp;</th>
+                <td>
+                        <h3 class="uppercase bold tt-10">Administration</h3>
+                        {% if error %}
+                            <br/>{{ error|trans }}<br/>
+                        {% endif %}						
+                </td>
+            </tr>				
+            <tr>
+                <th style="padding:0 5px 0px 0;width:177px">{{ 'security.login.username'|trans([], 'FOSUserBundle') }}</th>
+                <td><input type="text" id="username" name="_username" value="{{ last_username }}"  class="login-inp" /></td>
+            </tr>
+            <tr>
+                <th style="padding:0 5px 0px 0;width:177px"><label for="password">{{ 'security.login.password'|trans([], 'FOSUserBundle') }}</label></th>
+                <td><input type="password" id="password" name="_password" class="login-inp" /></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td valign="top">
+                    <input type="hidden" id="_csrf_token" name="_csrf_token" value="{{ csrf_token }}" />
+                    <input type="checkbox" id="remember_me" name="_remember_me" checked />
+                    <label for="login-check">{{ 'security.login.remember_me'|trans([], 'FOSUserBundle') }}</label>
+                    <a href="{{ path('fos_user_resetting_request') }}" class="reset-pwd" title="">{{ 'resetting.request.submit'|trans([], 'FOSUserBundle') }}</a>
+                </td>
+            </tr>
+            <tr>
+                <th><input type="hidden" name="roles" value='{"0":"ROLE_EDITOR","1":"ROLE_ADMIN","2":"ROLE_SUPER_ADMIN"}' /></th>
+                <td><input type="submit" name="Connexion" class="btn-black" value="{{ 'security.login.submit'|trans([], 'FOSUserBundle') }}" /></td>
+            </tr>
+        </table>
+    </form>	
+    <p>
+        {#<a href="{{ path('fos_user_resetting_request') }}" class="reset-pwd" title="">{{ 'resetting.request.submit'|trans([], 'FOSUserBundle') }}</a>
+        <a href="{{ path('fos_user_registration_register') }}" class="user-register" title="">{{ 'layout.register'|trans([], 'FOSUserBundle') }}</a>
+        #}
+    </p>
 {% endblock content %}

@@ -220,5 +220,4 @@ class Group extends BaseGroup
     		unset($this->permissions[$key]);
     	}
     }    
-    
 }

@@ -2,11 +2,11 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage   Core
+ * @subpackage Core
  * @package    EventListener
  * @abstract
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-01-30
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2011-01-30
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,41 +15,78 @@ namespace Sfynx\CoreBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
-use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+
 use Sfynx\AuthBundle\Entity\Role;
 
 /**
  * abstract listener manager.
  * This event is called after an entity is constructed by the EntityManager.
  *
- * @subpackage   Core
+ * @subpackage Core
  * @package    EventListener
  * @abstract
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class abstractListener
 {
+    /**
+     * @var array $associations
+     */
+    protected $associations = array();
+
+    /**
+     * @var array $discriminators
+     */    
+    protected $discriminators = array();
+
+    /**
+     * @var array $discriminatorColumns
+     */    
+    protected $discriminatorColumns = array();
+
+    /**
+     * @var array $inheritanceTypes
+     */    
+    protected $inheritanceTypes = array();
+
+    /**
+     * @var array $doctrine
+     */    
+    protected $doctrine = array();
+
+    /**
+     * @var array $indexes
+     */    
+    protected $indexes = array();
+
+    /**
+     * @var array $associations
+     */    
+    protected $uniques = array();
+    
     /**
      * @var \Sfynx\CoreBundle\EventListener\EntitiesContainer
      */
     private $EntitiesContainer;
     
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     private $container;    
 
     /**
      * Constructor
      * 
-     * @param ContainerInterface        $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container                = $container;
-        $this->EntitiesContainer        = $container->get('sfynx.core.entities.listener');
+        $this->container         = $container;
+        $this->EntitiesContainer = $container->get('sfynx.core.entities.listener');
         // Sets parameter template values.
         $this->setParams();
     }
@@ -59,7 +96,6 @@ abstract class abstractListener
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setParams()
@@ -101,7 +137,6 @@ abstract class abstractListener
      *
      * @return ObjectRepository
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-02-27
      */
@@ -126,15 +161,14 @@ abstract class abstractListener
      * prePersist default.
      * BE CAREFUL !!! this method has to be used in the last of your LifecycleEvent management.
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
-     * @param boolean    $isAnonymousToken            true to activate the anonymous token control.
-     * @param boolean    $isUsernamePasswordToken    true to activate the user token control.
-     * @param boolean    $isAllPermissions            true to enable full permission regardless of the user.
+     * @param LifecycleEventArgs $eventArgs
+     * @param boolean            $isAnonymousToken        true to activate the anonymous token control.
+     * @param boolean            $isUsernamePasswordToken true to activate the user token control.
+     * @param boolean            $isAllPermissions        true to enable full permission regardless of the user.
      * 
      * @return boolean
      * @access protected
      * @final
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     final protected function _prePersist(LifecycleEventArgs $eventArgs, $isAnonymousToken = true, $isUsernamePasswordToken = true, $isAllPermissions = false)
@@ -228,15 +262,14 @@ abstract class abstractListener
      * preUpdate default.
      * BE CAREFUL !!! this method has to be used in the last of your LifecycleEvent management.
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
-     * @param boolean    $isAnonymousToken            true to activate the anonymous token control.
-     * @param boolean    $isUsernamePasswordToken    true to activate the user token control.
-     * @param boolean    $isAllPermissions            true to enable full permission regardless of the user.
+     * @param LifecycleEventArgs $eventArgs
+     * @param boolean            $isAnonymousToken        true to activate the anonymous token control.
+     * @param boolean            $isUsernamePasswordToken true to activate the user token control.
+     * @param boolean            $isAllPermissions        true to enable full permission regardless of the user.
      * 
      * @return boolean
      * @access protected
      * @final
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     final protected function _preUpdate(LifecycleEventArgs $eventArgs, $isAnonymousToken = true, $isUsernamePasswordToken = true, $isAllPermissions = false)
@@ -344,15 +377,14 @@ abstract class abstractListener
      * PreRemove default.
      * BE CAREFUL !!! this method has to be used in the last of your LifecycleEvent management.
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
-     * @param boolean    $isAnonymousToken            true to activate the anonymous token control.
-     * @param boolean    $isUsernamePasswordToken    true to activate the user token control.
-     * @param boolean    $isAllPermissions            true to enable full permission regardless of the user.
+     * @param LifecycleEventArgs $eventArgs
+     * @param boolean            $isAnonymousToken        true to activate the anonymous token control.
+     * @param boolean            $isUsernamePasswordToken true to activate the user token control.
+     * @param boolean            $isAllPermissions        true to enable full permission regardless of the user.
      * 
      * @return boolean
      * @access protected
      * @final
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     final protected function _preRemove(LifecycleEventArgs $eventArgs, $isAnonymousToken = true, $isUsernamePasswordToken = true, $isAllPermissions = false)
@@ -458,7 +490,6 @@ abstract class abstractListener
      *
      * @return string the name of the table entity that we have to insert.
      * @access private
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getOwningTable($eventArgs, $entity)
@@ -469,13 +500,12 @@ abstract class abstractListener
     /**
      * Update a entity
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
-     * @param    object    $entity
-     * @param     array $identifier The update criteria. An associative array containing column-value pairs.
+     * @param LifecycleEventArgs $eventArgs
+     * @param object             $entity
+     * @param array              $identifier The update criteria. An associative array containing column-value pairs.
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function _updateEntity($eventArgs, $entity, $Identifier)
@@ -486,11 +516,10 @@ abstract class abstractListener
     /**
      * Persist all entities which are in the persistEntities container.
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param LifecycleEventArgs $eventArgs
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function _persistEntities($eventArgs)
@@ -505,7 +534,6 @@ abstract class abstractListener
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function _addPersistEntities($entity)
@@ -516,11 +544,10 @@ abstract class abstractListener
     /**
      * Gets the connexion of the database.
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param LifecycleEventArgs $eventArgs
      * 
      * @return \Doctrine\DBAL\Connection
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function _connexion(LifecycleEventArgs $eventArgs)
@@ -531,9 +558,8 @@ abstract class abstractListener
     /**
      * Gets the container instance.
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function _container()
@@ -547,6 +573,7 @@ abstract class abstractListener
      * @param string $controller The controller name (a string like BlogBundle:Post:index)
      * @param array  $path       An array of path parameters
      * @param array  $query      An array of query parameters
+     * 
      * @access protected
      * @return Response A Response instance
      */
@@ -563,7 +590,6 @@ abstract class abstractListener
      *
      * @return \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getToken()
@@ -574,9 +600,8 @@ abstract class abstractListener
     /**
      * Return the connected user name.
      *
-     * @return string    user name
+     * @return string User name
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserName()
@@ -587,9 +612,8 @@ abstract class abstractListener
     /**
      * Return the user permissions.
      *
-     * @return array    user permissions
+     * @return array User permissions
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserPermissions()
@@ -600,9 +624,8 @@ abstract class abstractListener
     /**
      * Return the user roles.
      *
-     * @return array    user roles
+     * @return array User roles
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getUserRoles()
@@ -618,7 +641,6 @@ abstract class abstractListener
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setFlash($message, $type = "permission")
@@ -631,7 +653,6 @@ abstract class abstractListener
      *
      * @return \Symfony\Component\HttpFoundation\Session\Flash\FlashBag
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getFlashBag()
@@ -644,7 +665,6 @@ abstract class abstractListener
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isAnonymousToken()
@@ -665,7 +685,6 @@ abstract class abstractListener
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isUsernamePasswordToken()
@@ -682,7 +701,6 @@ abstract class abstractListener
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isPersistRight()
@@ -699,7 +717,6 @@ abstract class abstractListener
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isUpdateRight()
@@ -716,7 +733,6 @@ abstract class abstractListener
      *
      * @return boolean
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isDeleteRight()
@@ -730,11 +746,11 @@ abstract class abstractListener
     
     /**
      * Return true if the restriction on the entity is activated.
-     *
+     * 
+     * @param object $entity
+     * 
      * @return boolean
-     * @param    object    $entity
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function isRestrictionByRole($entity)
@@ -799,9 +815,8 @@ abstract class abstractListener
      *
      * @return void
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     protected function setRepository()
     {
@@ -810,12 +825,13 @@ abstract class abstractListener
     
     /**
      * Gets the repository service of the entity given in param.
-     *
+     * 
+     * @param string $nameEntity
+     * 
      * @return ObjectRepository
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-01-23
+     * @since  2012-01-23
      */
     protected function getRepository($nameEntity = '')
     {
@@ -827,6 +843,259 @@ abstract class abstractListener
         } else {
             throw new \Doctrine\ORM\EntityNotFoundException();
         }
-    }   
+    }  
     
+    /**
+     * @param LoadClassMetadataEventArgs $args
+     * 
+     * @return void
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */   
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    {
+	$metadata = $eventArgs->getClassMetadata();
+        
+        $this->loadAssociations($eventArgs, $metadata);
+        $this->loadIndexes($eventArgs, $metadata);
+        $this->loadUniques($eventArgs, $metadata);
+
+        $this->loadDiscriminatorColumns($eventArgs, $metadata);
+        $this->loadDiscriminators($eventArgs, $metadata);
+        $this->loadInheritanceTypes($eventArgs, $metadata);
+        
+//        $namingStrategy = $eventArgs
+//            ->getEntityManager()
+//            ->getConfiguration()
+//            ->getNamingStrategy()
+//        ;           
+//        $metadata->mapManyToMany(array(
+//            'targetEntity'  => UploadedDocument::CLASS,
+//            'fieldName'     => 'uploadedDocuments',
+//            'cascade'       => array('persist'),
+//            'joinTable'     => array(
+//                'name'        => strtolower($namingStrategy->classToTableName($metadata->getName())) . '_document',
+//                'joinColumns' => array(
+//                    array(
+//                        'name'                  => $namingStrategy->joinKeyColumnName($metadata->getName()),
+//                        'referencedColumnName'  => $namingStrategy->referenceColumnName(),
+//                        'onDelete'  => 'CASCADE',
+//                        'onUpdate'  => 'CASCADE',
+//                    ),
+//                ),
+//                'inverseJoinColumns'    => array(
+//                    array(
+//                        'name'                  => 'document_id',
+//                        'referencedColumnName'  => $namingStrategy->referenceColumnName(),
+//                        'onDelete'  => 'CASCADE',
+//                        'onUpdate'  => 'CASCADE',
+//                    ),
+//                )
+//            )
+//        ));        
+    }        
+    
+    /**
+     * @param ClassMetadataInfo $metadata
+     *
+     * @throws \RuntimeException
+     */
+    protected function loadAssociations($eventArgs, ClassMetadataInfo $metadata)
+    {
+        if (!array_key_exists($metadata->getName(), $this->associations)) {
+            return;
+        }
+        try {
+            foreach ($this->associations[$metadata->getName()] as $type => $mappings) {
+                foreach ($mappings as $mapping) {
+                    if ($metadata->hasAssociation($mapping['fieldName'])) {
+                        continue;
+                    }
+                    call_user_func(array($metadata, $type), $mapping);
+                }
+            }
+        } catch (\ReflectionException $e) {
+            throw new \RuntimeException(sprintf('Error with class %s : %s', $metadata->getName(), $e->getMessage()), 404, $e);
+        }        
+    }    
+    
+    /**
+     * @param ClassMetadataInfo $metadata
+     *
+     * @throws \RuntimeException
+     */
+    protected function loadDiscriminatorColumns($eventArgs, ClassMetadataInfo $metadata)
+    {
+        if (!array_key_exists($metadata->getName(), $this->discriminatorColumns)) {
+            return;
+        }
+        try {
+            if (isset($this->discriminatorColumns[$metadata->getName()])) {
+                $arrayDiscriminatorColumns = $this->discriminatorColumns[$metadata->getName()];
+                if (isset($metadata->discriminatorColumn)) {
+                    $arrayDiscriminatorColumns = array_merge($metadata->discriminatorColumn, $this->discriminatorColumns[$metadata->name]);
+                }
+                $metadata->setDiscriminatorColumn($arrayDiscriminatorColumns);
+            }
+        } catch (\ReflectionException $e) {
+            throw new \RuntimeException(sprintf('Error with class %s : %s', $metadata->getName(), $e->getMessage()), 404, $e);
+        }
+    }
+
+    /**
+     * @param ClassMetadataInfo $metadata
+     *
+     * @throws \RuntimeException
+     */
+    protected function loadInheritanceTypes($eventArgs, ClassMetadataInfo $metadata)
+    {
+
+        if (!array_key_exists($metadata->getName(), $this->inheritanceTypes)) {
+            return;
+        }
+        try {
+            if (isset($this->inheritanceTypes[$metadata->getName()])) {
+
+                $metadata->setInheritanceType($this->inheritanceTypes[$metadata->getName()]);
+            }
+        } catch (\ReflectionException $e) {
+            throw new \RuntimeException(sprintf('Error with class %s : %s', $metadata->getName(), $e->getMessage()), 404, $e);
+        }
+    }
+
+    /**
+     * @param ClassMetadataInfo $metadata
+     *
+     * @throws \RuntimeException
+     */
+    protected function loadDiscriminators($eventArgs, ClassMetadataInfo $metadata)
+    {
+        if (!array_key_exists($metadata->getName(), $this->discriminators)) {
+            return;
+        }
+        try {
+            foreach ($this->discriminators[$metadata->getName()] as $key => $class) {
+                if (in_array($key, $metadata->discriminatorMap)) {
+                    continue;
+                }
+                $metadata->setDiscriminatorMap(array($key=>$class));
+            }
+        } catch (\ReflectionException $e) {
+            throw new \RuntimeException(sprintf('Error with class %s : %s', $metadata->getName(), $e->getMessage()), 404, $e);
+        }
+    }
+
+    /**
+     * @param ClassMetadataInfo $metadata
+     */
+    protected function loadIndexes($eventArgs, ClassMetadataInfo $metadata)
+    {
+        if (!array_key_exists($metadata->getName(), $this->indexes)) {
+            return;
+        }
+        foreach ($this->indexes[$metadata->getName()] as $name => $columns) {
+            $metadata->table['indexes'][$name] = array('columns' => $columns);
+        }
+    }
+
+    /**
+     * @param ClassMetadataInfo $metadata
+     */
+    protected function loadUniques($eventArgs, ClassMetadataInfo $metadata)
+    {
+        if (!array_key_exists($metadata->getName(), $this->uniques)) {
+            return;
+        }
+        foreach ($this->uniques[$metadata->getName()] as $name => $columns) {
+            $metadata->table['uniqueConstraints'][$name] = array('columns' => $columns);
+        }
+    }  
+    
+    /**
+     * Add a discriminator to a class.
+     *
+     * @param  string  $class               The Class
+     * @param  string  $key                 Key is the database value and values are the classes
+     * @param  string  $discriminatorClass  The mapped class
+     */
+    public function addDiscriminator($class, $key, $discriminatorClass)
+    {
+        if (!isset($this->discriminators[$class])) {
+            $this->discriminators[$class] = array();
+        }
+        if (!isset($this->discriminators[$class][$key])) {
+            $this->discriminators[$class][$key] = $discriminatorClass;
+        }
+    }
+
+    /**
+     * Add the Discriminator Column.
+     *
+     * @param string $class
+     * @param array  $columnDef
+     */
+    public function addDiscriminatorColumn($class, array $columnDef)
+    {
+        if (!isset($this->discriminatorColumns[$class])) {
+            $this->discriminatorColumns[$class] = $columnDef;
+        }
+    }
+
+    /**
+     * @param string $class
+     * @param string $type
+     */
+    public function addInheritanceType($class, $type)
+    {
+        if (!isset($this->inheritanceTypes[$class])) {
+            $this->inheritanceTypes[$class] = $type;
+        }
+    }
+
+    /**
+     * @param string $class
+     * @param string $type
+     * @param array $options
+     */
+    public function addAssociation($class, $type, array $options)
+    {
+        if (!isset($this->associations[$class])) {
+            $this->associations[$class] = array();
+        }
+        if (!isset($this->associations[$class][$type])) {
+            $this->associations[$class][$type] = array();
+        }
+        $this->associations[$class][$type][] = $options;
+    }
+
+    /**
+     * @param string $class
+     * @param string $name
+     * @param array  $columns
+     */
+    public function addIndex($class, $name, array $columns)
+    {
+        if (!isset($this->indexes[$class])) {
+            $this->indexes[$class] = array();
+        }
+        if (isset($this->indexes[$class][$name])) {
+            return;
+        }
+        $this->indexes[$class][$name] = $columns;
+    }
+
+    /**
+     * @param string $class
+     * @param string $name
+     * @param array  $columns
+     */
+    public function addUnique($class, $name, array $columns)
+    {
+        if (!isset($this->indexes[$class])) {
+            $this->uniques[$class] = array();
+        }
+        if (isset($this->uniques[$class][$name])) {
+            return;
+        }
+        $this->uniques[$class][$name] = $columns;
+    }        
 }

@@ -34,12 +34,12 @@
     {% endif %}	
 	
 	{% if entity.media.image is defined %}
-	{{ picture_form(entity.media.image, 'piapp_gedmobundle_organigramtype_media_image_binaryContent', 'reference')|raw }}
+	{{ picture_form(entity.media.image, 'piapp_gedmobundle_organigramtype_media', 'reference')|raw }}
 	{% endif %}
 	
 	<script type="text/javascript">
 	//<![CDATA[
 			//j_prototype_bytabs.ftc_dialog_form("left_picture", "Left picture", ".myform", 400, 366, "center");
-			j_prototype_bytabs.ftc_accordion_form("image_collection", "{{ 'pi.organigram.form.group.pictures'|trans }}", ".myform");								
+			j_prototype_bytabs.ftc_accordion_form("bg_image_collection", "{{ 'pi.organigram.form.group.pictures'|trans }}", ".myform");								
 	//]]>
 	</script>

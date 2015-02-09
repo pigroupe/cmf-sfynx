@@ -15,8 +15,7 @@ namespace Sfynx\MediaBundle\DependencyInjection;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader,
-    Symfony\Component\Config\FileLocator,
-    Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
+    Symfony\Component\Config\FileLocator;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -45,108 +44,12 @@ class SfynxMediaExtension extends Extension{
                 $container->setParameter('sfynx.media.crop.formats', $config['crop']['formats']);
             }
         }    
-        
-        /**
-         * Crop config parameter
-         */
-        $this->registerDoctrineMapping($config);     
 
         $loaderXml = new Loader\XmlFileLoader($container, new FileLocator(realpath(__DIR__ . '/../Resources/config/service')));
         $loaderXml->load('security.xml');
         
         $loaderXmlForm = new Loader\XmlFileLoader($container, new FileLocator(realpath(__DIR__ . '/../Resources/config')));
         $loaderXmlForm->load('form.xml');
-    }
-    
-   /**
-     * @param array $config
-     *
-     * @return void
-     */
-    public function registerDoctrineMapping(array $config)
-    {
-        $collector = DoctrineCollector::getInstance();
-        
-        if (class_exists('Sfynx\MediaBundle\Entity\Translation\MediathequeTranslation')) {
-            $collector->addAssociation('Sfynx\MediaBundle\Entity\Mediatheque', 'mapOneToMany', array(
-                'fieldName'     => 'translations',
-                'targetEntity'  => 'Sfynx\MediaBundle\Entity\Translation\MediathequeTranslation',
-                'cascade'       => array(
-                    'persist',
-                    'remove',
-                ),
-                'mappedBy'      => 'object',
-                'orderBy'       => array(
-                    'locale'  => 'ASC',
-                ),
-            ));
-            $collector->addAssociation('Sfynx\MediaBundle\Entity\Translation\MediathequeTranslation', 'mapManyToOne', array(
-                'fieldName'     => 'object',
-                'targetEntity'  => 'Sfynx\MediaBundle\Entity\Mediatheque',
-                'cascade'       => array(),
-                'inversedBy'    => 'translations',
-                'joinColumns'   =>  array(
-                    array(
-                        'name'  => 'object_id',
-                        'referencedColumnName' => 'id',
-                        'onDelete' => 'CASCADE'
-                    ),
-                ),
-            ));
-        }   
-        
-        if (class_exists('PiApp\GedmoBundle\Entity\Category')) {
-            $collector->addAssociation('Sfynx\MediaBundle\Entity\Mediatheque', 'mapManyToOne', array(
-                'fieldName'     => 'category',
-                'targetEntity'  => 'PiApp\GedmoBundle\Entity\Category',
-                'cascade'       => array(
-                    'persist',
-                ),
-                'mappedBy'      => NULL,
-                'inversedBy'    => 'items_media',
-                'joinColumns'   =>  array(
-                    array(
-                        'name'  => 'category',
-                        'referencedColumnName' => 'id',
-                        'nullable' => true
-                    ),
-                ),
-                'orphanRemoval' => false,
-            ));
-        }
-        
-        if (class_exists('Sfynx\MediaBundle\Entity\Media')) {
-            $collector->addAssociation('Sfynx\MediaBundle\Entity\Mediatheque', 'mapManyToOne', array(
-                'fieldName'     => 'image',
-                'targetEntity'  => 'Sfynx\MediaBundle\Entity\Media',
-                'cascade'       => array(
-                    'all',
-                ),
-                'joinColumns'   =>  array(
-                    array(
-                        'name'  => 'media',
-                        'referencedColumnName' => 'id',
-                        'nullable' => true
-                    ),
-                ),
-                'orphanRemoval' => false,
-            ));
-            $collector->addAssociation('Sfynx\MediaBundle\Entity\Mediatheque', 'mapManyToOne', array(
-                'fieldName'     => 'image2',
-                'targetEntity'  => 'Sfynx\MediaBundle\Entity\Media',
-                'cascade'       => array(
-                    'all',
-                ),
-                'joinColumns'   =>  array(
-                    array(
-                        'name'  => 'media2',
-                        'referencedColumnName' => 'id',
-                        'nullable' => true
-                    ),
-                ),
-                'orphanRemoval' => false,
-            ));            
-        } 
     }
     
     public function getAlias()

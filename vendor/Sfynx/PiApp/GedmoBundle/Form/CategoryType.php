@@ -52,6 +52,17 @@ class CategoryType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id_media = null;
+        // get the id of media
+        if ($builder->getData()->getMedia()
+                instanceof \Sfynx\MediaBundle\Entity\Mediatheque
+        ) {
+            $id_media = $builder->getData()->getMedia()->getId();
+        }
+        if (isset($_POST['piapp_gedmobundle_categorytype']['media'])) {
+            $id_media = $_POST['piapp_gedmobundle_categorytype']['media'];
+        } 
+        
         $builder 
             ->add('type', 'choice', array(
                     'choices'   => array(
@@ -84,7 +95,49 @@ class CategoryType extends AbstractType
                      ),
                      'required'  => false,
              ))
-             ->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'))
+             //->add('media', new \Sfynx\MediaBundle\Form\MediathequeType($this->_container, $this->_em, 'image', 'image_collection', "simpleLink", 'pi.form.label.media.picture'))
+            ->add('media', 'entity', array(
+             		'class' => 'SfynxMediaBundle:Mediatheque',
+            		'query_builder' => function(EntityRepository $er) use ($id_media) {
+                            $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                            $translatableListener->setTranslationFallback(true);            			
+                            return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->setParameter('id', $id_media)
+                            //->where("a.status = 'image'")
+                            //->andWhere("a.image IS NOT NULL")
+                            //->andWhere("a.enabled = 1")
+                            //->orderBy('a.id', 'ASC')
+                            ;
+            		},
+            		//'property' => 'id',
+            		'empty_value' => 'pi.form.label.select.choose.media',
+            		'label' => "Media",
+            		'multiple' => false,
+                            'required'  => false,
+             		'constraints' => array(
+                            //new Constraints\NotBlank(),
+             		),
+            		"label_attr" => array(
+                            "class"=> 'bg_image_collection',
+            		),
+            		"attr" => array(
+                            "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                            "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_selectentity_ajax", array('type'=>'image')),
+                            "data-selectid" => $id_media,
+                            "data-max" => 50,
+            		),
+            		'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+             				title="Ajouter une image à la médiatheque"
+             				data-title="Mediatheque"
+             				data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_media_new", array("NoLayout"=>"false", "category"=>'', 'status'=>'image')).'"
+             				data-selectid="#sfynx_mediabundle_mediatype_id"
+             				data-selecttitle="#sfynx_mediabundle_mediatype_title"
+             				data-insertid="#piapp_gedmobundle_blocktype_media"
+             				data-inserttype="multiselect"
+             				></a>',            		
+             ))                   
         ;
     }
 

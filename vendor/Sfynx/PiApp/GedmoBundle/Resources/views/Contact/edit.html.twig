@@ -50,11 +50,11 @@
     {% endif %}
 	
 	{% if entity.media.image is defined %}
-	{{ picture_form(entity.media.image, "piapp_gedmobundle_contacttype_media_image_binaryContent",  'reference', 'display: block; text-align:left;')|raw }}
+	{{ picture_form(entity.media.image, "piapp_gedmobundle_contacttype_media",  'reference', 'display: block; text-align:left;')|raw }}
 	{% endif %}
 	
 	{% if entity.media1.image is defined %}
-	{{ picture_form(entity.media1.image, "piapp_gedmobundle_contacttype_media1_image_binaryContent",  'reference', 'display: block; text-align:left;')|raw }}
+	{{ picture_form(entity.media1.image, "piapp_gedmobundle_contacttype_media1",  'reference', 'display: block; text-align:left;')|raw }}
 	{% endif %}
 	
 	<script type="text/javascript">
@@ -62,7 +62,7 @@
 			j_prototype_bytabs.ftc_accordion_form("address_collection", "{{ 'pi.contact.form.group.addess'|trans }}", ".myform");
 			j_prototype_bytabs.ftc_accordion_form("email_collection", "{{ 'pi.contact.form.group.email'|trans }}", ".myform");
 			j_prototype_bytabs.ftc_accordion_form("url_collection", "{{ 'pi.contact.form.group.website'|trans }}", ".myform");
-			j_prototype_bytabs.ftc_accordion_form("pictures", "{{ 'pi.contact.form.group.pictures'|trans }}", ".myform");
+			j_prototype_bytabs.ftc_accordion_form("bg_image_collection", "{{ 'pi.contact.form.group.pictures'|trans }}", ".myform");
 	//]]>
 	</script>	
 {% endblock %}		

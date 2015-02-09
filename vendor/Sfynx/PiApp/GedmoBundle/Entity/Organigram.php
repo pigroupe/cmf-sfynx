@@ -132,7 +132,7 @@ class Organigram extends AbstractDefault
     /**
      * @var \Sfynx\MediaBundle\Entity\Mediatheque $media
      *
-     * @ORM\OneToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , cascade={"all"}, inversedBy="organigram");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , inversedBy="organigram");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;    

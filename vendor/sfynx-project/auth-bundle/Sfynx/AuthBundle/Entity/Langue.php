@@ -265,5 +265,4 @@ class Langue extends AbstractTranslation
     {
         return $this->archived;
     }    
-    
 }

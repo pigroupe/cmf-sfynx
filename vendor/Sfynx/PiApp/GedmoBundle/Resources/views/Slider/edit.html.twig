@@ -50,13 +50,13 @@
     {% endif %}
 	
 	{% if entity.media.image is defined %}
-	{{ picture_form(entity.media.image, "piapp_gedmobundle_slidertype_media_image_binaryContent",  'small', 'display: block; text-align:left;')|raw }}
+	{{ picture_form(entity.media.image, "piapp_gedmobundle_slidertype_media",  'small', 'display: block; text-align:left;')|raw }}
 	{% endif %}
 	
 	<script type="text/javascript">
 	//<![CDATA[
 			j_prototype_bytabs.ftc_accordion_form("detail_collection", "Detail", ".myform");
-	        j_prototype_bytabs.ftc_accordion_form("image_collection", "{{ 'pi.slider.form.group.pictures'|trans }}", ".myform");
+                        j_prototype_bytabs.ftc_accordion_form("bg_image_collection", "{{ 'pi.slider.form.group.pictures'|trans }}", ".myform");
 			j_prototype_bytabs.ftc_accordion_form("link_collection", "Link", ".myform");
 			j_prototype_bytabs.ftc_accordion_form("meta_definition", "SEO", ".myform");			
 	//]]>
