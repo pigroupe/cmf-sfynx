@@ -14,7 +14,7 @@
 namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\CoreBundle\Controller\abstractController;
 use Sfynx\ToolBundle\Exception\ControllerException;
 
 /**

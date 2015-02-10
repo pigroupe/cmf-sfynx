@@ -13,7 +13,7 @@
 namespace Sfynx\WsBundle\Controller;
 
 use Sfynx\WsBundle\Exception\ClientException;
-use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\CoreBundle\Controller\abstractController;
 use Sfynx\ToolBundle\Util\PiStringManager;
 use Sfynx\AuthBundle\Entity\User;
 
