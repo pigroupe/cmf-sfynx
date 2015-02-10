@@ -33,11 +33,11 @@ class TranslationProxy
     /**
      * Initializes translations collection
      *
-     * @param   Object      $translatable   object to translate
-     * @param   string      $locale         translation name
-     * @param   array       $fields            object $fields to translate
-     * @param   string      $class          translation entity|document class
-     * @param   Collection  $coll           translations collection
+     * @param Object     $translatable object to translate
+     * @param string     $locale       translation name
+     * @param array      $fields       object $fields to translate
+     * @param string     $class        translation entity|document class
+     * @param Collection $coll         translations collection
      */
     public function __construct($translatable, $locale, array $fields, $class, $coll)
     {
@@ -52,7 +52,7 @@ class TranslationProxy
         if (!$translationClass->isSubclassOf('Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation')) {
             throw new \InvalidArgumentException(sprintf(
                 'Translation class should extend Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation, "%s" given',
-                $class
+                $this->class
             ));
         }
     }
@@ -75,9 +75,7 @@ class TranslationProxy
                 }
             }
         }
-
         $return = call_user_func_array(array($this->translatable, $method), $arguments);
-
         if ($this->translatable === $return) {
             return $this;
         }
@@ -107,7 +105,6 @@ class TranslationProxy
 
             return $this->setTranslatedValue($field, $value);
         }
-
         $this->translatable->$field = $value;
     }
 
@@ -137,7 +134,7 @@ class TranslationProxy
         } else {
              throw new \InvalidArgumentException(sprintf(
                 'Error field translate value',
-                $class
+                $this->class
             ));
             //return '';
         }

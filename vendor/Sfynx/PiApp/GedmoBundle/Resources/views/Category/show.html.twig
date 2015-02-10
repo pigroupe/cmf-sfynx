@@ -14,14 +14,16 @@
     
 	<table class="grid_show">
 		<caption>Category</caption>
-	    <tbody>	
+	    <tbody>
+                <input type="hidden" id="piapp_gedmobundle_categorytype_id" name="piapp_gedmobundle_categorytype[id]"  value="{{ entity.id }}">
+                <input type="hidden" id="piapp_gedmobundle_categorytype_name" name="piapp_gedmobundle_categorytype[name]"  value="{{ entity.name }}">
 	        <tr>
 	            <th>Id</th>	
 	            <td>{{ entity.id }}</td>	
 	        </tr>	
 	        <tr>
-	        	<th>Type</th>
-	        	<td>
+                    <th>Type</th>
+                    <td>
 	            	{{ ("pi.category.type."~entity.type)|trans }}
 	            </td>
 	        </tr>
@@ -29,18 +31,17 @@
 	            <th>Name</th>	
 	            <td>{{ entity.name }}</td>	
 	        </tr>	
-			</tr>	
-				<tr>
+		<tr>
 	            <th>Sous- titre</th>	
 	            <td>{{ entity.subtitle }}</td>	
 	        </tr>	  	        
-			<tr>
-	        	<th>Media</th>
-	        	<td>
-	        		{% if entity.media.image is defined %}
-	        			{% media entity.media.image, 'reference' %}
-	        		{% endif %}
-	        	</td>
+                <tr>
+                    <th>Media</th>
+                    <td>
+                    {% if entity.media.image is defined %}
+                            {% media entity.media.image, 'reference' %}
+                    {% endif %}
+                    </td>
 	        </tr>    	        
 	    </tbody>
 	</table>

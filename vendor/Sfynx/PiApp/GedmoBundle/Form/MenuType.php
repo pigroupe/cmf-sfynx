@@ -52,6 +52,16 @@ class MenuType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id_category = null;
+        if ($builder->getData()->getCategory()
+                instanceof Category
+        ) {
+            $id_category = $builder->getData()->getCategory()->getId();
+        }
+        if (isset($_POST['piapp_gedmobundle_menutype']['category'])) {
+            $id_category = $_POST['piapp_gedmobundle_menutype']['category'];
+        }  
+        //
         $id_media = null;
         // get the id of media
         if ($builder->getData()->getMedia()
@@ -85,8 +95,20 @@ class MenuType extends AbstractType
                     'multiple'    => false,
                     'required'  => false,
                     "attr" => array(
-                            "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_selectentity_ajax", array('type'=> 5)),
+                        "data-selectid" => $id_category,
+                        "data-max" => 50,
                     ),
+                    'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+                                    title="Ajouter une catégorie"
+                                    data-title="Catégorie"
+                                    data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_new", array("NoLayout"=>"false", 'type'=> 5)).'"
+                                    data-selectid="#piapp_gedmobundle_categorytype_id"
+                                    data-selecttitle="#piapp_gedmobundle_categorytype_name"
+                                    data-insertid="#piapp_gedmobundle_menutype_category"
+                                    data-inserttype="multiselect"
+                                    ></a>', 
             ))                 
              ->add('parent', 'entity', array(
                     'class' => 'PiAppGedmoBundle:Menu',

@@ -115,6 +115,67 @@ class CategoryController extends abstractController
     {
         return parent::archiveajaxAction();
     }    
+    
+    /**
+     * get entities in ajax request for select form.
+     *
+     * @Route("/content/gedmo/category/select/{type}", name="admin_gedmo_category_selectentity_ajax")
+     * @Secure(roles="ROLE_EDITOR")
+     * @return Response
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function selectajaxAction($type)
+    {
+    	$request = $this->container->get('request');
+    	$em      = $this->getDoctrine()->getManager();
+    	$locale  = $this->container->get('request')->getLocale();
+    	//
+    	$pagination = $this->container->get('request')->get('pagination', null);
+    	$keyword    = $this->container->get('request')->get('keyword', '');
+    	$MaxResults = $this->container->get('request')->get('max', 10);
+    	// we set query
+        $query  = $em->getRepository("PiAppGedmoBundle:Category")->getAllByCategory('', null, '', 'ASC', false);
+        $query
+        ->andWhere("a.type = '{$type}'");    		
+        //
+        $keyword = array(
+            0 => array(
+                'field_name' => 'name',
+                'field_value' => $keyword,
+                'field_trans' => true,
+                'field_trans_name' => 'trans',
+            ),
+        );
+
+        return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true, array(
+            'time'      => 3600,  
+            'namespace' => 'hash_list_gedmo_category'
+        ));
+    }     
+    
+    /**
+     * Select all entities.
+     *
+     * @return Response
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function renderselectajaxQuery($entities, $locale)
+    {
+    	$tab = array();
+    	foreach ($entities as $obj) {
+            $content   = $obj->translate($locale)->getName();
+            if (!empty($content)) {
+                $tab[] = array(
+                    'id' => $obj->getId(),
+                    'text' =>$this->container->get('twig')->render($content, array())
+                );
+            }
+    	}
+    	
+    	return $tab;
+    }     
 
     /**
      * Lists all Category entities.
@@ -137,7 +198,14 @@ class CategoryController extends abstractController
         } else {
         	$query    = $em->getRepository("PiAppGedmoBundle:Category")->getAllByCategory('', null, '', 'ASC', false);
         }
-        $entities   = $em->getRepository("PiAppGedmoBundle:Category")->findTranslationsByQuery($locale, $query->getQuery(), 'object', false, true);
+        $qb     = $em->getRepository($this->_entityName)->cacheQuery(
+                $query->getQuery(), 
+                3600, 
+                3, 
+                true,
+                'hash_list_gedmo_category'
+        );
+        $entities   = $em->getRepository("PiAppGedmoBundle:Category")->findTranslationsByQuery($locale, $qb, 'object', false, true);
     
         return $this->render("PiAppGedmoBundle:Category:$template", array(
                 'entities' => $entities,
@@ -189,7 +257,10 @@ class CategoryController extends abstractController
     public function newAction()
     {
         $em     = $this->getDoctrine()->getManager();
+        $type   = $this->container->get('request')->query->get('type');
         $entity = new Category();
+        $entity->setType($type);
+        $entity->setUpdatedAt(new \Datetime());
         $form   = $this->createForm(new CategoryType($this->container, $em), $entity, array('show_legend' => false));
         
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
@@ -228,6 +299,8 @@ class CategoryController extends abstractController
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
             $em->flush();
+            // to delete cache list query
+            $this->deleteAllCacheQuery('hash_list_gedmo_category');
             
             return $this->redirect($this->generateUrl('admin_gedmo_category_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
                         
@@ -245,8 +318,7 @@ class CategoryController extends abstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>    
      */
     public function editAction($id)
@@ -279,8 +351,7 @@ class CategoryController extends abstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @access    public
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>   
      */
     public function updateAction($id)
@@ -304,6 +375,8 @@ class CategoryController extends abstractController
             $entity->setTranslatableLocale($locale);
             $em->persist($entity);
             $em->flush();
+            // to delete cache list query
+            $this->deleteAllCacheQuery('hash_list_gedmo_category');
 
             return $this->redirect($this->generateUrl('admin_gedmo_category_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         }
@@ -347,6 +420,8 @@ class CategoryController extends abstractController
             try {
                 $em->remove($entity);
                 $em->flush();
+                // to delete cache list query
+                $this->deleteAllCacheQuery('hash_list_gedmo_category');
             } catch (\Exception $e) {
                 $this->container->get('request')->getSession()->getFlashBag()->clear();
                 $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');

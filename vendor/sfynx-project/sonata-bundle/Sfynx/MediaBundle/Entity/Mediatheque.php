@@ -196,7 +196,7 @@ class Mediatheque extends AbstractDefault
             $content .=  " - " .$title;
     	}
     	if (!is_null($cat)) {
-            $content .=  '('. $cat->translate($locale)->getName() .')';
+            $content .=  ' ('. $cat->getName() .')';
     	}
     	if (($this->getStatus() == 'image') 
                 && ($this->getImage() instanceof Media)

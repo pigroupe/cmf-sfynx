@@ -115,7 +115,7 @@ class SliderController extends abstractController
     {
         return parent::archiveajaxAction();
     }    
-
+    
     /**
      * Lists all Slider entities.
      *

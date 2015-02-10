@@ -18,6 +18,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
+use PiApp\GedmoBundle\Entity\Category;
+use Sfynx\MediaBundle\Entity\Mediatheque;
+
 /**
  * Description of the SliderType form.
  *
@@ -51,24 +54,34 @@ class SliderType extends AbstractType
      */
     public function __construct(EntityManager $em, $locale, ContainerInterface $container)
     {
-        $this->_em             = $em;
-        $this->_container     = $container;
-        $this->_locale        = $locale;        
+        $this->_em        = $em;
+        $this->_container = $container;
+        $this->_locale    = $locale;        
     }
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $id_media = null;
-        // get the id of media
+        $id_category = null;
         if ($builder->getData()->getMedia()
-                instanceof \Sfynx\MediaBundle\Entity\Mediatheque
+                instanceof Mediatheque
         ) {
             $id_media = $builder->getData()->getMedia()->getId();
         }
         if (isset($_POST['piapp_gedmobundle_slidertype']['media'])) {
             $id_media = $_POST['piapp_gedmobundle_slidertype']['media'];
         }       
-        
+        //
+        // get the id of media
+        if ($builder->getData()->getCategory()
+                instanceof Category
+        ) {
+            $id_category = $builder->getData()->getCategory()->getId();
+        }
+        if (isset($_POST['piapp_gedmobundle_slidertype']['category'])) {
+            $id_category = $_POST['piapp_gedmobundle_slidertype']['category'];
+        }   
+        //
         $builder  
             ->add('enabled', 'checkbox', array(
                     'data'  => true,
@@ -100,18 +113,25 @@ class SliderType extends AbstractType
                     'multiple'    => false,
                     'required'  => false,
                     "attr" => array(
-                            "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_selectentity_ajax", array('type'=> 4)),
+                        "data-selectid" => $id_category,
+                        "data-max" => 50,
                     ),
-                    "label_attr" => array(
-                            "class"=>"category_collection",
-                    ),                    
+                    'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+                                    title="Ajouter une catégorie"
+                                    data-title="Catégorie"
+                                    data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_new", array("NoLayout"=>"false", 'type'=> 4)).'"
+                                    data-selectid="#piapp_gedmobundle_categorytype_id"
+                                    data-selecttitle="#piapp_gedmobundle_categorytype_name"
+                                    data-insertid="#piapp_gedmobundle_slidertype_category"
+                                    data-inserttype="multiselect"
+                                    ></a>',                             
             ))      
             ->add('title', 'text', array(
                     'label'        => "pi.form.label.field.title",
                     'required'  => false,
             ))
-
-            
             ->add('subtitle', 'text', array(
                     "label" => 'Sub title',
                     "label_attr" => array(
@@ -139,8 +159,6 @@ class SliderType extends AbstractType
                             "class"    =>"pi_editor_simple_easy",
                     ),
             ))
-            
-            
             ->add('page', 'entity', array(
                     'class' => 'SfynxCmfBundle:Page',
                     'query_builder' => function(EntityRepository $er) {
@@ -165,8 +183,6 @@ class SliderType extends AbstractType
                     ),
                     'required'  => false,
             ))            
-            
-            
             ->add('meta_keywords', 'textarea', array(
                     "label" => "pi.form.label.field.meta_keywords",
                     "label_attr" => array(

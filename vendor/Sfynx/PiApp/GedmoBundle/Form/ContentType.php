@@ -58,6 +58,15 @@ class ContentType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id_category = null;
+        if ($builder->getData()->getCategory()
+                instanceof Category
+        ) {
+            $id_category = $builder->getData()->getCategory()->getId();
+        }
+        if (isset($_POST['piapp_gedmobundle_contenttype']['category'])) {
+            $id_category = $_POST['piapp_gedmobundle_contenttype']['category'];
+        }          
         $builder   
             ->add('enabled', 'checkbox', array(
                     'data'  => true,
@@ -97,26 +106,35 @@ class ContentType extends AbstractType
 //             ))                 
             ->add('category', 'entity', array(
                     'class' => 'PiAppGedmoBundle:Category',
-                     'query_builder' => function(EntityRepository $er) {
-                         $translatableListener = $this->_container->get('gedmo.listener.translatable');
-                         $translatableListener->setTranslationFallback(true);
-                         return $er->createQueryBuilder('k')
-                         ->select('k')
-                         ->where('k.type = :type')
-                         ->orderBy('k.name', 'ASC')
-                         ->setParameter('type', 3);
-                     },
+                    'query_builder' => function(EntityRepository $er) {
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);
+                        return $er->createQueryBuilder('k')
+                        ->select('k')
+                        ->where('k.type = :type')
+                        ->orderBy('k.name', 'ASC')
+                        ->setParameter('type', 3);
+                    },
                     'property' => 'name',
                     'empty_value' => 'pi.form.label.select.choose.category',
-                     'label'    => "pi.form.label.field.category",
+                    'label'    => "pi.form.label.field.category",
                     'multiple'    => false,
                     'required'  => false,
                     "attr" => array(
-                            "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_selectentity_ajax", array('type'=> 3)),
+                        "data-selectid" => $id_category,
+                        "data-max" => 50,
                     ),
-                     "label_attr" => array(
-                             "class"=>"content_collection",
-                     ),
+                    'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+                                    title="Ajouter une catégorie"
+                                    data-title="Catégorie"
+                                    data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_new", array("NoLayout"=>"false", 'type'=> 3)).'"
+                                    data-selectid="#piapp_gedmobundle_categorytype_id"
+                                    data-selecttitle="#piapp_gedmobundle_categorytype_name"
+                                    data-insertid="#piapp_gedmobundle_contenttype_category"
+                                    data-inserttype="multiselect"
+                                    ></a>', 
             ))   
             ->add('descriptif', 'text', array(
                      'label'    => 'pi.form.label.field.description',

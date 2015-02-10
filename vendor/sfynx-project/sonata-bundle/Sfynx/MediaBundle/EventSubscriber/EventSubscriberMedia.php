@@ -221,6 +221,23 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
     {
         $entity        = $eventArgs->getEntity();
         $entityManager = $eventArgs->getEntityManager();
+        if ( $this->isUsernamePasswordToken() 
+                && (($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) || ($entity instanceof \Sfynx\MediaBundle\Entity\Mediatheque)) 
+                && !$this->isRestrictionByRole($entity) 
+                && ($entity->getMediadelete() == true) )
+        {
+            try {
+                $entity_table = $this->getOwningTable($eventArgs, $entity);
+                $query = "UPDATE $entity_table mytable SET mytable.media = null WHERE mytable.id = ?";
+                $this->_connexion($eventArgs)->executeUpdate($query, array($entity->getId()));
+                
+                $this->_container()->get('bootstrap.media.provider.image')->preRemove($entity->getImage());
+                $this->_connexion($eventArgs)->delete($this->getOwningTable($eventArgs, $entity->getImage()), array('id'=>$entity->getImage()->getId()));
+                $this->_container()->get('bootstrap.media.provider.image')->postRemove($entity->getImage());                
+            } catch (\Exception $e) {
+            }
+            $entity->setImage(null);
+        }         
         // we clean the filename.
         if ( $this->isUsernamePasswordToken() 
                 && (($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) 

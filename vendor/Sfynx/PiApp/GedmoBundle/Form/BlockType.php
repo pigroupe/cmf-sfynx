@@ -60,6 +60,16 @@ class BlockType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id_category = null;
+        if ($builder->getData()->getCategory()
+                instanceof Category
+        ) {
+            $id_category = $builder->getData()->getCategory()->getId();
+        }
+        if (isset($_POST['piapp_gedmobundle_blocktype']['category'])) {
+            $id_category = $_POST['piapp_gedmobundle_blocktype']['category'];
+        }  
+        //
         $id_media = null;
         $id_media1 = null;
         // get the id of media
@@ -172,18 +182,27 @@ class BlockType extends AbstractType
                         ->where('k.type = :type')
                         ->orderBy('k.name', 'ASC')
                         ->setParameter('type', 1);
-                     },
+                    },
                     'property' => 'name',
                     'empty_value' => 'pi.form.label.select.choose.category',
                     'label'    => "pi.form.label.field.category",
                     'multiple'    => false,
                     'required'  => false,
                     "attr" => array(
-                        "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_selectentity_ajax", array('type'=> 1)),
+                        "data-selectid" => $id_category,
+                        "data-max" => 50,
                     ),
-                    "label_attr" => array(
-                        "class"=>"block_collection",
-                    ),
+                    'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+                                    title="Ajouter une catégorie"
+                                    data-title="Catégorie"
+                                    data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_new", array("NoLayout"=>"false", 'type'=> 1)).'"
+                                    data-selectid="#piapp_gedmobundle_categorytype_id"
+                                    data-selecttitle="#piapp_gedmobundle_categorytype_name"
+                                    data-insertid="#piapp_gedmobundle_blocktype_category"
+                                    data-inserttype="multiselect"
+                                    ></a>', 
             ));
         }
         if ($is_title) {
