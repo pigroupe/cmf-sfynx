@@ -509,7 +509,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                                     var _insertType = $(this).data('inserttype');
                                                     $('<div id="iframe-dialog" title="'+_title+'">&nbsp;</div>').html('<iframe id="modalIframeId" width="100%" height="99%" style="overflow-x: hidden; overflow-y: hidden" scrolling="no" marginWidth="0" marginHeight="0" frameBorder="0" src="'+_url+'" />').dialog({
                                                         width: 421,
-                                                        height: 600,
+                                                        height: 691,
                                                         open: function () {
                                                             $(this).find("iframe").contents().find('body').attr('scrolling', 'no');
                                                         },
