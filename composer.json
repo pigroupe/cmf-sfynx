@@ -33,7 +33,7 @@
         "friendsofsymfony/user-bundle": "2.0.*@dev",
         "besimple/i18n-routing-bundle": "2.3.0",
         
-        "sonata-project/admin-bundle": "2.4.*@dev",
+        "sonata-project/admin-bundle": "2.3.*@dev",
         "sonata-project/media-bundle": "2.4.*@dev",
         "sonata-project/classification-bundle": "2.3.*@dev",
         "sonata-project/datagrid-bundle": "2.2.*@dev"
