@@ -23,7 +23,7 @@ use Symfony\Component\Debug\Debug;
 //    //apc_clear_cache('opcode'); 
 //    //
 //    //# clear sf2 cache
-//    //apc_clear_cache('sf2'); 
+//    //apc_clear_cache('sfynx23'); 
 //    //
 //    //var_dump(realpath_cache_get());
 //}

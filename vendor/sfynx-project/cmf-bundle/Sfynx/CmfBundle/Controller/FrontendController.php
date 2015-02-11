@@ -27,7 +27,7 @@ use Sfynx\CmfBundle\Entity\Page as Page;
  *
  * @subpackage Admin_Controllers
  * @package    Controller
- * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com> 
  */
 class FrontendController extends CmfabstractController
 {

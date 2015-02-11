@@ -190,7 +190,7 @@ class Widget
     
         $this->setEnabled(true);
         $this->setConfigXml(PiWidgetExtension::getDefaultConfigXml());
-        $this->setLifetime('84600');
+        $this->setLifetime('0');
     }
 
     /**

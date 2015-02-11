@@ -91,12 +91,12 @@ class RoleFactory extends AbstractFactory implements RoleFactoryInterface
        	$twig_endif   = "{{ \" {% endif %}  \" }} \n";
     
     	return array(
-    			'autorized' => $all_roles_authorized,
-    			'no_authorized' => $all_roles_no_authorized,
-    			'script_or' => $script_or,
-    			'script_and' => $script_and,
-    			'twig_if' => $twig_if,
-    			'twig_endif' => $twig_endif
+            'autorized' => $all_roles_authorized,
+            'no_authorized' => $all_roles_no_authorized,
+            'script_or' => $script_or,
+            'script_and' => $script_and,
+            'twig_if' => $twig_if,
+            'twig_endif' => $twig_endif
     	);
     }    
     

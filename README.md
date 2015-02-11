@@ -184,7 +184,7 @@ mkdir web/yui
 
 chmod –R 0777 app/cachesfynx
 chmod –R 0777 app/cache
-chmod –R 0777 app/log
+chmod –R 0777 app/logs
 chmod –R 0777 web/uploads
 chmod –R 0777 web/yui
 ```
