@@ -33,7 +33,7 @@ class SymfonyConnexion_1 extends Simulation {
             .exec(http("request_fr_2")
                     .get("/fr/404error")
                     .headers(headers_1)
-                    .check(status.is(200)))
+                    .check(status.is(404)))
             .pause(1000 milliseconds, 3000 milliseconds)
             .exec(http("request_fr_3")
                     .get("/fr/")
@@ -50,7 +50,7 @@ class SymfonyConnexion_1 extends Simulation {
             .exec(http("request_en_2")
                     .get("/en/404error")
                     .headers(headers_1)
-                    .check(status.is(200)))
+                    .check(status.is(404)))
             .pause(1000 milliseconds, 3000 milliseconds)
             .exec(http("request_en_3")
                     .get("/en/")
@@ -60,7 +60,7 @@ class SymfonyConnexion_1 extends Simulation {
         }
         .group("Login") {
             exec(http("request_login_1")
-                    .get("/")
+                    .get("/en/")
                     .headers(headers_1))
                 .pause(0 milliseconds, 100 milliseconds)
                 .feed(csv("connexion_sfynx.csv"))
@@ -75,7 +75,7 @@ class SymfonyConnexion_1 extends Simulation {
         .group("Logout") {
             repeat(1) {
                 exec(http("request_logout_1")
-                        .get("/")
+                        .get("/en/")
                         .headers(headers_1))
                     .pause(1000 milliseconds, 3000 milliseconds)
             }.exec(http("request_logout_2")
@@ -84,10 +84,10 @@ class SymfonyConnexion_1 extends Simulation {
                     .check(status.in(200 to 302)))
             .pause(0 milliseconds, 100 milliseconds)
             .exec(http("request_logout_3")
-                    .get("/")
+                    .get("/en/")
                     .headers(headers_1))
             .pause(0 milliseconds, 100 milliseconds)
         }
 
-    setUp(scn.inject(atOnceUsers(500)).protocols(httpConf))
+    setUp(scn.inject(atOnceUsers(2000)).protocols(httpConf))
 }

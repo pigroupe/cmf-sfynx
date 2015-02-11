@@ -78,7 +78,7 @@ EOT
     {
         $start_date = time();
         $this->em   = $this->getContainer()->get('doctrine')->getManager('default');
-        $root_dir = $this->getContainer()->getParameter("kernel.root_dir") ."/data";
+        $root_dir = $this->getContainer()->getParameter("kernel.root_dir") ."/config/gatling/data";
         \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($root_dir, 0777);
         $path   = $root_dir . "/connexion_sfynx.csv";
         file_put_contents($path, 'username,password'."\n", LOCK_EX);
@@ -91,7 +91,7 @@ EOT
             ."`created_at`) VALUES "
             ."(:id, 'fr_FR', :user, :user, :user, :user, 1, '73rwkq08i3wo0ow840c0g48k800o0ok', "
             ."'xREF5HHqHbZmlmoO3+s5BXtVtYa3TIf8Wv+IVXJsQwx+0FG1WnqxjJ46toQ1u/+v1lfKOwo90FqEbqiPDzDo+g==', '2014-11-13 00:00:00', "
-            ."0, 0, NULL, NULL, NULL, 'a:1:{i:0;s:11:\"ROLE_USER\";}', 'a:4:{i:0;s:4:\"VIEW\";i:1;s:4:\"EDIT\";i:2;s:6:\"CREATE\";i:3;s:6:\"DELETE\";}', 0, NULL, :user, :user, '2014-11-12 17:55:21' "
+            ."0, 0, NULL, NULL, NULL, 'a:1:{i:0;s:9:\"ROLE_USER\";}', 'a:4:{i:0;s:4:\"VIEW\";i:1;s:4:\"EDIT\";i:2;s:6:\"CREATE\";i:3;s:6:\"DELETE\";}', 0, NULL, :user, :user, '2014-11-12 17:55:21' "
             .");";
 
         $this->em->getConnection()->beginTransaction();
