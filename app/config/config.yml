@@ -689,8 +689,8 @@ sfynx_auth:
             layout: "SfynxSmoothnessBundle::Layout\\layout-ajax.html.twig"
             css: "bundles/sfynxsmoothness/layout/screen-layout-ajax.css"
         error:
-            route_name: ~ # error_404
-            html: "@SfynxSmoothnessBundle/Resources/views/Error/error.html.twig"
+            route_name: error_404
+            html: ~ #"@SfynxSmoothnessBundle/Resources/views/Error/error.html.twig"
         admin:
             pc: "SfynxSmoothnessBundle::Layout\\Pc\\"
             mobile: "SfynxSmoothnessBundle::Layout\\Mobile\\Admin\\"
