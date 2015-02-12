@@ -22,13 +22,13 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - LAMELEE" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - SFYNX" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1000</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <longProp name="ThreadGroup.start_time">1422287468000</longProp>
         <longProp name="ThreadGroup.end_time">1422287468000</longProp>
@@ -59,8 +59,8 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Temps humain de click sur article (3s)" enabled="true">
-              <stringProp name="ConstantTimer.delay">300</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur article (3s)" enabled="true">
+              <stringProp name="ConstantTimer.delay">3000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -84,8 +84,8 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Temps humain de click sur article (3s)" enabled="true">
-              <stringProp name="ConstantTimer.delay">300</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur article (3s)" enabled="true">
+              <stringProp name="ConstantTimer.delay">3000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -109,8 +109,8 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Temps humain de click sur menu principale (3s)" enabled="true">
-              <stringProp name="ConstantTimer.delay">300</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur menu principale (3s)" enabled="true">
+              <stringProp name="ConstantTimer.delay">3000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -134,8 +134,8 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Temps humain de click sur menu principale (3s)" enabled="true">
-              <stringProp name="ConstantTimer.delay">300</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur menu principale (3s)" enabled="true">
+              <stringProp name="ConstantTimer.delay">3000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -159,8 +159,8 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Temps humain de click sur menu principale (3s)" enabled="true">
-              <stringProp name="ConstantTimer.delay">300</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur menu principale (3s)" enabled="true">
+              <stringProp name="ConstantTimer.delay">3000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -184,8 +184,8 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Temps humain de click sur menu principale (3s)" enabled="true">
-              <stringProp name="ConstantTimer.delay">300</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur menu principale (3s)" enabled="true">
+              <stringProp name="ConstantTimer.delay">3000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -208,7 +208,12 @@
             <boolProp name="HTTPSampler.monitor">false</boolProp>
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
-          <hashTree/>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur menu principale (3s)" enabled="true">
+              <stringProp name="ConstantTimer.delay">3000</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+          </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login Page" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
@@ -219,7 +224,7 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path"></stringProp>
+            <stringProp name="HTTPSampler.path">/</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -229,8 +234,8 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Temps humain pour la saisie du Login/password" enabled="true">
-              <stringProp name="ConstantTimer.delay">500</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain pour la saisie du Login/password" enabled="true">
+              <stringProp name="ConstantTimer.delay">5000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -333,7 +338,12 @@
               <boolProp name="HTTPSampler.monitor">false</boolProp>
               <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
             </HTTPSamplerProxy>
-            <hashTree/>
+            <hashTree>
+              <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Temps humain de click sur menu principale (3s)" enabled="true">
+                <stringProp name="ConstantTimer.delay">1000</stringProp>
+              </ConstantTimer>
+              <hashTree/>
+            </hashTree>
           </hashTree>
           <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -349,22 +359,28 @@
                 <message>true</message>
                 <threadName>true</threadName>
                 <dataType>true</dataType>
-                <encoding>false</encoding>
+                <encoding>true</encoding>
                 <assertions>true</assertions>
                 <subresults>true</subresults>
-                <responseData>false</responseData>
+                <responseData>true</responseData>
                 <samplerData>false</samplerData>
                 <xml>true</xml>
-                <fieldNames>false</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>true</responseHeaders>
+                <requestHeaders>true</requestHeaders>
                 <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <url>true</url>
+                <fileName>true</fileName>
+                <hostname>true</hostname>
+                <threadCounts>true</threadCounts>
+                <sampleCount>true</sampleCount>
+                <idleTime>true</idleTime>
               </value>
             </objProp>
-            <stringProp name="filename"></stringProp>
+            <stringProp name="filename">/home/alhassane/Documents/lamelee_audit/test-scenario/jmeter/prod/1-thread/jmeter-scenariot-1-thread-tree.jtl</stringProp>
           </ResultCollector>
           <hashTree/>
           <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
@@ -396,7 +412,7 @@
                 <bytes>true</bytes>
               </value>
             </objProp>
-            <stringProp name="filename"></stringProp>
+            <stringProp name="filename">/home/alhassane/Documents/lamelee_audit/test-scenario/jmeter/prod/1-thread/jmeter-scenariot-1-thread-table.jtl</stringProp>
           </ResultCollector>
           <hashTree/>
           <ResultCollector guiclass="MonitorHealthVisualizer" testclass="ResultCollector" testname="Monitor Results" enabled="true">
@@ -656,21 +672,21 @@
           </ResultCollector>
           <hashTree/>
         </hashTree>
-        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
-          <collectionProp name="CookieManager.cookies"/>
-          <boolProp name="CookieManager.clearEachIteration">false</boolProp>
-        </CookieManager>
-        <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Source de données CSV" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding">UTF-8</stringProp>
-          <stringProp name="filename">/var/www/symf_lamelee/app/data/connexion.csv</stringProp>
+          <stringProp name="filename">/var/www/cmf-sfynx/app/config/jmeter/data/connexion_sfynx.csv</stringProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
           <stringProp name="shareMode">Toutes les unités</stringProp>
           <boolProp name="stopThread">false</boolProp>
           <stringProp name="variableNames">username,password</stringProp>
         </CSVDataSet>
+        <hashTree/>
+        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
+          <collectionProp name="CookieManager.cookies"/>
+          <boolProp name="CookieManager.clearEachIteration">true</boolProp>
+        </CookieManager>
         <hashTree/>
       </hashTree>
       <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">

@@ -1,0 +1,96 @@
+### PROD-new-2 (mod mod_fcgid)
+
+## APC - /etc/php5/conf.d/20-apc.ini
+extension=apc.so
+apc.shm_size=1500M #This will allocate 1500M from the RAM to APC
+apc.ttl=7200
+apc.user_ttl=7200
+apc.enable_cli=0
+apc.stat=0
+apc.stat_ctime = 0
+
+## FCGID - Setting /etc/apache2/conf.d/00-myconf
+<Directory /var/www>
+AddHandler fcgid-script .php
+FCGIWrapper /usr/lib/cgi-bin/php5 .php
+Options +ExecCGI
+</Directory>
+# If you have Aliases provide php support for them (Here we provide php support for scripts in /usr/share's subdirectories)
+Alias /aptitude /usr/share/doc/aptitude/html/en
+Alias /apt /usr/share/doc/apt-doc
+
+<Directory /usr/share>
+AddHandler fcgid-script .php
+FCGIWrapper /usr/lib/cgi-bin/php5 .php
+Options ExecCGI FollowSymlinks Indexes
+</Directory>
+
+## PHP FPM - Edit  /etc/php5/fpm/pool.d/www.conf with following parameters :
+[www]
+user = www-data
+group = www-data
+chdir = /
+listen = 127.0.0.1:9000
+pm = dynamic
+pm.max_children      = 10
+pm.start_servers     = 4
+pm.min_spare_servers = 3
+pm.max_spare_servers = 10
+pm.max_requests      = 2000
+
+## MPM MWORKER - /etc/apache2/conf.d/mpm-worker.conf :
+<IfModule mpm_worker_module>
+  ServerLimit           1000
+  StartServers            3
+  MinSpareThreads         3
+  MaxSpareThreads        10
+  MaxClients            1000
+  MaxRequestsPerChild     0 
+</IfModule>
+
+## PHP.INI - /etc/php5/cli/php.ini
+max_input_time = -1
+memory_limit = -1
+max_execution_time = 2400
+
+## apache2.conf - /etc/apache2/apache2.conf
+Timeout 1800
+KeepAliveTimeout 15
+
+## MySql - /etc/mysql/my.cnf
+query_cache_size = 256M
+query_cache_limit  = 24M
+key_buffer = 256M
+tmp_table_size = 128MB
+
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        ServerName www.sfynx.local
+        DocumentRoot /var/www/cmf-sfynx/web
+
+	DirectoryIndex app.php
+
+#       php_value auto_prepend_file "/var/www/xhprof/external/header.php"
+#       php_value auto_append_file "/var/www/xhprof/external/footer.php"
+
+        <IfModule mod_fcgid.c>
+        #  SuexecUserGroup web2 web2
+          <Directory /var/www/cmf-sfynx/web/>
+            Options +ExecCGI
+            AllowOverride All
+            AddHandler fcgid-script .php
+            FCGIWrapper /var/www/php-fcgi-scripts/php-fcgi-starter .php
+            Order allow,deny
+            Allow from all
+          </Directory>
+        </IfModule>
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        LogLevel debug 
+ #warn
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+
+
+
