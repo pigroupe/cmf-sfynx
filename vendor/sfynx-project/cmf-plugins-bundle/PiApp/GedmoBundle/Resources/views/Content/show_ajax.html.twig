@@ -1,0 +1,7 @@
+{% extends getParameter('sfynx.auth.theme.layout.ajax') %}
+
+{% block global_layout %}
+
+	{% include 'PiAppGedmoBundle:Content:show_view.html.twig' with {'NoLayout':NoLayout, 'entity':entity, 'category':category} %}
+
+{% endblock %}

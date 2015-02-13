@@ -1,0 +1,8 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% extends getParameter('sfynx.auth.theme.layout.ajax') %}
+
+{% block global_layout %}
+
+	{% include 'PiAppGedmoBundle:Content:new_view.html.twig' with {'form':form, 'NoLayout':NoLayout, 'category':category} %}
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% if NoLayout %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1><a href="{{ path('admin_homepage') }}" >Accueil</a> > Création de tag</h1>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}    
+
+	<!-- Begin tag markup -->
+	<div id="tabs">
+		<ul>
+			<li>
+				<a href="#tabs-1" title="{{ 'pi.form.title.default.create'|trans }}">{{ 'pi.form.title.default.create'|trans }}</a>
+			</li>
+		</ul>
+
+		{% form_theme form getParameter('pi_app_admin.layout.template.form') %}
+		<form class="myform" action="{{ path('admin_content_tag_create', { 'NoLayout': NoLayout, 'category':category }) }}" method="post" {{ form_enctype(form) }} novalidate>
+		    <div id="tabs-1">
+		    	{{ form_widget(form) }}
+		    </div>
+		    <ul class="ui-widget-header ui-footer">
+			    <li>
+			    	<!-- <input id="add_tab" type="button" value="{{ 'pi.grid.action.add-tab'|trans }}" /> -->
+			    	<button type="submit" class="button-ui-create">{{ 'pi.grid.action.create'|trans }}</button>
+		            <a href="{{ path('admin_content_tag', { 'NoLayout': NoLayout, 'category':category }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+			    </li>
+			</ul>                 	    
+		</form>
+		
+	</div>
+	<!-- End tag markup -->	
+	
+	{% set options = {'prototype-name': ['translations'], 'prototype-tab-title': 'Translate'} %}
+	{{ renderJquery('FORM', 'prototype-bytab', options )|raw }}
+
+{% endblock %}

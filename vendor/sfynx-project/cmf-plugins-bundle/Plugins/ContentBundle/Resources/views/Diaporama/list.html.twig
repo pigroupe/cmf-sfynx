@@ -1,0 +1,34 @@
+<h1 class="tt2">NOS DOSSIERS DE MARIAGE</h1>
+
+<div class="listResults" id="paging_container">
+<ul class="content cf">
+    {% for diaporama in diaporamas %}
+        <li>
+            <article class="article cf">
+                <figure class="cf">
+
+                    <a href="{{ app.request.schemeAndHttpHost }}/{{diaporama.blocgeneral.type }}/{{ diaporama.blocgeneral.mainrub }}/{{ diaporama.blocgeneral.subrub }}/{{ diaporama.blocgeneral.slug }}.html" class="fleft">
+                        {% if diaporama.blocgeneral.media.image.id is defined %}
+                            <img width="160" height="98" alt="{{ clean_name(diaporama.blocgeneral.media.image.name) }}" src="{{ media_url(diaporama.blocgeneral.media.image.id, 'sous_rubrique', true, diaporama.blocgeneral.media.getUpdatedAt(), 'article_small_') }}"/>
+                        {% endif %}
+                    </a>
+                    <figcaption class="fright">
+                        <a href="{{ app.request.schemeAndHttpHost }}/{{diaporama.blocgeneral.type }}/{{ diaporama.blocgeneral.mainrub }}/{{ diaporama.blocgeneral.subrub }}/{{ diaporama.blocgeneral.slug }}.html">
+                            <span class="arrowLeft"></span>
+                            <h3 class="tt5">{{ diaporama.blocgeneral.title|striptags|lower|ucfirst }}</h3>
+                            <p>{{ diaporama.blocgeneral.descriptif|striptags|truncateText(150, '...')|raw }}</p>
+                        </a>
+                    </figcaption>
+                </figure>
+                <footer><p>Ajout&eacute; le {{ diaporama.blocgeneral.publishedat|localedate('long','medium', locale, 'EEEE d LLLL y')|ucfirst }} </p></footer>
+            </article>
+        </li>
+    {% endfor %}
+</ul>
+</div>
+
+<div class="paging cf">
+{% if (pagination_article is defined) %}
+    {{ knp_pagination_render(pagination_article, 'PiAppTemplateBundle:Template\\pagination:paginator.tag.html.twig')|raw }}
+{% endif %}
+</div>

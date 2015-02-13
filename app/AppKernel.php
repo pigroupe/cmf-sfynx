@@ -64,6 +64,7 @@ class AppKernel extends Kernel
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
+            //new Plugins\ContentBundle\PiAppGedmoBundle(),
             new Sfynx\AuthBundle\SfynxAuthBundle(),
             new Sfynx\CmfBundle\SfynxCmfBundle(),
 

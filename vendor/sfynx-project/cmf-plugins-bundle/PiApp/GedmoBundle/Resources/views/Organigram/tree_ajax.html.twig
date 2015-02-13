@@ -1,0 +1,14 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% initJquery 'ACCORDEON:nested' %}
+
+{% javascript "bundles/sfynxtemplate/js/jquery/multiselect/js/jquery.multiselect.filter.js" %}
+{% stylesheet "bundles/sfynxtemplate/js/jquery/multiselect/css/jquery.multiselect.filter.css:prepend" %}
+{% stylesheet "bundles/sfynxtemplate/js/jquery/multiselect/css/jquery.multiselect.css:prepend" %}
+
+{% extends getParameter('sfynx.auth.theme.layout.ajax') %}
+
+{% block global_layout %}
+	
+	{% include 'PiAppGedmoBundle:Organigram:tree_view.html.twig' with {'NoLayout':NoLayout, 'form_search':form_search, 'category': category, 'tree':tree} %}
+	
+{% endblock %}

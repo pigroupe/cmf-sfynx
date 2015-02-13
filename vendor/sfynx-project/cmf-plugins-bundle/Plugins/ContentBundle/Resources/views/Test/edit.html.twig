@@ -1,0 +1,186 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% if NoLayout %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h3><a href="{{ path('admin_homepage') }}" >Accueil</a> > <a href="{{ path('admin_content_bloc_general') }}" >Contenus</a> > Test</h3>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}    
+
+	<!-- Begin tag markup -->
+	<div id="tabs">
+		<ul>
+			<li>
+				<a href="#tabs-1" title="{{ 'pi.form.title.default.update'|trans }}">{{ 'pi.form.title.default.update'|trans }}</a> 
+			</li>
+		</ul>
+
+		{% form_theme edit_form getParameter('pi_app_admin.layout.template.form') %}
+		<form class="myform" action="{{ path('admin_content_test_update', { 'id': entity.id, 'NoLayout': NoLayout, 'category':category }) }}" method="post" {{ form_enctype(edit_form) }} novalidate>
+		    <div id="tabs-1">
+                        {#          
+                        {% set qsts = entity.questions %}
+                        <ul class="questions" data-prototype="{{ form_widget(edit_form.questions.vars.prototype)|e }}">
+                            {% for key,question in edit_form.questions %}
+                                <li class="questionLi{{ key }}">
+                                    {{ form_row(question) }}
+                                     <div class="clearfix " style="">
+                                     	<label class="test_collection">&nbsp;</label>
+                                     	<div class="input">
+                                    		<a href="#" class="removeA" id="remove-{{ question.id }}" >Supprimer cette question</a>
+                                    	</div>
+                                     </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <br/>
+                        {{ form_rest(edit_form) }}
+                        #}
+                        
+                        {{ form_widget(edit_form) }}
+                        {% if entity.blocgeneral.media.image is defined %}
+                            {{ picture_crop(entity.blocgeneral.media.image, "default", "plugins_contentbundle_testtype_blocgeneral_media")|raw}}
+                        {% endif %}            
+		    </div>
+		    <ul class="ui-widget-header ui-footer">
+			    <li>
+			    	<button id="add_tab" class="button-ui-add-tab">{{ 'pi.grid.action.add-question'|trans }}</button>
+			    	<a href="#" data-url="{{ path('admin_content_test_question', { 'id': entity.id, 'NoLayout':true }) }}" class="button-ui-back-list popin-edit" style="margin-right:70px">Modifier la position des questions</a>
+			    	
+			    	<button type="submit" class="button-ui-save">{{ 'pi.grid.action.save'|trans }}</button>
+		            <a href="{{ path('admin_content_bloc_general', { 'NoLayout': NoLayout, 'category':category }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+					{% if (NoLayout == false) %} 
+		            <a data-id="delete-form" class="button-ui-delete">{{ 'pi.grid.action.delete'|trans }}</a> 
+				    {% endif %}
+	            	<a target="_blank" href="{{ path_url('page_content_test', {'locale':app.request.locale, 'slug':entity.blocgeneral.getSlug(), 'rubrique':entity.blocgeneral.getMainrub().getSlug()|striptags, 'sousrubrique':entity.blocgeneral.getSubrub().getSlug()|striptags}) }}" class="button-ui-back-list" style="margin-left:70px">
+							Lien site web
+					</a>				    
+			    </li>
+			</ul>                	    
+		</form>
+	</div>
+	
+	<div style="display:none">		
+    	<form id="delete-form" action="{{ path('admin_content_test_delete', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category }) }}" method="post">
+        	{{ form_widget(delete_form) }}
+        	<button type="submit">{{ 'pi.grid.action.delete'|trans }}</button>
+    	</form>
+    </div>       
+	<!-- End tag markup -->	
+	
+	{% set options = {'prototype-name': ['questions'], 'prototype-tab-title': 'Question'} %}
+	{{ renderJquery('FORM', 'prototype-bytab', options )|raw }}
+	
+	<script type="text/javascript">
+	//<![CDATA[
+			j_prototype_bytabs.ftc_accordion_form("classement_collection", "{{ 'Classement'|trans }}", ".myform");
+	        j_prototype_bytabs.ftc_accordion_form("text_collection", "{{ 'Description'|trans }}", ".myform");
+			j_prototype_bytabs.ftc_accordion_form("profil_collection", "{{ 'Profils'|trans }}", ".myform");
+			j_prototype_bytabs.ftc_accordion_form("bg_image_collection", "{{ 'pi.block.form.group.pictures'|trans }}", ".myform");
+			j_prototype_bytabs.ftc_accordion_form("meta_definition", "{{ 'SEO'|trans }}", ".myform");
+	//]]>
+	</script>	
+	
+    <script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+   /*     $("#plugins_contentbundle_testtype_blocgeneral_subrub").change( function() {
+            $.ajax({
+                type: "GET",
+                data: "data=" + $(this).val(),
+                url:"{{ path_url('admin_content_rub_liste_sous_rubrique', {'data':'1'})}}",
+                success: function(msg){
+                    if (msg != ''){
+                        $("#plugins_contentbundle_testtype_blocgeneral_rub").html(msg).show();
+                    }
+                    else{
+                        $("#plugins_contentbundle_testtype_blocgeneral_rub").html('<em>No item result</em>');
+                    }
+                }
+            });
+        });*/
+
+        $("a.popin-edit").on('click', function(e){
+            var url = $(this).data('url');
+
+            // empêche le lien de créer un « # » dans l'URL
+            e.preventDefault();
+            $('<div id="iframe-dialog" title="Modification de la position des questions">&nbsp;</div>').html('<iframe id="modalIframeId" width="99%" height="99%" style="overflow-x: hidden; overflow-y: auto" marginWidth="0" marginHeight="0" frameBorder="0" src="'+url+'" />').dialog({
+                width: 450,
+                height: 600,
+                open: function () {},
+                close: function () {
+                    window.location.reload(true);
+                }
+            });
+        });       
+    });
+	//]]>   
+    </script>
+
+	{#
+    <script type="text/javascript">
+    //<![CDATA[
+            // Récupère le div qui contient la collection de tags
+            var collectionHolder = $('ul.questions');
+            // ajoute un lien « add a tag »
+            var $addQuestionLink = $('<h1><a href="#" class="add_question_link">Ajouter une question</a></h1>');
+            var $newLinkLi = $('<li></li>').append($addQuestionLink);
+            jQuery(document).ready(function() {
+                // ajoute l'ancre « ajouter un tag » et li à la balise ul
+                collectionHolder.append($newLinkLi);
+                $addQuestionLink.on('click', function(e) {
+                    // empêche le lien de créer un « # » dans l'URL
+                    e.preventDefault();
+                    // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
+                    addQuestionForm(collectionHolder, $newLinkLi);
+                });
+            });
+            $('.removeA').on('click', function(e) {
+                // empêche le lien de créer un « # » dans l'URL
+                e.preventDefault();
+                // supprime l'élément li pour le formulaire de tag
+                $(this).parent().remove();
+            }); 
+            j_prototype_bytabs.ftc_accordion_form("image_collection", "{{ 'pi.block.form.group.pictures'|trans }}", ".myform");
+            $("[class^='questionLi']").each(function(i){
+            		var currentClass = $(this).attr('class');
+            		j_prototype_bytabs.ftc_accordion_form("test_collection", "{{ 'Questions'|trans }} " + (i + 1), ".myform", currentClass);
+            		$(this).css({'display':'none'});
+            }); 
+                       
+	        function addQuestionForm(collectionHolder, $newLinkLi) {
+	            // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+	            var prototype = collectionHolder.attr('data-prototype');
+	            // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+	            // la longueur de la collection courante
+	            var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+	            // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+	            var $newFormLi = $('<li></li>').append(newForm);
+	            $newLinkLi.before($newFormLi);
+	            //Suppression de la question
+	            addQuestionFormDeleteLink($newFormLi);
+	        }
+	        function addQuestionFormDeleteLink($questionFormLi) {
+	            var $removeFormA = $('<a href="#" class="removeA">Supprimer cette question</a>');
+	            $questionFormLi.append($removeFormA);
+	
+	            $removeFormA.on('click', function(e) {
+	                // empêche le lien de créer un « # » dans l'URL
+	                e.preventDefault();
+	                // supprime l'élément li pour le formulaire de tag
+	                $questionFormLi.remove();
+	            });
+	        }
+    //]]>
+    </script>   
+    #}  
+
+{% endblock %}		

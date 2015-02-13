@@ -1,0 +1,329 @@
+{% initJquery 'GRID:grid-table' %}
+{% stylesheet getParameter('pi_app_admin.admin.theme_css')~':prepend' %}
+{% if NoLayout %}
+	{% stylesheet 'bundles/piappadmin/css/layout/admin/screen.css' %}
+	{% javascript 'bundles/piappadmin/js/jquery/custom_jquery.js' %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	{% if type_entity is not empty %}
+	<h1><a href="{{ path('admin_homepage') }}" >Accueil</a> > <a href="{{ path('admin_content_bloc_general') }}" >Contenus</a> > {{ type_entity }}</h1>
+	{% else %}
+	<h1><a href="{{ path('admin_homepage') }}" >Accueil</a> > Contenus</h1>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+    
+    {{ parent() }}
+
+	{% if NoLayout == false %}
+	<!--  start actions-box ............................................... -->
+	<div id="actions-box">
+	{% if ((type_entity is empty) or (type_entity == 'article')) %}
+			<a href="{{ path('admin_content_article_new', {'NoLayout':NoLayout, 'category':category}) }}" class="action-edit" title="{{ 'créer un article'|trans }}">{{ 'créer un article'|trans }}</a>
+	{% endif %}
+	{% if ((type_entity is empty) or (type_entity == 'diaporama')) %}
+            <a href="{{ path('admin_content_diaporama_new', {'NoLayout':NoLayout, 'category':category}) }}" class="action-edit" title="{{ 'créer un dossier'|trans }}">{{ 'créer un dossier'|trans }}</a>
+	{% endif %}            
+	{% if ((type_entity is empty) or (type_entity == 'test')) %}            
+            <a href="{{ path('admin_content_test_new', {'NoLayout':NoLayout, 'category':category}) }}" class="action-edit" title="{{ 'créer un test'|trans }}">{{ 'créer un test'|trans }}</a>
+    {% endif %}        
+	{% if ((type_entity is empty) or (type_entity == 'page')) %}            
+            <a href="{{ path('admin_content_page_new', {'NoLayout':NoLayout, 'category':category}) }}" class="action-edit" title="{{ 'créer une page'|trans }}">{{ 'créer une page'|trans }}</a>
+	{% endif %}       
+            
+            
+			<div class="clear"></div>
+	</div>
+	<!-- end actions-box........... -->
+	{% endif %}
+ 
+	<table id="grid_blocgeneral" class="grid" >
+	    <thead>
+	        <tr>	            
+	            <th class="position" >Position</th>
+	        	<th>Id</th>	  
+                <th>{{ 'pi.form.label.field.topic'|trans }}</th>
+                <th>{{ 'pi.page.form.tags'|trans }}</th>
+	            <th>Intitulé</th>	                        
+	            <th>{{ 'pi.form.label.field.type'|trans }}</th>
+                <th>{{ 'pi.form.label.field.author'|trans }}</th>
+	            <th>{{ 'pi.page.form.status'|trans }}</th>
+                <th width="101px">Date de création</th>	  
+                <th width="101px">Date de début de parution</th>
+                <th width="101px">Date de fin de parution</th>
+                <th width="140px">Actions</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	    {% if not isServerSide %}
+		    {% set num_line = 0 %}
+		    {% for entity in entities %}
+                    {% if  entity.article.id is defined %}
+                	    {% set type = 'article' %}
+                	    {% set idEntity = entity.article.id %}
+                	{% elseif entity.diaporama.id is defined %}
+                	    {% set type = 'diaporama' %}
+                	    {% set idEntity = entity.diaporama.id %}
+                	{% elseif entity.page.id is defined %}
+                	    {% set type = 'page' %}
+                	    {% set idEntity = entity.page.id %}
+                	{% elseif entity.test.id is defined %}
+                	    {% set type = 'test' %}
+                	    {% set idEntity = entity.test.id %}
+                	{% endif %}
+		        <tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_{{ type }}_{{ idEntity }}'  >		
+                    <td class="position" >{{ entity.position}}</td>		
+		        	<td>
+		        		{% if  entity.article.id is defined %}
+	                	<a href="{{ path('admin_content_article_edit', { 'id': entity.article.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}">{{ entity.id }}</a>
+	                	{% elseif entity.diaporama.id is defined %}
+	                	<a href="{{ path('admin_content_diaporama_edit', { 'id': entity.diaporama.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}">{{ entity.id }}</a>
+	                	{% elseif entity.page.id is defined %}
+	                	<a href="{{ path('admin_content_page_edit', { 'id': entity.page.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}">{{ entity.id }}</a>
+	                	{% elseif entity.test.id is defined %}
+	                	<a href="{{ path('admin_content_test_edit', { 'id': entity.test.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}">{{ entity.id }}</a>
+	                	{% endif %}
+		        	</td>		
+		            <td>{{ entity.mainrub }}</td>
+                    <td>
+                        {% for tag in entity.tag %}
+                            {{ tag.title }}
+                        {% endfor %}
+                    </td>
+                    <td>
+						{% if  entity.article.id is defined %}
+   		            	<a target="_blank" href="{{ path_url('page_contenu_article', {'locale':app.request.locale, 'slug':entity.getSlug(), 'rubrique':entity.getMainrub().getSlug()|striptags, 'sousrubrique':entity.getSubrub().getSlug()|striptags}) }}" class="info-tooltip">
+							{{ entity.title|truncateText(55)|raw }}
+						</a>
+	                	{% elseif entity.diaporama.id is defined %}
+   		            	<a target="_blank" href="{{ path_url('page_content_diaporama', {'locale':app.request.locale, 'slug':entity.getSlug(), 'rubrique':entity.getMainrub().getSlug()|striptags, 'sousrubrique':entity.getSubrub().getSlug()|striptags}) }}" class="info-tooltip">
+							{{ entity.title|truncateText(55)|raw }}
+						</a>
+	                	{% elseif entity.page.id is defined %}
+   		            	<a target="_blank" href="{{ path_url('page_content_page', {'locale':app.request.locale, 'slug':entity.getSlug()}) }}" class="info-tooltip">
+							{{ entity.title|truncateText(55)|raw }}
+						</a>
+	                	{% elseif entity.test.id is defined %}
+   		            	<a target="_blank" href="{{ path_url('page_content_test', {'locale':app.request.locale, 'slug':entity.getSlug(), 'rubrique':entity.getMainrub().getSlug()|striptags, 'sousrubrique':entity.getSubrub().getSlug()|striptags}) }}" class="info-tooltip">
+							{{ entity.title|truncateText(55)|raw }}
+						</a>
+	                	{% endif %}
+            		</a> 
+		            </td>
+		            <td>
+		                {{ entity|typeContent }}
+		            </td>		
+                    <td>{% if entity.author %}{{ entity.author }}{% endif%}</td>
+		            <td>{{ entity|status }}</td>
+                    <td>{% if entity.createdat %}{{ entity.createdat|date('Y-m-d') }}{% endif%}</td>	
+                    <td>{% if entity.publishedat %}{{ entity.publishedat|date('Y-m-d') }}{% endif%}</td>
+                    <td>{% if entity.archiveat %}{{ entity.archiveat|date('Y-m-d') }}{% endif%}</td>
+					<td width="140px">
+		            	{% if  entity.article.id is defined %}
+	                	<a href="{{ path('admin_content_article_edit', { 'id': entity.article.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="button-ui-edit">{{ 'pi.grid.action.edit'|trans }}</a>
+	                	<a id="showimagescrop" url="{{ path('admin_content_article_show_images_crop', {'id':entity.id}) }}" title="Images" class="button-ui-edit">{{ 'crop'|trans }}</a>
+	                	{% elseif entity.diaporama.id is defined %}
+	                	<a href="{{ path('admin_content_diaporama_edit', { 'id': entity.diaporama.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="button-ui-edit">{{ 'pi.grid.action.edit'|trans }}</a>
+	                	<a id="showimagescrop" url="{{ path('admin_content_diaporama_show_images_crop', {'id':entity.id}) }}" title="Images" class="button-ui-edit">{{ 'crop'|trans }}</a>
+	                	{% elseif entity.page.id is defined %}
+	                	<a href="{{ path('admin_content_page_edit', { 'id': entity.page.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="button-ui-edit">{{ 'pi.grid.action.edit'|trans }}</a>
+	                	<a id="showimagescrop" url="{{ path('admin_content_page_show_images_crop', {'id':entity.id}) }}" title="Images" class="button-ui-edit">{{ 'crop'|trans }}</a>
+	                	{% elseif entity.test.id is defined %}
+	                	<a href="{{ path('admin_content_test_edit', { 'id': entity.test.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="button-ui-edit">{{ 'pi.grid.action.edit'|trans }}</a>
+	                	<a id="showimagescrop" url="{{ path('admin_content_test_show_images_crop', {'id':entity.id}) }}" title="Images" class="button-ui-edit">{{ 'crop'|trans }}</a>
+	                	{% endif %}
+					</td>                      
+		        </tr>
+		        {% if num_line == 0 %} 
+		        	{% set num_line = 1 %}
+		        {% else %}
+		        	{% set num_line = 0 %}
+		        {% endif %}	
+		                
+		    {% endfor %}
+	    {% endif %}
+	    </tbody>
+	    <tfoot>
+			<tr>
+				<th data-type="input"><input type="text" name="" value="Position" style="width:100%" /></th>
+				<th data-type="input"><input type="text" name="" value="Id" style="width:100%" /></th>
+				<th data-column='2' data-title="{{ 'pi.form.label.field.topic'|trans }}" data-values='{{ rubriques|json_encode }}'></th>
+				<th data-column='3' data-title="{{ 'pi.form.label.field.tag'|trans }}"></th>
+				
+				<th data-column='4' data-type="input" ><input type="text" name="" value="" style="width:100%" /></th>
+				{#<th data-column='4' data-title="Auteur" style="width:100%" ></th>#}
+				
+				<th data-column='5' data-title="{{ 'pi.form.label.field.type'|trans }}" data-values='{"article":"Articles","diaporama":"Dossiers","test":"Tests","page":"Pages"}'></th>
+				<th data-column='6' data-type="input" ><input type="text" name="" value="" style="width:100%" /></th>
+				<th data-column='7' data-title="{{ 'pi.page.form.status'|trans }}" data-values='{"tif":"Actif","Archive":"Archivé","En attente dactivation":"En attente d activation"}'></th>
+                <th data-type="input"><input type="text" name="" value="{{ 'pi.create.name'|trans }}" style="width:100%" /></th>
+                <th data-type="input"><input type="text" name="" value="publishedat" style="width:100%" /></th> 
+                <th data-type="input"><input type="text" name="" value="{{ 'pi.update.name'|trans }}" style="width:100%" /></th>
+				<th></th>
+			</tr>
+		</tfoot>	    
+	</table>
+    
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $("#grid_blocgeneral_filter").append('<br /><a href="{{ path('admin_content_bloc_general') }}" style="color:black;font-weight:bold;">Supprimer tous les critères</a>');
+            $('#showimagescrop').live("click", function(){
+                $("#block-action-dialog").html('<iframe id="modalIframeId" width="100%" height="100%" marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto" src="'+$(this).attr("url")+'" />').dialog({
+                    width: 840,
+                    height: 600,
+                    open: function () {
+                        $(this).attr('title', 'images de croping');
+                        $(this).find('iframe').attr('style', 'width: 99%;height: 99%');
+                    },
+                    beforeClose: function () {
+
+                    },
+                    captionButtons: {
+                        //pin: { visible: true },
+                        refresh: { visible: true },
+                        //toggle: { visible: true },
+                        minimize: { visible: true },
+                        maximize: { visible: true }
+                    },
+                    show: 'scale',
+                    hide: 'scale',
+                    collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                    expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                });
+            });
+        });
+    </script>
+    
+    {% if type_entity is not empty %}
+	{% set options_gridtabale = {'grid-name': 'grid_blocgeneral', 'grid-type':'simple', 
+	        'grid-server-side': isServerSide,
+			'grid-state-save' : 'false',
+	        'grid-row-select':'multi',
+			'grid-paginate':'true',
+			'grid-LengthMenu':15,
+			'grid-paginate-top': 'true',
+			'grid-filter-date': {
+				'0': {'column' : 8, 'title-start': 'date min crea. ', 'title-end': 'date max crea.', 'right':'740', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minc', 'idMax':'maxc'},
+                '1': {'column' : 9, 'title-start': 'date min pub. ', 'title-end': 'date max pub.', 'right':'550', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minp', 'idMax':'maxp'},
+                '2': {'column' : 10, 'title-start': 'date min arc. ', 'title-end': 'date max arc.', 'right':'360', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'mina', 'idMax':'maxa'},
+            },			
+			'grid-filters-select': ['0','1','2','3','4','5','7','6','8','9','10','11'],
+			'grid-filters-active':'true',
+			'grid-filters': { 
+					'4':'Tag',
+					'5':'Intitulé',
+				},
+			'grid-filters-tfoot-up':'true',
+			'grid-sorting': { 
+					'8':'desc',
+				},
+			'grid-columns': { 
+					'0': { "bSortable": true },
+					'1': { "bSortable": true },
+					'2': { "bSortable": true },
+					'3': { "bSortable": true },
+					'4': { "bSortable": true },
+					'5': { "bSortable": false },
+					'6': { "bSortable": true },
+					'7': { "bSortable": false },
+					'8': { "bSortable": true },
+					'9': { "bSortable": true },
+					'10': { "bSortable": true },
+					'11': { "bSortable": false }
+				},				
+			'grid-visible': {
+				'0':'false',
+				'1':'false',
+                '2':'true',
+                '3':'false',
+                '5':'false',
+                '9':'true',
+                '10':'true',
+				},						
+		
+			} 			
+	%}
+    {% set grid_actions = {
+					'select_all': {'sButtonText':'pi.grid.action.select_all'},
+					'select_none': {'sButtonText':'pi.grid.action.select_none'},
+            }
+    %}
+    {% set grid_actions = grid_actions|merge({
+                        'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'admin_gedmo_blocgeneral_enabledentity_ajax','reload':1},
+                        'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'admin_gedmo_blocgeneral_disablentity_ajax', 'reload':1},
+                    }
+                )
+    %}
+    {% set grid_actions = grid_actions|merge({
+                        'rows_archive': {'sButtonText':'pi.grid.action.row_archive', 'route':'admin_gedmo_blocgeneral_archiventity_ajax','reload':1, 'remove':0},
+                    }
+                )
+    %}    
+    {% set options_gridtabale = options_gridtabale|merge({'grid-actions':grid_actions}) %}
+	{#
+			'rows_delete': {'sButtonText':'pi.grid.action.row_delete', 'route':'admin_gedmo_blocgeneral_deletentity_ajax'},
+	#}
+	{% else %}
+	{% set options_gridtabale = {'grid-name': 'grid_blocgeneral', 'grid-type':'simple', 
+	        'grid-server-side': isServerSide,
+			'grid-state-save' : 'false',
+	        'grid-row-select':'multi',
+			'grid-paginate':'true',
+			'grid-LengthMenu':15,
+			'grid-paginate-top': 'true',
+			'grid-filter-date': {
+				'0': {'column' : 8, 'title-start': 'date min crea. ', 'title-end': 'date max crea.', 'right':'740', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minc', 'idMax':'maxc'},
+                '1': {'column' : 9, 'title-start': 'date min pub. ', 'title-end': 'date max pub.', 'right':'550', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minp', 'idMax':'maxp'},
+                '2': {'column' : 10, 'title-start': 'date min arc. ', 'title-end': 'date max arc.', 'right':'360', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'mina', 'idMax':'maxa'},
+            },			
+			'grid-filters-select': ['0','1','2','3','4','5','7','6','8','9','10','11'],
+			'grid-filters-active':'true',
+			'grid-filters': { 
+					'4':'Tag',
+					'5':'Intitulé',
+				},
+			'grid-filters-tfoot-up':'true',				
+			'grid-sorting': { 
+					'8':'desc',
+				},
+			'grid-columns': { 
+					'0': { "bSortable": true },
+					'1': { "bSortable": true },
+					'2': { "bSortable": true },
+					'3': { "bSortable": true },
+					'4': { "bSortable": true },
+					'5': { "bSortable": false },
+					'6': { "bSortable": true },
+					'7': { "bSortable": false },
+					'8': { "bSortable": true },
+					'9': { "bSortable": true },
+					'10': { "bSortable": true },
+					'11': { "bSortable": false }
+				},				
+			'grid-visible': {
+				'0':'false',
+				'1':'false',
+                '2':'true',
+                '3':'false',
+                '9':'true',
+                '10':'true',
+				},						
+			'grid-actions': { 
+					'select_all': {'sButtonText':'pi.grid.action.select_all'},
+					'select_none': {'sButtonText':'pi.grid.action.select_none'},
+					'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'admin_gedmo_blocgeneral_enabledentity_ajax','reload':0},
+					'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'admin_gedmo_blocgeneral_disablentity_ajax', 'reload':0},
+					'rows_archive': {'sButtonText':'pi.grid.action.row_archive', 'route':'admin_gedmo_blocgeneral_archiventity_ajax','reload':0, 'remove':0},
+				}		
+			} 			
+	%}	
+	{% endif %}
+	{{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}	
+
+{% endblock %}

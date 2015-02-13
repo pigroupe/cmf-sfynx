@@ -4,7 +4,7 @@
      * archive {{ entity }} entities.
      *
      * @Route("/admin/gedmo/{{ entity|lower|replace({"\\": ''}) }}/archive", name="admin_gedmo_{{ entity|lower|replace({"\\": '_'}) }}_archiventity_ajax")
-     * @Secure(roles="ROLE_EDITOR")
+     * @PreAuthorize("hasRole('ROLE_EDITOR') or (hasRole('ROLE_ADMIN') and hasRole('ROLE_SUPER_ADMIN'))")
      * @return Response
      * @access public
      */

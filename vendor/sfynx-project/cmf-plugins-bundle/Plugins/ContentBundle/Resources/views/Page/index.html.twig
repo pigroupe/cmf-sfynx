@@ -1,0 +1,137 @@
+{% initJquery 'GRID:grid-table' %}
+{% stylesheet getParameter('pi_app_admin.admin.theme_css')~':prepend' %}
+{% if NoLayout %}
+	{% stylesheet 'bundles/piappadmin/css/layout/admin/screen.css' %}
+	{% javascript 'bundles/piappadmin/js/jquery/custom_jquery.js' %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1>Page</h1>
+{% endblock %}
+ 
+{% block content %}
+    
+    {{ parent() }}
+
+		{% if NoLayout == false %}
+	<!--  start actions-box ............................................... -->
+	<div id="actions-box">
+		<!-- <a href="" class="action-slider"><span>{{ 'pi.grid.action.title'|trans }}</span></a> -->
+		<!-- <div id="actions-box-slider"> -->
+			<a href="{{ path('admin_content_page_new', {'NoLayout':NoLayout, 'category':category}) }}" class="action-edit" title="{{ 'pi.grid.action.create'|trans }}">{{ 'pi.grid.action.create'|trans }}</a>
+		<!-- </div> -->
+		<div class="clear"></div>
+	</div>
+	<!-- end actions-box........... -->
+	{% endif %}
+	
+	<table id="grid_page" class="grid" >
+	    <thead>
+	        <tr>	            
+	            <th>Id</th>	            
+	            <th>Created_at</th>	            
+	            <th>Updated_at</th>	            
+	            <th>Published_at</th>	            
+	            <th>Archive_at</th>	            
+	            <th>Archived</th>	            
+	            <th>Enabled</th>	        	
+	            <th class="position" >Position</th>	                   
+	            <th>Actions</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	    {% if not isServerSide %}
+		    {% set num_line = 0 %}
+		    {% for entity in entities %}
+		        <tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_row_{{ entity.id }}'  >		
+		            <td><a href="{{ path('admin_content_page_show', { 'id': entity.id, 'NoLayout': NoLayout, 'category':category }) }}" title="">{{ entity.id }}</a></td>		
+		            <td>{% if entity.createdat %}{{ entity.createdat|date('Y-m-d') }}{% endif%}</td>		
+		            <td>{% if entity.updatedat %}{{ entity.updatedat|date('Y-m-d') }}{% endif%}</td>		
+		            <td>{% if entity.publishedat %}{{ entity.publishedat|date('Y-m-d') }}{% endif%}</td>		
+		            <td>{% if entity.archiveat %}{{ entity.archiveat|date('Y-m-d') }}{% endif%}</td>		
+		            <td>
+		            	{{ entity.archived|truncateText(55)|raw }}
+		            </td>		
+		            <td class="enabled" >{{ entity.enabled}}</td><td class="position" >{{ entity.position}}</td>	
+					<td width="200px">
+						<a href="{{ path('admin_content_page_show', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category }) }}" title="{{ 'pi.grid.action.show'|trans }}" class="button-ui-show">{{ 'pi.grid.action.show'|trans }}</a>
+	                	<a href="{{ path('admin_content_page_edit', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="button-ui-edit">{{ 'pi.grid.action.edit'|trans }}</a>
+                        <a id="showimagescrop" url="{{ path('admin_content_page_show_images_crop', {'id':entity.id}) }}" title="Images" class="button-ui-edit">{{ 'crop'|trans }}</a>
+					</td>                     		
+		        </tr>
+		        {% if num_line == 0 %} 
+		        	{% set num_line = 1 %}
+		        {% else %}
+		        	{% set num_line = 0 %}
+		        {% endif %}	
+		                
+		    {% endfor %}
+	    {% endif %}
+	    </tbody>
+	</table>
+
+    <script type="text/javascript">
+        $( document ).ready(function() {
+
+            $('#showimagescrop').live("click", function(){
+                $("#block-action-dialog").html('<iframe id="modalIframeId" width="100%" height="100%" marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto" src="'+$(this).attr("url")+'" />').dialog({
+                    width: 840,
+                    height: 600,
+                    open: function () {
+                        $(this).attr('title', 'images de croping');
+                        $(this).find('iframe').attr('style', 'width: 99%;height: 99%');
+                    },
+                    beforeClose: function () {
+
+                    },
+                    captionButtons: {
+                        //pin: { visible: true },
+                        refresh: { visible: true },
+                        //toggle: { visible: true },
+                        minimize: { visible: true },
+                        maximize: { visible: true }
+                    },
+                    show: 'scale',
+                    hide: 'scale',
+                    collapsingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                    expandingAnimation: { animated: "scale", duration: 1000000, easing: "easeOutExpo" },
+                });
+            });
+        });
+    </script>
+
+	{% set options_gridtabale = {'grid-name': 'grid_page', 'grid-type':'simple', 
+	        'grid-server-side': isServerSide,
+			'grid-paginate':'true',
+			'grid-LengthMenu':25,
+			'grid-filters-select': ['0','1','8'],
+			'grid-filters-active':'true',
+			'grid-filters': { 
+					'1':'Position',
+					'2':'Identifiant',
+				},
+			'grid-sorting': { 
+					'0':'asc',
+				},
+			'grid-visible': {
+				'0':'true',
+				'1':'false',
+				},						
+			'grid-actions': { 
+					'rows_position': {'route':'admin_gedmo_page_position_ajax',},
+					'select_all': {'sButtonText':'pi.grid.action.select_all'},
+					'select_none': {'sButtonText':'pi.grid.action.select_none'},
+					'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'admin_gedmo_page_enabledentity_ajax',},
+					'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'admin_gedmo_page_disablentity_ajax'},
+					'rows_archive': {'sButtonText':'pi.grid.action.row_archive', 'route':'admin_gedmo_page_archiventity_ajax'},
+					'rows_delete': {'sButtonText':'pi.grid.action.row_delete', 'route':'admin_gedmo_page_deletentity_ajax'},				
+				}		
+			} 			
+	%}
+	{{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}	
+
+{% endblock %}

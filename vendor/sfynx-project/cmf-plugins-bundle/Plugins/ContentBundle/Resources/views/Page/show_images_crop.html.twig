@@ -1,0 +1,8 @@
+<a href="{{ path('admin_content_page_edit', { 'id': entity.id, 'NoLayout':1, 'category':category }) }}" title="{{ 'pi.grid.action.edit'|trans }}">Editer les images</a>
+
+{% if entity.blocgeneral.media.image is defined %}
+    {{ picture_index(entity.blocgeneral.media.image, 'slider', slider_width ,  slider_height )|raw }}
+{%  else %}
+    </br></br> Aucune image n'est associée à cette page
+{% endif %}
+

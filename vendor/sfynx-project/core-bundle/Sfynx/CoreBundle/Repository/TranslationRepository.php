@@ -257,16 +257,36 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      */
     public function setTranslatableHints(Query $query, $locale, $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
-        $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\Translatable\Query\TreeWalker\TranslationWalker'); // if you use memcache or apc. You should set locale and other options like fallbacks to query through hints. Otherwise the query will be cached with a first used locale
+        // BE CARFULL ::: Strange Issue with Query Hint and APC
+        $query->setHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+        ); // if you use memcache or apc. You should set locale and other options like fallbacks to query through hints. Otherwise the query will be cached with a first used locale
+        $query->setHint(
+                \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE, 
+                $locale
+        ); // take locale from session or request etc.        
         if ($INNER_JOIN) {
-        	$query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_INNER_JOIN, $INNER_JOIN); // will use INNER joins for translations instead of LEFT joins, so that in case if you do not want untranslated records in your result set for instance.
+            $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_INNER_JOIN, $INNER_JOIN); // will use INNER joins for translations instead of LEFT joins, so that in case if you do not want untranslated records in your result set for instance.
         }
         if (!$lazy_loading) {
-        	// to avoid lazy-loading.
-        	$query->setHint(\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true);
+            // to avoid lazy-loading.
+            $query->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);
         }
-        $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale); // take locale from session or request etc.
-        $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_FALLBACK, $FALLBACK); // fallback to default values in case if record is not translated
+        $query->setHint(
+                \Gedmo\Translatable\TranslatableListener::HINT_FALLBACK,
+                $FALLBACK
+        ); // fallback to default values in case if record is not translated
+
+//        $config = $this->container->get('doctrine')->getManager()->getConfiguration();
+//        if ($config->getCustomHydrationMode(TranslationWalker::HYDRATE_OBJECT_TRANSLATION) === null) {
+//            $config->addCustomHydrationMode(
+//                TranslationWalker::HYDRATE_OBJECT_TRANSLATION,
+//                'Gedmo\\Translatable\\Hydrator\\ORM\\ObjectHydrator'
+//            );
+//        }        
+        $query->setHydrationMode(\Gedmo\Translatable\Query\TreeWalker\TranslationWalker::HYDRATE_OBJECT_TRANSLATION);
+        $query->setHint(Query::HINT_REFRESH, true);
         
         return $query;
     }    

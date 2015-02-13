@@ -1,0 +1,86 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% if NoLayout %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}
+{% extends layout_nav %}
+
+{% block title %}
+    <h3><a href="{{ path('admin_homepage') }}" >Accueil</a> > <a href="{{ path('admin_content_bloc_general') }}" >Contenus</a> > Article</h3>
+{% endblock %}
+
+{% block content %}
+
+    {{ parent() }}    
+
+	<!-- Begin tag markup -->
+	<div id="tabs">
+		<ul>
+			<li>
+				<a href="#tabs-1" title="{{ 'pi.form.title.default.update'|trans }}">{{ 'pi.form.title.default.update'|trans }}</a>
+			</li>
+		</ul>
+
+		{% form_theme edit_form getParameter('pi_app_admin.layout.template.form') %}
+		<form class="myform" action="{{ path('admin_content_article_update', { 'id': entity.id, 'NoLayout': NoLayout, 'category':category }) }}" method="post" {{ form_enctype(edit_form) }} novalidate>
+		    <div id="tabs-1">
+                {{ form_widget(edit_form) }}
+                {% if entity.blocgeneral.media.image is defined %}
+                    {{ picture_crop(entity.blocgeneral.media.image, "default", "plugins_contentbundle_articletype_blocgeneral_media")|raw}}
+                {% endif %}
+		    </div>
+		    <ul class="ui-widget-header ui-footer">
+			    <li>
+			    	<!-- <input id="add_tab" type="button" value="{{ 'pi.grid.action.add-tab'|trans }}" /> -->
+			    	<button type="submit" class="button-ui-save">{{ 'pi.grid.action.save'|trans }}</button>
+		            <a href="{{ path('admin_content_bloc_general', { 'NoLayout': NoLayout, 'category':category }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+					{% if (NoLayout == false) %} 
+		            <a data-id="delete-form" class="button-ui-delete">{{ 'pi.grid.action.delete'|trans }}</a> 
+				    {% endif %}
+			    </li>
+			</ul>    
+		</form>
+	</div>
+	<div style="display:none">		
+    	<form id="delete-form" action="{{ path('admin_content_article_delete', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category }) }}" method="post">
+        	{{ form_widget(delete_form) }}
+        	<button type="submit">{{ 'pi.grid.action.delete'|trans }}</button>
+    	</form>
+    </div>     
+	<!-- End tag markup -->
+
+	{% set options = {'prototype-name': ['translations'], 'prototype-tab-title': 'Translate'} %}
+	{{ renderJquery('FORM', 'prototype-bytab', options )|raw }}
+	
+	<script type="text/javascript">
+	//<![CDATA[
+	        j_prototype_bytabs.ftc_accordion_form("classement_collection", "{{ 'Classement'|trans }}", ".myform");
+	        j_prototype_bytabs.ftc_accordion_form("text_collection", "{{ 'Description'|trans }}", ".myform");
+			j_prototype_bytabs.ftc_accordion_form("bg_image_collection", "{{ 'pi.block.form.group.pictures'|trans }}", ".myform");
+			j_prototype_bytabs.ftc_accordion_form("meta_definition", "{{ 'SEO'|trans }}", ".myform");
+	//]]>
+	</script>	
+
+    <script type="text/javascript">
+    //<![CDATA[
+   /* $(document).ready(function(){
+        $("#plugins_contentbundle_articletype_blocgeneral_subrub").change( function() {
+            $.ajax({
+                type: "GET",
+                data: "data=" + $(this).val(),
+                url:"{{ path_url('admin_content_rub_liste_sous_rubrique', {'data':'1'})}}",
+                success: function(msg){
+                    if (msg != ''){
+                        $("#plugins_contentbundle_articletype_blocgeneral_rub").html(msg).show();
+                    }
+                    else{
+                        $("#plugins_contentbundle_articletype_blocgeneral_rub").html('<em>No item result</em>');
+                    }
+                }
+            });
+        });
+    });*/
+	//]]>   
+    </script>
+{% endblock %}

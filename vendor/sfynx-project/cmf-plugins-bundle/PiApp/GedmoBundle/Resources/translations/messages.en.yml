@@ -1,0 +1,149 @@
+# pi :: dashboard
+pi.dashboard.search: Search
+pi.dashboard.myaccount: My Account
+pi.dashboard.logout: Logout
+
+pi.dashboard.common.view_all: View all
+pi.dashboard.common.new: New
+
+pi.dashboard.menu1.title: Dashboard 
+pi.dashboard.menu1.media_media: Media
+pi.dashboard.menu1.media_gallery: Gallery
+pi.dashboard.menu1.group_list: Group
+pi.dashboard.menu1.group_user: User
+pi.dashboard.menu1.group_role: Role
+pi.dashboard.menu1.group_permission: Permission
+pi.dashboard.menu1.cms_historicalpage: Historical Page
+
+pi.dashboard.menu2.title: CMS
+pi.dashboard.menu2.layout: Layout
+pi.dashboard.menu2.page: Page
+pi.dashboard.menu2.cssjs: Css/Js
+pi.dashboard.menu2.snippet: Snippet
+
+pi.dashboard.menu3.title: Data
+pi.dashboard.menu3.rubrique: Section
+pi.dashboard.menu3.language: Language 
+pi.dashboard.menu3.tag: Tag
+pi.dashboard.menu3.keyword: Keyword
+pi.dashboard.menu3.comment: Comment
+pi.dashboard.menu3.word: Words
+pi.dashboard.menu3.category: Category
+
+pi.dashboard.menu4.title: Widget
+pi.dashboard.menu4.page: Page
+pi.dashboard.menu4.content: Content
+pi.dashboard.menu4.menu: Menu
+pi.dashboard.menu4.slider: Slider
+pi.dashboard.menu4.organigram: Organigram chart
+pi.dashboard.menu4.block: Block
+pi.dashboard.menu4.media: Media
+pi.dashboard.menu4.news: News
+
+pi.dashboard.menu5.title: Work
+pi.dashboard.menu5.individual: Individual
+pi.dashboard.menu5.corporation: Corporation
+pi.dashboard.menu5.rss: Rss
+pi.dashboard.menu5.newsletter: Newsletter
+pi.dashboard.menu5.ads: Ads
+
+pi.dashboard.menu6.title: Others
+pi.dashboard.menu6.contact: Contact
+pi.dashboard.menu6.pressrelease: Press releases
+pi.dashboard.menu6.partner: Partners
+pi.dashboard.menu6.team: Team
+
+# ENTITY :: MEDIA
+pi.media.title: List of media
+pi.media.form.field.mediadelete: Action to remove the media %s type.
+
+# ENTITY :: MENU
+pi.menu.title: Menu List
+pi.menu.translation.title: Translation menu
+pi.menu.form.picture: Picture
+pi.menu.form.group.pictures: Pictures
+
+# ENTITY :: ACTIVITY
+pi.activity.translation.title: Activity translation
+
+# ENTITY :: ORGANIGRAM
+pi.organigram.title: List of flowcharts
+pi.organigram.translation.title: Organigram translation
+pi.organigram.form.group.pictures: Pictures
+
+# ENTITY :: SLIDER
+pi.slider.title: List of sliders
+pi.slider.translation.title: Slider translation
+pi.slider.template.more: more
+pi.slider.form.group.pictures: Pictures
+
+# ENTITY :: CATEGORY
+pi.topic.title: Topics list
+pi.category.type.0: Contact
+pi.category.type.1: Block
+pi.category.type.2: Media
+pi.category.type.3: Contents
+pi.category.type.4: Slider
+pi.category.type.5: Menu
+pi.category.type.6: Rss
+pi.category.type.7: Pressrelease
+pi.category.type.8: Partner
+pi.category.type.9: Newsletter
+
+# ENTITY :: BLOCK
+pi.block.title: List of blocks
+pi.block.formbuilder.template.choice1: Block description with image on the left
+pi.block.formbuilder.template.choice2: Block description with picture at right
+pi.block.formbuilder.template.choice3: Block content with image on the left
+pi.block.formbuilder.template.choice4: Block content with side by side pictures and text  below
+pi.block.formbuilder.template.choice5: block content with center image
+pi.block.formbuilder.template.choice6: Block content image with right
+pi.block.formbuilder.template.choice9: Block content by default
+pi.block.formbuilder.template.choice7: Block video to the right of the description 
+pi.block.formbuilder.template.choice8: Block video to the left of the description
+pi.block.form.group.pictures: Pictures
+pi.block.form.group.url: Link
+
+# ENTITY :: CONTENT
+pi.content.title: List of contents
+pi.content.translation.title: Content translation
+pi.content.formbuilder.template.choice0: Simple content
+pi.content.formbuilder.template.choice1: Content in a P balise
+pi.content.formbuilder.template.choice2: Content in a DIV balise
+pi.content.formbuilder.template.choice3: Content in a SPAN balise
+pi.content.formbuilder.template.choice4: Content in a H1 balise
+pi.content.formbuilder.template.choice5: Content in a H2 balise
+pi.content.formbuilder.template.choice6: Content in a H3 balise
+
+# ENTITÉ :: CONTACT
+pi.contact.title: List of contacts
+pi.contact.form.picture.left: Left picture
+pi.contact.form.picture.right: Right picture
+pi.contact.form.group.addess: Address
+pi.contact.form.group.email: Email form
+pi.contact.form.group.website: Website
+pi.contact.form.group.pictures: Pictures
+pi.contact.formbuilder.template.choice0: Default template
+
+# ENTITY :: NEWS
+pi.news.form.picture: Picture
+pi.news.form.group.pictures: Pictures
+pi.news.form.group.links: Links
+pi.news.form.group.information: Information
+
+# ENTITY :: RSS
+pi.rss.form.group.pictures: Pictures
+
+# ENTITY :: PRESS RELEASE
+pi.pressmedia.form.file: File
+pi.pressmedia.form.pressmedia: Press release type
+
+# ENTITY :: PARTENERS
+pi.partner.form.group.text: Information
+pi.partner.form.group.page: Link
+pi.partner.form.group.picture: Logo
+
+# ENTITY :: NEWSLETTER
+pi.newsletter.form.group.text: Information
+pi.newsletter.form.group.page: Link
+pi.newsletter.form.group.picture: Logo
