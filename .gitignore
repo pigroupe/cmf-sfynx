@@ -18,7 +18,6 @@ app/bootstrap*
 # Symfony directories
 nbproject/*
 vendor/*
-!vendor/Sfynx/
 !vendor/sfynx-project/
 !vendor/Pear/
 !vendor/Zend/

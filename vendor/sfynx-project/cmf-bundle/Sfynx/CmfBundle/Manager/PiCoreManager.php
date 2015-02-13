@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 use Sfynx\CmfBundle\Builder\PiCoreManagerBuilderInterface;
-use Sfynx\CmfBundle\Manager\PiCoreManager;
+use Sfynx\ToolBundle\Util\PiFileManager;
 use Sfynx\CmfBundle\Entity\Page;
 use Sfynx\CmfBundle\Entity\TranslationPage;
 use Sfynx\CmfBundle\Entity\Widget;
@@ -280,53 +280,53 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             if ($this->isSluggifyPage()) {    		
                 $path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $this->Etag, $lang);
                 if (!file_exists($path_json_file_tmp)) {
-                    $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
+                    $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
                     // we add new Etag in the sluggify file.
                     $path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
-                    $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
+                    $result = PiFileManager::save($path_json_file_sluggify, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);
                 }
             // if the page has queries
             } elseif ($this->isQueryStringPage()) {	
                 $path_json_file_tmp = $this->createJsonFileName('page-history-tmp', $this->Etag, $lang);
                 if (!file_exists($path_json_file_tmp)) {
-                    $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
+                    $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, LOCK_EX);
                     // we add new Etag in the history.
                     $path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
-                    $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);    		    
+                    $result = PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", 0777, FILE_APPEND);    		    
                 }
             } else {
                 $path_json_file   = $this->createJsonFileName('page', $id, $lang);
                 if (!file_exists($path_json_file)) {
-                    $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+                    $result = PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
                 }
             }
     	} elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
     	    $path_json_file_tmp = $this->createJsonFileName('esi-tmp', $params['esi-url'], $lang);
             if (!file_exists($path_json_file_tmp)) {
-                $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
+                $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", 0777, LOCK_EX);
                 // we add new ESI tag in the file.
                 $path_json_file = $this->createJsonFileName('esi', $id, $lang);
-                $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
+                $result = PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", 0777, FILE_APPEND);
             }
     	} elseif (isset($params['widget-id']) && !empty($params['widget-id'])) {
     	    if (isset($params['widget-sluggify-url'])) {
     	        $path_json_file_tmp = $this->createJsonFileName('widget-history-tmp', $this->Etag, $lang);
     	        if (!file_exists($path_json_file_tmp)) {
-                    $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+                    $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
                     // we add new Etag in the history.
                     $path_json_file_history = $this->createJsonFileName('widget-history', $params['widget-id'], $lang);
-                    $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
+                    $result = PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
     	        }
     	    } else {
                 $path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
-                $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+                $result = PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
     	    }
     	} else {
             $path_json_file_tmp = $this->createJsonFileName('default-tmp', $this->Etag, $lang);
             if (!file_exists($path_json_file_tmp)) {
-                $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
+                $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", 0777, LOCK_EX);
                 $path_json_file = $this->createJsonFileName('default', $tag, $lang);
-                $result = \Sfynx\ToolBundle\Util\PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
+                $result = PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", 0777, FILE_APPEND);
             }
     	}
     
@@ -344,7 +344,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     public function createCacheWidgetRepository()
     {
         $path  = $this->container->getParameter("pi_app_admin.cache_dir.widget");
-    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($path, 0777);
+    	PiFileManager::mkdirr($path, 0777);
     
     	return $path;
     }    
