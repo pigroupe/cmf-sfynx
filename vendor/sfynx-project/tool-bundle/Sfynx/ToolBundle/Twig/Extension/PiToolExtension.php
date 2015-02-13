@@ -144,6 +144,9 @@ class PiToolExtension extends \Twig_Extension
      */
     public function getFunctions() {
         return array(
+            // Php Function
+            'file_exists' => new \Twig_Function_Function('file_exists'),
+            //
             'link'                    => new \Twig_Function_Method($this, 'linkFunction'),
             'in_paths'                => new \Twig_Function_Method($this, 'inPathsFunction'),
             'get_img_flag_By_country' => new \Twig_Function_Method($this, 'getImgFlagByCountryFunction'),
