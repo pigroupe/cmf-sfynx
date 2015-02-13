@@ -1,7 +1,0 @@
-{% extends getParameter('sfynx.auth.theme.layout.ajax') %}
-	
-{% block global_layout %}
-
-	{% include 'PiAppGedmoBundle:Organigram:show_view.html.twig' with {'delete_form':delete_form, 'NoLayout':NoLayout, 'entity':entity} %}
-		
-{% endblock %}
