@@ -1,8 +1,16 @@
 {
     "name": "symfony/framework-standard-edition",
-    "license": "MIT",
-    "type": "project",
+    "license": "GNU GPL",
+    "authors": [
+        {
+            "name": "Etienne de Longeaux",
+            "email": "etienne.delongeaux@gmail.com",
+            "homepage": "http://pi-groupe.fr",
+            "role": "Copyright Holder"
+        }
+    ],    
     "description": "The \"Symfony Standard Edition\" distribution",
+    "keywords": ["CMF"],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.19",
