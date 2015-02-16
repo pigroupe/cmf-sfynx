@@ -1,0 +1,22 @@
+default:
+    autoload: src/
+    extensions:
+        Behat\Symfony2Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                my_session:
+                    selenium2: ~
+    suites:
+        tool:
+            type: symfony_bundle
+            bundle: 'SfynxToolBundle'
+        core:
+            type: symfony_bundle
+            bundle: 'SfynxCoreBundle'
+        auth:
+            type: symfony_bundle
+            bundle: 'SfynxAuthBundle'
+        cmf:
+            type: symfony_bundle
+            bundle: 'SfynxCmfBundle'            
+

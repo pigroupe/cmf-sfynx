@@ -24,6 +24,7 @@ The framework works with Symfony 2.3 and has been split into 17 bundles :
 * SmoothnessBundle: A bundle which is used to define a complet admin template with all layers
 * AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
 * ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
+* BehatBundle : A bundle which provides context tools to run mink tests
 * CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 

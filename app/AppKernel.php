@@ -65,7 +65,7 @@ class AppKernel extends Kernel
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
-            //new Plugins\ContentBundle\PluginsContentBundle(),
+            new Cmf\ContentBundle\CmfContentBundle(),
             new Sfynx\AuthBundle\SfynxAuthBundle(),
             new Sfynx\CmfBundle\SfynxCmfBundle(),
 
@@ -74,7 +74,7 @@ class AppKernel extends Kernel
             new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
             new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(), 
         );
-
+            
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();

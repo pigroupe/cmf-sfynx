@@ -116,7 +116,7 @@
             "Sfynx\\BehatBundle": "vendor/sfynx-project/tool-bundle",
             "Sfynx\\CoreBundle": "vendor/sfynx-project/core-bundle",
             "Sfynx\\CmfBundle": "vendor/sfynx-project/cmf-bundle",
-            "Plugins\\ContentBundle": "vendor/sfynx-project/cmf-plugins-bundle",
+            "Cmf\\ContentBundle": "vendor/sfynx-project/cmf-plugins-bundle",
             "PiApp\\GedmoBundle": "vendor/sfynx-project/cmf-plugins-bundle",
             "Sfynx\\AuthBundle": "vendor/sfynx-project/auth-bundle",
             "Sfynx\\BrowserBundle": "vendor/sfynx-project/browser-bundle",
