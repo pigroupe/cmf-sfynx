@@ -12,6 +12,7 @@
 namespace Sfynx\BehatBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Sfynx configuration and managment of the Behat Bundle

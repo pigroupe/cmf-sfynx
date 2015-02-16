@@ -52,6 +52,7 @@ class AppKernel extends Kernel
             new Sfynx\WsBundle\SfynxWsBundle(),
             new Sfynx\CacheBundle\SfynxCacheBundle(),
             new Sfynx\ToolBundle\SfynxToolBundle(),
+            new Sfynx\BehatBundle\SfynxBehatBundle(),
             new Sfynx\CoreBundle\SfynxCoreBundle(),
             new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
             new Sfynx\BrowserBundle\SfynxBrowserBundle(),
@@ -64,7 +65,7 @@ class AppKernel extends Kernel
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
-            //new Plugins\ContentBundle\PiAppGedmoBundle(),
+            //new Plugins\ContentBundle\PluginsContentBundle(),
             new Sfynx\AuthBundle\SfynxAuthBundle(),
             new Sfynx\CmfBundle\SfynxCmfBundle(),
 
