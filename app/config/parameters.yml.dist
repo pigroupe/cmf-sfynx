@@ -38,3 +38,6 @@ parameters:
     
     #esi key
     esi_key: 9eu9ghv9 
+    
+    #WSSE key
+    wsse-secret_key: wsse_secured

@@ -68,6 +68,11 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
             
+        wsse_secured:
+            pattern:   /api/.*
+            stateless: true
+            wsse:      true            
+            
 # jms_security_extra Configuration
 # http://jmsyst.com/bundles/JMSSecurityExtraBundle/master/configuration
 jms_security_extra:

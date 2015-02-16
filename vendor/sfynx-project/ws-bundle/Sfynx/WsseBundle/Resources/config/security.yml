@@ -1,0 +1,6 @@
+#security:
+#    firewalls:
+#        wsse_secured:
+#            pattern:   /api/.*
+#            stateless: true
+#            wsse:      true

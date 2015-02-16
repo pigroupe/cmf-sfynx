@@ -110,6 +110,8 @@
             "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
             "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",
             "Sfynx\\WsBundle": "vendor/sfynx-project/ws-bundle",
+            "Sfynx\\WsseBundle": "vendor/sfynx-project/ws-bundle",
+            "Sfynx\\ApiBundle": "vendor/sfynx-project/ws-bundle",
             "Sfynx\\TranslatorBundle": "vendor/sfynx-project/translator-bundle",
             "Sfynx\\CacheBundle": "vendor/sfynx-project/cache-bundle",
             "Sfynx\\ToolBundle": "vendor/sfynx-project/tool-bundle",
