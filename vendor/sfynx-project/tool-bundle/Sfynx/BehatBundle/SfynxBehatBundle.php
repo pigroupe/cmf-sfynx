@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <Tool> project.
+ * This file is part of the <Behat> project.
  *
  * @subpackage Tool
  * @package    Bundle
@@ -9,21 +9,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\ToolBundle;
+namespace Sfynx\BehatBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Sfynx\ToolBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
-use Sfynx\ToolBundle\DependencyInjection\Compiler\MapperCollectionPass;
 
 /**
- * Sfynx configuration and managment of the Tool Bundle
+ * Sfynx configuration and managment of the Behat Bundle
  *
  * @subpackage Tool
  * @package    Bundle
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class SfynxToolBundle extends Bundle
+class SfynxBehatBundle extends Bundle
 {
     /**
      * Builds the bundle.
@@ -38,9 +35,6 @@ class SfynxToolBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        // register extension
-        $container->addCompilerPass(new PiTwigEnvironmentPass());
-        $container->addCompilerPass(new MapperCollectionPass());
     }
     
     /**
@@ -55,5 +49,5 @@ class SfynxToolBundle extends Bundle
      */
     public function shutdown()
     {
-    }    
+    }  
 }

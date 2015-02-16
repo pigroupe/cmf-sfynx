@@ -1,0 +1,6 @@
+##
+## SfynxToolBundle configuration
+##
+#sfynx_tool: 
+#    mail:
+#        overloading_mail: ~ # test@gmail.com

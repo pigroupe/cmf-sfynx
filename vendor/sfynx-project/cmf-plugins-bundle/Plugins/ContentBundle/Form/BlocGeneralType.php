@@ -107,16 +107,16 @@ class BlocGeneralType extends AbstractType
         }    
         
         $builder  
-	         ->add('title', 'text', array(
-	        		'label'    => "pi.form.label.field.title",
-	        		"label_attr" => array(
-	        				"class"=>"",
-	        		),
-	        		'required'  => true,
-	        		'constraints' => array(
-	        				new Constraints\NotBlank(),
-	        		),
-	         ))    
+                ->add('title', 'text', array(
+                    'label'    => "pi.form.label.field.title",
+                    "label_attr" => array(
+                                    "class"=>"",
+                    ),
+                    'required'  => true,
+                    'constraints' => array(
+                        new Constraints\NotBlank(),
+                    ),
+                ))    
              ->add('enabled', 'hidden', array(
                      'data'  => true,
              ))

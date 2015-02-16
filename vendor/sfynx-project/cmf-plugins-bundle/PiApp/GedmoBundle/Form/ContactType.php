@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints;
 
 /**
  * Description of the ContactType form.
@@ -142,18 +143,30 @@ class ContactType extends AbstractType
                      'required'  => false,
              ))            
              ->add('coordinates', 'text', array(
-                     "label" => 'pi.form.label.field.adress.coordinates',
-                     'required'  => false,
+                    "label" => 'pi.form.label.field.adress.coordinates',
+                    'required'  => false,
              ))
              ->add('name','text', array(
-                     'required'      => false,
+                    'required'      => false,
+                    'constraints' => array(
+                       new Constraints\Regex(array(
+                           'pattern' => "/^[[:alpha:]\s'\x22\-_&@!?()\[\]-]*$/u",
+                           'message' => 'erreur.regex.name',
+                       )),
+                    ),
              ))
              ->add('nickname','text', array(
-                     'required'      => false,
+                    'required'      => false,
+                    'constraints' => array(
+                       new Constraints\Regex(array(
+                           'pattern' => "/^[[:alpha:]\s'\x22\-_&@!?()\[\]-]*$/u",
+                           'message' => 'erreur.regex.nickname',
+                       )),
+                    ),                 
              ))             
              
              
-             ->add('address', 'textarea', array(
+            ->add('address', 'textarea', array(
                      "label" => 'pi.form.label.field.adress.main',
                      "label_attr" => array(
                              "class"=>"address_collection",
@@ -162,14 +175,72 @@ class ContactType extends AbstractType
                              "class"    =>"pi_editor_simple_easy",
                      ),
                      'required'  => false,
-             ))
-             ->add('phone', 'text', array(
-                     "label" => 'pi.form.label.field.adress.phone',
+            ))
+            ->add('cp', 'text', array(
+                'label' => 'pi.form.label.field.adress.cp',
+                "label_attr" => array(
+                    "class"=>"address_collection",
+                ),
+                'required' => false,
+                'constraints' => array(
+                    new Constraints\Regex(array(
+                        'pattern' => "/^[0-9]{4,6}$/",
+                        //'htmlPattern' => "^[0-9]{4,6}$",
+                        //'match'   => false,
+                        'message' => 'erreur.regex.cp',
+                    )),
+                ),
+            ))      
+            ->add('city', 'text', array(
+                     "label" => 'pi.form.label.field.adress.city',
                      "label_attr" => array(
                              "class"=>"address_collection",
                      ),
+                     "attr" => array(
+                             "class"    =>"pi_editor_simple_easy",
+                     ),
                      'required'  => false,
-             ))
+            ))  
+            ->add('country', 'text', array(
+                    "label" => 'pi.form.label.field.adress.city',
+                    "label_attr" => array(
+                        "class"=>"address_collection",
+                    ),
+                    "attr" => array(
+                        "class"    =>"pi_editor_simple_easy",
+                    ),
+                    'required'  => false,
+            ))                               
+            ->add('phone', 'text', array(
+                    "label" => 'pi.form.label.field.adress.phone',
+                    "label_attr" => array(
+                             "class"=>"address_collection",
+                    ),
+                    'required'  => false,
+                    'constraints' => array(
+                        new Constraints\Regex(array(
+                            'pattern' => "/^[0-9._-\s]{10,}$/",
+                            //'htmlPattern' => "^[0-9._-\s]+{10,}$",
+                            //'match'   => false,
+                            'message' => 'erreur.regex.phone',
+                        )),
+                    ),  
+            ))
+            ->add('mobile', 'text', array(
+                    'label' => 'pi.form.label.field.adress.phone.mobile',
+                    'required' => false,
+                    "label_attr" => array(
+                         "class"=>"address_collection",
+                    ),
+                    'constraints' => array(
+                        new Constraints\Regex(array(
+                            'pattern' => "/^[0-9._-\s]{10,}$/",
+                            //'htmlPattern' => "^[0-9._-\s]+{10,}$",
+                            //'match'   => false,
+                            'message' => 'erreur.regex.phone',
+                        )),
+                    ),            		     		
+            ))                            
              ->add('fax', 'text', array(
                      "label" => 'pi.form.label.field.adress.fax',
                      "label_attr" => array(
@@ -185,13 +256,19 @@ class ContactType extends AbstractType
                              "class"=>"email_collection",
                      ),
                      'required'  => false,
+                     'constraints' => array(
+                        new Constraints\Email(),
+                     ),   
              ))
              ->add('email_sender', 'text', array(
-             		"label" => 'Nom expéditeur',
-             		"label_attr" => array(
-             				"class"=>"email_collection",
-             		),
-             		'required'  => false,
+                    "label" => 'Nom expéditeur',
+                    "label_attr" => array(
+                                    "class"=>"email_collection",
+                    ),
+                    'required'  => false,
+                    'constraints' => array(
+                        new Constraints\Email(),
+                     ), 
              ))             
              ->add('email_subject', 'text', array(
                      "label" => 'pi.form.label.field.email.subject',

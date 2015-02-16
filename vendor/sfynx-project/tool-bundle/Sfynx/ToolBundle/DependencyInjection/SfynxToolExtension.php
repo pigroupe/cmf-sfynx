@@ -41,11 +41,11 @@ class SfynxToolExtension extends Extension{
          * Mail config parameter
          */
         if (isset($config['mail'])){
-        	if (isset($config['mail']['overloading_mail'])) {
-        		$container->setParameter('sfynx.tool.mail.overloading_mail', $config['mail']['overloading_mail']);
-        	} else {
-        		$container->setParameter('sfynx.tool.mail.overloading_mail', '');
-        	}
+            if (isset($config['mail']['overloading_mail'])) {
+                $container->setParameter('sfynx.tool.mail.overloading_mail', $config['mail']['overloading_mail']);
+            } else {
+                $container->setParameter('sfynx.tool.mail.overloading_mail', '');
+            }
         }
         
         /**
@@ -65,6 +65,6 @@ class SfynxToolExtension extends Extension{
     public function getAlias()
     {
     	return 'sfynx_tool';
-    }    
-
+    }   
 }
+
