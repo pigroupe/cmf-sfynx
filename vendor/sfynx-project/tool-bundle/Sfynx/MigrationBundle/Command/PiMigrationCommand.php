@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Migration> project.
  *
- * @category   Sfynx
+ * @category   Migration
  * @package    Command
  * @subpackage Migration
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -15,7 +15,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\MigrationBundle;\Command;
+namespace Sfynx\MigrationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,7 +30,7 @@ use Symfony\Component\Finder\Finder;
  * php app/console sfynx:migration --currentVersion 24
  * </code>
  *
- * @category   Sfynx
+ * @category   Migration
  * @package    Command
  * @subpackage Migration
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -55,7 +55,6 @@ class PiMigrationCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $basePath = $this->getContainer()->getParameter('sfynx.tool.migration.basepath');
         /** @var $dialog \Symfony\Component\Console\Helper\DialogHelper */
         $dialog   = $this->getHelperSet()->get('dialog');
 
@@ -81,7 +80,7 @@ class PiMigrationCommand extends ContainerAwareCommand
             //if ($mivrationVersion == "24") {  // pour lancer la migration 24
                 $output->writeln('Start ' . $migrationName);
                 require_once($file->getRealpath());
-                new $migrationName($this->getContainer(), $basePath, $output, $dialog);
+                new $migrationName($this->getContainer(), $output, $dialog);
                 $output->writeln('End ' . $migrationName);
             }
         }

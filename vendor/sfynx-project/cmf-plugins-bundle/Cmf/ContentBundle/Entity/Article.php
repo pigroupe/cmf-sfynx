@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use BootStrap\TranslationBundle\Model\AbstractDefault;
+use Sfynx\CoreBundle\Model\AbstractDefault;
 
 /**
  * Cmf\ContentBundle\Entity\Article

@@ -7,8 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\DependencyInjection\Container;
-use Tools\AcceptanceTestBundle\Behat\MinkExtension\Context\MinkContext;
+use Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext;
 use Behat\Behat\ApplicationFactory;
 
 /**
@@ -60,9 +59,11 @@ class BehatCommand extends ContainerAwareCommand
     
     /**
      * Run behat original command
-     * @param Container $container
+     * 
+     * @param array $args
      */
-    private function runBehatCommand(array $args = array()) {
+    private function runBehatCommand(array $args = array())
+    {
         define('BEHAT_BIN_PATH', $this->getContainer()->getParameter('kernel.root_dir').'/../bin/behat');
         function includeIfExists($file)
         {

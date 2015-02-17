@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Admin> project.
  *
- * @subpackage   Admin
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @category   Admin
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,9 +25,15 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @subpackage   Admin
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Admin
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxAdminExtension extends Extension
 {

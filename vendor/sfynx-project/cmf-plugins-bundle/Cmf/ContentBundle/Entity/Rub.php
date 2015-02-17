@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use BootStrap\TranslationBundle\Model\AbstractDefault;
+use Sfynx\CoreBundle\Model\AbstractDefault;
 
 /**
  * Cmf\ContentBundle\Entity\Rub
@@ -134,7 +134,7 @@ class Rub extends AbstractDefault
     /**
      * @var integer $media
      *
-     * @ORM\ManyToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , inversedBy="cont_rub");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , inversedBy="cont_rub");
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;
@@ -338,7 +338,7 @@ class Rub extends AbstractDefault
     /**
      * Set media
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      */
     public function setMedia($media)
     {
@@ -349,7 +349,7 @@ class Rub extends AbstractDefault
     /**
      * Get media
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia()
     {

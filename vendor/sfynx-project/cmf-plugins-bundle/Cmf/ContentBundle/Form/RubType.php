@@ -63,7 +63,7 @@ class RubType extends AbstractType
     {
         $id_media = NULL;
 
-        if (($builder->getData()->getMedia() instanceof \PiApp\GedmoBundle\Entity\Media)) {
+        if (($builder->getData()->getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque)) {
             $id_media = $builder->getData()->getMedia()->getId();
         }
 

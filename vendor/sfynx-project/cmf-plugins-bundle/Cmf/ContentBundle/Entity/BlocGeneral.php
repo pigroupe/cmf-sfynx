@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use BootStrap\TranslationBundle\Model\AbstractDefault;
+use Sfynx\CoreBundle\Model\AbstractDefault;
 
 /**
  * Cmf\ContentBundle\Entity\BlocGeneral
@@ -67,7 +67,7 @@ class BlocGeneral extends AbstractDefault
     /**
      * @var integer $media
      *
-     * @ORM\ManyToOne(targetEntity="PiApp\GedmoBundle\Entity\Media" , inversedBy="blocgeneral");
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque" , inversedBy="blocgeneral");
      * @ORM\JoinColumn(name="gedmo_media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;    
@@ -140,9 +140,9 @@ class BlocGeneral extends AbstractDefault
     private $title;
 
     /**
-     * @var \BootStrap\UserBundle\Entity\User $user
+     * @var \Sfynx\AuthBundle\Entity\User $user
      *
-     * @ORM\ManyToOne(targetEntity="BootStrap\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Sfynx\AuthBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      *
      */
@@ -454,10 +454,10 @@ class BlocGeneral extends AbstractDefault
     /**
      * Set media
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $media
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $media
      * @return BlocGeneral
      */
-    public function setMedia(\PiApp\GedmoBundle\Entity\Media $media = null)
+    public function setMedia(\Sfynx\MediaBundle\Entity\Mediatheque $media = null)
     {
         $this->media = $media;
     
@@ -467,7 +467,7 @@ class BlocGeneral extends AbstractDefault
     /**
      * Get media
      *
-     * @return \PiApp\GedmoBundle\Entity\Media 
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque 
      */
     public function getMedia()
     {
@@ -705,10 +705,10 @@ class BlocGeneral extends AbstractDefault
     /**
      * Set user
      *
-     * @param \BootStrap\UserBundle\Entity\User $user
+     * @param \Sfynx\AuthBundle\Entity\User $user
      * @return BlocGeneral
      */
-    public function setUser(\BootStrap\UserBundle\Entity\User $user = null)
+    public function setUser(\Sfynx\AuthBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -718,7 +718,7 @@ class BlocGeneral extends AbstractDefault
     /**
      * Get user
      *
-     * @return \BootStrap\UserBundle\Entity\User
+     * @return \Sfynx\AuthBundle\Entity\User
      */
     public function getUser()
     {

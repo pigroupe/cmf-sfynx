@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('sfynx_tool_behat')
+        $treeBuilder->root('sfynx_behat')
             ->addDefaultsIfNotSet()
                 ->children()
                     ->arrayNode('servers')

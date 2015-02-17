@@ -4,11 +4,10 @@ namespace Cmf\ContentBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use BootStrap\TranslationBundle\Model\AbstractDefault;
-use BootStrap\TranslationBundle\Annotation as PI;
+use Sfynx\CoreBundle\Model\AbstractDefault;
+use Sfynx\PositionBundle\Annotation as PI;
 
 /**
  * Cmf\ContentBundle\Entity\MediasDiaporama
@@ -69,7 +68,7 @@ class MediasDiaporama extends AbstractDefault
     
     /**
      *
-     * @ORM\ManyToOne(targetEntity="PiApp\GedmoBundle\Entity\Media")
+     * @ORM\ManyToOne(targetEntity="Sfynx\MediaBundle\Entity\Mediatheque")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $media;
@@ -165,10 +164,10 @@ class MediasDiaporama extends AbstractDefault
     /**
      * Set medias
      *
-     * @param \PiApp\GedmoBundle\Entity\Media $medias
+     * @param \Sfynx\MediaBundle\Entity\Mediatheque $medias
      * @return MediasDiaporama
      */
-    public function setMedia(\PiApp\GedmoBundle\Entity\Media $media = null)
+    public function setMedia(\Sfynx\MediaBundle\Entity\Mediatheque $media = null)
     {
         $this->media = $media;
         return $this;
@@ -177,7 +176,7 @@ class MediasDiaporama extends AbstractDefault
     /**
      * Get medias
      *
-     * @return \PiApp\GedmoBundle\Entity\Media
+     * @return \Sfynx\MediaBundle\Entity\Mediatheque
      */
     public function getMedia()
     {

@@ -13,7 +13,7 @@
 namespace Cmf\ContentBundle\Entity\Translation;
 
 use Doctrine\ORM\Mapping as ORM;
-use BootStrap\TranslationBundle\Model\AbstractTranslationEntity;
+use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
 
 /**
  * @ORM\Entity(repositoryClass="Cmf\ContentBundle\Repository\TagRepository")

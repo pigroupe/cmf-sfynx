@@ -749,8 +749,15 @@ sfynx_tool:
     mail:
         overloading_mail: ~ # test@gmail.com  
     date:
-        cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"        
-        
+        cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"  
+
+#
+# SfynxMigrationBundle configuration
+#
+sfynx_migration:
+    path_dir:
+        migration: "%kernel.root_dir%/migration/"          
+
 #
 # SfynxMediaBundle configuration
 #       
@@ -843,4 +850,4 @@ sfynx_ws:
         prefix_host: 'http://'
         uri_proxy: 'http://www.sfyn22.local'
         uri_proxy_login: 'http://www.sfyn22.local'
-        application_name: sso-sfynx                         
+        application_name: sso-sfynx  

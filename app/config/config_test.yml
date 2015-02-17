@@ -26,17 +26,21 @@ doctrine:
                 user:     %test_database_user%
                 password: %test_database_password%
                 
+
 #
-# SfynxBehatBundle configuration
+# MinkBundle configuration
 #
 mink:
     base_url: http://www.sfynx.local/
     selenium2: ~
-    browser_name: firefox
+    browser_name: firefox 
     
-sfynx_tool_behat: 
+#
+# SfynxBehatBundle configuration
+#
+sfynx_behat:
     servers: [local, dev]
     locales: [en, fr, ar]
     options:
         server: local
-        locale: fr                
+        locale: fr 

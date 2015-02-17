@@ -54,7 +54,6 @@ class AppKernel extends Kernel
             new Sfynx\ApiBundle\SfynxApiBundle(),
             new Sfynx\CacheBundle\SfynxCacheBundle(),
             new Sfynx\ToolBundle\SfynxToolBundle(),
-            new Sfynx\BehatBundle\SfynxBehatBundle(),
             new Sfynx\MigrationBundle\SfynxMigrationBundle(),
             new Sfynx\CoreBundle\SfynxCoreBundle(),
             new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
@@ -81,6 +80,11 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+        }
+        
+        if ('test' === $this->getEnvironment()) {
+            $bundles[] = new Sfynx\BehatBundle\SfynxBehatBundle();
+            $bundle[]  = new Behat\MinkBundle\MinkBundle();
         }
 
         return $bundles;

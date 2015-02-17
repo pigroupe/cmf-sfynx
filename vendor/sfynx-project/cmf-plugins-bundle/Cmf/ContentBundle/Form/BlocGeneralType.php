@@ -72,7 +72,7 @@ class BlocGeneralType extends AbstractType
         if ( 
         		($builder->getParent()->getData()->getBlocGeneral() instanceof \Cmf\ContentBundle\Entity\BlocGeneral)
         		&& 
-        		($builder->getParent()->getData()->getBlocGeneral()->getMedia() instanceof \PiApp\GedmoBundle\Entity\Media)
+        		($builder->getParent()->getData()->getBlocGeneral()->getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
         ) {
        		$id_media = $builder->getParent()->getData()->getBlocGeneral()->getMedia()->getId();
         }        

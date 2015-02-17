@@ -64,7 +64,7 @@ class DiaporamaType extends AbstractType
         if ($builder->getData() instanceof \Cmf\ContentBundle\Entity\Diaporama && $builder->getData()->getMedias() instanceof \Doctrine\ORM\PersistentCollection){
             $array_media = array();
             foreach($builder->getData()->getMedias() as $media_diaporama){
-                if ($media_diaporama instanceof \Cmf\ContentBundle\Entity\MediasDiaporama && $media_diaporama->getMedia() instanceof \PiApp\GedmoBundle\Entity\Media){
+                if ($media_diaporama instanceof \Cmf\ContentBundle\Entity\MediasDiaporama && $media_diaporama->getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque){
                     array_push($array_media, $media_diaporama->getMedia()->getId());
                 }
             }

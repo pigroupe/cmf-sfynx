@@ -61,6 +61,7 @@
         "phing/phing": "dev-master",
         "behat/behat": "3.0.*@dev",
         "behat/mink": "1.6.*@dev",
+        "behat/mink-bundle": "~1.4",
         "behat/symfony2-extension": "*@dev",
         "behat/mink-extension":  "*@dev",
         "behat/mink-selenium2-driver":  "*@dev",
