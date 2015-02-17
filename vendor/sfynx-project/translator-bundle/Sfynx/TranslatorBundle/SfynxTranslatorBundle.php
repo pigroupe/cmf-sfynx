@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Translator> project.
  *
+ * @category   Sfynx
+ * @package    Bunlde
  * @subpackage Translator
- * @package    Bundle
  * @author     Riad HELLAL <hellal.riad@gmail.com>
- * @since      2012-11-14
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,9 +23,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the translor Bundle
  *
+ * @category   Sfynx
+ * @package    Bunlde
  * @subpackage Translator
- * @package    Bundle
  * @author     Riad HELLAL <hellal.riad@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxTranslatorBundle extends Bundle
 {

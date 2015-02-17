@@ -423,7 +423,7 @@ class Page
     /**
      * Remove a translation from the collection of related translations
      *
-     * @param  \Sfynx\CmfBundle\Entity\TranslationPage    $translation
+     * @param \Sfynx\CmfBundle\Entity\TranslationPage $translation
      */
     public function removeTranslation(\Sfynx\CmfBundle\Entity\TranslationPage $translation)
     {
@@ -446,13 +446,15 @@ class Page
      *  Get the translation according to the language
      *
      * @param string $locale
+     * 
      * @return \Sfynx\CmfBundle\Entity\TranslationPage
      */
     public function getTranslationByLocale($locale)
     {
         foreach($this->translations as $key => $trans){
-            if ($trans->getLangCode()->getId() == $locale)
+            if ($trans->getLangCode()->getId() == $locale) {
                 return $trans;
+            }
         }
         return null;
     }    
@@ -460,7 +462,7 @@ class Page
     /**
      * Add blocks
      *
-     * @param \Sfynx\CmfBundle\Entity\Block    $block
+     * @param \Sfynx\CmfBundle\Entity\Block $block
      */
     public function addBlock(\Sfynx\CmfBundle\Entity\Block $block)
     {
@@ -478,11 +480,11 @@ class Page
     	// we order by position value.
     	$iterator = $this->blocks->getIterator();
     	$iterator->uasort(function ($first, $second) {
-    		if ($first === $second) {
-    			return 0;
-    		}
-    		 
-    		return (int) $first->getPosition() < (int) $second->getPosition() ? -1 : 1;
+            if ($first === $second) {
+                return 0;
+            }
+
+            return (int) $first->getPosition() < (int) $second->getPosition() ? -1 : 1;
     	});
     	$this->blocks = new \Doctrine\Common\Collections\ArrayCollection(iterator_to_array($iterator));
     	
@@ -492,7 +494,7 @@ class Page
     /**
      * Set rubrique
      *
-     * @param \Sfynx\CmfBundle\Entity\Rubrique    $rubrique
+     * @param \Sfynx\CmfBundle\Entity\Rubrique $rubrique
      */
     public function setRubrique(\Sfynx\CmfBundle\Entity\Rubrique $rubrique)
     {
@@ -512,7 +514,7 @@ class Page
     /**
      * Set layout
      *
-     * @param \Sfynx\AuthBundle\Entity\Layout    $layout
+     * @param \Sfynx\AuthBundle\Entity\Layout $layout
      */
     public function setLayout(\Sfynx\AuthBundle\Entity\Layout $layout)
     {
@@ -532,7 +534,7 @@ class Page
     /**
      * Add Css Page
      *
-     * @param \Sfynx\CmfBundle\Entity\Page    $Page
+     * @param \Sfynx\CmfBundle\Entity\Page $Page
      */
     public function addPageCss(\Sfynx\CmfBundle\Entity\Page $Page)
     {
@@ -542,7 +544,7 @@ class Page
     /**
      * Set Css Page
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection    $Page
+     * @param \Doctrine\Common\Collections\ArrayCollection $Page
      */
     public function setPageCss($Pages)
     {
@@ -562,7 +564,7 @@ class Page
     /**
      * Add Js Page
      *    
-     * @param \Sfynx\CmfBundle\Entity\Page    $Page
+     * @param \Sfynx\CmfBundle\Entity\Page $Page
      */
     public function addPageJs(\Sfynx\CmfBundle\Entity\Page $Page)
     {
@@ -572,7 +574,7 @@ class Page
     /**
      * Set Js Page
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection    $Pages
+     * @param \Doctrine\Common\Collections\ArrayCollection $Pages
      */    
     public function setPageJs($Pages)
     {
@@ -592,7 +594,7 @@ class Page
     /**
      * Add keyWord
      *
-     * @param \Sfynx\CmfBundle\Entity\KeyWord    $keywords
+     * @param \Sfynx\CmfBundle\Entity\KeyWord $keywords
      */
     public function addKeyWord(\Sfynx\CmfBundle\Entity\KeyWord $keywords)
     {
@@ -602,7 +604,7 @@ class Page
     /**
      * Set keywords
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection    $keyword
+     * @param \Doctrine\Common\Collections\ArrayCollection $keyword
      */    
     public function setKeywords($keyword)
     {

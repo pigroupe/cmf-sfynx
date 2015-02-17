@@ -6,7 +6,7 @@
  * @package    Handler
  * @subpackage Request
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -22,12 +22,6 @@ use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use Sfynx\CmfBundle\Lib\Browscap;
-use Sfynx\CmfBundle\Lib\MobileDetect;
-
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\CmfBundle\SfynxCmfEvents;
 
@@ -39,7 +33,7 @@ use Sfynx\CmfBundle\SfynxCmfEvents;
  * @package    Handler
  * @subpackage Request
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -103,13 +97,13 @@ class HandlerRequest
         $isPrefixLocale = $this->isPrefixLocale();
         if ($isPrefixLocale instanceof Response) {
             $event->setResponse($isPrefixLocale);
-        	return;
+            return;
         }        
         // SEO redirecrtion for old url
         $SEOUrl = $this->isSEOUrl();
         if ($SEOUrl instanceof Response) {
-        	$event->setResponse($SEOUrl);
-        	return;
+            $event->setResponse($SEOUrl);
+            return;
         }       
         // Test if we are or not in the scop.
         $isNoScope = $this->isNoScope();

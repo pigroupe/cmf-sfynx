@@ -6,7 +6,7 @@
  * @package    Security
  * @subpackage Firewall
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Air France
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       http://opensource.org/licenses/gpl-license.php
@@ -32,7 +32,7 @@ use Sfynx\WsseBundle\Security\Authentication\Token\WsseUserToken;
  * @package    Security
  * @subpackage Firewall
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Air France
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       http://opensource.org/licenses/gpl-license.php

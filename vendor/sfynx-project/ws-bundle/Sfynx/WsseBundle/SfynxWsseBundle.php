@@ -4,9 +4,9 @@
  *
  * @category   Sfynx
  * @package    Bunlde
- * @subpackage Ws-wsse
+ * @subpackage Ws
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Air France
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       http://opensource.org/licenses/gpl-license.php
@@ -26,9 +26,9 @@ use Sfynx\WsseBundle\Security\Factory\WsseFactory;
  *
  * @category   Sfynx
  * @package    Bunlde
- * @subpackage Ws-wsse
+ * @subpackage Ws
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Air France
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       http://opensource.org/licenses/gpl-license.php

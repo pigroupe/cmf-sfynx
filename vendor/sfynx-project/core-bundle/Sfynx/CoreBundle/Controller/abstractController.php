@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
 
 use Sfynx\ToolBundle\Exception\ControllerException;
-use Sfynx\ToolBundle\Util\PiArrayManager;
 use Sfynx\ToolBundle\Util\PiStringManager;
 
 /**
@@ -665,9 +664,8 @@ abstract class abstractController extends Controller
      */    
     protected function checkCsrf($name, $query = '_token')
     {
-    	$request = $this->getRequest();
+    	$request      = $this->getRequest();
     	$csrfProvider = $this->get('form.csrf_provider');
-        //
     	if (!$csrfProvider->isCsrfTokenValid($name, $request->query->get($query))) {
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('CSRF token is invalid.');
     	}
@@ -688,37 +686,7 @@ abstract class abstractController extends Controller
      */    
     protected function getErrorMessages(Form $form, $type = 'array', $delimiter = "<br />")
     {
-    	$errors = array();
-    	foreach ($form->getErrors() as $key => $error) {
-            if($error->getMessagePluralization() !== null) {
-                $errors[$key] = array(
-                    'id'    => $error->getMessage(),
-                    'trans' => $this->get('translator')->transChoice(
-                        $error->getMessage(), 
-                        $error->getMessagePluralization(), 
-                        $error->getMessageParameters()
-                    )
-                );
-            } else {
-                $errors[$key] = array(
-                    'id'    => $error->getMessage(),
-                    'trans' => $this->get('translator')->trans($error->getMessage())
-                );
-            }    		
-    	}
-    	$all = $form->all();
-    	if (is_array($all)) {
-            foreach ($all as $child) {
-                if (!$child->isValid()) {
-                    $errors[$child->getName()] = $this->getErrorMessages($child, 'array');
-                }
-            }
-    	}
-    	if ($type == 'array') {
-            return $errors;
-     	} else {
-            return PiArrayManager::convertArrayToString($errors, $this->get('translator'), 'pi.form.label.field.', '', $delimiter);
-     	}
+        return $this->container('sfynx.tool.twig.extension.form')->getFormErrors($form, $type, $delimiter);
     }
     
     /**

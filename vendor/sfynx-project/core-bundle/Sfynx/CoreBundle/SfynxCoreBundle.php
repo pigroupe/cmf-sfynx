@@ -2,9 +2,15 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage   Sfynx
- * @package    Bundle
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Sfynx
+ * @package    Bunlde
+ * @subpackage Core
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,12 +21,17 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * BootStrap configuration and managment of the translation Bundle
+ * Sfynx configuration and managment of the core Bundle
  *
- * @subpackage   Sfynx
- * @package    Bundle
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Sfynx
+ * @package    Bunlde
+ * @subpackage Core
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxCoreBundle extends Bundle
 {

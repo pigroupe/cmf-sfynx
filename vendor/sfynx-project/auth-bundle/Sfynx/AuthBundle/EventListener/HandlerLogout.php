@@ -6,7 +6,7 @@
  * @package    Handler
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -34,7 +34,7 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  * @package    Handler
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt

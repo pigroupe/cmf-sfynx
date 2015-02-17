@@ -2,9 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  *
+ * @category   Sfynx
+ * @package    Bunlde
  * @subpackage Tool
- * @package    Bundle
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,9 +25,15 @@ use Sfynx\ToolBundle\DependencyInjection\Compiler\MapperCollectionPass;
 /**
  * Sfynx configuration and managment of the Tool Bundle
  *
+ * @category   Sfynx
+ * @package    Bunlde
  * @subpackage Tool
- * @package    Bundle
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxToolBundle extends Bundle
 {

@@ -5,6 +5,7 @@ parameters:
     sfynx.tool.twig.extension.date.class: Sfynx\ToolBundle\Twig\Extension\PiDateExtension
     sfynx.tool.twig.extension.tool.class: Sfynx\ToolBundle\Twig\Extension\PiToolExtension
     sfynx.tool.twig.extension.route.class: Sfynx\ToolBundle\Twig\Extension\PiRouteExtension
+    sfynx.tool.twig.extension.form.class: Sfynx\ToolBundle\Twig\Extension\PiFormExtension
     sfynx.tool.twig.extension.layouthead.class: Sfynx\ToolBundle\Twig\Extension\PiLayoutHeadExtension
 
 services:
@@ -81,7 +82,13 @@ services:
         class: %sfynx.tool.twig.extension.route.class%
         arguments: ['@service_container']
         tags:
-            - { name: twig.extension }     
+            - { name: twig.extension }  
+            
+    sfynx.tool.twig.extension.form:
+        class: %sfynx.tool.twig.extension.form.class%
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.extension }             
             
     sfynx.tool.twig.extension.layouthead:
         class: %sfynx.tool.twig.extension.layouthead.class%

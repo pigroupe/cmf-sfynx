@@ -1,28 +1,39 @@
 <?php
 /**
- * This file is part of the <Library> project.
+ * This file is part of the <Migration> project.
  *
- * @subpackage Library
- * @package    Bundle
+ * @category   Sfynx
+ * @package    Bunlde
+ * @subpackage Tool
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\LibraryBundle;
+namespace Sfynx\MigrationBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Sfynx\LibraryBundle\DependencyInjection\Compiler\PiTwigEnvironmentPass;
 
 /**
- * BootStrap configuration and managment of the user Bundle
+ * Sfynx configuration and managment of the Migration Bundle
  *
- * @subpackage Library
- * @package    Bundle
+ * @category   Sfynx
+ * @package    Bunlde
+ * @subpackage Tool
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
-class SfynxLibraryBundle extends Bundle
+class SfynxMigrationBundle extends Bundle
 {
     /**
      * Builds the bundle.
@@ -33,14 +44,10 @@ class SfynxLibraryBundle extends Bundle
      * other extensions, ...
      *
      * @param ContainerBuilder $container A ContainerBuilder instance
-     * 
-     * @author <etienne de Longeaux> <etienne.delongeaux@gmail.com>
      */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        // register extension
-        $container->addCompilerPass(new PiTwigEnvironmentPass());
     }
     
     /**
@@ -48,12 +55,12 @@ class SfynxLibraryBundle extends Bundle
      */
     public function boot()
     {
-    }
+    }    
     
     /**
      * Shutdowns the Bundle.
      */
     public function shutdown()
     {
-    }    
+    }  
 }

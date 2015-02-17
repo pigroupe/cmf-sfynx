@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @subpackage   Admin_Controllers
+ * @subpackage Admin_Controllers
  * @package    Controller
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-03
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-03
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.

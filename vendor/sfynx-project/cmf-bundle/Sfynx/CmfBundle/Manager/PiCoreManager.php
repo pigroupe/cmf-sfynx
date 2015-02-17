@@ -732,6 +732,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             $page = unserialize($report);  
         } else {
             $page = $this->getRepository('Page')->getPageByRoute($route);
+            $this->cachePage($page, "persist");
         } 
         if ($isForce 
                 && ($page instanceof Page)
@@ -741,6 +742,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         
         return $page;       
     }  
+    
+    protected function cachePage($entity, $type){}
     
     /**
      * Returns the blocks of a page.
