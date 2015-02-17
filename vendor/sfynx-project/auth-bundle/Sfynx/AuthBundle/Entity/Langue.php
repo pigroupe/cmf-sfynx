@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage   Auth
+ * @category   Auth
  * @package    Entity
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-12-28
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -28,9 +33,15 @@ use Sfynx\CoreBundle\Model\AbstractTranslation;
  * @Gedmo\TranslationEntity(class="Sfynx\AuthBundle\Entity\Translation\LangueTranslation")
  * @UniqueEntity("id")
  * 
- * @subpackage   Auth
- * @package    Entity 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Auth
+ * @package    Entity
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class Langue extends AbstractTranslation
 {

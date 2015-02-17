@@ -1,10 +1,15 @@
 <?php
 /**
- * This file is part of the <Gedmo> project.
+ * This file is part of the <CmfPluginsGedmo> project.
  *
- * @category   Bootstrap
- * @package    Bundle
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   CmfPluginsGedmo
+ * @package    Bunlde
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,10 +22,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Gedmo managment Bundle
  *
- * @category   Bootstrap
- * @package    Bundle
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   CmfPluginsGedmo
+ * @package    Bunlde
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class PiAppGedmoBundle extends Bundle
 {

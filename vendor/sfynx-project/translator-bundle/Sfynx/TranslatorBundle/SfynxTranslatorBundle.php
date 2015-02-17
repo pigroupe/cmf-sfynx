@@ -2,9 +2,8 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @category   Sfynx
+ * @category   Translator
  * @package    Bunlde
- * @subpackage Translator
  * @author     Riad HELLAL <hellal.riad@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -23,9 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the translor Bundle
  *
- * @category   Sfynx
+ * @category   Translator
  * @package    Bunlde
- * @subpackage Translator
  * @author     Riad HELLAL <hellal.riad@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License

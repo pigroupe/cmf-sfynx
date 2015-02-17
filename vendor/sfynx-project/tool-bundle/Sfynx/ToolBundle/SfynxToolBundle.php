@@ -2,9 +2,8 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @category   Sfynx
+ * @category   Tool
  * @package    Bunlde
- * @subpackage Tool
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -25,9 +24,8 @@ use Sfynx\ToolBundle\DependencyInjection\Compiler\MapperCollectionPass;
 /**
  * Sfynx configuration and managment of the Tool Bundle
  *
- * @category   Sfynx
+ * @category   Tool
  * @package    Bunlde
- * @subpackage Tool
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License

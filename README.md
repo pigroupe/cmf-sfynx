@@ -18,15 +18,18 @@ The framework works with Symfony 2.3 and has been split into 17 bundles :
 
 
 ``` bash
-* CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
-( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )
-* TemplateBundle :  A bundle which is used to stock all template of layout and others.
-* SmoothnessBundle: A bundle which is used to define a complet admin template with all layers
+* CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
 * AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
 * ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
 * BehatBundle : A bundle which provides context tools to run mink tests
 * MigrationBundle : A bundle which provides a command to set migration files with a version handler
-* CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
+* CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
+( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )
+* GedmoBundle : A bundle which is used to create a project with the CMF.
+* MediaBundle : A bundle which overload the SonataMediaBundle, with crop system.
+* TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
+* TemplateBundle :  A bundle which is used to stock all template of layout and others.
+* SmoothnessBundle: A bundle which is used to define a complet admin template with all layers
 * CacheBundle : A bundle which provides classes to cache handlers (memcache, files).
 * DatabaseBundle : A bundle which provides classes and commands to run DB vendor`s utilities to backup and restore databases. 
 * AclManagerBundle : A bundle which provides classes to run ACL Manager`s utilities for Symfony2.
@@ -35,9 +38,6 @@ The framework works with Symfony 2.3 and has been split into 17 bundles :
 * EncryptBundle : A bundle which provides annotations to encrypt fields
 * PositionBundle : A bundle which provides annotations to manage position of entiy rows
 * AdminBundle : A bundle which overload the SonataAdminBundle.
-* MediaBundle : A bundle which overload the SonataMediaBundle, with crop system.
-* TranslatorBundle : A bundle which provides entity and models of classes allowing to work with translation words.
-* GedmoBundle : A bundle which is used to create a project with the CMF.
 ```
 
 ## Documentation

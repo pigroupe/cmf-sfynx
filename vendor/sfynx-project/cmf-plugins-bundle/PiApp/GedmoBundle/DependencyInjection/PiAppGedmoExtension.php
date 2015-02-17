@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <Gedmo> project.
+ * This file is part of the <CmfPluginsGedmo> project.
  *
  * @category   CmfPluginsGedmo
  * @package    DependencyInjection

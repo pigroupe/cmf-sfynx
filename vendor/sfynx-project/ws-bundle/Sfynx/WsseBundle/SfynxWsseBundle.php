@@ -1,10 +1,9 @@
 <?php
 /**
- * This file is part of the <WSSE> project.
+ * This file is part of the <Ws-se> project.
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Bunlde
- * @subpackage Ws
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -24,9 +23,8 @@ use Sfynx\WsseBundle\Security\Factory\WsseFactory;
 /**
  * Sfynx configuration and managment of the Webservice Bundle
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Bunlde
- * @subpackage Ws
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License

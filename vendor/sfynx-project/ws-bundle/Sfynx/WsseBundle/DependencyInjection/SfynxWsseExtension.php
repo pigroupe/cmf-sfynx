@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <Wsse> project.
+ * This file is part of the <Ws-se> project.
  *
- * @category   WebServiceWsse
+ * @category   Ws-se
  * @package    DependencyInjection
  * @subpackage Extension
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  * 
- * @category   WebServiceWsse
+ * @category   Ws-se
  * @package    DependencyInjection
  * @subpackage Extension
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>

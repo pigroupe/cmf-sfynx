@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @subpackage   Admin_Entities
+ * @category   Cmf
  * @package    Entity
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-12-28
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,10 +26,15 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Sfynx\CmfBundle\Repository\HistoricalStatusRepository")
  * @ORM\HasLifecycleCallbacks
  * 
- * @subpackage   Admin_Entities
+ * @category   Cmf
  * @package    Entity
- * 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class HistoricalStatus
 {

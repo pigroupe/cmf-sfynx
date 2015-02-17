@@ -1,10 +1,15 @@
 <?php
 /**
- * This file is part of the <Cmf> project.
+ * This file is part of the <CmfPluginsContent> project.
  *
- * @category Cmf
- * @package  Bundle
- * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   CmfPluginsContent
+ * @package    Bunlde
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -142,9 +147,14 @@ $GLOBALS['GEDMO_WIDGET_ORGANIGRAM']['PluginsContentBundle:Rub'] = array(
 /**
  * Gedmo managment Bundle
  *
- * @category Bootstrap
- * @package  Bundle
- * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   CmfPluginsContent
+ * @package    Bunlde
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class CmfContentBundle extends Bundle
 {

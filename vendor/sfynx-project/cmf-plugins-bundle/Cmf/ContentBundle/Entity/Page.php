@@ -1,5 +1,20 @@
 <?php
-
+/**
+ * This file is part of the <CmfPluginsContent> project.
+ *
+ * @category   CmfPluginsContent
+ * @package    Entity
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Cmf\ContentBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -11,14 +26,21 @@ use Sfynx\CoreBundle\Model\AbstractDefault;
 
 /**
  * Cmf\ContentBundle\Entity\Page
+ * 
  * @ORM\Table(name="cont_page")
  * @ORM\Entity(repositoryClass="Cmf\ContentBundle\Repository\PageRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\TranslationEntity(class="Cmf\ContentBundle\Entity\Translation\PageTranslation")
  *
- * @category   plugins_Entities
+ * @category   CmfPluginsContent
  * @package    Entity
- * 
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class Page extends AbstractDefault 
 {

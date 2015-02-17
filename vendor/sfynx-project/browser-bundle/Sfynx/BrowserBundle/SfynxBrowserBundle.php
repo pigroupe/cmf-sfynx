@@ -2,9 +2,8 @@
 /**
  * This file is part of the <Browser> project.
  *
- * @category   Sfynx
+ * @category   Browser
  * @package    Bunlde
- * @subpackage Browser
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -23,9 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the browser Bundle
  *
- * @category   Sfynx
+ * @category   Browser
  * @package    Bunlde
- * @subpackage Browser
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License

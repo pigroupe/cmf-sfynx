@@ -2,9 +2,8 @@
 /**
  * This file is part of the <Cache> project.
  *
- * @category   Sfynx
+ * @category   Cache
  * @package    Bunlde
- * @subpackage Cache
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -23,9 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the cache Bundle
  *
- * @category   Sfynx
+ * @category   Cache
  * @package    Bunlde
- * @subpackage Cache
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License

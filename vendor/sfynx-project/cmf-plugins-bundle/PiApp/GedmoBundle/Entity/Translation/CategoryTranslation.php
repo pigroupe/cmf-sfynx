@@ -1,11 +1,16 @@
 <?php 
 /**
- * This file is part of the <Gedmo> project.
+ * This file is part of the <CmfPluginsGedmo> project.
  *
- * @category   Gedmo_Entities
+ * @category   CmfPluginsGedmo
  * @package    Entity
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-07-31
+ * @subpackage ModelTranslation
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,6 +28,16 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  *             "locale", "object_id", "field"
  *         })}
  * )
+ * 
+ * @category   CmfPluginsGedmo
+ * @package    Entity
+ * @subpackage ModelTranslation
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class CategoryTranslation extends AbstractTranslationEntity
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <Cmf> project.
+ * This file is part of the <CmfPluginsContent> project.
  *
  * @category   CmfPluginsContent
  * @package    DependencyInjection

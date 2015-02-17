@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Migration> project.
  *
- * @category   Migration
+ * @category   toolMigration
  * @package    DependencyInjection
  * @subpackage Configuration
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -26,7 +26,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  * 
- * @category   Migration
+ * @category   toolMigration
  * @package    DependencyInjection
  * @subpackage Configuration
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>

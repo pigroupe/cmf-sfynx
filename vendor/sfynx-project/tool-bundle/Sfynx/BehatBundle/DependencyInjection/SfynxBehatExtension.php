@@ -2,7 +2,7 @@
 /**
  * This file is part of the <Behat> project.
  *
- * @category   Behat
+ * @category   toolBehat
  * @package    DependencyInjection
  * @subpackage Extension
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  * 
- * @category   Behat
+ * @category   toolBehat
  * @package    DependencyInjection
  * @subpackage Extension
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>

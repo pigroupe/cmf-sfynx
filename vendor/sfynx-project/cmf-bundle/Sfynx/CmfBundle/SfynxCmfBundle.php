@@ -2,9 +2,8 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @category   Sfynx
+ * @category   Cmf
  * @package    Bunlde
- * @subpackage Cmf
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -25,9 +24,8 @@ use Sfynx\CmfBundle\DependencyInjection\Compiler\AddDependencyRoute;
 /**
  * Sfynx configuration and managment of the Cmf Bundle
  *
- * @category   Sfynx
+ * @category   Cmf
  * @package    Bunlde
- * @subpackage Cmf
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License

@@ -2,9 +2,8 @@
 /**
  * This file is part of the <Core> project.
  *
- * @category   Sfynx
+ * @category   Core
  * @package    Bunlde
- * @subpackage Core
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -23,9 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Sfynx configuration and managment of the core Bundle
  *
- * @category   Sfynx
+ * @category   Core
  * @package    Bunlde
- * @subpackage Core
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
