@@ -1,6 +1,0 @@
-#
-#   import routes from a controller directory
-#
-annotation_sfynx_cmf:
-    resource: "@SfynxWsseBundle/Controller"
-    type:     annotation

@@ -855,7 +855,7 @@ sfynx_ws:
 #
 # SfynxWsseBundle configuration
 #       
-#sfynx_wsse:
-#    security:
-#        cache_dir: %wsse_cache_dir%
-#        nonce_lifetime: 300
+sfynx_wsse:
+    security:
+        cache_dir: %wsse_cache_dir%
+        nonce_lifetime: 300

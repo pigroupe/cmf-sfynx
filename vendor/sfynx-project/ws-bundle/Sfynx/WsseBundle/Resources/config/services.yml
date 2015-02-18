@@ -1,8 +1,7 @@
 services:
     wsse.security.authentication.provider:
         class: Sfynx\WsseBundle\Security\Authentication\Provider\WsseProvider
-        arguments: ['', "%sfynx.wsse.security.cache_dir%"]  
-        # @service_container
+        arguments: ['', "%sfynx.wsse.security.cache_dir%", @service_container]  
 
     wsse.security.authentication.listener:
         class: Sfynx\WsseBundle\Security\Firewall\WsseListener

@@ -55,9 +55,9 @@ class WsseProvider implements AuthenticationProviderInterface
      */     
     private $cacheDir;
 
-    public function __construct(UserProviderInterface $userProvider, $cacheDir /*, ContainerInterface $container*/)
+    public function __construct(UserProviderInterface $userProvider, $cacheDir , ContainerInterface $container)
     {
-        /*$this->container    = $container;*/
+        $this->container    = $container;
         $this->userProvider = $userProvider;
         $this->cacheDir     = $cacheDir;
     }
@@ -86,8 +86,7 @@ class WsseProvider implements AuthenticationProviderInterface
     protected function validateDigest($digest, $nonce, $created, $secret)
     {
         // we set Expire value
-        //$Expire_lifetime = (int) $this->container->getParameter("sfynx.wsse.security.nonce_lifetime");
-        $Expire_lifetime = 300;
+        $Expire_lifetime = (int) $this->container->getParameter("sfynx.wsse.security.nonce_lifetime");
         
         // Check created time is not in the future
         if (strtotime($created) > time()) {
