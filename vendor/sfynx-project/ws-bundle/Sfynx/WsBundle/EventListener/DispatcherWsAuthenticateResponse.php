@@ -15,6 +15,7 @@ namespace Sfynx\WsBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Symfony\Component\HttpFoundation\Cookie;
+use Sfynx\AuthBundle\Entity\User;
 
 /**
  * Response handler of authenticate response
@@ -57,6 +58,7 @@ class DispatcherWsAuthenticateResponse
         if ($app_id 
                && !empty($app_id) 
                && $this->container->hasParameter('ws.auth')
+               && ($user instanceof User)
         ) {
             $config_ws     = $this->container->getParameter('ws.auth');
             $key           = $config_ws['handlers']['getpermisssion']['key'];

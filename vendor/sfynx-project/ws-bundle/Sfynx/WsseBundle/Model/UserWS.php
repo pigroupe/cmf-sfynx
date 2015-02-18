@@ -60,14 +60,14 @@ class UserWS
     public function jsonSerialize()
     {
         $userInArray =  array(
-            'userconnected' => $this->user->isConnected($this->expired),
-            'username'      => $this->user->getName() ? $this->getName() : $this->getUserName(),
-            'userfirstname' => $this->user->getNickname(),
-            'useremail'     => $this->user->getEmail(),
-            'uservoie'      => $this->user->getAddress(),
-            'usercp'        => $this->user->getZipCode(),
-            'userville'     => $this->user->getCity(),
-            'error'         => $this->getError(),
+            'isconnected' => $this->user->isConnected($this->expired),
+            'lastname'      => $this->user->getName() ? $this->getName() : $this->getUserName(),
+            'firstname' => $this->user->getNickname(),
+            'email'     => $this->user->getEmail(),
+            'adress'      => $this->user->getAddress(),
+            'cp'        => $this->user->getZipCode(),
+            'city'     => $this->user->getCity(),
+            'error'     => $this->getError(),
         );
 
         return $userInArray;

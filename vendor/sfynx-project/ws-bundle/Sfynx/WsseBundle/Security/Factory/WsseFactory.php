@@ -48,7 +48,7 @@ class WsseFactory implements SecurityFactoryInterface
 
         $listenerId = 'security.authentication.listener.wsse.'.$id;
         $listener = $container->setDefinition($listenerId, new DefinitionDecorator('wsse.security.authentication.listener'));
-
+        
         return array($providerId, $listenerId, $defaultEntryPoint);
     }
 

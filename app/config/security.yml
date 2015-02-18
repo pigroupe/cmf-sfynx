@@ -35,6 +35,17 @@ security:
         # the user will be redirected to a form where he will be able to enter his credentials.
         #
         
+            
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+            
+        wsse_secure:
+            pattern:   ^/api/.*
+            #stateless: true
+            wsse:      true
+            #anonymous : true            
+            
         # defaut login area for standard users   
         main:
             pattern: .*
@@ -63,16 +74,6 @@ security:
                 invalidate_session: false
                 #delete_cookies: [sfynx_auth_user]
             anonymous: true
-            
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-            
-        wsse_secured:
-            pattern:   /api/.*
-            stateless: true
-            wsse:      true
-            anonymous : true
             
 # jms_security_extra Configuration
 # http://jmsyst.com/bundles/JMSSecurityExtraBundle/master/configuration

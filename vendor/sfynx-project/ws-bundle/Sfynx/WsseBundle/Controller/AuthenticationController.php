@@ -51,7 +51,6 @@ class AuthenticationController extends abstractController
      * Custom Header (+) :
      *      - Parameter = “x-wsse“,
      *      - Value 
-     *              GET /api/users/authentication HTTP/1.1
      *              Host: localhost
      *              X-WSSE: UsernameToken Username="admin", PasswordDigest="GtGn8TZX/KVlEQuerkESVElc64g=", Nonce="NzViZGU3NjM5MTAzZmU1Nw==", Created="2015-02-18T17:09:12Z"
      *              Authorization: Basic YWRtaW46YWRtaW4=
@@ -69,27 +68,29 @@ class AuthenticationController extends abstractController
         $user = $this->container->get('security.context')->getToken()->getUser();
         $locale = $this->container->get("request")->getLocale();
 
-        //$response->setContent($this->getUserInformation($user));
-        $response->setStatusCode(200);
-        
-        // Record all cookies in relation with ws.
-        $dateExpire     = $this->container->getParameter('sfynx.core.cookies.date_expire');
-        $date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
-        // Record the layout variable in cookies.
-        if ($dateExpire && !empty($date_interval)) {
-            if (is_numeric($date_interval)) {
-                $dateExpire = time() + intVal($date_interval);
+        if ($user instanceof User) {
+            $response->setContent($this->getUserInformation($user));
+            $response->setStatusCode(200);
+
+            // Record all cookies in relation with ws.
+            $dateExpire     = $this->container->getParameter('sfynx.core.cookies.date_expire');
+            $date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
+            // Record the layout variable in cookies.
+            if ($dateExpire && !empty($date_interval)) {
+                if (is_numeric($date_interval)) {
+                    $dateExpire = time() + intVal($date_interval);
+                } else {
+                    $dateExpire = new \DateTime("NOW");
+                    $dateExpire->add(new \DateInterval($date_interval));
+                }
             } else {
-                $dateExpire = new \DateTime("NOW");
-                $dateExpire->add(new \DateInterval($date_interval));
+                $dateExpire = 0;
             }
-        } else {
-            $dateExpire = 0;
+            // we apply all events allowed to change the redirection response
+            $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $user, $locale);
+            $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
+            $response = $event_response->getResponse();
         }
-        // we apply all events allowed to change the redirection response
-        $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $user, $locale);
-        $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
-        $response = $event_response->getResponse();
 
         return $response;
     }
@@ -97,10 +98,7 @@ class AuthenticationController extends abstractController
     private function getUserInformation(User $user)
     {
         $userWs = new UserWS($user);
-        $information = $userWs->jsonSerialize();
-        unset($information['userconnected']);
-        unset($information['error']);
 
-        return json_encode($information);
+        return json_encode($userWs->jsonSerialize());
     }
 }

@@ -1,0 +1,11 @@
+parameters:
+  nbi_simplepartner.x_auth_token.secret_key: "tokenToTest"
+
+services:
+  nbi_simplepartner.security.authentication.provider:
+    class:  Sfynx\WsseBundle\Security\Authentication\Provider\SimplePartnerProvider
+    arguments: ['', %nbi_simplepartner.x_auth_token.secret_key%]
+
+  nbi_simplepartner.security.authentication.listener:
+    class:  Sfynx\WsseBundle\Security\Firewall\SimplePartnerListener
+    arguments: [@security.context, @security.authentication.manager]

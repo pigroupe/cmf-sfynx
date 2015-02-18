@@ -19,7 +19,7 @@ framework:
         engines: ['twig']
         assets_version: v1_0_0
     default_locale:  "%locale%"
-    trusted_proxies: ~
+    trusted_proxies: [127.0.0.1] # is to Work behind a Load Balancer or a Reverse Proxy
     #trust_proxy_headers: false # Whether or not the Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP) 
     session:
         name: %pi_session_name%
@@ -855,7 +855,7 @@ sfynx_ws:
 #
 # SfynxWsseBundle configuration
 #       
-sfynx_wsse:
-    security:
-        cache_dir: %wsse_cache_dir%
-        nonce_lifetime: 300
+#sfynx_wsse:
+#    security:
+#        cache_dir: %wsse_cache_dir%
+#        nonce_lifetime: 300

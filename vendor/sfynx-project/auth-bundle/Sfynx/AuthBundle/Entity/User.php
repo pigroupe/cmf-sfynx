@@ -867,7 +867,7 @@ class User extends AbstractUser
     public function isConnected($expired = 1800)
     {
         if ($this->lastLogin) {
-            $dateLastLogin = new \DateTime($this->lastLogin);
+            $dateLastLogin = $this->lastLogin;
             $dateTime = time() - $expired;
 
             if ($dateLastLogin->getTimestamp() > $dateTime) {
