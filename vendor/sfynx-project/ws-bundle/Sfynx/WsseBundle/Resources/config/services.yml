@@ -1,11 +1,8 @@
-parameters:
-  wsse.x_auth_token.secret_key: %wsse-secret_key%
-  
 services:
     wsse.security.authentication.provider:
         class: Sfynx\WsseBundle\Security\Authentication\Provider\WsseProvider
-        arguments: ["", "%wsse.x_auth_token.secret_key%"]
+        arguments: ["", "%sfynx.wsse.security.cache_dir%", @service_container]
 
     wsse.security.authentication.listener:
         class: Sfynx\WsseBundle\Security\Firewall\WsseListener
-        arguments: ["@security.context", "@security.authentication.manager"]
+        arguments: [@security.context, @security.authentication.manager]

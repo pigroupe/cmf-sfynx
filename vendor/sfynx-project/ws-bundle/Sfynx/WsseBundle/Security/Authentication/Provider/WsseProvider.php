@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <WSSE> project.
+ * This file is part of the <Ws-se> project.
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -23,11 +23,12 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\NonceExpiredException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Sfynx\WsseBundle\Security\Authentication\Token\WsseUserToken;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provider WSSE
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -39,12 +40,24 @@ use Sfynx\WsseBundle\Security\Authentication\Token\WsseUserToken;
  */
 class WsseProvider implements AuthenticationProviderInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+    
+    /**
+     * @var UserProviderInterface
+     */    
     private $userProvider;
     
+    /**
+     * @var string
+     */     
     private $cacheDir;
 
-    public function __construct(UserProviderInterface $userProvider, $cacheDir)
+    public function __construct(UserProviderInterface $userProvider, $cacheDir, ContainerInterface $container)
     {
+        $this->container    = $container;
         $this->userProvider = $userProvider;
         $this->cacheDir     = $cacheDir;
     }
@@ -53,7 +66,9 @@ class WsseProvider implements AuthenticationProviderInterface
     {
         $user = $this->userProvider->loadUserByUsername($token->getUsername());
 
-        if ($user && $this->validateDigest($token->digest, $token->nonce, $token->created, $user->getPassword())) {
+        if ($user 
+                && $this->validateDigest($token->digest, $token->nonce, $token->created, $user->getPassword())
+        ) {
             $authenticatedToken = new WsseUserToken($user->getRoles());
             $authenticatedToken->setUser($user);
 
@@ -71,19 +86,24 @@ class WsseProvider implements AuthenticationProviderInterface
      */
     protected function validateDigest($digest, $nonce, $created, $secret)
     {
+        // we set Expire value
+        $Expire_lifetime = (int) $this->container->getParameter("sfynx.wsse.security.nonce_lifetime");
+        
         // Check created time is not in the future
         if (strtotime($created) > time()) {
             return false;
         }
 
         // Expire timestamp after 5 minutes
-        if (time() - strtotime($created) > 300) {
+        if (time() - strtotime($created) > $Expire_lifetime) {
             return false;
         }
 
         // Validate that the nonce is *not* used in the last 5 minutes
         // if it has, this could be a replay attack
-        if (file_exists($this->cacheDir.'/'.$nonce) && file_get_contents($this->cacheDir.'/'.$nonce) + 300 > time()) {
+        if (file_exists($this->cacheDir.'/'.$nonce) 
+                && file_get_contents($this->cacheDir.'/'.$nonce) + $Expire_lifetime > time()
+        ) {
             throw new NonceExpiredException('Previously used nonce detected');
         }
         // If cache directory does not exist we create it

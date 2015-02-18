@@ -44,10 +44,29 @@ class SfynxWsseExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+        
+        /**
+         * Cache config parameter
+         */
+        if (isset($config['security'])){
+            if (isset($config['security']['cache_dir'])) {
+                $container->setParameter('sfynx.wsse.security.cache_dir', $config['security']['cache_dir']);
+            }
+            if (isset($config['security']['nonce_lifetime'])) {
+                $container->setParameter('sfynx.wsse.security.nonce_lifetime', $config['security']['nonce_lifetime']);
+            }      
+        }          
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function getAlias() {
+        return 'sfynx_wsse';
+    }    
 }

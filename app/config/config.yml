@@ -851,3 +851,11 @@ sfynx_ws:
         uri_proxy: 'http://www.sfyn22.local'
         uri_proxy_login: 'http://www.sfyn22.local'
         application_name: sso-sfynx  
+        
+#
+# SfynxWsseBundle configuration
+#       
+sfynx_wsse:
+    security:
+        cache_dir: %wsse_cache_dir%
+        nonce_lifetime: 300

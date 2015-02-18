@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <WSSE> project.
+ * This file is part of the <Ws-se> project.
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 /**
  * Token WSSE
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>

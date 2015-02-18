@@ -56,8 +56,9 @@ class PiAuthenticateManager extends Controller
      * @param Response      $response
      * 
      * @return void
+     * @access public
      */
-    protected function authenticateDefaultUser(UserInterface $user, Response $response)
+    public function authenticateDefaultUser(UserInterface $user, Response $response)
     {
         try {
             $this->container->get('fos_user.security.login_manager')->loginUser(
@@ -78,10 +79,10 @@ class PiAuthenticateManager extends Controller
      * @param boolean       $deleteToken
      * 
      * @return Response
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function authenticateUser(UserInterface $user = null, &$response = null, $deleteToken = false)
+    public function authenticateUser(UserInterface $user = null, &$response = null, $deleteToken = false)
     {
     	$em          = $this->container->get('doctrine')->getManager();
         $locale      = $this->container->get('request')->getLocale();
@@ -134,10 +135,10 @@ class PiAuthenticateManager extends Controller
      * Disconnect a user with Symfony Security.
      *
      * @return void
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function disconnectUser()
+    public function disconnectUser()
     {
     	$this->container->get('request')->getSession()->invalidate();
     }   
@@ -146,10 +147,10 @@ class PiAuthenticateManager extends Controller
      * Return the token object.
      *
      * @return UsernamePasswordToken
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getToken()
+    public function getToken()
     {
         return  $this->container->get('security.context')->getToken();
     }  
@@ -160,10 +161,10 @@ class PiAuthenticateManager extends Controller
      * @param UserInterface $user
      * 
      * @return UsernamePasswordToken
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function tokenUser(UserInterface $user)
+    public function tokenUser(UserInterface $user)
     {
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
         $user->setConfirmationToken($tokenGenerator->generateToken());
@@ -187,9 +188,10 @@ class PiAuthenticateManager extends Controller
      * @param array         $parameters
      * 
      * @return string
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function sendResettingEmailMessage(UserInterface $user, $route_reset_connexion, $title = '', $parameters = array())
+    public function sendResettingEmailMessage(UserInterface $user, $route_reset_connexion, $title = '', $parameters = array())
     {  
     	$tokenGenerator = $this->container->get('fos_user.util.token_generator');
         $user->setConfirmationToken($tokenGenerator->generateToken());
@@ -224,9 +226,10 @@ class PiAuthenticateManager extends Controller
      * @param array         $parameters
      * 
      * @return string
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function sendResettingEmailMessageURL(UserInterface $user, $route_reset_connexion, $parameters = array())
+    public function sendResettingEmailMessageURL(UserInterface $user, $route_reset_connexion, $parameters = array())
     {
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
         $user->setConfirmationToken($tokenGenerator->generateToken());
@@ -247,13 +250,25 @@ class PiAuthenticateManager extends Controller
     }    
 
     /**
+     * Return the connected user entity.
+     *
+     * @return string User name
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function getUser()
+    {
+        return $this->getToken()->getUser()->getUsername();
+    }
+    
+    /**
      * Return the connected user name.
      *
      * @return string User name
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserName()
+    public function getUserName()
     {
         return $this->getToken()->getUser()->getUsername();
     }
@@ -262,10 +277,10 @@ class PiAuthenticateManager extends Controller
      * Return the user permissions.
      *
      * @return array User permissions
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserPermissions()
+    public function getUserPermissions()
     {
         return $this->getToken()->getUser()->getPermissions();
     }
@@ -274,10 +289,10 @@ class PiAuthenticateManager extends Controller
      * Return the user roles.
      *
      * @return array    user roles
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserRoles()
+    public function getUserRoles()
     {
         return $this->getToken()->getUser()->getRoles();
     }
@@ -291,7 +306,7 @@ class PiAuthenticateManager extends Controller
      *
      * @return string
      */
-    protected function getObfuscatedEmail(UserInterface $user)
+    public function getObfuscatedEmail(UserInterface $user)
     {
         $email = $user->getEmail();
         if (false !== $pos = strpos($email, '@')) {
@@ -305,10 +320,10 @@ class PiAuthenticateManager extends Controller
      * Return if yes or no the user is anonymous token.
      *
      * @return boolean
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function isAnonymousToken()
+    public function isAnonymousToken()
     {
         if (
             ($this->getToken() instanceof AnonymousToken)
@@ -325,10 +340,10 @@ class PiAuthenticateManager extends Controller
      * Return if yes or no the user is UsernamePassword token.
      *
      * @return boolean
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function isUsernamePasswordToken()
+    public function isUsernamePasswordToken()
     {
         if ($this->getToken() instanceof UsernamePasswordToken) {
             return true;
@@ -343,10 +358,10 @@ class PiAuthenticateManager extends Controller
      * @param integer $userId
      * 
      * @return boolean
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function isUserdIdExisted($userId)
+    public function isUserdIdExisted($userId)
     {
         $em = $this->container->get('doctrine')->getManager();
         $entity = $em->getRepository('SfynxAuthBundle:User')->find($userId);
@@ -364,10 +379,10 @@ class PiAuthenticateManager extends Controller
      * @param string $application
      * 
      * @return string
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserByTokenAndApplication($token, $application)
+    public function getUserByTokenAndApplication($token, $application)
     {
     	$em    = $this->container->get('doctrine')->getManager();
     	$like_app = array(strtoupper($application.'::'.$token));
@@ -396,10 +411,10 @@ class PiAuthenticateManager extends Controller
      * @param string $application
      * 
      * @return string
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserByTokenAndApplicationMultiple($token, $application)
+    public function getUserByTokenAndApplicationMultiple($token, $application)
     {
     	$em    = $this->container->get('doctrine')->getManager();
     	$like  = strtoupper($application.'::'.$token);
@@ -427,10 +442,10 @@ class PiAuthenticateManager extends Controller
      * @param string  $application
      * 
      * @return string
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getTokenByUserIdAndApplication($userId, $application)
+    public function getTokenByUserIdAndApplication($userId, $application)
     {
     	$em = $this->container->get('doctrine')->getManager();
     	if ($userId instanceof User) {
@@ -453,10 +468,10 @@ class PiAuthenticateManager extends Controller
      * @param string  $application
      * 
      * @return boolean
-     * @access protected
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function setAssociationUserIdWithApplicationToken($userId, $token, $application)
+    public function setAssociationUserIdWithApplicationToken($userId, $token, $application)
     {
     	$em = $this->container->get('doctrine')->getManager();
         if ($userId instanceof User) {

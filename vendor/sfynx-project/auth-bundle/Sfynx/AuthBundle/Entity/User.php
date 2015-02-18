@@ -102,6 +102,55 @@ class User extends AbstractUser
      */
     protected $email;    
     
+    /**
+     * @var boolean $global_opt_in
+     * 
+     * @ORM\Column(name="global_opt_in", type="boolean", nullable = true)
+     */
+    protected $global_opt_in;
+
+    /**
+     * @var boolean $site_opt_in
+     * 
+     * @ORM\Column(name="site_opt_in", type="boolean", nullable = true)
+     */
+    protected $site_opt_in;
+
+    /**
+     * @var string $birthday
+     * 
+     * @ORM\Column(name="birthday", type="string", nullable = true)
+     */
+    protected $birthday;
+
+    /**
+     * @var string $address
+     * 
+     * @ORM\Column(name="address", type="text", nullable = true)
+     */
+    protected $address;
+
+    /**
+     * @var string $zip_code
+     * 
+     * @ORM\Column(name="zip_code", type="string", nullable = true)
+     */
+    protected $zip_code;
+
+    /**
+     * @var string $city
+     * 
+     * @ORM\Column(name="city", type="string", nullable = true)
+     */
+    protected $city;
+
+    /**
+     * @var string $country
+     * 
+     * @ORM\Column(name="country", type="string", nullable = true)
+     */
+    protected $country;    
+    
      /**
      * @ORM\ManyToMany(targetEntity="Sfynx\AuthBundle\Entity\Group")
      * @ORM\JoinTable(name="fos_user_group",
@@ -375,17 +424,122 @@ class User extends AbstractUser
     /**
      * Get nickname
      *
-     * @return text
+     * @return string
      */
     public function getNickname()
     {
         return $this->nickname;
     }
     
+    /**
+     * Get enabled
+     *
+     * @return boolean
+     */    
     public function getEnabled()
     {
     	return $this->enabled;
     }
+    
+   /**
+     * Get the [global_opt_in] column value.
+     *
+     * @return boolean
+     */
+    public function getGlobalOptIn()
+    {
+        return $this->global_opt_in;
+    }
+
+    /**
+     * Get the [site_opt_in] column value.
+     *
+     * @return boolean
+     */
+    public function getSiteOptIn()
+    {
+        return $this->site_opt_in;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [birthday] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * 
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getBirthday($format = null)
+    {
+        if ($this->birthday === null) {
+            return null;
+        }
+
+        if ($this->birthday === '0000-00-00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new \DateTime($this->birthday);
+        } catch (\Exception $x) {
+            throw new \InvalidArgumentException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->birthday, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+    }
+
+    /**
+     * Get the [address] column value.
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Get the [zip_code] column value.
+     *
+     * @return string
+     */
+    public function getZipCode()
+    {
+        return $this->zip_code;
+    }
+
+    /**
+     * Get the [city] column value.
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Get the [country] column value.
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }    
         
     /**
      * Set created_at
@@ -552,4 +706,175 @@ class User extends AbstractUser
     	 
     	return '';
     }   
+    
+    /**
+     * Sets the value of the [global_opt_in] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * 
+     * @return User The current object (for fluent API support)
+     */
+    public function setGlobalOptIn($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+        if ($this->global_opt_in !== $v) {
+            $this->global_opt_in = $v;
+        }
+
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of the [site_opt_in] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * 
+     * @return User The current object (for fluent API support)
+     */
+    public function setSiteOptIn($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+        if ($this->site_opt_in !== $v) {
+            $this->site_opt_in = $v;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of [birthday] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * 
+     * @return User The current object (for fluent API support)
+     */
+    public function setBirthday($v)
+    {
+        $dt = $v;
+        if ($this->birthday !== null || $v !== null) {
+            $currentDateAsString = ($this->birthday !== null && $tmpDt = new \DateTime($this->birthday)) ? $tmpDt->format('Y-m-d') : null;
+            $newDateAsString = $v ? $dt->format('Y-m-d') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->birthday = $newDateAsString;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+    
+    /**
+     * Set the value of [address] column.
+     *
+     * @param string $v new value
+     * 
+     * @return User The current object (for fluent API support)
+     */
+    public function setAddress($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+        if ($this->address !== $v) {
+            $this->address = $v;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [zip_code] column.
+     *
+     * @param string $v new value
+     * 
+     * @return User The current object (for fluent API support)
+     */
+    public function setZipCode($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+        if ($this->zip_code !== $v) {
+            $this->zip_code = $v;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [city] column.
+     *
+     * @param string $v new value
+     * 
+     * @return User The current object (for fluent API support)
+     */
+    public function setCity($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+        if ($this->city !== $v) {
+            $this->city = $v;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [country] column.
+     *
+     * @param string $v new value
+     * 
+     * @return User The current object (for fluent API support)
+     */
+    public function setCountry($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+        if ($this->country !== $v) {
+            $this->country = $v;
+        }
+
+        return $this;
+    }
+    
+    /**
+     * @param  int  $expired
+     * @return bool
+     */
+    public function isConnected($expired = 1800)
+    {
+        if ($this->lastLogin) {
+            $dateLastLogin = new \DateTime($this->lastLogin);
+            $dateTime = time() - $expired;
+
+            if ($dateLastLogin->getTimestamp() > $dateTime) {
+                return true;
+            }
+        }
+
+        return false;
+    }    
 }

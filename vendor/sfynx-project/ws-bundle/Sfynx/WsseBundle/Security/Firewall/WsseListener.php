@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <WSSE> project.
+ * This file is part of the <Ws-se> project.
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Firewall
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -28,7 +28,7 @@ use Sfynx\WsseBundle\Security\Authentication\Token\WsseUserToken;
 /**
  * Listener WSSE
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Firewall
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -46,7 +46,7 @@ class WsseListener implements ListenerInterface
 
     public function __construct(SecurityContextInterface $securityContext, AuthenticationManagerInterface $authenticationManager)
     {
-        $this->securityContext = $securityContext;
+        $this->securityContext       = $securityContext;
         $this->authenticationManager = $authenticationManager;
     }
 
@@ -55,7 +55,9 @@ class WsseListener implements ListenerInterface
         $request = $event->getRequest();
 
         $wsseRegex = '/UsernameToken Username="([^"]+)", PasswordDigest="([^"]+)", Nonce="([^"]+)", Created="([^"]+)"/';
-        if (!$request->headers->has('x-wsse') || 1 !== preg_match($wsseRegex, $request->headers->get('x-wsse'), $matches)) {
+        if (!$request->headers->has('x-wsse') 
+                || 1 !== preg_match($wsseRegex, $request->headers->get('x-wsse'), $matches)
+        ) {
             return;
         }
 
@@ -74,18 +76,21 @@ class WsseListener implements ListenerInterface
         } catch (AuthenticationException $failed) {
             // ... you might log something here
 
-            // To deny the authentication clear the token. This will redirect to the login page.
-            // Make sure to only clear your token, not those of other authentication listeners.
-            // $token = $this->tokenStorage->getToken();
-            // if ($token instanceof WsseUserToken && $this->providerKey === $token->getProviderKey()) {
-            //     $this->tokenStorage->setToken(null);
-            // }
-            // return;
+            //To deny the authentication clear the token. This will redirect to the login page.
+            //Make sure to only clear your token, not those of other authentication listeners.
+            $token = $this->securityContext->getToken();
+            if ($token instanceof WsseUserToken 
+                     && $this->providerKey === $token->getProviderKey()
+            ) {
+                $this->securityContext->setToken(null);
+            }
+            
+            return;
         }
 
-        // By default deny authorization
+        // Deny authentication with a '403 Forbidden' HTTP response
         $response = new Response();
-        $response->setStatusCode(401);
+        $response->setStatusCode(403);
         $event->setResponse($response);
     }
 }

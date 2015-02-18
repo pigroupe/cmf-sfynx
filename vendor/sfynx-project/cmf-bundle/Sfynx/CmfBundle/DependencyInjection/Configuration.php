@@ -57,7 +57,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Admin config
      *
-     * @param $rootNode ArrayNodeDefinition Class
+     * @param ArrayNodeDefinition $rootNode ArrayNodeDefinition Class
      *
      * @return void
      * @access protected
@@ -70,8 +70,8 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('cache_dir')
                 ->addDefaultsIfNotSet()
                 ->children()                
-                    ->scalarNode('etag')->defaultValue('%kernel.root_dir%/cachesfynx/Etag/')->cannotBeEmpty()->end()
-                    ->scalarNode('indexation')->defaultValue('%kernel.root_dir%/cachesfynx/Indexation')->cannotBeEmpty()->end()
+                    ->scalarNode('etag')->isRequired()->defaultValue('%kernel.root_dir%/cachesfynx/Etag/')->cannotBeEmpty()->end()
+                    ->scalarNode('indexation')->isRequired()->defaultValue('%kernel.root_dir%/cachesfynx/Indexation')->cannotBeEmpty()->end()
                     ->scalarNode('widget')->isRequired()->defaultValue("%kernel.root_dir%/cachesfynx/Widget")->cannotBeEmpty()->end()
                     ->scalarNode('seo')->isRequired()->defaultValue("%kernel.root_dir%/cachesfynx/Seo")->cannotBeEmpty()->end()
                 ->end()        

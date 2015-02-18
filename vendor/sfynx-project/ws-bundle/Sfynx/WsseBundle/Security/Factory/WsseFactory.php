@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the <WSSE> project.
+ * This file is part of the <Ws-se> project.
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Factory
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -26,7 +26,7 @@ use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityF
 /**
  * Factory WSSE
  *
- * @category   Sfynx
+ * @category   Ws-se
  * @package    Security
  * @subpackage Firewall
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>

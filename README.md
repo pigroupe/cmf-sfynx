@@ -35,6 +35,7 @@ The framework works with Symfony 2.3 and has been split into 17 bundles :
 * AclManagerBundle : A bundle which provides classes to run ACL Manager`s utilities for Symfony2.
 * BrowserBundle : A bundle which provides library to run Browscap Manager`s utilities and MobileDetect Manager`s utilities.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
+* WsseBundle : A bundle which provides web services allowing to connect authentication service with the Wsse protocol.
 * EncryptBundle : A bundle which provides annotations to encrypt fields
 * PositionBundle : A bundle which provides annotations to manage position of entiy rows
 * AdminBundle : A bundle which overload the SonataAdminBundle.
@@ -53,6 +54,7 @@ The framework works with Symfony 2.3 and has been split into 17 bundles :
 * [Example of Encrypt annotation usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/EncryptBundle/Resources/doc/index.md)
 * [Example of Position annotation usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/PositionBundle/Resources/doc/index.md)
 * [Example of Ws usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsBundle/Resources/doc/index.md)
+* [Example of Wsse usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsseBundle/Resources/doc/index.md)
 * [Example of Browser usage](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/browser-bundle/Sfynx/BrowserBundle/Resources/doc/index.md)
 
 ## License
