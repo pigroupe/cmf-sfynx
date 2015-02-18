@@ -123,7 +123,7 @@ class PiAuthenticateManager extends Controller
                 $dateExpire = 0;
             }
             // we apply all events allowed to change the redirection response
-            $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $this->getUser(), $locale);
+            $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $user, $locale);
             $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
             $response = $event_response->getResponse();
         }  
@@ -205,13 +205,13 @@ class PiAuthenticateManager extends Controller
         
         $parameters = array_merge($parameters, array('token' => $user->getConfirmationToken()));
         
-        $url      = $this->container->get('sfynx.tool.route.factory')->getRoute($route_reset_connexion, $parameters);
+        $url      = $this->container->get('sfynx.tool.route.factory')
+                ->getRoute($route_reset_connexion, $parameters);
         $html_url = 'http://'.$this->container->get('request')->getHttpHost() . $this->container->get('request')->getBasePath().$url;
         
         if (empty($title)) {
             $title = $html_url;
-        }
-        
+        }        
         $result = "<a href='$html_url'>" . $title . "</a>";
         
         return $result;

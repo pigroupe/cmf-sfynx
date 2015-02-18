@@ -4,3 +4,4 @@
 #            pattern:   /api/.*
 #            stateless: true
 #            wsse:      true
+#            anonymous : true

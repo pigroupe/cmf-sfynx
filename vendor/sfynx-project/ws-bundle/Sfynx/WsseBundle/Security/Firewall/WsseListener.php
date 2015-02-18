@@ -24,6 +24,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Sfynx\WsseBundle\Security\Authentication\Token\WsseUserToken;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 /**
  * Listener WSSE
@@ -40,14 +41,28 @@ use Sfynx\WsseBundle\Security\Authentication\Token\WsseUserToken;
  */
 class WsseListener implements ListenerInterface
 {
-    protected $tokenStorage;
+    /**
+     * @var SecurityContextInterface $securityContext
+     */
+    protected $securityContext;
     
+    /**
+     * @var AuthenticationManagerInterface $authenticationManager
+     */    
     protected $authenticationManager;
+    
+    /**
+     * @var LoggerInterface $logger
+     */      
+    protected $logger;
 
-    public function __construct(SecurityContextInterface $securityContext, AuthenticationManagerInterface $authenticationManager)
-    {
+    public function __construct(SecurityContextInterface $securityContext,
+                               AuthenticationManagerInterface $authenticationManager,
+                               LoggerInterface $logger
+    ){
         $this->securityContext       = $securityContext;
         $this->authenticationManager = $authenticationManager;
+        $this->logger = $logger;
     }
 
     public function handle(GetResponseEvent $event)
@@ -58,6 +73,12 @@ class WsseListener implements ListenerInterface
         if (!$request->headers->has('x-wsse') 
                 || 1 !== preg_match($wsseRegex, $request->headers->get('x-wsse'), $matches)
         ) {
+            print_r('cocoic');exit;
+            // Deny authentication with a '403 Forbidden' HTTP response
+            $response = new Response();
+            $response->setStatusCode(403);
+            $event->setResponse($response);
+            
             return;
         }
 
@@ -75,6 +96,8 @@ class WsseListener implements ListenerInterface
             return;
         } catch (AuthenticationException $failed) {
             // ... you might log something here
+            $failedMessage = 'WSSE Login failed for '.$token->getUsername().'. Why ? '.$failed->getMessage();
+            $this->logger->err($failedMessage);
 
             //To deny the authentication clear the token. This will redirect to the login page.
             //Make sure to only clear your token, not those of other authentication listeners.
@@ -85,12 +108,13 @@ class WsseListener implements ListenerInterface
                 $this->securityContext->setToken(null);
             }
             
+            // Deny authentication with a '403 Forbidden' HTTP response
+            $response = new Response();
+            $response->setStatusCode(403);
+            $response->setContent($failedMessage);
+            $event->setResponse($response);
+            
             return;
         }
-
-        // Deny authentication with a '403 Forbidden' HTTP response
-        $response = new Response();
-        $response->setStatusCode(403);
-        $event->setResponse($response);
     }
 }

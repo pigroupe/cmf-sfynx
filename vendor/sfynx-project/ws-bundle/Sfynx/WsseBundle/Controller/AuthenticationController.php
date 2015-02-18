@@ -21,8 +21,10 @@ use Sfynx\CoreBundle\Controller\abstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use NosBelIdees\UserBundle\Propel\User;
-use NosBelIdees\UserBundle\Model\UserWS;
+use Sfynx\AuthBundle\Entity\User;
+use Sfynx\WsseBundle\Model\UserWS;
+use Sfynx\AuthBundle\Event\ResponseEvent;
+use Sfynx\AuthBundle\SfynxAuthEvents;
 
 /**
  * Authentication Controller
@@ -41,7 +43,22 @@ use NosBelIdees\UserBundle\Model\UserWS;
 class AuthenticationController extends abstractController
 {
     /**
-     * @Route("/users/authentication", name="wsse_users_authentication")
+     * For WSSE Header generation, use http://www.teria.com/~koseki/tools/wssegen/ . 
+     * Simple, efficient. (auto nonce, auto date. No before wsse. User = username in database, password = encypted salt+password = password as in database)
+     * 
+     * Install and open Rest Console for chrome. Fields to use :
+     * Request API : Your server address, with an API service (http://obtao.localhost/app_dev.php/api/me for us)
+     * Custom Header (+) :
+     *      - Parameter = “x-wsse“,
+     *      - Value 
+     *              GET /api/users/authentication HTTP/1.1
+     *              Host: localhost
+     *              X-WSSE: UsernameToken Username="admin", PasswordDigest="GtGn8TZX/KVlEQuerkESVElc64g=", Nonce="NzViZGU3NjM5MTAzZmU1Nw==", Created="2015-02-18T17:09:12Z"
+     *              Authorization: Basic YWRtaW46YWRtaW4=
+     * Authorization Hearder :  Authorization profile=”UsernameToken”
+     * 
+     * @link http://www.teria.com/~koseki/tools/wssegen/
+     * @Route("/user/authentication", name="wsse_users_authentication")
      * @Method("GET")
      */
     public function authenticationAction(Request $request)
@@ -50,8 +67,9 @@ class AuthenticationController extends abstractController
         $response->headers->set('Content-Type', 'application/json');
 
         $user = $this->container->get('security.context')->getToken()->getUser();
+        $locale = $this->container->get("request")->getLocale();
 
-        $response->setContent($this->getUserInformation($user));
+        //$response->setContent($this->getUserInformation($user));
         $response->setStatusCode(200);
         
         // Record all cookies in relation with ws.
@@ -69,7 +87,7 @@ class AuthenticationController extends abstractController
             $dateExpire = 0;
         }
         // we apply all events allowed to change the redirection response
-        $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $this->getUser(), $locale);
+        $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $user, $locale);
         $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
         $response = $event_response->getResponse();
 
