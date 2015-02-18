@@ -448,7 +448,7 @@ class MenuController extends abstractController
         );
         
         // we repair the tree
-        $em->getRepository("PiAppGedmoBundle:Menu")->setRecover();
+        $em->getRepository("PiAppGedmoBundle:Menu")->recover();
         $result = $em->getRepository("PiAppGedmoBundle:Menu")->verify();
         
         $node   = $this->container->get('request')->query->get('node');
@@ -503,7 +503,7 @@ class MenuController extends abstractController
             $em->getRepository("PiAppGedmoBundle:Menu")->moveUp($node);
          
          // we repair the tree
-         $em->getRepository("PiAppGedmoBundle:Menu")->setRecover();
+         $em->getRepository("PiAppGedmoBundle:Menu")->recover();
          $result = $em->getRepository("PiAppGedmoBundle:Menu")->verify();
 
         return $this->redirect($this->generateUrl('admin_gedmo_menu_tree', array('category'=>$category, 'NoLayout' => $NoLayout)));
@@ -543,7 +543,7 @@ class MenuController extends abstractController
             $em->getRepository("PiAppGedmoBundle:Menu")->moveDown($node);
 
         // we repair the tree
-        $em->getRepository("PiAppGedmoBundle:Menu")->setRecover();
+        $em->getRepository("PiAppGedmoBundle:Menu")->recover();
         $result = $em->getRepository("PiAppGedmoBundle:Menu")->verify();
         
         return $this->redirect($this->generateUrl('admin_gedmo_menu_tree', array('category'=>$category, 'NoLayout' => $NoLayout)));

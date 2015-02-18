@@ -316,7 +316,7 @@ class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterfa
             //         }
             
             // we repair the tree
-            //$em->getRepository($entity)->setRecover();
+            //$em->getRepository($entity)->recover();
             //$result = $em->getRepository($entity)->verify();            
 
             $tree        = $em->getRepository($entity)->buildTree($nodes, $options);
@@ -464,7 +464,7 @@ class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterfa
                     }
             );
             // we repair the tree
-            //$em->getRepository($entity)->setRecover();
+            //$em->getRepository($entity)->recover();
             //$result = $em->getRepository($entity)->verify();
             //$node = $em->getRepository($entity)->findNodeOr404(4, $locale,'object');
             //$left = $em->getRepository($entity)->children($node);

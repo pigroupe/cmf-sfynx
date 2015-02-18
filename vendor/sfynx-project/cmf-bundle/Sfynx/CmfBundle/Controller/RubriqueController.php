@@ -353,7 +353,7 @@ class RubriqueController extends CmfabstractController
         );
          
         // we repair the tree
-        $em->getRepository("SfynxCmfBundle:Rubrique")->setRecover();
+        $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
         
         $node   = $this->container->get('request')->query->get('node');
@@ -405,7 +405,7 @@ class RubriqueController extends CmfabstractController
             $em->getRepository("SfynxCmfBundle:Rubrique")->moveUp($node);
     
         // we repair the tree
-        $em->getRepository("SfynxCmfBundle:Rubrique")->setRecover();
+        $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
     
         return $this->redirect($this->generateUrl('admin_rubrique_tree', array('NoLayout' => $NoLayout)));
@@ -444,7 +444,7 @@ class RubriqueController extends CmfabstractController
             $em->getRepository("SfynxCmfBundle:Rubrique")->moveDown($node);
     
         // we repair the tree
-        $em->getRepository("SfynxCmfBundle:Rubrique")->setRecover();
+        $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
          
         return $this->redirect($this->generateUrl('admin_rubrique_tree', array('NoLayout' => $NoLayout)));

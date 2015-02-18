@@ -180,12 +180,12 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
     /**
      * Loads all translations with all translatable fields from the given entity
      *
-     * @param string $locale
-     * @param Query  $query
-     * @param string $result = {'array', 'object'}
-     * @param bool   $INNER_JOIN
-     * @param bool   $FALLBACK
-     * @param bool   $lazy_loading
+     * @param string  $locale
+     * @param Query   $query
+     * @param string  $result = {'array', 'object'}
+     * @param boolean $INNER_JOIN
+     * @param boolean $FALLBACK
+     * @param boolean $lazy_loading
      * 
      * @return array|object of result query
      * @access public
@@ -255,12 +255,12 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * 
      * @link https://github.com/l3pp4rd/DoctrineExtensions/blob/master/doc/translatable.md#entity-domain-object
      *
-     * @param string $locale
-     * @param Query  $query
-     * @param string $result = {'array', 'object'}
-     * @param bool   $INNER_JOIN
-     * @param bool   $FALLBACK
-     * @param bool   $lazy_loading
+     * @param Query   $query
+     * @param string  $locale
+     * @param string  $result = {'array', 'object'}
+     * @param boolean $INNER_JOIN
+     * @param boolean $FALLBACK
+     * @param boolean $lazy_loading
      *      
      * @return Query   
      * @access public
@@ -305,12 +305,11 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
     /**
      * Find all translations by an entity.
      *
-     * @param string $locale
-     * @param Query  $query
-     * @param string $result = {'array', 'object'}
-     * @param bool   $INNER_JOIN
-     * @param bool   $FALLBACK
-     * @param bool   $lazy_loading
+     * @param string  $locale
+     * @param string  $result = {'array', 'object'}
+     * @param boolean $INNER_JOIN
+     * @param boolean $FALLBACK
+     * @param boolean $lazy_loading
      * 
      * @return array|object
      * @access public
@@ -325,8 +324,9 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
       
         $query = $this->checkRoles($qb)->getQuery();
       
-        if (!is_null($MaxResults))
+        if (!is_null($MaxResults)) {
             $query->setMaxResults($MaxResults);
+        }
         
         return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading);        
     }
@@ -336,7 +336,6 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      *
      * @param string  $locale
      * @param integer $id
-     * @param Query   $query
      * @param string  $result = {'array', 'object'}
      * @param bool    $INNER_JOIN
      * @param bool    $FALLBACK
@@ -424,6 +423,27 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         
         return $result;
     }
+    
+    /**
+     * Gets all field values of an translation entity.
+     *
+     * @param $id value of the id
+     * 
+     * @return object
+     * @access public
+     * @author Riad HELLAL <hellal.riad@gmail.com>
+     */    
+    public function getTranslationsByObjectId($id)
+    {
+        $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.object = :objectId ");
+        $query->setParameter('objectId', $id);
+        $entities = $query->getResult();            
+        if (!is_null($entities)){
+            return $entities;
+        } else {
+            return null;
+        }
+   }       
     
     /**
      * Loads all translations with all translatable
@@ -574,7 +594,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
     /**
      * Gets all field values of an entity.
      *
-     * @param $field value of the field table
+     * @param string $field value of the field table
      * 
      * @return array
      * @access public
@@ -587,41 +607,22 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         ->where('a.enabled = :enabled')
         ->andWhere('a.archived = :archived')
         ->setParameters(array(
-                'enabled'    => 1,
-                'archived'    => 0,
+            'enabled'  => 1,
+            'archived' => 0,
         ));
     
         $result = array();
-        $data    = $query->getQuery()->getArrayResult();
+        $data   = $query->getQuery()->getArrayResult();
         if ($data && is_array($data) && count($data)) {
             foreach ($data as $row) {
-                if (isset($row[$field]) && !empty($row[$field]))
+                if (isset($row[$field]) && !empty($row[$field])) {
                     $result[ $row[$field] ] = $row[$field];
+                }
             }
         }
+        
         return $result;
     }
-    
-    /**
-     * Gets all field values of an translation entity.
-     *
-     * @param $id value of the id
-     * 
-     * @return object
-     * @access public
-     * @author Riad HELLAL <hellal.riad@gmail.com>
-     */    
-    public function getTranslationsByObjectId($id)
-    {
-        $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.object = :objectId ");
-        $query->setParameter('objectId', $id);
-        $entities = $query->getResult();            
-        if (!is_null($entities)){
-            return $entities;
-        } else {
-            return null;
-        }
-   }    
     
     /**
      * Gets all entities by one category.
@@ -634,7 +635,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param boolean $is_checkRoles
      * @param boolean $with_archive
      * 
-     * @return array|entity
+     * @return QueryBuilder
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -695,7 +696,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param string  $ORDER_Position    ['ASC', 'DESC']
      * @param boolean $is_checkRoles
      * 
-     * @return array|entity
+     * @return QueryBuilder
      * @access public
      * @author Riad HELLAL <hellal.riad@gmail.com>
      */
@@ -739,7 +740,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param boolean $is_checkRoles
      * @param boolean $with_archive
      * 
-     * @return integer
+     * @return QueryBuilder
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -748,7 +749,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         $query = $this->createQueryBuilder('a')
         ->select("a");
         if (!$with_archive){
-        	$query->where('a.archived = 0');
+            $query->where('a.archived = 0');
         }
         if ( !is_null($enabled) ) {
             $query
@@ -757,11 +758,11 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
                     'enabled'    => $enabled,
             ));
         }
-        $query->orderBy("a.{$field}", $ORDER);
-        
-        if ($is_checkRoles)
+        $query->orderBy("a.{$field}", $ORDER);        
+        if ($is_checkRoles) {
             $query = $this->checkRoles($query);
-                
+        }
+        
         return $query;
     }
         
@@ -774,7 +775,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param boolean $is_checkRoles
      * @param boolean $with_archive
      * 
-     * @return integer
+     * @return QueryBuilder
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -783,7 +784,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         $query = $this->createQueryBuilder('a')
         ->select("a");        
         if (!$with_archive){
-        	$query->where('a.archived = 0');
+            $query->where('a.archived = 0');
         }        
         if (!is_null($FirstPosition) && !is_null($LastPosition)) {
             $query
@@ -819,7 +820,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param boolean $is_checkRoles
      * @param boolean $with_archive
      * 
-     * @return integer
+     * @return QueryBuilder
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -921,7 +922,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param string  $locale
      * @param string  $category
      * @param string  $result = {'array', 'object'}
-     * @param bool    $INNER_JOIN
+     * @param boolean $INNER_JOIN
      * @param boolean $is_checkRoles
      * @param boolean $FALLBACK
      * @param boolean $lazy_loading
@@ -942,7 +943,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
             $query
             ->andWhere('a.category = :cat')
             ->setParameters(array(
-                    'cat' => $category,
+                'cat' => $category,
             ));
         }        
         if ($is_checkRoles) {
@@ -1013,10 +1014,10 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      *
      * @param string  $locale
      * @param array   $fields
-     * @param string  $result      ['array', 'object']
+     * @param string  $result     ['array', 'object']
      * @param boolean $INNER_JOIN
      * 
-     * @return object
+     * @return null|object
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */

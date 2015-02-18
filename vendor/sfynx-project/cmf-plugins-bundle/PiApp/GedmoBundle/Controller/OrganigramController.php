@@ -451,7 +451,7 @@ class OrganigramController extends abstractController
         );
         
         // we repair the tree
-        $em->getRepository("PiAppGedmoBundle:Organigram")->setRecover();
+        $em->getRepository("PiAppGedmoBundle:Organigram")->recover();
         $result = $em->getRepository("PiAppGedmoBundle:Organigram")->verify();
         
         $node   = $this->container->get('request')->query->get('node');

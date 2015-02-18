@@ -546,7 +546,7 @@ class RubController extends abstractController
         );
         
         // we repair the tree
-        $em->getRepository("PluginsContentBundle:Rub")->setRecover();
+        $em->getRepository("PluginsContentBundle:Rub")->recover();
         $result = $em->getRepository("PluginsContentBundle:Rub")->verify();
         
         $node   = $this->container->get('request')->query->get('node');
@@ -600,7 +600,7 @@ class RubController extends abstractController
             $em->getRepository("PluginsContentBundle:Rub")->moveUp($node);
          
          // we repair the tree
-         $em->getRepository("PluginsContentBundle:Rub")->setRecover();
+         $em->getRepository("PluginsContentBundle:Rub")->recover();
          $result = $em->getRepository("PluginsContentBundle:Rub")->verify();
 
         return $this->redirect($this->generateUrl('admin_content_rub_tree', array('category'=>$category, 'NoLayout' => $NoLayout)));
@@ -640,7 +640,7 @@ class RubController extends abstractController
             $em->getRepository("PluginsContentBundle:Rub")->moveDown($node);
 
         // we repair the tree
-        $em->getRepository("PluginsContentBundle:Rub")->setRecover();
+        $em->getRepository("PluginsContentBundle:Rub")->recover();
         $result = $em->getRepository("PluginsContentBundle:Rub")->verify();
         
         return $this->redirect($this->generateUrl('admin_content_rub_tree', array('category'=>$category, 'NoLayout' => $NoLayout)));

@@ -11,6 +11,12 @@
     ],    
     "description": "The \"Symfony Standard Edition\" distribution",
     "keywords": ["CMF"],
+    "repositories": [
+    {
+        "type":"git",
+        "url":"https://github.com/l3pp4rd/DoctrineExtensions.git"
+    }
+    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.19",
@@ -35,7 +41,7 @@
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "doctrine/data-fixtures": "1.0.*",
         "doctrine/doctrine-cache-bundle": "1.0.*",    
-        "gedmo/doctrine-extensions": "2.3.*@dev",
+        "gedmo/doctrine-extensions": "~2.3.9",
         "stof/doctrine-extensions-bundle": "1.1.*@dev",
         
         "friendsofsymfony/user-bundle": "2.0.*@dev",

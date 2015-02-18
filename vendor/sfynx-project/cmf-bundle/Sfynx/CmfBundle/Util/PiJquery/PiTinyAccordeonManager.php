@@ -102,7 +102,7 @@ class PiTinyAccordeonManager extends PiJqueryExtension
       *         );
       *         
       *         // we repair the tree
-      *         $em->getRepository("PiAppGedmoBundle:Menu")->setRecover();
+      *         $em->getRepository("PiAppGedmoBundle:Menu")->recover();
       *         $result = $em->getRepository("PiAppGedmoBundle:Menu")->verify();
       *         
       *         $node   = $this->container->get('request')->query->get('node');
