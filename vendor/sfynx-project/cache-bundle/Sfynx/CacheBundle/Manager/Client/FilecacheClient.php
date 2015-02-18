@@ -2,11 +2,11 @@
 /**
  * This file is part of the <Cache> project.
  * 
- * @uses CacheClientInterface
- * @subpackage   Cache
- * @package    Manager
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-02-03
+ * @uses       CacheClientInterface
+ * @package    Cache
+ * @subpackage Manager
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-02-03
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,10 +20,10 @@ use Sfynx\CacheBundle\Builder\CacheClientInterface;
  *
  * Fixes appreciated!
  * 
- * @uses ClientCacheInterface
- * @subpackage   Cache
- * @package    Manager
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @uses       ClientCacheInterface
+ * @package    Cache
+ * @subpackage Manager
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class FilecacheClient implements CacheClientInterface
 {
@@ -103,26 +103,26 @@ class FilecacheClient implements CacheClientInterface
         }
     }
     
-	/**
-	 * Delete the file cache
-	 *
-	 * @param string $key Unique key to identify the data
-	 * @access public
-	 * @return void
-	 */
-	
-	public function clear($key)
-	{
-	    if ( !$this->isSafe() || empty( $key ) ){
-	    	return false;
-	    }
-	    if ( file_exists( $this->buildFilename( $key ) ) ) {
-	        unlink($this->buildFilename( $key ));
-	        return true;
-	    } else {
-	        return false;
-	    }    
-	}    
+    /**
+     * Delete the file cache
+     *
+     * @param string $key Unique key to identify the data
+     * @access public
+     * @return void
+     */
+
+    public function clear($key)
+    {
+        if ( !$this->isSafe() || empty( $key ) ){
+            return false;
+        }
+        if ( file_exists( $this->buildFilename( $key ) ) ) {
+            unlink($this->buildFilename( $key ));
+            return true;
+        } else {
+            return false;
+        }    
+    }    
 
     public function setPath( $path )
     {

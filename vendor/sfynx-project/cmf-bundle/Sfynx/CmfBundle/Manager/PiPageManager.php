@@ -1184,7 +1184,7 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 }
             }
             fclose($reading);
-    	}  	
+    	}  
     }    
     
     /**
@@ -1227,7 +1227,6 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
                 }
             } // endForeach
         }
-        //exit;
     }
     
     /**

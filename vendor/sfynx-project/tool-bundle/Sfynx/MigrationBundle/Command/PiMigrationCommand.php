@@ -64,9 +64,8 @@ class PiMigrationCommand extends ContainerAwareCommand
 
         // folder
         $migrationFolder = $input->getOption('dir');
-        $root_dir        = $this->getContainer()->getParameter('kernel.root_dir');
         if (is_null($migrationFolder)) {
-            $migrationFolder = $root_dir . '/migrations/default';
+            $migrationFolder  = $container->getParameter('sfynx.tool.migration.path_dir');
         }
 
         $finder = new Finder();
