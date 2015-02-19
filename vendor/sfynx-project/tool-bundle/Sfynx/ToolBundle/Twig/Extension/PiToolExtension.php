@@ -145,10 +145,10 @@ class PiToolExtension extends \Twig_Extension
     public function getFunctions() {
         return array(
             // Php Function
-            'file_exists' => new \Twig_Function_Function('file_exists'),
+            'file_exists'             => new \Twig_Function_Function('file_exists'),
+            'file_get_contents'       => new \Twig_Function_Function('file_get_contents'),
             //
             'link'                    => new \Twig_Function_Method($this, 'linkFunction'),
-            'in_paths'                => new \Twig_Function_Method($this, 'inPathsFunction'),
             'get_img_flag_By_country' => new \Twig_Function_Method($this, 'getImgFlagByCountryFunction'),
             'get_pattern_by_local'    => new \Twig_Function_Method($this, 'getDatePatternByLocalFunction'),  
             'clean_name'              => new \Twig_Function_Method($this, 'getCleanNameFunction'),
@@ -198,35 +198,6 @@ class PiToolExtension extends \Twig_Extension
 
         return '<a href="' . $path . '"' . $attributes . '>' . $label . '</a>';
     }
-    
-    /**
-     * Return the $returnTrue value if the route of the page is include in $paths value, else return the $returnFalse value.
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */    
-    public function inPathsFunction($paths, $returnTrue = '', $returnFalse = '')
-    {
-        $route = (string) $this->container->get('request')->get('_route');
-        $names = explode(':', $paths);
-        $is_true = false;        
-        if (is_array($names)) {
-            foreach ($names as $k => $path) {
-                if ($route == $path)
-                    $is_true = true;
-            }
-            if ($is_true) {
-                return $returnTrue;
-            } else {
-                return $returnFalse;
-            }            
-        } else {
-            if ($route == $paths) {
-                return $returnTrue;
-            } else {
-                return $returnFalse;
-            }            
-        }
-    }    
     
     /**
      * Return the image flag of a country.

@@ -71,7 +71,6 @@ class AuthenticationController extends abstractController
         if ($user instanceof User) {
             $response->setContent($this->getUserInformation($user));
             $response->setStatusCode(200);
-
             // Record all cookies in relation with ws.
             $dateExpire     = $this->container->getParameter('sfynx.core.cookies.date_expire');
             $date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
