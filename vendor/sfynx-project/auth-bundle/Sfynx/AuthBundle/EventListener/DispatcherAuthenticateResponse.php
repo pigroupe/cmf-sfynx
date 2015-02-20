@@ -179,9 +179,7 @@ class DispatcherAuthenticateResponse
         } elseif ($event->getRequest()->isXmlHttpRequest()) {
             $response = new Response(json_encode("ok"));
             $response->headers->set('Content-Type', 'application/json');
-        } else {
-            $response = $event->getResponse();
-        }
+        } 
 
         $event->setResponse($response);
     }

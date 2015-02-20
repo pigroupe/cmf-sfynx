@@ -42,9 +42,9 @@ security:
             
         wsse_secure:
             pattern:   ^/api/wsse/v1/.*
-            #stateless: true
+            stateless: true
             wsse:      true
-            #anonymous : true            
+            anonymous : true            
             
         # defaut login area for standard users   
         main:

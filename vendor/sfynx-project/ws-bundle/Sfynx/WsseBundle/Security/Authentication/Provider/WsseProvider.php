@@ -112,7 +112,7 @@ class WsseProvider implements AuthenticationProviderInterface
         file_put_contents($this->cacheDir.'/'.$nonce, time());
 
         // Validate Secret
-        $expected = base64_encode(sha1(base64_decode($nonce).$created.$secret, true));
+        $expected = static::makeDigest($nonce, $created, $secret);
 
         return $digest === $expected;
     }
@@ -121,4 +121,33 @@ class WsseProvider implements AuthenticationProviderInterface
     {
         return $token instanceof WsseUserToken;
     }
+    
+    public static function makeTonce() 
+    {
+        $chars   = "123456789abcdefghijklmnopqrstuvwxyz";
+        $random  = "" . microtime();
+        $random .= mt_rand();
+        $mi      = strlen($chars) - 1;
+        for ($i = 0; $i < 10; $i++) {
+            $random .= $chars[mt_rand(0, $mi)];
+        }
+        $nonce = md5($random);
+        
+        return $nonce;
+    }
+    
+    public static function makeDigest($nonce, $created, $password)
+    {
+        return base64_encode(sha1(base64_decode($nonce).$created.$password, true));
+    }    
+
+    public static function makeToken($username, $password)
+    {
+        $nonce  = static::makeTonce();
+        $ts     = date('c');
+        $digest = static::makeDigest($nonce, $ts, $password);
+        
+        return sprintf('X-WSSE: UsernameToken Username="%s", PasswordDigest="%s", Nonce="%s", Created="%s"',
+                       $username, $digest, $nonce, $ts);
+    }   
 }

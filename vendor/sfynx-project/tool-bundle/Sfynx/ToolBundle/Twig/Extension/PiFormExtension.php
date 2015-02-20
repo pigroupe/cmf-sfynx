@@ -67,8 +67,8 @@ class PiFormExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'form_errors'      => new \Twig_Function_Method($this, 'getFormErrors'),
-            'form_view_errors' => new \Twig_Function_Method($this, 'getFormViewErrors')
+            'group_form_errors'      => new \Twig_Function_Method($this, 'getFormErrors'),
+            'group_form_view_errors' => new \Twig_Function_Method($this, 'getFormViewErrors')
         );
     }    
 
@@ -83,7 +83,7 @@ class PiFormExtension extends \Twig_Extension
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    protected function getFormErrors(Form $form, $type = 'array', $delimiter = "<br />")
+    public function getFormErrors(Form $form, $type = 'array', $delimiter = "<br />")
     {
     	$errors = array();
     	foreach ($form->getErrors() as $key => $error) {

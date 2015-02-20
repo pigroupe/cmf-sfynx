@@ -7,7 +7,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-            $bundles = array(
+        $bundles = array(
                 
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -84,7 +84,7 @@ class AppKernel extends Kernel
         
         if ('test' === $this->getEnvironment()) {
             $bundles[] = new Sfynx\BehatBundle\SfynxBehatBundle();
-            $bundle[]  = new Behat\MinkBundle\MinkBundle();
+            $bundles[]  = new Behat\MinkBundle\MinkBundle();
         }
 
         return $bundles;

@@ -29,10 +29,12 @@ abstract class WebTestCase extends BaseWebTestCase
     const USER_EMAIL = 'user@gmail.com';
     const USER_USERNAME = 'user';
     const USER_PASS = 'user';
+    const USER_PASSWORD = 'yYuo6VMvpzKGhOy7fETi8D0a5RN4Cgyn7Z2ggdpny8z8nMnzhO/q4mEGSzJGGDLTgYrRhpJvpPLjw63Z98TNEA==';
     
     const ADMIN_EMAIL = 'admin@hotmail.com';
     const ADMIN_USERNAME = 'admin';
     const ADMIN_PASS = 'admin';
+    const ADMIN_PASSWORD = 'SM2FMHW0KOT4cp6fDGmNoCCI50JpCiXcpWWLvIMiHTDwetKtME0hCAUtXFmhLwNEjCfkescvgQUvkTClrXXooQ==';
 
     const URL_CONNECTION = '/login';
     const URL_DECONNECTION = '/logout';
@@ -71,6 +73,16 @@ abstract class WebTestCase extends BaseWebTestCase
         self::runCommand('doctrine:database:create --env=test');
         self::runCommand('doctrine:schema:create --env=test');
     }
+    
+    protected static function emptyCache()
+    {
+        self::runCommand('rm -rf app/cache/test/*');
+    } 
+    
+    protected static function updateSchema()
+    {
+        self::runCommand('doctrine:schema:update --force --env=test');
+    }     
 
     /**
      * @param  \Symfony\Bundle\FrameworkBundle\Client $client

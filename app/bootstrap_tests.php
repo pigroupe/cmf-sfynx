@@ -13,3 +13,7 @@ $process->run();
 
 $process = new PhpProcess('php app/console doctrine:schema:create --env=test');
 $process->run();
+
+$process = new PhpProcess('php app/console doctrine:schema:update --force --env=test');
+$process->run();
+

@@ -15,9 +15,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\WsseBundle\Tests;
+namespace Sfynx\WsseBundle\Tests\Security;
 
 use Sfynx\AuthBundle\Tests\WebTestCase;
+use Sfynx\WsseBundle\Security\Authentication\Provider\WsseProvider;
 
 /**
  * Tests for the simple partner firewall of NosBelIdeesWebserviceBundle
@@ -34,11 +35,13 @@ class WsseAuthentificationTest extends WebTestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
+        self::updateSchema();
         self::loadFixtures();
     }
 
     public function testRequestWithoutXAuthToken()
     {
+        static::emptyCache();
         $client = static::createClient();
 
         $client->request('GET', '/api/wsse/v1/user/authentication');
@@ -47,14 +50,14 @@ class WsseAuthentificationTest extends WebTestCase
 
     public function testRequestWithXAuthTokenInvalid()
     {
-        $md5 = md5('invalidTokenForTest' . date('Y-m-d'));
+        static::emptyCache();
         $client = static::createClient();
 
         $client->request('GET',
             '/api/wsse/v1/user/authentication',
             array(),    // parameters
             array(),    // files
-            array('x-wsse' => $md5), // custom http header, prefix with HTTP_ ans uppercased
+            array('HTTP_X-WSSE' => WsseProvider::makeToken("BadName", self::USER_PASSWORD)), // custom http header, prefix with HTTP_ ans uppercased
             '' //content
         );
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
@@ -62,16 +65,17 @@ class WsseAuthentificationTest extends WebTestCase
 
     public function testRequestWithValidXAuthToken()
     {
-        $md5 = md5('tokenForTest' . date('Y-m-d'));
+        static::emptyCache();
         $client = static::createClient();
+        $this->logout($client);
 
         $client->request('GET',
             '/api/wsse/v1/user/authentication',
             array(),    // parameters
             array(),    // files
-            array('x-wsse' => $md5), // custom http header, prefix with HTTP_ ans uppercased
+            array('HTTP_X-WSSE' => WsseProvider::makeToken(self::USER_USERNAME, self::USER_PASSWORD)), // custom http header, prefix with HTTP_ ans uppercased
             '' //content
         );
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }
