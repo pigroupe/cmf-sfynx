@@ -38,7 +38,7 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  * 
- * @Route("/api")
+ * @Route("/api/wsse/v1")
  */
 class AuthenticationController extends abstractController
 {

@@ -1,11 +1,16 @@
 <?php
 /**
  * This file is part of the <Auth> project.
- *
- * @subpackage Auth
+ * 
+ * @category   Auth
  * @package    Tests
+ * @subpackage Controller
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2012-03-08
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,14 +22,14 @@ use Sfynx\AuthBundle\Tests\WebTestCase;
 /**
  * Tests for the back office controller of NosBelIdeesSiteBundle
  *
- * @package    Auth
- * @subpackage Tests
- * @author     Simon Constans <simon.constans@rappfrance.com>
- *
- * @group functional
- * @group database
+ * @category   Auth
+ * @package    Tests
+ * @subpackage Controller
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @group      functional
+ * @group      database
  */
-class BackOfficeControllerTest extends WebTestCase
+class SecurityControllerTest extends WebTestCase
 {
     public static function setUpBeforeClass()
     {

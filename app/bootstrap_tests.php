@@ -12,3 +12,4 @@ $process = new PhpProcess('php app/console doctrine:database:create --env=test')
 $process->run();
 
 $process = new PhpProcess('php app/console doctrine:schema:create --env=test');
+$process->run();

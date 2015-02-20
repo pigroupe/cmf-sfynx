@@ -17,7 +17,9 @@ namespace Sfynx\AuthBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand as containerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Sfynx\ToolBundle\Util\PiFileManager;
 
 /**
  * Command to create user visite data test
@@ -53,13 +55,15 @@ class CreateUserCommand extends containerAwareCommand
         $this
             ->setName('sfynx:user:create')
             ->setDescription('Charger les données des utilisateurs')
+            ->addOption('firstId', null, InputOption::VALUE_REQUIRED, 'First id user value')
+            ->addOption('lastId', null, InputOption::VALUE_REQUIRED, 'Last id user value')
             ->setHelp(
                 <<<EOT
 La commande <info>sfynx:user:create</info> permet de charger les données tests des utilisateurs.
 
 Utilisation de la commande:
 
-<info>php app/console sfynx:user:create</info>
+<info>php app/console sfynx:user:create --firstId=4 --lastId=10000  --env=test</info>
 
 EOT
             );
@@ -79,9 +83,14 @@ EOT
         $start_date = time();
         $this->em   = $this->getContainer()->get('doctrine')->getManager('default');
         $root_dir = $this->getContainer()->getParameter("kernel.root_dir") ."/config/gatling/data";
-        \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($root_dir, 0777);
+        PiFileManager::mkdirr($root_dir, 0777);
         $path   = $root_dir . "/connexion_sfynx.csv";
         file_put_contents($path, 'username,password'."\n", LOCK_EX);
+        //
+        $firstId = (int) $input->getOption('firstId');
+        $lastId  = (int) $input->getOption('lastId');
+        $output->writeln('First id user : ' . $firstId);
+        $output->writeln('last id user : ' . $lastId);
         //
         $output->writeln(" - début de chargement de donnée");
         
@@ -99,7 +108,7 @@ EOT
         try {
             $psw = "user";
             $start_date_user = time();
-            for ($j=4; $j<= 10000; $j++) {
+            for ($j=$firstId; $j<= $lastId; $j++) {
                 $user_value = 'user'.$j;
                 $params = array('id' => $j, 'user'=> $user_value, 'user'=> $user_value, 'user'=> $user_value, 
                     'user'=> $user_value, 'user'=> $user_value, 'user'=> $user_value);

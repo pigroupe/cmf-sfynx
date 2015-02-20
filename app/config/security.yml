@@ -41,7 +41,7 @@ security:
             security: false
             
         wsse_secure:
-            pattern:   ^/api/.*
+            pattern:   ^/api/wsse/v1/.*
             #stateless: true
             wsse:      true
             #anonymous : true            
