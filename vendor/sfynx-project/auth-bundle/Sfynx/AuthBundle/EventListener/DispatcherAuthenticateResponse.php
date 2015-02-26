@@ -155,7 +155,7 @@ class DispatcherAuthenticateResponse
         // we apply all events allowed to change the url redirection
         $event_redirection = new RedirectionEvent($this->router, $this->redirect);
         $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGEREDIRECTION, $event_redirection);
-        $response = $event_redirection->getResponse();  
+        $response = $event_redirection->getResponse(); 
         
         // we deal with the case where the connection is limited to a set of roles (ajax or not ajax connection).
         if (isset($_POST['roles']) && !empty($_POST['roles'])) {
@@ -179,8 +179,8 @@ class DispatcherAuthenticateResponse
         } elseif ($event->getRequest()->isXmlHttpRequest()) {
             $response = new Response(json_encode("ok"));
             $response->headers->set('Content-Type', 'application/json');
-        } 
-
+        }
+        
         $event->setResponse($response);
     }
     

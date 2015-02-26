@@ -32,11 +32,26 @@ use Sfynx\WsseBundle\Security\Authentication\Provider\WsseProvider;
  */
 class WsseAuthentificationTest extends WebTestCase
 {
+//    public function setUp()
+//    {
+//        $this->createDatabase();
+//        $this->client = self::createClient();
+//        $this->container = $this->client->getContainer();
+//        $metadatas = $this->getMetadatas();
+//        if (!empty($metadatas)) {
+//            $tool = new \Doctrine\ORM\Tools\SchemaTool(
+//                $this->container->get('doctrine.orm.entity_manager')
+//            );
+//            $tool->dropSchema($metadatas);
+//            $tool->createSchema($metadatas);
+//        }
+//    }
+    
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        self::updateSchema();
-        self::loadFixtures();
+        static::updateSchema();
+        static::loadFixtures();
     }
 
     public function testRequestWithoutXAuthToken()
@@ -57,7 +72,7 @@ class WsseAuthentificationTest extends WebTestCase
             '/api/wsse/v1/user/authentication',
             array(),    // parameters
             array(),    // files
-            array('HTTP_X-WSSE' => WsseProvider::makeToken("BadName", self::USER_PASSWORD)), // custom http header, prefix with HTTP_ ans uppercased
+            array('HTTP_X-WSSE' => WsseProvider::makeToken("BadName", static::USER_PASSWORD)), // custom http header, prefix with HTTP_ ans uppercased
             '' //content
         );
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
@@ -67,15 +82,15 @@ class WsseAuthentificationTest extends WebTestCase
     {
         static::emptyCache();
         $client = static::createClient();
-        $this->logout($client);
+        $client->request('GET', static::URL_DECONNECTION);
 
         $client->request('GET',
             '/api/wsse/v1/user/authentication',
             array(),    // parameters
             array(),    // files
-            array('HTTP_X-WSSE' => WsseProvider::makeToken(self::USER_USERNAME, self::USER_PASSWORD)), // custom http header, prefix with HTTP_ ans uppercased
+            array('HTTP_X-WSSE' => WsseProvider::makeToken(static::USER_USERNAME, static::USER_PASSWORD)), // custom http header, prefix with HTTP_ ans uppercased
             '' //content
         );
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 }

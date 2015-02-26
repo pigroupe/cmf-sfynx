@@ -64,7 +64,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
     protected static function loadFixtures()
     {
-        self::runCommand('doctrine:fixtures:load @SfynxAuthBundle --env=test');
+        self::runCommand('doctrine:fixtures:load --append --fixtures=vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle  --env=test');
     }
 
     protected static function emptyDatabase()

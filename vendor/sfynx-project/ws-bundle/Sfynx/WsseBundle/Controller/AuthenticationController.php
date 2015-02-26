@@ -86,9 +86,12 @@ class AuthenticationController extends abstractController
                 $dateExpire = 0;
             }
             // we apply all events allowed to change the redirection response
-            $event_response = new ResponseEvent($response, $dateExpire, $this->getRequest(), $user, $locale);
+            $event_response = new ResponseEvent(null, $dateExpire, $this->getRequest(), $user, $locale);
             $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
-            $response = $event_response->getResponse();
+            //
+            foreach ($event_response->getResponse()->headers->getCookies() as $cokkie) {
+                $response->headers->setCookie($cokkie);
+            }
         }
 
         return $response;

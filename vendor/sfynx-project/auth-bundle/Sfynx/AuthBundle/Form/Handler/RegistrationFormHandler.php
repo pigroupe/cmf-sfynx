@@ -1,17 +1,42 @@
 <?php
-// src/Bootstrap/UserBundle/UserBundle/Form/Handler/RegistrationFormHandler.php
-namespace Bootstrap\UserBundle\Form\Handler;
+namespace Sfynx\AuthBundle\Form\Handler;
 
-use FOS\UserBundle\Form\Handler\RegistrationFormHandler as BaseHandler;
+use Sfynx\CoreBundle\Form\Handler\AbstractFormHandler;
 use FOS\UserBundle\Model\UserInterface;
 
-class RegistrationFormHandler extends BaseHandler
+class RegistrationFormHandler extends AbstractFormHandler
 {
-    protected function onSuccess(UserInterface $user, $confirmation)
+    protected $user;
+    protected $confirmation;
+    
+    public function __construct(FormInterface $form, Request $request, $userManager, $mailer)
     {
-        if ($confirmation) {
+        parent::__construct($form, $request);
+        
+        $this->mailer = $mailer;
+        $this->userManager = $userManager;
+    }
+    
+    public function setUser(UserInterface $user) 
+    {
+        $this->user = $user;
+    }
+    
+    public function setConfirmation($confirmation) 
+    {
+        $this->confirmation = $confirmation;
+    }
+    
+    protected function getValidMethods()
+    {
+        return array('POST');
+    }
+    
+    protected function onSuccess()
+    {
+        if ($this->confirmation) {
             $user->setEnabled(false);
-            $this->mailer->sendConfirmationEmailMessage($user);
+            $this->mailer->sendConfirmationEmailMessage($this->user);
         } else {
             $user->setConfirmationToken(null);
             $user->setEnabled(true);
@@ -19,6 +44,6 @@ class RegistrationFormHandler extends BaseHandler
         $user->setRoles(array('ROLE_ADMIN'));
         $user->setPermissions(array('VIEW', 'EDIT', 'CREATE', 'DELETE'));
 
-        $this->userManager->updateUser($user, true);
+        $this->userManager->updateUser($this->user, true);
     }   
 }
