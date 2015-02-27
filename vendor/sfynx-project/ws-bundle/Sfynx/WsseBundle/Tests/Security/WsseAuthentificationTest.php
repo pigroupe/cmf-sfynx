@@ -32,24 +32,11 @@ use Sfynx\WsseBundle\Security\Authentication\Provider\WsseProvider;
  */
 class WsseAuthentificationTest extends WebTestCase
 {
-//    public function setUp()
-//    {
-//        $this->createDatabase();
-//        $this->client = self::createClient();
-//        $this->container = $this->client->getContainer();
-//        $metadatas = $this->getMetadatas();
-//        if (!empty($metadatas)) {
-//            $tool = new \Doctrine\ORM\Tools\SchemaTool(
-//                $this->container->get('doctrine.orm.entity_manager')
-//            );
-//            $tool->dropSchema($metadatas);
-//            $tool->createSchema($metadatas);
-//        }
-//    }
-    
+            
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
+        parent::setUp();
         static::updateSchema();
         static::loadFixtures();
     }

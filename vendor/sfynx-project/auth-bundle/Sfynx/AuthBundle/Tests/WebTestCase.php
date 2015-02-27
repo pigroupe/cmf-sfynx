@@ -41,7 +41,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
     /** @var Application */
     private static $application;
-
+    
     protected static function runCommand($command)
     {
         $command = sprintf('%s --quiet', $command);
