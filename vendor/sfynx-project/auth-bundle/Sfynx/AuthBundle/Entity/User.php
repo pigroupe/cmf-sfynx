@@ -255,6 +255,11 @@ class User extends AbstractUser
     {
     	$this->id = (int) $id;
     }    
+    
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    }    
 
     /**
      * Add groups

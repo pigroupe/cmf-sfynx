@@ -15,6 +15,8 @@ namespace Sfynx\AuthBundle\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Doctrine\ORM\Tools\SchemaTool;
+use Sfynx\AuthBundle\DataFixtures\ORM\UsersFixtures;
 
 /**
  * This is the base test case for all functional tests.
@@ -26,21 +28,40 @@ use Symfony\Bundle\FrameworkBundle\Client;
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
-    const USER_EMAIL = 'user@gmail.com';
-    const USER_USERNAME = 'user';
-    const USER_PASS = 'user';
-    const USER_PASSWORD = 'yYuo6VMvpzKGhOy7fETi8D0a5RN4Cgyn7Z2ggdpny8z8nMnzhO/q4mEGSzJGGDLTgYrRhpJvpPLjw63Z98TNEA==';
+    const USER_EMAIL     = 'user@example.org';
+    const USER_USERNAME  = 'user123';
+    const USER_PASS      = 'testtest';
+    const USER_PASSWORD  = 'jMhPNtk/r/aDmrihsK2jw+D+zpnSxBxCL5v1tvCWZd/I4N7/gJiAjVPS0Xy2XkbVpVOPjgSHBBsskDmHWqEo4Q==';
     
-    const ADMIN_EMAIL = 'admin@hotmail.com';
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASS = 'admin';
-    const ADMIN_PASSWORD = 'SM2FMHW0KOT4cp6fDGmNoCCI50JpCiXcpWWLvIMiHTDwetKtME0hCAUtXFmhLwNEjCfkescvgQUvkTClrXXooQ==';
+    const ADMIN_EMAIL    = 'admin@example.org';
+    const ADMIN_USERNAME = 'admin123';
+    const ADMIN_PASS     = 'testtest';
+    const ADMIN_PASSWORD = 'jMhPNtk/r/aDmrihsK2jw+D+zpnSxBxCL5v1tvCWZd/I4N7/gJiAjVPS0Xy2XkbVpVOPjgSHBBsskDmHWqEo4Q==';
 
-    const URL_CONNECTION = '/login';
+    const URL_CONNECTION   = '/login';
     const URL_DECONNECTION = '/logout';
 
     /** @var Application */
-    private static $application;
+    protected static $application;
+    
+    protected static $kernel;
+    
+    protected static $em;
+    
+    protected static $metadata;
+    
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        static::$kernel = static::createKernel();
+        static::$kernel->boot();
+        
+        static::$em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        
+        $schemaTool = new SchemaTool(static::$em);
+        static::$metadata = static::$em->getMetadataFactory()->getAllMetadata();
+    }    
     
     protected static function runCommand($command)
     {
@@ -64,9 +85,9 @@ abstract class WebTestCase extends BaseWebTestCase
 
     protected static function loadFixtures()
     {
-        self::runCommand('doctrine:fixtures:load --append --fixtures=vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle  --env=test');
+        self::runCommand('doctrine:fixtures:load --append --fixtures=vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle --env=test');
     }
-
+    
     protected static function emptyDatabase()
     {
         self::runCommand('doctrine:database:drop --force --env=test');
@@ -117,7 +138,7 @@ abstract class WebTestCase extends BaseWebTestCase
         if (!$client) {
             $client = static::createClient();
         }
-        $client->request('GET', self::URL_CONNECTION);
+        $client->request('GET', self::URL_CONNECTION);        
         
         $form = $client->getCrawler()->filter('form input[type=submit]')->first()->form();
         $client->submit(

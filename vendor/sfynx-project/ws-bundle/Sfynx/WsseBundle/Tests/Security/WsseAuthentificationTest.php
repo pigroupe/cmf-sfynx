@@ -36,9 +36,8 @@ class WsseAuthentificationTest extends WebTestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        parent::setUp();
+        
         static::updateSchema();
-        static::loadFixtures();
     }
 
     public function testRequestWithoutXAuthToken()

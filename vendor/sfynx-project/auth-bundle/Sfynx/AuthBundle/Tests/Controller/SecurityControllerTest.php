@@ -34,7 +34,8 @@ class SecurityControllerTest extends WebTestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        self::loadFixtures();
+        
+        static::updateSchema();
     }
 
     /**
@@ -60,9 +61,9 @@ class SecurityControllerTest extends WebTestCase
     public function testAdminConnectsSucessfully()
     {
         $client = static::createClient();
+        
         $this->loginRoleAdmin($client)
             ->request('GET', '/admin/home');
-
         $this->assertStatusCode('200', $client);
     }
 }
