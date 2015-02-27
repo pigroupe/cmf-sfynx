@@ -41,4 +41,3 @@ if (!$process->isSuccessful()) {
     throw new \RuntimeException($process->getErrorOutput());
 }
 print $process->getOutput();
-
