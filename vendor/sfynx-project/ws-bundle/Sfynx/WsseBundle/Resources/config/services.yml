@@ -8,3 +8,4 @@ services:
         arguments: [@security.context, @security.authentication.manager, @logger]
         tags:
             - { name: monolog.logger, channel: wsse }
+

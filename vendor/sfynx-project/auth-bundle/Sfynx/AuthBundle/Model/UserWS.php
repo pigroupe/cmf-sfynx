@@ -1,9 +1,10 @@
 <?php
 /**
- * This file is part of the <Ws-se> project.
+ * This file is part of the <Auth> project.
  *
- * @category   Ws-se
- * @package    Model
+ * @category   Auth
+ * @package    User
+ * @subpackage Model
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -14,13 +15,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\WsseBundle\Model;
+namespace Sfynx\AuthBundle\Model;
 
 use Sfynx\AuthBundle\Entity\User;
+use Sfynx\AuthBundle\Entity\Langue;
 
 /**
- * @category   Ws-se
- * @package    Model
+ * @category   Auth
+ * @package    User
+ * @subpackage Model
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -50,7 +53,7 @@ class UserWS
 
     public function __construct(User $user = null, $expired = 1800)
     {
-        $this->user = $user;
+        $this->user    = $user;
         $this->expired = $expired;
     }
 
@@ -61,16 +64,26 @@ class UserWS
     {
         $userInArray =  array(
             'isconnected' => $this->user->isConnected($this->expired),
-            'lastname'      => $this->user->getName() ? $this->getName() : $this->getUserName(),
-            'firstname' => $this->user->getNickname(),
-            'email'     => $this->user->getEmail(),
-            'adress'      => $this->user->getAddress(),
-            'cp'        => $this->user->getZipCode(),
-            'city'     => $this->user->getCity(),
-            'error'     => $this->getError(),
+            'userid'      => $this->user->getId(),
+            'enabled'     => $this->user->getEnabled(),
+            'username'    => $this->user->getUserName(),
+            'lastname'    => $this->user->getName() ? $this->user->getName() : $this->user->getUserName(),
+            'firstname'   => $this->user->getNickname(),
+            'email'       => $this->user->getEmail(),
+            'address'     => $this->user->getAddress(),
+            'cp'          => $this->user->getZipCode(),
+            'city'        => $this->user->getCity(),
+            'country'     => $this->user->getCountry(),
+            'lang_code'   => ($this->user->getLangCode() instanceof Langue) ? $this->user->getLangCode()->getId() : "",
+            'birthday'    => $this->user->getBirthday(),
+            'global_optin'=> $this->user->getGlobalOptIn(),
+            'site_optin'  => $this->user->getSiteOptIn(),
+            'created_at'  => $this->user->getCreatedAt(),
+            'updated_at'  => $this->user->getUpdatedAt(),
+            'error'       => $this->getError(),
         );
 
-        return $userInArray;
+        return json_encode($userInArray);
     }
 
     /**

@@ -33,8 +33,7 @@ class SecurityControllerTest extends WebTestCase
 {
     public static function setUpBeforeClass()
     {
-        parent::setUpBeforeClass();
-        
+        parent::setUpBeforeClass();        
         static::updateSchema();
     }
 

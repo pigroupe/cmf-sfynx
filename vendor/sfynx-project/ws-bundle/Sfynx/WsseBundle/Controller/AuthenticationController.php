@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sfynx\AuthBundle\Entity\User;
-use Sfynx\WsseBundle\Model\UserWS;
+use Sfynx\AuthBundle\Model\UserWS;
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
 
@@ -101,6 +101,6 @@ class AuthenticationController extends abstractController
     {
         $userWs = new UserWS($user);
 
-        return json_encode($userWs->jsonSerialize());
+        return $userWs->jsonSerialize();
     }
 }

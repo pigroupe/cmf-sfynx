@@ -28,19 +28,9 @@ use Sfynx\AuthBundle\DataFixtures\ORM\UsersFixtures;
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
-    const USER_EMAIL     = 'user@example.org';
-    const USER_USERNAME  = 'user123';
-    const USER_PASS      = 'testtest';
-    const USER_PASSWORD  = 'jMhPNtk/r/aDmrihsK2jw+D+zpnSxBxCL5v1tvCWZd/I4N7/gJiAjVPS0Xy2XkbVpVOPjgSHBBsskDmHWqEo4Q==';
-    
-    const ADMIN_EMAIL    = 'admin@example.org';
-    const ADMIN_USERNAME = 'admin123';
-    const ADMIN_PASS     = 'testtest';
-    const ADMIN_PASSWORD = 'jMhPNtk/r/aDmrihsK2jw+D+zpnSxBxCL5v1tvCWZd/I4N7/gJiAjVPS0Xy2XkbVpVOPjgSHBBsskDmHWqEo4Q==';
-
     const URL_CONNECTION   = '/login';
     const URL_DECONNECTION = '/logout';
-
+    
     /** @var Application */
     protected static $application;
     
@@ -120,8 +110,8 @@ abstract class WebTestCase extends BaseWebTestCase
             $form,
             array(
                 'roles' => '{"0":"ROLE_USER"}',
-                '_username' => self::USER_USERNAME,
-                '_password' => self::USER_PASS
+                '_username' => UsersFixtures::USER_USERNAME,
+                '_password' => UsersFixtures::USER_PASS
             )
         );
         $client->followRedirect();
@@ -145,8 +135,8 @@ abstract class WebTestCase extends BaseWebTestCase
             $form,
             array(
                 'roles' => '{"0":"ROLE_ADMIN","1":"ROLE_SUPER_ADMIN"}',
-                '_username' => self::ADMIN_USERNAME,
-                '_password' => self::ADMIN_PASS
+                '_username' => UsersFixtures::ADMIN_USERNAME,
+                '_password' => UsersFixtures::ADMIN_PASS
             )
         );
         $client->followRedirect();

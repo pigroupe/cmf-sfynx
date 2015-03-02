@@ -26,6 +26,16 @@ use Sfynx\AuthBundle\Entity\User;
  */
 class UsersFixtures extends AbstractFixture implements OrderedFixtureInterface
 {
+    const USER_EMAIL     = 'user@example.org';
+    const USER_USERNAME  = 'user123';
+    const USER_PASS      = 'testtest';
+    const USER_PASSWORD  = 'jMhPNtk/r/aDmrihsK2jw+D+zpnSxBxCL5v1tvCWZd/I4N7/gJiAjVPS0Xy2XkbVpVOPjgSHBBsskDmHWqEo4Q==';
+    
+    const ADMIN_EMAIL    = 'admin@example.org';
+    const ADMIN_USERNAME = 'admin123';
+    const ADMIN_PASS     = 'testtest';
+    const ADMIN_PASSWORD = 'jMhPNtk/r/aDmrihsK2jw+D+zpnSxBxCL5v1tvCWZd/I4N7/gJiAjVPS0Xy2XkbVpVOPjgSHBBsskDmHWqEo4Q==';
+
     /**
      * Load user fixtures
      *
