@@ -297,6 +297,8 @@ class UsersController extends abstractController
      */    
     public function createAction(Request $request)
     {
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->container->get('event_dispatcher');
         $em = $this->getDoctrine()->getManager();
         // we create entity
         $entity = new User();

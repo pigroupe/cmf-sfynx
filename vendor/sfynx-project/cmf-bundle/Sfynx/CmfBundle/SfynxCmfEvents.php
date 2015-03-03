@@ -54,6 +54,12 @@ final class SfynxCmfEvents
     const REGISTRATION_SUCCESS = 'pi.user.registration.success';
     
     /**
+     * The REGISTRATION_SUCCESS event occurs when the user is correctly created
+     * 
+     */    
+    const REGISTRATION_WS_SUCCESS = 'pi.user.registration.ws.success';    
+    
+    /**
      * The REGISTRATION_COMPLETED event occurs when the user is correctly created
      * 
      */    

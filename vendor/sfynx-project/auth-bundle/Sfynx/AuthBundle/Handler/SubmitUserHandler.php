@@ -17,12 +17,16 @@
  */
 namespace Sfynx\AuthBundle\Handler;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator;
 use FOS\UserBundle\Model\UserManager;
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Validator\SubmitUserValidator;
 use Sfynx\AuthBundle\Model\UserWS;
+use FOS\UserBundle\Event\UserEvent;
+use Sfynx\CmfBundle\SfynxCmfEvents;
 
 /**
  * This class is used to process json data transmit in post from the new api Webservice
@@ -57,18 +61,28 @@ class SubmitUserHandler
     private $newUser = null;
     
     /** @var array */
-    private $submitDatas = null;    
+    private $submitDatas = null;   
+    
+    /** @var Request */
+    private $request;     
+    
+    /** @var EventDispatcherInterface */
+    private $dispatcher;      
 
-    public function __construct(SubmitUserValidator $validator, UserManager $userManager, Validator $sfValidator, $mailer = null)
+    public function __construct(ContainerInterface $container, SubmitUserValidator $validator, UserManager $userManager, Validator $sfValidator, $mailer = null)
     {
         $this->validator   = $validator;
         $this->sfValidator = $sfValidator;
         $this->userManager = $userManager;
         $this->mailer      = $mailer;
+        $this->container   = $container;
+        $this->request     = $container->get('request');
+        $this->dispatcher  = $container->get('event_dispatcher');
     }
 
     public function bindDatas(Request $request)
     {
+        $this->request     = $request;
         $this->submitDatas = $this->validator->setSubmitedUserDatas($request);
     }
 
@@ -106,6 +120,7 @@ class SubmitUserHandler
                 400
             );
         }
+        $this->dispatcher->dispatch(SfynxCmfEvents::REGISTRATION_WS_SUCCESS, new UserEvent($this->newUser, $this->request));
         //
         $this->userManager->updateUser($this->newUser);
         if ($this->mailer) {
