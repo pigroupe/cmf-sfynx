@@ -39,5 +39,23 @@ final class SfynxCmfEvents
      * This event allows you to modify the default values of the response before a user deconnection.
      * The event listener method receives a Symfony\Component\HttpFoundation\Response instance.
      */
-    const HANDLER_REQUEST_CHANGERESPONSE_NOSCOPE = 'pi.handler.request.noscope.changeresponse';    
+    const HANDLER_REQUEST_CHANGERESPONSE_NOSCOPE = 'pi.handler.request.noscope.changeresponse';   
+    
+    /**
+     * The REGISTRATION_COMPLETED event occurs when the user is correctly created
+     * 
+     */    
+    const REGISTRATION_INITIALIZE = 'pi.user.registration.initialize'; 
+    
+    /**
+     * The REGISTRATION_SUCCESS event occurs when the user is correctly created
+     * 
+     */    
+    const REGISTRATION_SUCCESS = 'pi.user.registration.success';
+    
+    /**
+     * The REGISTRATION_COMPLETED event occurs when the user is correctly created
+     * 
+     */    
+    const REGISTRATION_COMPLETED = 'pi.user.registration.completed';    
 }

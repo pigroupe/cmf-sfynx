@@ -106,6 +106,7 @@ class SubmitUserHandler
                 400
             );
         }
+        //
         $this->userManager->updateUser($this->newUser);
         if ($this->mailer) {
             $this->mailer->sendConfirmationEmailMessage($this->newUser);

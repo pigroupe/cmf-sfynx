@@ -34,6 +34,10 @@ use Sfynx\AuthBundle\Form\Type\UsersNewFormType;
 
 use Symfony\Component\Form\FormError;
 
+use FOS\UserBundle\Event\UserEvent;
+use FOS\UserBundle\Event\FormEvent;
+use Sfynx\CmfBundle\SfynxCmfEvents;
+
 /**
  * Users controller.
  *
@@ -305,11 +309,14 @@ class UsersController extends abstractController
         if ($user) {
         	$form->get('email')->addError(new FormError($this->container->get('translator')->trans('erreur.email.unique')));
         }        
+        $dispatcher->dispatch(SfynxCmfEvents::REGISTRATION_INITIALIZE, new UserEvent($user, $request));
         if ($form->isValid()) {
             $entity->setUsernameCanonical($data["username"]);
             $entity->setEmailCanonical($data["email"]);
             $em->persist($entity);
             $em->flush();
+            
+            $dispatcher->dispatch(SfynxCmfEvents::REGISTRATION_SUCCESS, new FormEvent($form, $request));
 
             return $this->redirect($this->generateUrl('users'));
         }
