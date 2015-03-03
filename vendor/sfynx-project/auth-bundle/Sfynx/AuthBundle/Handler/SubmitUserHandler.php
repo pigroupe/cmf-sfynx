@@ -19,7 +19,6 @@ namespace Sfynx\AuthBundle\Handler;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator;
-use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserManager;
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Validator\SubmitUserValidator;
@@ -60,7 +59,7 @@ class SubmitUserHandler
     /** @var array */
     private $submitDatas = null;    
 
-    public function __construct(SubmitUserValidator $validator, UserManager $userManager, Validator $sfValidator, MailerInterface $mailer = null)
+    public function __construct(SubmitUserValidator $validator, UserManager $userManager, Validator $sfValidator, $mailer = null)
     {
         $this->validator   = $validator;
         $this->sfValidator = $sfValidator;
@@ -138,18 +137,23 @@ class SubmitUserHandler
     private function populateUserWithSubmitedDatas()
     {
         $this->newUser = new User();
-        $this->newUser->setEnabled($this->submitDatas['enabled']);
-        $this->newUser->addRole($this->submitDatas['role']);
-        $this->newUser->setFirstName($this->submitDatas['first_name']);
-        $this->newUser->setLastName($this->submitDatas['last_name']);
+        if (isset($this->submitDatas['enabled'])) {
+            $this->newUser->setEnabled($this->submitDatas['enabled']);
+        }
+        $this->newUser->setNickname($this->submitDatas['first_name']);
+        $this->newUser->setName($this->submitDatas['last_name']);
         $this->newUser->setEmail($this->submitDatas['email']);
+        //
+        $this->newUser->addRole($this->submitDatas['connexion']['role']);
         $this->newUser->setUsername($this->submitDatas['connexion']['username']);
         $this->newUser->setPlainPassword($this->submitDatas['connexion']['password']);
         if (isset($this->submitDatas['location'])) {
             $this->newUser->setAddress($this->submitDatas['location']['address']);
             $this->newUser->setZipCode($this->submitDatas['location']['cp']);
             $this->newUser->setCity($this->submitDatas['location']['city']);
-            $this->newUser->setCountry($this->submitDatas['location']['country']);
+            if (isset($this->submitDatas['location']['country'])) {
+                $this->newUser->setCountry($this->submitDatas['location']['country']);
+            }
         }
         if (isset($this->submitDatas['birthday'])) {
             $this->newUser->setBirthday($this->submitDatas['birthday']);

@@ -129,6 +129,24 @@ class SfynxAuthExtension extends Extension{
         	if (isset($config['theme']['layout'])) {
         	    $container->setParameter('sfynx.auth.theme.layout', $config['theme']['layout']); // "SfynxSmoothnessBundle::Layout\\"
         	}
+                
+                
+                
+                if (isset($config['theme']['email']['registration']['from_email']['address'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.registration.from_email.address', $config['theme']['email']['registration']['from_email']['address']);
+        	}
+                if (isset($config['theme']['email']['registration']['template'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.registration.template', $config['theme']['email']['registration']['template']); 
+        	}   
+                if (isset($config['theme']['email']['resetting']['from_email']['address'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.resetting.from_email.address', $config['theme']['email']['resetting']['from_email']['address']);
+        	}
+                if (isset($config['theme']['email']['resetting']['template'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.resetting.template', $config['theme']['email']['resetting']['template']); 
+        	}                 
+                
+                
+                
         	if (isset($config['theme']['global']['layout'])) {
         	    $container->setParameter('sfynx.auth.theme.layout.global', $config['theme']['global']['layout']); // "SfynxSmoothnessBundle::Layout\\layout-global-cmf.html.twig"
         	}

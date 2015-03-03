@@ -99,9 +99,15 @@ class SubmitUserValidator
         $this->validateFirstName();
         $this->validateLastName();
         $this->validateEmail();
+        $this->validateRole();
         $this->validateUserName();
         $this->validatePassword();
         $this->validateLocation();
+        
+//        print_r($this->getErrors());
+//        print_r($this->getValidationCode());
+//        print_r($this->submitedUserDatas);
+//        exit;
     }
 
     private function setValidationCode($code)
@@ -202,6 +208,28 @@ class SubmitUserValidator
         if (strlen($this->submitedUserDatas['connexion']['username']) > 50 || strlen($this->submitedUserDatas['connexion']['username']) < 8) {
             $this->setValidationCode(400);
             $this->setValidationErrors('login', 'Le login doit avoir entre 8 et 50 caractéres.');
+
+            return false;
+        }
+    }   
+    
+    private function validateRole()
+    {
+        if (!isset($this->submitedUserDatas['connexion']['role']) || trim($this->submitedUserDatas['connexion']['role']) === '') {
+            $this->setValidationCode(400);
+            $this->setValidationErrors('role', 'Le rôle est obligatoire.');
+
+            return false;
+        }
+        if (ctype_upper($this->submitedUserDatas['connexion']['role'])) {
+            $this->setValidationCode(400);
+            $this->setValidationErrors('role', 'Le rôle doit être en majuscule');
+
+            return false;
+        }
+        if (substr($this->submitedUserDatas['connexion']['role'], 0, 5) != "ROLE_") {
+            $this->setValidationCode(400);
+            $this->setValidationErrors('role', 'Le rôle doit commencer par "ROLE_"');
 
             return false;
         }

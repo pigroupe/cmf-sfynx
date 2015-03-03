@@ -41,12 +41,17 @@ class CreateControllerTest extends WebTestCase
     private static $UserFixtures = array(
         'first_name'=> 'John',
         'last_name' => 'Do',
-        'email'     => UsersFixtures::ADMIN_EMAIL,
-        'password'  => UsersFixtures::ADMIN_PASS,
+        'email'     => "johntest@myemail.com",
+        'connexion' => array(
+            'username' => "JohnUserName",
+            'password' => "JohnPsw123",
+            'role'     => 'ROLE_USER'
+        ),
         'location'  => array(
             'address' => '12, avenue du Capitaine Glarner',
             'cp'      => '93400',
-            'city'    => ' Saint-Ouen'
+            'city'    => ' Saint-Ouen',
+            'country' => 'France'
         )
     );      
 
@@ -119,6 +124,8 @@ class CreateControllerTest extends WebTestCase
         $this->assertTrue(isset($return['email']), "unvalid data is in the error message");
     }
 
+
+    
     public function testIfRequestHaveExistingUserEmailResponseHaveA403StatusCode()
     {
         $this->client->request('POST',
@@ -146,25 +153,35 @@ class CreateControllerTest extends WebTestCase
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
         $return = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertTrue(isset($return['userid']), "new created user information are return");
-        $this->assertEquals(static::USER_EMAIL, $return['email']);
+        $this->assertEquals(static::$UserFixtures['email'], $return['email']);
     }
     
+    /**
+     * Return user data with a json format
+     *
+     * @param array  $invalidValues Values to override expected to be invalid
+     * @param string $dataToRemove  key Values to delete
+     * 
+     * @return string JSON fixture values
+     */    
     public static function getUserDataInJson(array $invalidValues = array(), $dataToRemove = null)
     {
         $fixtures = static::getFixtures('User', $invalidValues);
-        if ($dataToRemove && isset($fixtures[$dataToRemove])) {
+        if ($dataToRemove 
+                && isset($fixtures[$dataToRemove])
+        ) {
             unset($fixtures[$dataToRemove]);
         }
-        //print_r($fixtures);
+        
         return json_encode($fixtures);
     }   
     
     /**
      * Common getter for all fixtures
      *
+     * @param string $fixtureType
      * @param array  $invalidValues Values to override expected to be invalid
      * @param array  $validValues   Values to override expected to be valid
-     * @param string $fixtureType
      */
     public static function getFixtures($fixtureType, array $invalidValues = array(), array $validValues = array())
     {

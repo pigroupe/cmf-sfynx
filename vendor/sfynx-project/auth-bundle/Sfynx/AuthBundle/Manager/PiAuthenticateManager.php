@@ -13,6 +13,7 @@
  */
 namespace Sfynx\AuthBundle\Manager;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -22,6 +23,7 @@ use FOS\UserBundle\Model\UserInterface;
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
 use Sfynx\AuthBundle\Entity\User;
+use Sfynx\AuthBundle\Mailer\PiMailerManager;
 
 /**
  * abstract controller.
@@ -32,8 +34,6 @@ use Sfynx\AuthBundle\Entity\User;
  */
 class PiAuthenticateManager extends Controller
 {
-    const SESSION_EMAIL = 'fos_user_send_resetting_email/email';
-     
     /**
      * @var ContainerInterface
      */
@@ -174,81 +174,11 @@ class PiAuthenticateManager extends Controller
         
         $this->container->get('request')
                 ->getSession()
-                ->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
+                ->set(PiMailerManager::SESSION_EMAIL, $this->container->get('sfynx.auth.mailer')->getObfuscatedEmail($user));
          
         return $user->getConfirmationToken();
     }    
-    
-    /**
-     * Send mail to reset user password (return link with url)
-     * 
-     * @param UserInterface $user
-     * @param string        $route_reset_connexion
-     * @param string        $title
-     * @param array         $parameters
-     * 
-     * @return string
-     * @access public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function sendResettingEmailMessage(UserInterface $user, $route_reset_connexion, $title = '', $parameters = array())
-    {  
-    	$tokenGenerator = $this->container->get('fos_user.util.token_generator');
-        $user->setConfirmationToken($tokenGenerator->generateToken());
-        $em = $this->container->get('doctrine')->getManager();
-        $em->persist($user);
-        $em->flush();
-        
-        $this->container->get('request')
-                ->getSession()
-                ->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
-        
-        $parameters = array_merge($parameters, array('token' => $user->getConfirmationToken()));
-        
-        $url      = $this->container->get('sfynx.tool.route.factory')
-                ->getRoute($route_reset_connexion, $parameters);
-        $html_url = 'http://'.$this->container->get('request')->getHttpHost() . $this->container->get('request')->getBasePath().$url;
-        
-        if (empty($title)) {
-            $title = $html_url;
-        }        
-        $result = "<a href='$html_url'>" . $title . "</a>";
-        
-        return $result;
-    }  
-    
-    /**
-     * Send mail to reset user password (return URL)
-     * 
-     * @param UserInterface $user
-     * @param string        $route_reset_connexion
-     * @param string        $title
-     * @param array         $parameters
-     * 
-     * @return string
-     * @access public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function sendResettingEmailMessageURL(UserInterface $user, $route_reset_connexion, $parameters = array())
-    {
-        $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-        $user->setConfirmationToken($tokenGenerator->generateToken());
-        $em = $this->container->get('doctrine')->getManager();
-        $em->persist($user);
-        $em->flush();
-
-        $this->container->get('request')
-                ->getSession()
-                ->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
-
-        $parameters = array_merge($parameters, array('token' => $user->getConfirmationToken()));
-
-        $url       = $this->container->get('sfynx.tool.route.factory')->getRoute($route_reset_connexion, $parameters);
-        $html_url = 'http://'.$this->container->get('request')->getHttpHost() . $this->container->get('request')->getBasePath().$url;
-
-        return $html_url;
-    }    
-
+ 
     /**
      * Return the connected user entity.
      *
@@ -297,25 +227,6 @@ class PiAuthenticateManager extends Controller
         return $this->getToken()->getUser()->getRoles();
     }
     
-    /**
-     * Get the truncated email displayed when requesting the resetting.
-     *
-     * The default implementation only keeps the part following @ in the address.
-     *
-     * @param UserInterface $user
-     *
-     * @return string
-     */
-    public function getObfuscatedEmail(UserInterface $user)
-    {
-        $email = $user->getEmail();
-        if (false !== $pos = strpos($email, '@')) {
-            $email = '...' . substr($email, $pos);
-        }
-    
-        return $email;
-    }      
-
     /**
      * Return if yes or no the user is anonymous token.
      *

@@ -29,8 +29,6 @@ use FOS\UserBundle\Model\UserInterface;
  * 
  * @subpackage   Auth
  * @package    Controller
- * @author Thibault Duplessis <thibault.duplessis@gmail.com>
- * @author Christophe Coevoet <stof@notk.org>
  */
 class RegistrationController extends BaseController
 {

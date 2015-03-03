@@ -3,9 +3,15 @@
 {{ 'resetting.email.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}, 'FOSUserBundle')|striptags }}
 {% endautoescape %}
 {% endblock %}
+
 {% block body_text %}
 {% autoescape false %}
-{{ 'resetting.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}, 'FOSUserBundle')|raw }}
+{{ 'resetting.email.body.txt'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}, 'FOSUserBundle')|raw }}
 {% endautoescape %}
 {% endblock %}
-{% block body_html %}{% endblock %}
+
+{% block body_html %}
+{% autoescape false %}
+{{ 'resetting.email.body.html'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}, 'FOSUserBundle')|raw }}
+{% endautoescape %}
+{% endblock %}

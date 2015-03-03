@@ -9,6 +9,7 @@ parameters:
     sfynx.auth.dispatcher.loginfailure.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherLoginFailureResponse
     sfynx.auth.dispatcher.authenticate.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherAuthenticateResponse
 
+    sfynx.auth.mailer.user.class: Sfynx\AuthBundle\Mailer\PiMailerManager
     sfynx.auth.manager.user.class: Sfynx\AuthBundle\Manager\PiAuthenticateManager
     sfynx.auth.manager.locale.class: Sfynx\AuthBundle\Util\PiLocaleManager
     sfynx.auth.role.factory.class: Sfynx\AuthBundle\Role\RoleFactory
@@ -86,6 +87,13 @@ services:
         arguments: ['@service_container']
         
     #
+    # configuration of the user mailer
+    #    
+    sfynx.auth.mailer:
+        class: %sfynx.auth.mailer.user.class%  
+        arguments: ['@service_container']        
+        
+    #
     # configuration of the locale manager
     #    
     sfynx.auth.locale_manager:
@@ -117,7 +125,7 @@ services:
 
     sfynx.auth.form.handler.registration:
         class: Sfynx\AuthBundle\Form\Handler\RegistrationFormHandler
-        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer"]
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@sfynx.auth.mailer"]
         scope: request
         public: false
                     
@@ -135,7 +143,7 @@ services:
       
     sfynx.auth.ws.submit_user.handler:
         class: Sfynx\AuthBundle\Handler\SubmitUserHandler
-        arguments: ["@sfynx.auth.ws.submit_user.validator", "@fos_user.user_manager", "@validator", "@fos_user.mailer"]             
+        arguments: ["@sfynx.auth.ws.submit_user.validator", "@fos_user.user_manager", "@validator", "@sfynx.auth.mailer"]             
             
     #
     # configuration overload validators
