@@ -120,6 +120,7 @@ class SubmitUserHandler
                 400
             );
         }
+        //
         $this->dispatcher->dispatch(SfynxCmfEvents::REGISTRATION_WS_SUCCESS, new UserEvent($this->newUser, $this->request));
         //
         $this->userManager->updateUser($this->newUser);

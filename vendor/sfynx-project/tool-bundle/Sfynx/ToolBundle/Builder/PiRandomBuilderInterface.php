@@ -18,7 +18,7 @@
 namespace Sfynx\ToolBundle\Builder;
 
 /**
- * Log builder Interface.
+ * Random builder Interface.
  *
  * @category   Tool
  * @package    Util
@@ -30,15 +30,6 @@ namespace Sfynx\ToolBundle\Builder;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-interface PiLogManagerInterface
+interface PiRandomBuilderInterface
 {
-    public function setPath($path);
-    public function setName($name);
-    public function setFile($filePath, $mode = 0777);
-    public function setInit($id, $format = "YmdHis", $flag = FILE_APPEND, $path = "");
-    public function setInfo($info, $inLogger = true);
-    public function clearInfo();
-    public function setErr($err, $inLogger = true);
-    public function delete();
-    public function save($flag = FILE_APPEND, $mode = 0777);
 }

@@ -3,8 +3,8 @@
  * This file is part of the <Migration> project.
  *
  * @category   Migration
- * @package    Abstract
- * @subpackage Model
+ * @package    Model
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI6GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -25,8 +25,8 @@ use Symfony\Component\Console\Helper\HelperInterface;
  * Abstract model of a migration file.
  *
  * @category   Migration
- * @package    Abstract
- * @subpackage Model
+ * @package    Model
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI6GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License

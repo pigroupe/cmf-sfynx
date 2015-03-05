@@ -40,6 +40,8 @@ abstract class WebTestCase extends BaseWebTestCase
     
     protected static $metadata;
     
+    protected $validator;
+    
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -210,4 +212,14 @@ abstract class WebTestCase extends BaseWebTestCase
         $calledEvents = $profile->getCollector('propel_events')->getCalledListeners();
         $this->assertContains($event, implode(array_keys($calledEvents)));
     }
+    
+    protected function getValidator()
+    {
+        if (!$this->validator) {
+            $client = static::createClient();
+            $this->validator = $client->getContainer()->get('validator');
+        }
+
+        return $this->validator;
+    }    
 }

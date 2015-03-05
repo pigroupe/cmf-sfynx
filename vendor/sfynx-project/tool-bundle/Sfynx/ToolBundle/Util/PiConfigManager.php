@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage Tool
+ * @category   Tool
  * @package    Util
+ * @subpackage Service
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2012-01-18
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,9 +25,15 @@ use Sfynx\ToolBundle\Exception\ExtensionException;
 /**
  * Configuration service of the CMF system
  *
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class PiConfigManager implements PiConfigManagerBuilderInterface 
 {    

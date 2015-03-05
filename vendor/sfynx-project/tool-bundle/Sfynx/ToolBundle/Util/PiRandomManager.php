@@ -17,21 +17,13 @@
  */
 namespace Sfynx\ToolBundle\Util;
 
-use Sfynx\ToolBundle\Builder\PiEncryptionBuilderInterface;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Sfynx\ToolBundle\Builder\PiRandomBuilderInterface;
 
 /**
- * Description of the encryption manager
+ * Description of the random manager
  *
  * <code>
- *     $encryption    = $this-container->get('sfynx.tool.encryption_manager');
- *     
- *     <span class="hiddenLink {{ url|obfuscateLink }}">
- *
- *     <span frameborder="0" scrolling="no" width="805px" height="800px"  data-sort="3" data-hashtag="myBudget" class="hiddenLinkIframe {{ url|obfuscateLink }}" />
- *     {{ obfuscateLinkJS('iframe','hiddenLinkIframe')|raw }}
+ *     $random    = $this-container->get('sfynx.tool.random_manager');
  * </code>
  * 
  * @category   Tool
@@ -44,7 +36,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-class PiEncryption implements PiEncryptionBuilderInterface 
+class PiRandomManager implements PiRandomBuilderInterface 
 {   
 
     /**

@@ -4,7 +4,6 @@
  *
  * @subpackage   Auth
  * @package    Controller
- * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-10-01
  *
