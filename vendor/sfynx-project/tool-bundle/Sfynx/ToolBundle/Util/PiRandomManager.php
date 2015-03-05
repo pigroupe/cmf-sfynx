@@ -38,388 +38,476 @@ use Sfynx\ToolBundle\Builder\PiRandomBuilderInterface;
  */
 class PiRandomManager implements PiRandomBuilderInterface 
 {   
-
-    /**
-     * des encryption
-     */
-    const ENCRYPT_DES = 'des';
+    /** gaussianWeightedRandom() */
+    const RANDOM_Gaussian = 'gaussian';
+    
+    /** bellWeightedRandom() */
+    const RANDOM_Bell = 'bell';   
+    
+    /** gaussianWeightedRisingRandom() */
+    const RANDOM_GaussianRising = 'gaussianRising';   
+    
+    /** gaussianWeightedFallingRandom() */
+    const RANDOM_GaussianFalling = 'gaussianFalling';  
+    
+    /** gammaWeightedRandom() */
+    const RANDOM_Gamma = 'gamma'; 
+    
+    /** QaDgammaWeightedRandom() */
+    const RANDOM_GammaQaD = 'gammaQaD';  
+    
+    /** logarithmic10WeightedRandom() */
+    const RANDOM_Logarithmic10 = 'log10';  
+    
+    /** logarithmicWeightedRandom() */
+    const RANDOM_Logarithmic = 'log'; 
+    
+    /** poissonWeightedRandom() */
+    const RANDOM_Poisson = 'poisson';  
+    
+    /** domeWeightedRandom() */
+    const RANDOM_Dome = 'dome';  
+    
+    /** sawWeightedRandom() */
+    const RANDOM_Saw = 'saw';  
+    
+    /** pyramidWeightedRandom() */
+    const RANDOM_Pyramid = 'pyramid';  
+    
+    /** linearWeightedRandom() */
+    const RANDOM_Linear = 'linear';  
+    
+    /** nonWeightedRandom() */
+    const RANDOM_Unweighted = 'non';                   
     
     /**
-     * blowfish crypt encryption
-     */
-    const ENCRYPT_BLOWFISH_CRYPT = 'blowfish_crypt';
-    
-    /**
-     * md5 crypt encryption
-     */
-    const ENCRYPT_MD5_CRYPT = 'md5_crypt';
-    
-    /**
-     * ext crypt encryption
-     */
-    const ENCRYPT_EXT_CRYPT = 'ext_crypt';
-
-    /**
-     * md5 encryption
-     */
-    const ENCRYPT_HASH = 'hash';
-    
-    /**
-     * md5 encryption
-     */
-    const ENCRYPT_MD5 = 'md5';
-    
-    /**
-     * smd5 encryption
-     */
-    const ENCRYPT_SMD5 = 'smd5';
-
-    /**
-     * sha encryption
-     */
-    const ENCRYPT_SHA = 'sha';
-    
-    /**
-     * ssha encryption
-     */
-    const ENCRYPT_SSHA = 'ssha';
-    
-    /**
-     * lmpassword encryption
-     */
-    const ENCRYPT_LMPASSWORD = 'lmpassword';
-    
-    /**
-     * ntpassword encryption
-     */
-    const ENCRYPT_NTPASSWORD = 'ntpassword';
-    
-    /**
-     * no encryption
-     */
-    const ENCRYPT_PLAIN = 'plain';
-    
-    const ENCRYPT_MAIL_UNSUBSCRIBE = 'mailunsubscribe';
-    
-    /**
-     * returns all supported password encryptions types
+     * returns all supported random types
      *
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public static function getSupportedEncryptionTypes()
+    public static function getSupportedRandomTypes()
     {
         return array(
-            self::ENCRYPT_BLOWFISH_CRYPT,
-            self::ENCRYPT_EXT_CRYPT,
-            self::ENCRYPT_DES,
-            self::ENCRYPT_HASH,
-            self::ENCRYPT_MD5,
-            self::ENCRYPT_MD5_CRYPT,
-            self::ENCRYPT_PLAIN,
-            self::ENCRYPT_SHA,
-            self::ENCRYPT_SMD5,
-            self::ENCRYPT_SSHA,
-            self::ENCRYPT_LMPASSWORD,
-            self::ENCRYPT_NTPASSWORD,
-            self::ENCRYPT_MAIL_UNSUBSCRIBE
+            self::RANDOM_Gaussian,
+            self::RANDOM_Bell,
+            self::RANDOM_GaussianRising,
+            self::RANDOM_GaussianFalling,
+            self::RANDOM_Gamma,
+            self::RANDOM_GammaQaD,
+            self::RANDOM_Logarithmic10,
+            self::RANDOM_Logarithmic,
+            self::RANDOM_Poisson,
+            self::RANDOM_Dome,
+            self::RANDOM_Saw,
+            self::RANDOM_Pyramid,
+            self::RANDOM_Linear,
+            self::RANDOM_Unweighted
         );
     }
     
     /**
-     * encryptes password
+     * get random value
      *
-     * @param string $_password
-     * @param string $_method
-     * @return string the password
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public static function encryptPassword($_password, $_method)
-    {
-        switch (strtolower($_method)) {
-            case self::ENCRYPT_BLOWFISH_CRYPT:
-                $salt = '$2$' . self::getRandomString(13);
-                $password = '{CRYPT}' . crypt($_password, $salt);
-                break;
-                
-            case self::ENCRYPT_EXT_CRYPT:
-                $salt = self::getRandomString(9);
-                $password = '{CRYPT}' . crypt($_password, $salt);
-                break;
-                
-            case self::ENCRYPT_MD5:
-                $password = '{MD5}' . base64_encode(pack("H*", md5($_password)));
-                break;
-                
-            case self::ENCRYPT_MD5_CRYPT:
-                $salt = '$1$' . self::getRandomString(9);
-                $password = '{CRYPT}' . crypt($_password, $salt);
-                break;
-                
-            case self::ENCRYPT_PLAIN:
-                $password = $_password;
-                break;
-                
-            case self::ENCRYPT_SHA:
-                if(function_exists('mhash')) {
-                    $password = '{SHA}' . base64_encode(mhash(MHASH_SHA1, $_password));
-                }
-                break;
-
-            case self::ENCRYPT_HASH:
-                if(function_exists('hash')) {
-                    $password = hash_hmac('ripemd160', $_password, '314secret911');
-                }
-                break;
-                
-            case self::ENCRYPT_SMD5:
-                if(function_exists('mhash')) {
-                    $salt = self::getRandomString(8);
-                    $hash = mhash(MHASH_MD5, $_password . $salt);
-                    $password = '{SMD5}' . base64_encode($hash . $salt);
-                }
-                break;
-                
-            case self::ENCRYPT_SSHA:
-                if(function_exists('mhash')) {
-                    $salt = self::getRandomString(8);
-                    $hash = mhash(MHASH_SHA1, $_password . $salt);
-                    $password = '{SSHA}' . base64_encode($hash . $salt);
-                }
-                break;
-                
-            case self::ENCRYPT_LMPASSWORD:
-                $crypt = new PEAR_Crypt_CHAP_MSv1();
-                $password = strtoupper(bin2hex($crypt->lmPasswordHash($_password)));
-                break;
-                
-            case self::ENCRYPT_NTPASSWORD:
-                $crypt = new PEAR_Crypt_CHAP_MSv1();
-                $password = strtoupper(bin2hex($crypt->ntPasswordHash($_password)));
-                
-                // @todo replace Crypt_CHAP_MSv1
-                //$password = hash('md4', Zend_Auth_Adapter_Http_Ntlm::toUTF16LE($_password), TRUE);
-                break;
-                
-            case self::ENCRYPT_MAIL_UNSUBSCRIBE:
-                $crypt 				= new PEAR_Crypt_CHAP_MSv1();
-				$crypt->password 	= $_password;
-				$crypt->challenge 	= pack('H*', '102DB5DF085D3041');
-				
-//				$unipw 					= '{MAIL}' . $crypt->str2unicode($crypt->password);    
-//              $password['unicode-pw']	= '{MAIL}' . strtoupper(bin2hex($unipw));
-//              $password['NT-HASH']	= '{MAIL}' . strtoupper(bin2hex($crypt->ntPasswordHash()));
-//              $password['NT-Resp']	= '{MAIL}' . strtoupper(bin2hex($crypt->challengeResponse()));
-//              $password['LM-HASH']	= '{MAIL}' . strtoupper(bin2hex($crypt->lmPasswordHash()));
-//              $password['LM-Resp']	= '{MAIL}' . strtoupper(bin2hex($crypt->lmChallengeResponse()));
-//              $password['Response']	= '{MAIL}' . strtoupper(bin2hex($crypt->response()));
-                
-                $password	=	strtoupper(bin2hex($crypt->ntPasswordHash()));
-                break;                
-
-            case self::ENCRYPT_DES:
-                $salt = self::getRandomString(2);
-                $password  = '{CRYPT}'. crypt($_password, $salt);
-                break;
-                                
-            default:
-				break;
-        }
-        
-        if (! $password) {
-            throw new Zend_Exception("$_method is not supported by your php version");
-        }
-        
-        return $password;
-    }    
-    
-    /**
-     * generates a randomstrings of given length
-     *
-     * @param int $_length
+     * @param string $Method
+     * @param string $LowValue
+     * @param string $maxRand
+     * 
      * @return string the random value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public static function getRandomString($_length)
+    public static function weightedRandom($Method, $LowValue, $maxRand)
     {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        
-        $randomString = '';;
-        for ($i=0; $i<(int)$_length; $i++) {
-            $randomString .= $chars[mt_rand(1, strlen($chars)) -1];
+        switch (strtolower($Method)) {
+            case strtolower(self::RANDOM_Gaussian) :
+                $rVal = static::gaussianWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Bell) :
+                $rVal = static::bellWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_GaussianRising) :
+                $rVal = static::gaussianWeightedRisingRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_GaussianFalling) :
+                $rVal = static::gaussianWeightedFallingRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Gamma) :
+                $rVal = static::gammaWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_GammaQaD) :
+                $rVal = static::QaDgammaWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Logarithmic10) :
+                $rVal = static::logarithmic10WeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Logarithmic) :
+                $rVal = static::logarithmicWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Poisson) :
+                $rVal = static::poissonWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Dome) :
+                $rVal = static::domeWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Saw) :
+                $rVal = static::sawWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Pyramid) :
+                $rVal = static::pyramidWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            case strtolower(self::RANDOM_Linear) :
+                $rVal = static::linearWeightedRandom($LowValue, $maxRand);
+                break ;
+                
+            default :
+                $rVal = static::nonWeightedRandom($LowValue, $maxRand);
+                break ;
         }
         
-        return $randomString;
-    }
+        if (!$rVal 
+                || !in_array(strtolower($Method), static::getSupportedRandomTypes())
+        ) {
+            throw new \Exception("$Method is not supported by your php version");
+        }
+        
+        return $rVal;
+    }    
     
-    /**
-     * encrypt string
-     *
-     * @param string $string
-     * @param string $key
-     * @return string the encrypt string value
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */ 
-    public static function encryptFilter($string, $key = "0A1TG4GO")
-    {
-    	$key = $key . "0A1TG4GO";
-    	$result = '';
-    	for($i=0; $i<strlen($string); $i++) {
-    		$char = substr($string, $i, 1);
-    		$keychar = substr($key, ($i % strlen($key))-1, 1);
-    		$char = chr(ord($char)+ord($keychar));
-    		$result.=$char;
-    	}
-    	
-    	return strtr(base64_encode($result), '+/=', '-_,');
-    }
-    
-    /**
-     * decrypt string
-     *
-     * @param string $string
-     * @param string $key
-     * @return string the decrypt string value
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public static function decryptFilter($string, $key = "0A1TG4GO")
-    {
-    	$key = $key . "0A1TG4GO";
-    	$result = '';
-    	$string = base64_decode(strtr($string, '-_,', '+/='));
-    	for($i=0; $i<strlen($string); $i++) {
-    		$char = substr($string, $i, 1);
-    		$keychar = substr($key, ($i % strlen($key))-1, 1);
-    		$char = chr(ord($char)-ord($keychar));
-    		$result.=$char;
-    	}
-    	
-    	return $result;
-    }
-    
-    /**
-     * Obfuscate link. SEO worst practice.
-     *
-     * @param string $url
-     * @return string the encrypt obfuscate Link value
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public static function obfuscateLinkEncrypt($url, $_base16 = "0A12B34C56D78E9F")
-    {
-    	$output = "";
-    	for ($i = 0, $size = strlen($url); $i < $size; $i++) {
-    		$cc = ord($url[$i]);
-    		$ch = $cc >> 4;
-    		$cl = $cc - ($ch * 16);
-    		$output .= $_base16[$ch] . $_base16[$cl];
-    	}
-    	
-    	return $output;
-    }
-    
-    /**
-     * Obfuscate link JS. SEO worst practice.
-     *
-     * @param string $fileName
-     * @return string the decrypt obfuscate Link JS code.
-     * @access public
-     * 
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public static function obfuscateLinkDecrypt($balise = "a", $class = "hiddenLink", $base16 = "0A12B34C56D78E9F")
-    {
-    	// We open the buffer.
-    	ob_start ();
-    	?>
-                    <script type="text/javascript">
-                    //<![CDATA[
-                        jQuery(document).ready(function() {  
-                            var listitems = jQuery('.<?php echo $class; ?>').get();
-                            var index_ = 0;
-                            listitems.sort(function(a, b) {
-                                var hashtag = parsedURL.anchor ? '#'+parsedURL.anchor : null ;       //FORMAT HAS TO MATCH #AAAAA
-                                var hashtag_ = '#' + $(a).data('hashtag');
-                                var sort_a = parseInt($(a).data('sort'));
-                                var sort_b = parseInt($(b).data('sort'));
-                                if (hashtag == hashtag_) {
-                                    return 0;
-                                } else if ( (sort_a != undefined) && (sort_b != undefined) && (sort_a < sort_b) ) {
-                                    return sort_a;
-                                } else if ( (sort_a != undefined) && (sort_b != undefined) && (sort_a > sort_b) ) {
-                                    return sort_a;
-                                } else {
-                                    index_ = index_ +1;
-                                    return index_;
-                                }
-                            })
-                            $.each(listitems, function(index, span) { 
-                                    $(span).removeClass('<?php echo $class; ?>');
-            
-                                    var base16  = "<?php echo $base16; ?>";
-                                    var link    = document.createElement('<?php echo $balise; ?>');
-                                    var styles  = span.className.split(' ');
-                                    var encoded = styles[0];
-                                    var decoded = '';        
-                                    for (var i = 0; i < encoded.length; i += 2) {
-                                        var ch = base16.indexOf(encoded.charAt(i));
-                                        var cl = base16.indexOf(encoded.charAt(i+1));
-                                        decoded += String.fromCharCode((ch*16)+cl);
-                                    }        
-                                    styles.shift();
-                                    link.className  = styles.join(' ');
-                                    <?php if (in_array($balise, array('img', 'iframe', 'script'))) : ?>
-                                    link.src       = decoded;
-                                    <?php elseif (in_array($balise, array('div'))) : ?>
-                                    $(link).load( decoded );
-                                    <?php elseif (in_array($balise, array('ajax'))) : ?>
-                                        $.ajax({
-                                            type: "GET",
-                                            url: decoded,
-                                            async:  true // IMPORTANT !!! 
-                                        }).done(function(response) {
-                                            $(link).before(response);
-                                            $(link).remove();
-                                        }).complete(function(){
-                                        });
-                                    <?php else : ?>
-                                    link.href       = decoded;
-                                    <?php endif; ?>
-                                    
-                                    var attributes = $(span).prop("attributes");
-                                    $.each(attributes, function() {
-                                        link.setAttribute(this.name, this.value); 
-                                    });
 
-                                    link.innerHTML  = span.innerHTML;
-            
-                                    $(span).replaceWith(link);                                
-                            });
-                        });
-                    //]]>
-                    </script>
-                    
-        <?php 
-        // We retrieve the contents of the buffer.
-        $_content = ob_get_contents ();
-        // We clean the buffer.
-        ob_clean ();
-        // We close the buffer.
-        ob_end_flush ();
-                
-        return $_content;                                
-    }     
+
+    public function mkseed()
+    {
+        srand(hexdec(substr(md5(microtime()), -8)) & 0x7fffffff) ;
+    }
+
+
+    /*
+    public function factorial($in) {
+        if ($in == 1) {
+            return $in ;
+        }
+        return ($in * factorial($in - 1.0)) ;
+    }   //  function factorial()
+
+
+    public function factorial($in) {
+        $out = 1 ;
+        for ($i = 2; $i <= $in; $i++) {
+            $out *= $i ;
+        }
+
+        return $out ;
+    }   //  function factorial()
+    */
+
+
+    public function random_0_1()
+    {
+        //  returns random number using mt_rand() with a flat distribution from 0 to 1 inclusive
+        //
+        return (float) mt_rand() / (float) mt_getrandmax() ;
+    }
+
+
+    public function random_PN()
+    {
+        //  returns random number using mt_rand() with a flat distribution from -1 to 1 inclusive
+        //
+        return (2.0 * static::random_0_1()) - 1.0 ;
+    } 
+    
+    public function gauss()
+    {
+        static $useExists = false ;
+        static $useValue ;
+
+        if ($useExists) {
+            //  Use value from a previous call to this function
+            //
+            $useExists = false ;
+            return $useValue ;
+        } else {
+            //  Polar form of the Box-Muller transformation
+            //
+            $w = 2.0 ;
+            while (($w >= 1.0) || ($w == 0.0)) {
+                $x = static::random_PN() ;
+                $y = static::random_PN() ;
+                $w = ($x * $x) + ($y * $y) ;
+            }
+            $w = sqrt((-2.0 * log($w)) / $w) ;
+
+            //  Set value for next call to this function
+            //
+            $useValue = $y * $w ;
+            $useExists = true ;
+
+            return $x * $w ;
+        }
+    }
+
+
+    public function gauss_ms($mean, $stddev)
+    {
+        //  Adjust our gaussian random to fit the mean and standard deviation
+        //  The division by 4 is an arbitrary value to help fit the distribution
+        //      within our required range, and gives a best fit for $stddev = 1.0
+        //
+        return static::gauss() * ($stddev/4) + $mean;
+    }
+
+
+    public static function gaussianWeightedRandom($LowValue, $maxRand, $mean = 0.0, $stddev = 2.0)
+    {
+        //  Adjust a gaussian random value to fit within our specified range
+        //      by 'trimming' the extreme values as the distribution curve
+        //      approaches +/- infinity
+        $rand_val = $LowValue + $maxRand ;
+        while (($rand_val < $LowValue) || ($rand_val >= ($LowValue + $maxRand))) {
+            $rand_val = floor(gauss_ms($mean,$stddev) * $maxRand) + $LowValue ;
+            $rand_val = ($rand_val + $maxRand) / 2 ;
+        }
+
+        return $rand_val ;
+    }
+
+
+    public static function bellWeightedRandom($LowValue, $maxRand)
+    {
+        return static::gaussianWeightedRandom( $LowValue, $maxRand, 0.0, 1.0) ;
+    }
+
+    public static function gaussianWeightedRisingRandom($LowValue, $maxRand)
+    {
+        //  Adjust a gaussian random value to fit within our specified range
+        //      by 'trimming' the extreme values as the distribution curve
+        //      approaches +/- infinity
+        //  The division by 4 is an arbitrary value to help fit the distribution
+        //      within our required range
+        $rand_val = $LowValue + $maxRand ;
+        while (($rand_val < $LowValue) || ($rand_val >= ($LowValue + $maxRand))) {
+            $rand_val = $maxRand - round((abs(static::gauss()) / 4) * $maxRand) + $LowValue ;
+        }
+
+        return $rand_val ;
+    }
+
+
+    public static function gaussianWeightedFallingRandom($LowValue, $maxRand)
+    {
+        //  Adjust a gaussian random value to fit within our specified range
+        //      by 'trimming' the extreme values as the distribution curve
+        //      approaches +/- infinity
+        //  The division by 4 is an arbitrary value to help fit the distribution
+        //      within our required range
+        $rand_val = $LowValue + $maxRand ;
+        while (($rand_val < $LowValue) || ($rand_val >= ($LowValue + $maxRand))) {
+            $rand_val = floor((abs(static::gauss()) / 4) * $maxRand) + $LowValue ;
+        }
+
+        return $rand_val ;
+    }
+
+
+    public static function logarithmic($mean=1.0, $lambda = 5.0)
+    {
+        return ($mean * -log(static::random_0_1())) / $lambda;
+    }
+
+
+    public static function logarithmicWeightedRandom($LowValue, $maxRand)
+    {
+        do {
+            $rand_val = static::logarithmic();
+        } while ($rand_val > 1) ;
+
+        return floor($rand_val * $maxRand) + $LowValue;
+    }
+
+
+    public static function logarithmic10($lambda = 0.5)
+    {
+        return abs(-log10(static::random_0_1()) / $lambda);
+    }
+
+
+    public static function logarithmic10WeightedRandom($LowValue, $maxRand)
+    {
+        do {
+            $rand_val = static::logarithmic10();
+        } while ($rand_val > 1) ;
+
+        return floor($rand_val * $maxRand) + $LowValue;
+    } 
+
+
+    public static function gamma($lambda = 3.0)
+    {
+        $wLambda = $lambda + 1.0;
+        if ($lambda <= 8.0) {
+            //  Use direct method, adding waiting times
+            $x = 1.0 ;
+            for ($j = 1; $j <= $wLambda; $j++) {
+                $x *= static::random_0_1() ;
+            }
+            $x = -log($x) ;
+        } else {
+            //  Use rejection method
+            do {
+                do {
+                    //  Generate the tangent of a random angle, the equivalent of
+                    //      $y = tan(pi * random_0_1())
+                    do {
+                        $v1 = static::random_0_1();
+                        $v2 = static::random_PN();
+                    } while (($v1 * $v1 + $v2 * $v2) > 1.0) ;
+                    $y = $v2 / $v1 ;
+                    $s = sqrt(2.0 * $lambda + 1.0) ;
+                    $x = $s * $y + $lambda ;
+                //  Reject in the region of zero probability
+                } while ($x <= 0.0) ;
+                //  Ratio of probability function to comparison function
+                $e = (1.0 + $y * $y) * exp($lambda * log($x / $lambda) - $s * $y) ;
+            //  Reject on the basis of a second uniform deviate
+            } while (static::random_0_1() > $e);
+        }
+
+        return $x;
+    }
+
+
+    public static function gammaWeightedRandom($LowValue, $maxRand)
+    {
+        do {
+            $rand_val = static::gamma() / 12 ;
+        } while ($rand_val > 1) ;
+
+        return floor($rand_val * $maxRand) + $LowValue;
+    }
+
+
+    public static function QaDgammaWeightedRandom($LowValue, $maxRand)
+    {
+        return round((asin(static::random_0_1()) + (asin(static::random_0_1()))) * $maxRand / pi()) + $LowValue ;
+    }
+
+
+    public static function gammaln($in)
+    {
+        $tmp  = $in + 4.5 ;
+        $tmp -= ($in - 0.5) * log($tmp) ;
+
+        $ser = 1.000000000190015
+                + (76.18009172947146 / $in)
+                - (86.50532032941677 / ($in + 1.0))
+                + (24.01409824083091 / ($in + 2.0))
+                - (1.231739572450155 / ($in + 3.0))
+                + (0.1208650973866179e-2 / ($in + 4.0))
+                - (0.5395239384953e-5 / ($in + 5.0)) ;
+
+        return (log(2.5066282746310005 * $ser) - $tmp) ;
+    }
+
+
+    public static function poisson($lambda = 1.0)
+    {
+        static $oldLambda ;
+        static $g, $sq, $alxm ;
+
+        if ($lambda <= 12.0) {
+            //  Use direct method
+            if ($lambda <> $oldLambda) {
+                $oldLambda = $lambda ;
+                $g = exp(-$lambda) ;
+            }
+            $x = -1 ;
+            $t = 1.0 ;
+            do {
+                ++$x ;
+                $t *= static::random_0_1() ;
+            } while ($t > $g) ;
+        } else {
+            //  Use rejection method
+            if ($lambda <> $oldLambda) {
+                $oldLambda = $lambda ;
+                $sq = sqrt(2.0 * $lambda) ;
+                $alxm = log($lambda) ;
+                $g = $lambda * $alxm - static::gammaln($lambda + 1.0) ;
+            }
+            do {
+                do {
+                    //  $y is a deviate from a Lorentzian comparison function
+                    $y = tan(pi() * static::random_0_1()) ;
+                    $x = $sq * $y + $lambda ;
+                //  Reject if close to zero probability
+                } while ($x < 0.0) ;
+                $x = floor($x) ;
+                //  Ratio of the desired distribution to the comparison function
+                //  We accept or reject by comparing it to another uniform deviate
+                //  The factor 0.9 is used so that $t never exceeds 1
+                $t = 0.9 * (1.0 + $y * $y) * exp($x * $alxm - static::gammaln($x + 1.0) - $g) ;
+            } while (static::random_0_1() > $t) ;
+        }
+
+        return $x;
+    }
+
+
+    public static function poissonWeightedRandom($LowValue, $maxRand)
+    {
+        do {
+            $rand_val = static::poisson() / $maxRand ;
+        } while ($rand_val > 1) ;
+
+        return floor($x * $maxRand) + $LowValue ;
+    }
+
+
+    public static function binomial($lambda=6.0)
+    {
+    }
+
+
+    public static function domeWeightedRandom($LowValue, $maxRand)
+    {
+        return floor(sin(static::random_0_1() * (pi() / 2)) * $maxRand) + $LowValue ;
+    }
+
+
+    public static function sawWeightedRandom($LowValue, $maxRand)
+    {
+        return floor((atan(static::random_0_1()) + atan(static::random_0_1())) * $maxRand / (pi()/2)) + $LowValue ;
+    }
+
+
+    public static function pyramidWeightedRandom($LowValue, $maxRand)
+    {
+        return floor((static::random_0_1() + static::random_0_1()) / 2 * $maxRand) + $LowValue ;
+    }
+
+
+    public static function linearWeightedRandom($LowValue, $maxRand)
+    {
+        return floor(static::random_0_1() * ($maxRand)) + $LowValue ;
+    }
+
+
+    public static function nonWeightedRandom($LowValue, $maxRand)
+    {
+        return rand($LowValue,$maxRand+$LowValue-1) ;
+    }
 }

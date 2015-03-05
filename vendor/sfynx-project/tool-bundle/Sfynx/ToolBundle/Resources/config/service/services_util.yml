@@ -16,6 +16,7 @@ parameters:
     sfynx.tool.manager.log.class: Sfynx\ToolBundle\Util\PiLogManager
     sfynx.tool.manager.timer.class: Sfynx\ToolBundle\Util\PiTimerManager
     sfynx.tool.manager.encryption.class: Sfynx\ToolBundle\Util\PiEncryption
+    sfynx.tool.manager.random.class: Sfynx\ToolBundle\Util\PiRandomManager
     
     sfynx.tool.manager.soapclient.class: Sfynx\ToolBundle\Util\Soap\PiSoapClientManager
     sfynx.tool.manager.soapclient.proxy.class: Sfynx\ToolBundle\Util\Soap\PiSoapProxy
@@ -78,12 +79,14 @@ services:
         class: %sfynx.tool.manager.timer.class%      
         arguments: ['@service_container']         
         
+    sfynx.tool.string_manager:
+        class: %sfynx.tool.manager.string.class%
+        
     sfynx.tool.encryption_manager:
         class: %sfynx.tool.manager.encryption.class%      
-        arguments: ['@service_container']
         
-    sfynx.tool.string_manager:
-        class: %sfynx.tool.manager.string.class%    
+    sfynx.tool.random_manager:
+        class: %sfynx.tool.manager.random.class%      
         
     #
     # configuration of the Util classes

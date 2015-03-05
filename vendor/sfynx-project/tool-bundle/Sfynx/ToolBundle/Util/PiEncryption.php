@@ -19,9 +19,6 @@ namespace Sfynx\ToolBundle\Util;
 
 use Sfynx\ToolBundle\Builder\PiEncryptionBuilderInterface;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
-
 /**
  * Description of the encryption manager
  *
@@ -214,9 +211,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
                 break;
                 
             case self::ENCRYPT_MAIL_UNSUBSCRIBE:
-                $crypt 				= new PEAR_Crypt_CHAP_MSv1();
-				$crypt->password 	= $_password;
-				$crypt->challenge 	= pack('H*', '102DB5DF085D3041');
+                $crypt 			= new PEAR_Crypt_CHAP_MSv1();
+                $crypt->password 	= $_password;
+                $crypt->challenge 	= pack('H*', '102DB5DF085D3041');
 				
 //				$unipw 					= '{MAIL}' . $crypt->str2unicode($crypt->password);    
 //              $password['unicode-pw']	= '{MAIL}' . strtoupper(bin2hex($unipw));
@@ -235,11 +232,13 @@ class PiEncryption implements PiEncryptionBuilderInterface
                 break;
                                 
             default:
-				break;
+                break;
         }
         
-        if (! $password) {
-            throw new Zend_Exception("$_method is not supported by your php version");
+        if (!$password 
+                || !in_array(strtolower($_method), static::getSupportedEncryptionTypes())
+        ) {
+            throw new \Exception("$_method is not supported by your php version");
         }
         
         return $password;
