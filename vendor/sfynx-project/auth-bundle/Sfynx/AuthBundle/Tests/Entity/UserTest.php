@@ -38,8 +38,9 @@ class UserTest extends WebTestCase
     private static $fixtures = array(
         'site_login_creation' => array(
             'form' => array(
-                'first_name' => 'Admin',
-                'last_name' => 'Admin',
+                'username' => 'AdminUsername',
+                'nickname' => 'Admin',
+                'name' => 'Admin',
                 'email' => array('email' => 'example@example.org', 'confirm_email' => 'example@example.org'),
                 'plainPassword' => array('password' => 'password', 'confirm' => 'password'),
                 //'global_opt_in' => false,
@@ -48,9 +49,10 @@ class UserTest extends WebTestCase
                 'site_opt_in' => false,
                 'captcha' => '1234'
             ),
-            'propel' => array(
-                'FirstName' => 'Admin',
-                'LastName' => 'Admin',
+            'doctrine' => array(
+                'Username' => 'AdminUsername',
+                'Nickname' => 'Admin',
+                'Name' => 'Admin',
                 'Email' => 'test@example.org',
                 'PlainPassword' => '123456789',
                 'ZipCode' => '75017',
@@ -63,7 +65,7 @@ class UserTest extends WebTestCase
                 'address' => '48, bd des Batignolles',
                 'country' => 'FR',
             ),
-            'propel' => array(
+            'doctrine' => array(
                 'Address' => '48, bd des Batignolles',
                 'Country' => 'FR',
                 'Birthday' => '2000-01-02',
@@ -83,8 +85,8 @@ class UserTest extends WebTestCase
 
         $this->assertNull($user->getName());
         $this->assertNull($user->getNickname());
-        $this->assertFalse($user->getGlobalOptIn());
-        $this->assertFalse($user->getSiteOptIn());
+        $this->assertNull($user->getGlobalOptIn());
+        $this->assertNull($user->getSiteOptIn());
     }
 
     /**
@@ -97,6 +99,7 @@ class UserTest extends WebTestCase
         $user->setPlainPassword($data['PlainPassword']);
 
         $errors = $this->getValidator()->validate($user, array('registration'));
+        
         $this->assertCount(1, $errors, (string) $errors);
         $this->assertRegExp('/' . $field . '/', (string) $errors);
     }
@@ -126,7 +129,7 @@ class UserTest extends WebTestCase
                     'site_personal_data',
                     array('Address' => str_repeat(implode('', range('a', 'z')), 6)),
                     array(),
-                    'propel'
+                    'doctrine'
                 ),
                 'address'
             ),
@@ -135,7 +138,7 @@ class UserTest extends WebTestCase
                     'site_personal_data',
                     array('Address' => '%$24'),
                     array(),
-                    'propel'
+                    'doctrine'
                 ),
                 'address'
             ),             
@@ -152,14 +155,14 @@ class UserTest extends WebTestCase
             array(
                 static::getFixtures(
                     'site_login_creation',
-                    array('FirstName' => ''),
-                    array('LastName' => 'âéèìùò'),
-                    'propel'
+                    array('Nickname' => ''),
+                    array('Name' => 'âéèìùò'),
+                    'doctrine'
                 ),
-                'first_name'
+                'nickname'
             ),
             array(
-                static::getFixtures('site_login_creation', array('Email' => 'xyz@test'), array(), 'propel'),
+                static::getFixtures('site_login_creation', array('Email' => 'xyz@test'), array(), 'doctrine'),
                 'email'
             ),
             array(
@@ -167,7 +170,7 @@ class UserTest extends WebTestCase
                     'site_login_creation',
                     array('City' => str_repeat(implode('', range('a', 'z')), 6)),
                     array(),
-                    'propel'
+                    'doctrine'
                 ),
                 'city'
             ),
@@ -176,25 +179,11 @@ class UserTest extends WebTestCase
                     'site_login_creation',
                     array('ZipCode' => 'WC1E 6HJ'),
                     array('City' => 'Maïüöùîû'),
-                    'propel'
+                    'doctrine'
                 ),
                 'zip_code'
             ),           
         );
-    }
-
-    public function testUsernameUsesEmail()
-    {
-        $user = new User();
-        $user->setEmail('test@example.org');
-        $this->assertEquals('test@example.org', $user->getUsername());
-    }
-
-    public function testGetIdFormated()
-    {
-        $user = new User();
-        $user->setId(12);
-        $this->assertEquals('0400000012', $user->getIdFormated());
     }
 
     public function testIsConnected()
@@ -214,13 +203,6 @@ class UserTest extends WebTestCase
         $user->setLastLogin($date);
         $this->assertFalse($user->isConnected());
     }
-
-    public function testGetUpdatedAtWithChildrenBirthdays()
-    {
-        $user = new User();
-        $user->setUpdatedAt(new \DateTime('2012-01-01 00:00:01'));
-        $this->assertEquals('2012-02-02', $user->getUpdatedAtWithChildrenBirthdays('Y-m-d'));
-    }
     
     /**
      * Common getter for all fixtures
@@ -228,7 +210,7 @@ class UserTest extends WebTestCase
      * @param string $name          The form name
      * @param array  $invalidValues Values to override expected to be invalid
      * @param array  $valudValues   Values to override expected to be valid
-     * @param string $format        The values format (propel|form)
+     * @param string $format        The values format (doctrine|form)
      */
     public static function getFixtures(
         $name,

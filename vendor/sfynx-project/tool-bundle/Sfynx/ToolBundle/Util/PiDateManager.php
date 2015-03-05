@@ -67,6 +67,63 @@ class PiDateManager implements PiDateManagerBuilderInterface
     );
     
     /**
+     * Factory method to get a DateTime object from a temporal input
+     *
+     * @param mixed        $value         The value to convert (can be a string, a timestamp, or another DateTime)
+     * @param DateTimeZone $timeZone      (optional) timezone
+     * @param string       $dateTimeClass The class of the object to create, defaults to DateTime
+     *
+     * @return mixed null, or an instance of $dateTimeClass
+     * @throws Exception
+     */
+    public static function newInstance($value, \DateTimeZone $timeZone = null, $dateTimeClass = 'DateTime')
+    {
+        if ($value instanceof \DateTime) {
+            return $value;
+        }
+        if ($value === null || $value === '') {
+            // '' is seen as NULL for temporal objects
+            // because DateTime('') == DateTime('now') -- which is unexpected
+            return null;
+        }
+        try {
+            if (self::isTimestamp($value)) { // if it's a unix timestamp
+                $dateTimeObject = new $dateTimeClass('@' . $value, new \DateTimeZone('UTC'));
+                // timezone must be explicitly specified and then changed
+                // because of a DateTime bug: http://bugs.php.net/bug.php?id=43003
+                $dateTimeObject->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+            } else {
+                if ($timeZone === null) {
+                    // stupid DateTime constructor signature
+                    $dateTimeObject = new $dateTimeClass($value);
+                } else {
+                    $dateTimeObject = new $dateTimeClass($value, $timeZone);
+                }
+            }
+        } catch (Exception $e) {
+            throw new \Exception('Error parsing date/time value: ' . var_export($value, true), $e);
+        }
+
+        return $dateTimeObject;
+    }
+
+    public static function isTimestamp($value)
+    {
+        if (!is_numeric($value)) {
+            return false;
+        }
+        $stamp = strtotime($value);
+        if (false === $stamp) {
+            return true;
+        }
+        $month = date('m', $value);
+        $day   = date('d', $value);
+        $year  = date('Y', $value);
+
+        return checkdate($month, $day, $year);
+    }    
+    
+    /**
      * Parse a string representation of a date to a \DateTime
      * 
      * @param string $date
