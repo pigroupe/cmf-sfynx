@@ -5,18 +5,16 @@ default:
         Behat\MinkExtension:
             sessions:
                 my_session:
-                    selenium2: ~
+                    symfony2: ~
+            base_url: http://www.sfynx.local/app_test.php
+            
     suites:
-        tool:
-            type: symfony_bundle
-            bundle: 'SfynxToolBundle'
-        core:
-            type: symfony_bundle
-            bundle: 'SfynxCoreBundle'
         auth:
             type: symfony_bundle
             bundle: 'SfynxAuthBundle'
-        cmf:
-            type: symfony_bundle
-            bundle: 'SfynxCmfBundle'            
-
+            
+    formatters:
+        pretty:
+            verbose:  true
+            paths:    true
+            snippets: true            
