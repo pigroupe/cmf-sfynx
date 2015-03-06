@@ -274,11 +274,19 @@ To connect as default super administrator:
 
 **The password must be changed at the first use.**
 
-### Step 7: Run the tests
+### Step 7: Run the phpunit tests
 
 ``` bash
     
-    phpunit -c app/
+    bin/phpunit -c app vendor/sfynx-project
     casperjs test app/Tests/casperjs/ --base-url=127.0.0.1:4042 --pre=app/Resources/casperjs/pre.js
+
+```
+
+### Step 7: Run Behat tests
+
+``` bash
+    
+    bin/behat
 
 ```

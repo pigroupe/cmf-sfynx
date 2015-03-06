@@ -21,7 +21,7 @@ set :copy_vendors, true
 set :deploy_via,  :remote_cache
 set :composer_options,  "--verbose --prefer-dist"
 set :shared_files,      ["app/config/parameters.yml", "web/robots.txt"]
-set :shared_children,   [app_path + "/logs", web_path + "/uploads"]
+set :shared_children,   [app_path + "/logs", app_path + "/cachesfynx", web_path + "/uploads"]
 
 # ORM
 set :model_manager, "doctrine"
