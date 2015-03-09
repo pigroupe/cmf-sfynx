@@ -3,10 +3,14 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage   Const
+ * @category   Auth
  * @package    Event
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2014-07-23
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -49,5 +53,4 @@ final class SfynxAuthEvents
      * The event listener method receives a Symfony\Component\HttpFoundation\Response instance.
      */
     const HANDLER_LOGOUT_CHANGERESPONSE = 'pi.handler.logout.changeresponse';    
- 
-}
+ }

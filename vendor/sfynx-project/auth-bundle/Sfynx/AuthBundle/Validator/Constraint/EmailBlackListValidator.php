@@ -31,7 +31,6 @@ class EmailBlackListValidator extends ConstraintValidator
         $domainArray = preg_split("/@/", $value);
         if (count($domainArray) > 1) {
             $domain = $domainArray[1];
-
             if (!is_null($this->blackList) && in_array($domain, $this->blackList)) {
                 $this->context->addViolation($constraint->message);
             }

@@ -32,8 +32,9 @@ class CommentType extends AbstractType
                 'data'  => true,
                 'label'    => 'pi.form.label.field.enabled',
             ))
-            ->add('user')
-            ->add('comment')
+            ->add('user', 'hidden', array(
+                'data_class'  => 'SfynxAuthBundle:User',
+            ))
             ->add('email')
             ->add('approved')
             ->add('created_at', 'date', array(

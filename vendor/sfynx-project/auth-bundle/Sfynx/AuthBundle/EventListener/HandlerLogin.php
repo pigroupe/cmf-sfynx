@@ -176,12 +176,10 @@ class HandlerLogin
         } else {
             $dateExpire = 0;
         }        
-        
         // we apply all events allowed to change the redirection response
         $event_response = new ResponseEvent(null, $dateExpire, $this->getRequest(), $this->getUser(), $this->locale);
         $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
         $response       = $event_response->getResponse();
-        
         //
         $event->setResponse($response);        
     }    

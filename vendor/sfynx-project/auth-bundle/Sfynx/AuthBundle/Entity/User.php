@@ -235,7 +235,7 @@ class User extends AbstractUser
      * @Assert\NotBlank(groups={"registration"},message="user.field_required")
      * @Assert\Email(groups={"registration"},message="user.field_email_format")
      * @Assert\Length(max=50, groups={"registration", "user_account"}, maxMessage="user.email.max_length")
-     * @MyAssert\EmailBlackList(groups={"registration"},message="user.field_email_black_list")
+     * @MyAssert\EmailBlackList(groups={"registration"}, message="user.field_email_black_list")
      */
     protected $email;    
     
@@ -376,7 +376,22 @@ class User extends AbstractUser
      *
      */
     public function __toString() {
-        return (string) $this->username;
+        $content  = $this->getId();
+        $username = $this->getUsername();
+        $mail     = $this->getEmail();
+        $name     = $this->getName();
+        $nickame  = $this->getNickname();
+        if ($username) {
+            $content .=  "- " . $username;
+        }
+        if ($mail) {
+            $content .=  "- " . $mail;
+        }
+        if ($name && $nickame) {
+            $content .=  " (" . $name . " ". $nickame . ")";
+        }        
+            
+        return (string) $content;
     }    
 
     /**

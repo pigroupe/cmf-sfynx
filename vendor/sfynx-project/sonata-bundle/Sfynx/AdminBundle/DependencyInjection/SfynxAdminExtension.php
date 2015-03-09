@@ -44,9 +44,6 @@ class SfynxAdminExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $loader  = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('serviceform.xml');
-
         $loader2 = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader2->load('servicesadmin.yml');
     }

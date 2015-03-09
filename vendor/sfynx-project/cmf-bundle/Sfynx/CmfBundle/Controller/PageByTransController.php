@@ -35,24 +35,6 @@ class PageByTransController extends CmfabstractController
     protected $_entityName = "SfynxCmfBundle:Page";
     
     /**
-     * Lists all Page entities.
-     * 
-     * @Secure(roles="ROLE_EDITOR")
-     * @return Response
-     * @access public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function indexAction()
-    {
-        $em       = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('SfynxCmfBundle:Page')->getAllPageHtml()->getQuery()->getResult();
-        
-        return $this->render('SfynxCmfBundle:PageByTrans:index.html.twig', array(
-            'entities' => $entities
-        ));
-    }
-    
-    /**
      * Enabled Page entities.
      *
      * @Route("/admin/pagebytrans/enabled", name="admin_pagebytrans_enabledentity_ajax")
@@ -160,6 +142,24 @@ class PageByTransController extends CmfabstractController
                 'id_grid'  => 'grid_' . $status,
         ));
     }
+    
+    /**
+     * Lists all Page entities.
+     * 
+     * @Secure(roles="ROLE_EDITOR")
+     * @return Response
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function indexAction()
+    {
+        $em       = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('SfynxCmfBundle:Page')->getAllPageHtml()->getQuery()->getResult();
+        
+        return $this->render('SfynxCmfBundle:PageByTrans:index.html.twig', array(
+            'entities' => $entities
+        ));
+    }    
 
     /**
      * Finds and displays a Page entity.
@@ -271,6 +271,18 @@ class PageByTransController extends CmfabstractController
      */
     public function editAction(Request $request, Page $entity)
     {
+//        $em = $this->getDoctrine()->getManager(); 
+//        $result = $em->getRepository('SfynxAuthBundle:User')->createQueryBuilder('k')
+//                            ->select('k')
+//                            ->where("k.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
+//                            ->andWhere("k.roles NOT LIKE '%ROLE_MEMBER%'")
+//                            ->andWhere("k.roles NOT LIKE '%ROLE_PROVIDER%'")
+//                            ->andWhere("k.roles NOT LIKE '%ROLE_CUSTOMER%'")
+//                            ->orderBy('k.name', 'ASC');
+//        echo "<PRE>";
+//        print_r($result->getQuery()->getResult());
+//        exit;
+        
         $locale = $this->container->get('request')->getLocale();
         $User   = $this->get('security.context')->getToken()->getUser();
         $NoLayout = $this->container->get('request')->query->get('NoLayout');

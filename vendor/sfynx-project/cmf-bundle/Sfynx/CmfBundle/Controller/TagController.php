@@ -92,7 +92,7 @@ class TagController extends CmfabstractController
     public function selectajaxAction()
     {
     	$request = $this->container->get('request');
-    	$em		 = $this->getDoctrine()->getManager();
+    	$em      = $this->getDoctrine()->getManager();
     	$locale  = $this->container->get('request')->getLocale();
     	//
     	$pagination = $this->container->get('request')->get('pagination', null);
@@ -127,11 +127,11 @@ class TagController extends CmfabstractController
     {
     	$tab = array();
     	foreach ($entities as $obj) {
-            $content   = $obj->translate($locale)->getTitle();
+            $content   = $obj->getName();
             if (!empty($content)) {
                 $tab[] = array(
-                    'id' => $obj->getId(),
-                    'text' =>$this->container->get('twig')->render($content, array())
+                    'id'   => $obj->getId(),
+                    'text' => $content
                 );
             }
     	}

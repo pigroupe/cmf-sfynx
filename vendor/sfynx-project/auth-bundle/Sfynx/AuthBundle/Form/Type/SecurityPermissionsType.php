@@ -2,15 +2,20 @@
 /**
  * This file is part of the <Admin> project.
  * 
- * @subpackage   Type
+ * @category   Auth
  * @package    Form
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-11-17
+ * @subpackage Type
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\AdminBundle\Form\Type;
+namespace Sfynx\AuthBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 
@@ -24,13 +29,19 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Security Roles
+ * Security Permissions
  *
- * @subpackage   Type
+ * @category   Auth
  * @package    Form
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Type
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
-class SecurityRolesType extends AbstractType
+class SecurityPermissionsType extends AbstractType
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -53,7 +64,7 @@ class SecurityRolesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-    }    
+    }
     
     /**
      * {@inheritdoc}
@@ -64,35 +75,31 @@ class SecurityRolesType extends AbstractType
     
         $attr = $view->vars['attr'];
         $view->vars['attr'] = $attr;
-    }
-        
+    }    
+
     /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         parent::setDefaultOptions($resolver);
-    
-        $roles = array();
-        // get roles from the service container
-        foreach ($this->container->getParameter('security.role_hierarchy.roles') as $name => $rolesHierarchy)
-        {
-            $roles[$name] = $name . ': ' . implode(', ', $rolesHierarchy);
 
-            foreach ($rolesHierarchy as $role) {
-                if (!isset($roles[$role])) {
-                    $roles[$role] = $role;
-                }
-            }
+        $permissions = array();
+           //$query = $this->pool->getContainer()->get('sfynx.auth.repository')->findAllEnabled('permission');
+           $query = $this->container->get('sfynx.auth.repository')->getRepository('permission')->getAvailablePermissions();
+           foreach ($query as $field => $value) {
+           if (isset($value['name']) && !isset($permission[ $value['name'] ])) {
+               $permissions[ $value['name'] ] = $value['name'];
+           }
         }
-        
+           
         $resolver->setDefaults(array(
-                'choices' => function (Options $options, $parentChoices) use ($roles) {
-                    return empty($parentChoices) ? $roles : array();
+                'choices' => function (Options $options, $parentChoices) use ($permissions) {
+                    return empty($parentChoices) ? $permissions : array();
                 },
         ));
-    }   
-
+    }
+    
     public function getParent()
     {
         return 'choice';
@@ -103,6 +110,6 @@ class SecurityRolesType extends AbstractType
      */
     public function getName()
     {
-        return 'sfynx_security_roles';
+        return 'sfynx_security_permissions';
     }    
 }

@@ -24,6 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Sfynx\CoreBundle\Model\AbstractDefault;
+use Sfynx\MediaBundle\Entity\Media;
+use Sfynx\MediaBundle\Entity\Mediatheque;
 
 /**
  * PiApp\GedmoBundle\Entity\Category
@@ -175,7 +177,13 @@ class Category extends AbstractDefault
      */
     public function __toString()
     {
-        return (string) $this->getName();
+        $content = $this->getName();
+        if (($this->getMedia() instanceof Mediatheque)
+                    && ($this->getMedia()->getImage() instanceof Media)
+            ) {
+            $content .= "<img width='100px' src=\"{{ media_url('".$this->getMedia()->getImage()->getId()."', 'small', true, '".$this->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
+    	}
+        return (string) $content;
     }    
 
     /**

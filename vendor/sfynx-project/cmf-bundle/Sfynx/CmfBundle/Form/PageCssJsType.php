@@ -19,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Sfynx\CmfBundle\Repository\PageRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Sfynx\AuthBundle\Entity\User;
 
 /**
  * Description of the PageCssJsType form.
@@ -48,6 +49,13 @@ class PageCssJsType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id_users = null;
+        if ($builder->getData()->getUser()
+                instanceof User
+        ) {
+            $id_users = $builder->getData()->getUser()->getId();
+        }
+        //
         $builder
             ->add('enabled', 'checkbox', array(
                     'data'  => true,
@@ -55,28 +63,30 @@ class PageCssJsType extends AbstractType
             ))
             ->add('user', 'entity', array(
                     'class' => 'SfynxAuthBundle:User',
-            		'query_builder' => function(EntityRepository $er) {
-            			return $er->createQueryBuilder('k')
-            			->select('k')
-            			->where("k.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_MEMBER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_PROVIDER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_CUSTOMER%'")
-            			->orderBy('k.name', 'ASC');
-            		},
-                    'label'    => 'pi.form.label.field.user',
+                    'query_builder' => function(EntityRepository $er) use ($id_users) {
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);
+                        return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->andWhere('a.enabled = 1')
+                            ->setParameter('id', $id_users);
+                    },
+                    'empty_value' => 'pi.form.label.select.choose.user',
+                    'label'    => "pi.form.label.field.user",
+                    'multiple'    => false,
+                    'required'  => false,
                     "attr" => array(
-                            "class"=>"pi_simpleselect",
-                    ),
-            ))
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("users_selectentity_ajax"),
+                        "data-selectid" => $id_users,
+                        "data-max" => 50,
+                    )                           
+            ))  
             ->add('keywords', 'entity', array(
                     'class' => 'SfynxCmfBundle:KeyWord',
                     'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('k')
-                            ->select('k')
-                            ->where('k.enabled = :enabled')
-                            ->orderBy('k.groupname', 'ASC')
-                            ->setParameter('enabled', 1);
+                        return $er->getAllPageKeyWords();
                     },
                     'multiple'    => true,
                     'required'  => false,
@@ -87,7 +97,7 @@ class PageCssJsType extends AbstractType
             ->add('meta_content_type', 'choice', array(
                     'choices'   => PageRepository::getAvailableCssJsContentTypes(),
                     'required'  => true,
-                    'multiple'    => false,
+                    'multiple'  => false,
                     'expanded'  => true,
             ))
             ->add('cacheable', 'checkbox', array(
@@ -119,7 +129,7 @@ class PageCssJsType extends AbstractType
                     'by_reference' => true,                    
                     'type'   => new TranslationCssJsPageType,
                     'options'  => array(
-                            'attr'      => array('class' => 'translation_widget')
+                        'attr'      => array('class' => 'translation_widget')
                     ),
                     'label'    => ' '
             )) 

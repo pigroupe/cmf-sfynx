@@ -54,6 +54,12 @@ class TranslationPageType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if (isset( $_POST['_diaporama_tags_']) &&  $_POST['_diaporama_tags_']) {
+            $array_tags =$_POST['_diaporama_tags_'];
+        } else {
+            $array_tags = null;
+        }
+        
         $format_date = $this->_container->get('sfynx.tool.twig.extension.tool')->getDatePatternByLocalFunction($this->_locale);
         
         $builder
@@ -98,16 +104,12 @@ class TranslationPageType extends AbstractType
             ->add('langCode', 'entity', array(
                     'class' => 'SfynxAuthBundle:Langue',
                     'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('k')
-                        ->select('k')
-                        ->where('k.enabled = :enabled')
-                        ->orderBy('k.label', 'ASC')
-                        ->setParameter('enabled', 1);
+                        return $er->getAllLanguages();
                     },
                     'property' => 'label',
                     "label"    => "pi.form.label.field.language",
                     "attr" => array(
-                            "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect",
                     ),            
             ))
 //             ->add('langStatus', 'choice', array(
@@ -126,58 +128,41 @@ class TranslationPageType extends AbstractType
             ->add('tags', 'entity', array(
                     'class' => 'SfynxCmfBundle:Tag',
                     'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('k')
-                        ->select('k')
-                        ->where('k.enabled = :enabled')
-                        ->orderBy('k.groupname', 'ASC')
-                        ->setParameter('enabled', 1);
+                        return $er->getAllTags();
                     },
                     'multiple'    => true,
                     'required'  => false,
                     'label'    => 'pi.page.form.tags',
                     "attr" => array(
-                            "class"=>"pi_multiselect",
+                        "class"=>"pi_multiselect",
                     ),
             ))
-//             ->add('tag', 'entity', array(
+//             ->add('tags', 'entity', array(
 //             		'class' => 'SfynxCmfBundle:Tag',
-//             		'query_builder' => function(EntityRepository $er) use ($id_tags) {
-//             			$translatableListener = $this->_container->get('gedmo.listener.translatable');
-//             			$translatableListener->setTranslationFallback(true);
-//             			return $er->createQueryBuilder('a')
-//             			->select('a')
-//             			->where("a.id IN (:id)")
-//             			->andWhere('a.enabled = 1')
-//             			->setParameter('id', $id_tags)
-//             			//->where("a.status = 'image'")
-//             			//->andWhere("a.image IS NOT NULL")
-//             			//->andWhere("a.enabled = 1")
-//             			->orderBy('a.id', 'ASC')
-//             			;
+//             		'query_builder' => function(EntityRepository $er) use ($array_tags) {
+//                            $translatableListener = $this->_container->get('gedmo.listener.translatable');
+//                            $translatableListener->setTranslationFallback(true);
+//                            return $er->createQueryBuilder('a')
+//                            ->select('a')
+//                            ->where("a.id IN (:id)")
+//                            ->andWhere('a.enabled = 1')
+//                            ->setParameter('id', $array_tags)
+//                            //->where("a.status = 'image'")
+//                            //->andWhere("a.image IS NOT NULL")
+//                            //->andWhere("a.enabled = 1")
+//                            ->orderBy('a.id', 'ASC')
+//                            ;
 //             		},
-//             		//'property' => 'title',
 //             		'empty_value' => 'pi.form.label.select.choose.tag',
 //             		'label' => "Tag",
 //             		'multiple' => true,
 //             		'required'  => false,
-//             		'constraints' => array(
-//             				new Constraints\NotBlank(),
-//             		),
 //             		"attr" => array(
-//             				"class"=>"pi_multiselect ajaxselect", // ajaxselect
-//             				"data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_content_tag_selectentity_ajax"),
-//             				//"data-selectid" => json_encode($id_tags)
-//             				"data-max" => 40,
-//             		),
-//             		'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
-//              				title="Ajouter un tag à la sélection"
-//              				data-title="Tags"
-//              				data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_content_tag_new", array("NoLayout"=>"false", "category"=>'')).'"
-//              				data-selectid="#piapp_adminbundle_tagtype_id"
-//              				data-selecttitle="#piapp_adminbundle_tagtype_name"
-//              				data-insertid="#piapp_adminbundle_translationpagetype_tag"
-//              				data-inserttype="multiselect"
-//              				></a>',
+//                            "class"=>"pi_multiselect ajaxselect", // ajaxselect
+//                            "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_content_tag_selectentity_ajax"),
+//                            //"data-selectid" => json_encode($id_tags)
+//                            "data-max" => 40,
+//             		)
 //             ))            
             ->add('breadcrumb', 'hidden', array(
                     'label'    => 'pi.page.form.breadcrumb',

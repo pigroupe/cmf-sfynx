@@ -167,7 +167,7 @@ class MediathequeController extends abstractController
         $tab = array();
         foreach ($entities as $obj) {
             $content = $obj->getId();
-            $title   = $obj->translate($locale)->getTitle();
+            $title   = $obj->getTitle();
             $cat     = $obj->getCategory();
             if ($title) {
                 $content .=  " - " .$title;

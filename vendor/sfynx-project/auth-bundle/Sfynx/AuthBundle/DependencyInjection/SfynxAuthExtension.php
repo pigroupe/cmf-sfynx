@@ -39,6 +39,9 @@ class SfynxAuthExtension extends Extension{
 
     public function load(array $config, ContainerBuilder $container)
     {
+        $loader  = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('serviceformtype.xml');
+        
         // we load all services
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services_cmfconfig.yml');
@@ -46,7 +49,6 @@ class SfynxAuthExtension extends Extension{
         // we load config
         $configuration = new Configuration();
         $config  = $this->processConfiguration($configuration, $config);
-        
         
         /**
          * Login failure config parameter
@@ -253,5 +255,4 @@ class SfynxAuthExtension extends Extension{
     {
     	return 'sfynx_auth';
     }    
-
 }

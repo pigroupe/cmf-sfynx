@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sfynx.auth.form.type.security_roles" class="Sfynx\AuthBundle\Form\Type\SecurityRolesType">
+            <tag name="form.type" alias="sfynx_security_roles" />
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="sfynx.auth.form.type.security_permissions" class="Sfynx\AuthBundle\Form\Type\SecurityPermissionsType">
+            <tag name="form.type" alias="sfynx_security_permissions" />
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="sfynx.auth.form.type.routes" class="Sfynx\AuthBundle\Form\Type\RoutesType">
+            <tag name="form.type" alias="sfynx_routes" />
+            <argument type="service" id="service_container" />
+        </service>    
+        <service id="sfynx.auth.form.type.profile" class="Sfynx\AuthBundle\Form\Type\ProfileFormType">
+            <tag name="form.type" alias="bootstrap_user_profile" />
+            <argument>%fos_user.model.user.class%</argument>
+        </service> 
+        <service id="sfynx.auth.form.type.registration" class="Sfynx\AuthBundle\Form\Type\RegistrationFormType">
+            <tag name="form.type" alias="bootstrap_user_registration" />
+            <argument>%fos_user.model.user.class%</argument>
+        </service>                     
+    </services>
+
+</container>

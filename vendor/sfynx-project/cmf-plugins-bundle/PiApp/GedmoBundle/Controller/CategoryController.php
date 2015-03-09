@@ -25,6 +25,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\PreAuthorize;
 
+use Sfynx\MediaBundle\Entity\Media;
+use Sfynx\MediaBundle\Entity\Mediatheque;
 use PiApp\GedmoBundle\Entity\Category;
 use PiApp\GedmoBundle\Form\CategoryType;
 use PiApp\GedmoBundle\Entity\Translation\CategoryTranslation;
@@ -148,7 +150,7 @@ class CategoryController extends abstractController
                 'field_trans_name' => 'trans',
             ),
         );
-
+        
         return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true, array(
             'time'      => 3600,  
             'namespace' => 'hash_list_gedmo_category'
@@ -166,7 +168,12 @@ class CategoryController extends abstractController
     {
     	$tab = array();
     	foreach ($entities as $obj) {
-            $content   = $obj->translate($locale)->getName();
+            $content   = $obj->getName();
+            if (($obj->getMedia() instanceof Mediatheque)
+                    && ($obj->getMedia()->getImage() instanceof Media)
+            ) {
+                $content .= "<img width='100px' src=\"{{ media_url('".$obj->getMedia()->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
+            }
             if (!empty($content)) {
                 $tab[] = array(
                     'id' => $obj->getId(),

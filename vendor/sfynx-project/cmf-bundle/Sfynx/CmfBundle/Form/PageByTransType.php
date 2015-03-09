@@ -17,6 +17,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Sfynx\AuthBundle\Entity\User;
+use Sfynx\CmfBundle\Entity\Tag;
 
 /**
  * Description of the PageByTransType form.
@@ -58,6 +60,37 @@ class PageByTransType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $array_tags = null;
+        if ($builder->getData()->getTranslations() instanceof \Doctrine\ORM\PersistentCollection){
+            $array_tags = array();
+            foreach($builder->getData()->getTranslations() as $translation){
+                if ($translation->getTags() instanceof \Doctrine\Common\Collections\ArrayCollection) {
+                    foreach ($translation->getTags() as $tag) {
+                        if ($tag instanceof Tag){
+                            array_push($array_tags, $tag->getName());
+                        }
+                    }
+                }
+            }
+        }
+        if (isset( $_POST['piapp_adminbundle_pagetype_translations']['tags'])) {
+            $array_tags =array();
+            foreach($_POST['piapp_adminbundle_pagetype_translations']['tags'] as $tag){
+                array_push($array_tags, $tag['tags']);
+            }
+        }         
+        $_POST['_diaporama_tags_'] = $array_tags;
+        //
+        $id_users = null;
+        if ($builder->getData()->getUser()
+                instanceof User
+        ) {
+            $id_users = $builder->getData()->getUser()->getId();
+        }
+        if (isset($_POST['piapp_adminbundle_pagetype']['user'])) {
+            $id_users = $_POST['piapp_adminbundle_pagetype']['user'];
+        }  
+        //
         if (in_array('ROLE_ADMIN', $this->_roles_user) 
                 || in_array('ROLE_SUPER_ADMIN', $this->_roles_user) 
                 || in_array('ROLE_CONTENT_MANAGER', $this->_roles_user)
@@ -72,22 +105,27 @@ class PageByTransType extends AbstractType
                     'label'    => 'pi.form.label.field.enabled',
             ))
             ->add('user', 'entity', array(
-                    'class'     => 'SfynxAuthBundle:User',
-            		'query_builder' => function(EntityRepository $er) {
-                            return $er->createQueryBuilder('k')
-                            ->select('k')
-                            ->where("k.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
-                            ->andWhere("k.roles NOT LIKE '%ROLE_MEMBER%'")
-                            ->andWhere("k.roles NOT LIKE '%ROLE_PROVIDER%'")
-                            ->andWhere("k.roles NOT LIKE '%ROLE_CUSTOMER%'")
-                            ->orderBy('k.name', 'ASC');
-            		},
-                    'read_only'    => $read_only,
-                    'label'    => 'pi.form.label.field.user',
-                    "attr"         => array(
-                            "class"=>"pi_simpleselect",
-                    ),
-            ))
+                    'class' => 'SfynxAuthBundle:User',
+                    'query_builder' => function(EntityRepository $er) use ($id_users) {
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);
+                        return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->andWhere('a.enabled = 1')
+                            ->setParameter('id', $id_users);
+                    },
+                    'empty_value' => 'pi.form.label.select.choose.user',
+                    'label'    => "pi.form.label.field.user",
+                    'multiple'    => false,
+                    'required'  => false,
+                    "attr" => array(
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("users_selectentity_ajax"),
+                        "data-selectid" => $id_users,
+                        "data-max" => 50,
+                    )                           
+            ))                   
             ->add('rubrique', 'entity', array(
                     'class' => 'SfynxCmfBundle:Rubrique',
                     'query_builder' => function(EntityRepository $er) {
@@ -99,7 +137,7 @@ class PageByTransType extends AbstractType
                     'multiple'    => false,
                     'required'  => false,
                     "attr" => array(
-                            "class"=>"pi_simpleselect",
+                        "class"=>"pi_simpleselect",
                     ),                    
             ))
             ->add('layout', 'entity', array(

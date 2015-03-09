@@ -115,25 +115,23 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         
     #
+    # configuration overload validators
+    # 
+    sfynx.auth.validator.unique:
+        class: %sfynx.auth.validator.emailblackList.class%
+        alls:
+            - [ setBlackList, [ %mail_blacklist% ] ]
+        tags:
+            - { name: validator.constraint_validator, alias: email_black_list }
+            
+    #
     # configuration of the user form registration
     # 
-    sfynx.auth.registration.form.type:
-        class: Sfynx\AuthBundle\Form\Type\RegistrationFormType
-        arguments: [%fos_user.model.user.class%]
-        tags:
-            - { name: form.type, alias: bootstrap_user_registration }
-
     sfynx.auth.form.handler.registration:
         class: Sfynx\AuthBundle\Form\Handler\RegistrationFormHandler
         arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@sfynx.auth.mailer"]
         scope: request
         public: false
-                    
-    sfynx.auth.profile.form.type:
-        class: Sfynx\AuthBundle\Form\Type\ProfileFormType
-        arguments: [%fos_user.model.user.class%]
-        tags:
-            - { name: form.type, alias: bootstrap_user_profile }
             
     #
     # configuration of the user service for webservice apply
@@ -144,16 +142,6 @@ services:
     sfynx.auth.ws.submit_user.handler:
         class: Sfynx\AuthBundle\Handler\SubmitUserHandler
         arguments: ["@service_container", "@sfynx.auth.ws.submit_user.validator", "@fos_user.user_manager", "@validator", "@sfynx.auth.mailer"]             
-            
-    #
-    # configuration overload validators
-    # 
-    sfynx.auth.validator.unique:
-        class: %sfynx.auth.validator.emailblackList.class%
-        alls:
-            - [ setBlackList, [ %mail_blacklist% ] ]
-        tags:
-            - { name: validator.constraint_validator, alias: email_black_list }
             
     #
     # configuration of the Util classes
