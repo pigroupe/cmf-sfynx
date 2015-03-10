@@ -64,22 +64,26 @@ class PageByTransType extends AbstractType
         if ($builder->getData()->getTranslations() instanceof \Doctrine\ORM\PersistentCollection){
             $array_tags = array();
             foreach($builder->getData()->getTranslations() as $translation){
-                if ($translation->getTags() instanceof \Doctrine\Common\Collections\ArrayCollection) {
+                if ($translation->getTags() instanceof \Doctrine\ORM\PersistentCollection) {
                     foreach ($translation->getTags() as $tag) {
                         if ($tag instanceof Tag){
-                            array_push($array_tags, $tag->getName());
+                            array_push($array_tags, $tag->getId());
                         }
                     }
                 }
             }
         }
-        if (isset( $_POST['piapp_adminbundle_pagetype_translations']['tags'])) {
+        if (isset($_POST['piapp_adminbundle_pagetype']['translations'])) {
             $array_tags =array();
-            foreach($_POST['piapp_adminbundle_pagetype_translations']['tags'] as $tag){
-                array_push($array_tags, $tag['tags']);
+            foreach ($_POST['piapp_adminbundle_pagetype']['translations'] as $translations) {
+                if (isset($translations['tags'])) {
+                    foreach ($translations['tags'] as $tag) {
+                        array_push($array_tags, $tag);
+                    }
+                }
             }
         }         
-        $_POST['_diaporama_tags_'] = $array_tags;
+        $_POST['_cmfpage_translations_tags_'] = $array_tags;
         //
         $id_users = null;
         if ($builder->getData()->getUser()

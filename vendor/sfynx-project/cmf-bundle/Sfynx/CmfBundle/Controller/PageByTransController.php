@@ -271,18 +271,6 @@ class PageByTransController extends CmfabstractController
      */
     public function editAction(Request $request, Page $entity)
     {
-//        $em = $this->getDoctrine()->getManager(); 
-//        $result = $em->getRepository('SfynxAuthBundle:User')->createQueryBuilder('k')
-//                            ->select('k')
-//                            ->where("k.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
-//                            ->andWhere("k.roles NOT LIKE '%ROLE_MEMBER%'")
-//                            ->andWhere("k.roles NOT LIKE '%ROLE_PROVIDER%'")
-//                            ->andWhere("k.roles NOT LIKE '%ROLE_CUSTOMER%'")
-//                            ->orderBy('k.name', 'ASC');
-//        echo "<PRE>";
-//        print_r($result->getQuery()->getResult());
-//        exit;
-        
         $locale = $this->container->get('request')->getLocale();
         $User   = $this->get('security.context')->getToken()->getUser();
         $NoLayout = $this->container->get('request')->query->get('NoLayout');

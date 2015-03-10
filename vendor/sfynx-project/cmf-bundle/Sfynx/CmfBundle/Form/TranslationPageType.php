@@ -54,8 +54,8 @@ class TranslationPageType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (isset( $_POST['_diaporama_tags_']) &&  $_POST['_diaporama_tags_']) {
-            $array_tags =$_POST['_diaporama_tags_'];
+        if (isset($_POST['_cmfpage_translations_tags_'])) {
+            $array_tags = $_POST['_cmfpage_translations_tags_'];
         } else {
             $array_tags = null;
         }
@@ -125,45 +125,45 @@ class TranslationPageType extends AbstractType
                     'multiple'    => false,
                     'expanded' => true,
             ))     
-            ->add('tags', 'entity', array(
-                    'class' => 'SfynxCmfBundle:Tag',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->getAllTags();
-                    },
-                    'multiple'    => true,
-                    'required'  => false,
-                    'label'    => 'pi.page.form.tags',
-                    "attr" => array(
-                        "class"=>"pi_multiselect",
-                    ),
-            ))
-//             ->add('tags', 'entity', array(
-//             		'class' => 'SfynxCmfBundle:Tag',
-//             		'query_builder' => function(EntityRepository $er) use ($array_tags) {
-//                            $translatableListener = $this->_container->get('gedmo.listener.translatable');
-//                            $translatableListener->setTranslationFallback(true);
-//                            return $er->createQueryBuilder('a')
-//                            ->select('a')
-//                            ->where("a.id IN (:id)")
-//                            ->andWhere('a.enabled = 1')
-//                            ->setParameter('id', $array_tags)
-//                            //->where("a.status = 'image'")
-//                            //->andWhere("a.image IS NOT NULL")
-//                            //->andWhere("a.enabled = 1")
-//                            ->orderBy('a.id', 'ASC')
-//                            ;
-//             		},
-//             		'empty_value' => 'pi.form.label.select.choose.tag',
-//             		'label' => "Tag",
-//             		'multiple' => true,
-//             		'required'  => false,
-//             		"attr" => array(
-//                            "class"=>"pi_multiselect ajaxselect", // ajaxselect
-//                            "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_content_tag_selectentity_ajax"),
-//                            //"data-selectid" => json_encode($id_tags)
-//                            "data-max" => 40,
-//             		)
-//             ))            
+//            ->add('tags', 'entity', array(
+//                    'class' => 'SfynxCmfBundle:Tag',
+//                    'query_builder' => function(EntityRepository $er) {
+//                        return $er->getAllTags();
+//                    },
+//                    'multiple'    => true,
+//                    'required'  => false,
+//                    'label'    => 'pi.page.form.tags',
+//                    "attr" => array(
+//                        "class"=>"pi_multiselect",
+//                    ),
+//            ))
+             ->add('tags', 'entity', array(
+             		'class' => 'SfynxCmfBundle:Tag',
+             		'query_builder' => function(EntityRepository $er) use ($array_tags) {
+                            $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                            $translatableListener->setTranslationFallback(true);
+                            return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->andWhere('a.enabled = 1')
+                            ->setParameter('id', $array_tags)
+                            //->where("a.status = 'image'")
+                            //->andWhere("a.image IS NOT NULL")
+                            //->andWhere("a.enabled = 1")
+                            ->orderBy('a.id', 'ASC')
+                            ;
+             		},
+             		'empty_value' => 'pi.form.label.select.choose.tag',
+             		'label' => "Tag",
+             		'multiple' => true,
+             		'required'  => false,
+             		"attr" => array(
+                            "class"=>"pi_multiselect ajaxselect", // ajaxselect
+                            "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_content_tag_selectentity_ajax"),
+                            "data-selectid" => json_encode($array_tags),
+                            "data-max" => 40,
+             		)
+             ))            
             ->add('breadcrumb', 'hidden', array(
                     'label'    => 'pi.page.form.breadcrumb',
                     'required' => false,
