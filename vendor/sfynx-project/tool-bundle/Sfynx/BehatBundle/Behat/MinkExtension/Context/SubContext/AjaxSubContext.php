@@ -26,18 +26,6 @@ class AjaxSubContext extends BaseMinkContext
         $this->browserName = $this->getMinkParameter('browser_name');
     }
 
-     /**
-     * Override method to wait for Ajax requests to finish before continuing
-     *
-     * @param $text
-     */
-    public function assertPageContainsText($text)
-    {
-        $this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
-        
-        parent::assertPageContainsText($text);
-    }
-    
     /**
      * Checks that form hidden field with specified id|name has specified value.
      *

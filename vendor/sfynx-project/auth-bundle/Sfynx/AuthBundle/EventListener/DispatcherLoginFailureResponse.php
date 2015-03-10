@@ -103,7 +103,9 @@ class DispatcherLoginFailureResponse
            $username = "";
        }
        // we return the key ID of failure connection
-       return $username . $this->container->get('request')->getClientIp() . '-' .$_SERVER['HTTP_USER_AGENT'];
+       $HTTP_USER_AGENT = $this->container->get('request')->server->get('HTTP_USER_AGENT');
+       
+       return $username . $this->container->get('request')->getClientIp() . '-' . $HTTP_USER_AGENT;
    }   
    
    /**

@@ -1,0 +1,34 @@
+[36m@mink:my_session[0m
+[1mFeature:[0m I would like to log in to the system
+
+  [1mScenario:[0m Log in as admin                    [30m# vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle/Features/login.feature:5[0m
+    [32mGiven I go to "[0m[32;1m/login[0m[32m"[0m                     [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::visit()[0m
+    [32mThen I should not see "[0m[32;1mLogged in as admin[0m[32m"[0m [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertPageNotContainsText()[0m
+    [32mAnd I fill in "[0m[32;1musername[0m[32m" with "[0m[32;1madmin[0m[32m"[0m      [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::fillField()[0m
+    [32mAnd I fill in "[0m[32;1mpassword[0m[32m" with "[0m[32;1madmin[0m[32m"[0m      [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::fillField()[0m
+    [32mAnd I press "[0m[32;1mConnexion[0m[32m"[0m                    [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::pressButton()[0m
+    [32mThen I should see "[0m[32;1mLogged in as admin[0m[32m"[0m     [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertPageContainsText()[0m
+    [32mThen I should not see "[0m[32;1mformLogin[0m[32m"[0m          [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertPageNotContainsText()[0m
+    [32mWhen I follow "[0m[32;1mlogout[0m[32m"[0m                     [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::clickLink()[0m
+    [32mThen I should not see "[0m[32;1mLogged in as admin[0m[32m"[0m [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertPageNotContainsText()[0m
+    [32mThen I should see "[0m[32;1mform-connexion[0m[32m"[0m         [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertPageContainsText()[0m
+
+  [1mScenario:[0m Unsuccessful login                     [30m# vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle/Features/login.feature:17[0m
+    [32mGiven I go to "[0m[32;1m/login[0m[32m"[0m                         [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::visit()[0m
+    [32mThen I should not see "[0m[32;1mLogged in as admin[0m[32m"[0m     [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertPageNotContainsText()[0m
+    [32mAnd I fill in "[0m[32;1musername[0m[32m" with "[0m[32;1mwrong username[0m[32m"[0m [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::fillField()[0m
+    [32mAnd I fill in "[0m[32;1mpassword[0m[32m" with "[0m[32;1mwrong password[0m[32m"[0m [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::fillField()[0m
+    [32mAnd I press "[0m[32;1mConnexion[0m[32m"[0m                        [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::pressButton()[0m
+    [32mThen I should see "[0m[32;1mBad credentials[0m[32m"[0m            [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertPageContainsText()[0m
+
+  [1mScenario:[0m Profile unavailable                 [30m# vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle/Features/login.feature:25[0m
+    [32mGiven I go to "[0m[32;1m/profile[0m[32m"[0m                    [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::visit()[0m
+    [32mThen the response status code should be [0m[32;1m404[0m[32m[0m [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertResponseStatus()[0m
+
+  [1mScenario:[0m Resetting unavailable               [30m# vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle/Features/login.feature:29[0m
+    [32mGiven I go to "[0m[32;1m/resetting[0m[32m"[0m                  [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::visit()[0m
+    [32mThen the response status code should be [0m[32;1m404[0m[32m[0m [30m# Sfynx\AuthBundle\Features\Context\FeatureContext::assertResponseStatus()[0m
+
+4 scénarios ([32m4 succès[0m)
+20 étapes ([32m20 succès[0m)
+0m2,46s (51,88Mb)

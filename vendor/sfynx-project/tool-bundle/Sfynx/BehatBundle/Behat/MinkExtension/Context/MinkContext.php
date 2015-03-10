@@ -58,12 +58,37 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     /**
      * Behat additional options initializer
      */
-    public function __construct() {
+    public function __construct(array $parameters) {
         $this->forTheServer(self::$options['server'], self::$options['locale']);
         //
         $this->useContext('RadioButtonSubContext', new RadioButtonSubContext($parameters));
-        $this->useContext('RadioButtonSubContext', new AjaxSubContext($parameters));
+        $this->useContext('AjaxSubContext', new AjaxSubContext($parameters));
+        
+        parent::__construct($parameters);
     }
+    
+     /**
+     * Override method to wait for Ajax requests to finish before continuing
+     *
+     * @param $text
+     */
+    public function assertPageContainsText($text)
+    {
+        //$this->getSession()->wait(10000, '(0 === jQuery.active)');
+        parent::assertPageContainsText($text);
+    }    
+    
+    /**
+     * Override method to wait for Ajax requests to finish before continuing
+     * 
+     * @param $text
+     */
+    public function assertResponseContains($text)
+    {
+        //$this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        //$this->getSession()->wait(10000, '(0 === jQuery.active)');
+        parent::assertResponseContains($text);
+    }    
     
     /**
      * Log with a role
@@ -277,7 +302,6 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
      */
     public function pressLinkButton($button)
     {
-        
         $this->getSession()->getPage()->find('xpath', '//label[text()="Réinitialiser mon mot de passe"]');
     }
 }
