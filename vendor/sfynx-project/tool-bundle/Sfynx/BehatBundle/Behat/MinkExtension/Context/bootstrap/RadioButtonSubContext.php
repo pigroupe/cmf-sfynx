@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\BehatBundle\Features\Context\SubContext;
+namespace Sfynx\BehatBundle\Features\Context\bootstrap;
 
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use Behat\Mink\Exception\ElementNotFoundException;
@@ -12,7 +12,7 @@ class RadioButtonSubContext extends BaseMinkContext
      *
      * @param array $parameters context parameters
      */
-    public function __construct(array $parameters)
+    public function __construct()
     {
     }
 

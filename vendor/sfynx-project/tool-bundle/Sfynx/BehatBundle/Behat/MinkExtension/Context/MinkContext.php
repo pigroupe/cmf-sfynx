@@ -8,6 +8,10 @@ use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Sfynx\BehatBundle\Features\Context\SubContext\RadioButtonSubContext;
 use Sfynx\BehatBundle\Features\Context\SubContext\AjaxSubContext;
+use Sfynx\BehatBundle\Features\Context\SubContext\HiddenFieldSubContext;
+use Behat\Mink\Exception\UnsupportedDriverActionException,
+    Behat\Mink\Exception\ExpectationException;
+use Behat\Symfony2Extension\Driver\KernelDriver;
 
 /**
  * Mink context for Behat BDD tool.
@@ -58,14 +62,39 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     /**
      * Behat additional options initializer
      */
-    public function __construct(array $parameters) {
+    public function __construct() 
+    {
         $this->forTheServer(self::$options['server'], self::$options['locale']);
         //
-        $this->useContext('RadioButtonSubContext', new RadioButtonSubContext($parameters));
-        $this->useContext('AjaxSubContext', new AjaxSubContext($parameters));
         
-        parent::__construct($parameters);
+//        $this->useContext('RadioButtonSubContext', new RadioButtonSubContext());
+//        $this->useContext('AjaxSubContext', new AjaxSubContext());
+//        $this->useContext('HiddenFieldSubContext', new HiddenFieldSubContext());
+        
     }
+    
+    public function getSymfonyProfile()
+    {
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof KernelDriver) {
+            throw new UnsupportedDriverActionException(
+                'You need to tag the scenario with '.
+                '"@mink:symfony2". Using the profiler is not '.
+                'supported by %s', $driver
+            );
+        }
+
+        $profile = $driver->getClient()->getProfile();
+        if (false === $profile) {
+            throw new \RuntimeException(
+                'The profiler is disabled. Activate it by setting '.
+                'framework.profiler.only_exceptions to false in '.
+                'your config'
+            );
+        }
+
+        return $profile;
+    }    
     
      /**
      * Override method to wait for Ajax requests to finish before continuing
@@ -74,7 +103,8 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
      */
     public function assertPageContainsText($text)
     {
-        //$this->getSession()->wait(10000, '(0 === jQuery.active)');
+        //$this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        //$this->getSession()->wait(5000, '(0 === jQuery.active)');
         parent::assertPageContainsText($text);
     }    
     
@@ -86,7 +116,7 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     public function assertResponseContains($text)
     {
         //$this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
-        //$this->getSession()->wait(10000, '(0 === jQuery.active)');
+        //$this->getSession()->wait(5000, '(0 === jQuery.active)');
         parent::assertResponseContains($text);
     }    
     

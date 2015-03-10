@@ -5,8 +5,7 @@ framework:
     test: ~
     session:
         storage_id: session.storage.mock_file
-    profiler:
-        enabled: false
+    profiler: { only_exceptions: false }
 
 web_profiler:
     toolbar: false

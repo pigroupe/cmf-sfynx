@@ -3,6 +3,7 @@ default:
     extensions:
         Behat\Symfony2Extension: ~
         Behat\MinkExtension:
+            zombie: ~
             sessions:
                 my_session:
                     symfony2: ~
@@ -11,7 +12,7 @@ default:
     suites:
         auth:
             type: symfony_bundle
-            bundle: 'SfynxAuthBundle'
+            bundle: 'SfynxAuthBundle'        
             
     formatters:
         pretty:

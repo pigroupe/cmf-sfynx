@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\BehatBundle\Features\Context\SubContext;
+namespace Sfynx\BehatBundle\Features\Context\bootstrap;
 
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
@@ -7,9 +7,8 @@ use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 
-class AjaxSubContext extends BaseMinkContext
+class HiddenFieldSubContext extends BaseMinkContext
 {
-    
     /**
      * @var string $browserName
      */    
@@ -21,7 +20,7 @@ class AjaxSubContext extends BaseMinkContext
      *
      * @param array $parameters context parameters
      */
-    public function __construct(array $parameters)
+    public function __construct()
     {
         $this->browserName = $this->getMinkParameter('browser_name');
     }
@@ -99,5 +98,5 @@ class AjaxSubContext extends BaseMinkContext
             $filename = sprintf('%s_%s_%s_%s.%s', $event->getLogicalParent()->getTitle(), $this->browserName, date('YmdHis'), uniqid('', true), 'png');
             file_put_contents($directory . '/' . $filename, $driver->getScreenshot());
         }
-    }    
+    }  
 }

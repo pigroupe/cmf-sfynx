@@ -4,9 +4,8 @@ namespace Sfynx\AuthBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Defines application features from the specific context.
@@ -22,5 +21,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
      */
     public function __construct()
     {
+        parent::__construct();
     }
 }
