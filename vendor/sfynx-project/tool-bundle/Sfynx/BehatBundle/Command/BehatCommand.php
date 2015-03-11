@@ -28,7 +28,16 @@ class BehatCommand extends ContainerAwareCommand
     {
         $this
             ->setName('sfynx:behat:execute')
-            ->setDescription('Call Behat with additional options.');
+            ->setDescription('Call Behat with additional options.')
+            ->setHelp(<<<EOT
+The <info>sfynx:behat:execute</info> command to execute behat command
+
+An example of usage of the command:
+
+<info>./app/console sfynx:database:backup "my-connection-service-id" "/var/tmp" [my_sql_file_name.sql]</info>
+
+EOT
+            );
         foreach (self::$options as $option) {
             $this->addOption($option, null, InputOption::VALUE_OPTIONAL, 'Website '.$option.'.');
         }
