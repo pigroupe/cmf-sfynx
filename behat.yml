@@ -19,3 +19,4 @@ default:
             verbose:  true
             paths:    true
             snippets: true            
+
