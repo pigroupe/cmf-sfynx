@@ -32,3 +32,11 @@ Feature: I would like to log in to the system
       And I press "Connexion"
      Then I should see "Bad credentials"
      Then the response should contain "behatFormLogin"
+
+  Scenario: Profile unavailable
+    Given I go to "/profile"
+     Then the response status code should be 404
+
+  Scenario: Resetting unavailable
+    Given I go to "/resetting"
+     Then the response status code should be 404

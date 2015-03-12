@@ -5,7 +5,7 @@
         {
             "name": "Etienne de Longeaux",
             "email": "etienne.delongeaux@gmail.com",
-            "homepage": "http://pi-groupe.fr",
+            "homepage": "http://www.pi-groupe.fr",
             "role": "Copyright Holder"
         }
     ],    
@@ -27,7 +27,7 @@
         "symfony/assetic-bundle": "2.3.*",
         "symfony/swiftmailer-bundle": "2.3.*",
         "symfony/monolog-bundle": "2.3.*",
-        "sensio/distribution-bundle": "2.3.*",
+        "sensio/distribution-bundle": "2.3.11",
         "sensio/framework-extra-bundle": "2.3.*",
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
@@ -42,16 +42,26 @@
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "doctrine/data-fixtures": "1.0.*",
         "doctrine/doctrine-cache-bundle": "1.0.*",    
-        "gedmo/doctrine-extensions": "~2.3.9",
+        "gedmo/doctrine-extensions": "2.3.12",
         "stof/doctrine-extensions-bundle": "1.1.*@dev",
         
         "friendsofsymfony/user-bundle": "2.0.*@dev",
         "besimple/i18n-routing-bundle": "2.3.0",
         
-        "sonata-project/admin-bundle": "2.3.*@dev",
-        "sonata-project/media-bundle": "2.4.*@dev",
-        "sonata-project/classification-bundle": "2.3.*@dev",
-        "sonata-project/datagrid-bundle": "2.2.*@dev"
+        
+        "sonata-project/core-bundle": "2.3.1",
+        "sonata-project/cache": "1.0.4",
+        "sonata-project/block-bundle": "2.2.13",
+        "sonata-project/exporter": "1.3.4",
+        "sonata-project/admin-bundle": "2.3.x-dev#95a6bc59e7241954ea7ab3f36ff031df2835ba35",
+        "sonata-project/doctrine-orm-admin-bundle": "2.3.1",
+        "sonata-project/datagrid-bundle": "dev-master#dba166c6c52591f1bfafa8514b848a3bae23a557",
+        "sonata-project/classification-bundle": "dev-master#7dc507d324c93f66b17325c61752dcc280f6ed89",
+        "sonata-project/easy-extends-bundle": "2.1.9",
+        "sonata-project/doctrine-extensions": "1.0.2",
+        "sonata-project/notification-bundle": "2.3.0",
+        "sonata-project/intl-bundle": "2.2.1",
+        "sonata-project/media-bundle": "dev-master#653023c28a1222f71f96b9dd4ecb6db22d610c80"
     },
     "require-dev": {
         "benjam1/symfttpd": "2.1.*",

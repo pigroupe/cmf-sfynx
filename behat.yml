@@ -3,6 +3,7 @@ default:
     extensions:
         Behat\Symfony2Extension: ~
         Behat\MinkExtension:
+            browser_name: 'firefox'
             sessions:
                 my_session_selenium:
                     selenium2: ~

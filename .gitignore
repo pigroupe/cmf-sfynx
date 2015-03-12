@@ -39,7 +39,6 @@ app/phpunit.xml
 
 # Composer
 composer.phar
-composer.lock
 
 # OTHER
 *.DS_Store
