@@ -96,30 +96,6 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
         return $profile;
     }    
     
-//     /**
-//     * Override method to wait for Ajax requests to finish before continuing
-//     *
-//     * @param $text
-//     */
-//    public function assertPageContainsText($text)
-//    {
-//        //$this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
-//        $this->getSession()->wait(5000, '(0 === jQuery.active)');
-//        parent::assertPageContainsText($text);
-//    }    
-//    
-//    /**
-//     * Override method to wait for Ajax requests to finish before continuing
-//     * 
-//     * @param $text
-//     */
-//    public function assertResponseContains($text)
-//    {
-//        //$this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
-//        $this->getSession()->wait(5000, '(0 === jQuery.active)');
-//        parent::assertResponseContains($text);
-//    }    
-    
     /**
      * Log with a role
      * 

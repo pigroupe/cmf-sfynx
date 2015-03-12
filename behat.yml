@@ -4,9 +4,12 @@ default:
         Behat\Symfony2Extension: ~
         Behat\MinkExtension:
             sessions:
-                my_session:
+                my_session_selenium:
                     selenium2: ~
-                    #symfony2: ~
+                my_session_zombie:
+                    zombie: ~    
+                my_session_symfony2:
+                    symfony2: ~                       
             base_url: http://www.sfynx.local/
             
     suites:

@@ -38,7 +38,7 @@ mink:
 # SfynxBehatBundle configuration
 #
 sfynx_behat:
-    servers: [local, dev]
+    servers: [local, test]
     locales: [en, fr, ar]
     options:
         server: local

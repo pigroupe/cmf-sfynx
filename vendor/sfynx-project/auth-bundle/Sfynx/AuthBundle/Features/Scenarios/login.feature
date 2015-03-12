@@ -1,5 +1,5 @@
 # language: en
-@mink:my_session
+@mink:my_session_selenium
 Feature: I would like to log in to the system
 
   Scenario: Log in as admin
@@ -11,9 +11,11 @@ Feature: I would like to log in to the system
       And I press "Connexion"
      Then I should see "Logged in as admin"
      Then the response should not contain "behatFormLogin"
+     When I wait for 2 seconds
       And I click on ".connexion-my-account"
      When I follow "behatLinkProfile"
      Then the response should contain "user_from"
+     When I wait for 2 seconds
      And I click on ".connexion-my-account"
      When I follow "behatLinkUsers"
      Then the response should contain "grid_customer_wrapper"
@@ -30,11 +32,3 @@ Feature: I would like to log in to the system
       And I press "Connexion"
      Then I should see "Bad credentials"
      Then the response should contain "behatFormLogin"
-
-  Scenario: Profile unavailable
-    Given I go to "/profile"
-     Then the response status code should be 404
-
-  Scenario: Resetting unavailable
-    Given I go to "/resetting"
-     Then the response status code should be 404
