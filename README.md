@@ -283,11 +283,24 @@ To connect as default super administrator:
 
 ```
 
-### Step 7: Run Behat tests
+### Step 8: Run Behat tests
+
+In first step, you have to install and configure Selenium Server :
+
+Download the Selenium Server from the project website.
+Run the server with the following command (update the version number to the one you downloaded):
+
+``` bash
+
+    java -jar selenium-server-standalone-2.44.0.jar
+
+```
+
+after you just have to run behat
 
 ``` bash
     
-    bin/behat
+    bin/behat 
     ou
     php app/console sfynx:behat:execute --env=test --suite=auth
 
