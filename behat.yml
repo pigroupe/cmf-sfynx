@@ -10,12 +10,17 @@ default:
                     zombie: ~    
                 my_session_symfony2:
                     symfony2: ~                       
-            base_url: http://www.sfynx.local/
+            base_url: http://www.sfynx.local/app_test.php
             
     suites:
         auth:
             type: symfony_bundle
-            bundle: 'SfynxAuthBundle'        
+            bundle: 'SfynxAuthBundle'
+            contexts: 
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\RadioButtonSubContext
             
     formatters:
         pretty:

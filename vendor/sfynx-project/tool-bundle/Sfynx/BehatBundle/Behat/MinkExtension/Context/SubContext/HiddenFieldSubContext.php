@@ -1,13 +1,13 @@
 <?php
-namespace Sfynx\BehatBundle\Features\Context\bootstrap;
+namespace Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext;
 
-use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 
-class HiddenFieldSubContext extends BaseMinkContext
+class HiddenFieldSubContext extends RawMinkContext
 {
     /**
      * @var string $browserName
@@ -78,25 +78,25 @@ class HiddenFieldSubContext extends BaseMinkContext
         return $node;
     }
     
-    /**
-     * Take screenshot when step fails.
-     * Works only with Selenium2Driver.
-     *
-     * @AfterStep
-     */
-    public function takeScreenshotAfterFailedStep($event)
-    {
-        if (4 === $event->getResult()) {
-            $driver = $this->getSession()->getDriver();
-            if (!($driver instanceof Selenium2Driver)) {
-                throw new UnsupportedDriverActionException('Taking screenshots is not supported by %s, use Selenium2Driver instead.', $driver);
-            }
-            $directory = 'build/behat/' . $event->getLogicalParent()->getFeature()->getTitle();
-            if (!is_dir($directory)) {
-                mkdir($directory, 0777, true);
-            }
-            $filename = sprintf('%s_%s_%s_%s.%s', $event->getLogicalParent()->getTitle(), $this->browserName, date('YmdHis'), uniqid('', true), 'png');
-            file_put_contents($directory . '/' . $filename, $driver->getScreenshot());
-        }
-    }  
+//    /**
+//     * Take screenshot when step fails.
+//     * Works only with Selenium2Driver.
+//     *
+//     * @AfterStep
+//     */
+//    public function takeScreenshotAfterFailedStep($event)
+//    {
+//        if (4 === $event->getResult()) {
+//            $driver = $this->getSession()->getDriver();
+//            if (!($driver instanceof Selenium2Driver)) {
+//                throw new UnsupportedDriverActionException('Taking screenshots is not supported by %s, use Selenium2Driver instead.', $driver);
+//            }
+//            $directory = 'build/behat/' . $event->getLogicalParent()->getFeature()->getTitle();
+//            if (!is_dir($directory)) {
+//                mkdir($directory, 0777, true);
+//            }
+//            $filename = sprintf('%s_%s_%s_%s.%s', $event->getLogicalParent()->getTitle(), $this->browserName, date('YmdHis'), uniqid('', true), 'png');
+//            file_put_contents($directory . '/' . $filename, $driver->getScreenshot());
+//        }
+//    }  
 }

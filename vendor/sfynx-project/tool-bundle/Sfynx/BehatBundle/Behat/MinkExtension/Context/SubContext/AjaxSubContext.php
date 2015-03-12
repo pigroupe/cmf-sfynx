@@ -1,13 +1,13 @@
 <?php
-namespace Sfynx\BehatBundle\Features\Context\bootstrap;
+namespace Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext;
 
-use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 
-class AjaxSubContext extends BaseMinkContext
+class AjaxSubContext extends RawMinkContext
 {
     /**
      * Initializes context.
@@ -17,7 +17,6 @@ class AjaxSubContext extends BaseMinkContext
      */
     public function __construct()
     {
-        print_r('cocinc');exit;
     }
 
    /**

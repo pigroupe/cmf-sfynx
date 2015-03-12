@@ -1,10 +1,10 @@
 <?php
-namespace Sfynx\BehatBundle\Features\Context\bootstrap;
+namespace Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext;
 
-use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Mink\Exception\ElementNotFoundException;
 
-class RadioButtonSubContext extends BaseMinkContext
+class RadioButtonSubContext extends RawMinkContext
 {
     /**
      * Initializes context.

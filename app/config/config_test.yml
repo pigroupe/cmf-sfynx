@@ -30,7 +30,7 @@ doctrine:
 # MinkBundle configuration
 #
 mink:
-    base_url: http://www.sfynx.local/
+    base_url: http://www.sfynx.local/app_test.php
     selenium2: ~
     browser_name: firefox 
     

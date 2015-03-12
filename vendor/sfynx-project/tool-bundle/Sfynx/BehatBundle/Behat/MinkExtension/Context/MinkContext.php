@@ -1,14 +1,10 @@
 <?php
-
 namespace Sfynx\BehatBundle\Behat\MinkExtension\Context;
 
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Sfynx\BehatBundle\Features\Context\SubContext\RadioButtonSubContext;
-use Sfynx\BehatBundle\Features\Context\SubContext\AjaxSubContext;
-use Sfynx\BehatBundle\Features\Context\SubContext\HiddenFieldSubContext;
 use Behat\Mink\Exception\UnsupportedDriverActionException,
     Behat\Mink\Exception\ExpectationException;
 use Behat\Symfony2Extension\Driver\KernelDriver;
@@ -65,12 +61,6 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     public function __construct() 
     {
         $this->forTheServer(self::$options['server'], self::$options['locale']);
-        //
-        
-//        $this->useContext('RadioButtonSubContext', new RadioButtonSubContext());
-//        $this->useContext('AjaxSubContext', new AjaxSubContext());
-//        $this->useContext('HiddenFieldSubContext', new HiddenFieldSubContext());
-        
     }
     
     public function getSymfonyProfile()
@@ -140,19 +130,21 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
      */
     public function forTheServer($server = null, $locale = null)
     {   
-        if (!in_array($server, self::$allowed['servers']) && !empty($server)) {
-            throw new \Exception('Website server "'.$server.'" not found.');
-        } else {
-            $server = self::$options['server'];
+        if (count(self::$allowed) >= 1) {
+            if (!in_array($server, self::$allowed['servers']) && !empty($server)) {
+                throw new \Exception('Website server "'.$server.'" not found.');
+            } else {
+                $server = self::$options['server'];
+            }
+            if ($locale !== '' && !in_array($locale, self::$allowed['locales']) && !empty($locale)) {
+                throw new \Exception('Website locale "'.$locale.'" not found.');
+            } elseif ($locale == '') {
+                $locale = self::$options['locale'];
+            }
+
+            $baseUrl = 'http://bitume.'.strtolower($server).'.dev';
+            $this->setMinkParameter('base_url', strtr($baseUrl, array(' ', '')));
         }
-        if ($locale !== '' && !in_array($locale, self::$allowed['locales']) && !empty($locale)) {
-            throw new \Exception('Website locale "'.$locale.'" not found.');
-        } elseif ($locale == '') {
-            $locale = self::$options['locale'];
-        }
-        
-        $baseUrl = 'http://bitume.'.strtolower($server).'.dev';
-        $this->setMinkParameter('base_url', strtr($baseUrl, array(' ', '')));
     }
     
     /**
