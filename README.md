@@ -287,6 +287,9 @@ To connect as default super administrator:
 
 ``` bash
     
-    bin/behat
+    bin/behat --env=test --suite=auth
+    ou
+    php app/console sfynx:behat:execute --env=test --suite=auth
+
 
 ```
