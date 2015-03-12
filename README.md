@@ -301,7 +301,7 @@ after you just have to run behat
 ``` bash
     
     bin/behat 
-    ou
+    or
     php app/console sfynx:behat:execute --env=test --suite=auth
 
 
