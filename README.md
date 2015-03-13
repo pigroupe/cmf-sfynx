@@ -221,7 +221,7 @@ http://getcomposer.org/ or just run the following command:
 **Execute initialize.xml configuration**
 ``` bash
 
-    phing -f app/phing/initialize.xml rebuild
+    bin/phing -f app/phing/initialize.xml rebuild
 
 ```
 
