@@ -40,6 +40,8 @@ abstract class WebTestCase extends BaseWebTestCase
     
     protected static $metadata;
     
+    protected static $translator;
+    
     protected $validator;
     
     public static function setUpBeforeClass()
@@ -49,7 +51,11 @@ abstract class WebTestCase extends BaseWebTestCase
         static::$kernel = static::createKernel();
         static::$kernel->boot();
         
+        static::$kernel->getContainer()->get('request')->setLocale('en_EN');
+
         static::$em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        
+        static::$translator = static::$kernel->getContainer()->get('translator');
         
         $schemaTool = new SchemaTool(static::$em);
         static::$metadata = static::$em->getMetadataFactory()->getAllMetadata();
@@ -98,11 +104,18 @@ abstract class WebTestCase extends BaseWebTestCase
     }     
 
     /**
-     * @param  \Symfony\Bundle\FrameworkBundle\Client $client
-     * @return \Symfony\Bundle\FrameworkBundle\Client
+     * @param Client  $client
+     * @param boolean $is_redirection
+     * 
+     * @return Client
      */
-    protected function loginRoleUser(Client $client = null)
-    {
+    protected function loginRoleUser(
+            Client $client = null, 
+            $is_redirection = true, 
+            $username = UsersFixtures::USER_USERNAME, 
+            $password = UsersFixtures::USER_PASS,
+            $role = '{"0":"ROLE_USER"}'
+    ) {
         if (!$client) {
             $client = static::createClient();
         }
@@ -111,22 +124,31 @@ abstract class WebTestCase extends BaseWebTestCase
         $client->submit(
             $form,
             array(
-                'roles' => '{"0":"ROLE_USER"}',
+                'roles' => $role,
                 '_username' => UsersFixtures::USER_USERNAME,
                 '_password' => UsersFixtures::USER_PASS
             )
         );
-        $client->followRedirect();
+        if ($is_redirection) {
+            $client->followRedirect();
+        }
 
         return $client;
     }
 
     /**
-     * @param  \Symfony\Bundle\FrameworkBundle\Client $client
-     * @return \Symfony\Bundle\FrameworkBundle\Client
+     * @param Client  $client
+     * @param boolean $is_redirection
+     * 
+     * @return Client
      */
-    protected function loginRoleAdmin(Client $client = null)
-    {
+    protected function loginRoleAdmin(
+            Client $client = null, 
+            $is_redirection = true, 
+            $username = UsersFixtures::ADMIN_USERNAME, 
+            $password = UsersFixtures::ADMIN_PASS,
+            $role = '{"0":"ROLE_ADMIN","1":"ROLE_SUPER_ADMIN"}'
+    ) {
         if (!$client) {
             $client = static::createClient();
         }
@@ -136,12 +158,14 @@ abstract class WebTestCase extends BaseWebTestCase
         $client->submit(
             $form,
             array(
-                'roles' => '{"0":"ROLE_ADMIN","1":"ROLE_SUPER_ADMIN"}',
-                '_username' => UsersFixtures::ADMIN_USERNAME,
-                '_password' => UsersFixtures::ADMIN_PASS
+                'roles' => $role,
+                '_username' => $username,
+                '_password' => $password
             )
         );
-        $client->followRedirect();
+        if ($is_redirection) {
+            $client->followRedirect();
+        }
 
         return $client;
     }

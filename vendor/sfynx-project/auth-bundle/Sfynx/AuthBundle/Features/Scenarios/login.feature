@@ -34,7 +34,7 @@ Feature: I would like to log in to the system
         And I fill in "username" with "wrong username"
         And I fill in "password" with "wrong password"
         And I press "Connexion"
-       Then I should see "Bad credentials"
+       Then I should see "Username or password incorrect"
        Then the response should contain "behatFormLogin"
 
     Scenario: Log in as user

@@ -15,7 +15,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\AuthBundle\Tests\Controller;
+namespace Sfynx\AuthBundle\Tests\Security;
 
 use Sfynx\AuthBundle\Tests\WebTestCase;
 
@@ -29,7 +29,7 @@ use Sfynx\AuthBundle\Tests\WebTestCase;
  * @group      functional
  * @group      database
  */
-class SecurityControllerTest extends WebTestCase
+class SecurityRedirectionTest extends WebTestCase
 {
     public static function setUpBeforeClass()
     {
