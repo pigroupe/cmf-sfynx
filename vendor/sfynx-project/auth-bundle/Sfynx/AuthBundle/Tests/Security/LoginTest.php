@@ -4,7 +4,7 @@
  * 
  * @category   Auth
  * @package    Tests
- * @subpackage Controller
+ * @subpackage Security
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -26,7 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Client;
  *
  * @category   Auth
  * @package    Tests
- * @subpackage Controller
+ * @subpackage Security
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @group      functional
  * @group      database
@@ -37,6 +37,7 @@ class LoginTest extends WebTestCase
     {
         parent::setUpBeforeClass();        
         static::updateSchema();
+        static::emptyLoginFailure();
     }
 
     public function testLoginLink()
@@ -55,24 +56,32 @@ class LoginTest extends WebTestCase
      */
     public function testLoginError(Client $client)
     {
+        $msg = static::$translator->trans('Bad credentials');
+
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(self::URL_CONNECTION, $client->getRequest()->getRequestUri());
-        $this->loginRoleAdmin($client, UsersFixtures::ADMIN_USERNAME, 'error');
-        $this->assertStatusCode('403', $client);
+        
+        $this->loginRoleAdmin($client, false, UsersFixtures::ADMIN_USERNAME, 'error');
+        $this->assertStatusCode('302', $client);
+        $this->assertEquals(self::URL_CONNECTION_CHECK, $client->getRequest()->getRequestUri());
+
+        $crawler = $client->followRedirect();
+        $this->assertEquals(self::URL_CONNECTION_FAILURE, $client->getRequest()->getRequestUri());
         
         $crawler = $client->followRedirect();
-        $this->assertEquals(self::URL_CONNECTION, $client->getRequest()->getRequestUri());
-        
-        $msg = static::$translator->trans('Bad credentials');
         $this->assertCount(
             1,
             $crawler->filter('html:contains("'.$msg.'")')
         );
-        $this->loginRoleAdmin($client, 'error_username', UsersFixtures::ADMIN_PASS);
-        $this->assertStatusCode('403', $client);
+        
+        $this->loginRoleAdmin($client, false, 'error_username', UsersFixtures::ADMIN_PASS);
+        $this->assertStatusCode('302', $client);
+        $this->assertEquals(self::URL_CONNECTION_CHECK, $client->getRequest()->getRequestUri());
         
         $crawler = $client->followRedirect();
-        $this->assertEquals(self::URL_CONNECTION, $client->getRequest()->getRequestUri());
+        $this->assertEquals(self::URL_CONNECTION_FAILURE, $client->getRequest()->getRequestUri());
+        
+        $crawler = $client->followRedirect();
         $this->assertCount(
             1,
             $crawler->filter('html:contains("'.$msg.'")')
@@ -81,57 +90,40 @@ class LoginTest extends WebTestCase
         return $client;
     }
 
-//    /**
-//     * @depends testLoginError
-//     */
-//    public function testLogin(Client $client)
-//    {
-//        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-//        $this->assertEquals(self::URL_CONNECTION, $client->getRequest()->getRequestUri());
-//
-//        $this->loginRoleAdmin($client);
-//        if ($profile = $client->getProfile()) {
-//            $this->assertHasPropelHandlerCalled($profile, 'handleUpdateUser');
-//            $this->assertHasPropelHandlerCalled($profile, 'UserActionsSubscriber::handleUpdateUser');
-//        }
-//        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-//        $this->assertEquals('/verification', $client->getRequest()->getRequestUri());
-//
-//        $crawler = $client->followRedirect();
-//        $this->assertEquals('/', $client->getRequest()->getRequestUri());
-//        $this->assertCount(0, $crawler->filter('header a:contains("Je m\'inscris")'));
-//        $this->assertCount(0, $crawler->filter('header a:contains("Je m\'identifie")'));
-//
-//        return $client;
-//    }
-//
-//    /**
-//     * @depends testLogin
-//     */
-//    public function testLogout(Client $client)
-//    {
-//        $crawler = $client->getCrawler();
-//        $crawler = $client->request('GET', self::URL_DECONNECTION);
-//        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-//        $this->assertEquals(self::URL_DECONNECTION, $client->getRequest()->getRequestUri());
-//        
-//        $crawler = $client->followRedirect();
-//        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-//        $this->assertEquals('/', $client->getRequest()->getRequestUri());
-//    }
-//
-//    public function testLoginDontChangeLastUpdate()
-//    {
-//        /** @var $refUser User */
-//        $refUser = UserQuery::create()->filterByEmail(self::USER_EMAIL)->findOne();
-//        $InitialLastUpdate = $refUser->getUpdatedAt()->format('Y-m-d H:i:s');
-//        sleep(1);
-//
-//        $this->loginRoleUser();
-//
-//        $refUser = UserQuery::create()->filterByEmail(self::USER_EMAIL)->findOne();
-//        $FinalLastUpdate = $refUser->getUpdatedAt()->format('Y-m-d H:i:s');
-//
-//        $this->assertEquals($InitialLastUpdate, $FinalLastUpdate);
-//    }
+    /**
+     * @depends testLoginError
+     */
+    public function testLogin(Client $client)
+    {
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(self::URL_CONNECTION, $client->getRequest()->getRequestUri());
+
+        $this->loginRoleAdmin($client, false);
+        if ($profile = $client->getProfile()) {
+            $this->assertHasEventsCalled($profile, 'EventListener\HandlerLogin');
+            $this->assertHasEventsCalled($profile, 'EventListener\HandlerLocale');
+            $this->assertHasEventsCalled($profile, 'EventListener\HandlerRequest');
+        }
+
+        $crawler = $client->followRedirect();
+        $this->assertStatusCode('200', $client);
+        $this->assertEquals('/admin/home', $client->getRequest()->getRequestUri());
+
+        return $client;
+    }
+
+    /**
+     * @depends testLogin
+     */
+    public function testLogout(Client $client)
+    {
+        $crawler = $client->getCrawler();
+        $crawler = $client->request('GET', self::URL_DECONNECTION);
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(self::URL_DECONNECTION, $client->getRequest()->getRequestUri());
+        
+        $crawler = $client->followRedirect();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals('/en/', $client->getRequest()->getRequestUri());
+    }
 }

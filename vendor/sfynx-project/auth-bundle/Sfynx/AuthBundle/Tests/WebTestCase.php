@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Doctrine\ORM\Tools\SchemaTool;
+use Symfony\Component\Process\Process;
 use Sfynx\AuthBundle\DataFixtures\ORM\UsersFixtures;
 
 /**
@@ -28,8 +29,10 @@ use Sfynx\AuthBundle\DataFixtures\ORM\UsersFixtures;
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
-    const URL_CONNECTION   = '/login';
-    const URL_DECONNECTION = '/logout';
+    const URL_CONNECTION         = '/login';
+    const URL_CONNECTION_CHECK   = '/login_check';
+    const URL_CONNECTION_FAILURE = '/login_failure';
+    const URL_DECONNECTION       = '/logout';
     
     /** @var Application */
     protected static $application;
@@ -95,8 +98,20 @@ abstract class WebTestCase extends BaseWebTestCase
     
     protected static function emptyCache()
     {
-        self::runCommand('rm -rf app/cache/test/*');
+        $process = new Process("rm -rf app/cache/test/*");
+        $process->setTimeout(2);
+        $process->run();
     } 
+    
+    protected static function emptyLoginFailure()
+    {
+        $path_dir_login_failure = static::$kernel->getContainer()->getParameter('sfynx.auth.loginfailure.cache_dir');
+        $path_dir_login_failure = realpath($path_dir_login_failure);
+        
+        $process = new Process("rm -rf $path_dir_login_failure/*");
+        $process->setTimeout(2);
+        $process->run();
+    }     
     
     protected static function updateSchema()
     {
@@ -231,9 +246,9 @@ abstract class WebTestCase extends BaseWebTestCase
         }
     }
 
-    protected function assertHasPropelHandlerCalled($profile, $event)
+    protected function assertHasEventsCalled($profile, $event)
     {
-        $calledEvents = $profile->getCollector('propel_events')->getCalledListeners();
+        $calledEvents = $profile->getCollector('events')->getCalledListeners();
         $this->assertContains($event, implode(array_keys($calledEvents)));
     }
     

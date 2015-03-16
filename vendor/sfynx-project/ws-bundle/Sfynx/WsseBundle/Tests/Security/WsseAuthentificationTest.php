@@ -41,8 +41,6 @@ class WsseAuthentificationTest extends WebTestCase
 
     public function testRequestWithoutXAuthToken()
     {
-        static::emptyCache();
-        
         $client = static::createClient();
         $client->request('GET', '/api/wsse/v1/user/authentication');
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
@@ -50,8 +48,6 @@ class WsseAuthentificationTest extends WebTestCase
 
     public function testRequestWithXAuthTokenInvalid()
     {
-        static::emptyCache();
-        
         $client = static::createClient();
         $client->request('GET',
             '/api/wsse/v1/user/authentication',
@@ -65,8 +61,6 @@ class WsseAuthentificationTest extends WebTestCase
 
     public function testRequestWithValidXAuthToken()
     {
-        static::emptyCache();
-        
         $client = static::createClient();
         $client->request('GET', static::URL_DECONNECTION);
         $client->request('GET',
