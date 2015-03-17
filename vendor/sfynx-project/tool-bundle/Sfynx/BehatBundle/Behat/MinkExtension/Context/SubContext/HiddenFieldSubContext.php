@@ -18,8 +18,6 @@
 namespace Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext;
 
 use Behat\MinkExtension\Context\RawMinkContext;
-use Behat\Mink\Exception\UnsupportedDriverActionException;
-use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 

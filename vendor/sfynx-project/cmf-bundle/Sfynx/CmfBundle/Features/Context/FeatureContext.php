@@ -17,6 +17,7 @@
  */
 namespace Sfynx\CmfBundle\Features\Context;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Sfynx\BehatBundle\Behat\MinkExtension\Context\FeatureContext as baseFeatureContext;
 
 /**
@@ -36,6 +37,9 @@ use Sfynx\BehatBundle\Behat\MinkExtension\Context\FeatureContext as baseFeatureC
  */
 class FeatureContext extends baseFeatureContext
 {
+    /** @var \Behat\MinkExtension\Context\MinkContext */
+    private $minkCmfContext;
+            
     /**
      * Initializes context.
      *
@@ -47,4 +51,12 @@ class FeatureContext extends baseFeatureContext
     {
         parent::__construct();
     }
+    
+    /** @BeforeScenario */
+    public function CmfgatherContexts(BeforeScenarioScope $scope)
+    {
+        $environment = $scope->getEnvironment();
+
+        $this->minkCmfContext  = $environment->getContext('Sfynx\CmfBundle\Features\Context\MinkContext');
+    }     
 }

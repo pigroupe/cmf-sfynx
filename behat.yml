@@ -26,6 +26,7 @@ default:
             type: symfony_bundle
             bundle: 'SfynxCmfBundle'
             contexts: 
+                - Sfynx\CmfBundle\Features\Context\MinkContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext

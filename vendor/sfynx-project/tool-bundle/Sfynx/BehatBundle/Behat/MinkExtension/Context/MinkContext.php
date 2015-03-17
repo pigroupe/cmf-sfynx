@@ -327,4 +327,50 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     {
         $this->getSession()->getPage()->find('xpath', '//label[text()="Réinitialiser mon mot de passe"]');
     }
+    
+    /**
+     * Click on the element with the provided xpath query
+     * exemple:
+     *      Given I click on the element with xpath "//a[@id='14']"
+     * 
+     * @When /^I click on the element with xpath "([^"]*)"$/
+     */
+    public function iClickOnTheElementWithXPath($xpath)
+    {
+        $session = $this->getSession(); // get the mink session
+        $element = $session->getPage()->find(
+            'xpath',
+            $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
+        ); // runs the actual query and returns the element
+ 
+        // errors must not pass silently
+        if (null === $element) {
+            throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
+        }
+        
+        // ok, let's click on it
+        $element->click();
+    }    
+    
+    /**
+     * Click on the element with the provided CSS Selector
+     * exemple: Given I click on the element with css selector "a#14"
+     *
+     * @When /^I click on the element with css selector "([^"]*)"$/
+     */
+    public function iClickOnTheElementWithCSSSelector($cssSelector)
+    {
+        $session = $this->getSession();
+        $element = $session->getPage()->find(
+            'xpath',
+            $session->getSelectorsHandler()->selectorToXpath('css', $cssSelector) // just changed xpath to css
+        );
+        if (null === $element) {
+            throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
+        }
+        $title = $this->getSession()->getPage()->find('css', 'title')->getText();
+ 
+        $element->click();
+ 
+    }    
 }
