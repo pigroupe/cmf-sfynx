@@ -38,9 +38,7 @@ if (extension_loaded('apc')) {
 //// invalide tous les éléments dans 0 secondes
 //$m->flush(0);
 
-if(preg_match("/app_dev.php/",$_SERVER['REQUEST_URI']) 
-        || preg_match("/app.php/",$_SERVER['REQUEST_URI'] )
-) {
+if(preg_match("/app.php/",$_SERVER['REQUEST_URI'])) {
     header('Location: /');
 } else {
     $kernel = new AppKernel('prod', false);

@@ -80,7 +80,7 @@ class TranslationPage
      * @var \Sfynx\AuthBundle\Entity\Langue $langCode
      *
      * @ORM\ManyToOne(targetEntity="Sfynx\AuthBundle\Entity\Langue", cascade={"persist", "detach"})
-     * @ORM\JoinColumn(name="lang_code", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="lang_code", referencedColumnName="id", nullable=true)
      */
     protected $langCode;
     
@@ -263,14 +263,11 @@ class TranslationPage
 
     public function __construct()
     {
-        $this->tags                 = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->comments             = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->historical_status     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags              = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments          = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->historical_status = new \Doctrine\Common\Collections\ArrayCollection();
     
         $this->setEnabled(true);
-        //$this->setCreatedAt(new \DateTime());
-        //$this->setUpdatedAt(new \DateTime());
-    
     }
     
     public function __toString()
@@ -738,7 +735,7 @@ class TranslationPage
         $this->tags[] = $tag;
     }
     
-    public function setTags($tags)
+    public function setTags(\Doctrine\Common\Collections\ArrayCollection $tags)
     {
         $this->tags = $tags;
     }
@@ -788,7 +785,7 @@ class TranslationPage
      *
      * @param \Sfynx\AuthBundle\Entity\Langue
      */
-    public function setLangCode(\Sfynx\AuthBundle\Entity\Langue $langCode)
+    public function setLangCode($langCode)
     {
         $this->langCode = $langCode;
     }

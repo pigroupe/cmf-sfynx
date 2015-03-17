@@ -1431,13 +1431,37 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             //    		
             $new_page = clone($page);
             $new_page->setId(null);
+            if ($page->getLayout() instanceof \Sfynx\AuthBundle\Entity\Layout) {
+                $new_page->setLayout($em->getReference('Sfynx\AuthBundle\Entity\Layout', $page->getLayout()->getId()));
+            } else {
+                $new_page->setLayout(null);
+            }
+            $new_page->setPageCss(new \Doctrine\Common\Collections\ArrayCollection());
+            $new_page->setPageJs(new \Doctrine\Common\Collections\ArrayCollection());
+            if ($page->getUser() instanceof \Sfynx\AuthBundle\Entity\User) {
+                $new_page->setUser($em->getReference('Sfynx\AuthBundle\Entity\User', $page->getUser()->getId()));
+            } else {
+                $new_page->setUser(null);
+            }
+            if ($page->getRubrique() instanceof \Sfynx\CmfBundle\Entity\Rubrique) {
+                $new_page->setRubrique($em->getReference('Sfynx\CmfBundle\Entity\Rubrique', $page->getRubrique()->getId()));
+            } else {
+                $new_page->setRubrique(null);
+            }
+            $new_page->setTranslations(new \Doctrine\Common\Collections\ArrayCollection());
             // we copy all translations.
             foreach ($this->translations[$id] as $translation) {
                 $new_translation = clone($translation);
                 $new_translation->setId(null);
+                $new_translation->setTags(new \Doctrine\Common\Collections\ArrayCollection());
+                if ($translation->getLangCode() instanceof \Sfynx\AuthBundle\Entity\Langue) {
+                    $new_translation->setLangCode($em->getReference('Sfynx\AuthBundle\Entity\Langue', $translation->getLangCode()->getId()));
+                } else {
+                    $new_translation->setLangCode(null);
+                }
                 $new_page->addTranslation($new_translation);
             }
-                    // we clone all blocks and all widgets.   		
+            // we clone all blocks and all widgets.   		
             if (isset($this->blocks[$id]) && !empty($this->blocks[$id])) {
                 $all_blocks = $this->blocks[$id];
                 foreach ($all_blocks as $block) {
@@ -1471,29 +1495,16 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             $routeCacheManager = $this->getContainer()->get('sfynx.tool.route.cache');
             $routeCacheManager->setGenerator();
             $routeCacheManager->setMatcher();
+            
             // we set the new url in the locale.
-            $entity_translate_page = $this->translations[$id][$locale];
-            if (
-                ($entity_translate_page instanceof TranslationPage)
-                && ($entity_translate_page->getSlug() != "")
-            ) {
-                $new_url = $new_page->getUrl() . '/' . $entity_translate_page->getSlug();
-            } else {
-                $new_url = $new_page->getUrl();
-            }
-            $new_url = str_replace("//", "/", $new_url);
-            $new_url = preg_replace_callback(
-                "/{[a-zA-Z0-9]+}/i", 
-                function($matches) {
-                    return 'testValue';
-                },
-                $new_url
-            );       
-
-            return $new_url;
+            return  $this->getContainer()
+                    ->get('sfynx.tool.route.factory')
+                    ->getRoute('pi_routename_redirection', array('routename' => $new_page->getRouteName(), 'langue' => $locale));
     	}
     	
-    	return $this->getContainer()->get('sfynx.tool.route.factory')->getRoute('home_page', array('locale' => $locale));
+    	return $this->getContainer()
+                ->get('sfynx.tool.route.factory')
+                ->getRoute('home_page', array('locale' => $locale));
     }
     
     /**

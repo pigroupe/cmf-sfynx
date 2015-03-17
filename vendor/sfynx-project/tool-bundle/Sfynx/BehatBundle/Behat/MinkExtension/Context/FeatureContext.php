@@ -1,10 +1,21 @@
 <?php
-
+/**
+ * This file is part of the <Behat> project.
+ *
+ * @category   Behat
+ * @package    Feature
+ * @subpackage Main
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-03-02
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Sfynx\BehatBundle\Behat\MinkExtension\Context;
-
-//use Behat\Behat\Context\SnippetAcceptingContext;
-//use Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext;
-//use Symfony\Component\HttpFoundation\Session\Session;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
@@ -18,6 +29,16 @@ use Behat\Behat\Hook\Scope\AfterStepScope;
  * Defines application features from the specific context.
  * 
  * class FeatureContext extends MinkContext implements Context, SnippetAcceptingContext
+ * 
+ * @category   Behat
+ * @package    Feature
+ * @subpackage Main
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-03-02
  */
 class FeatureContext implements SnippetAcceptingContext        
 {

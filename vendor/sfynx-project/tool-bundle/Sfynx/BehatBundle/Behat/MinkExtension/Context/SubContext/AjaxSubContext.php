@@ -1,4 +1,20 @@
 <?php
+/**
+ * This file is part of the <Behat> project.
+ *
+ * @category   Behat
+ * @package    Mink
+ * @subpackage SubContext
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-03-02
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext;
 
 use Behat\MinkExtension\Context\RawMinkContext;
@@ -7,6 +23,20 @@ use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 
+/**
+ * Mink context for Behat BDD tool.
+ * Provides Mink integration and base step definitions with additional options.
+ * 
+ * @category   Behat
+ * @package    Mink
+ * @subpackage SubContext
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-03-02
+ */
 class AjaxSubContext extends RawMinkContext
 {
     /**

@@ -55,8 +55,8 @@ class Page
     /**
      * @var \Sfynx\AuthBundle\Entity\User $user
      *
-     * @ORM\ManyToOne(targetEntity="Sfynx\AuthBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Sfynx\AuthBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
     
@@ -221,8 +221,6 @@ class Page
         $this->page_js        = new \Doctrine\Common\Collections\ArrayCollection();
         
         $this->setEnabled(true);
-        //$this->setCreatedAt(new \DateTime());
-        //$this->setUpdatedAt(new \DateTime());
     }
     
     public function __toString()
@@ -392,7 +390,7 @@ class Page
      *
      * @param \Sfynx\AuthBundle\Entity\User
      */
-    public function setUser(\Sfynx\AuthBundle\Entity\User $user)
+    public function setUser($user)
     {
         $this->user = $user;
     }
@@ -506,7 +504,7 @@ class Page
      *
      * @param \Sfynx\CmfBundle\Entity\Rubrique $rubrique
      */
-    public function setRubrique(\Sfynx\CmfBundle\Entity\Rubrique $rubrique)
+    public function setRubrique($rubrique)
     {
         $this->rubrique = $rubrique;
     }
@@ -526,7 +524,7 @@ class Page
      *
      * @param \Sfynx\AuthBundle\Entity\Layout $layout
      */
-    public function setLayout(\Sfynx\AuthBundle\Entity\Layout $layout)
+    public function setLayout($layout)
     {
         $this->layout = $layout;
     }

@@ -104,11 +104,11 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
      * 
      * @param string $langue
      * @param array $options
+     * 
      * @return string the url translated to the locale value.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-23
+     * @since  2012-02-23
      */
     public function getLocaleRoute($langue = '', $options = null)
     {
@@ -125,26 +125,26 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
             $new_url = $this->getContainer()->get('router')->generate('home_page', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
         if (isset($options['result']) && ($options['result'] == 'match')) {
-			return	$data;
-		} else {
-		    return $new_url;
-		}
+            return	$data;
+        } else {
+            return $new_url;
+        }
     }    
     
     /**
 	 * Return the url translated by route name to the locale value.
 	 * 
 	 * <code>
-	 *     $url		= $this->container->get('sfynx.tool.route.factory')->getRoute("page_lamelee_connexion", array('locale'=> $this->container->get('session')->getLocale()));
+	 *     $url = $this->container->get('sfynx.tool.route.factory')->getRoute("page_lamelee_connexion", array('locale'=> $this->container->get('session')->getLocale()));
 	 * </code>
      *
      * @param string $route_name
-     * @param array     $params
+     * @param array  $params
+     * 
      * @return string the url translated to the locale value.
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-11
+     * @since  2012-04-11
      */
     public function getRoute($route_name = null, $params = null)
     {
@@ -172,23 +172,23 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
         return $new_url;
     }    
     
-    /**
-	 * Return the value of the parameter of the current or the referer url.
-	 * 
-	 * <code>
-	 *     $slug = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('slug', $this->container->get('session')->getLocale(), 0);
-	 *     $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('session')->getLocale(), 1); 
-	 * </code>
-	 * 
-	 * @param array	 $params
-	 * @param string $langue
-	 * @param boolean $isGetReferer
-     * @return string the url translated to the locale value.
-     * @access public
-     *
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-04-11
-     */
+   /**
+    * Return the value of the parameter of the current or the referer url.
+    * 
+    * <code>
+    *     $slug = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('slug', $this->container->get('session')->getLocale(), 0);
+    *     $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('session')->getLocale(), 1); 
+    * </code>
+    * 
+    * @param array   $params
+    * @param string  $langue
+    * @param boolean $isGetReferer
+    * 
+    * @return string the url translated to the locale value.
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    * @since  2012-04-11
+    */
     public function getMatchParamOfRoute($param = null, $langue = '', $isGetReferer = false)
     {
         if ($langue == '')    {
@@ -229,16 +229,16 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
      *  $requirements = array('_method' => 'get|post');
      * <code>
      *
-     * @param string  $name         The route name
-     * @param array   $locales      An array with keys locales and values patterns
-     * @param array   $defaults     An array of default parameter values
-     * @param array   $requirements An array of requirements for parameters (regexes)
-     * @param array   $options      An array of options
+     * @param string $name         The route name
+     * @param array  $locales      An array with keys locales and values patterns
+     * @param array  $defaults     An array of default parameter values
+     * @param array  $requirements An array of requirements for parameters (regexes)
+     * @param array  $options      An array of options
+     * 
      * @return \BeSimple\I18nRoutingBundle\Routing\Generator\UrlGenerator
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-23
+     * @since  2012-02-23
      */    
     public function getGenerate($name, array $locales, array $defaults = array(), array $requirements = array(), array $options = array())
     {
@@ -253,12 +253,12 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
 
     /**
      *
-     * @param \Symfony\Component\Routing\RouteCollection $collection
+     * @param  \Symfony\Component\Routing\RouteCollection $collection
+     * 
      * @return \BeSimple\I18nRoutingBundle\Routing\Generator\UrlGenerator
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-23
+     * @since  2012-02-23
      */    
     public function getGenerator(RouteCollection $collection = null)
     {
@@ -272,7 +272,6 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
      *
      * @return \Symfony\Component\Routing\RouteCollection
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-02-23
      */    
@@ -301,9 +300,8 @@ class RouteTranslatorFactory extends AbstractFactory implements RouteTranslatorF
      * 
      * @return \Symfony\Component\Routing\RouteCollection
      * @access private
-     * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-02-23
+     * @since  2012-02-23
      * 
      * // googd: 'home_page' => array (  0 =>   array (  ),  1 =>   array (    '_controller' => 'PiApp\\AdminBundle\\Controller\\FrontendController::pageAction',  ),  2 =>   array (  ),  3 =>   array (    0 =>     array (      0 => 'text',      1 => '/',    ),  ),  4 =>   array (  ),),
      * // bad :  'home_page' => array (  0 =>   array (  ),  1 =>   array (    '_controller' => 'PiApp\\AdminBundle\\Controller\\FrontendController::pageAction',  ),  2 =>   array (    '_method' => 'GET|POST',  ),  3 =>   array (    0 =>     array (      0 => 'text',      1 => '/',    ),  ),  4 =>   array (    0 =>     array (      0 => 'text',      1 => '1',    ),  ),),

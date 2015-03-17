@@ -1,4 +1,20 @@
 <?php
+/**
+ * This file is part of the <Behat> project.
+ *
+ * @category   Behat
+ * @package    Mink
+ * @subpackage Context
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-03-02
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Sfynx\BehatBundle\Behat\MinkExtension\Context;
 
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
@@ -12,7 +28,16 @@ use Behat\Symfony2Extension\Driver\KernelDriver;
 /**
  * Mink context for Behat BDD tool.
  * Provides Mink integration and base step definitions with additional options.
- *
+ * 
+ * @category   Behat
+ * @package    Mink
+ * @subpackage Context
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-03-02
  */
 class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, KernelAwareContext
 {

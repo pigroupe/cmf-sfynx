@@ -14,14 +14,19 @@ Feature: I would like to log in to the system
         And I fill in "password" with "admin"
         And I press "Connexion"
        Then I should see "Logged in as admin"
+      Given I am logged as "admin"
        Then the response should not contain "behatFormLogin"
        When I wait for 2 seconds
         And I click on ".connexion-my-account"
+       When I wait for 2 seconds
        When I follow "behatLinkProfile"
+       When I wait for 2 seconds
        Then the response should contain "user_from"
        When I wait for 2 seconds
-       And I click on ".connexion-my-account"
+        And I click on ".connexion-my-account"
+       When I wait for 2 seconds
        When I follow "behatLinkUsers"
+       When I wait for 3 seconds
        Then the response should contain "grid_customer_wrapper"
        When I follow "logout"
        Then I should not see "Logged in as admin"
@@ -45,9 +50,9 @@ Feature: I would like to log in to the system
         And I fill in "_username" with "user"
         And I fill in "_password" with "user"
         And I press "OK"
-       When I wait for 2 seconds
-       Then the response should contain "/logout"
-       When I wait for 2 seconds
+       When I wait for 3 seconds
+       Then I should see "user"
+      Given I am logged as "user"
        When I follow "behatLinkLogout"
-       Then the response should not contain "/logout"
+       When I wait for 2 seconds
        Then the response should contain "form-connexion"

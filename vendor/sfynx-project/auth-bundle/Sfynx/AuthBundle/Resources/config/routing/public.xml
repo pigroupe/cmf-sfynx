@@ -10,7 +10,11 @@
     
     <route id="login_failure" pattern="/login_failure" >
         <default key="_controller">SfynxAuthBundle:Frontend:loginfailure</default>
-    </route>      
+    </route>   
+    
+    <route id="pi_routename_redirection" pattern="/redirection/{routename}/{langue}" >
+        <default key="_controller">SfynxAuthBundle:Frontend:redirection</default>
+    </route>          
     
     <route id="admin_redirection" pattern="/redirectionuser" >
         <default key="_controller">SfynxAuthBundle:Frontend:redirectionuser</default>

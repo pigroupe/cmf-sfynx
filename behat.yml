@@ -11,7 +11,7 @@ default:
                     zombie: ~    
                 my_session_symfony2:
                     symfony2: ~                       
-            base_url: http://www.sfynx.local/app_test.php
+            base_url: http://test.sfynx.local
             
     suites:
         auth:
@@ -22,10 +22,18 @@ default:
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\RadioButtonSubContext
-            
-    formatters:
-        pretty:
-            verbose:  true
-            paths:    true
-            snippets: true            
+        cmf:
+            type: symfony_bundle
+            bundle: 'SfynxCmfBundle'
+            contexts: 
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\RadioButtonSubContext                
+#            
+#    formatters:
+#        pretty:
+#            verbose:  true
+#            paths:    true
+#            snippets: true            
 

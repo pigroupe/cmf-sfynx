@@ -101,7 +101,7 @@ class FrontendController extends CmfabstractController
      * @Secure(roles="ROLE_EDITOR")
      * @return RedirectResponse
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2013-12-017
+     * @since  2013-12-017
      */
     public function copypageAction()
     {
@@ -174,9 +174,11 @@ class FrontendController extends CmfabstractController
         if ($page instanceof Page) {
             if ($action == 'archiving') {
                 $this->container->get('pi_app_admin.manager.search_lucene')->indexPage($page);
+                
                 return new Response('archiving-ok');
             } elseif ($action == 'delete') {
                 $this->container->get('pi_app_admin.manager.search_lucene')->deletePage($page);
+                
                 return new Response('delete-archiving-ok');
             }
         }

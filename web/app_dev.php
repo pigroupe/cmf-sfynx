@@ -51,9 +51,7 @@ use Symfony\Component\Debug\Debug;
 }*/
 
 
-if(preg_match("/app_dev.php/",$_SERVER['REQUEST_URI']) 
-        || preg_match("/app.php/",$_SERVER['REQUEST_URI'] )
-) {
+if(preg_match("/app_dev.php/",$_SERVER['REQUEST_URI'])) {
     header('Location: /');
 } else {
     Debug::enable();
