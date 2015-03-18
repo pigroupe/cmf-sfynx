@@ -21,7 +21,7 @@ default:
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
-                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\RadioButtonSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext
         cmf:
             type: symfony_bundle
             bundle: 'SfynxCmfBundle'
@@ -30,11 +30,11 @@ default:
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
-                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\RadioButtonSubContext                
-#            
-#    formatters:
-#        pretty:
-#            verbose:  true
-#            paths:    true
-#            snippets: true            
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext                
+            
+    formatters:
+        pretty:
+            verbose:  true
+            paths:    true
+            snippets: true            
 

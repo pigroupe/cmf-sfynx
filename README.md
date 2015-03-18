@@ -296,13 +296,24 @@ Run the server with the following command (update the version number to the one 
 
 ```
 
-after you just have to run behat
+After you just have to run behat.
+
+**To test the connexion handler**
 
 ``` bash
     
-    bin/behat 
+    bin/behat --suite=auth
     or
     php app/console sfynx:behat:execute --env=test --suite=auth
 
+```
+
+**To test the Cmf (creation of page with widget)**
+
+``` bash
+    
+    bin/behat --suite=cmf
+    or
+    php app/console sfynx:behat:execute --env=test --suite=cmf
 
 ```

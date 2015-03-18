@@ -185,16 +185,6 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     }
     
     /**
-     * Click on element CSS with index name
-     * 
-     * @When /^(?:|I )click on "(?P<id>(?:[^"]|\\")*)"$/
-     */
-    public function clickOn($element)
-    {
-        $this->assertSession()->elementExists('css', $element)->click();
-    }
-    
-    /**
      * Checks, that element with specified CSS is visible on page.
      *
      * @Then /^(?:|The )"(?P<element>[^"]*)" element (should be|is) visible$/
@@ -300,6 +290,20 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     }
     
     /**
+     * Click on the element with the provided CSS Selector
+     * exemple: Given I click on the element with css selector "a#14"
+     *
+     * @Then /^(?:|I )should have a title egal to "(?P<title>(?:[^"]|\\")*)"$/
+     */
+    public function assertPageNotContainsTitle($title)
+    {
+        $title_css = $this->getSession()->getPage()->find('css', 'title')->getText();
+        if ($title_css != $title) {
+            throw new \Exception('Title "'.$title.'" not visible.');
+        }
+    }     
+    
+    /**
      * {@inheritdoc}
      */
     public function visit($page)
@@ -311,66 +315,18 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     }
     
     /**
-     * @When I click on number :num
-     */
-    public function iClickOnNumber($num)
-    {
-        $this->clickOn('#num-'.$num);
-    }
-    
-    /**
-     * Presses button with specified id|name|title|alt|value.
-     *
-     * @When /^(?:|I )press link "(?P<a>(?:[^"]|\\")*)"$/
-     */
-    public function pressLinkButton($button)
-    {
-        $this->getSession()->getPage()->find('xpath', '//label[text()="Réinitialiser mon mot de passe"]');
-    }
-    
-    /**
-     * Click on the element with the provided xpath query
-     * exemple:
-     *      Given I click on the element with xpath "//a[@id='14']"
-     * 
-     * @When /^I click on the element with xpath "([^"]*)"$/
-     */
-    public function iClickOnTheElementWithXPath($xpath)
-    {
-        $session = $this->getSession(); // get the mink session
-        $element = $session->getPage()->find(
-            'xpath',
-            $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
-        ); // runs the actual query and returns the element
- 
-        // errors must not pass silently
-        if (null === $element) {
-            throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
-        }
-        
-        // ok, let's click on it
-        $element->click();
-    }    
-    
-    /**
      * Click on the element with the provided CSS Selector
      * exemple: Given I click on the element with css selector "a#14"
      *
-     * @When /^I click on the element with css selector "([^"]*)"$/
+     * @Then /^I switch to iframe "([^"]*)"$/
      */
-    public function iClickOnTheElementWithCSSSelector($cssSelector)
+    public function iSwitchToIframe($iframeId)
     {
-        $session = $this->getSession();
-        $element = $session->getPage()->find(
+        $this->getSession()->switchToIframe($iframeId);
+        $text = $this->getSession()->getPage()->find(
             'xpath',
-            $session->getSelectorsHandler()->selectorToXpath('css', $cssSelector) // just changed xpath to css
-        );
-        if (null === $element) {
-            throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
-        }
-        $title = $this->getSession()->getPage()->find('css', 'title')->getText();
- 
-        $element->click();
- 
-    }    
+            '//*[contains(@id,"tabs")]'
+        ); 
+        print_r($text->getText());exit;
+    }      
 }

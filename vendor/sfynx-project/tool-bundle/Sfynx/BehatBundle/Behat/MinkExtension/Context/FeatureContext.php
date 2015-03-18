@@ -51,8 +51,8 @@ class FeatureContext implements SnippetAcceptingContext
     /** @var \Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext */
     private $hiddenfieldsubcontext;  
         
-    /** @var \Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\RadioButtonSubContext */
-    private $radiobuttonsubcontext;  
+    /** @var \Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext */
+    private $xpathxubcontext;  
     
     /** @BeforeScenario */
     public function gatherContexts(BeforeScenarioScope $scope)
@@ -62,7 +62,7 @@ class FeatureContext implements SnippetAcceptingContext
         $this->minkContext           = $environment->getContext('Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext');
         $this->ajaxsubcontext        = $environment->getContext('Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxContext');
         $this->hiddenfieldsubcontext = $environment->getContext('Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext');
-        $this->radiobuttonsubcontext = $environment->getContext('Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\RadioButtonSubContext');
+        $this->xpathxubcontext       = $environment->getContext('Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext');
     }   
     
     /** @BeforeFeature */
