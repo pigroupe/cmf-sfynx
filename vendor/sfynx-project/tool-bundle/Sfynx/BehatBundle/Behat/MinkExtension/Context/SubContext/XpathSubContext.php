@@ -127,10 +127,10 @@ class XpathSubContext extends RawMinkContext
      * exemple:
      *      Given I click on the element with xpath "//a[@id='14']"
      *      Given I click on the element with xpath "//label[text()='My awesome test']"
-     *      Given I click on the element with xpath "//div[@id='myid']/div[@class='myclass']/p[text()='found my text']"
-     *      Given I click on the element with xpath "//html/body/div[4]/div/div/div"
-     *      Given I click on the element with xpath "//input[@type='radio' and @checked='checked']/following-sibling::label[contains(text(), '$option')] "
+     *      Given I click on the element with xpath "//div[@id='myid']//div[@class='myclass']//p[text()='found my text']"
+     *      Given I click on the element with xpath "//input[@type='radio' and @checked='checked']//following-sibling::label[contains(text(), '$option')]"
      *      Given I click on the element with xpath "//div[contains(., '$identifier') and @class[contains(.,'form-type-radio')]]"
+     *      Given I click on the element with xpath "//*[contains(@id,'tabs')]//form[@class='myform']//div[@id='piapp_adminbundle_pagetype']//fieldset//div[4]//button"
      * 
      * @When /^I click on the element with xpath "([^"]*)"$/
      */
@@ -140,13 +140,14 @@ class XpathSubContext extends RawMinkContext
         $element = $session->getPage()->find(
             'xpath',
             $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
-        ); // runs the actual query and returns the element
+        ); 
+        //print_r($element->getText());
         // errors must not pass silently
         if (null === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
         }
         // ok, let's click on it
-        $element->click();
+        $element->click();        
     }    
     
     /**

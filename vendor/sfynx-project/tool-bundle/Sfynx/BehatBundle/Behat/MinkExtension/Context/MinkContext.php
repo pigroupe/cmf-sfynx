@@ -25,6 +25,10 @@ use Behat\Mink\Exception\UnsupportedDriverActionException,
     Behat\Mink\Exception\ExpectationException;
 use Behat\Symfony2Extension\Driver\KernelDriver;
 
+use Behat\Mink\Driver\BrowserKitDriver;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 /**
  * Mink context for Behat BDD tool.
  * Provides Mink integration and base step definitions with additional options.
@@ -323,10 +327,42 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     public function iSwitchToIframe($iframeId)
     {
         $this->getSession()->switchToIframe($iframeId);
-        $text = $this->getSession()->getPage()->find(
-            'xpath',
-            '//*[contains(@id,"tabs")]'
-        ); 
-        print_r($text->getText());exit;
-    }      
+    }  
+    
+    /**
+     * Click on the element with the provided CSS Selector
+     * exemple: Given I click on the element with css selector "a#14"
+     *
+     * @Then /^I switch to main window$/
+     */
+    public function iSwitchToMainWindow()
+    {
+        $this->getSession()->switchToIframe(null);
+    }     
+    
+    /**
+     * @Given /^I am authenticated as "([^"]*)"$/
+     */
+    public function iAmAuthenticatedAs($username)
+    {
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof BrowserKitDriver) {
+            throw new UnsupportedDriverActionException('This step is only supported by the BrowserKitDriver');
+        }
+
+        $client = $driver->getClient();
+        $client->getCookieJar()->set(new Cookie(session_name(), true));
+
+        $session = $client->getContainer()->get('session');
+
+        $user = $this->kernel->getContainer()->get('fos_user.user_manager')->findUserByUsername($username);
+        $providerKey = $this->kernel->getContainer()->getParameter('fos_user.firewall_name');
+
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+        $session->set('_security_'.$providerKey, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
+    }    
 }
