@@ -75,17 +75,6 @@ class XpathSubContext extends RawMinkContext
     }
     
     /**
-     * Click on element CSS with index name
-     * 
-     * @When /^(?:|I )click on "(?P<id>(?:[^"]|\\")*)"$/
-     */
-    public function clickOn($element)
-    {
-        $this->assertSession()->elementExists('css', $element)->click();
-    }    
-    
-    
-    /**
      * @When I click on number :num
      */
     public function iClickOnNumber($num)
@@ -123,6 +112,19 @@ class XpathSubContext extends RawMinkContext
     }      
     
     /**
+     * Click on element CSS with index name
+     * 
+     * css=a[href=”#id3”]
+     * css=span#firstChild + span
+     * 
+     * @When /^(?:|I )click on "(?P<id>(?:[^"]|\\")*)"$/
+     */
+    public function clickOn($element)
+    {
+        $this->assertSession()->elementExists('css', $element)->click();
+    }        
+    
+    /**
      * Click on the element with the provided xpath query
      * exemple:
      *      Given I click on the element with xpath "//a[@id='14']"
@@ -131,6 +133,18 @@ class XpathSubContext extends RawMinkContext
      *      Given I click on the element with xpath "//input[@type='radio' and @checked='checked']//following-sibling::label[contains(text(), '$option')]"
      *      Given I click on the element with xpath "//div[contains(., '$identifier') and @class[contains(.,'form-type-radio')]]"
      *      Given I click on the element with xpath "//*[contains(@id,'tabs')]//form[@class='myform']//div[@id='piapp_adminbundle_pagetype']//fieldset//div[4]//button"
+     * 
+     * 
+     * xpath=//img[@alt=’The image alt text’]
+     * xpath=//table[@id=’table1’]//tr[4]/td[2]
+     * xpath=//a[contains(@href,’#id1’)]
+     * xpath=//a[contains(@href,’#id1’)]/@class
+     * xpath=(//table[@class=’stylee’])//th[text()=’theHeaderText’]/../td
+     * xpath=//input[@name=’name2’ and @value=’yes’]
+     * xpath=//*[text()=”right”]
+     * xpath=//html//*[@data-search-id='images']
+     * 
+     * 
      * 
      * @When /^I click on the element with xpath "([^"]*)"$/
      */
@@ -141,7 +155,6 @@ class XpathSubContext extends RawMinkContext
             'xpath',
             $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
         ); 
-        //print_r($element->getText());
         // errors must not pass silently
         if (null === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));

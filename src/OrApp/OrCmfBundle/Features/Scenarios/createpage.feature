@@ -29,9 +29,21 @@ Feature: I would like to log in to the system
        When I wait for 2 seconds
        Then I switch to main window
        Then I switch to iframe "modalIframeId"
-       When I click on the element with xpath "//body//div[10]"
+       When I click on the element with xpath "//body//label[contains(@for,'ui-multiselect-piapp_adminbundle_pagetype_layout-option-13')]//span"
        When I wait for 2 seconds
         And I press "Save"
        When I wait for 2 seconds
        Then I switch to main window
        When I wait for 2 seconds   
+       When I click on the element with xpath "//body//button[contains(@class,'ui-dialog-titlebar-close')]//span"
+       When I wait for 2 seconds 
+       Then I register the new page  
+
+    Scenario: Create a new bloc
+      Given I go to the new page
+        And I click on ".menu-xp"
+       When I wait for 2 seconds
+        And I click on ".veneer_blocks_widgets"
+       When I wait for 2 seconds
+       When I click on the element with xpath "//*[contains(@class,'block_action_import')][contains(@data-id,'3')]"
+       When I wait for 2 seconds
