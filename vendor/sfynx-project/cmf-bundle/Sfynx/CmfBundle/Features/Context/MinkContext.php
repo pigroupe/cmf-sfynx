@@ -91,9 +91,9 @@ class MinkContext extends RawMinkContext
     }     
     
     /**
-     * @Then I switch to the edit form
+     * @Then I switch to the iframe
      */
-    public function iSwitchToTheEditForm()
+    public function iSwitchToTheIframe()
     {
         $this->getSession()->switchToIframe("modalIframeId");
         $this->getSession()->wait(2 * 1000);
@@ -117,18 +117,18 @@ class MinkContext extends RawMinkContext
             throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
         }
         // ok, let's click on it
-        $element->click();       
+        $element->click();  
+        $this->getSession()->wait(5 * 1000);
     }      
     
     /**
-     * @When I save the edit form
+     * @When I save the edit page form
      */
-    public function iSaveTheEditForm()
+    public function iSaveTheEditPageForm()
     {
-        $this->iSwitchToTheEditForm();
+        $this->iSwitchToTheIframe();
         //
-        $button = "Save";
-        $this->getSession()->getPage()->pressButton($button);
+        $this->getSession()->getPage()->pressButton("Save");
         //
         $this->getSession()->switchToIframe(null);
         //
@@ -136,11 +136,11 @@ class MinkContext extends RawMinkContext
     }    
     
     /**
-     * @Then I click to the layout select field
+     * @Then I click to the layout select field from the edit page
      */
-    public function iClickToTheLayoutSelectField()
+    public function iClickToTheLayoutSelectFieldFromTheEditPage()
     {
-        $this->iSwitchToTheEditForm();
+        $this->iSwitchToTheIframe();
         //
         $xpath = "//*[contains(@id,'tabs')]//form[@class='myform']//div[@id='piapp_adminbundle_pagetype']//fieldset//div[4]//button";
         $session = $this->getSession(); // get the mink session
@@ -161,11 +161,11 @@ class MinkContext extends RawMinkContext
     }  
     
     /**
-     * @Then /^I select the new layout "([^"]*)"$/
+     * @Then /^I select the new layout "([^"]*)" from the edit page$/
      */
-    public function iSelectTheNewLayout($layout)
+    public function iSelectTheNewLayoutFromTheEditPage($layout)
     {
-        $this->iSwitchToTheEditForm();
+        $this->iSwitchToTheIframe();
         //
         $xpath = "//body//label[contains(@for,'ui-multiselect-piapp_adminbundle_pagetype_layout-option-{$layout}')]//span";
         $session = $this->getSession(); // get the mink session
@@ -221,6 +221,62 @@ class MinkContext extends RawMinkContext
         $element->click();     
         //
         $this->getSession()->wait(6 * 1000);        
-    }       
-   
+    }  
+    
+    /**
+     * @Then I click to the block widget edit form from the widget handler
+     */
+    public function iClickToEditTheBlockWidgetEditFormFromTheWidgetHandler()
+    {
+        $this->iSwitchToTheIframe();
+        //
+        $session = $this->getSession(); // get the mink session
+        $element = $session->getPage()->find(
+            'xpath',
+            $session->getSelectorsHandler()->selectorToXpath('css', "span#behatFormBuilderWidgetBlock")
+        ); 
+        // errors must not pass silently
+        if (null === $element) {
+            throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
+        }
+        $new_element = $element->getParent()->getParent()->find('css', "a.edit"); 
+        // ok, let's click on it
+        $new_element->click();   
+        //
+        $this->getSession()->switchToIframe(null);
+        //
+        $this->getSession()->wait(2 * 1000);
+    }  
+    
+    /**
+     * @Then /^I create a new block with "([^"]*)" title and "([^"]*)" template$/
+     */
+    public function iCreateANewBlock($titleBlock, $templateLabel)
+    {
+        $this->iSwitchToTheIframe();
+        //
+        $this->assertSession()->elementExists('css', "input#piappgedmobundlemanagerformbuilderpimodelwidgetblock_choice_1")->click();
+        //
+        $this->getSession()->getPage()->fillField("piappgedmobundlemanagerformbuilderpimodelwidgetblock[title]", $titleBlock);
+        
+        $xpath = "//body//select[@id='piappgedmobundlemanagerformbuilderpimodelwidgetblock_template']//option[text()='{$templateLabel}']";
+        $session = $this->getSession(); // get the mink session
+        $element = $session->getPage()->find(
+            'xpath',
+            $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
+        ); 
+        // errors must not pass silently
+        if (null === $element) {
+            throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
+        }
+        // ok, let's click on it
+        $element->click();     
+        //
+        $new_element = $element->getParent()->getParent()->getParent()->getParent()->getParent(); 
+        $new_element->pressButton("Save");
+        //
+        $this->getSession()->switchToIframe(null);
+        //
+        $this->getSession()->wait(2 * 1000);
+    }      
 }

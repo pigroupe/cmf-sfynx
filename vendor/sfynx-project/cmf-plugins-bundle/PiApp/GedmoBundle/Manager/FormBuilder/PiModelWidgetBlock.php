@@ -68,7 +68,7 @@ class PiModelWidgetBlock extends PiFormBuilderManager
     public static function getContents()
     {
         return array(
-            PiFormBuilderManager::CONTENT_RENDER_TITLE => "Widget Block",
+            PiFormBuilderManager::CONTENT_RENDER_TITLE => "<span id='behatFormBuilderWidgetBlock'>Widget Block</span>",
             PiFormBuilderManager::CONTENT_RENDER_DESC  => "Call for inserting or creating a block.",
         );
     }
@@ -325,5 +325,4 @@ class PiModelWidgetBlock extends PiFormBuilderManager
                 ),
         );
     }    
-
 }

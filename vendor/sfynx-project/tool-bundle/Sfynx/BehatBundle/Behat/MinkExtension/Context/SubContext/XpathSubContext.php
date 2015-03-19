@@ -63,17 +63,6 @@ class XpathSubContext extends RawMinkContext
         $this->getSession()->getDriver()->click($radioButton->getXPath());
     }
     
-    
-    /**
-     * Presses button with specified id|name|title|alt|value.
-     *
-     * @When /^(?:|I )press link "(?P<a>(?:[^"]|\\")*)"$/
-     */
-    public function pressLinkButton($button)
-    {
-        $this->getSession()->getPage()->find('xpath', '//label[text()="Réinitialiser mon mot de passe"]');
-    }
-    
     /**
      * @When I click on number :num
      */
@@ -177,6 +166,7 @@ class XpathSubContext extends RawMinkContext
             'xpath',
             $session->getSelectorsHandler()->selectorToXpath('css', $cssSelector) // just changed xpath to css
         );
+        //print_r($element->getHtml());exit;
         // errors must not pass silently
         if (null === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
@@ -202,6 +192,7 @@ class XpathSubContext extends RawMinkContext
     {
         return $this->getSession()->getSelectorsHandler()->xpathLiteral($text);
     }
+    
     /**
      * Find all elements that match XPath
      *
