@@ -114,7 +114,7 @@ class XpathSubContext extends RawMinkContext
     /**
      * Click on element CSS with index name
      * 
-     * css=a[href=”#id3”]
+     * css=a[href='#id3']
      * css=span#firstChild + span
      * 
      * @When /^(?:|I )click on "(?P<id>(?:[^"]|\\")*)"$/
@@ -155,6 +155,7 @@ class XpathSubContext extends RawMinkContext
             'xpath',
             $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
         ); 
+        //print_r($element->getHtml());exit;
         // errors must not pass silently
         if (null === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
@@ -176,9 +177,11 @@ class XpathSubContext extends RawMinkContext
             'xpath',
             $session->getSelectorsHandler()->selectorToXpath('css', $cssSelector) // just changed xpath to css
         );
+        // errors must not pass silently
         if (null === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
         }
+        // ok, let's click on it
         $element->click(); 
     }   
     

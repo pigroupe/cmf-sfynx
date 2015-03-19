@@ -319,9 +319,6 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     }
     
     /**
-     * Click on the element with the provided CSS Selector
-     * exemple: Given I click on the element with css selector "a#14"
-     *
      * @Then /^I switch to iframe "([^"]*)"$/
      */
     public function iSwitchToIframe($iframeId)
@@ -330,9 +327,6 @@ class MinkContext extends BaseMinkContext implements SnippetAcceptingContext, Ke
     }  
     
     /**
-     * Click on the element with the provided CSS Selector
-     * exemple: Given I click on the element with css selector "a#14"
-     *
      * @Then /^I switch to main window$/
      */
     public function iSwitchToMainWindow()
