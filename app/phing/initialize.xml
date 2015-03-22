@@ -4,16 +4,17 @@
     <import file="app/phing/frontend.xml" />
 
     <target name="rebuild"
-        depends="clean-cache, composer:install, doctrine:rebuild, cache:clear, frontend:assets"
+        depends="clean-cache, composer:install, doctrine:rebuild, clean-cache, frontend:assets"
         description="Rebuild dev environement from the scratch"
         />
 
     <target name="clean-cache">
         <exec command="rm -rf app/cache/*"/>
+        <exec command="rm -rf app/cachesfynx/*"/>
     </target>
 
     <target name="clear-cache">
-        <exec command="app/console cache:clear"/>
+        <exec command="php app/console cache:clear"/>
     </target>
 
     <target name="composer:install" description="Installing vendors with composer">

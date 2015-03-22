@@ -174,28 +174,7 @@ parameters:
     esi_key: 9eu9ghv9
 ```
 
-### Step 2: Setting up Permissions
-
-* The directories below should be writable by both the web server and the user.
-* On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. 
-* We must change www-data on your web server.
-
-Many systems allow you to use ACL chmod a +.
-**For more information** : http://symfony.com/doc/current/book/installation.html
-
-``` bash
-mkdir web/uploads
-mkdir web/uploads/media
-mkdir web/yui
-
-chmod –R 0777 app/cachesfynx
-chmod –R 0777 app/cache
-chmod –R 0777 app/logs
-chmod –R 0777 web/uploads
-chmod –R 0777 web/yui
-```
-
-### Step 3: Installing the vendor
+### Step 2: Installing the vendor
 
 As Symfony uses [Composer][2] to manage its dependencies, the recommended way
 to create a new project is to use it.
@@ -214,6 +193,27 @@ http://getcomposer.org/ or just run the following command:
 
     php  composer.phar install
 
+```
+
+### Step 3: Setting up Permissions
+
+* The directories below should be writable by both the web server and the user.
+* On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. 
+* We must change www-data on your web server.
+
+Many systems allow you to use ACL chmod a +.
+**For more information** : http://symfony.com/doc/current/book/installation.html
+
+``` bash
+mkdir web/uploads
+mkdir web/uploads/media
+mkdir web/yui
+
+chmod –R 0777 app/cachesfynx
+chmod –R 0777 app/cache
+chmod –R 0777 app/logs
+chmod –R 0777 web/uploads
+chmod –R 0777 web/yui
 ```
 
 ### Step 4: Create database, tables and fixtures with phing
@@ -248,6 +248,7 @@ http://getcomposer.org/ or just run the following command:
 ``` bash
 
     php  app/console  doctrine:fixtures:load
+    php  app/console  sfynx:classification:fixtures
 
 ```
 

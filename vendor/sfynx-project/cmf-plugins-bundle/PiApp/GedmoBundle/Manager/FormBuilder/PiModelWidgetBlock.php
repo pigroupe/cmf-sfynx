@@ -173,6 +173,16 @@ class PiModelWidgetBlock extends PiFormBuilderManager
                             "class"=>"block_collection",
                     ),
             ))
+            ->add('descriptif', 'textarea', array(
+                    'required'  => false,
+                    'label'    => 'pi.form.label.field.description',
+                    "attr" => array(
+                        "class"    =>"pi_editor_simple_easy",
+                    ),
+                    "label_attr" => array(
+                        "class"=>"block_collection",
+                    ),
+             ))                            
             ;
     }
     
@@ -198,6 +208,7 @@ class PiModelWidgetBlock extends PiFormBuilderManager
                 
                 $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_id_block").attr("required", "required");
                 $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_title").removeAttr("required");
+                $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_descriptif").removeAttr("required");
 
                 $("input[id='piappgedmobundlemanagerformbuilderpimodelwidgetblock_choice_0']").change(function () {
                     if ($(this).is(':checked')){
@@ -206,12 +217,14 @@ class PiModelWidgetBlock extends PiFormBuilderManager
 
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_id_block").attr("required", "required");
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_title").removeAttr("required");
+                        $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_descriptif").removeAttr("required");
                     } else {
                         create_content_form.parents('.clearfix').show();
                         insert_content_form.parents('.clearfix').hide();
 
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_id_block").removeAttr("required");
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_title").attr("required", "required");
+                        $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_descriptif").attr("required", "required");
                     }
                    });
                 $("input[id='piappgedmobundlemanagerformbuilderpimodelwidgetblock_choice_1']").change(function () {
@@ -221,12 +234,14 @@ class PiModelWidgetBlock extends PiFormBuilderManager
 
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_id_block").removeAttr("required");
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_title").attr("required", "required");
+                        $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_descriptif").attr("required", "required");
                     } else {
                         create_content_form.parents('.clearfix').hide();
                         insert_content_form.parents('.clearfix').show();
 
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_id_block").attr("required", "required");
                         $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_title").removeAttr("required");
+                        $("#piappgedmobundlemanagerformbuilderpimodelwidgetblock_descriptif").removeAttr("required");
                     }
                    });
                                       
@@ -277,6 +292,7 @@ class PiModelWidgetBlock extends PiFormBuilderManager
             }
             
             $this->_createentity->setTitle($this->_data['title']);
+            $this->_createentity->setDescriptif($this->_data['descriptif']);
             $this->_createentity->setPublishedAt(new \DateTime());
             $this->_createentity->setCreatedAt(new \DateTime());
                 

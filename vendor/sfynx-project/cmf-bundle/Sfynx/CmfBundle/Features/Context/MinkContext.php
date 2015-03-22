@@ -52,6 +52,7 @@ class MinkContext extends RawMinkContext
     public function iGoToTheNewPage()
     {
         $this->visitPath(static::$container['newurl']);
+        $this->getSession()->wait(2 * 1000);
     }
     
     /**
@@ -249,15 +250,16 @@ class MinkContext extends RawMinkContext
     }  
     
     /**
-     * @Then /^I create a new block with "([^"]*)" title and "([^"]*)" template$/
+     * @Then /^I create a new block with "([^"]*)" title and "([^"]*)" descriptif and "([^"]*)" template$/
      */
-    public function iCreateANewBlock($titleBlock, $templateLabel)
+    public function iCreateANewBlock($titleBlock, $descBlock, $templateLabel)
     {
         $this->iSwitchToTheIframe();
         //
         $this->assertSession()->elementExists('css', "input#piappgedmobundlemanagerformbuilderpimodelwidgetblock_choice_1")->click();
         //
         $this->getSession()->getPage()->fillField("piappgedmobundlemanagerformbuilderpimodelwidgetblock[title]", $titleBlock);
+        $this->getSession()->getPage()->fillField("piappgedmobundlemanagerformbuilderpimodelwidgetblock[descriptif]", $descBlock);
         
         $xpath = "//body//select[@id='piappgedmobundlemanagerformbuilderpimodelwidgetblock_template']//option[text()='{$templateLabel}']";
         $session = $this->getSession(); // get the mink session

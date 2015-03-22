@@ -42,6 +42,14 @@ if (!$process->isSuccessful()) {
 }
 print $process->getOutput();
 
+$process = new Process('php app/console sfynx:classification:fixtures --env=test');
+$process->setTimeout(120);
+$process->run();
+if (!$process->isSuccessful()) {
+    throw new \RuntimeException($process->getErrorOutput());
+}
+print $process->getOutput();
+
 $process = new Process('rm -rf app/cache/test/*');
 $process->setTimeout(120);
 $process->run();

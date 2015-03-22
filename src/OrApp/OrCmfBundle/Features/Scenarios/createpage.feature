@@ -75,11 +75,12 @@ Feature: I would like to log in to the system
 #       Then I switch to main window
 
     Scenario: Create a new bloc
-#     Given I am on "/en/copy/1426774577"
+#     Given I am on "/en/copy/1427036946"
       Given I go to the new page
        Then I click on the main menu
         And I click to show the structure of the page
        Then I click to edit the widget handler from the "content" Zone
         And I click to the block widget edit form from the widget handler
-       Then I create a new block with "My title block" title and "Block content with side by side pictures and text  below" template
+       Then I create a new block with "My title block" title and "My description" descriptif and "Block description with image on the left" template
         And I close the edit form
+      Given I go to the new page

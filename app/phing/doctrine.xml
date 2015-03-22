@@ -34,6 +34,10 @@
             <arg line="app/console" />
             <arg line="doctrine:fixtures:load" />
         </exec>
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="sfynx:classification:fixtures" />
+        </exec>        
     </target>
 
     <target name="doctrine:info">
