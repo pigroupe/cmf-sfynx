@@ -205,15 +205,15 @@ Many systems allow you to use ACL chmod a +.
 **For more information** : http://symfony.com/doc/current/book/installation.html
 
 ``` bash
-mkdir web/uploads
-mkdir web/uploads/media
-mkdir web/yui
+    mkdir -p app/cachesfynx/loginfailure
+    mkdir -p web/uploads/media
+    mkdir web/yui
 
-chmod –R 0777 app/cachesfynx
-chmod –R 0777 app/cache
-chmod –R 0777 app/logs
-chmod –R 0777 web/uploads
-chmod –R 0777 web/yui
+    chmod -R 0777 app/cachesfynx
+    chmod -R 0777 app/cache
+    chmod -R 0777 app/logs
+    chmod -R 0777 web/uploads
+    chmod -R 0777 web/yui
 ```
 
 ### Step 4: Create database, tables and fixtures with phing
@@ -262,7 +262,93 @@ chmod –R 0777 web/yui
 
 **For more information** : http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
 
-### Step 6: Connexion on /login
+### Step 6: Create the Virtual host file
+
+Create the virtualhost file like this
+
+``` bash
+    sudo nano /etc/apache2/sites-available/sfynx.conf
+
+```
+
+And in this file insert following code
+
+``` bash
+
+    <VirtualHost *:80>
+            ServerName  www.sfynx.local
+            ServerAlias www.sfynx.local             
+            DocumentRoot /var/www/cmf-sfynx/web/
+            <Directory "/var/www/cmf-sfynx/web">
+                    Options Indexes FollowSymLinks MultiViews
+                    AllowOverride None
+                    RewriteEngine On
+
+                    RewriteCond %{REQUEST_FILENAME} !-f
+                    RewriteRule ^(.*)$ app_dev.php [QSA,L]
+
+                    #php_value auto_prepend_file "/var/www/xhprof/external/header.php"
+                    #php_value auto_append_file "/var/www/xhprof/external/footer.php"
+
+                    #Require all granted
+                    Order allow,deny
+                    allow from all
+            </Directory>
+            ErrorLog ${APACHE_LOG_DIR}/error_sfynx_dev.log
+            LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
+            CustomLog ${APACHE_LOG_DIR}/access-dev.log varnishcombined
+    </VirtualHost>
+
+    <VirtualHost *:80>
+            ServerName  test.sfynx.local
+            ServerAlias test.sfynx.local
+            DocumentRoot /var/www/cmf-sfynx/web/
+            <Directory "/var/www/cmf-sfynx/web">
+                    Options Indexes FollowSymLinks MultiViews
+                    AllowOverride None
+                    RewriteEngine On
+
+                    RewriteCond %{REQUEST_FILENAME} !-f
+                    RewriteRule ^(.*)$ app_test.php [QSA,L]
+
+                    #php_value auto_prepend_file "/var/www/xhprof/external/header.php"
+                    #php_value auto_append_file "/var/www/xhprof/external/footer.php"
+
+                    #Require all granted
+                    Order allow,deny
+                    allow from all
+            </Directory>
+            ErrorLog ${APACHE_LOG_DIR}/error_sfynx_test.log
+            LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
+            CustomLog ${APACHE_LOG_DIR}/access-test.log varnishcombined
+    </VirtualHost>
+
+```
+
+And run a2ensite to create the alias
+
+``` bash
+    a2enmod rewrite
+    a2enmod expires
+    sudo a2ensite sfynx
+
+``` 
+
+Then update the hosts file /etc/hosts
+
+``` bash
+    sudo nano /etc/hosts
+``` 
+
+And add these lines
+
+``` bash
+    127.0.0.1       www.sfynx.local
+    127.0.0.1       test.sfynx.local
+``` 
+
+
+### Step 7: Connexion on /login
 
 To connect as default super administrator:
 
@@ -275,7 +361,7 @@ To connect as default super administrator:
 
 **The password must be changed at the first use.**
 
-### Step 7: Run the phpunit tests
+### Step 8: Run the phpunit tests
 
 ``` bash
     
@@ -284,7 +370,7 @@ To connect as default super administrator:
 
 ```
 
-### Step 8: Run Behat tests
+### Step 9: Run Behat tests
 
 In first step, you have to install and configure Selenium Server :
 

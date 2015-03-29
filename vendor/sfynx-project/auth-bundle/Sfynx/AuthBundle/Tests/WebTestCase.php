@@ -98,7 +98,7 @@ abstract class WebTestCase extends BaseWebTestCase
     
     protected static function emptyCache()
     {
-        $process = new Process("rm -rf app/cache/test/*");
+        $process = new Process("php app/console cache:clear --env=test");
         $process->setTimeout(2);
         $process->run();
     } 
@@ -106,11 +106,12 @@ abstract class WebTestCase extends BaseWebTestCase
     protected static function emptyLoginFailure()
     {
         $path_dir_login_failure = static::$kernel->getContainer()->getParameter('sfynx.auth.loginfailure.cache_dir');
-        $path_dir_login_failure = realpath($path_dir_login_failure);
-        
-        $process = new Process("rm -rf $path_dir_login_failure/*");
-        $process->setTimeout(2);
-        $process->run();
+        $path_dir_login_failure = realpath($path_dir_login_failure);        
+        if (strlen($path_dir_login_failure)>= 2) {        
+            $process = new Process("rm -rf $path_dir_login_failure/*");        
+            $process->setTimeout(2);
+            $process->run();
+        }
     }     
     
     protected static function updateSchema()

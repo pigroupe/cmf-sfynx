@@ -38,14 +38,21 @@ class PiLayoutHeadExtension extends \Twig_Extension
      *  absolute path to YUI jar file.
      */    
     private $JAR_PATH;
+    
     private $TEMP_FILES_DIR;
-    private $options = array('type' => 'js',
-            'linebreak' => false,
-            'verbose' => false,
-            'nomunge' => false,
-            'semi' => false,
-            'nooptimize' => false);  
+    
+    private $options = array(
+        'type' => 'js',
+        'linebreak' => false,
+        'verbose' => false,
+        'nomunge' => false,
+        'semi' => false,
+        'nooptimize' => false
+    );
+    
     private $files = array();
+    
+    private $string;
      
     /**
      * Constructor.
