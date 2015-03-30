@@ -37,6 +37,12 @@
         <echo msg="Analyse du code mort ..." />
         <exec command="bin/phpmd  ${dir.src} xml codesize,unusedcode,naming,design --exclude **/map/*,**/om/* --reportfile ${dir.reports}/pmd.xml" passthru="true" />
     </target>
+    
+    <!-- PHP Loc -->
+    <target name="static:loc" description="A tool for quickly measuring the size of a PHP project.">
+        <echo msg="Analyse du projet ..." />
+        <exec command='bin/phploc ${dir.src} --count-tests --log-xml="${dir.reports}/loc.xml"' passthru="true" />
+    </target>    
 
     <target name="static:info">
         <echo>This file contains the central configuration for Php static code analysis</echo>

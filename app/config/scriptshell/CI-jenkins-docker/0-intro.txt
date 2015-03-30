@@ -1,0 +1,22 @@
+Tout bon développeur se doit connaitre le très bon mix github et travis-ci. Je ne saurais que trop vous conseiller d'utiliser
+ces outils mais il y a toutefois différentes raisons qui pourraient vous pousser à ne pas vouloir utiliser ces services:
+
+- Les VM de travis sont des Ubuntu Linux 12.04 64 bit, ce qui n'est pas forcément votre cible.
+- Votre code est tellement secret et vous ne voulez pas forcément qu'il se retrouve sur le kloug
+- Vous voulez rester maitre de vos outils et de vos infrastructures.
+- Vous avez envie de faire votre propre travis-ci pour le lulz
+- Voilà donc une infrastructure que j'ai mise en place avec jenkins un très bon outil d'intégration continue 
+(malgré le fait qu'il soit codé en java) et docker qui est un système de container linux ultra léger basé sur les cgroups, lxc et aufs
+
+L'idée est la suivante pour un build:
+
+1-Jenkins lance un container docker
+2-Jenkins lance un slave temporaire dans le container
+3-Le build se fait sur le container et jenkins récupère le résultat du build (logs, metadonnées, artifacts)
+4-Quand le build est terminé, le container docker est détruit
+
+De cette manière le build est toujours lancé dans un environnement sain et contrôlé, vous n'avez pas besoin de maintenir
+des slaves jenkins et ça scale particulièrement bien puisque vous pouvez rajouter des serveurs docker capables de lancer 
+pleins de containers.
+
+Voilà la manip sur Debian wheezy pour faire des containers Debian wheezy.

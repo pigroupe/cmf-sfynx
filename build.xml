@@ -44,6 +44,7 @@
         <echo>You can launch:</echo>
         <echo> * build:local =>                     Launch test, code analysis and tests locally</echo>
         <echo> * build:local-documentation =>       Build documentation locally</echo>
+        <echo> * build:test-deploy =>               Quick build for CI on Jenkins (on dev fork) without code covering</echo>
         <echo> * build:jenkins-quick =>             Quick build for CI on Jenkins (on dev fork)</echo>
         <echo> * build:jenkins-normal =>            Build on dev branch for CI on Jenkins</echo>
         <echo> * build:jenkins-documentation =>     Generate documentation on Jenkins</echo>

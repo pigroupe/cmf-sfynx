@@ -1,0 +1,15 @@
+C'est maintenant que la magie s'opère, on va installer le plugin docker sur jenkins via l'interface web et dans la configuration générale,
+paramètres "cloud", on déclare notre image docker. On rajoute au passage un credential "Username with password" pour qu'il puisse 
+se connecter en ssh sur le container (username: jenkins, password: jenkins) et on met un label "wheezy64" pour ces containers.
+
+Voir IMAGE 1
+
+Ensuite on configure un job qui va se lancer sur un container jenkins avec le système de labels.
+
+VOIR IMAGE 2
+
+Vous pouvez adapter l'image docker pour y installer l'environnement de build dont vous avez besoin 
+(base de données, compilateurs, interpréteurs python, ruby etc).
+
+Pour plus de flexibilité vous pouvez aussi installer sudo et donner tous les droits sans mot de passe 
+à l'utilisateur jenkins, ainsi le script de build peut installer des packages et modifier la configuration de l'image.
