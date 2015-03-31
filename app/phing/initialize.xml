@@ -10,7 +10,6 @@
 
     <target name="clean-cache">
         <exec command="rm -rf app/cache/*"/>
-        <exec command="rm -rf app/cachesfynx/*"/>
     </target>
 
     <target name="clear-cache">

@@ -80,9 +80,22 @@ SFYNX is a free software distributed under the GPL license. This license guarant
 
 - In French law, SFYNX falls under the regulations stipulated in the code of intellectual property rights (CPI). The SFYNX kernel is a collaborative work by its authors, listed above as per article L 113-1 of the CPI. The entire SFYNX project is comprised of a collective work in respect of articles L 113-2 and L 113-5 of the CPI. The authors release the work to the public in accordance with the rights and obligations as defined by the GNU public license.
 
-## Installation
+## Installing automaticly all-in-one
 
-### Step 0: Configuring Serveur
+We have create an installer script shell which execute th e sfynx install.
+
+``` bash
+
+    chmod +x app/config/scriptshell/installer-sfynx.sh
+    ./app/config/scriptshell/installer-sfynx.sh
+    
+``` 
+
+After you will have to execute the installation step-by-step from the step 6.
+
+## Installation step-by-step
+
+### Step 1: Configuring Serveur
 
 Before starting coding, make sure that your local system is properly
 configured for Symfony.
@@ -119,60 +132,6 @@ Execute the `check.php` script from the command line:
               - smtp_port = smtp-port-value
          - sous linux :
               - sendmail_path = "var-bin-sendmail"    
-    
-**Doctrine** : 
-
-To use Doctrine, you will need to have installed PDO. And you must have installed the PDO driver for the database server you want to use.    
-
-### Step 1: Configuring parameters  BDD and mailer
-
-* Open the file app / config / parameters.ini
-* Give the name "mydatabase" for example in the database and choose the type pdo_mysql to use a MySQL database.
-* Give your user and password of your Gmail count.
-* Change the secret code that will be used to protect your application from XSS attacks.
-
-``` bash
-parameters:
-    database_driver:   pdo_mysql
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     symfsfynx22
-    database_user:     root
-    database_password: ~
-
-    test_database_driver:   pdo_mysql
-    test_database_host:     127.0.0.1
-    test_database_port:     null
-    test_database_name:     symfsfynx23_test
-    test_database_user:     root
-    test_database_password: pacman 
-
-    mailer_transport:  sendmail
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
-
-    locale:            en_GB
-    secret:            5b5a0ff57bd45284dafe7f104fc7d8e15
-    
-    # memcache params
-    session_memcache_host: 127.0.0.1 # 127.0.0.1
-    session_memcache_port: 11211 # 11211
-    session_memcache_prefix: sess_memcache_
-    session_memcache_expire: 864000
-    session_memcache_locking: true      
-    session_memcache_spin_lock_wait: 150000      
-
-    #pi_app_admin 
-    pi_cookie_lifetime: 604800
-    pi_session_name: "PHPSESSID"
-    
-    #boot_strap_ws
-    ws_key: 0A1TG4GO  
-    
-    #esi key
-    esi_key: 9eu9ghv9
-```
 
 ### Step 2: Installing the vendor
 
@@ -191,7 +150,8 @@ http://getcomposer.org/ or just run the following command:
 **Setting vendor with composer.json**
 ``` bash
 
-    php  composer.phar install
+    php -d memory_limit=1024M composer.phar install --no-interaction
+    php composer.phar dump-autoload --optimize
 
 ```
 
