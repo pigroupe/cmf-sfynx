@@ -38,6 +38,35 @@ java -jar jenkins-cli.jar -s ${value}/ install-plugin monitoring
 java -jar jenkins-cli.jar -s ${value}/ install-plugin scm-sync-configuration
 java -jar jenkins-cli.jar -s ${value}/ install-plugin svn-tag
 
+#CI
+java -jar jenkins-cli.jar -s ${value}/ install-plugin ldap
+java -jar jenkins-cli.jar -s ${value}/ install-plugin mantis
+java -jar jenkins-cli.jar -s ${value}/ install-plugin greenballs
+java -jar jenkins-cli.jar -s ${value}/ install-plugin build-pipeline-plugin
+java -jar jenkins-cli.jar -s ${value}/ install-plugin dashboard-view
+java -jar jenkins-cli.jar -s ${value}/ install-plugin translation
+java -jar jenkins-cli.jar -s ${value}/ install-plugin preSCMbuildstep
+java -jar jenkins-cli.jar -s ${value}/ install-plugin groovy
+java -jar jenkins-cli.jar -s ${value}/ install-plugin plot
+java -jar jenkins-cli.jar -s ${value}/ install-plugin ansicolor
+java -jar jenkins-cli.jar -s ${value}/ install-plugin simple-theme-plugin
+java -jar jenkins-cli.jar -s ${value}/ install-plugin nested-view
+java -jar jenkins-cli.jar -s ${value}/ install-plugin ansicolor
+java -jar jenkins-cli.jar -s ${value}/ install-plugin anything-goes-formatter
+java -jar jenkins-cli.jar -s ${value}/ install-plugin gitlab-merge-request-jenkins
+java -jar jenkins-cli.jar -s ${value}/ install-plugin gitlab-hook
+java -jar jenkins-cli.jar -s ${value}/ install-plugin sidebar-link
+java -jar jenkins-cli.jar -s ${value}/ install-plugin scriptler
+java -jar jenkins-cli.jar -s ${value}/ install-plugin groovy-postbuild
+java -jar jenkins-cli.jar -s ${value}/ install-plugin clone-workspace-scm
+java -jar jenkins-cli.jar -s ${value}/ install-plugin sitemonitor
+java -jar jenkins-cli.jar -s ${value}/ install-plugin claim
+java -jar jenkins-cli.jar -s ${value}/ install-plugin tap
+java -jar jenkins-cli.jar -s ${value}/ install-plugin rich-text-publisher-plugin
+java -jar jenkins-cli.jar -s ${value}/ install-plugin nodelabelparameter
+java -jar jenkins-cli.jar -s ${value}/ install-plugin rebuild
+java -jar jenkins-cli.jar -s ${value}/ install-plugin docker-build-step
+java -jar jenkins-cli.jar -s ${value}/ install-plugin docker-plugin
 
 java -jar jenkins-cli.jar -s ${value} safe-restart
 
