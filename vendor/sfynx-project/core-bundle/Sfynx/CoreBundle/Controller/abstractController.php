@@ -723,4 +723,32 @@ abstract class abstractController extends Controller
                 ->getFlashBag()
                 ->add($param, $messages);
     }    
+    
+    /**
+     * Put result content in cache with ttl.
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function getCacheFunction($key, $ttl)
+    {
+        $dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
+    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+    	$this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
+    	
+        return $this->container->get("sfynx.cache.filecache")->get($key); 
+    } 
+    
+    /**
+     * Put result content in cache with ttl.
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function setCacheFunction($key, $ttl, $newvalue)
+    {
+        $dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
+    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+        $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
+        // important : if ttl is equal to zero then the cache is infini
+        $this->container->get("sfynx.cache.filecache")->set($key, $newvalue, $ttl);
+    }    
 }

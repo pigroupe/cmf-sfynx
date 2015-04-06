@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="initialize" description="Frontend build" default="info" basedir=".">
-    <import file="app/phing/doctrine.xml" />
-    <import file="app/phing/frontend.xml" />
+    <import file="${dir.app}/config/phing/doctrine.xml" />
+    <import file="${dir.app}/config/phing/frontend.xml" />
 
     <target name="rebuild"
         depends="clean-cache, composer:install, doctrine:rebuild, clean-cache, frontend:assets"

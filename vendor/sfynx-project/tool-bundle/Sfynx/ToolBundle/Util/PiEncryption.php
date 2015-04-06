@@ -43,7 +43,6 @@ use Sfynx\ToolBundle\Builder\PiEncryptionBuilderInterface;
  */
 class PiEncryption implements PiEncryptionBuilderInterface 
 {   
-
     /**
      * des encryption
      */
@@ -111,7 +110,6 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getSupportedEncryptionTypes()
@@ -138,9 +136,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @param string $_password
      * @param string $_method
+     * 
      * @return string the password
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function encryptPassword($_password, $_method)
@@ -248,9 +246,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      * generates a randomstrings of given length
      *
      * @param int $_length
+     * 
      * @return string the random value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getRandomString($_length)
@@ -270,9 +268,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @param string $string
      * @param string $key
+     * 
      * @return string the encrypt string value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */ 
     public static function encryptFilter($string, $key = "0A1TG4GO")
@@ -294,9 +292,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @param string $string
      * @param string $key
+     * 
      * @return string the decrypt string value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function decryptFilter($string, $key = "0A1TG4GO")
@@ -318,9 +316,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      * Obfuscate link. SEO worst practice.
      *
      * @param string $url
+     * 
      * @return string the encrypt obfuscate Link value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function obfuscateLinkEncrypt($url, $_base16 = "0A12B34C56D78E9F")
@@ -340,11 +338,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      * Obfuscate link JS. SEO worst practice.
      *
      * @param string $fileName
+     * 
      * @return string the decrypt obfuscate Link JS code.
      * @access public
-     * 
-     * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function obfuscateLinkDecrypt($balise = "a", $class = "hiddenLink", $base16 = "0A12B34C56D78E9F")
