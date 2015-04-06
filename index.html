@@ -51,24 +51,27 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 
 <p>The framework works with Symfony 2.3 and has been split into 17 bundles :</p>
 
-<div class="highlight highlight-bash"><pre><span class="pl-k">*</span> CmfBundle <span class="pl-s3">:</span> A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
+<div class="highlight highlight-bash"><pre><span class="pl-k">*</span> CoreBundle <span class="pl-c1">:</span> A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
+<span class="pl-k">*</span> AuthBundle <span class="pl-c1">:</span> A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and <span class="pl-c1">set</span> handlers <span class="pl-k">for</span> <span class="pl-smi">login</span> behavior, <span class="pl-c1">logout</span> behavior and failure connection behavior
+<span class="pl-k">*</span> ToolBundle <span class="pl-c1">:</span> A bundle which provides tool libraries and services of route and role and twig extensions
+<span class="pl-k">*</span> BehatBundle <span class="pl-c1">:</span> A bundle which provides context tools to run mink tests
+<span class="pl-k">*</span> MigrationBundle <span class="pl-c1">:</span> A bundle which provides a <span class="pl-c1">command</span> to <span class="pl-c1">set</span> migration files with a version handler
+<span class="pl-k">*</span> CmfBundle <span class="pl-c1">:</span> A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
 ( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )
-<span class="pl-k">*</span> TemplateBundle <span class="pl-s3">:</span>  A bundle which is used to stock all template of layout and others.
+<span class="pl-k">*</span> GedmoBundle <span class="pl-c1">:</span> A bundle which is used to create a project with the CMF.
+<span class="pl-k">*</span> MediaBundle <span class="pl-c1">:</span> A bundle which overload the SonataMediaBundle, with crop system.
+<span class="pl-k">*</span> TranslatorBundle <span class="pl-c1">:</span> A bundle which provides entity and models of classes allowing to work with translation words.
+<span class="pl-k">*</span> TemplateBundle <span class="pl-c1">:</span>  A bundle which is used to stock all template of layout and others.
 <span class="pl-k">*</span> SmoothnessBundle: A bundle which is used to define a complet admin template with all layers
-<span class="pl-k">*</span> AuthBundle <span class="pl-s3">:</span> A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and <span class="pl-s3">set</span> handlers <span class="pl-k">for</span> <span class="pl-vo">login</span> behavior, <span class="pl-s3">logout</span> behavior and failure connection behavior
-<span class="pl-k">*</span> ToolBundle <span class="pl-s3">:</span> A bundle which provides tool libraries and services of route and role and twig extensions
-<span class="pl-k">*</span> CoreBundle <span class="pl-s3">:</span> A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
-<span class="pl-k">*</span> CacheBundle <span class="pl-s3">:</span> A bundle which provides classes to cache handlers (memcache, files).
-<span class="pl-k">*</span> DatabaseBundle <span class="pl-s3">:</span> A bundle which provides classes and commands to run DB vendor<span class="pl-s1"><span class="pl-pds">`</span>s utilities to backup and restore databases. </span>
-<span class="pl-s1"><span class="pl-k">*</span> AclManagerBundle <span class="pl-s3">:</span> A bundle which provides classes to run ACL Manager<span class="pl-pds">`</span></span>s utilities <span class="pl-k">for</span> <span class="pl-vo">Symfony2</span>.
-<span class="pl-k">*</span> BrowserBundle <span class="pl-s3">:</span> A bundle which provides library to run Browscap Manager<span class="pl-s1"><span class="pl-pds">`</span>s utilities and MobileDetect Manager<span class="pl-pds">`</span></span>s utilities.
-<span class="pl-k">*</span> WsBundle <span class="pl-s3">:</span> A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
-<span class="pl-k">*</span> EncryptBundle <span class="pl-s3">:</span> A bundle which provides annotations to encrypt fields
-<span class="pl-k">*</span> PositionBundle <span class="pl-s3">:</span> A bundle which provides annotations to manage position of entiy rows
-<span class="pl-k">*</span> AdminBundle <span class="pl-s3">:</span> A bundle which overload the SonataAdminBundle.
-<span class="pl-k">*</span> MediaBundle <span class="pl-s3">:</span> A bundle which overload the SonataMediaBundle, with crop system.
-<span class="pl-k">*</span> TranslatorBundle <span class="pl-s3">:</span> A bundle which provides entity and models of classes allowing to work with translation words.
-<span class="pl-k">*</span> GedmoBundle <span class="pl-s3">:</span> A bundle which is used to create a project with the CMF.</pre></div>
+<span class="pl-k">*</span> CacheBundle <span class="pl-c1">:</span> A bundle which provides classes to cache handlers (memcache, files).
+<span class="pl-k">*</span> DatabaseBundle <span class="pl-c1">:</span> A bundle which provides classes and commands to run DB vendor<span class="pl-s"><span class="pl-pds">`</span>s utilities to backup and restore databases. </span>
+<span class="pl-s"><span class="pl-k">*</span> AclManagerBundle <span class="pl-c1">:</span> A bundle which provides classes to run ACL Manager<span class="pl-pds">`</span></span>s utilities <span class="pl-k">for</span> <span class="pl-smi">Symfony2</span>.
+<span class="pl-k">*</span> BrowserBundle <span class="pl-c1">:</span> A bundle which provides library to run Browscap Manager<span class="pl-s"><span class="pl-pds">`</span>s utilities and MobileDetect Manager<span class="pl-pds">`</span></span>s utilities.
+<span class="pl-k">*</span> WsBundle <span class="pl-c1">:</span> A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
+<span class="pl-k">*</span> WsseBundle <span class="pl-c1">:</span> A bundle which provides web services allowing to connect authentication service with the Wsse protocol.
+<span class="pl-k">*</span> EncryptBundle <span class="pl-c1">:</span> A bundle which provides annotations to encrypt fields
+<span class="pl-k">*</span> PositionBundle <span class="pl-c1">:</span> A bundle which provides annotations to manage position of entiy rows
+<span class="pl-k">*</span> AdminBundle <span class="pl-c1">:</span> A bundle which overload the SonataAdminBundle.</pre></div>
 
 <h2>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
@@ -79,10 +82,13 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/template-bundle/Sfynx/TemplateBundle/Resources/doc/index.md">Example of Template usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/core-bundle/Sfynx/CoreBundle/Resources/doc/index.md">Example of Core usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/tool-bundle/Sfynx/ToolBundle/Resources/doc/index.md">Example of Tool usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/tool-bundle/Sfynx/BehatBundle/Resources/doc/index.md">Example of Tool Behat usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/tool-bundle/Sfynx/MigrationBundle/Resources/doc/index.md">Example of Tool Migration usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/sonata-bundle/Sfynx/MediaBundle/Resources/doc/index.md">Example of Media usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/EncryptBundle/Resources/doc/index.md">Example of Encrypt annotation usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/annotation-bundle/Sfynx/PositionBundle/Resources/doc/index.md">Example of Position annotation usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsBundle/Resources/doc/index.md">Example of Ws usage</a></li>
+<li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/ws-bundle/Sfynx/WsseBundle/Resources/doc/index.md">Example of Wsse usage</a></li>
 <li><a href="https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/browser-bundle/Sfynx/BrowserBundle/Resources/doc/index.md">Example of Browser usage</a></li>
 </ul>
 
@@ -94,8 +100,8 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 
 <p>SFYNX is a free software distributed under the GPL license. This license guarantees the following freedoms:</p>
 
-<div class="highlight highlight-bash"><pre>- the freedom to install and use SFYNX <span class="pl-k">for</span> <span class="pl-vo">any</span> usage whatsoever<span class="pl-k">;</span>
-- the freedom to look into SFYNX’s code and adapt it to your own needs by modifying the <span class="pl-s3">source</span> code, to which you have direct access since SFYNX is entirely developed <span class="pl-k">in</span> PHP<span class="pl-k">;</span>
+<div class="highlight highlight-bash"><pre>- the freedom to install and use SFYNX <span class="pl-k">for</span> <span class="pl-smi">any</span> usage whatsoever<span class="pl-k">;</span>
+- the freedom to look into SFYNX’s code and adapt it to your own needs by modifying the <span class="pl-c1">source</span> code, to which you have direct access since SFYNX is entirely developed <span class="pl-k">in</span> PHP<span class="pl-k">;</span>
 - the freedom to distribute copies of the software to anyone, provided you <span class="pl-k">do</span> not modify or delete the license<span class="pl-k">;</span>
 - the freedom to enhance SFYNX and to distribute your enhancements among the public so that the entire community may benefit from it, provided you <span class="pl-k">do</span> not modify or delete the license.</pre></div>
 
@@ -108,10 +114,22 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 </ul>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="installing-automaticly-all-in-one" class="anchor" href="#installing-automaticly-all-in-one" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing automaticly all-in-one</h2>
+
+<p>We have create an installer script shell which execute th e sfynx install.</p>
+
+<div class="highlight highlight-bash"><pre>
+    chmod +x sysadmin/scriptshell/installer-sfynx.sh
+    ./sysadmin/scriptshell/installer-sfynx.sh
+</pre></div>
+
+<p>After you will have to execute the installation step-by-step from the step 6.</p>
+
+<h2>
+<a id="installation-step-by-step" class="anchor" href="#installation-step-by-step" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation step-by-step</h2>
 
 <h3>
-<a id="step-0-configuring-serveur" class="anchor" href="#step-0-configuring-serveur" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 0: Configuring Serveur</h3>
+<a id="step-1-configuring-serveur" class="anchor" href="#step-1-configuring-serveur" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 1: Configuring Serveur</h3>
 
 <p>Before starting coding, make sure that your local system is properly
 configured for Symfony.</p>
@@ -166,85 +184,8 @@ configured for Symfony.</p>
 </li>
 </ul>
 
-<p><strong>Doctrine</strong> : </p>
-
-<p>To use Doctrine, you will need to have installed PDO. And you must have installed the PDO driver for the database server you want to use.    </p>
-
 <h3>
-<a id="step-1-configuring-parameters--bdd-and-mailer" class="anchor" href="#step-1-configuring-parameters--bdd-and-mailer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 1: Configuring parameters  BDD and mailer</h3>
-
-<ul>
-<li>Open the file app / config / parameters.ini</li>
-<li>Give the name "mydatabase" for example in the database and choose the type pdo_mysql to use a MySQL database.</li>
-<li>Give your user and password of your Gmail count.</li>
-<li>Change the secret code that will be used to protect your application from XSS attacks.</li>
-</ul>
-
-<div class="highlight highlight-bash"><pre>parameters:
-    database_driver:   pdo_mysql
-    database_host:     127.0.0.1
-    database_port:     <span class="pl-k">~</span>
-    database_name:     symfsfynx22
-    database_user:     root
-    database_password: <span class="pl-k">~</span>
-
-    test_database_driver:   pdo_mysql
-    test_database_host:     127.0.0.1
-    test_database_port:     null
-    test_database_name:     symfsfynx23_test
-    test_database_user:     root
-    test_database_password: pacman 
-
-    mailer_transport:  sendmail
-    mailer_host:       127.0.0.1
-    mailer_user:       <span class="pl-k">~</span>
-    mailer_password:   <span class="pl-k">~</span>
-
-    locale:            en_GB
-    secret:            5b5a0ff57bd45284dafe7f104fc7d8e15
-
-    <span class="pl-c"># memcache params</span>
-    session_memcache_host: 127.0.0.1 <span class="pl-c"># 127.0.0.1</span>
-    session_memcache_port: 11211 <span class="pl-c"># 11211</span>
-    session_memcache_prefix: sess_memcache_
-    session_memcache_expire: 864000
-    session_memcache_locking: <span class="pl-s3">true</span>      
-    session_memcache_spin_lock_wait: 150000      
-
-    <span class="pl-c">#pi_app_admin </span>
-    pi_cookie_lifetime: 604800
-    pi_session_name: <span class="pl-s1"><span class="pl-pds">"</span>PHPSESSID<span class="pl-pds">"</span></span>
-
-    <span class="pl-c">#boot_strap_ws</span>
-    ws_key: 0A1TG4GO  
-
-    <span class="pl-c">#esi key</span>
-    esi_key: 9eu9ghv9</pre></div>
-
-<h3>
-<a id="step-2-setting-up-permissions" class="anchor" href="#step-2-setting-up-permissions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 2: Setting up Permissions</h3>
-
-<ul>
-<li>The directories below should be writable by both the web server and the user.</li>
-<li>On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. </li>
-<li>We must change www-data on your web server.</li>
-</ul>
-
-<p>Many systems allow you to use ACL chmod a +.
-<strong>For more information</strong> : <a href="http://symfony.com/doc/current/book/installation.html">http://symfony.com/doc/current/book/installation.html</a></p>
-
-<div class="highlight highlight-bash"><pre>mkdir web/uploads
-mkdir web/uploads/media
-mkdir web/yui
-
-chmod –R 0777 app/cachesfynx
-chmod –R 0777 app/cache
-chmod –R 0777 app/log
-chmod –R 0777 web/uploads
-chmod –R 0777 web/yui</pre></div>
-
-<h3>
-<a id="step-3-installing-the-vendor" class="anchor" href="#step-3-installing-the-vendor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 3: Installing the vendor</h3>
+<a id="step-2-installing-the-vendor" class="anchor" href="#step-2-installing-the-vendor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 2: Installing the vendor</h3>
 
 <p>As Symfony uses [Composer][2] to manage its dependencies, the recommended way
 to create a new project is to use it.</p>
@@ -259,8 +200,31 @@ to create a new project is to use it.</p>
 <p><strong>Setting vendor with composer.json</strong></p>
 
 <div class="highlight highlight-bash"><pre>
-    php  composer.phar install
+    php -d memory_limit=1024M composer.phar install --no-interaction
+    php composer.phar dump-autoload --optimize
 </pre></div>
+
+<h3>
+<a id="step-3-setting-up-permissions" class="anchor" href="#step-3-setting-up-permissions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 3: Setting up Permissions</h3>
+
+<ul>
+<li>The directories below should be writable by both the web server and the user.</li>
+<li>On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. </li>
+<li>We must change www-data on your web server.</li>
+</ul>
+
+<p>Many systems allow you to use ACL chmod a +.
+<strong>For more information</strong> : <a href="http://symfony.com/doc/current/book/installation.html">http://symfony.com/doc/current/book/installation.html</a></p>
+
+<div class="highlight highlight-bash"><pre>    mkdir -p app/cachesfynx/loginfailure
+    mkdir -p web/uploads/media
+    mkdir web/yui
+
+    chmod -R 0777 app/cachesfynx
+    chmod -R 0777 app/cache
+    chmod -R 0777 app/logs
+    chmod -R 0777 web/uploads
+    chmod -R 0777 web/yui</pre></div>
 
 <h3>
 <a id="step-4-create-database-tables-and-fixtures-with-phing" class="anchor" href="#step-4-create-database-tables-and-fixtures-with-phing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 4: Create database, tables and fixtures with phing</h3>
@@ -268,7 +232,7 @@ to create a new project is to use it.</p>
 <p><strong>Execute initialize.xml configuration</strong></p>
 
 <div class="highlight highlight-bash"><pre>
-    phing -f app/phing/initialize.xml rebuild
+    bin/phing -f app/config/phing/initialize.xml rebuild
 </pre></div>
 
 <h3>
@@ -290,6 +254,7 @@ to create a new project is to use it.</p>
 
 <div class="highlight highlight-bash"><pre>
     php  app/console  doctrine:fixtures:load
+    php  app/console  sfynx:classification:fixtures
 </pre></div>
 
 <p><strong>Type the following command to install assets of the bundles</strong></p>
@@ -301,7 +266,83 @@ to create a new project is to use it.</p>
 <p><strong>For more information</strong> : <a href="http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html">http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html</a></p>
 
 <h3>
-<a id="step-6-connexion-on-login" class="anchor" href="#step-6-connexion-on-login" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 6: Connexion on /login</h3>
+<a id="step-6-create-the-virtual-host-file" class="anchor" href="#step-6-create-the-virtual-host-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 6: Create the Virtual host file</h3>
+
+<p>Create the virtualhost file like this</p>
+
+<div class="highlight highlight-bash"><pre>    sudo nano /etc/apache2/sites-available/sfynx.conf
+</pre></div>
+
+<p>And in this file insert following code</p>
+
+<div class="highlight highlight-bash"><pre>
+    <span class="pl-k">&lt;</span>VirtualHost <span class="pl-k">*</span>:<span class="pl-k">80&gt;</span>
+            ServerName  www.sfynx.<span class="pl-k">local</span>
+            ServerAlias www.sfynx.<span class="pl-k">local</span>             
+            DocumentRoot /var/www/cmf-sfynx/web/
+            <span class="pl-k">&lt;</span>Directory <span class="pl-s"><span class="pl-pds">"</span>/var/www/cmf-sfynx/web<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+                    Options Indexes FollowSymLinks MultiViews
+                    AllowOverride None
+                    RewriteEngine On
+
+                    RewriteCond %{REQUEST_FILENAME} <span class="pl-k">!</span>-f
+                    RewriteRule ^(.<span class="pl-k">*</span>)$ app_dev.php [QSA,L]
+
+                    <span class="pl-c">#php_value auto_prepend_file "/var/www/xhprof/external/header.php"</span>
+                    <span class="pl-c">#php_value auto_append_file "/var/www/xhprof/external/footer.php"</span>
+
+                    <span class="pl-c">#Require all granted</span>
+                    Order allow,deny
+                    allow from all
+            <span class="pl-k">&lt;</span>/Directory<span class="pl-k">&gt;</span>
+            ErrorLog <span class="pl-smi">${APACHE_LOG_DIR}</span>/error_sfynx_dev.log
+            LogFormat <span class="pl-s"><span class="pl-pds">"</span>%{X-Forwarded-For}i %l %u %t <span class="pl-cce">\"</span>%r<span class="pl-cce">\"</span> %&gt;s %b <span class="pl-cce">\"</span>%{Referer}i<span class="pl-cce">\"</span> <span class="pl-cce">\"</span>%{User-Agent}i<span class="pl-cce">\"</span><span class="pl-pds">"</span></span> varnishcombined
+            CustomLog <span class="pl-smi">${APACHE_LOG_DIR}</span>/access-dev.log varnishcombined
+    <span class="pl-k">&lt;</span>/VirtualHost<span class="pl-k">&gt;</span>
+
+    <span class="pl-k">&lt;</span>VirtualHost <span class="pl-k">*</span>:<span class="pl-k">80&gt;</span>
+            ServerName  <span class="pl-c1">test</span>.sfynx.<span class="pl-k">local</span>
+            ServerAlias <span class="pl-c1">test</span>.sfynx.<span class="pl-k">local</span>
+            DocumentRoot /var/www/cmf-sfynx/web/
+            <span class="pl-k">&lt;</span>Directory <span class="pl-s"><span class="pl-pds">"</span>/var/www/cmf-sfynx/web<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+                    Options Indexes FollowSymLinks MultiViews
+                    AllowOverride None
+                    RewriteEngine On
+
+                    RewriteCond %{REQUEST_FILENAME} <span class="pl-k">!</span>-f
+                    RewriteRule ^(.<span class="pl-k">*</span>)$ app_test.php [QSA,L]
+
+                    <span class="pl-c">#php_value auto_prepend_file "/var/www/xhprof/external/header.php"</span>
+                    <span class="pl-c">#php_value auto_append_file "/var/www/xhprof/external/footer.php"</span>
+
+                    <span class="pl-c">#Require all granted</span>
+                    Order allow,deny
+                    allow from all
+            <span class="pl-k">&lt;</span>/Directory<span class="pl-k">&gt;</span>
+            ErrorLog <span class="pl-smi">${APACHE_LOG_DIR}</span>/error_sfynx_test.log
+            LogFormat <span class="pl-s"><span class="pl-pds">"</span>%{X-Forwarded-For}i %l %u %t <span class="pl-cce">\"</span>%r<span class="pl-cce">\"</span> %&gt;s %b <span class="pl-cce">\"</span>%{Referer}i<span class="pl-cce">\"</span> <span class="pl-cce">\"</span>%{User-Agent}i<span class="pl-cce">\"</span><span class="pl-pds">"</span></span> varnishcombined
+            CustomLog <span class="pl-smi">${APACHE_LOG_DIR}</span>/access-test.log varnishcombined
+    <span class="pl-k">&lt;</span>/VirtualHost<span class="pl-k">&gt;</span>
+</pre></div>
+
+<p>And run a2ensite to create the alias</p>
+
+<div class="highlight highlight-bash"><pre>    a2enmod rewrite
+    a2enmod expires
+    sudo a2ensite sfynx
+</pre></div>
+
+<p>Then update the hosts file /etc/hosts</p>
+
+<div class="highlight highlight-bash"><pre>    sudo nano /etc/hosts</pre></div>
+
+<p>And add these lines</p>
+
+<div class="highlight highlight-bash"><pre>    127.0.0.1       www.sfynx.<span class="pl-k">local</span>
+    127.0.0.1       <span class="pl-c1">test</span>.sfynx.<span class="pl-k">local</span></pre></div>
+
+<h3>
+<a id="step-7-connexion-on-login" class="anchor" href="#step-7-connexion-on-login" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 7: Connexion on /login</h3>
 
 <p>To connect as default super administrator:</p>
 
@@ -313,11 +354,41 @@ to create a new project is to use it.</p>
 <p><strong>The password must be changed at the first use.</strong></p>
 
 <h3>
-<a id="step-7-run-the-tests" class="anchor" href="#step-7-run-the-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 7: Run the tests</h3>
+<a id="step-8-run-the-phpunit-tests" class="anchor" href="#step-8-run-the-phpunit-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 8: Run the phpunit tests</h3>
 
 <div class="highlight highlight-bash"><pre>
-    phpunit -c app/
-    casperjs <span class="pl-s3">test</span> app/Tests/casperjs/ --base-url=127.0.0.1:4042 --pre=app/Resources/casperjs/pre.js
+    bin/phpunit -c app vendor/sfynx-project
+    casperjs <span class="pl-c1">test</span> app/Tests/casperjs/ --base-url=127.0.0.1:4042 --pre=app/Resources/casperjs/pre.js
+</pre></div>
+
+<h3>
+<a id="step-9-run-behat-tests" class="anchor" href="#step-9-run-behat-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 9: Run Behat tests</h3>
+
+<p>In first step, you have to install and configure Selenium Server :</p>
+
+<p>Download the Selenium Server from the project website.
+Run the server with the following command (update the version number to the one you downloaded):</p>
+
+<div class="highlight highlight-bash"><pre>
+    java -jar selenium-server-standalone-2.44.0.jar
+</pre></div>
+
+<p>After you just have to run behat.</p>
+
+<p><strong>To test the connexion handler</strong></p>
+
+<div class="highlight highlight-bash"><pre>
+    bin/behat --suite=auth
+    or
+    php app/console sfynx:behat:execute --env=<span class="pl-c1">test</span> --suite=auth
+</pre></div>
+
+<p><strong>To test the Cmf (creation of page with widget)</strong></p>
+
+<div class="highlight highlight-bash"><pre>
+    bin/behat --suite=cmf
+    or
+    php app/console sfynx:behat:execute --env=<span class="pl-c1">test</span> --suite=cmf
 </pre></div>
         </section>
 
