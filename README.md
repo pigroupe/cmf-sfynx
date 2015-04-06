@@ -86,8 +86,8 @@ We have create an installer script shell which execute th e sfynx install.
 
 ``` bash
 
-    chmod +x app/config/scriptshell/installer-sfynx.sh
-    ./app/config/scriptshell/installer-sfynx.sh
+    chmod +x sysadmin/scriptshell/installer-sfynx.sh
+    ./sysadmin/scriptshell/installer-sfynx.sh
     
 ``` 
 
@@ -181,7 +181,7 @@ Many systems allow you to use ACL chmod a +.
 **Execute initialize.xml configuration**
 ``` bash
 
-    bin/phing -f app/phing/initialize.xml rebuild
+    bin/phing -f app/config/phing/initialize.xml rebuild
 
 ```
 

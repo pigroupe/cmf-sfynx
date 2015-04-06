@@ -33,6 +33,7 @@
     <import file="${dir.app}/config/phing/doctrine.xml" />
     <import file="${dir.app}/config/phing/static-analysis.xml" />
     <import file="${dir.app}/config/phing/test-php-unit.xml" />
+    <import file="${dir.app}/config/phing/test-javascript.xml" /> 
     <import file="${dir.app}/config/phing/documentation.xml" />
 
     <!-- ************ -->
