@@ -20,7 +20,7 @@ nbproject/*
 vendor/*
 !vendor/sfynx-project/
 !vendor/sonata-project/
-!vendor/sonata-project-new/
+!vendor/sonata-project-news/
 !vendor/Pear/
 !vendor/Zend/
 */logs/*
