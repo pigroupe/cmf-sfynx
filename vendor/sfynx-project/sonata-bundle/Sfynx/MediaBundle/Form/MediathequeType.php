@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints;
 
+use PiApp\GedmoBundle\Entity\Category;
+
 /**
  * Description of the MediaType form.
  *
@@ -84,6 +86,16 @@ class MediathequeType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id_category = null;
+        if ($builder->getData()->getCategory()
+                instanceof Category
+        ) {
+            $id_category = $builder->getData()->getCategory()->getId();
+        }
+        if (isset($_POST['sfynx_mediabundle_mediatype_image']['category'])) {
+            $id_category = $_POST['sfynx_mediabundle_mediatype_image']['category'];
+        }  
+        //
         $builder
                 ->add('status', 'hidden', array(
                     "data"        => $this->_status,
@@ -103,80 +115,109 @@ class MediathequeType extends AbstractType
         if ($this->_simpleLink == "all"){
             $builder            
                  ->add('enabled', 'checkbox', array(
-                        //'data'  => true,
-                         'label'    => 'pi.form.label.field.enabled',
-                         "label_attr" => array(
-                                 "class"=> $this->_class,
-                         ),
+                    //'data'  => true,
+                     'label'    => 'pi.form.label.field.enabled',
+                     "label_attr" => array(
+                             "class"=> $this->_class,
+                     ),
                 ))           
                  ->add('category', 'entity', array(
-                        'class'         => 'PiAppGedmoBundle:Category',
-                         'query_builder' => function(EntityRepository $er) {
-                             $translatableListener = $this->_container->get('gedmo.listener.translatable');
-                             $translatableListener->setTranslationFallback(true);
-                             return $er->createQueryBuilder('k')
-                             ->select('k')
-                             ->where('k.type = :type')
-                             ->orderBy('k.name', 'ASC')
-                             ->setParameter('type', 2);
-                         },
-                        'property'         => 'name',
-                        'empty_value'     => 'pi.form.label.select.choose.category',
-                        'multiple'        => false,
-                        'required'      => false,
-                        "attr" => array(
-                                "class"=>"pi_simpleselect",
-                        ),
-                         'label'    => "pi.form.label.field.category",
-                         "label_attr" => array(
-                                 "class"=> $this->_class,
-                         ),
+                    'class' => 'PiAppGedmoBundle:Category',
+                    'query_builder' => function(EntityRepository $er) use ($id_category) {
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);
+                        return $er->createQueryBuilder('k')
+                        ->select('k')
+                        ->where('k.type = :type')
+                        ->andWhere("k.id IN (:id)")
+                        ->orderBy('k.name', 'ASC')
+                        ->setParameter('id', $id_category)
+                        ->setParameter('type', 2);
+                    },
+                    'empty_value' => 'pi.form.label.select.choose.category',
+                    'label'    => "pi.form.label.field.category",
+                    'multiple'    => false,
+                    'required'  => false,
+                    "attr" => array(
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_selectentity_ajax", array('type'=> 2)),
+                        "data-selectid" => $id_category,
+                        "data-max" => 50,
+                    ),
+                    'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+                                    title="Ajouter une catégorie"
+                                    data-title="Catégorie"
+                                    data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_new", array("NoLayout"=>"false", 'type'=> 2)).'"
+                                    data-selectid="#piapp_gedmobundle_categorytype_id"
+                                    data-selecttitle="#piapp_gedmobundle_categorytype_name"
+                                    data-insertid="#sfynx_mediabundle_mediatype_image_category"
+                                    data-inserttype="multiselect"
+                                    ></a>',  
                 ))               
                  ->add('title', 'text', array(
-                         'label'            => "pi.form.label.field.title",
-                         "label_attr"     => array(
-                                 "class"=> $this->_class,
-                         ),
-                         'required'      => true,
-                         'constraints' => array(
-                         		new Constraints\NotBlank(),
-                         ),                         
+                    'label'            => "pi.form.label.field.title",
+                    "label_attr"     => array(
+                            "class"=> $this->_class,
+                    ),
+                    'required'      => true,
+                    'constraints' => array(
+                                   new Constraints\NotBlank(),
+                    ),                         
                  ))  
                  ->add('descriptif', 'textarea', array(
-                 		'label'    => 'pi.form.label.field.description',
-                 		"label_attr" => array(
-                 				"class"=>"content_collection",
-                 		),
+                    'label'    => 'pi.form.label.field.description',
+                    "label_attr" => array(
+                                    "class"=>"content_collection",
+                    ),
                  ))                           
                  ->add('url', 'text', array(
-                         "label"     => "pi.form.label.field.url",
-                         "label_attr" => array(
-                                 "class"=> $this->_class,
-                         ),
-                         'required'  => false,
+                    "label"     => "pi.form.label.field.url",
+                    "label_attr" => array(
+                            "class"=> $this->_class,
+                    ),
+                    'required'  => false,
                  ))                     
             ;
         }elseif ($this->_simpleLink == "simpleCategory"){
             $builder
                 ->add('enabled', 'hidden', array(
-                        'data'  => true,
-                         "label_attr" => array(
-                                 "class"=> $this->_class,
-                         ),
+                    'data'  => true,
+                     "label_attr" => array(
+                             "class"=> $this->_class,
+                     ),
                 ))   
                 ->add('category', 'entity', array(
-                            'class' => 'PiAppGedmoBundle:Category',
-                            'property' => 'name',
-                            'empty_value' => 'pi.form.label.select.choose.category',
-                            'multiple'    => false,
-                            'required'  => false,
-                            "attr" => array(
-                                    "class"=>"pi_simpleselect",
-                            ),
-                            'label'    => "pi.form.label.field.category",
-                             "label_attr" => array(
-                                     "class"=> $this->_class,
-                             ),
+                    'class' => 'PiAppGedmoBundle:Category',
+                    'query_builder' => function(EntityRepository $er) use ($id_category) {
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);
+                        return $er->createQueryBuilder('k')
+                        ->select('k')
+                        ->where('k.type = :type')
+                        ->andWhere("k.id IN (:id)")
+                        ->orderBy('k.name', 'ASC')
+                        ->setParameter('id', $id_category)
+                        ->setParameter('type', 2);
+                    },
+                    'empty_value' => 'pi.form.label.select.choose.category',
+                    'label'    => "pi.form.label.field.category",
+                    'multiple'    => false,
+                    'required'  => false,
+                    "attr" => array(
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_selectentity_ajax", array('type'=> 2)),
+                        "data-selectid" => $id_category,
+                        "data-max" => 50,
+                    ),
+                    'widget_suffix' => '<a class="button-ui-mediatheque button-ui-dialog"
+                                    title="Ajouter une catégorie"
+                                    data-title="Catégorie"
+                                    data-href="'.$this->_container->get('sfynx.tool.route.factory')->getRoute("admin_gedmo_category_new", array("NoLayout"=>"false", 'type'=> 2)).'"
+                                    data-selectid="#piapp_gedmobundle_categorytype_id"
+                                    data-selecttitle="#piapp_gedmobundle_categorytype_name"
+                                    data-insertid="#piapp_gedmobundle_slidertype_category"
+                                    data-inserttype="multiselect"
+                                    ></a>',  
                 ))
             ; 
         } elseif ( ($this->_simpleLink == "simpleDescriptif") || ($this->_simpleLink == "simpleWithIcon") ) {

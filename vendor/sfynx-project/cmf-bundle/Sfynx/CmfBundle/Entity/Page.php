@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @subpackage   Admin_Entities
+ * @category   Cmf
  * @package    Entity
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-12-28
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,10 +31,15 @@ use Doctrine\ORM\Mapping\Index;
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("route_name")
  * 
- * @subpackage   Admin_Entities
+ * @category   Cmf
  * @package    Entity
- * 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class Page
 {
@@ -45,8 +55,8 @@ class Page
     /**
      * @var \Sfynx\AuthBundle\Entity\User $user
      *
-     * @ORM\ManyToOne(targetEntity="Sfynx\AuthBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Sfynx\AuthBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
     
@@ -211,8 +221,6 @@ class Page
         $this->page_js        = new \Doctrine\Common\Collections\ArrayCollection();
         
         $this->setEnabled(true);
-        //$this->setCreatedAt(new \DateTime());
-        //$this->setUpdatedAt(new \DateTime());
     }
     
     public function __toString()
@@ -382,7 +390,7 @@ class Page
      *
      * @param \Sfynx\AuthBundle\Entity\User
      */
-    public function setUser(\Sfynx\AuthBundle\Entity\User $user)
+    public function setUser($user)
     {
         $this->user = $user;
     }
@@ -423,7 +431,7 @@ class Page
     /**
      * Remove a translation from the collection of related translations
      *
-     * @param  \Sfynx\CmfBundle\Entity\TranslationPage    $translation
+     * @param \Sfynx\CmfBundle\Entity\TranslationPage $translation
      */
     public function removeTranslation(\Sfynx\CmfBundle\Entity\TranslationPage $translation)
     {
@@ -446,13 +454,15 @@ class Page
      *  Get the translation according to the language
      *
      * @param string $locale
+     * 
      * @return \Sfynx\CmfBundle\Entity\TranslationPage
      */
     public function getTranslationByLocale($locale)
     {
         foreach($this->translations as $key => $trans){
-            if ($trans->getLangCode()->getId() == $locale)
+            if ($trans->getLangCode()->getId() == $locale) {
                 return $trans;
+            }
         }
         return null;
     }    
@@ -460,7 +470,7 @@ class Page
     /**
      * Add blocks
      *
-     * @param \Sfynx\CmfBundle\Entity\Block    $block
+     * @param \Sfynx\CmfBundle\Entity\Block $block
      */
     public function addBlock(\Sfynx\CmfBundle\Entity\Block $block)
     {
@@ -478,11 +488,11 @@ class Page
     	// we order by position value.
     	$iterator = $this->blocks->getIterator();
     	$iterator->uasort(function ($first, $second) {
-    		if ($first === $second) {
-    			return 0;
-    		}
-    		 
-    		return (int) $first->getPosition() < (int) $second->getPosition() ? -1 : 1;
+            if ($first === $second) {
+                return 0;
+            }
+
+            return (int) $first->getPosition() < (int) $second->getPosition() ? -1 : 1;
     	});
     	$this->blocks = new \Doctrine\Common\Collections\ArrayCollection(iterator_to_array($iterator));
     	
@@ -492,9 +502,9 @@ class Page
     /**
      * Set rubrique
      *
-     * @param \Sfynx\CmfBundle\Entity\Rubrique    $rubrique
+     * @param \Sfynx\CmfBundle\Entity\Rubrique $rubrique
      */
-    public function setRubrique(\Sfynx\CmfBundle\Entity\Rubrique $rubrique)
+    public function setRubrique($rubrique)
     {
         $this->rubrique = $rubrique;
     }
@@ -512,9 +522,9 @@ class Page
     /**
      * Set layout
      *
-     * @param \Sfynx\AuthBundle\Entity\Layout    $layout
+     * @param \Sfynx\AuthBundle\Entity\Layout $layout
      */
-    public function setLayout(\Sfynx\AuthBundle\Entity\Layout $layout)
+    public function setLayout($layout)
     {
         $this->layout = $layout;
     }
@@ -532,7 +542,7 @@ class Page
     /**
      * Add Css Page
      *
-     * @param \Sfynx\CmfBundle\Entity\Page    $Page
+     * @param \Sfynx\CmfBundle\Entity\Page $Page
      */
     public function addPageCss(\Sfynx\CmfBundle\Entity\Page $Page)
     {
@@ -542,7 +552,7 @@ class Page
     /**
      * Set Css Page
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection    $Page
+     * @param \Doctrine\Common\Collections\ArrayCollection $Page
      */
     public function setPageCss($Pages)
     {
@@ -562,7 +572,7 @@ class Page
     /**
      * Add Js Page
      *    
-     * @param \Sfynx\CmfBundle\Entity\Page    $Page
+     * @param \Sfynx\CmfBundle\Entity\Page $Page
      */
     public function addPageJs(\Sfynx\CmfBundle\Entity\Page $Page)
     {
@@ -572,7 +582,7 @@ class Page
     /**
      * Set Js Page
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection    $Pages
+     * @param \Doctrine\Common\Collections\ArrayCollection $Pages
      */    
     public function setPageJs($Pages)
     {
@@ -592,7 +602,7 @@ class Page
     /**
      * Add keyWord
      *
-     * @param \Sfynx\CmfBundle\Entity\KeyWord    $keywords
+     * @param \Sfynx\CmfBundle\Entity\KeyWord $keywords
      */
     public function addKeyWord(\Sfynx\CmfBundle\Entity\KeyWord $keywords)
     {
@@ -602,7 +612,7 @@ class Page
     /**
      * Set keywords
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection    $keyword
+     * @param \Doctrine\Common\Collections\ArrayCollection $keyword
      */    
     public function setKeywords($keyword)
     {

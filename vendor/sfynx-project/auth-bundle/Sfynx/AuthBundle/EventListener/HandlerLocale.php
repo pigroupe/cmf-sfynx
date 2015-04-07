@@ -6,7 +6,7 @@
  * @package    Handler
  * @subpackage Request
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -18,9 +18,7 @@
 namespace Sfynx\AuthBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\HttpKernel;
 
 /**
@@ -30,7 +28,7 @@ use Symfony\Component\HttpKernel\HttpKernel;
  * @package    Handler
  * @subpackage Request
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -105,5 +103,4 @@ class HandlerLocale
            $_GET['_locale'] = $this->defaultLocale;   
        }
    }
-
 }

@@ -13,7 +13,7 @@
 namespace Sfynx\MediaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\CoreBundle\Controller\abstractController;
 use Sfynx\ToolBundle\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,6 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use Sfynx\MediaBundle\Entity\Mediatheque;
+use Sfynx\MediaBundle\Entity\Media;
 use Sfynx\MediaBundle\Form\MediathequeType;
 use Sfynx\MediaBundle\Entity\Translation\MediaTranslation;
 
@@ -166,20 +167,22 @@ class MediathequeController extends abstractController
         $tab = array();
         foreach ($entities as $obj) {
             $content = $obj->getId();
-            $title   = $obj->translate($locale)->getTitle();
+            $title   = $obj->getTitle();
             $cat     = $obj->getCategory();
             if ($title) {
                 $content .=  " - " .$title;
             }
             if (!is_null($cat)) {
-                $content .=  '('. $cat->translate($locale)->getName() .')';
+                $content .=  ' ('. $cat->getName() .')';
             }
-            if ( ($this->type == 'image') && ($obj->getImage() instanceof \Sfynx\MediaBundle\Entity\Media)) {
+            if (($this->type == 'image') 
+                    && ($obj->getImage() instanceof Media)
+            ) {
                 $content .= "<img width='100px' src=\"{{ media_url('".$obj->getImage()->getId()."', 'small', true, '".$obj->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
             }
             $tab[] = array(
-                'id' => $obj->getId(),
-                'text' =>$this->container->get('twig')->render($content, array())
+                'id'   => $obj->getId(),
+                'text' => $this->container->get('twig')->render($content, array())
             );
         }
     

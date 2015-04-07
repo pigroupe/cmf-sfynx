@@ -5,7 +5,7 @@
  * @subpackage Auth
  * @package    Tests
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2012-03-08
+ * @since      2015-01-08
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,13 +15,13 @@ namespace Sfynx\AuthBundle\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Doctrine\ORM\Tools\SchemaTool;
+use Symfony\Component\Process\Process;
+use Sfynx\AuthBundle\DataFixtures\ORM\UsersFixtures;
 
 /**
  * This is the base test case for all functional tests.
  * It bootstraps the database before each test class.
- *
- * @todo Decide if this shouldn't go to bootstrap ?
- *       Maybe replace the database by a SQLite in memory ?
  *
  * @subpackage Auth
  * @package    Tests
@@ -29,20 +29,41 @@ use Symfony\Bundle\FrameworkBundle\Client;
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
-    const USER_EMAIL = 'user@gmail.com';
-    const USER_USERNAME = 'user';
-    const USER_PASS = 'user';
+    const URL_CONNECTION         = '/login';
+    const URL_CONNECTION_CHECK   = '/login_check';
+    const URL_CONNECTION_FAILURE = '/login_failure';
+    const URL_DECONNECTION       = '/logout';
     
-    const ADMIN_EMAIL = 'admin@hotmail.com';
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASS = 'admin';
-
-    const URL_CONNECTION = '/login';
-    const URL_DECONNECTION = '/logout';
-
     /** @var Application */
-    private static $application;
+    protected static $application;
+    
+    protected static $kernel;
+    
+    protected static $em;
+    
+    protected static $metadata;
+    
+    protected static $translator;
+    
+    protected $validator;
+    
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
 
+        static::$kernel = static::createKernel();
+        static::$kernel->boot();
+        
+        static::$kernel->getContainer()->get('request')->setLocale('en_EN');
+
+        static::$em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        
+        static::$translator = static::$kernel->getContainer()->get('translator');
+        
+        $schemaTool = new SchemaTool(static::$em);
+        static::$metadata = static::$em->getMetadataFactory()->getAllMetadata();
+    }    
+    
     protected static function runCommand($command)
     {
         $command = sprintf('%s --quiet', $command);
@@ -65,22 +86,52 @@ abstract class WebTestCase extends BaseWebTestCase
 
     protected static function loadFixtures()
     {
-        self::runCommand('doctrine:fixtures:load @SfynxAuthBundle --env=test');
+        self::runCommand('doctrine:fixtures:load --append --fixtures=vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle --env=test');
     }
-
+    
     protected static function emptyDatabase()
     {
         self::runCommand('doctrine:database:drop --force --env=test');
         self::runCommand('doctrine:database:create --env=test');
         self::runCommand('doctrine:schema:create --env=test');
     }
+    
+    protected static function emptyCache()
+    {
+        $process = new Process("php app/console cache:clear --env=test");
+        $process->setTimeout(2);
+        $process->run();
+    } 
+    
+    protected static function emptyLoginFailure()
+    {
+        $path_dir_login_failure = static::$kernel->getContainer()->getParameter('sfynx.auth.loginfailure.cache_dir');
+        $path_dir_login_failure = realpath($path_dir_login_failure);        
+        if (strlen($path_dir_login_failure)>= 2) {        
+            $process = new Process("rm -rf $path_dir_login_failure/*");        
+            $process->setTimeout(2);
+            $process->run();
+        }
+    }     
+    
+    protected static function updateSchema()
+    {
+        self::runCommand('doctrine:schema:update --force --env=test');
+    }     
 
     /**
-     * @param  \Symfony\Bundle\FrameworkBundle\Client $client
-     * @return \Symfony\Bundle\FrameworkBundle\Client
+     * @param Client  $client
+     * @param boolean $is_redirection
+     * 
+     * @return Client
      */
-    protected function loginRoleUser(Client $client = null)
-    {
+    protected function loginRoleUser(
+            Client $client = null, 
+            $is_redirection = true, 
+            $username = UsersFixtures::USER_USERNAME, 
+            $password = UsersFixtures::USER_PASS,
+            $role = '{"0":"ROLE_USER"}'
+    ) {
         if (!$client) {
             $client = static::createClient();
         }
@@ -89,37 +140,48 @@ abstract class WebTestCase extends BaseWebTestCase
         $client->submit(
             $form,
             array(
-                'roles' => '{"0":"ROLE_USER"}',
-                '_username' => self::USER_USERNAME,
-                '_password' => self::USER_PASS
+                'roles' => $role,
+                '_username' => UsersFixtures::USER_USERNAME,
+                '_password' => UsersFixtures::USER_PASS
             )
         );
-        $client->followRedirect();
+        if ($is_redirection) {
+            $client->followRedirect();
+        }
 
         return $client;
     }
 
     /**
-     * @param  \Symfony\Bundle\FrameworkBundle\Client $client
-     * @return \Symfony\Bundle\FrameworkBundle\Client
+     * @param Client  $client
+     * @param boolean $is_redirection
+     * 
+     * @return Client
      */
-    protected function loginRoleAdmin(Client $client = null)
-    {
+    protected function loginRoleAdmin(
+            Client $client = null, 
+            $is_redirection = true, 
+            $username = UsersFixtures::ADMIN_USERNAME, 
+            $password = UsersFixtures::ADMIN_PASS,
+            $role = '{"0":"ROLE_ADMIN","1":"ROLE_SUPER_ADMIN"}'
+    ) {
         if (!$client) {
             $client = static::createClient();
         }
-        $client->request('GET', self::URL_CONNECTION);
+        $client->request('GET', self::URL_CONNECTION);        
         
         $form = $client->getCrawler()->filter('form input[type=submit]')->first()->form();
         $client->submit(
             $form,
             array(
-                'roles' => '{"0":"ROLE_ADMIN","1":"ROLE_SUPER_ADMIN"}',
-                '_username' => self::ADMIN_USERNAME,
-                '_password' => self::ADMIN_PASS
+                'roles' => $role,
+                '_username' => $username,
+                '_password' => $password
             )
         );
-        $client->followRedirect();
+        if ($is_redirection) {
+            $client->followRedirect();
+        }
 
         return $client;
     }
@@ -185,9 +247,19 @@ abstract class WebTestCase extends BaseWebTestCase
         }
     }
 
-    protected function assertHasPropelHandlerCalled($profile, $event)
+    protected function assertHasEventsCalled($profile, $event)
     {
-        $calledEvents = $profile->getCollector('propel_events')->getCalledListeners();
+        $calledEvents = $profile->getCollector('events')->getCalledListeners();
         $this->assertContains($event, implode(array_keys($calledEvents)));
     }
+    
+    protected function getValidator()
+    {
+        if (!$this->validator) {
+            $client = static::createClient();
+            $this->validator = $client->getContainer()->get('validator');
+        }
+
+        return $this->validator;
+    }    
 }

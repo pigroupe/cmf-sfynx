@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Cache> project.
  *
- * @subpackage Cache
- * @package Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-03-26
+ * @category   Cache
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,9 +25,15 @@ use Symfony\Component\DependencyInjection\Loader;
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @subpackage Cache
- * @package Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Cache
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxCacheExtension extends Extension
 {

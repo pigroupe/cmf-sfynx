@@ -1,0 +1,74 @@
+	<script type="text/javascript">
+	//<![CDATA[
+
+		$(document).ready(function() {		
+		    $('a.tree-reorder-link').click(function () {
+		        var link = $("select[name='select-root-category'] option:selected").attr('value');
+		        $(this).attr('href', link + $(this).attr('href'));
+		        return true;
+		    });
+
+            $("#tree ul li:first-child").each(function(){
+                $(this).find(".linkUp:first").hide();
+            });
+
+            $("#tree ul li:last-child").each(function(){
+                $(this).find(".linkDown:last").hide();
+            });
+
+		    $("a.tree-action").click(function(e){
+                // empêche le lien de créer un « # » dans l'URL
+                e.preventDefault();
+		    	var url = $(this).data('url');
+		    	//console.log(url)
+		    	$("#tree-dialog").attr('title', 'Modification de la rubrique');
+		    	$("#tree-dialog").html('<iframe id="modalIframeId" width="99%" height="99%" style="overflow-x: hidden; overflow-y: auto" marginWidth="0" marginHeight="0" frameBorder="0" src="'+url+'" />').dialog({
+			    	width: 450,
+			    	height: 600,
+			    	open: function () {
+			    		$(this).attr('title', 'Formulaire');
+					},
+					close: function () {
+						window.location.reload(true);
+					}
+			    });
+			});		    
+		    $("a.button-ui-create").button({icons: {primary: "ui-icon-plus"}});
+		});
+
+	//]]>
+	</script>
+	
+	<div id="tree-dialog" >&nbsp;</div>
+	
+	<table>
+		    <tr>
+                <td>
+		            <a href="{{ path('admin_content_rub_new', {'NoLayout':NoLayout}) }}" class="button-ui-create">{{ 'pi.grid.action.create'|trans }}</a>		
+				</td>
+		    </tr>
+	</table>		
+	
+	{% if tree %}
+		<div id="tree">
+		    {{ tree|raw }}
+		</div>
+	{% else %}
+		<div class="alert-message info"><p>There are no nodes in tree to display</p></div>
+	{% endif %}
+
+	{% set options_nested = {'acc-id-box': 'tree', 'acc-id': 'acc1', 'acc-type': "accordeonUl"} %}
+	{{ renderJquery('ACCORDEON', 'nested', options_nested )|raw }}
+	
+	{% if (NoLayout != true) %}
+		{% set options_chartpage = {
+			'id':'orga',
+			'entity':'PluginsContentBundle:Rub',
+			'category':category,
+			'action':'renderDefault',
+			'menu': 'organigram',
+			'enabledonly':'false',
+			'fields':{'0':{'content':'title', 'class':'pi_tree_desc'},'1':{'content':'leftright'}}
+		} %}
+		{#{ renderJquery('MENU', 'org-chart-page', options_chartpage )|raw }#}
+	{% endif %}

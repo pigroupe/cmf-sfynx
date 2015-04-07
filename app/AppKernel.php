@@ -7,7 +7,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-            $bundles = array(
+        $bundles = array(
                 
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -50,20 +50,23 @@ class AppKernel extends Kernel
             new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
             new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
             new Sfynx\WsBundle\SfynxWsBundle(),
+            new Sfynx\WsseBundle\SfynxWsseBundle(),
+            new Sfynx\ApiBundle\SfynxApiBundle(),
             new Sfynx\CacheBundle\SfynxCacheBundle(),
             new Sfynx\ToolBundle\SfynxToolBundle(),
+            new Sfynx\MigrationBundle\SfynxMigrationBundle(),
             new Sfynx\CoreBundle\SfynxCoreBundle(),
             new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
             new Sfynx\BrowserBundle\SfynxBrowserBundle(),
             new Sfynx\EncryptBundle\SfynxEncryptBundle(),
             new Sfynx\PositionBundle\SfynxPositionBundle(),
             new Sfynx\AdminBundle\SfynxAdminBundle(),
-            new Sfynx\LibraryBundle\SfynxLibraryBundle(),
             new Sfynx\MediaBundle\SfynxMediaBundle(),
             new Sfynx\ClassificationBundle\SfynxClassificationBundle(),                
             new Sfynx\TemplateBundle\SfynxTemplateBundle(),
             new Sfynx\SmoothnessBundle\SfynxSmoothnessBundle(),
             new PiApp\GedmoBundle\PiAppGedmoBundle(),
+            new Cmf\ContentBundle\CmfContentBundle(),
             new Sfynx\AuthBundle\SfynxAuthBundle(),
             new Sfynx\CmfBundle\SfynxCmfBundle(),
 
@@ -72,11 +75,16 @@ class AppKernel extends Kernel
             new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
             new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(), 
         );
-
+            
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+        }
+        
+        if ('test' === $this->getEnvironment()) {
+            $bundles[] = new Sfynx\BehatBundle\SfynxBehatBundle();
+            $bundles[]  = new Behat\MinkBundle\MinkBundle();
         }
 
         return $bundles;
@@ -95,8 +103,8 @@ class AppKernel extends Kernel
     protected function initializeContainer() {
     	parent::initializeContainer();
     	if (PHP_SAPI == 'cli') {
-    		$this->getContainer()->enterScope('request');
-    		$this->getContainer()->set('request', new \Symfony\Component\HttpFoundation\Request(), 'request');
+            $this->getContainer()->enterScope('request');
+            $this->getContainer()->set('request', new \Symfony\Component\HttpFoundation\Request(), 'request');
     	}
     }    
 }

@@ -1,12 +1,12 @@
 <div id="div-connexion">
 	{% if is_granted("IS_AUTHENTICATED_FULLY") %}
 	<div class="login connected">
-		<h3 class="tt-clr tt-9 bold">BONJOUR</h3>
-		<p class="tt-clr  bold">{% if (app.user.nickname is not empty) %}{{ app.user.nickname }} {{ app.user.name }}{% else %}{{ app.user.username }}{% endif %}</p>
-		<a href="{{ path('home_page') }}" class="mySpace">Home</a>
-		<div class="action cf">
-				<a href="{{ path('fos_user_security_logout') }}" class="fleft">{{ 'layout.logout'|trans([], 'FOSUserBundle') }}</a>
-		</div>	
+            <h3 class="tt-clr tt-9 bold">BONJOUR</h3>
+            <p class="tt-clr  bold">{% if (app.user.nickname is not empty) %}{{ app.user.nickname }} {{ app.user.name }}{% else %}{{ app.user.username }}{% endif %}</p>
+            <a href="{{ path('home_page') }}" class="mySpace">Home</a>
+            <div class="action cf">
+                <a href="{{ path('fos_user_security_logout') }}" class="fleft" id="behatLinkLogout">{{ 'layout.logout'|trans([], 'FOSUserBundle') }}</a>
+            </div>	
 	</div>
 	{% else %}
 	<div class="login">	

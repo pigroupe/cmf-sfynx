@@ -6,11 +6,11 @@ annotation_sfynx_cmf:
     type:     annotation    
     
 #
-#    SfynxCoreBundle customer route loader 
+#    SfynxCmfBundle customer route loader 
 #    
 fos_route_extra:
     resource: .
-    type: sfynxtemplateextra    
+    type: sfynxcmfextra    
 
 #
 #   Import Default routing files

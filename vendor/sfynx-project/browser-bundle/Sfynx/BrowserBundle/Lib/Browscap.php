@@ -563,6 +563,10 @@ class Browscap
                     $tmp_patterns[$pattern] = $i;
                 } else {
                     $compressed_pattern = preg_replace('@\d@', '(\d)', $pattern);
+//                    $compressed_pattern = preg_replace_callback('@\d@', function($matches) {
+//                        return '(\d)';
+//                    }, $pattern);                  
+                    
 
                     if (!isset($tmp_patterns[$compressed_pattern])) {
                         $tmp_patterns[$compressed_pattern] = array('first' => $pattern);

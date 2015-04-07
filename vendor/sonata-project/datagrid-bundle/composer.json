@@ -1,0 +1,30 @@
+{
+    "name": "sonata-project/datagrid-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SonataDatagridBundle",
+    "keywords": ["datagrid", "sonata"],
+    "homepage": "http://sonata-project.org/bundles/datagrid",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@sonata-project.org",
+            "homepage": "http://sonata-project.org"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/SonataDatagridBundle/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Sonata\\DatagridBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2.x-dev"
+        }
+    },
+    "require-dev": {
+        "doctrine/orm": "~2.4"
+    }
+}

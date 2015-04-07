@@ -6,7 +6,7 @@
  * @package    Handler
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -27,10 +27,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
-use Sfynx\AuthBundle\Event\RedirectionEvent;
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
 
@@ -43,7 +40,7 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  * @package    Handler
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -51,11 +48,6 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  */
 class HandlerLogin
 {
-    /**
-     * @var \Sfynx\ToolBundle\Route\RouteTranslatorFactory
-     */
-    protected $router;
-        
     /** 
      * @var \Symfony\Component\Security\Core\SecurityContext
      */
@@ -82,21 +74,6 @@ class HandlerLogin
     protected $container;    
     
     /**
-     * @var string $redirect route name of the login redirection
-     */    
-    protected $redirect = "";
-    
-    /**
-     * @var string $template layout file name
-     */    
-    protected $template = "";
-    
-    /**
-     * @var string
-     */
-    protected $layout;
-    
-    /**
      * @var string
      */
     protected $locale;  
@@ -115,7 +92,6 @@ class HandlerLogin
         $this->dispatcher   = $dispatcher;
         $this->em           = $doctrine->getManager();
         $this->container    = $container;
-        $this->router       = $this->container->get('sfynx.tool.route.factory');
     }
 
     /**
@@ -142,6 +118,37 @@ class HandlerLogin
     }    
     
     /**
+     * Sets the state of the redirection.
+     *
+     * @access protected
+     * @return void
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function setParams()
+    {
+        // we get params
+        $this->date_expire    = $this->container->getParameter('sfynx.core.cookies.date_expire');
+        $this->date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
+    }    
+    
+    /**
+     * Sets the user local value.
+     *
+     * @access protected
+     * @return void
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function setLocaleUser()
+    {
+    	if (method_exists($this->getUser()->getLangCode(), 'getId')) {
+            $this->locale = $this->getUser()->getLangCode()->getId();
+    	} else {
+            $this->locale = $this->container->get('request')->getPreferredLanguage();
+    	}
+    	$this->getRequest()->setLocale($this->locale);
+    }      
+    
+    /**
      * Invoked after the response has been created.
      * Invoked to allow the system to modify or replace the Response object after its creation.
      *
@@ -155,44 +162,10 @@ class HandlerLogin
     {
         // we delete the username info in session if it exists
         if ($this->container->get('request')->getSession()->has('login-username')) {
-        	$this->container->get('request')->getSession()->remove('login-username');
+            $this->container->get('request')->getSession()->remove('login-username');
         }
-        // we apply all events allowed to change the url redirection
-        $event_redirection = new RedirectionEvent($this->router, $this->redirect);
-        $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGEREDIRECTION, $event_redirection);
-        $redirection = $event_redirection->getRedirection();
-        // we deal with the general case with a non ajax connection.
-        if (!empty($redirection)) {
-            $response = new RedirectResponse($redirection);
-        } elseif (!empty($this->redirect)) {
-   		    $response = new RedirectResponse($this->router->getRoute($this->redirect));
-    	}  	
-        // we deal with the case where the connection is limited to a set of roles (ajax or not ajax connection).
-        if (isset($_POST['roles']) && !empty($_POST['roles'])) {
-        	$all_authorization_roles = json_decode($_POST['roles'], true);
-        	$best_roles_name = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
-        	// If the permisssion is not given.
-        	if (is_array($all_authorization_roles) && !in_array($best_roles_name, $all_authorization_roles)) {
-        		if ($this->getRequest()->isXmlHttpRequest()) {
-        			$response = new Response(json_encode("no-authorization"));
-        			$response->headers->set('Content-Type', 'application/json');
-        		} else {
-        			$referer_url = $this->container->get('sfynx.tool.route.factory')->getRefererRoute();
-        			$response = new RedirectResponse($referer_url);
-        			$this->redirect = 'home_page';
-        		}
-        	} else {
-        		if ($this->getRequest()->isXmlHttpRequest()) {
-        			$response = new Response(json_encode("ok"));
-        			$response->headers->set('Content-Type', 'application/json');
-        		}
-        	}
-        // we deal with the case where the connection is done in ajax without limited connection.
-        } elseif ($this->getRequest()->isXmlHttpRequest()) {
-        	$response = new Response(json_encode("ok"));
-        	$response->headers->set('Content-Type', 'application/json');
-        }
-        // Record the layout variable in cookies.
+
+        // we set the dateExpire value for cokkies
         if ($this->date_expire && !empty($this->date_interval)) {
             if (is_numeric($this->date_interval)) {
                 $dateExpire = time() + intVal($this->date_interval);
@@ -202,27 +175,11 @@ class HandlerLogin
             }
         } else {
             $dateExpire = 0;
-        }
-        // Record all cookies in relation with ws.
-        if ($this->application_id && !empty($this->application_id) && $this->container->hasParameter('ws.auth')) {
-        	$config_ws     = $this->container->getParameter('ws.auth');
-        	$key           = $config_ws['handlers']['getpermisssion']['key'];
-        	$userId        = $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($this->getUser()->getId(), $key);
-            $applicationId = $this->container->get('sfynx.tool.twig.extension.tool')->encryptFilter($this->application_id, $key);
-        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', $userId, $dateExpire));
-        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', $applicationId, $dateExpire));
-        	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-key', $key, $dateExpire));
-        	// $response->headers->getCookies();        	
-        }   
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', $this->layout, $dateExpire));
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-screen', $this->screen, $dateExpire));
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', $this->redirect, $dateExpire));
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-framework', 'Symfony 2.2', $dateExpire));
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', $this->locale, $dateExpire));
+        }        
         // we apply all events allowed to change the redirection response
-        $event_response = new ResponseEvent($response, $dateExpire);
+        $event_response = new ResponseEvent(null, $dateExpire, $this->getRequest(), $this->getUser(), $this->locale);
         $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
-        $response = $event_response->getResponse();
+        $response       = $event_response->getResponse();
         //
         $event->setResponse($response);        
     }    
@@ -285,75 +242,6 @@ class HandlerLogin
         // $exception = new \Exception('Some special exception');
         // $event->setException($exception);
     }
-    
-    /**
-     * Sets the state of the redirection.
-     *
-     * @access protected
-     * @return void
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function setParams()
-    {
-        // we get browser info
-        $browser = $this->getRequest()->attributes->get('sfynx-browser');
-        // we get params
-        $this->date_expire    = $this->container->getParameter('sfynx.core.cookies.date_expire');
-        $this->date_interval  = $this->container->getParameter('sfynx.core.cookies.date_interval');
-        $this->application_id = $this->container->getParameter('sfynx.core.cookies.application_id');
-        $this->is_browser_authorized  = $this->container->getParameter("sfynx.auth.browser.switch_layout_mobile_authorized");
-        $this->redirect       = $this->container->getParameter('sfynx.auth.login.redirect');
-        $this->template       = $this->container->getParameter('sfynx.auth.login.template');
-        // we get vars
-        $this->layout         = $this->getRequest()->attributes->get('sfynx-layout');
-        $this->screen         = $this->getRequest()->attributes->get('sfynx-screen');        
-        // we get the best role of the user.
-        $BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
-        if (!empty($BEST_ROLE_NAME)) {
-            $role         = $this->em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $BEST_ROLE_NAME));
-            if ($role instanceof \Sfynx\AuthBundle\Entity\Role) {
-                $RouteLogin = $role->getRouteLogin();
-                if (!empty($RouteLogin) && !is_null($RouteLogin)) {
-                    $this->redirect = $RouteLogin;
-                }
-                if ($role->getLayout() instanceof \Sfynx\AuthBundle\Entity\Layout) {
-                    $FilePc = $role->getLayout()->getFilePc();
-                    if (!empty($FilePc)  && !is_null($FilePc)) {
-                        $this->template = $FilePc;
-                    }
-                }
-            }
-        }
-        // Sets layout
-        if (
-            $this->is_browser_authorized
-            && $this->getRequest()->attributes->has('sfynx-browser') 
-            && $this->getRequest()->attributes->get('sfynx-browser')->isMobileDevice
-        ) {
-        	$this->layout    = $this->container->getParameter('sfynx.auth.theme.layout.admin.mobile') . $this->screen . '.html.twig';
-        } else {
-       		$this->layout    = $this->container->getParameter('sfynx.auth.theme.layout.admin.pc').$this->template;
-        }
-        // we modify sfynx-layout and sfynx-screen info in the request
-        $this->getRequest()->attributes->set('sfynx-layout', $this->layout);
-    }        
-
-    /**
-     * Sets the user local value.
-     *
-     * @access protected
-     * @return void
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function setLocaleUser()
-    {
-    	if (method_exists($this->getUser()->getLangCode(), 'getId')) {
-    		$this->locale = $this->getUser()->getLangCode()->getId();
-    	} else {
-    		$this->locale = $this->container->get('request')->getPreferredLanguage();
-    	}
-    	$this->getRequest()->setLocale($this->locale);
-    }    
     
     /**
      * Return the request object.

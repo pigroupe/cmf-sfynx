@@ -1,0 +1,123 @@
+{% initJquery 'GRID:grid-table' %}
+{% stylesheet getParameter('pi_app_admin.admin.theme_css')~':prepend' %}
+{% if NoLayout %}
+	{% stylesheet 'bundles/piappadmin/css/layout/admin/screen.css' %}
+	{% javascript 'bundles/piappadmin/js/jquery/custom_jquery.js' %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1><a href="{{ path('admin_homepage') }}" >Accueil</a> > Gestion des tag</h1>
+{% endblock %}
+ 
+{% block content %}
+    
+    {{ parent() }}
+
+	{% if NoLayout == false %}
+	<!--  start actions-box ............................................... -->
+	<div id="actions-box">
+        <a href="{{ path('admin_content_tag_new', {'NoLayout':NoLayout, 'category':category}) }}" class="action-edit" title="{{ 'pi.grid.action.create'|trans }}">{{ 'pi.grid.action.create'|trans }}</a>
+		<div class="clear"></div>
+	</div>
+	<!-- end actions-box........... -->
+	{% endif %}
+	
+	<table id="grid_tag" class="grid" >
+	    <thead>
+	        <tr>	            
+	            <th class="position" >Position</th>	                    
+	        	<th>Id</th>	            
+	            <th>{{ 'pi.page.form.tags'|trans }}</th>	            
+	            <th width="101px">{{ 'pi.create.name'|trans }}</th>	                        
+	            <th width="51px">{{ 'pi.page.form.status'|trans }}</th>	        	
+	            <th width="71px">Actions</th>
+	        </tr>
+	    </thead>
+	    <tfoot>
+			<tr>
+				<th data-type="input"><input type="text" name="" value="Position" style="width:100%" /></th>
+				<th data-type="input"><input type="text" name="" value="Id" style="width:100%" /></th>
+				<th data-column='2' data-title="{{ 'pi.form.label.field.tag'|trans }}"></th>
+				<th data-column='3' data-title="{{ 'pi.create.name'|trans }}"></th>
+				<th data-column='4' data-title="{{ 'pi.page.form.status'|trans }}" data-values='{"1":"Actif","0":"En attente d activation"}'></th>
+				<th></th>
+			</tr>
+		</tfoot>	    
+	    <tbody>
+	    {% if not isServerSide %}
+		    {% set num_line = 0 %}
+		    {% for entity in entities %}
+		        <tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_row_{{ entity.id }}'  >		
+		        	<td class="position" >{{ entity.position}}</td>
+		            <td><a href="{{ path('admin_content_tag_show', { 'id': entity.id, 'NoLayout': NoLayout, 'category':category }) }}" title="">{{ entity.id }}</a></td>		
+		            <td>
+		            	{{ entity.title|truncateText(55)|raw }}
+		            </td>		
+		            <td>{% if entity.createdat %}{{ entity.createdat|date('Y-m-d') }}{% endif%}</td>		
+		            <td class="enabled" >{{ entity.enabled}}</td>
+					<td width="130px">
+                        {#<a href="{{ path('admin_content_tag_show', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category }) }}" title="{{ 'pi.grid.action.show'|trans }}" class="button-ui-show">{{ 'pi.grid.action.show'|trans }}</a>#}
+                        <a href="{{ path('admin_content_tag_edit', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category}) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="button-ui-edit">{{ 'pi.grid.action.edit'|trans }}</a>
+					</td>                    
+		        </tr>
+		        {% if num_line == 0 %} 
+		        	{% set num_line = 1 %}
+		        {% else %}
+		        	{% set num_line = 0 %}
+		        {% endif %}	
+		                
+		    {% endfor %}
+	    {% endif %}
+	    </tbody>
+	</table>
+
+	{% set options_gridtabale = {'grid-name': 'grid_tag', 'grid-type':'simple', 
+	        'grid-server-side': isServerSide,
+			'grid-LengthMenu':15,
+			'grid-paginate':'true',
+			'grid-filters-active':'false',
+			'grid-state-save' : 'true',
+			'grid-filters': { 
+					'1':'Position',
+					'2':'Identifiant',
+				},
+            'grid-filter-date': {
+                '0': {'column' : 3, 'title-start': 'date min créa. ', 'title-end': 'date max créa.', 'right':'790', 'width':'183', 'format' : 'yy-mm-dd', 'idMin':'minc', 'idMax':'maxc'},
+            },
+			'grid-sorting': { 
+					'3':'asc',
+				},
+			'grid-filters-tfoot-up':'true',		
+			'grid-columns': { 
+					'0': { "bSortable": true },
+					'1': { "bSortable": true },
+					'2': { "bSortable": true },
+					'3': { "bSortable": true },
+					'4': { "bSortable": false },
+					'5': { "bSortable": false },
+				},				
+			'grid-visible': {
+				'0':'false',
+				'1':'false',
+				}		
+			} 			
+	%}
+    {% set grid_actions = {
+					'select_all': {'sButtonText':'pi.grid.action.select_all'},
+					'select_none': {'sButtonText':'pi.grid.action.select_none'},
+            }
+    %}
+    {% set grid_actions = grid_actions|merge({
+					'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'admin_content_tag_enabledentity_ajax','reload':0},
+					'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'admin_content_tag_disablentity_ajax', 'reload':0},
+                    }
+                )
+    %}
+    {% set options_gridtabale = options_gridtabale|merge({'grid-actions':grid_actions}) %}    
+	{{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}	
+
+{% endblock %}

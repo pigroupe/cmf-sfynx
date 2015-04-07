@@ -70,9 +70,9 @@ class CacheRoute
     {
         $this->container            = $container;
         $this->options['cache_dir'] = $container->get("kernel")->getCacheDir();
-        $this->environment            = ucfirst($container->get("kernel")->getEnvironment());
+        $this->environment          = ucfirst($container->get("kernel")->getEnvironment());
         // we get all routes existed
-        $this->collection            = $container->get('router')->getRouteCollection();
+        $this->collection           = $container->get('router')->getRouteCollection();
     }
 
     /**
@@ -112,10 +112,9 @@ class CacheRoute
         $cache         = new ConfigCache($this->file, false);  // //if (!$cache->isFresh($class))
         //if (!$cache->isFresh($class)) {
             $dumper     = new $this->options['matcher_dumper_class']($this->collection);
-        
             $options     = array(
-                    'class'      => $class,
-                    'base_class' => $this->options['matcher_base_class'],
+                'class'      => $class,
+                'base_class' => $this->options['matcher_base_class'],
             );
             try {
                 $cache->write($dumper->dump($options), $this->collection->getResources());
@@ -124,25 +123,23 @@ class CacheRoute
         //}
     }
     
-       /**
-        * Checks if the cache is still fresh.
-        *
-        * This method always returns true when debug is off and the
-        * cache file exists.
-        *
-        * @return Boolean true if the cache is fresh, false otherwise
-      */
+    /**
+     * Checks if the cache is still fresh.
+     *
+     * This method always returns true when debug is off and the
+     * cache file exists.
+     *
+     * @return Boolean true if the cache is fresh, false otherwise
+     */
     private function isFresh()
     {
         if (!file_exists($this->file)) {
             return false;
         }
-        
         $metadata = $this->file.'.meta';
         if (!file_exists($metadata)) {
             return false;
         }
-        
         $time = filemtime($this->file);
         $meta = unserialize(file_get_contents($metadata));
         foreach ($meta as $resource) {
@@ -151,6 +148,7 @@ class CacheRoute
                 return false;
             }
         }
+        
         return true;
     }    
 }

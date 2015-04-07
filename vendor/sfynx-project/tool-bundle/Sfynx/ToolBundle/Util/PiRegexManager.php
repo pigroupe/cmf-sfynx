@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-09-20
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,9 +27,15 @@ use Sfynx\ToolBundle\Builder\PiRegexManagerBuilderInterface;
  *  $result            = $RegexFormatter->LimiteCaractere($text, '0', 25); // obtains a datetime instance
  * </code>
  *
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class PiRegexManager implements PiRegexManagerBuilderInterface
 {

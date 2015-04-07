@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Translator> project.
  *
- * @subpackage   Translator
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-11-14
+ * @category   Translator
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,9 +25,15 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @subpackage   Translator
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Translator
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxTranslatorExtension extends Extension
 {
@@ -31,8 +42,8 @@ class SfynxTranslatorExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loaderYaml  = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loaderYaml  = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/service'));
         $loaderYaml->load('services.yml');
-    }
-    
+        $loaderYaml->load('services_subscriber.yml');
+    }    
 }

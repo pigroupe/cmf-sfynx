@@ -13,6 +13,8 @@
 namespace Sfynx\MediaBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Sfynx\ToolBundle\Util\PiFileManager;
+use Sfynx\MediaBundle\Entity\Media;
 
 /**
  * Tool Filters and Functions used in twig
@@ -87,8 +89,8 @@ class PiCropExtension extends \Twig_Extension
      */
     public function getFileFormFunction($media, $nameForm, $style = "display: block; text-align:center;margin: 30px auto;z-index:99999999999", $is_by_mimetype = true)
     {
-        if ($media instanceof \Sfynx\MediaBundle\Entity\Media){
-            $id         = $media->getId();
+        if ($media instanceof Media){
+            $id = $media->getId();
             try {
                     $file_url = $this->container->get('sonata.media.twig.extension')->path($id, "reference");
                     if ($is_by_mimetype){
@@ -130,7 +132,7 @@ class PiCropExtension extends \Twig_Extension
      */
     public function getPictureFormFunction($media, $nameForm, $format = 'reference', $style = "display: block; text-align:center;margin: 30px auto;", $idForm = "", $ClassName = '')
     {
-    	if ($media instanceof \Sfynx\MediaBundle\Entity\Media) {
+    	if ($media instanceof Media) {
             $id = $media->getId();
             if ($format != 'reference') {
                 $mediaCrop = $this->container->get('sonata.media.twig.extension')->path($media, $format);
@@ -181,7 +183,7 @@ class PiCropExtension extends \Twig_Extension
     	if ($format == "default") {
     		$format = "SfynxTemplateBundle:Template\\Crop:default.html.twig";
     	}
-    	if ($media instanceof \Sfynx\MediaBundle\Entity\Media) {            
+    	if ($media instanceof Media) {            
     		$crop     = $this->container->getParameter('sfynx.media.crop');
     		$globals  = $this->container->get('twig')->getGlobals();
             if (!empty($type) && (in_array($type, array('input', 'script')))) {
@@ -236,7 +238,7 @@ class PiCropExtension extends \Twig_Extension
      */    
     public function getPictureIndexFunction($media, $format = '', $width='', $height='')
     {
-        if ($media instanceof \Sfynx\MediaBundle\Entity\Media) {
+        if ($media instanceof Media) {
             $id = $media->getId();
             $mediaCrop = $this->container->get('sonata.media.twig.extension')->path($media, $format);
             if(file_exists($src = $this->container->get('kernel')->getRootDir() . '/../web'.$mediaCrop)) {
@@ -318,17 +320,17 @@ class PiCropExtension extends \Twig_Extension
         }        
         try {
             if (!$cachable){
-                $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
+                $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format) . "?v.$timestamp";
             } else {
                 $dossier = $this->container->getParameter("sfynx.core.cache_dir.media");
-                \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+                PiFileManager::mkdirr($dossier, 0777);
                 $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
-                $url_public_media = $this->container->get("sfynx.cache.filecache")->get($format.$pattern.$id.'_'.$timestamp);
-                if ( !$url_public_media ) {
-                    $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format);
+                $url_public_media = $this->container->get("sfynx.cache.filecache")->get($format.$pattern.$id.'_'.$timestamp);        
+                if (!$url_public_media) {
+                    $url_public_media = $this->container->get('sonata.media.twig.extension')->path($id, $format) . "?v.$timestamp";
                     $this->container->get("sfynx.cache.filecache")->set($format.$pattern.$id.'_'.$timestamp, $url_public_media, 0);
-                }         
-            }            
+                }       
+            }     
         } catch (\Exception $e) {
             $url_public_media = "";
         }

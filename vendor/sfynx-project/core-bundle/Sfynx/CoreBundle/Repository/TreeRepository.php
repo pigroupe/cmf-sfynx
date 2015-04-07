@@ -13,13 +13,11 @@
 namespace Sfynx\CoreBundle\Repository;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Gedmo\Tool\Wrapper\EntityWrapper;
-use Gedmo\Translatable\Mapping\Event\Adapter\ORM as TranslatableAdapterORM;
-use Doctrine\DBAL\Types\Type;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Translation Repository
@@ -41,7 +39,7 @@ class TreeRepository extends NestedTreeRepository
     private $_entityTranslationName = "";
         
     /**
-     * @var \Doctrine\ORM\Query
+     * @var Query
      */
     public $onChildrenQuery;
     
@@ -53,7 +51,7 @@ class TreeRepository extends NestedTreeRepository
     protected $_configurations = array();
     
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     protected $_container;    
     
@@ -62,18 +60,20 @@ class TreeRepository extends NestedTreeRepository
      */
     public function __construct(EntityManager $em, ClassMetadata $class)
     {
-           parent::__construct($em, $class);
-           
-           if (isset($this->getClassMetadata()->associationMappings['translations']) && !empty($this->getClassMetadata()->associationMappings['translations']))
-               $this->_entityTranslationName = $this->getClassMetadata()->associationMappings['translations']['targetEntity'];           
+        parent::__construct($em, $class);
+
+        if (isset($this->getClassMetadata()->associationMappings['translations']) 
+                && !empty($this->getClassMetadata()->associationMappings['translations'])
+        ) {
+            $this->_entityTranslationName = $this->getClassMetadata()->associationMappings['translations']['targetEntity'];
+        }
     }
     
     /**
      * Gets the container instance.
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      * @access protected
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function getContainer()
@@ -84,51 +84,61 @@ class TreeRepository extends NestedTreeRepository
     /**
      * Gets the container instance.
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function setContainer($container)
     {
         $this->_container = $container;
+        
         return $this;
     }    
     
     /**
      * add where for user roles
      *
-     * @param \Doctrine\ORM\QueryBuilder $query
-     * @return \Doctrine\ORM\QueryBuilder
-     * @access    public
-     *
+     * @param QueryBuilder $query QueryBuilder instance
+     * 
+     * @return QueryBuilder
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @author Riad Hellal <hellal.riad@gmail.com>
      */
-    public function checkRoles(\Doctrine\ORM\QueryBuilder $query)
+    public function checkRoles(QueryBuilder $query)
     {
-        if ( ($this->_container instanceof \Symfony\Component\DependencyInjection\ContainerInterface)
+        if ( ($this->_container instanceof ContainerInterface)
             && (true === $this->_container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
             && !($this->_container->get('security.context')->isGranted('ROLE_ADMIN'))    
         ){
             $entity_name = $this->_entityName;
-            if (isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']) && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name]) ){
+            if (isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']) 
+                    && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])
+            ){
                 if (is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
                     $route = $this->_container->get('request')->get('_route');
-                    if ((empty($route) || ($route == "_internal")))
-                        $route = $this->_container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container->get('request')->getLocale());
+                    if ((empty($route) || ($route == "_internal"))) {
+                        $locale = $this->_container->get('request')->getLocale();
+                        $route  = $this->_container->get('sfynx.tool.route.factory')
+                            ->getMatchParamOfRoute('_route', $locale);
+                    }
                     if (!in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
                         return $query;
                     }
                 }
-                $user_roles    = $this->_container->get('sfynx.auth.role.factory')->getAllUserRoles();
-                $orModule = $query->expr()->orx();
-                foreach($user_roles as $key => $role){
-                    $orModule->add($query->expr()->like('node.heritage', $query->expr()->literal('%"'.$role.'"%')));
+                $user_roles = $this->_container
+                        ->get('sfynx.auth.role.factory')
+                        ->getAllUserRoles();
+                $orModule   = $query->expr()->orx();
+                foreach ($user_roles as $key => $role) {
+                    $orModule->add($query
+                            ->expr()
+                            ->like('node.heritage', $query->expr()->literal('%"'.$role.'"%')));
                 }
                 $query->andWhere($orModule);                            
             }
-        }    
+        }
+        
         return $query;
     }    
     
@@ -136,13 +146,15 @@ class TreeRepository extends NestedTreeRepository
      * Loads all translations with all translatable
      * fields from the given entity
      *
-     * @param string $locale
-     * @param \Doctrine\ORM\Query $query
-     * @param string $result = {'array', 'object'}
-     * @param bool    $INNER_JOIN      
+     * @param string  $locale
+     * @param Query   $query
+     * @param string  $result = {'array', 'object'}
+     * @param boolean $INNER_JOIN
+     * @param boolean $FALLBACK
+     * @param boolean $lazy_loading
+     *      
      * @return array/object of result query
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function findTranslationsByQuery($locale, Query $query, $result = "object", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
@@ -171,15 +183,15 @@ class TreeRepository extends NestedTreeRepository
     /**
      * return query in cache
      *
-     * @param \Doctrine\ORM\Query 	$query
-     * @param int					$time
-     * @param string 				$MODE	[MODE_GET, MODE_PUT , MODE_NORMAL , MODE_REFRESH]	
-     * @param boolean               $setCacheable
-     * @param string                $namespace
-     * @param string                $input_hash
-     * @return \Doctrine\ORM\Query
-     * @access    public
-     *
+     * @param Query   $query
+     * @param integer $time
+     * @param string  $MODE	    [MODE_GET, MODE_PUT , MODE_NORMAL , MODE_REFRESH]	
+     * @param boolean $setCacheable
+     * @param string  $namespace
+     * @param string  $input_hash
+     * 
+     * @return Query
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function cacheQuery(Query $query, $time = 3600, $MODE = 3 /* \Doctrine\ORM\Cache::MODE_NORMAL */, $setCacheable = true, $namespace = '', $input_hash = '')
@@ -197,7 +209,7 @@ class TreeRepository extends NestedTreeRepository
             $query->setCacheMode($MODE);
         }
         if (method_exists($query, 'setCacheable')) {
-        	$query->setCacheable($setCacheable);
+            $query->setCacheable($setCacheable);
         }
         
     	return $query;
@@ -206,43 +218,68 @@ class TreeRepository extends NestedTreeRepository
     /**
      * Loads all translations with all translatable
      * fields from the given entity
-     *
+     * 
      * @link https://github.com/l3pp4rd/DoctrineExtensions/blob/master/doc/translatable.md#entity-domain-object
-     * 
-     * @param object $entity Must implement Translatable
-     * @return \Doctrine\ORM\Query
-     * @param string $locale
-     * @param bool    $INNER_JOIN         
-     * @access    public
-     * 
+     *
+     * @param Query   $query
+     * @param string  $locale
+     * @param string  $result = {'array', 'object'}
+     * @param boolean $INNER_JOIN
+     * @param boolean $FALLBACK
+     * @param boolean $lazy_loading
+     *      
+     * @return Query   
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function setTranslatableHints(Query $query, $locale, $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
     {
-        $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\Translatable\Query\TreeWalker\TranslationWalker');
-        if($INNER_JOIN) {
-        	$query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_INNER_JOIN, $INNER_JOIN); // will use INNER joins for translations instead of LEFT joins, so that in case if you do not want untranslated records in your result set for instance.
+        // BE CARFULL ::: Strange Issue with Query Hint and APC
+        $query->setHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+        ); // if you use memcache or apc. You should set locale and other options like fallbacks to query through hints. Otherwise the query will be cached with a first used locale
+        $query->setHint(
+                \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE, 
+                $locale
+        ); // take locale from session or request etc.        
+        if ($INNER_JOIN) {
+            $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_INNER_JOIN, $INNER_JOIN); // will use INNER joins for translations instead of LEFT joins, so that in case if you do not want untranslated records in your result set for instance.
         }
         if (!$lazy_loading) {
-        	// to avoid lazy-loading.
-        	$query->setHint(\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true);
-        }        
-        $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale);
-        $query->setHint(\Gedmo\Translatable\TranslatableListener::HINT_FALLBACK, $FALLBACK);
+            // to avoid lazy-loading.
+            $query->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);
+        }
+        $query->setHint(
+                \Gedmo\Translatable\TranslatableListener::HINT_FALLBACK,
+                $FALLBACK
+        ); // fallback to default values in case if record is not translated
+
+//        $config = $this->container->get('doctrine')->getManager()->getConfiguration();
+//        if ($config->getCustomHydrationMode(TranslationWalker::HYDRATE_OBJECT_TRANSLATION) === null) {
+//            $config->addCustomHydrationMode(
+//                TranslationWalker::HYDRATE_OBJECT_TRANSLATION,
+//                'Gedmo\\Translatable\\Hydrator\\ORM\\ObjectHydrator'
+//            );
+//        }        
+        $query->setHydrationMode(\Gedmo\Translatable\Query\TreeWalker\TranslationWalker::HYDRATE_OBJECT_TRANSLATION);
+        $query->setHint(Query::HINT_REFRESH, true);
         
         return $query;
-    }
+    }  
     
     /**
      * Find a node by its id
      *
-     * @param int    $id
-     * @param string $locale
-     * @param string $result = {'array', 'object'}
-     * @param bool    $INNER_JOIN    
-     * @return object
-     * @access    public
+     * @param interger $id
+     * @param string   $locale
+     * @param string   $result = {'array', 'object'}
+     * @param boolean  $INNER_JOIN
+     * @param boolean  $FALLBACK
+     * @param boolean  $lazy_loading
      * 
+     * @return array|object
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */  
     public function findNodeOr404($id, $locale, $result = "object", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
@@ -250,20 +287,22 @@ class TreeRepository extends NestedTreeRepository
         $query = $this->_em->createQuery("SELECT node FROM {$this->_entityName} node WHERE node.id = :id");
         $query->setParameter('id', $id);
         $query->setMaxResults(1);
-    
+        
         return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading));
     }
     
     /**
      * Find a translation of an entity by its id
      *
-     * @param string $locale
-     * @param int    $id
-     * @param string $result = {'array', 'object'}
-     * @param bool    $INNER_JOIN
-     * @return object
-     * @access    public
-     *
+     * @param interger $id
+     * @param string   $locale
+     * @param string   $result = {'array', 'object'}
+     * @param boolean  $INNER_JOIN
+     * @param boolean  $FALLBACK
+     * @param boolean  $lazy_loading
+     * 
+     * @return array|object
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function findOneByEntity($locale, $id, $result = "array", $INNER_JOIN = false, $FALLBACK = true, $lazy_loading = true)
@@ -284,13 +323,17 @@ class TreeRepository extends NestedTreeRepository
     /**
      * Find all nodes of the tree by params
      *
-     * @param string $locale
-     * @param string $category
-     * @param string $result = {'array', 'object'}
-     * @param bool    $INNER_JOIN
+     * @param string  $locale
+     * @param string  $category
+     * @param string  $result = {'array', 'object'}
+     * @param boolean $INNER_JOIN
+     * @param boolean $enabled
+     * @param integer $node
+     * @param boolean $is_checkRoles
+     * @param boolean $iscache
+     * 
      * @return object
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getAllTree($locale, $category = '', $result = "object", $INNER_JOIN = false, $enable = true, $node = null, $is_checkRoles = true, $iscache = false)
@@ -346,23 +389,31 @@ class TreeRepository extends NestedTreeRepository
     }   
     
     /**
-     * {@inheritDoc}
-     */    
+     * Find all nodes of the tree by params
+     *
+     * @param integer $node
+     * @param string  $locale
+     * @param boolean $INNER_JOIN
+     * 
+     * @return object
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */  
     public function findAllParentChoises($node = null, $locale, $INNER_JOIN = false)
     {
         $dql = "SELECT c FROM {$this->_entityName} c";
         if (!is_null($node)) {
-            $subSelect = "SELECT n FROM {$this->_entityName} n";
+            $subSelect  = "SELECT n FROM {$this->_entityName} n";
             $subSelect .= ' WHERE n.root = '.$node->getRoot();
             $subSelect .= ' AND n.lft BETWEEN '.$node->getLeft().' AND '.$node->getRight();
     
             $dql .= " WHERE c.id NOT IN ({$subSelect})";
         }
-        $q                = $this->_em->createQuery($dql);
-        $q            = $this->setTranslatableHints($q, $locale, $INNER_JOIN);
-        $nodes         = $q->getArrayResult();
+        $q     = $this->_em->createQuery($dql);
+        $q     = $this->setTranslatableHints($q, $locale, $INNER_JOIN);
+        $nodes = $q->getArrayResult();
         
-        $indexed     = array();
+        $indexed = array();
         foreach ($nodes as $node) {
             $indexed[$node['id']] = $node['title'];
         }
@@ -372,157 +423,185 @@ class TreeRepository extends NestedTreeRepository
     /**
      * Gets all field values of an entity.
      *
-     * @param    $field        value of the field table
+     * @param string $field value of the field table
+     * 
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-03-15
      */
     public function getArrayAllByField($field)
     {
-        $query = $this->createQueryBuilder('node')
-        ->select("node.{$field}")
-        ->where('node.enabled = :enabled')
-        ->andWhere('node.archived = :archived')
+        $query = $this->createQueryBuilder('a')
+        ->select("a.{$field}")
+        ->where('a.enabled = :enabled')
+        ->andWhere('a.archived = :archived')
         ->setParameters(array(
-                'enabled'    => 1,
-                'archived'    => 0,
+            'enabled'  => 1,
+            'archived' => 0,
         ));
     
         $result = array();
-        $data    = $query->getQuery()->getArrayResult();
+        $data   = $query->getQuery()->getArrayResult();
         if ($data && is_array($data) && count($data)) {
             foreach ($data as $row) {
-                if (isset($row[$field]) && !empty($row[$field]))
+                if (isset($row[$field]) && !empty($row[$field])) {
                     $result[ $row[$field] ] = $row[$field];
+                }
             }
         }
+        
         return $result;
     }
     
     /**
      * Gets all entities by one category.
      *
-     * @return array\entity
-     * @access public
-     *
+     * @param string  $category
+     * @param integer $MaxResults
+     * @param boolean $rootOnly
+     * 
+     * @return QueryBuilder
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2012-03-15
+     * @since  2012-03-15
      */
     public function getAllByCategory($category = '', $MaxResults = null, $rootOnly = false)
     {
         $query = $this->createQueryBuilder('node')
         ->select('node')
         ->where('node.enabled = :enabled')
-        ->andWhere('node.archived = :archived');
-        
-        if ($rootOnly && in_array($rootOnly, array('ASC', 'DESC'))){
+        ->andWhere('node.archived = :archived');        
+        if ($rootOnly && in_array($rootOnly, array('ASC', 'DESC'))) {
             $config = $this->getConfiguration();
             $query->andWhere('node.' . $config['parent'] . " IS NULL")
             ->orderBy('node.' . $config['root'], $rootOnly);
-        }
-        
-        if (!empty($category))
+        }        
+        if (!empty($category)) {
             $query->andWhere('node.category = :cat')
             ->setParameters(array(
-                    'cat'        => $category,
-                    'enabled'    => 1,
-                    'archived'    => 0,
+                'cat'      => $category,
+                'enabled'  => 1,
+                'archived' => 0,
             ));
-        else
+        } else {
             $query->setParameters(array(
-                    'enabled'    => 1,
-                    'archived'    => 0,
+                'enabled'  => 1,
+                'archived' => 0,
             ));
-    
-        if (!is_null($MaxResults))
+        }    
+        if (!is_null($MaxResults)) {
             $query->setMaxResults($MaxResults);
+        }
     
         return $query;
     }     
-
+    
     /**
      * Gets all field values of an translation entity.
      *
-     * @param    $id        value of the id
+     * @param integer $id value of the id
+     * 
      * @return object
-     * @access public
-     *
      * @author Riad HELLAL <hellal.riad@gmail.com>
-     * @since 2013-05-30
+     * @since  2013-05-30
      */
     public function getTranslationsByObjectId($id)
     {
         $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.object = :objectId ");
         $query->setParameter('objectId', $id);
-        $entities = $query->getResult();
-    
+        $entities = $query->getResult();    
         if (!is_null($entities)){
             return $entities;
-        }else
+        } else {
             return null;
-    }    
-    
+        }
+    }       
+
     /**
-     * {@inheritDoc}
+     * Find all entities by locale
+     *
+     * @param string   $locale        Locale value
+     * @param string   $result        ['array', 'object']
+     * @param boolean  $INNER_JOIN
+     * @param boolean  $is_checkRoles
+     * @param boolean  $FALLBACK
+     * @param boolean  $lazy_loading
+     * 
+     * @return object
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getEntities($locale, $result = "object", $INNER_JOIN = true, $FALLBACK = true, $lazy_loading = true)
+    public function getEntities($locale, $result = "object", $INNER_JOIN = true, $is_checkRoles = true, $FALLBACK = true, $lazy_loading = true)
     {
-        $qb = $this->_em->createQueryBuilder()
+        $query = $this->_em->createQueryBuilder()
         ->select('c')
         ->from($this->_entityName, 'c')
         ;
         if (!is_null($this->basedOnNode)) {
-            $qb->where($qb->expr()->notIn(
-                    'c.id',
-                    $this->_em
-                    ->createQueryBuilder()
-                    ->select('n')
-                    ->from($this->_entityName, 'n')
-                    ->where('n.root = '.$this->basedOnNode->getRoot())
-                    ->andWhere($qb->expr()->between(
-                            'n.lft',
-                            $this->basedOnNode->getLeft(),
-                            $this->basedOnNode->getRight()
-                    ))
-                    ->getDQL()
+            $query->where($qb->expr()->notIn(
+                'c.id',
+                $this->_em
+                ->createQueryBuilder()
+                ->select('n')
+                ->from($this->_entityName, 'n')
+                ->where('n.root = '.$this->basedOnNode->getRoot())
+                ->andWhere($qb->expr()->between(
+                        'n.lft',
+                        $this->basedOnNode->getLeft(),
+                        $this->basedOnNode->getRight()
+                ))
+                ->getDQL()
             ));
         }
-        $q = $qb->getQuery();
+        if ($is_checkRoles) {
+            $query = $this->checkRoles($query);
+        }
 
-        return $this->findTranslationsByQuery($locale, $q, $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
+        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     }
     
     /**
-     * {@inheritDoc}
+     * Find all entities of the entity by list of ids
+     *
+     * @param interger $identifier
+     * @param array    $parameters    array of all id values
+     * @param string   $locale        Locale value
+     * @param string   $result        ['array', 'object']
+     * @param boolean  $INNER_JOIN
+     * @param boolean  $is_checkRoles
+     * @param boolean  $FALLBACK
+     * @param boolean  $lazy_loading
+     * 
+     * @return object
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public function getEntitiesByIds($identifier, array $values, $locale, $result = "object", $INNER_JOIN = true, $FALLBACK = true, $lazy_loading = true)
+    public function getEntitiesByIds($identifier, array $parameters, $locale, $result = "object", $INNER_JOIN = true, $is_checkRoles = true, $FALLBACK = true, $lazy_loading = true)
     {
         $query = $this->_em->createQueryBuilder()
         ->select('c')
         ->from($this->_entityName, 'c')
         ->where($query->expr()->in(
-                'c.'.$identifier,
-                ':ids'
+            'c.'.$identifier,
+            ':ids'
         ))
-        ->setParameter('ids', $values, Connection::PARAM_INT_ARRAY)
-        ->getQuery()
+        ->setParameter('ids', $parameters, Connection::PARAM_INT_ARRAY)        
         ;
+        if ($is_checkRoles) {
+            $query = $this->checkRoles($query);
+        }
 
-        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
+        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     }
     
     /**
      * Find a translation field of an entity by its id
      *
-     * @param string $locale
-     * @param int    $id
-     * @param string $result = {'array', 'object'}
+     * @param string  $locale
+     * @param array   $fields
      * @param bool    $INNER_JOIN
+     * 
      * @return object
-     * @access    public
-     *
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getContentByField($locale, array $fields, $INNER_JOIN = false)
@@ -532,29 +611,28 @@ class TreeRepository extends NestedTreeRepository
         $query->setParameter('field', array_keys($fields['content_search']));
         $query->setParameter('content', array_values($fields['content_search']));
         $query->setMaxResults(1);
-        $entities = $query->getResult();
-            
+        $entities = $query->getResult();            
         if (!is_null($entities)){
             $entity = current($entities);
             if (is_object($entity)){
-                $id        = $entity->getObject()->getId();
-           
-                $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.object = :objectId");
+                $id    = $entity->getObject()->getId();           
+                $query = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.object = :objectId");
                 $query->setParameter('locale', $locale);
                 $query->setParameter('objectId', $id);
                 $query->setParameter('field', $fields['field_result']);
                 $query->setMaxResults(1);
-                $entities = $query->getResult();
-           
+                $entities = $query->getResult();           
                 if (!is_null($entities) && (count($entities)>=1) ){
                     return current($entities);
-                }else
+                } else {
                     return null;
-            }else
+                }
+            } else {
                 return null;
-        }else
+            }
+        } else {
             return null;
-            
+        }
         //         $dql = <<<___SQL
         //   SELECT a
         //   FROM {$this->_entityName} a
@@ -573,13 +651,13 @@ class TreeRepository extends NestedTreeRepository
     /**
      * Find a translation of an entity by its id
      *
-     * @param string $locale
-     * @param int    $id
-     * @param string $result = {'array', 'object'}
-     * @param bool    $INNER_JOIN
-     * @return object
-     * @access    public
-     *
+     * @param string  $locale
+     * @param array   $fields
+     * @param string  $result     ['array', 'object']
+     * @param boolean $INNER_JOIN
+     * 
+     * @return null|object
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getEntityByField($locale, array $fields, $result = "object", $INNER_JOIN = false)
@@ -589,533 +667,17 @@ class TreeRepository extends NestedTreeRepository
         $query->setParameter('field', array_keys($fields['content_search']));
         $query->setParameter('content', array_values($fields['content_search']));
         $query->setMaxResults(1);
-        $entities = $query->getResult();
-    
+        $entities = $query->getResult();    
         if (!is_null($entities)){
-            $entity = current($entities);
-    
+            $entity = current($entities);    
             if (is_object($entity)){
                 $id        = $entity->getObject()->getId();
                 return $this->findOneByEntity($locale, $id, $result, $INNER_JOIN);
-            }else
+            } else {
                 return null;
-        }else
+            }
+        } else {
             return null;
+        }
     }    
-    
-    /**
-     * Will do reordering based on current translations
-     */
-    public function childrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
-    {
-        $q = parent::childrenQuery($node, $direct, $sortByField, $direction, $includeNode);
-        if ($this->onChildrenQuery instanceof Closure) {
-            $c = &$this->onChildrenQuery;
-            $c($q);
-        }
-        return $q;
-    }    
-    
-    /**
-     * Counts the children of given TreeNode
-     *
-     * @param object $node - if null counts all records in tree
-     * @param boolean $direct - true to count only direct children
-     * @return integer
-     */
-    public function childCount($node = null, $direct = false)
-    {
-        $count = 0;
-        $meta = $this->getClassMetadata();
-        $nodeId = $meta->getSingleIdentifierFieldName();
-        $config = $this->getConfiguration();
-        if (null !== $node) {
-            if ($direct) {
-                $id = $meta->getReflectionProperty($nodeId)->getValue($node);
-                $qb = $this->_em->createQueryBuilder();
-                $qb->select('COUNT(node.' . $nodeId . ')')
-                ->from($this->_entityName, 'node')
-                ->where('node.' . $config['parent'] . ' = ' . $id);
-    
-                $q = $qb->getQuery();
-                $count = intval($q->getSingleScalarResult());
-            } else {
-                $left = $meta->getReflectionProperty($config['left'])->getValue($node);
-                $right = $meta->getReflectionProperty($config['right'])->getValue($node);
-                if ($left && $right) {
-                    $count = ($right - $left - 1) / 2;
-                }
-            }
-        } else {
-            $dql = "SELECT COUNT(node.{$nodeId}) FROM {$this->_entityName} node";
-            if ($direct) {
-                $dql .= ' WHERE node.' . $config['parent'] . ' IS NULL';
-            }
-            $q = $this->_em->createQuery($dql);
-            $count = intval($q->getSingleScalarResult());
-        }
-        return $count;
-    }  
-
-    /**
-     * Get list of children followed by given $node
-     *
-     * @param object $node - if null, all tree nodes will be taken
-     * @param boolean $direct - true to take only direct children
-     * @param string $sortByField - field name to sort by
-     * @param string $direction - sort direction : "ASC" or "DESC"
-     * @return array - list of given $node children, null on failure
-     */
-    public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
-    {
-        $meta = $this->getClassMetadata();
-        $config = $this->getConfiguration();
-    
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('node')
-        ->from($this->_entityName, 'node');
-        if ($node !== null) {
-            if ($direct) {
-                $nodeId = $meta->getSingleIdentifierFieldName();
-                $id = $meta->getReflectionProperty($nodeId)->getValue($node);
-                $qb->where('node.' . $config['parent'] . ' = ' . $id);
-            } else {
-                $left = $meta->getReflectionProperty($config['left'])->getValue($node);
-                $right = $meta->getReflectionProperty($config['right'])->getValue($node);
-                if ($left && $right) {
-                    $qb->where('node.' . $config['right'] . " < {$right}")
-                    ->andWhere('node.' . $config['left'] . " > {$left}");
-                }
-            }
-        } else {
-            if ($direct) {
-                $qb->where('node.' . $config['parent'] . ' IS NULL');
-            }
-        }
-        if (!$sortByField) {
-            $qb->orderBy('node.' . $config['left'], 'ASC');
-        } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
-                $qb->orderBy('node.' . $sortByField, $direction);
-            } else {
-                throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
-            }
-        }
-        $q = $qb->getQuery();
-        $q->useResultCache(false);
-        $q->useQueryCache(false);
-        return $q->getResult(Query::HYDRATE_OBJECT);
-    }    
-    
-    /**
-     * Generally loads configuration from cache
-     *
-     * @throws RuntimeException if no configuration for class found
-     * @return array
-     */
-    public function getConfiguration() {
-        $config = array();
-        if (isset($this->_configurations[$this->_entityName])) {
-            $config = $this->_configurations[$this->_entityName];
-        } else {
-            $cacheDriver = $this->_em->getMetadataFactory()->getCacheDriver();
-            $cacheId = \Gedmo\Mapping\ExtensionMetadataFactory::getCacheId(
-                    $this->_entityName,
-                    'Gedmo\Tree'
-            );
-            if (($cached = $cacheDriver->fetch($cacheId)) !== false) {
-                $this->_configurations[$this->_entityName] = $cached;
-                $config = $cached;
-            }
-        }
-        if (!$config) {
-            throw new \RuntimeException("TreeNodeRepository: this repository cannot be used on {$this->_entityName} without Tree metadata");
-        }
-        return $config;
-    }
-    
-    /**
-     * Synchronize the tree with given conditions
-     *
-     * @param array $config
-     * @param integer $shift
-     * @param string $dir
-     * @param string $conditions
-     * @param string $field
-     * @return void
-     */
-    protected function _sync($config, $shift, $dir, $conditions, $field = 'both')
-    {
-        if ($field == 'both') {
-            $this->_sync($config, $shift, $dir, $conditions, $config['left']);
-            $field = $config['right'];
-        }
-    
-        $dql = "UPDATE {$this->_entityName} node";
-        $dql .= " SET node.{$field} = node.{$field} {$dir} {$shift}";
-        $dql .= " WHERE node.{$field} {$conditions}";
-        
-        $q = $this->_em->createQuery($dql);
-        return $q->getSingleScalarResult();
-    }
-    
-    /**
-     * Synchronize tree according to Node`s parent Node
-     *
-     * @param array $config
-     * @param Node $parent
-     * @param Node $node
-     * @return void
-     */
-    protected function _adjustNodeWithParent($config, $parent, $node)
-    {
-        $edge = $this->_getTreeEdge($config);
-        $meta = $this->getClassMetadata();
-        $leftField = $config['left'];
-        $rightField = $config['right'];
-        $parentField = $config['parent'];
-    
-        $leftValue = $meta->getReflectionProperty($leftField)->getValue($node);
-        $rightValue = $meta->getReflectionProperty($rightField)->getValue($node);
-        if ($parent === null) {
-            $this->_sync($config, $edge - $leftValue + 1, '+', 'BETWEEN ' . $leftValue . ' AND ' . $rightValue);
-            $this->_sync($config, $rightValue - $leftValue + 1, '-', '> ' . $leftValue);
-        } else {
-            // need to refresh the parent to get up to date left and right
-            $this->_em->refresh($parent);
-            $parentLeftValue = $meta->getReflectionProperty($leftField)->getValue($parent);
-            $parentRightValue = $meta->getReflectionProperty($rightField)->getValue($parent);
-            if ($leftValue < $parentLeftValue && $parentRightValue < $rightValue) {
-                return;
-            }
-            if (empty($leftValue) && empty($rightValue)) {
-                $this->_sync($config, 2, '+', '>= ' . $parentRightValue);
-                // cannot schedule this update if other Nodes pending
-                $qb = $this->_em->createQueryBuilder();
-                $qb->update($this->_entityName, 'node')
-                ->set('node.' . $leftField, $parentRightValue)
-                ->set('node.' . $rightField, $parentRightValue + 1);
-                $entityIdentifiers = $meta->getIdentifierValues($node);
-                foreach ($entityIdentifiers as $field => $value) {
-                    if (strlen($value)) {
-                        $qb->where('node.' . $field . ' = ' . $value);
-                    }
-                }
-                $q = $qb->getQuery();
-                $q->getSingleScalarResult();
-            } else {
-                $this->_sync($config, $edge - $leftValue + 1, '+', 'BETWEEN ' . $leftValue . ' AND ' . $rightValue);
-                $diff = $rightValue - $leftValue + 1;
-    
-                if ($leftValue > $parentLeftValue) {
-                    if ($rightValue < $parentRightValue) {
-                        $this->_sync($config, $diff, '-', 'BETWEEN ' . $rightValue . ' AND ' . ($parentRightValue - 1));
-                        $this->_sync($config, $edge - $parentRightValue + $diff + 1, '-', '> ' . $edge);
-                    } else {
-                        $this->_sync($config, $diff, '+', 'BETWEEN ' . $parentRightValue . ' AND ' . $rightValue);
-                        $this->_sync($config, $edge - $parentRightValue + 1, '-', '> ' . $edge);
-                    }
-                } else {
-                    $this->_sync($config, $diff, '-', 'BETWEEN ' . $rightValue . ' AND ' . ($parentRightValue - 1));
-                    $this->_sync($config, $edge - $parentRightValue + $diff + 1, '-', '> ' . $edge);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Get the edge of tree
-     *
-     * @param array $config
-     * @return integer
-     */
-    protected function _getTreeEdge($config)
-    {
-        $q = $this->_em->createQuery("SELECT MAX(node.{$config['right']}) FROM {$this->_entityName} node");
-        $q->useResultCache(false);
-        $q->useQueryCache(false);
-        $right = $q->getSingleScalarResult();
-        return intval($right);
-    }
-    
-    /**
-     * Tries to recover the tree
-     *
-     * @throws Exception if something fails in transaction
-     * @return void
-     *
-     * {@inheritDoc}
-     */
-    public function setRecover()
-    {
-        if ($this->verify() === true) {
-            return;
-        }
-    
-        $meta = $this->getClassMetadata();
-        $config = $this->getConfiguration();
-    
-        $identifier = $meta->getSingleIdentifierFieldName();
-        $leftField = $config['left'];
-        $rightField = $config['right'];
-        $parentField = $config['parent'];
-    
-        $count = 1;
-        $dql = "SELECT node.{$identifier} FROM {$this->_entityName} node";
-        $dql .= " ORDER BY node.{$leftField} ASC";
-        $q = $this->_em->createQuery($dql);
-        $nodes = $q->getArrayResult();
-        // process updates in transaction
-        $this->_em->getConnection()->beginTransaction();
-        try {
-            foreach ($nodes as $node) {
-                $left = $count++;
-                $right = $count++;
-                $dql = "UPDATE {$this->_entityName} node";
-                $dql .= " SET node.{$leftField} = {$left},";
-                $dql .= " node.{$rightField} = {$right}";
-                $dql .= " WHERE node.{$identifier} = {$node[$identifier]}";
-                $q = $this->_em->createQuery($dql);
-                $q->getSingleScalarResult();
-            }
-            foreach ($nodes as $node) {
-                $node = $this->_em->getReference($this->_entityName, $node[$identifier]);
-                $this->_em->refresh($node);
-                $parent = $meta->getReflectionProperty($parentField)->getValue($node);
-                $this->_adjustNodeWithParent($config, $parent, $node);
-            }
-            $this->_em->getConnection()->commit();
-        } catch (\Exception $e) {
-            $this->_em->close();
-            $this->_em->getConnection()->rollback();
-            throw $e;
-        }
-    }
-
-//     /**
-//      * Get the Tree path of Nodes by given $node
-//      *
-//      * @param object $node
-//      * @return array - list of Nodes in path
-//      */
-//     public function getPath($node)
-//     {
-//         $result = array();
-//         $meta = $this->getClassMetadata();
-//         $config = $this->getConfiguration();
-    
-//         $left = $meta->getReflectionProperty($config['left'])->getValue($node);
-//         $right = $meta->getReflectionProperty($config['right'])->getValue($node);
-//         if ($left && $right) {
-//             $qb = $this->_em->createQueryBuilder();
-//             $qb->select('node')
-//             ->from($this->_entityName, 'node')
-//             ->where('node.' . $config['left'] . " <= :left")
-//             ->andWhere('node.' . $config['right'] . " >= :right")
-//             ->orderBy('node.' . $config['left'], 'ASC');
-//             $q = $qb->getQuery();
-//             $result = $q->execute(
-//                     compact('left', 'right'),
-//                     Query::HYDRATE_OBJECT
-//             );
-//         }
-//         return $result;
-//     }
-
-//     /**
-//      * Get list of leaf nodes of the tree
-//      *
-//      * @param string $sortByField - field name to sort by
-//      * @param string $direction - sort direction : "ASC" or "DESC"
-//      * @return array - list of given $node children, null on failure
-//      */
-//     public function getLeafs($root = null, $sortByField = null, $direction = 'ASC')
-//     {
-//         $meta = $this->getClassMetadata();
-//         $config = $this->getConfiguration();
-    
-//         $qb = $this->_em->createQueryBuilder();
-//         $qb->select('node')
-//         ->from($this->_entityName, 'node')
-//         ->where('node.' . $config['right'] . ' = 1 + node.' . $config['left']);
-//         if (!$sortByField) {
-//             $qb->orderBy('node.' . $config['left'], 'ASC');
-//         } else {
-//             if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
-//                 $qb->orderBy('node.' . $sortByField, $direction);
-//             } else {
-//                 throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
-//             }
-//         }
-//         $q = $qb->getQuery();
-//         return $q->getResult(Query::HYDRATE_OBJECT);
-//     } 
-
-    /**
-     * Move the node up in the same level
-     *
-     * @param object $node
-     * @param mixed $number
-     *         integer - number of positions to shift
-     *         boolean - true shift till first position
-     * @throws Exception if something fails in transaction
-     * @return boolean - true if shifted
-     */
-    public function moveUp($node, $number = 1)
-    {
-        $meta = $this->getClassMetadata();
-        $config = $this->getConfiguration();
-        if (!$number) {
-            return false;
-        }    
-        $parent = $meta->getReflectionProperty($config['parent'])->getValue($node);
-        $left = $meta->getReflectionProperty($config['left'])->getValue($node);
-        if ($parent) {
-            $this->_em->refresh($parent);
-            $parentLeft = $meta->getReflectionProperty($config['left'])->getValue($parent);
-            if (($left - 1) == $parentLeft) {
-                return false;
-            }
-        }    
-        $dql = "SELECT node FROM {$this->_entityName} node";
-        $dql .= ' WHERE node.' . $config['right'] . ' = ' . ($left - 1);
-        $q = $this->_em->createQuery($dql);
-        $q->setMaxResults(1);
-        $result = $q->getResult(Query::HYDRATE_OBJECT);
-        $previousSiblingNode = count($result) ? array_shift($result) : null;
-    
-        if (!$previousSiblingNode) {
-            return false;
-        }
-        // this one is very important because if em is not cleared
-        // it loads node from memory without refresh
-        $this->_em->refresh($previousSiblingNode);
-    
-        $right = $meta->getReflectionProperty($config['right'])->getValue($node);
-        $previousLeft = $meta->getReflectionProperty($config['left'])->getValue($previousSiblingNode);
-        $previousRight = $meta->getReflectionProperty($config['right'])->getValue($previousSiblingNode);
-        $edge = $this->_getTreeEdge($config);
-        // process updates in transaction
-        $this->_em->getConnection()->beginTransaction();
-        try {
-            $this->_sync($config, $edge - $previousLeft +1, '+', 'BETWEEN ' . $previousLeft . ' AND ' . $previousRight);
-            $this->_sync($config, $left - $previousLeft, '-', 'BETWEEN ' .$left . ' AND ' . $right);
-            $this->_sync($config, $edge - $previousLeft - ($right - $left), '-', '> ' . $edge);
-            $this->_em->getConnection()->commit();
-        } catch (\Exception $e) {
-            $this->_em->close();
-            $this->_em->getConnection()->rollback();
-            throw $e;
-        }
-        if (is_int($number)) {
-            $number--;
-        }
-        if ($number) {
-            $this->_em->refresh($node);
-            $this->moveUp($node, $number);
-        }
-        
-        return true;
-    } 
-
-    /**
-     * Move the node down in the same level
-     *
-     * @param object $node
-     * @param mixed $number
-     *         integer - number of positions to shift
-     *         boolean - true shift till last position
-     * @throws Exception if something fails in transaction
-     * @return boolean - true if shifted
-     */
-    public function moveDown($node, $number = 1)
-    {
-        $meta = $this->getClassMetadata();
-        $config = $this->getConfiguration();
-        if (!$number) {
-            return false;
-        }
-    
-        $parent = $meta->getReflectionProperty($config['parent'])->getValue($node);
-        $right = $meta->getReflectionProperty($config['right'])->getValue($node);
-    
-        if ($parent) {
-            $this->_em->refresh($parent);
-            $parentRight = $meta->getReflectionProperty($config['right'])->getValue($parent);
-            if (($right + 1) == $parentRight) {
-                return false;
-            }
-        }
-        $dql = "SELECT node FROM {$this->_entityName} node";
-        $dql .= ' WHERE node.' . $config['left'] . ' = ' . ($right + 1);
-        $q = $this->_em->createQuery($dql);
-        $q->setMaxResults(1);
-        $result = $q->getResult(Query::HYDRATE_OBJECT);
-        $nextSiblingNode = count($result) ? array_shift($result) : null;    
-//         if (!$nextSiblingNode) {
-//             return false;
-//         }    
-        // this one is very important because if em is not cleared
-        // it loads node from memory without refresh
-        //$this->_em->refresh($nextSiblingNode);    
-        $left = $meta->getReflectionProperty($config['left'])->getValue($node);
-        $nextLeft = $meta->getReflectionProperty($config['left'])->getValue($nextSiblingNode);
-        $nextRight = $meta->getReflectionProperty($config['right'])->getValue($nextSiblingNode);
-        $edge = $this->_getTreeEdge($config);
-        // process updates in transaction
-        $this->_em->getConnection()->beginTransaction();
-        try {
-            $this->_sync($config, $edge - $left + 1, '+', 'BETWEEN ' . $left . ' AND ' . $right);
-            $this->_sync($config, $nextLeft - $left, '-', 'BETWEEN ' . $nextLeft . ' AND ' . $nextRight);
-            $this->_sync($config, $edge - $left - ($nextRight - $nextLeft), '-', ' > ' . $edge);
-            $this->_em->getConnection()->commit();
-        } catch (\Exception $e) {
-            $this->_em->close();
-            $this->_em->getConnection()->rollback();
-            throw $e;
-        }
-        if (is_int($number)) {
-            $number--;
-        }
-        if ($number) {
-            $this->_em->refresh($node);
-            $this->moveDown($node, $number);
-        }
-        
-        return true;
-    }  
-
-    /**
-     * Move the node up in the same level
-     *
-     * @param object $oldRoot
-     * @param object $newRoot
-     * @throws Exception if something fails in transaction
-     * @return boolean - true if shifted
-     */
-    public function moveRoot($oldRoot, $newRoot)
-    {
-        $meta   = $this->getClassMetadata();
-        $config = $this->getConfiguration();
-        $field  = $config["root"];        
-        // process updates in transaction
-        $this->_em->getConnection()->beginTransaction();   
-        try {
-            $dql  = "UPDATE {$this->_entityName} node";
-            $dql .= " SET node.{$field} = {$newRoot}";
-            $dql .= " WHERE node.{$field} = {$oldRoot}";
-            
-            $q = $this->_em->createQuery($dql);
-            $q->getSingleScalarResult();
-            $this->_em->getConnection()->commit();
-            
-            return true;
-        } catch (\Exception $e) {
-            $this->_em->close();
-            $this->_em->getConnection()->rollback();
-            throw $e;
-            
-            return false;
-        }     
-    } 
 }

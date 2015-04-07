@@ -6,7 +6,7 @@
  * @package    Handler
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -34,7 +34,7 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  * @package    Handler
  * @subpackage Authentication
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -137,9 +137,9 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     protected function redirection()
     {
     	if (!empty($this->redirection)) {
-    		$response = new RedirectResponse($this->router->getRoute($this->redirection));
+    		$response = new RedirectResponse($this->router->getRoute($this->redirection), 302);
     	} else {
-    		$response = new RedirectResponse($this->router->getRoute('home_page'));
+    		$response = new RedirectResponse($this->router->getRoute('home_page'), 302);
     	}
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', '', time() - 3600));

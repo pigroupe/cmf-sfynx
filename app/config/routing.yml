@@ -46,3 +46,10 @@ SfynxTranslatorBundle:
 SfynxWsBundle:
     resource: "@SfynxWsBundle/Resources/config/routing.yml"
     prefix:   /
+    
+#
+#   Import SfynxWsseBundle routing files
+#     
+SfynxWsseBundle:
+    resource: "@SfynxWsseBundle/Resources/config/routing.yml"
+    prefix:   /    

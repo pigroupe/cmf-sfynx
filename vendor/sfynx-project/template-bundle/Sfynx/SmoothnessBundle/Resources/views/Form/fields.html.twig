@@ -43,17 +43,19 @@
 
 {% block form_widget_compound %}
 {% spaceless %}
-    {% if form.parent == null %}
-        {% if render_fieldset %}
+    {% if form.parent is empty %}
         <div {{ block('widget_container_attributes') }}>
+        {% if render_fieldset %}
             <fieldset>
         {% endif %}
         {% if show_legend %}{{ block('form_legend') }}{% endif %}
     {% endif %}
-    {{ block('form_rows_visible') }}
-    {{ form_rest(form) }}
-    {% if form.parent == null %}
-        {% if render_fieldset %}</fieldset>{% endif %}
+            {{ block('form_rows_visible') }}
+            {{ form_rest(form) }}
+    {% if form.parent is empty %}
+            {% if render_fieldset %}
+            </fieldset>
+            {% endif %}
         </div>
     {% endif %}
 {% endspaceless %}
@@ -126,7 +128,7 @@
         {% endif %}
         <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
             {% if empty_value is not none %}
-                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain)|renderResponse() }}</option>
             {% endif %}
             {% if preferred_choices|length > 0 %}
                 {% set options = preferred_choices %}
@@ -143,6 +145,19 @@
         {% endif %}
     {% endspaceless %}
 {% endblock choice_widget_collapsed %}
+    
+{% block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain)|renderResponse() }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options %}    
 
 {% block checkbox_widget %}
 {% spaceless %}
@@ -464,7 +479,7 @@
 {% spaceless %}
 {% if error_type %}
     {{ error_type }}
-{% elseif form.parent == null %}
+{% elseif form.parent is empty %}
     {{ form.vars.error_type | default('inline') }}
 {% else %}
 inline
@@ -476,7 +491,7 @@ inline
 
 {% block widget_control_group_start %}
 {% spaceless %}
-{% if widget_control_group|default(false) or form.parent == null %}
+{% if widget_control_group|default(false) or form.parent is empty %}
     {% set widget_control_group_attr = widget_control_group_attr|merge({'class': widget_control_group_attr.class|default('') ~ ' clearfix'}) %}
     {% if errors|length > 0 %}
         {% set widget_control_group_attr = widget_control_group_attr|merge({'class': widget_control_group_attr.class|default('') ~ ' error'}) %}
@@ -508,7 +523,7 @@ inline
 
 {% block widget_control_group_end %}
 {% spaceless %}
-{% if widget_control_group|default(false) or form.parent == null %}
+{% if widget_control_group|default(false) or form.parent is empty %}
     </div>
 {% endif %}
 {% endspaceless %}

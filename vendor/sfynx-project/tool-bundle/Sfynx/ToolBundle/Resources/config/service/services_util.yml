@@ -7,6 +7,8 @@ parameters:
     sfynx.tool.manager.stringcut.class: Sfynx\ToolBundle\Util\PiStringCutManager
     sfynx.tool.manager.date.class: Sfynx\ToolBundle\Util\PiDateManager
     sfynx.tool.manager.file.class: Sfynx\ToolBundle\Util\PiFileManager
+    sfynx.tool.manager.file_spl.class: Sfynx\ToolBundle\Util\PiFileSplManager
+    sfynx.tool.manager.curl.class: Sfynx\ToolBundle\Util\PiCurlManager
     sfynx.tool.manager.script.class: Sfynx\ToolBundle\Util\PiScriptManager
     sfynx.tool.manager.regex.class: Sfynx\ToolBundle\Util\PiRegexManager
     sfynx.tool.manager.mailer.class: Sfynx\ToolBundle\Util\PiMailerManager
@@ -14,6 +16,10 @@ parameters:
     sfynx.tool.manager.log.class: Sfynx\ToolBundle\Util\PiLogManager
     sfynx.tool.manager.timer.class: Sfynx\ToolBundle\Util\PiTimerManager
     sfynx.tool.manager.encryption.class: Sfynx\ToolBundle\Util\PiEncryption
+    sfynx.tool.manager.random.class: Sfynx\ToolBundle\Util\PiRandomManager
+    
+    sfynx.tool.manager.soapclient.class: Sfynx\ToolBundle\Util\Soap\PiSoapClientManager
+    sfynx.tool.manager.soapclient.proxy.class: Sfynx\ToolBundle\Util\Soap\PiSoapProxy
 
 services:
     #
@@ -42,6 +48,14 @@ services:
         class: %sfynx.tool.manager.file.class%  
         arguments: ['@service_container']  
         
+    sfynx.tool.file_sqp_manager:
+        class: %sfynx.tool.manager.file_spl.class%  
+        arguments: [%kernel.cache_dir%, '@logger']         
+        
+    sfynx.tool.curl_manager:
+        class: %sfynx.tool.manager.curl.class%  
+        arguments: ['@service_container']         
+        
     sfynx.tool.script_manager:
         class: %sfynx.tool.manager.script.class%  
         arguments: ['@service_container']         
@@ -65,6 +79,22 @@ services:
         class: %sfynx.tool.manager.timer.class%      
         arguments: ['@service_container']         
         
+    sfynx.tool.string_manager:
+        class: %sfynx.tool.manager.string.class%
+        
     sfynx.tool.encryption_manager:
         class: %sfynx.tool.manager.encryption.class%      
-        arguments: ['@service_container']
+        
+    sfynx.tool.random_manager:
+        class: %sfynx.tool.manager.random.class%      
+        
+    #
+    # configuration of the Util classes
+    #         
+    sfynx.tool.soapclient_manager:
+        class: %sfynx.tool.manager.soapclient.class%            
+        arguments: ['@service_container'] 
+        
+    synx.tool.soapclient_proxy:
+        class: %sfynx.tool.manager.soapclient.proxy.class%
+        arguments: ['@sfynx.tool.soapclient_manager']

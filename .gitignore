@@ -1,3 +1,6 @@
+#tmp
+tmp/*
+
 # documentation
 doc/uml/xmi/*
 doc/uml/php/*
@@ -10,12 +13,13 @@ doc/phpcpd/*
 
 # Bootstrap
 app/bootstrap*
+!app/bootstrap_tests.php
 
 # Symfony directories
 nbproject/*
 vendor/*
-!vendor/Sfynx/
 !vendor/sfynx-project/
+!vendor/sonata-project/
 !vendor/Pear/
 !vendor/Zend/
 */logs/*

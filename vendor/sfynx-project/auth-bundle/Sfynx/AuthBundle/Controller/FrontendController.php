@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 use Sfynx\AuthBundle\Entity\User;
-use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\CoreBundle\Controller\abstractController;
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
 
@@ -96,6 +96,25 @@ class FrontendController extends abstractController
         
         return $response;
     }    
+    
+    /**
+     * Redirection by routename
+     *
+     * @param string $routename Route name value
+     * @param string $locale    Locale value
+     * 
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     * @since  2015-03-17
+     */    
+    public function redirectionAction($routename, $langue)
+    {
+        $url =  $this->container
+                ->get('sfynx.tool.route.factory')
+                ->getRoute($routename, array('locale' => $langue));
+        
+        return $this->redirect($url);
+    }        
     
     /**
      * Redirection function

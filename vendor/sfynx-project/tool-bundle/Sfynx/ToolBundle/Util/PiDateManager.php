@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -41,9 +46,15 @@ use Sfynx\ToolBundle\Builder\PiDateManagerBuilderInterface;
  * 	$finish 	= date("N", mktime(0,0,0,$date_month,$days,$date_year)); // Finishing day of  current month
  * </code>
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class PiDateManager implements PiDateManagerBuilderInterface 
 {    
@@ -54,6 +65,63 @@ class PiDateManager implements PiDateManagerBuilderInterface
         'short'  => \IntlDateFormatter::SHORT,
         'none'   => \IntlDateFormatter::NONE,
     );
+    
+    /**
+     * Factory method to get a DateTime object from a temporal input
+     *
+     * @param mixed        $value         The value to convert (can be a string, a timestamp, or another DateTime)
+     * @param DateTimeZone $timeZone      (optional) timezone
+     * @param string       $dateTimeClass The class of the object to create, defaults to DateTime
+     *
+     * @return mixed null, or an instance of $dateTimeClass
+     * @throws Exception
+     */
+    public static function newInstance($value, \DateTimeZone $timeZone = null, $dateTimeClass = 'DateTime')
+    {
+        if ($value instanceof \DateTime) {
+            return $value;
+        }
+        if ($value === null || $value === '') {
+            // '' is seen as NULL for temporal objects
+            // because DateTime('') == DateTime('now') -- which is unexpected
+            return null;
+        }
+        try {
+            if (self::isTimestamp($value)) { // if it's a unix timestamp
+                $dateTimeObject = new $dateTimeClass('@' . $value, new \DateTimeZone('UTC'));
+                // timezone must be explicitly specified and then changed
+                // because of a DateTime bug: http://bugs.php.net/bug.php?id=43003
+                $dateTimeObject->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+            } else {
+                if ($timeZone === null) {
+                    // stupid DateTime constructor signature
+                    $dateTimeObject = new $dateTimeClass($value);
+                } else {
+                    $dateTimeObject = new $dateTimeClass($value, $timeZone);
+                }
+            }
+        } catch (Exception $e) {
+            throw new \Exception('Error parsing date/time value: ' . var_export($value, true), $e);
+        }
+
+        return $dateTimeObject;
+    }
+
+    public static function isTimestamp($value)
+    {
+        if (!is_numeric($value)) {
+            return false;
+        }
+        $stamp = strtotime($value);
+        if (false === $stamp) {
+            return true;
+        }
+        $month = date('m', $value);
+        $day   = date('d', $value);
+        $year  = date('Y', $value);
+
+        return checkdate($month, $day, $year);
+    }    
     
     /**
      * Parse a string representation of a date to a \DateTime
@@ -385,6 +453,5 @@ class PiDateManager implements PiDateManagerBuilderInterface
             }
         }
         return $results;
-    }    
-
+    }   
 }

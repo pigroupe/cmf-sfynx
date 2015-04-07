@@ -1,0 +1,12 @@
+parameters:
+    plugins.twig.extension.content.tool.class: Cmf\ContentBundle\Twig\Extension\PiToolExtension
+
+services:
+    #
+    # configuration of the orchestra extensions
+    #         
+    plugins.twig.extension.content.tool:
+        class: %plugins.twig.extension.content.tool.class%
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.extension }

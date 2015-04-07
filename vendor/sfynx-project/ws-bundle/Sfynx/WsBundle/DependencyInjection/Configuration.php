@@ -1,11 +1,16 @@
 <?php
 /**
- * This file is part of the <web service> project.
+ * This file is part of the <WebService> project.
  *
- * @subpackage   Tool
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-03-26
+ * @category   WebService
+ * @package    DependencyInjection
+ * @subpackage Configuration
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,9 +24,15 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * @subpackage   Tool
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   WebService
+ * @package    DependencyInjection
+ * @subpackage Configuration
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class Configuration implements ConfigurationInterface {
 
@@ -111,5 +122,4 @@ class Configuration implements ConfigurationInterface {
         	->end()
     	->end();
     }    
-    
 }

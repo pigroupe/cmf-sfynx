@@ -38,14 +38,21 @@ class PiLayoutHeadExtension extends \Twig_Extension
      *  absolute path to YUI jar file.
      */    
     private $JAR_PATH;
+    
     private $TEMP_FILES_DIR;
-    private $options = array('type' => 'js',
-            'linebreak' => false,
-            'verbose' => false,
-            'nomunge' => false,
-            'semi' => false,
-            'nooptimize' => false);  
+    
+    private $options = array(
+        'type' => 'js',
+        'linebreak' => false,
+        'verbose' => false,
+        'nomunge' => false,
+        'semi' => false,
+        'nooptimize' => false
+    );
+    
     private $files = array();
+    
+    private $string;
      
     /**
      * Constructor.
@@ -325,7 +332,13 @@ class PiLayoutHeadExtension extends \Twig_Extension
             }
         }       
         if (preg_match_all('/@import "([^`]*?)";/i', $this->string, $allImports, PREG_SET_ORDER)) {
-            $this->string = preg_replace('/@import "([^`]*?)";/i', '', $this->string);
+            $this->string = preg_replace_callback(
+                '/@import "([^`]*?)";/i',
+                function($matches) {
+                    return "";
+                },
+                $this->string
+            );
             foreach ($allImports as $k => $import) {
                 $this->string = $import[0] . "  " . $this->string;
             }

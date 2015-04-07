@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-18
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,9 +18,6 @@
 namespace Sfynx\ToolBundle\Util;
 
 use Sfynx\ToolBundle\Builder\PiEncryptionBuilderInterface;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of the encryption manager
@@ -29,13 +31,18 @@ use Symfony\Component\HttpFoundation\Response;
  *     {{ obfuscateLinkJS('iframe','hiddenLinkIframe')|raw }}
  * </code>
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class PiEncryption implements PiEncryptionBuilderInterface 
 {   
-
     /**
      * des encryption
      */
@@ -103,7 +110,6 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @return array
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getSupportedEncryptionTypes()
@@ -130,9 +136,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @param string $_password
      * @param string $_method
+     * 
      * @return string the password
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function encryptPassword($_password, $_method)
@@ -203,9 +209,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
                 break;
                 
             case self::ENCRYPT_MAIL_UNSUBSCRIBE:
-                $crypt 				= new PEAR_Crypt_CHAP_MSv1();
-				$crypt->password 	= $_password;
-				$crypt->challenge 	= pack('H*', '102DB5DF085D3041');
+                $crypt 			= new PEAR_Crypt_CHAP_MSv1();
+                $crypt->password 	= $_password;
+                $crypt->challenge 	= pack('H*', '102DB5DF085D3041');
 				
 //				$unipw 					= '{MAIL}' . $crypt->str2unicode($crypt->password);    
 //              $password['unicode-pw']	= '{MAIL}' . strtoupper(bin2hex($unipw));
@@ -224,11 +230,13 @@ class PiEncryption implements PiEncryptionBuilderInterface
                 break;
                                 
             default:
-				break;
+                break;
         }
         
-        if (! $password) {
-            throw new Zend_Exception("$_method is not supported by your php version");
+        if (!$password 
+                || !in_array(strtolower($_method), static::getSupportedEncryptionTypes())
+        ) {
+            throw new \Exception("$_method is not supported by your php version");
         }
         
         return $password;
@@ -238,9 +246,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      * generates a randomstrings of given length
      *
      * @param int $_length
+     * 
      * @return string the random value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function getRandomString($_length)
@@ -260,9 +268,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @param string $string
      * @param string $key
+     * 
      * @return string the encrypt string value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */ 
     public static function encryptFilter($string, $key = "0A1TG4GO")
@@ -284,9 +292,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      *
      * @param string $string
      * @param string $key
+     * 
      * @return string the decrypt string value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function decryptFilter($string, $key = "0A1TG4GO")
@@ -308,15 +316,15 @@ class PiEncryption implements PiEncryptionBuilderInterface
      * Obfuscate link. SEO worst practice.
      *
      * @param string $url
+     * 
      * @return string the encrypt obfuscate Link value
      * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function obfuscateLinkEncrypt($url, $_base16 = "0A12B34C56D78E9F")
     {
     	$output = "";
-    	for ($i = 0; $i < strlen($url); $i++) {
+    	for ($i = 0, $size = strlen($url); $i < $size; $i++) {
     		$cc = ord($url[$i]);
     		$ch = $cc >> 4;
     		$cl = $cc - ($ch * 16);
@@ -330,11 +338,9 @@ class PiEncryption implements PiEncryptionBuilderInterface
      * Obfuscate link JS. SEO worst practice.
      *
      * @param string $fileName
+     * 
      * @return string the decrypt obfuscate Link JS code.
      * @access public
-     * 
-     * @access public
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function obfuscateLinkDecrypt($balise = "a", $class = "hiddenLink", $base16 = "0A12B34C56D78E9F")
@@ -419,5 +425,4 @@ class PiEncryption implements PiEncryptionBuilderInterface
                 
         return $_content;                                
     }     
-
 }

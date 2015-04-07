@@ -38,3 +38,6 @@ parameters:
     
     #esi key
     esi_key: 9eu9ghv9 
+    
+    #WSSE cache dir
+    wsse_cache_dir: "%kernel.cache_dir%/security/nonces"

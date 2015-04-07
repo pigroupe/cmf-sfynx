@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @subpackage   Admin_Controllers
+ * @subpackage Admin_Controllers
  * @package    Controller
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-03
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-03
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,7 +27,7 @@ use Sfynx\CmfBundle\Entity\Page as Page;
  *
  * @subpackage Admin_Controllers
  * @package    Controller
- * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com> 
  */
 class FrontendController extends CmfabstractController
 {
@@ -101,7 +101,7 @@ class FrontendController extends CmfabstractController
      * @Secure(roles="ROLE_EDITOR")
      * @return RedirectResponse
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     * @since 2013-12-017
+     * @since  2013-12-017
      */
     public function copypageAction()
     {
@@ -174,9 +174,11 @@ class FrontendController extends CmfabstractController
         if ($page instanceof Page) {
             if ($action == 'archiving') {
                 $this->container->get('pi_app_admin.manager.search_lucene')->indexPage($page);
+                
                 return new Response('archiving-ok');
             } elseif ($action == 'delete') {
                 $this->container->get('pi_app_admin.manager.search_lucene')->deletePage($page);
+                
                 return new Response('delete-archiving-ok');
             }
         }

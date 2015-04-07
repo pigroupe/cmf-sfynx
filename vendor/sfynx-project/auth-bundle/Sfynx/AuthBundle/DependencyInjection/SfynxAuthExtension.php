@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage   Auth
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @category   Auth
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,23 +25,30 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @subpackage   Auth
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Auth
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxAuthExtension extends Extension{
 
     public function load(array $config, ContainerBuilder $container)
     {
+        $loader  = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('serviceformtype.xml');
+        
         // we load all services
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services_cmfconfig.yml');
-        $loader->load('mail_blacklist.yml');
         $loader->load('services.yml');
         // we load config
         $configuration = new Configuration();
         $config  = $this->processConfiguration($configuration, $config);
-        
         
         /**
          * Login failure config parameter
@@ -119,6 +131,24 @@ class SfynxAuthExtension extends Extension{
         	if (isset($config['theme']['layout'])) {
         	    $container->setParameter('sfynx.auth.theme.layout', $config['theme']['layout']); // "SfynxSmoothnessBundle::Layout\\"
         	}
+                
+                
+                
+                if (isset($config['theme']['email']['registration']['from_email']['address'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.registration.from_email.address', $config['theme']['email']['registration']['from_email']['address']);
+        	}
+                if (isset($config['theme']['email']['registration']['template'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.registration.template', $config['theme']['email']['registration']['template']); 
+        	}   
+                if (isset($config['theme']['email']['resetting']['from_email']['address'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.resetting.from_email.address', $config['theme']['email']['resetting']['from_email']['address']);
+        	}
+                if (isset($config['theme']['email']['resetting']['template'])) {
+        	    $container->setParameter('sfynx.auth.theme.email.resetting.template', $config['theme']['email']['resetting']['template']); 
+        	}                 
+                
+                
+                
         	if (isset($config['theme']['global']['layout'])) {
         	    $container->setParameter('sfynx.auth.theme.layout.global', $config['theme']['global']['layout']); // "SfynxSmoothnessBundle::Layout\\layout-global-cmf.html.twig"
         	}
@@ -225,5 +255,4 @@ class SfynxAuthExtension extends Extension{
     {
     	return 'sfynx_auth';
     }    
-
 }

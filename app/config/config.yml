@@ -1,5 +1,7 @@
 imports:
     - { resource: parameters.yml }
+    - { resource: mail_blacklist.yml }
+    - { resource: securityips_blacklist.yml }
     - { resource: security.yml }    
     - { resource: "@SfynxAclManagerBundle/Resources/config/security.yml" }
     - { resource: "@SfynxAdminBundle/Resources/config/security.yml" }
@@ -15,9 +17,9 @@ framework:
     validation:      { enabled: true, enable_annotations: true }
     templating:
         engines: ['twig']
-        #assets_version: SomeVersionScheme
+        assets_version: v1_0_0
     default_locale:  "%locale%"
-    trusted_proxies: ~
+    trusted_proxies: [127.0.0.1] # is to Work behind a Load Balancer or a Reverse Proxy
     #trust_proxy_headers: false # Whether or not the Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP) 
     session:
         name: %pi_session_name%
@@ -31,7 +33,6 @@ framework:
 #        gc_divisor:           ~
 #        gc_probability:       ~
 #        gc_maxlifetime:       ~
-#        save_path:            %kernel.cache_dir%/sessions               
     #esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php       
     fragments:  { path: /_proxy  } 
     
@@ -203,9 +204,9 @@ doctrine:
                 alias: Gedmo
                 prefix: Gedmo\Tree\Entity
                 dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
-        metadata_cache_driver: array # array|apc
-        query_cache_driver: array
-        result_cache_driver: array
+        metadata_cache_driver: apc # array|apc|memcache
+        query_cache_driver: apc # array|apc|memcache
+        result_cache_driver: array # BE CARFULL ::: Strange Issue with Query Hint and APC or memcache
 #        metadata_cache_driver:
 #            type: memcache
 #            host: localhost
@@ -596,7 +597,7 @@ sfynx_cmf:
         homepage_deletewidget: true
         page_management_by_user_only: true
         route:
-            with_prefix_locale: false
+            with_prefix_locale: true
             single_slug: false
         esi:
             authorized: false
@@ -677,10 +678,19 @@ sfynx_auth:
     default_login_redirection:
         redirection: admin_homepage
         template: layout-pi-admin-cmf.html.twig
-    theme:     
+    theme:  
         name: smoothness # {'flatlab','smoothness'} 
         login: "SfynxSmoothnessBundle::Login\\"
         layout: "SfynxSmoothnessBundle::Layout\\"
+        email:
+            registration:
+                from_email:
+                    address: contact@sfynx.fr
+                template: SfynxSmoothnessBundle:Login\\Registration:email.txt.twig
+            resetting:
+                from_email:
+                    address: contact@sfynx.fr
+                template: SfynxSmoothnessBundle:Login\\Resetting:email.txt.twig        
         global:
             layout: "SfynxSmoothnessBundle::Layout\\layout-global-cmf.html.twig"
             css: "bundles/sfynxsmoothness/layout/screen-layout-global.css"
@@ -688,8 +698,8 @@ sfynx_auth:
             layout: "SfynxSmoothnessBundle::Layout\\layout-ajax.html.twig"
             css: "bundles/sfynxsmoothness/layout/screen-layout-ajax.css"
         error:
-            route_name: ~ # error_404
-            html: "@SfynxSmoothnessBundle/Resources/views/Error/error.html.twig"
+            route_name: error_404
+            html: ~ #"@SfynxSmoothnessBundle/Resources/views/Error/error.html.twig"
         admin:
             pc: "SfynxSmoothnessBundle::Layout\\Pc\\"
             mobile: "SfynxSmoothnessBundle::Layout\\Mobile\\Admin\\"
@@ -748,8 +758,15 @@ sfynx_tool:
     mail:
         overloading_mail: ~ # test@gmail.com  
     date:
-        cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"        
-        
+        cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"  
+
+#
+# SfynxMigrationBundle configuration
+#
+sfynx_migration:
+    path_dir:
+        migration: "%kernel.root_dir%/migration/"          
+
 #
 # SfynxMediaBundle configuration
 #       
@@ -842,4 +859,12 @@ sfynx_ws:
         prefix_host: 'http://'
         uri_proxy: 'http://www.sfyn22.local'
         uri_proxy_login: 'http://www.sfyn22.local'
-        application_name: sso-sfynx                         
+        application_name: sso-sfynx  
+        
+#
+# SfynxWsseBundle configuration
+#       
+sfynx_wsse:
+    security:
+        cache_dir: %wsse_cache_dir%
+        nonce_lifetime: 300

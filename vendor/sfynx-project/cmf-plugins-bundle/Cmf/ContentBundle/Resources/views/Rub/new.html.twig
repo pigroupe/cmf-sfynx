@@ -1,0 +1,14 @@
+{%  initJquery 'FORM:prototype-bytab' %}
+{% extends app.request.attributes.get('sfynx-layout') %}
+
+{% block title %}
+
+	<h1>Rubrique creation</h1>
+	
+{% endblock %}
+ 
+{% block content %}
+
+	{% include 'PluginsContentBundle:Rub:new_view.html.twig' with {'form':form, 'NoLayout':NoLayout} %}
+
+{% endblock %}

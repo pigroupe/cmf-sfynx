@@ -62,8 +62,10 @@ class PiRouteExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'path_url'        => new \Twig_Function_Method($this, 'getUrlByRouteFunction'),
-            'match_url'       => new \Twig_Function_Method($this, 'getMatchUrlFunction'),
+            'path_url'    => new \Twig_Function_Method($this, 'getUrlByRouteFunction'),
+            'match_url'   => new \Twig_Function_Method($this, 'getMatchUrlFunction'),
+            'in_paths'    => new \Twig_Function_Method($this, 'inPathsFunction'),
+            'route_match' => new \Twig_Function_Method($this, 'isRouteMatchingFunction'), 
         );
     }
     
@@ -112,5 +114,66 @@ class PiRouteExtension extends \Twig_Extension
         }
         
         return $match;
+    }    
+    
+    /**
+     * Return the $returnTrue value if the route of the page is include in $paths value, else return the $returnFalse value.
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */    
+    public function inPathsFunction($matches, $returnTrue = '', $returnFalse = '')
+    {
+        $route = (string) $this->container->get('request')->get('_route');
+        $names = explode(':', $matches);
+        $is_true = false;        
+        if (is_array($names)) {
+            foreach ($names as $k => $path) {
+                if ($route == $path)
+                    $is_true = true;
+            }
+            if ($is_true) {
+                return $returnTrue;
+            } else {
+                return $returnFalse;
+            }            
+        } else {
+            if ($route == $matches) {
+                return $returnTrue;
+            } else {
+                return $returnFalse;
+            }            
+        }
+    }   
+    
+    public function isRouteMatchingFunction($matches)
+    {
+        $current = $this->request->get('_route');
+        $path = $this->request->getPathInfo();
+
+        foreach ($matches as $match) {
+            if (!is_string($match)) {
+                continue;
+            }
+            // Test Path
+            if (substr($match, -1) == "*") {
+                // Has a wildcard
+                $temp = str_replace("*", "", $match);
+                if (strpos($path, $temp) !== false) {
+                    return true;
+                }
+            } else {
+                // Doesn't have a wildcard
+                if ($match == $path) {
+                    return true;
+                }
+            }
+
+            // Test route name
+            if ($current && $current == $match) {
+                return true;
+            }
+        }
+
+        return false;
     }    
 }

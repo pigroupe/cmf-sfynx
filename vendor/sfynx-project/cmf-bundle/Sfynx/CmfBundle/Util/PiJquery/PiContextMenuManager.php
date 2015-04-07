@@ -267,7 +267,7 @@ class PiContextMenuManager extends PiJqueryExtension
                     }
                 },
                 $.contextMenu.separator,
-                { '<?php echo $this->translator->trans('pi.contextmenu.page.refresh'); ?>': 
+                { '<span class="page_action_refresh" ><?php echo $this->translator->trans('pi.contextmenu.page.refresh'); ?></span>': 
                     {
                         onclick:function() {
                                window.location.href= "<?php echo $this->container->get('router')->generate('public_refresh_page') ?>"; 
@@ -296,7 +296,7 @@ class PiContextMenuManager extends PiJqueryExtension
                         icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/update-page-16.png"); ?>'
                     }
                 },   
-                { '<?php echo $this->translator->trans('pi.contextmenu.page.copy'); ?>': 
+                { '<span class="page_action_copy" ><?php echo $this->translator->trans('pi.contextmenu.page.copy'); ?></span>': 
                     {
                         onclick:function() {
                                window.location.href= "<?php echo $this->container->get('router')->generate('public_copy_page') ?>"; 

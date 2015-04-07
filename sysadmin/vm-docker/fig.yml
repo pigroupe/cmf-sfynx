@@ -1,0 +1,65 @@
+front:
+  build: images/nginx
+  ports:
+    - "80:80"
+    - "9000:9000"
+  links:
+    - mysql:mysql
+    - mongodb:mongodb
+    - memcached:memcached
+    - redis:redis
+    - elasticsearch:elasticsearch
+  volumes:
+    - www:/var/www
+    - sites:/etc/nginx/sites-enabled
+
+mysql:
+  image: tutum/mysql
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_PASS: password
+
+mongodb:
+  image: tutum/mongodb
+  ports:
+    - "27017:27017"
+    - "28017:28017"
+  environment:
+    MONGODB_PASS: password
+
+memcached:
+  image: tutum/memcached
+  ports:
+    - "11211:11211"
+  environment:
+    MEMCACHED_PASS: password
+
+redis:
+  image: tutum/redis
+  ports:
+    - "6379:6379"
+  environment:
+    REDIS_PASS: password
+
+elasticsearch:
+  image: tutum/elasticsearch
+  ports:
+    - "9200:9200"
+  environment:
+    ELASTICSEARCH_USER: admin
+    ELASTICSEARCH_PASS: password
+
+shipyardDb:
+  image: shipyard/rethinkdb
+  ports:
+    - "49153:49153"
+    - "49154:49154"
+    - "49155:49155"
+
+shipyard:
+  image: shipyard/shipyard
+  ports:
+    - "8080:8080"
+  links:
+    - shipyardDb:rethinkdb

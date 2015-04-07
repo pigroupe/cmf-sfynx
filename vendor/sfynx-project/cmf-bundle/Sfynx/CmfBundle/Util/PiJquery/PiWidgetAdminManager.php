@@ -15,7 +15,6 @@ namespace Sfynx\CmfBundle\Util\PiJquery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Sfynx\ToolBundle\Twig\Extension\PiJqueryExtension;
-use Sfynx\ToolBundle\Exception\ExtensionException;
 
 /**
  * Widget Admin Jquery UI plugin

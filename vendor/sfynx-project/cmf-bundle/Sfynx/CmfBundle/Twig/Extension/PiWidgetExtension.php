@@ -37,7 +37,7 @@ class PiWidgetExtension extends \Twig_Extension
     protected static $_content;    
     
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      * @access  protected
      */
     protected $container;
@@ -526,11 +526,11 @@ class PiWidgetExtension extends \Twig_Extension
     	$dossier = $this->container->get('pi_app_admin.manager.page')->createCacheWidgetRepository();
     	$this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
     	$value = $this->container->get("sfynx.cache.filecache")->get($key);
-    	if ( !$value ) {
-    		$value = $this->container->get($serviceName)->$method($id, $lang, $params);
-    		$this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier); // IMPORTANT if in the method of the service the path is overwrite.
-    		// important : if ttl is equal to zero then the cache is infini
-    		$this->container->get("sfynx.cache.filecache")->set($key, $value, $ttl);
+    	if (!$value) {
+            $value = $this->container->get($serviceName)->$method($id, $lang, $params);
+            $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier); // IMPORTANT if in the method of the service the path is overwrite.
+            // important : if ttl is equal to zero then the cache is infini
+            $this->container->get("sfynx.cache.filecache")->set($key, $value, $ttl);
     	}
     
     	return $value;

@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-19
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,13 +23,19 @@ use Sfynx\ToolBundle\Builder\PiArrayManagerBuilderInterface;
  * Description of array manager
  *
  * <code>
- *     $ArrayFormatter    = $container->get('sfynx.tool.array_manager');
- *  $result            = $ArrayFormatter->dump($array); // obtains a datetime instance
+ *     $ArrayFormatter = $container->get('sfynx.tool.array_manager');
+ *     $result         = $ArrayFormatter->dump($array); // obtains a datetime instance
  * </code>
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class PiArrayManager implements PiArrayManagerBuilderInterface 
 {
@@ -63,10 +74,10 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
      * 		$this->get("sfynx.tool.array_manager")->recursive_method_return($params, 'array_change_key_case', CASE_UPPER);
      * </code>
      * 
-     * @param    array      $array
-     * @param    string        $method
+     * @param array  $array
+     * @param string $method
+     * 
      * @return array
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public static function recursive_method_return(array &$array, $method, $option = null)
@@ -87,9 +98,9 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
     /**
      * Trims a entire array recursivly.
      *
-     * @param       array      $Input      Input array
-     * @return array
+     * @param array $Input Input array
      * 
+     * @return array
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function TrimArray($Input)
@@ -160,7 +171,7 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
         $hash = null;
 
         if (is_array($array) && count($array) > 1) {
-            for ($i = 0; $i <= count($array); $i+= 2) {
+            for ($i = 0, $size = count($array); $i <= $size; $i+= 2) {
                 if (isset($array[$i])) {
                     $key = $array[$i];
                     $value = $array[$i + 1];

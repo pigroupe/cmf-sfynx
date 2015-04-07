@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage   Auth
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @category   Auth
+ * @package    DependencyInjection
+ * @subpackage Configuration
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,9 +26,15 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  * 
- * @subpackage   Auth
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Auth
+ * @package    DependencyInjection
+ * @subpackage Configuration
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class Configuration implements ConfigurationInterface
 {
@@ -200,6 +211,36 @@ class Configuration implements ConfigurationInterface
             	    ->scalarNode('name')->isRequired()->defaultValue("smoothness")->cannotBeEmpty()->end()
             	    ->scalarNode('login')->isRequired()->defaultValue('SfynxSmoothnessBundle::Login\\')->cannotBeEmpty()->end()
             	    ->scalarNode('layout')->isRequired()->defaultValue('SfynxSmoothnessBundle::Layout\\')->cannotBeEmpty()->end()
+                
+                    ->arrayNode('email')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->arrayNode('registration')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->arrayNode('from_email')
+                                            ->canBeUnset()
+                                            ->children()
+                                                ->scalarNode('address')->isRequired()->cannotBeEmpty()->end()
+                                            ->end()
+                                        ->end()
+                                        ->scalarNode('template')->defaultValue('FOSUserBundle:Registration:email.txt.twig')->end()
+                                    ->end()
+                                ->end()
+                                ->arrayNode('resetting')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->arrayNode('from_email')
+                                            ->canBeUnset()
+                                            ->children()
+                                                ->scalarNode('address')->isRequired()->cannotBeEmpty()->end()
+                                            ->end()
+                                        ->end()
+                                        ->scalarNode('template')->defaultValue('FOSUserBundle:Registration:email.txt.twig')->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                    ->end()
             	    
             	    ->arrayNode('global')
                 	    ->addDefaultsIfNotSet()

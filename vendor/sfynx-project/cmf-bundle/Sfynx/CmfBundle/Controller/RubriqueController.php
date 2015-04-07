@@ -301,8 +301,8 @@ class RubriqueController extends CmfabstractController
      *
      * @Secure(roles="ROLE_EDITOR")
      * @param string $category
-     * @access    public
-     *
+     * 
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function treeAction()
@@ -319,49 +319,52 @@ class RubriqueController extends CmfabstractController
         $self->translator = $this->container->get('translator');
         $options = array(
                 'decorate' => true,
-                'rootOpen' => "\n <div class='acc-section'><div class='acc-content'><ul class='acc'> \n",
-                'rootClose' => "\n </ul></div></div> \n",
+                'rootOpen' => "\n <div class='inner'><ul> \n",
+                'rootClose' => "\n </ul></div> \n",
                 'childOpen' => "    <li> \n",        // 'childOpen' => "    <li class='collapsed' > \n",
                 'childClose' => "    </li> \n",
-                'nodeDecorator' => function($node) use (&$self) {
-                     
+                'nodeDecorator' => function($node) use (&$self) {                     
                     // define of all url images
                     $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
-                    $UrlpathAdd    = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
+                    $UrlpathAdd   = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
                     $Urlpath1     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
                     $Urlpath2     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
                     $Urlpath3     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
                     $Urlpath4     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
     
-                    $linkNode     = '<h3 class="tree-node" >'
-                            . '<img src="'.$Urlpath0.'" height="21px" />&nbsp;&nbsp;&nbsp;' . $node['titre']
-                            . '&nbsp;&nbsp;&nbsp; (node: ' .  $node['id'] . ', level : ' .  $node['lvl'] . ')'
-                        . '</h3>';
+                    $linkNode     = '<h4>'. $node['titre'] . '&nbsp;&nbsp;&nbsp; (node: ' .  $node['id'] . ', level : ' .  $node['lvl'] . ')' . '</h4>';
     
-                    if ( ($node['lft'] == -1) && ($node['rgt'] == 0) )   $linkNode .= '<div class="acc-section"><div class="acc-content">';
-                    if ( ($node['lft'] !== -1) && ($node['rgt'] !== 0) ) $linkNode .= '<div class="acc-section"><div class="acc-content">';
-                    if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )  $linkNode .= '<div class="acc-section"><div class="acc-content">';
+                    if ( ($node['lft'] == -1) && ($node['rgt'] == 0) )   $linkNode .= '<div class="inner">';
+                    if ( ($node['lft'] !== -1) && ($node['rgt'] !== 0) ) $linkNode .= '<div class="inner">';
+                    if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )  $linkNode .= '<div class="inner">';
     
                     $linkAdd    = '<a href="#" class="tree-action" data-url="' . $self->generateUrl('admin_rubrique_new', array("NoLayout" => true,  'parent' => $node['id'])) . '" ><img src="'.$UrlpathAdd.'" title="'.$self->translator->trans('pi.add').'"  width="16" /></a>';
                     $linkEdit   = '<a href="#" class="tree-action" data-url="' . $self->generateUrl('admin_rubrique_edit', array('id' => $node['id'], "NoLayout" => true)) . '" ><img src="'.$Urlpath1.'" title="'.$self->translator->trans('pi.edit').'"  width="16" /></a>';
-                    $linkUp        = '<a href="' . $self->generateUrl('admin_rubrique_move_up', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath2.'" title="'.$self->translator->trans('pi.move-up').'" width="16" /></a>';
-                    $linkDown     = '<a href="' . $self->generateUrl('admin_rubrique_move_down', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath3.'" title="'.$self->translator->trans('pi.move-down').'" width="16" /></a>';
-                    $linkDelete    = '<a href="' . $self->generateUrl('admin_rubrique_node_remove', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath4.'" title="'.$self->translator->trans('pi.delete').'"  width="16" /></a>';
+                    $linkUp     = '<a href="' . $self->generateUrl('admin_rubrique_move_up', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath2.'" title="'.$self->translator->trans('pi.move-up').'" width="16" /></a>';
+                    $linkDown   = '<a href="' . $self->generateUrl('admin_rubrique_move_down', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath3.'" title="'.$self->translator->trans('pi.move-down').'" width="16" /></a>';
+                    $linkDelete = '<a href="' . $self->generateUrl('admin_rubrique_node_remove', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath4.'" title="'.$self->translator->trans('pi.delete').'"  width="16" /></a>';
     
                     $linkNode .= $linkAdd . '&nbsp;&nbsp;&nbsp;' . $linkEdit . '&nbsp;&nbsp;&nbsp;' . $linkUp . '&nbsp;&nbsp;&nbsp;' . $linkDown . '&nbsp;&nbsp;&nbsp;' . $linkDelete;
     
-                    if ( ($node['lft'] == -1) && ($node['rgt'] == 0) )  $linkNode .= '</div></div>'; // if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )
-                    if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) ) $linkNode .= '</div></div>'; // if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )
+                    if ( ($node['lft'] == -1) && ($node['rgt'] == 0) )  $linkNode .= '</div>'; // if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )
+                    if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) ) $linkNode .= '</div>'; // if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )
                     return $linkNode;
                 }
         );
          
         // we repair the tree
-        $em->getRepository("SfynxCmfBundle:Rubrique")->setRecover();
+        $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
+        
+        $node   = $this->container->get('request')->query->get('node');
+        if (!empty($node) ){
+            $node  = $em->getRepository("SfynxCmfBundle:Rubrique")->findNodeOr404($node, $locale,'object');
+        } else {
+            $node = null;
+        }        
          
-        $nodes         = $em->getRepository("SfynxCmfBundle:Rubrique")->getAllTree($locale, '', 'array', false, true);
-        $tree        = $em->getRepository("SfynxCmfBundle:Rubrique")->buildTree($nodes, $options);
+        $nodes  = $em->getRepository("SfynxCmfBundle:Rubrique")->getAllTree($locale, '', 'array', false, true, $node);
+        $tree   = $em->getRepository("SfynxCmfBundle:Rubrique")->buildTree($nodes, $options);
          
         return $this->render("SfynxCmfBundle:Rubrique:$template", array(
                 'tree'          => $tree,
@@ -402,7 +405,7 @@ class RubriqueController extends CmfabstractController
             $em->getRepository("SfynxCmfBundle:Rubrique")->moveUp($node);
     
         // we repair the tree
-        $em->getRepository("SfynxCmfBundle:Rubrique")->setRecover();
+        $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
     
         return $this->redirect($this->generateUrl('admin_rubrique_tree', array('NoLayout' => $NoLayout)));
@@ -441,7 +444,7 @@ class RubriqueController extends CmfabstractController
             $em->getRepository("SfynxCmfBundle:Rubrique")->moveDown($node);
     
         // we repair the tree
-        $em->getRepository("SfynxCmfBundle:Rubrique")->setRecover();
+        $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
          
         return $this->redirect($this->generateUrl('admin_rubrique_tree', array('NoLayout' => $NoLayout)));

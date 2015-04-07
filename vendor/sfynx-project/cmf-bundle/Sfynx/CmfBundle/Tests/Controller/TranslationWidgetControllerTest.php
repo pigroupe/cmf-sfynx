@@ -6,9 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TranslationWidgetControllerTest extends WebTestCase
 {
-    /*
+    
     public function testCompleteScenario()
     {
+        $this->markTestSkipped('must be revisited.');
+        
         // Create a new client to browse the application
         $client = static::createClient();
 
@@ -50,5 +52,4 @@ class TranslationWidgetControllerTest extends WebTestCase
         // Check the entity has been delete on the list
         $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
     }
-    */
 }

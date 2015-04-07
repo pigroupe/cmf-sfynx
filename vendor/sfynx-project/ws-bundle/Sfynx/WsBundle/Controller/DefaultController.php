@@ -13,8 +13,9 @@
 namespace Sfynx\WsBundle\Controller;
 
 use Sfynx\WsBundle\Exception\ClientException;
-use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\CoreBundle\Controller\abstractController;
 use Sfynx\ToolBundle\Util\PiStringManager;
+use Sfynx\AuthBundle\Entity\User;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,7 +96,7 @@ class DefaultController extends abstractController
     	$application    = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_application', null), $key);    	
     	// we check if the user ID exists in the authentication service.
     	// If the user ID doesn't exist, we generate.
-    	if (!$this->isUserdIdExisted($userId)) {
+    	if (!$this->container->get('sfynx.auth.user_manager')->isUserdIdExisted($userId)) {
             //-----we initialize de logger-----
             $logger = $this->container->get('sfynx.tool.log_manager');
             $logger->setInit('log_client_auth', date("YmdH"));
@@ -112,13 +113,14 @@ class DefaultController extends abstractController
             if (isset($config['log'][$env])) {
                 $is_debug = $config['log'][$env];
                 if ($is_debug){
-                        $logger->save();
+                    $logger->save();
                 }   		
             }
     	    throw ClientException::callBadAuthRequest(__CLASS__);
     	} else {
     	    // else we get the token associated to the user ID.
-    	    $token = $this->getTokenByUserIdAndApplication($userId, $application);
+    	    $token = $this->container->get('sfynx.auth.user_manager')
+                    ->getTokenByUserIdAndApplication($userId, $application);
     	    if ($token) {
     	        $isAuthorization = true;
     	    } else {
@@ -139,10 +141,10 @@ class DefaultController extends abstractController
             $env = $this->container->get("kernel")->getEnvironment();
             $config = $this->container->getParameter("ws.auth");
             if (isset($config['log'][$env])) {
-                    $is_debug = $config['log'][$env];
-                    if ($is_debug){
-                            $logger->save();
-                    }   		
+                $is_debug = $config['log'][$env];
+                if ($is_debug){
+                        $logger->save();
+                }   		
             }  	    
     	}    	
     	if ($format == 'json') {
@@ -225,8 +227,9 @@ class DefaultController extends abstractController
     	$application    = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($request->headers->get('x-auth-ws_application', null), $key);    	
     	// If the user ID exists,
     	// we associate the token to the userId
-    	if ($this->isUserdIdExisted($userId)) {
-            $success = $this->setAssociationUserIdWithApplicationToken($userId, $token, $application);
+    	if ($this->container->get('sfynx.auth.user_manager')->isUserdIdExisted($userId)) {
+            $success = $this->container->get('sfynx.auth.user_manager')
+                    ->setAssociationUserIdWithApplicationToken($userId, $token, $application);
     	} else {
             $success = false;
     	}
@@ -296,8 +299,9 @@ class DefaultController extends abstractController
     	}
     	//
     	$entity   = $em->getRepository('SfynxUserBundle:User')->find($userId);
-    	if ($entity instanceof \Sfynx\AuthBundle\Entity\User) {
-            return $this->authenticateUser($entity, $response, false);
+    	if ($entity instanceof User) {
+            return $this->container->get('sfynx.auth.user_manager')
+                    ->authenticateUser($entity, $response, false);
     	} else {
             $tab = array();
             $tab['succes_authenticate'] = false;
@@ -361,7 +365,7 @@ class DefaultController extends abstractController
     	if ($this->get('security.context')->getToken() 
                 instanceof UsernamePasswordToken) {
             // we get user
-            $token = $this->getTokenByUserIdAndApplication(
+            $token = $this->container->get('sfynx.auth.user_manager')->getTokenByUserIdAndApplication(
                 $this->get('security.context')->getToken()->getUser(),
                 $application
             );
@@ -463,14 +467,16 @@ class DefaultController extends abstractController
         // we set the locale country value egal to the locale .com value
         $response->headers->setCookie(new Cookie('_locale', $locale, time() + 8640000));
         // we get user by token
-        $user = $this->getUserByTokenAndApplication($token, $application);
-        if ($user instanceof \FindMrMiles\UserBundle\Entity\User) {
-            return $this->authenticateUser($user, $response, false);
+        $user = $this->container->get('sfynx.auth.user_manager')
+                ->getUserByTokenAndApplication($token, $application);
+        if ($user instanceof User) {
+            return $this->container->get('sfynx.auth.user_manager')
+                    ->authenticateUser($user, $response, false);
         } else {
             $response = new RedirectResponse($request->get('ws_redirect_uri'));
             // we do not remove the cookie due to avoid a rollback from SSO connexion in HandlerRequest
             $response->headers->setCookie(
-                new \Symfony\Component\HttpFoundation\Cookie(
+                new Cookie(
                     'findmrmiles-connected',
                     0,
                     time() + 8640000

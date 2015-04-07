@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Tool
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @category   Tool
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,9 +25,15 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
 /**
  * This is the class that loads and manages your bundle configuration
  *
- * @subpackage   Tool
- * @package    Configuration
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   Tool
+ * @package    DependencyInjection
+ * @subpackage Extension
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class SfynxToolExtension extends Extension{
 
@@ -41,11 +52,11 @@ class SfynxToolExtension extends Extension{
          * Mail config parameter
          */
         if (isset($config['mail'])){
-        	if (isset($config['mail']['overloading_mail'])) {
-        		$container->setParameter('sfynx.tool.mail.overloading_mail', $config['mail']['overloading_mail']);
-        	} else {
-        		$container->setParameter('sfynx.tool.mail.overloading_mail', '');
-        	}
+            if (isset($config['mail']['overloading_mail'])) {
+                $container->setParameter('sfynx.tool.mail.overloading_mail', $config['mail']['overloading_mail']);
+            } else {
+                $container->setParameter('sfynx.tool.mail.overloading_mail', '');
+            }
         }
         
         /**
@@ -65,6 +76,5 @@ class SfynxToolExtension extends Extension{
     public function getAlias()
     {
     	return 'sfynx_tool';
-    }    
-
+    }   
 }

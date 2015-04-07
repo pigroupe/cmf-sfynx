@@ -1,0 +1,19 @@
+<a href="{{ path('admin_content_diaporama_edit', { 'id': entity.id, 'NoLayout':1, 'category':category }) }}" title="{{ 'pi.grid.action.edit'|trans }}">Editer les images</a>
+
+{% if entity.blocgeneral.media.image is defined %}
+    {{ picture_index(entity.blocgeneral.media.image, 'slider', slider_width ,  slider_height )|raw }}
+    {{ picture_index(entity.blocgeneral.media.image, 'mosaique', mosaique_width ,  mosaique_height )|raw }}
+    {{ picture_index(entity.blocgeneral.media.image, 'image_principale',  image_principale_width ,  image_principale_height )|raw }}
+{%  else %}
+   </br></br> Aucune image n'est associée à cet diaporama
+{% endif %}
+   
+{% for diapo in entity.medias %}
+    {% if diapo.medias.image is defined %}
+        {{ picture_index(diapo.medias.image, 'slider', slider_width ,  slider_height )|raw }}
+        {{ picture_index(diapo.medias.image, 'slider_miniature', slider_miniature_width ,  slider_miniature_height )|raw }}
+    {%  else %}
+        </br></br> Aucune image n'est associée à cet diaporama
+    {% endif %} 
+{% endfor %}     
+

@@ -6,7 +6,7 @@
  * @package    Handler
  * @subpackage Request
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -20,16 +20,7 @@ namespace Sfynx\AuthBundle\EventListener;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use Sfynx\CmfBundle\Lib\Browscap;
-use Sfynx\CmfBundle\Lib\MobileDetect;
-
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\CmfBundle\SfynxCmfEvents;
+use Sfynx\ToolBundle\Util\PiFileManager;
 
 /**
  * Custom request handler.
@@ -39,7 +30,7 @@ use Sfynx\CmfBundle\SfynxCmfEvents;
  * @package    Handler
  * @subpackage Request
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -75,7 +66,7 @@ class HandlerRequest
     /**
      * Invoked to modify the controller that should be executed.
      *
-     * @param FilterControllerEvent $event The event
+     * @param GetResponseEvent $event The event
      * 
      * @access public
      * @return void
@@ -84,8 +75,8 @@ class HandlerRequest
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
-        	// ne rien faire si ce n'est pas la requête principale
-        	return;
+            // ne rien faire si ce n'est pas la requête principale
+            return;
         }        
         // Set request
         $this->request = $event->getRequest($event);
@@ -95,10 +86,10 @@ class HandlerRequest
         if ($this->request->cookies->has('sfynx-layout')) {
             $this->layout = $this->request->cookies->get('sfynx-layout');
         } else {
-       		$this->layout = $this->container->getParameter('sfynx.auth.theme.layout.front.pc') . $this->init_pc_layout;
+            $this->layout = $this->container->getParameter('sfynx.auth.theme.layout.front.pc') . $this->init_pc_layout;
         }
         if ($this->request->cookies->has('sfynx-screen')) {
-        	$this->screen = $this->request->cookies->get('sfynx-screen');
+            $this->screen = $this->request->cookies->get('sfynx-screen');
         } else {
             $this->screen = "layout";
         }
@@ -108,7 +99,7 @@ class HandlerRequest
                 && $this->container->has("sfynx.browser.lib.browscap")
         ) {
             // we get the browser
-            \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($this->browscap_cache_dir, 0777);
+            PiFileManager::mkdirr($this->browscap_cache_dir, 0777);
             if ($this->request->attributes->has('sfynx-browser')) {
                 $this->browser = $this->request->attributes->get('sfynx-browser');
             } else {
@@ -153,11 +144,12 @@ class HandlerRequest
     	$this->init_mobile_layout     = $this->container->getParameter('sfynx.auth.layout.init.mobile.template');
     	$this->is_browser_authorized  = $this->container->getParameter("sfynx.auth.browser.switch_layout_mobile_authorized");
     	//    	
-    	if ($this->container->has("sfynx.browser.lib.mobiledetect") && $this->container->hasParameter("sfynx.browser.browscap.cache_dir")) {
+    	if ($this->container->has("sfynx.browser.lib.mobiledetect") 
+                && $this->container->hasParameter("sfynx.browser.browscap.cache_dir")
+        ) {
     	    $this->browscap_cache_dir  = $this->container->getParameter("sfynx.browser.browscap.cache_dir");
     	} else {
     	    $this->browscap_cache_dir  = null;
     	}
     }   
-
 }

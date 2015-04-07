@@ -3,9 +3,9 @@
  * This file is part of the <web service> project.
  *
  * @subpackage WS
- * @package Manager
- * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-03-26
+ * @package    Manager
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2013-03-26
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,14 +14,13 @@ namespace Sfynx\WsBundle\Manager\Client;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sfynx\WsBundle\Manager\Client\AbstractClient;
-use phpbrowscap\Browscap;
 
 /**
  * Authentification client
  * 
  * @subpackage WS
- * @package Manager
- * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @package    Manager
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class AuthClient extends AbstractClient
 {
@@ -58,8 +57,9 @@ class AuthClient extends AbstractClient
     /**
      * Constructor.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface    $container
-     * @param string $clientname
+     * @param ContainerInterface $container
+     * @param string             $clientname
+     * 
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -79,7 +79,8 @@ class AuthClient extends AbstractClient
      * @param string $handler
      * @param string $method
      * @param string $slug
-     * @param array $getparams
+     * @param array  $getparams
+     * 
      * @return mixed
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -142,8 +143,9 @@ class AuthClient extends AbstractClient
     /**
      * Sets the url
      *
-     * @param string $handler name of the handler.
-     * @param array    $getparams
+     * @param string $handler   name of the handler.
+     * @param array  $getparams Parameter values
+     * 
      * @return void
      * @access private
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>

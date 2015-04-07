@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @subpackage   Admin_Entities
+ * @category   Cmf
  * @package    Entity
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-12-28
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,10 +29,15 @@ use Sfynx\AuthBundle\Repository\RoleRepository;
  * @ORM\Entity(repositoryClass="Sfynx\CmfBundle\Repository\TranslationPageRepository")
  * @ORM\HasLifecycleCallbacks()
  * 
- * @subpackage   Admin_Entities
+ * @category   Cmf
  * @package    Entity
- * 
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class TranslationPage
 {
@@ -70,7 +80,7 @@ class TranslationPage
      * @var \Sfynx\AuthBundle\Entity\Langue $langCode
      *
      * @ORM\ManyToOne(targetEntity="Sfynx\AuthBundle\Entity\Langue", cascade={"persist", "detach"})
-     * @ORM\JoinColumn(name="lang_code", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="lang_code", referencedColumnName="id", nullable=true)
      */
     protected $langCode;
     
@@ -253,14 +263,11 @@ class TranslationPage
 
     public function __construct()
     {
-        $this->tags                 = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->comments             = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->historical_status     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags              = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments          = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->historical_status = new \Doctrine\Common\Collections\ArrayCollection();
     
         $this->setEnabled(true);
-        //$this->setCreatedAt(new \DateTime());
-        //$this->setUpdatedAt(new \DateTime());
-    
     }
     
     public function __toString()
@@ -291,30 +298,30 @@ class TranslationPage
     public function slugify($text)
     {
         // replace non letter or digits by -
-        //$text = preg_replace('#[^\\pL\d]+#u', '-', $text);
-        $text = preg_replace('#[^\\pL\/\d]+#u', '-', $text);
-
+        $text = preg_replace_callback(
+            '#[^\\pL\/\d]+#u',
+            function($matches) {
+                return "-";
+            },
+            $text
+        );
         // delete all accent
         $translit = array('Á'=>'A','À'=>'A','Â'=>'A','Ä'=>'A','Ã'=>'A','Å'=>'A','Ç'=>'C','É'=>'E','È'=>'E','Ê'=>'E','Ë'=>'E','Í'=>'I','Ï'=>'I','Î'=>'I','Ì'=>'I','Ñ'=>'N','Ó'=>'O','Ò'=>'O','Ô'=>'O','Ö'=>'O','Õ'=>'O','Ú'=>'U','Ù'=>'U','Û'=>'U','Ü'=>'U','Ý'=>'Y','á'=>'a','à'=>'a','â'=>'a','ä'=>'a','ã'=>'a','å'=>'a','ç'=>'c','é'=>'e','è'=>'e','ê'=>'e','ë'=>'e','í'=>'i','ì'=>'i','î'=>'i','ï'=>'i','ñ'=>'n','ó'=>'o','ò'=>'o','ô'=>'o','ö'=>'o','õ'=>'o','ú'=>'u','ù'=>'u','û'=>'u','ü'=>'u','ý'=>'y','ÿ'=>'y');
         $text       = strtr($text, $translit);
-        
         // trim
         $text = trim($text, '-');
-    
         // transliterate
-        if (function_exists('iconv'))
+        if (function_exists('iconv')) {
             $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-    
+        }
         // lowercase
         $text = strtolower($text);
-    
         // remove unwanted characters
-        //$text = preg_replace('#[^-\w]+#', '', $text);
-    
-        if (empty($text))
+        if (empty($text)) {
             return '';
-        else
+        } else {
             return $text;
+        }
     }    
     
     /**
@@ -728,7 +735,7 @@ class TranslationPage
         $this->tags[] = $tag;
     }
     
-    public function setTags($tags)
+    public function setTags(\Doctrine\Common\Collections\ArrayCollection $tags)
     {
         $this->tags = $tags;
     }
@@ -778,7 +785,7 @@ class TranslationPage
      *
      * @param \Sfynx\AuthBundle\Entity\Langue
      */
-    public function setLangCode(\Sfynx\AuthBundle\Entity\Langue $langCode)
+    public function setLangCode($langCode)
     {
         $this->langCode = $langCode;
     }

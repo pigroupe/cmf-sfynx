@@ -554,7 +554,13 @@ class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuil
         $tags = self::$_delete_tags;        
         foreach($tags as $key => $tag){
             if (preg_match_all("/<{$tag}[^>]*>([^`]*?)<\/{$tag}>/i", $body, $allTags, PREG_SET_ORDER)){
-                $body = preg_replace("/<{$tag}[^>]*>([^`]*?)<\/{$tag}>/i", '', $body);
+                $body = preg_replace_callback(
+                    "/<{$tag}[^>]*>([^`]*?)<\/{$tag}>/i", 
+                    function($matches) {
+                        return "";
+                    },
+                    $body
+                );
             }
         }        
         

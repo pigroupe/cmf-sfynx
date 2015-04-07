@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2013-11-14
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,9 +24,15 @@ use Sfynx\ToolBundle\Route\AbstractFactory;
 /**
  * Instance Db
  * 
- * @subpackage   Tool
+ * @category   Tool
  * @package    Util
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Service
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class PiDbManager extends AbstractFactory
 {
@@ -82,20 +93,46 @@ class PiDbManager extends AbstractFactory
     public function executeQuery($query, $tabParams = array(), $log = false)
     {
     	if (is_array($tabParams)) {
-    		foreach ($tabParams as $nom => $param) {
-    			$nameParam  = $param["NAME"];
-    			$valueParam = $param["VALUE"];
-    			$typeParam  = $param["TYPE"];
-    			if ($typeParam == self::BIND_TYPE_NUM || $typeParam == self::BIND_TYPE_INT) {
-    				$query = preg_replace('/:' . $nameParam . '/i', $valueParam, $query);
-    			} elseif ($typeParam == self::BIND_TYPE_STR) {
-    				$query = preg_replace('/:' . $nameParam . '/i', $this->quoteSql($valueParam), $query);
-    			} elseif (is_numeric($valueParam) || ($valueParam == "NULL")) {
-    				$query = preg_replace('/:' . $nameParam . '/i', $valueParam, $query);
-    			} else {
-    				$query = preg_replace('/:' . $nameParam . '/i', $this->quoteSql($valueParam), $query);
-    			}
-    		}
+            foreach ($tabParams as $nom => $param) {
+                $nameParam  = $param["NAME"];
+                $valueParam = $param["VALUE"];
+                $typeParam  = $param["TYPE"];
+                if ($typeParam == self::BIND_TYPE_NUM || $typeParam == self::BIND_TYPE_INT) {
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ($valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                } elseif ($typeParam == self::BIND_TYPE_STR) {
+                    $valueParam = $this->quoteSql($valueParam);
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ( $valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                } elseif (is_numeric($valueParam) || ($valueParam == "NULL")) {
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ($valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                } else {
+                    $valueParam = $this->quoteSql($valueParam);
+                    $query = preg_replace_callback(
+                        '/:' . $nameParam . '/i',
+                        function($matches) use ($valueParam) {
+                            return $valueParam;
+                        },
+                        $query
+                    );
+                }
+            }
     	}
     	
     	str_replace('select', 'select', strtolower($query), $cont_select);

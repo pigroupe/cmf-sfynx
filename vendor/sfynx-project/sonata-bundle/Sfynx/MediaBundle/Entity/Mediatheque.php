@@ -1,11 +1,16 @@
 <?php
 /**
- * This file is part of the <Media> project.
+ * This file is part of the <SonataMedia> project.
  *
- * @category   Gedmo_Entities
+ * @category   SonataMedia
  * @package    Entity
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-07-31
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,6 +25,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Sfynx\CoreBundle\Model\AbstractDefault;
 use Sfynx\PositionBundle\Annotation as PI;
+use Sfynx\MediaBundle\Entity\AddTrait;
+use Sfynx\MediaBundle\Entity\Media;
+
 
 /**
  * Sfynx\MediaBundle\Entity\Mediatheque
@@ -29,9 +37,15 @@ use Sfynx\PositionBundle\Annotation as PI;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\TranslationEntity(class="Sfynx\MediaBundle\Entity\Translation\MediathequeTranslation")
  *
- * @category Gedmo_Entities
- * @package  Entity
- * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @category   SonataMedia
+ * @package    Entity
+ * @subpackage Model
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class Mediatheque extends AbstractDefault 
 {
@@ -136,45 +150,7 @@ class Mediatheque extends AbstractDefault
      */
     protected $copyright;    
     
-    /**
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Contact", mappedBy="media");
-     */
-    protected $contact1;
-        
-    /**
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Contact", mappedBy="media1");
-     */
-    protected $contact2;
-    
-    /**
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Menu", mappedBy="media");
-     */
-    protected $menu;    
-        
-    /**
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Slider", mappedBy="media");
-     */
-    protected $slider;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="PiApp\GedmoBundle\Entity\Block", mappedBy="media", cascade={"persist"});
-     */
-    protected $block;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="PiApp\GedmoBundle\Entity\Block", mappedBy="media1", cascade={"persist"});
-     */
-    protected $block2;    
-
-    /**
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Organigram", mappedBy="media");
-     */
-    protected $organigram; 
-    
-    /**
-     * @ORM\OneToOne(targetEntity="PiApp\GedmoBundle\Entity\Category", mappedBy="media");
-     */
-    protected $entitycategory; 
+    use AddTrait;
     
     /**
      * @ORM\Column(name="position", type="integer",  nullable=true)
@@ -182,6 +158,25 @@ class Mediatheque extends AbstractDefault
      */
     protected $position;
     
+    /**
+     * Get magic method
+     */      
+    public function __get($property) {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+    }
+
+    /**
+     * Set magic method
+     */     
+    public function __set($property, $value) {
+        if (property_exists($this, $property)) {
+            $this->$property = $value;
+        }
+
+        return $this;
+    }    
     
     /**
      * Constructor
@@ -189,9 +184,6 @@ class Mediatheque extends AbstractDefault
     public function __construct()
     {
         parent::__construct();
-        
-        $this->block = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->block2 = new \Doctrine\Common\Collections\ArrayCollection();
     }    
     
     /**
@@ -204,21 +196,23 @@ class Mediatheque extends AbstractDefault
     public function __toString()
     {
     	if (isset($_GET['_locale']) && !empty($_GET['_locale'])) {
-    		$locale = $_GET['_locale'];
+            $locale = $_GET['_locale'];
     	} else {
-    		$locale = "fr_FR";
+            $locale = "fr_FR";
     	}
     	$content = $this->getId();
     	$title = $this->translate($locale)->getTitle();
     	$cat = $this->getCategory();
     	if ($title) {
-    		$content .=  " - " .$title;
+            $content .=  " - " .$title;
     	}
     	if (!is_null($cat)) {
-    		$content .=  '('. $cat->translate($locale)->getName() .')';
+            $content .=  ' ('. $cat->getName() .')';
     	}
-    	if ( ($this->getStatus() == 'image') && ($this->getImage() instanceof \Sfynx\MediaBundle\Entity\Media)) {
-    		$content .= "<img width='100px' src=\"{{ media_url('".$this->getImage()->getId()."', 'small', true, '".$this->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
+    	if (($this->getStatus() == 'image') 
+                && ($this->getImage() instanceof Media)
+        ) {
+            $content .= "<img width='100px' src=\"{{ media_url('".$this->getImage()->getId()."', 'small', true, '".$this->getUpdatedAt()->format('Y-m-d H:i:s')."', 'gedmo_media_') }}\" alt='Photo'/>";
     	}
     	
         return (string) $content;
@@ -426,122 +420,122 @@ class Mediatheque extends AbstractDefault
     	return $this->copyright;
     }    
 
-    
-    /**
-     * Get image
-     *
-     * @return \Sfynx\MediaBundle\Entity\Media
-     */
-    public function getContact1()
-    {
-        return $this->contact1;
-    }
-    public function getContact2()
-    {
-        return $this->contact2;
-    }    
-    public function getMenu()
-    {
-        return $this->menu;
-    }
-    public function getSlider()
-    {
-        return $this->slider;
-    }
-    public function getBlock()
-    {
-        return $this->block;
-    }
-    public function getBlock2()
-    {
-        return $this->block2;
-    }    
-    public function getOrganigram()
-    {
-        return $this->organigram;
-    }       
-    public function getEntitycategory()
-    {
-        return $this->entitycategory;
-    }
-    
-    /**
-     * Set entitycategory
-     *
-     * @param \PiApp\GedmoBundle\Entity\Category $category
-     */
-    public function setEntitycategory(\PiApp\GedmoBundle\Entity\Category $category)
-    {
-        $this->entitycategory = $category;
-    }   
-  
-    /**
-     * Set contact1
-     *
-     * @param \PiApp\GedmoBundle\Entity\Contact $contact1
-     */
-    public function setContact1(\PiApp\GedmoBundle\Entity\Contact $contact1)
-    {
-        $this->contact1 = $contact1;
-    }
-
-    /**
-     * Set contact2
-     *
-     * @param \PiApp\GedmoBundle\Entity\Contact $contact2
-     */
-    public function setContact2(\PiApp\GedmoBundle\Entity\Contact $contact2)
-    {
-        $this->contact2 = $contact2;
-    }
-
-    /**
-     * Set menu
-     *
-     * @param \PiApp\GedmoBundle\Entity\Menu $menu
-     */
-    public function setMenu(\PiApp\GedmoBundle\Entity\Menu $menu)
-    {
-        $this->menu = $menu;
-    }
-
-    /**
-     * Set slider
-     *
-     * @param \PiApp\GedmoBundle\Entity\Slider $slider
-     */
-    public function setSlider(\PiApp\GedmoBundle\Entity\Slider $slider)
-    {
-        $this->slider = $slider;
-    }
-
-    /**
-     * Set block
-     *
-     * @param \PiApp\GedmoBundle\Entity\Block $block
-     */
-    public function setBlock(\PiApp\GedmoBundle\Entity\Block $block)
-    {
-        $this->block = $block;
-    }
-    
-    /**
-     * Set block2
-     *
-     * @param \PiApp\GedmoBundle\Entity\Block $block
-     */
-    public function setBlock2(\PiApp\GedmoBundle\Entity\Block $block)
-    {
-        $this->block2 = $block;
-    }    
-
-    /**
-     * Set organigram
-     *
-     * @param \PiApp\GedmoBundle\Entity\Organigram $organigram
-     */
-    public function setOrganigram(\PiApp\GedmoBundle\Entity\Organigram $organigram)
-    {
-        $this->organigram = $organigram;
-    }
+//    
+//    /**
+//     * Get image
+//     *
+//     * @return \Sfynx\MediaBundle\Entity\Media
+//     */
+//    public function getContact1()
+//    {
+//        return $this->contact1;
+//    }
+//    public function getContact2()
+//    {
+//        return $this->contact2;
+//    }    
+//    public function getMenu()
+//    {
+//        return $this->menu;
+//    }
+//    public function getSlider()
+//    {
+//        return $this->slider;
+//    }
+//    public function getBlock()
+//    {
+//        return $this->block;
+//    }
+//    public function getBlock2()
+//    {
+//        return $this->block2;
+//    }    
+//    public function getOrganigram()
+//    {
+//        return $this->organigram;
+//    }       
+//    public function getEntitycategory()
+//    {
+//        return $this->entitycategory;
+//    }
+//    
+//    /**
+//     * Set entitycategory
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Category $category
+//     */
+//    public function setEntitycategory(\PiApp\GedmoBundle\Entity\Category $category)
+//    {
+//        $this->entitycategory = $category;
+//    }   
+//  
+//    /**
+//     * Set contact1
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Contact $contact1
+//     */
+//    public function setContact1(\PiApp\GedmoBundle\Entity\Contact $contact1)
+//    {
+//        $this->contact1 = $contact1;
+//    }
+//
+//    /**
+//     * Set contact2
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Contact $contact2
+//     */
+//    public function setContact2(\PiApp\GedmoBundle\Entity\Contact $contact2)
+//    {
+//        $this->contact2 = $contact2;
+//    }
+//
+//    /**
+//     * Set menu
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Menu $menu
+//     */
+//    public function setMenu(\PiApp\GedmoBundle\Entity\Menu $menu)
+//    {
+//        $this->menu = $menu;
+//    }
+//
+//    /**
+//     * Set slider
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Slider $slider
+//     */
+//    public function setSlider(\PiApp\GedmoBundle\Entity\Slider $slider)
+//    {
+//        $this->slider = $slider;
+//    }
+//
+//    /**
+//     * Set block
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Block $block
+//     */
+//    public function setBlock(\PiApp\GedmoBundle\Entity\Block $block)
+//    {
+//        $this->block = $block;
+//    }
+//    
+//    /**
+//     * Set block2
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Block $block
+//     */
+//    public function setBlock2(\PiApp\GedmoBundle\Entity\Block $block)
+//    {
+//        $this->block2 = $block;
+//    }    
+//
+//    /**
+//     * Set organigram
+//     *
+//     * @param \PiApp\GedmoBundle\Entity\Organigram $organigram
+//     */
+//    public function setOrganigram(\PiApp\GedmoBundle\Entity\Organigram $organigram)
+//    {
+//        $this->organigram = $organigram;
+//    }
 }

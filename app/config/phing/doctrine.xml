@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="doctrine" description="Frontend build" default="doctrine:info" basedir=".">
+
+    <target name="doctrine:update"
+        description="Update doctrine class, and pass migration if needed"
+        depends="doctrine:build"
+        />
+
+    <target name="doctrine:rebuild"
+        description="Rebuilds doctrine completely"
+        depends="doctrine:rebuild-db, doctrine:build, doctrine:fixtures"
+        />
+
+    <target name="doctrine:rebuild-db">
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="doctrine:database:drop" />
+            <arg line="--force" />
+        </exec>
+
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="doctrine:database:create" />
+        </exec>
+    </target>
+    
+    <target name="doctrine:build" description="Create Doctrine Schemas">
+        <exec command="php app/console doctrine:schema:update --force"
+            passthru="true"/>
+    </target>    
+
+    <target name="doctrine:fixtures">
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="doctrine:fixtures:load" />
+        </exec>
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="sfynx:classification:fixtures" />
+        </exec>        
+    </target>
+
+    <target name="doctrine:info">
+        <echo>This is a set of tools for doctrine managment</echo>
+    </target>
+</project>

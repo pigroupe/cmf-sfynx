@@ -1,18 +1,33 @@
 {
     "name": "symfony/framework-standard-edition",
-    "license": "MIT",
-    "type": "project",
+    "license": "GNU GPL",
+    "authors": [
+        {
+            "name": "Etienne de Longeaux",
+            "email": "etienne.delongeaux@gmail.com",
+            "homepage": "http://www.pi-groupe.fr",
+            "role": "Copyright Holder"
+        }
+    ],    
     "description": "The \"Symfony Standard Edition\" distribution",
+    "keywords": ["CMF"],
+    "repositories": [
+    {
+        "type":"git",
+        "url":"https://github.com/l3pp4rd/DoctrineExtensions.git"
+    }
+    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.19",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "1.2.*",
         "twig/extensions": "1.0.*",
+        "symfony/console": "~2.2",
         "symfony/assetic-bundle": "2.3.*",
         "symfony/swiftmailer-bundle": "2.3.*",
         "symfony/monolog-bundle": "2.3.*",
-        "sensio/distribution-bundle": "2.3.*",
+        "sensio/distribution-bundle": "2.3.11",
         "sensio/framework-extra-bundle": "2.3.*",
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
@@ -27,21 +42,25 @@
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "doctrine/data-fixtures": "1.0.*",
         "doctrine/doctrine-cache-bundle": "1.0.*",    
-        "gedmo/doctrine-extensions": "2.3.*@dev",
+        "gedmo/doctrine-extensions": "2.3.12",
         "stof/doctrine-extensions-bundle": "1.1.*@dev",
         
         "friendsofsymfony/user-bundle": "2.0.*@dev",
         "besimple/i18n-routing-bundle": "2.3.0",
         
-        "sonata-project/admin-bundle": "2.4.*@dev",
-        "sonata-project/media-bundle": "2.4.*@dev",
-        "sonata-project/classification-bundle": "2.3.*@dev",
-        "sonata-project/datagrid-bundle": "2.2.*@dev"
+        "knplabs/knp-menu-bundle": "v2.0.0",
+        "knplabs/gaufrette": ">=0.1.6",
+        "imagine/imagine": "0.6.2",
+        "kriswallsmith/buzz": "0.*",
+        "nelmio/api-doc-bundle": "2.8.0",
+        "friendsofsymfony/rest-bundle": "1.5.3",
+        "doctrine/common": "v2.4.2",
+        "doctrine/cache": "v1.4.0"
     },
     "require-dev": {
         "benjam1/symfttpd": "2.1.*",
         "phpunit/phpunit": "4.0.20",
-        "phploc/phploc": "2.1.*@dev",
+        "phploc/phploc": "2.0.*@dev",
         "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
         "squizlabs/php_codesniffer": "2.0.*@dev",
         "phpmd/phpmd": "2.1.*",
@@ -53,12 +72,15 @@
         "phing/phing": "dev-master",
         "behat/behat": "3.0.*@dev",
         "behat/mink": "1.6.*@dev",
-        "behat/symfony2-extension": "*@dev",
-        "behat/mink-extension":  "*@dev",
+        "behat/mink-bundle": "~1.4",
+        "behat/symfony2-extension": "~2.0@dev",
+        "behat/mink-extension":  "~2.0@dev",
         "behat/mink-selenium2-driver":  "*@dev",
-        "behat/mink-browserkit-driver": "1.2.*@dev",
+        "behat/mink-browserkit-driver": "~1.1@dev",
+        "behat/mink-goutte-driver": "*@stable",
+        "behat/mink-zombie-driver": "*@stable",
         "jns/xhprof-bundle": "1.0.*@dev",
-        "facebook/xhprof": "dev-master@dev",
+        "facebook/xhprof": "dev-master@dev",        
         "phpcasperjs/phpcasperjs": "dev-master"
     },       
     "scripts": {
@@ -95,19 +117,23 @@
     "autoload": {
         "psr-0": {
             "" : "src",
-            "PiApp": "vendor/Sfynx",
             "Sfynx\\ClassificationBundle": "vendor/sfynx-project/sonata-bundle",
             "Sfynx\\AdminBundle": "vendor/sfynx-project/sonata-bundle",
             "Sfynx\\MediaBundle": "vendor/sfynx-project/sonata-bundle",
-            "Sfynx\\LibraryBundle": "vendor/sfynx-project/library-bundle",
             "Sfynx\\AclManagerBundle": "vendor/sfynx-project/acl-manager-bundle",
             "Sfynx\\DatabaseBundle": "vendor/sfynx-project/database-bundle",
             "Sfynx\\WsBundle": "vendor/sfynx-project/ws-bundle",
+            "Sfynx\\WsseBundle": "vendor/sfynx-project/ws-bundle",
+            "Sfynx\\ApiBundle": "vendor/sfynx-project/ws-bundle",
             "Sfynx\\TranslatorBundle": "vendor/sfynx-project/translator-bundle",
             "Sfynx\\CacheBundle": "vendor/sfynx-project/cache-bundle",
             "Sfynx\\ToolBundle": "vendor/sfynx-project/tool-bundle",
+            "Sfynx\\BehatBundle": "vendor/sfynx-project/tool-bundle",
+            "Sfynx\\MigrationBundle": "vendor/sfynx-project/tool-bundle",
             "Sfynx\\CoreBundle": "vendor/sfynx-project/core-bundle",
             "Sfynx\\CmfBundle": "vendor/sfynx-project/cmf-bundle",
+            "Cmf\\ContentBundle": "vendor/sfynx-project/cmf-plugins-bundle",
+            "PiApp\\GedmoBundle": "vendor/sfynx-project/cmf-plugins-bundle",
             "Sfynx\\AuthBundle": "vendor/sfynx-project/auth-bundle",
             "Sfynx\\BrowserBundle": "vendor/sfynx-project/browser-bundle",
             "Sfynx\\EncryptBundle": "vendor/sfynx-project/annotation-bundle",
@@ -115,6 +141,22 @@
             "Sfynx\\TemplateBundle": "vendor/sfynx-project/template-bundle",
             "Sfynx\\SmoothnessBundle": "vendor/sfynx-project/template-bundle",
             "Zend_": "vendor/Zend/library"
-        }
+        },
+        "psr-4": {
+            "Sonata\\NotificationBundle\\": "vendor/sonata-project/notification-bundle",
+            "Sonata\\MediaBundle\\": "vendor/sonata-project/media-bundle",
+            "Sonata\\IntlBundle\\": "vendor/sonata-project/intl-bundle",
+            "Sonata\\EasyExtendsBundle\\": "vendor/sonata-project/easy-extends-bundle",
+            "Sonata\\Doctrine\\Tests\\": "vendor/sonata-project/doctrine-extensions/tests",
+            "Sonata\\Doctrine\\": "vendor/sonata-project/doctrine-extensions/src",
+            "Sonata\\DoctrineORMAdminBundle\\": "vendor/sonata-project/doctrine-orm-admin-bundle",
+            "Sonata\\DatagridBundle\\": "vendor/sonata-project/datagrid-bundle",
+            "Sonata\\CoreBundle\\": "vendor/sonata-project/core-bundle",
+            "Sonata\\ClassificationBundle\\": "vendor/sonata-project/classification-bundle",
+            "Sonata\\Cache\\Tests\\": "vendor/sonata-project/cache/test",
+            "Sonata\\Cache\\": "vendor/sonata-project/cache/lib",
+            "Sonata\\BlockBundle\\": "vendor/sonata-project/block-bundle",
+            "Sonata\\AdminBundle\\": "vendor/sonata-project/admin-bundle"
+        }        
     }    
 }

@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Cmf> project.
  *
- * @subpackage   Cmf
+ * @subpackage Cmf
  * @package    Jquery
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-01-11
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-01-11
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,9 +22,9 @@ use Sfynx\CmfBundle\Manager\PiTreeManager;
 /**
  * Organigramm of all pages according to the section with Org Chart Jquery plugin.
  *
- * @subpackage   Cmf
+ * @subpackage Cmf
  * @package    Jquery
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiOrgChartPageManager extends PiJqueryExtension
 {
@@ -56,7 +56,6 @@ class PiOrgChartPageManager extends PiJqueryExtension
      *
      * @access protected
      * @return void
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */    
     protected function init($options = null)
@@ -74,19 +73,19 @@ class PiOrgChartPageManager extends PiJqueryExtension
     /**
       * Set progress text for Progress flash dialog.
       *
-      * @param    $options    tableau d'options.
+      * @param $options tableau d'options.
+     * 
       * @access protected
       * @return void
-      *
       * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com> 
       */
     protected function render($options = null)
     {        
         // Options management
-        if (!isset($options['action']) || empty($options['action']) || (isset($options['action']) && !in_array(strtolower($options['action']), self::$actions)) ) {
+        if (!isset($options['action']) || empty($options['action']) || (isset($options['action']) && !in_array(strtolower($options['action']), self::$actions))) {
             throw ExtensionException::optionValueNotSpecified('action', __CLASS__);
         }
-        if (!isset($options['menu']) || empty($options['menu']) || (isset($options['menu']) && !in_array(strtolower($options['menu']), self::$menus)) ) {
+        if (!isset($options['menu']) || empty($options['menu']) || (isset($options['menu']) && !in_array(strtolower($options['menu']), self::$menus))) {
             throw ExtensionException::optionValueNotSpecified('menu', __CLASS__);
         }
         // set names
@@ -105,17 +104,17 @@ class PiOrgChartPageManager extends PiJqueryExtension
     /**
      *render chart with a click event.
      *
-     * @param string    $htmlTree
-     * @param array        $options
+     * @param string $htmlTree
+     * @param array  $options
+     * 
      * @access private
      * @return string
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     private function renderdefaultAction($htmlTree, $options = null)
     {
         // Options management
-        if ( !isset($options['id']) || empty($options['id']) ) {
+        if (!isset($options['id']) || empty($options['id'])) {
             throw ExtensionException::optionValueNotSpecified('id', __CLASS__);
         }
     
@@ -159,25 +158,26 @@ class PiOrgChartPageManager extends PiJqueryExtension
         // We close the buffer.
         ob_end_flush ();
         
-        return  $this->renderScript($_content_js, $_content_html, 'cmf/orgchartpage/default/');
+        return $this->renderScript($_content_js, $_content_html, 'cmf/orgchartpage/default/');
     }
     
     
     /**
      *render chart with a click event.
      *
-     * @param string    $htmlTree 
-     * @param array        $options
+     * @param string $htmlTree 
+     * @param array  $options
+     * 
      * @access private
      * @return string
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     private function renderbyclickAction($htmlTree, $options = null)
     {
         // Options management
-        if ( !isset($options['id']) || empty($options['id']) )
+        if (!isset($options['id']) || empty($options['id'])) {
             throw ExtensionException::optionValueNotSpecified('id', __CLASS__);
+        }
         
         // We open the buffer.
         ob_start ();        
@@ -241,7 +241,7 @@ class PiOrgChartPageManager extends PiJqueryExtension
         // We close the buffer.
         ob_end_flush ();
         
-        return  $this->renderScript($_content_js, $_content_html, 'cmf/orgchartpage/renderbyclick/');
+        return $this->renderScript($_content_js, $_content_html, 'cmf/orgchartpage/renderbyclick/');
     }    
     
     /**
@@ -265,25 +265,25 @@ class PiOrgChartPageManager extends PiJqueryExtension
      *        {{ getService('pi_app_admin.manager.tree').run('organigram', 'Rubrique~org-chart-page', app.session.getLocale(), options_chartpage)|raw }}    
      * </code>
      * 
-     * @param    array $options
+     * @param array $options
+     * 
      * @access public
      * @return string
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     public function pageMenu($options = null)
     {
-        $PageManager = $this->container->get('pi_app_admin.manager.page');
-        
+        $PageManager = $this->container->get('pi_app_admin.manager.page');        
         $htmlTree = "";
-        if ($PageManager instanceof PiPageManager){
+        if ($PageManager instanceof PiPageManager) {
             $htmlTree = $PageManager->getChildrenHierarchyRub();
             $htmlTree = $PageManager->setTreeWithPages($htmlTree);
             $htmlTree = $PageManager->setHomePage($htmlTree);
             
             return $htmlTree;
-        }else 
-            throw ExtensionException::serviceUndefined('PiPageManager');        
+        } else {
+            throw ExtensionException::serviceUndefined('PiPageManager');
+        }
     }
     
     /**
@@ -302,22 +302,22 @@ class PiOrgChartPageManager extends PiJqueryExtension
      *  {{ renderJquery('MENU', 'org-chart-page', options_chartpage )|raw }}
      * <code> 
      *
-     * @param    array $options
+     * @param array $options
+     * 
      * @access public
      * @return string
-     *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
     public function organigramMenu($options = null)
     {
         // Options management
-        if ( !isset($options['entity']) || empty($options['entity']) ) {
+        if (!isset($options['entity']) || empty($options['entity'])) {
             throw ExtensionException::optionValueNotSpecified('entity', __CLASS__);
         }
-        if ( !isset($options['category']) ) {
+        if (!isset($options['category'])) {
             throw ExtensionException::optionValueNotSpecified('category', __CLASS__);
         }
-        if ( !isset($options['locale']) ) {
+        if (!isset($options['locale'])) {
             $locale     = $this->container->get('request')->getLocale();
         } else {        
             $locale = $options['locale'];

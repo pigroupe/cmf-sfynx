@@ -2,10 +2,15 @@
 /**
  * This file is part of the <Tool> project.
  * 
- * @subpackage Tool
+ * @category   Tool
  * @package    Util
+ * @subpackage Service
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2013-11-14
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,17 +18,22 @@
 namespace Sfynx\ToolBundle\Util;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\ToolBundle\Route\AbstractFactory;
 use Sfynx\ToolBundle\Builder\PiMapperManagerBuilderInterface;
 
 /**
  * Mapper manager tool
  * 
- * @subpackage Tool
+ * @category   Tool
  * @package    Util
+ * @subpackage Service
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
-class PiMapperManager extends AbstractFactory
+class PiMapperManager
 {
     private $mappers = array();
     
@@ -32,10 +42,7 @@ class PiMapperManager extends AbstractFactory
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
+    public function __construct()    {}
 
     /**
      * Return a JS file in the container in links.

@@ -30,6 +30,15 @@ sfynx_auth:
         name: smoothness # {'flatlab','smoothness'} 
         login: "SfynxSmoothnessBundle::Login\\"
         layout: "SfynxSmoothnessBundle::Layout\\"
+        email:
+            registration:
+                from_email:
+                    address: contact@sfynx.fr
+                template: SfynxSmoothnessBundle:Login\\Registration:email.txt.twig
+            resetting:
+                from_email:
+                    address: contact@sfynx.fr
+                template: SfynxSmoothnessBundle:Login\\Resetting:email.txt.twig 
         global:
             layout: "SfynxSmoothnessBundle::Layout\\layout-global-cmf.html.twig"
             css: "bundles/sfynxsmoothness/layout/screen-layout-global.css"

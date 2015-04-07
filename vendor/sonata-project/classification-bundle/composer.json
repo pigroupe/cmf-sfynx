@@ -1,0 +1,41 @@
+{
+    "name": "sonata-project/classification-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SonataClassificationBundle",
+    "keywords": ["category", "tag", "taxonomy"],
+    "homepage": "http://sonata-project.org/bundles/classification",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@sonata-project.org",
+            "homepage": "http://sonata-project.org"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/SonataClassificationBundle/contributors"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.3",
+        "symfony/form": "~2.3",
+        "sonata-project/doctrine-orm-admin-bundle": "~2.3",
+        "sonata-project/datagrid-bundle": "~2.2@dev"
+    },
+    "require-dev": {
+        "friendsofsymfony/rest-bundle": "~1.1",
+        "jms/serializer-bundle": "~0.11",
+        "sonata-project/media-bundle": "~2.2"
+    },
+    "suggest": {
+        "sonata-project/media-bundle": "~2.2"
+    },
+    "autoload": {
+        "psr-4": { "Sonata\\ClassificationBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3.x-dev"
+        }
+    }
+}

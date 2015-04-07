@@ -6,7 +6,7 @@
  * @package    Handler
  * @subpackage Exception
  * @author     riad hellal <hellal.riad@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package    Handler
  * @subpackage Exception
  * @author     riad hellal <hellal.riad@gmail.com>
- * @copyright  2014 Pi-groupe
+ * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version    2.3
  * @link       https://github.com/pigroupe/cmf-sfynx/blob/master/web/COPYING.txt
@@ -103,7 +103,8 @@ class HandlerException
                 $response->setContent(file_get_contents($path_error_file));
             } else {
                 if ($this->container->hasParameter('sfynx.auth.theme.layout.error.route_name')
-                        && ($this->container->getParameter('sfynx.auth.theme.layout.error.route_name' != ""))) {
+                        && ($this->container->getParameter('sfynx.auth.theme.layout.error.route_name')!= "")
+                ) {
                     $route_name = $this->container->getParameter('sfynx.auth.theme.layout.error.route_name');
                 } else {
                     $route_name = 'error_404';

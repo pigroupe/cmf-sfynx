@@ -1,0 +1,51 @@
+#
+#   import routes from a controller directory
+#
+annotation_content:
+    resource: "@PluginsContentBundle/Controller"
+    type: annotation
+
+#PluginsContentBundle:Article
+plugins_content_article:
+    resource: "@PluginsContentBundle/Resources/config/routing/article.xml"
+    prefix: /admin/content/article
+#PluginsContentBundle:BlocGeneral
+plugins_content_blocgeneral:
+    resource: "@PluginsContentBundle/Resources/config/routing/blocgeneral.xml"
+    prefix: /admin/content/blocgeneral
+#PluginsContentBundle:Diaporama
+plugins_content_diaporama:
+    resource: "@PluginsContentBundle/Resources/config/routing/diaporama.xml"
+    prefix: /admin/content/diaporama
+#PluginsContentBundle:MediasDiaporama
+plugins_content_medias_diaporama:
+    resource: "@PluginsContentBundle/Resources/config/routing/mediasdiaporama.xml"
+    prefix: /admin/content/mediasdiaporama
+#PluginsContentBundle:Page
+plugins_content_page:
+    resource: "@PluginsContentBundle/Resources/config/routing/page.xml"
+    prefix: /admin/content/page
+#PluginsContentBundle:Rub
+plugins_content_rub:
+    resource: "@PluginsContentBundle/Resources/config/routing/rub.xml"
+    prefix: /admin/content/rub
+#PluginsContentBundle:Test
+plugins_content_test:
+    resource: "@PluginsContentBundle/Resources/config/routing/test.xml"
+    prefix: /admin/content/test
+#PluginsContentBundle:TestQuestion
+plugins_content_test_question:
+    resource: "@PluginsContentBundle/Resources/config/routing/testquestion.xml"
+    prefix: /admin/content/testquestion    
+#PluginsContentBundle:Rub
+plugins_content_rub_front:
+    resource: "@PluginsContentBundle/Resources/config/routing/rubfront.xml"
+    prefix: /rub
+#PluginsContentBundle:Tag
+plugins_content_tag:
+    resource: "@PluginsContentBundle/Resources/config/routing/tag.xml"
+    prefix: /admin/content/tag
+#PluginsContentBundle:Meahome
+plugins_content_meahome:
+    resource: "@PluginsContentBundle/Resources/config/routing/meahome.xml"
+    prefix: /admin/content/meahome

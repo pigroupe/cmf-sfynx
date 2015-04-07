@@ -7,7 +7,10 @@ parameters:
     sfynx.auth.handler.authenticationHandler.class: Sfynx\AuthBundle\EventListener\HandlerAuthentication
     
     sfynx.auth.dispatcher.loginfailure.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherLoginFailureResponse
+    sfynx.auth.dispatcher.authenticate.changeresponse.class: Sfynx\AuthBundle\EventListener\DispatcherAuthenticateResponse
 
+    sfynx.auth.mailer.user.class: Sfynx\AuthBundle\Mailer\PiMailerManager
+    sfynx.auth.manager.user.class: Sfynx\AuthBundle\Manager\PiAuthenticateManager
     sfynx.auth.manager.locale.class: Sfynx\AuthBundle\Util\PiLocaleManager
     sfynx.auth.role.factory.class: Sfynx\AuthBundle\Role\RoleFactory
     sfynx.auth.repository.class: Sfynx\AuthBundle\Repository\Repository
@@ -56,6 +59,16 @@ services:
     #               
     # Event dispatchers Configuration
     # 
+    sfynx.auth.dispatcher.authenticate.change_response:
+        class: %sfynx.auth.dispatcher.authenticate.changeresponse.class%
+        arguments: [@service_container]
+        properties:
+            is_browser_authorized: %sfynx.auth.browser.switch_layout_mobile_authorized%
+            redirect: %sfynx.auth.login.redirect%
+            template: %sfynx.auth.login.template%
+        tags:
+            - { name: kernel.event_listener, event: pi.handler.login.changeresponse, method: onPiAuthenticateResponse, priority: 10 }    
+            
     sfynx.auth.dispatcher.login_failure.change_response:
         class: %sfynx.auth.dispatcher.loginfailure.changeresponse.class%
         arguments: [@service_container]
@@ -65,6 +78,20 @@ services:
             login_failure_connection_attempts: %sfynx.auth.loginfailure.connection_attempts%   
         tags:
             - { name: kernel.event_listener, event: pi.handler.login.failure, method: onPiLoginFailureResponse, priority: 1 }          
+     
+    #
+    # configuration of the user manager
+    #    
+    sfynx.auth.user_manager:
+        class: %sfynx.auth.manager.user.class%  
+        arguments: ['@service_container']
+        
+    #
+    # configuration of the user mailer
+    #    
+    sfynx.auth.mailer:
+        class: %sfynx.auth.mailer.user.class%  
+        arguments: ['@service_container']        
         
     #
     # configuration of the locale manager
@@ -88,27 +115,6 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         
     #
-    # configuration of the user form registration
-    # 
-    sfynx.auth.registration.form.type:
-        class: Sfynx\AuthBundle\Form\Type\RegistrationFormType
-        arguments: [%fos_user.model.user.class%]
-        tags:
-            - { name: form.type, alias: bootstrap_user_registration }
-
-    sfynx.auth.form.handler.registration:
-        class: Sfynx\AuthBundle\Form\Handler\RegistrationFormHandler
-        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer"]
-        scope: request
-        public: false
-                    
-    sfynx.auth.profile.form.type:
-        class: Sfynx\AuthBundle\Form\Type\ProfileFormType
-        arguments: [%fos_user.model.user.class%]
-        tags:
-            - { name: form.type, alias: bootstrap_user_profile }
-            
-    #
     # configuration overload validators
     # 
     sfynx.auth.validator.unique:
@@ -117,6 +123,25 @@ services:
             - [ setBlackList, [ %mail_blacklist% ] ]
         tags:
             - { name: validator.constraint_validator, alias: email_black_list }
+            
+    #
+    # configuration of the user form registration
+    # 
+    sfynx.auth.form.handler.registration:
+        class: Sfynx\AuthBundle\Form\Handler\RegistrationFormHandler
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@sfynx.auth.mailer"]
+        scope: request
+        public: false
+            
+    #
+    # configuration of the user service for webservice apply
+    # 
+    sfynx.auth.ws.submit_user.validator:
+      class: Sfynx\AuthBundle\Validator\SubmitUserValidator 
+      
+    sfynx.auth.ws.submit_user.handler:
+        class: Sfynx\AuthBundle\Handler\SubmitUserHandler
+        arguments: ["@service_container", "@sfynx.auth.ws.submit_user.validator", "@fos_user.user_manager", "@validator", "@sfynx.auth.mailer"]             
             
     #
     # configuration of the Util classes
@@ -142,9 +167,9 @@ services:
     #
     # configuration of IP address allowed for the Admin and user access control
     #    
-    #security.access.blacklist_voter:
-    #    class:      Sfynx\AuthBundle\Security\Authorization\Voter\ClientIpVoter
-    #    arguments:  [@service_container, [127.0.0.1, ::1, 188.165.248.255]]
-    #    public:     false
-    #    tags:
-    #        -       { name: security.voter } 
+    security.access.blacklist_voter:
+        class:      Sfynx\AuthBundle\Security\Authorization\Voter\ClientIpVoter
+        arguments:  [@service_container, %security_ip_blacklist% ]   # [127.0.0.1, ::1, 188.165.248.255]
+        public:     false
+        tags:
+            -       { name: security.voter } 

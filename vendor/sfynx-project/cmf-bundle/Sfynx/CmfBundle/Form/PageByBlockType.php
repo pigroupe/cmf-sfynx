@@ -19,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Sfynx\CmfBundle\Repository\PageRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Sfynx\AuthBundle\Entity\User;
 
 /**
  * Description of the PageByBlockType form.
@@ -55,10 +56,21 @@ class PageByBlockType extends AbstractType
         
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (in_array('ROLE_ADMIN', $this->_roles_user) || in_array('ROLE_SUPER_ADMIN', $this->_roles_user) || in_array('ROLE_CONTENT_MANAGER', $this->_roles_user))
+        $id_users = null;
+        if ($builder->getData()->getUser()
+                instanceof User
+        ) {
+            $id_users = $builder->getData()->getUser()->getId();
+        }
+        //
+        if (in_array('ROLE_ADMIN', $this->_roles_user) 
+                || in_array('ROLE_SUPER_ADMIN', $this->_roles_user) 
+                || in_array('ROLE_CONTENT_MANAGER', $this->_roles_user)
+        ) {
             $read_only = false;
-        else
+        } else {
             $read_only = true;
+        }
                 
         $builder
             ->add('enabled', 'checkbox', array(
@@ -66,30 +78,31 @@ class PageByBlockType extends AbstractType
                     'label'    => 'pi.form.label.field.enabled',
             ))
             ->add('user', 'entity', array(
-                    'class'     => 'SfynxAuthBundle:User',
-            		'query_builder' => function(EntityRepository $er) {
-            			return $er->createQueryBuilder('k')
-            			->select('k')
-            			->where("k.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_MEMBER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_PROVIDER%'")
-            			->andWhere("k.roles NOT LIKE '%ROLE_CUSTOMER%'")
-            			->orderBy('k.name', 'ASC');
-            		},
-                    'read_only'    => $read_only,
-                    'label'    => 'pi.form.label.field.user',
-                    "attr"         => array(
-                            "class"=>"pi_simpleselect",
-                    ),
-            ))
+                    'class' => 'SfynxAuthBundle:User',
+                    'query_builder' => function(EntityRepository $er) use ($id_users) {
+                        $translatableListener = $this->_container->get('gedmo.listener.translatable');
+                        $translatableListener->setTranslationFallback(true);
+                        return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.id IN (:id)")
+                            ->andWhere('a.enabled = 1')
+                            ->setParameter('id', $id_users);
+                    },
+                    'empty_value' => 'pi.form.label.select.choose.user',
+                    'label'    => "pi.form.label.field.user",
+                    'multiple'    => false,
+                    'required'  => false,
+                    "attr" => array(
+                        "class"=>"pi_simpleselect ajaxselect", // ajaxselect
+                        "data-url"=>$this->_container->get('sfynx.tool.route.factory')->getRoute("users_selectentity_ajax"),
+                        "data-selectid" => $id_users,
+                        "data-max" => 50,
+                    )                           
+            ))  
             ->add('rubrique', 'entity', array(
                     'class' => 'SfynxCmfBundle:Rubrique',
                     'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('k')
-                        ->select('k')
-                        ->where('k.enabled = :enabled')
-                        ->orderBy('k.lft', 'ASC')
-                        ->setParameter('enabled', 1);
+                        return $er->getAllPageRubrique();
                     },
                     'empty_value' => 'Choose an option',
                     'multiple'    => false,
@@ -131,11 +144,7 @@ class PageByBlockType extends AbstractType
             ->add('keywords', 'entity', array(
                     'class' => 'SfynxCmfBundle:KeyWord',
                     'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('k')
-                            ->select('k')
-                            ->where('k.enabled = :enabled')
-                            ->orderBy('k.groupname', 'ASC')
-                            ->setParameter('enabled', 1);
+                        return $er->getAllPageKeyWords();
                     },
                     'multiple'    => true,
                     'required'  => false,
@@ -178,7 +187,7 @@ class PageByBlockType extends AbstractType
                     'by_reference' => true,                    
                     'type'   => new BlockType,
                     'options'  => array(
-                            'attr'      => array('class' => 'block_widget')
+                        'attr'      => array('class' => 'block_widget')
                     ),    
                     'label'    => ' '
             )) 

@@ -1,0 +1,40 @@
+default:
+    autoload: src/
+    extensions:
+        Behat\Symfony2Extension: ~
+        Behat\MinkExtension:
+            browser_name: 'firefox'
+            sessions:
+                my_session_selenium:
+                    selenium2: ~
+                my_session_zombie:
+                    zombie: ~    
+                my_session_symfony2:
+                    symfony2: ~                       
+            base_url: http://test.sfynx.local
+            
+    suites:
+        auth:
+            type: symfony_bundle
+            bundle: 'SfynxAuthBundle'
+            contexts: 
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext
+        cmf:
+            type: symfony_bundle
+            bundle: 'SfynxCmfBundle'
+            contexts: 
+                - Sfynx\CmfBundle\Features\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext                
+            
+    formatters:
+        pretty:
+            verbose:  true
+            paths:    true
+            snippets: true            
+

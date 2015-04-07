@@ -1,0 +1,159 @@
+{% initJquery 'GRID:grid-table' %}
+{% stylesheet getParameter('pi_app_admin.admin.theme_css')~':prepend' %}
+{% if NoLayout %}
+	{% stylesheet 'bundles/piappadmin/css/layout/admin/screen.css' %}
+	{% javascript 'bundles/piappadmin/js/jquery/custom_jquery.js' %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h1>TestQuestion</h1>
+{% endblock %}
+ 
+{% block content %}
+
+	{% if not NoLayout %}
+	<!--  start actions-box ............................................... -->
+	<div id="actions-box">
+		<!-- <a href="" class="action-slider"><span>{{ 'pi.grid.action.title'|trans }}</span></a> -->
+		<!-- <div id="actions-box-slider"> -->
+			<a href="{{ path('admin_content_test_question_new', {'NoLayout':NoLayout, 'category':category}) }}" class="action-edit" title="{{ 'pi.grid.action.create'|trans }}">{{ 'pi.grid.action.create'|trans }}</a>
+		<!-- </div> -->
+		<div class="clear"></div>
+	</div>
+	<!-- end actions-box........... -->
+	{% endif %}
+	
+	{% if NoLayout %}
+		<table id="grid_test_question" class="grid" >
+		    <thead>
+		        <tr>	            
+		            <th class="position" >Position</th>	
+		        	<th>Id</th>	        	
+		            <th>Titre Question</th>	
+		        </tr>
+		    </thead>
+		    <tbody>
+			    {% set num_line = 0 %}
+			    {% for entity in entities %}
+			        <tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_row_{{ entity.id }}'  >
+			            <td class="position">{{ entity.position}}</td>		
+			        	<td>{{ entity.id}}</td>		
+	                    <td>{{ entity.title }}</td>
+	                </tr>
+			        {% if num_line == 0 %} 
+			        	{% set num_line = 1 %}
+			        {% else %}
+			        	{% set num_line = 0 %}
+			        {% endif %}	
+			    {% endfor %}
+		    </tbody>
+		</table>	
+	{% else %}
+		<table id="grid_test_question" class="grid" >
+		    <thead>
+		        <tr>	            
+		            <th class="position" >Position</th>	                    
+		        	<th>Id</th>	            
+		            <th>{{ NoLayout }}</th>	            
+		            <th>Updated_at</th>	            
+		            <th>Published_at</th>	            
+		            <th>Archive_at</th>	            
+		            <th>Archived</th>	            
+		            <th>Enabled</th>	        	
+		            <th><a href="javascript:void(0);" title="Actions">Actions</a></th>
+		        </tr>
+		    </thead>
+		    <tbody>
+			    {% set num_line = 0 %}
+			    {% for entity in entities %}
+			        <tr {% if(num_line == 0) %}class="odd"{% endif %}  id='{{ entity.position }}_row_{{ entity.id }}'  >		
+			            <td><a href="{{ path('admin_content_test_question_show', { 'id': entity.id, 'NoLayout': NoLayout, 'category':category }) }}" title="">{{ entity.id }}</a></td>		
+			            <td>{% if entity.createdat %}{{ entity.createdat|date('Y-m-d') }}{% endif%}</td>		
+			            <td>{% if entity.updatedat %}{{ entity.updatedat|date('Y-m-d') }}{% endif%}</td>		
+			            <td>{% if entity.publishedat %}{{ entity.publishedat|date('Y-m-d') }}{% endif%}</td>		
+			            <td>{% if entity.archiveat %}{{ entity.archiveat|date('Y-m-d') }}{% endif%}</td>		
+			            <td>
+			            	{{ entity.archived|truncateText(55)|raw }}
+			            </td>		
+			            <td class="enabled" >{{ entity.enabled}}</td><td class="position" >{{ entity.position}}</td>			
+						<td><a href="{{ path('admin_content_test_question_show', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category }) }}" title="{{ 'pi.grid.action.show'|trans }}" class="icon-3 info-tooltip" >&nbsp;</a>
+	                	                	<a href="{{ path('admin_content_test_question_edit', { 'id': entity.id, 'NoLayout':NoLayout, 'category':category }) }}" title="{{ 'pi.grid.action.edit'|trans }}" class="icon-1 info-tooltip" >&nbsp;</a>
+	                		
+						</td>		
+			        </tr>
+			        {% if num_line == 0 %} 
+			        	{% set num_line = 1 %}
+			        {% else %}
+			        	{% set num_line = 0 %}
+			        {% endif %}	
+			                
+			    {% endfor %}
+		    </tbody>
+		</table>
+	{% endif %}
+
+	{% if NoLayout %}
+		{% set options_gridtabale = {'grid-name': 'grid_test_question', 'grid-type':'simple', 
+		        'grid-server-side': false,
+				'grid-paginate':'false',
+				'grid-LengthMenu':25,
+				'grid-filters-select': ['0','1','2'],
+				'grid-filters-active':'false',
+				'grid-filters': { 
+						'1':'Position',
+						'2':'Identifiant',
+					},
+				'grid-sorting': { 
+						'0':'asc',
+					},
+				'grid-visible': {
+					'0':'false',
+					'1':'false',
+					},						
+				'grid-actions': { 
+						'rows_position': {'route':'admin_gedmo_test_question_position_ajax',},
+					}		
+				} 			
+		%}	
+	{% else %}
+		{% set options_gridtabale = {'grid-name': 'grid_test_question', 'grid-type':'simple', 
+		        'grid-server-side': 0,
+				'grid-paginate':'true',
+				'grid-LengthMenu':25,
+				'grid-filters-select': ['0','1'],
+				'grid-filters-active':'true',
+				'grid-filters': { 
+						'1':'Position',
+						'2':'Identifiant',
+					},
+				'grid-sorting': { 
+						'0':'asc',
+					},
+				'grid-visible': {
+					'0':'true',
+					'1':'false',
+					},						
+				'grid-actions': { 
+						'rows_position': {'route':'admin_gedmo_test_question_position_ajax',},
+						'select_all': {'sButtonText':'pi.grid.action.select_all'},
+						'select_none': {'sButtonText':'pi.grid.action.select_none'},
+						'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'admin_gedmo_test_question_enabledentity_ajax',},
+						'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'admin_gedmo_test_question_disablentity_ajax'},
+						'rows_archive': {'sButtonText':'pi.grid.action.row_archive', 'route':'admin_gedmo_test_question_archiventity_ajax'},
+						'rows_delete': {'sButtonText':'pi.grid.action.row_delete', 'route':'admin_gedmo_test_question_deletentity_ajax'},
+						'copy': {'sButtonText':'pi.grid.action.copy'},
+						'print': {'sButtonText':'pi.grid.action.print'},
+						'export_pdf': {'sButtonText':'pi.grid.action.export'},				
+						'export_csv': {'sButtonText':'pi.grid.action.export'},
+						'export_xls': {'sButtonText':'pi.grid.action.export'},					
+					}		
+				} 			
+		%}
+	{% endif %}
+	{{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}	
+
+{% endblock %}

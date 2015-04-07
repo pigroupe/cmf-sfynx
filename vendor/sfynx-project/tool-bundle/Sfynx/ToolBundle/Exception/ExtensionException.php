@@ -2,10 +2,10 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Exception
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2011-02-10
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2011-02-10
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,9 +15,9 @@ namespace Sfynx\ToolBundle\Exception;
 /**
  * Extension Exception
  *
- * @subpackage   Tool
+ * @subpackage Tool
  * @package    Exception
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class ExtensionException extends \Exception
 {

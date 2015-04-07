@@ -144,7 +144,7 @@ class RouteLoader implements LoaderInterface
 
     public function supports($resource, $type = null)
     {
-        return 'sfynxtemplateextra' === $type;
+        return 'sfynxcmfextra' === $type;
     }
     
     public function getResolver()

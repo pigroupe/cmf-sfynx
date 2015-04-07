@@ -20,7 +20,7 @@ use FOS\UserBundle\Model\UserInterface;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sfynx\AuthBundle\Controller\abstractController;
+use Sfynx\CoreBundle\Controller\abstractController;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -33,6 +33,10 @@ use Sfynx\AuthBundle\Form\Type\UsersFormType;
 use Sfynx\AuthBundle\Form\Type\UsersNewFormType;
 
 use Symfony\Component\Form\FormError;
+
+use FOS\UserBundle\Event\UserEvent;
+use FOS\UserBundle\Event\FormEvent;
+use Sfynx\CmfBundle\SfynxCmfEvents;
 
 /**
  * Users controller.
@@ -113,14 +117,89 @@ class UsersController extends abstractController
     public function archiveajaxAction()
     {
     	return parent::archiveajaxAction();
-    }    
+    } 
+    
+    /**
+     * get entities in ajax request for select form.
+     *
+     * @Route("/users/select", name="users_selectentity_ajax")
+     * @Secure(roles="ROLE_EDITOR")
+     * @return Response
+     * @access public
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function selectajaxAction()
+    {
+    	$request = $this->container->get('request');
+    	$em      = $this->getDoctrine()->getManager();
+    	$locale  = $this->container->get('request')->getLocale();
+    	//
+    	$pagination = $this->container->get('request')->get('pagination', null);
+    	$keyword    = $this->container->get('request')->get('keyword', '');
+    	$MaxResults = $this->container->get('request')->get('max', 10);
+    	// we set query
+        $query	= $em->getRepository("SfynxAuthBundle:User")->createQueryBuilder('a')
+        ->leftJoin('a.groups', 'gps')
+        ->andWhere("a.roles NOT LIKE '%ROLE_SUBSCRIBER%'")
+        ->andWhere("a.roles NOT LIKE '%ROLE_MEMBER%'")
+        ->andWhere("a.roles NOT LIKE '%ROLE_PROVIDER%'")
+        ->andWhere("a.roles NOT LIKE '%ROLE_CUSTOMER%'"); 		
+        //
+        $keyword = array(
+            0 => array(
+                'field_name' => 'title',
+                'field_value' => $keyword,
+                'field_trans' => true,
+                'field_trans_name' => 'trans',
+            ),
+        );
+
+        return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true, array(
+            'time'      => 3600,  
+            'namespace' => 'hash_list_auth_user'
+        ));
+    }   
+
+    /**
+     * Select all entities.
+     *
+     * @return Response
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function renderselectajaxQuery($entities, $locale)
+    {
+        $tab = array();
+        foreach ($entities as $obj) {
+            $content  = $obj->getId();
+            $username = $obj->getUsername();
+            $mail     = $obj->getEmail();
+            $name     = $obj->getName();
+            $nickame  = $obj->getNickname();
+            if ($username) {
+                $content .=  "- " . $username;
+            }
+            if ($mail) {
+                $content .=  "- " . $mail;
+            }
+            if ($name && $nickame) {
+                $content .=  " (" . $name . " ". $nickame . ")";
+            } 
+            $tab[] = array(
+                'id'   => $obj->getId(),
+                'text' => $content
+            );
+        }
+    
+    	return $tab;
+    }        
     
     /**
      * Lists all user entities.
      * 
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * @access    public
+     * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
     public function indexAction()
@@ -293,6 +372,8 @@ class UsersController extends abstractController
      */    
     public function createAction(Request $request)
     {
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->container->get('event_dispatcher');
         $em = $this->getDoctrine()->getManager();
         // we create entity
         $entity = new User();
@@ -305,11 +386,16 @@ class UsersController extends abstractController
         if ($user) {
         	$form->get('email')->addError(new FormError($this->container->get('translator')->trans('erreur.email.unique')));
         }        
+        $dispatcher->dispatch(SfynxCmfEvents::REGISTRATION_INITIALIZE, new UserEvent($user, $request));
         if ($form->isValid()) {
             $entity->setUsernameCanonical($data["username"]);
             $entity->setEmailCanonical($data["email"]);
             $em->persist($entity);
             $em->flush();
+            // to delete cache list query
+            $this->deleteAllCacheQuery('hash_list_auth_user');
+            
+            $dispatcher->dispatch(SfynxCmfEvents::REGISTRATION_SUCCESS, new FormEvent($form, $request));
 
             return $this->redirect($this->generateUrl('users'));
         }
@@ -383,6 +469,8 @@ class UsersController extends abstractController
             $entity->setEmailCanonical($data["email"]);
             $em->persist($entity);
             $em->flush();
+            // to delete cache list query
+            $this->deleteAllCacheQuery('hash_list_auth_user');
             
             return $this->redirect($this->generateUrl('users_edit', array('id'=>$id)));
         }

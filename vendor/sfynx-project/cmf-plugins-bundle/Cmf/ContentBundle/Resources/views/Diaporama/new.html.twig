@@ -1,0 +1,136 @@
+{% initJquery 'FORM:prototype-bytab' %}
+{% if NoLayout %}
+	{% set layout_nav = 'PiAppTemplateBundle::Template\\Layout\\layout-ajax.html.twig' %}
+{% else %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}
+	<h3><a href="{{ path('admin_homepage') }}" >Accueil</a> > <a href="{{ path('admin_content_bloc_general') }}" >Contenus</a> > Dossier</h3>
+{% endblock %}
+ 
+{% block content %}
+
+    {{ parent() }}    
+
+	<!-- Begin tag markup -->
+	<div id="tabs">
+		<ul>
+			<li>
+				<a href="#tabs-1" title="{{ 'pi.form.title.default.create'|trans }}">{{ 'pi.form.title.default.create'|trans }}</a>
+			</li>
+		</ul>
+
+		{% form_theme form getParameter('pi_app_admin.layout.template.form') %}
+		<form class="myform" action="{{ path('admin_content_diaporama_create', { 'NoLayout': NoLayout, 'category':category }) }}" method="post" {{ form_enctype(form) }} novalidate>
+		    <div id="tabs-1">
+                    {{ form_widget(form) }}
+		    </div>
+		    <ul class="ui-widget-header ui-footer">
+			    <li>
+			    	<button id="add_tab" class="button-ui-add-tab">{{ 'pi.grid.action.add-picture'|trans }}</button>
+			    	<button type="submit" class="button-ui-create">{{ 'pi.grid.action.create'|trans }}</button>
+		            <a href="{{ path('admin_content_bloc_general', { 'NoLayout': NoLayout, 'category':category }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
+			    </li>
+			</ul>  		    
+		</form>
+		
+	</div>
+	<!-- End tag markup -->	
+	
+	{% set options = {'prototype-name': ['medias'], 'prototype-tab-title': 'Media'} %}
+	{{ renderJquery('FORM', 'prototype-bytab', options )|raw }}	
+	
+	<script type="text/javascript">
+	//<![CDATA[      
+			j_prototype_bytabs.ftc_accordion_form("classement_collection", "{{ 'Classement'|trans }}", ".myform");     
+            j_prototype_bytabs.ftc_accordion_form("text_collection", "{{ 'Description'|trans }}", ".myform");
+			j_prototype_bytabs.ftc_accordion_form("bg_image_collection", "{{ 'pi.block.form.group.pictures'|trans }}", ".myform", "no-accordion");
+			j_prototype_bytabs.ftc_accordion_form("meta_definition", "{{ 'SEO'|trans }}", ".myform");
+	//]]>
+	</script>	
+		
+    <script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+    	//$('#plugins_contentbundle_diaporamatype_blocgeneral_slug').parent().parent().hide();
+        $('#plugins_contentbundle_diaporamatype_blocgeneral_isvisiblediapo').prop("checked",true);
+        $('#plugins_contentbundle_diaporamatype_blocgeneral_isvisiblediapo').parent().addClass("checked");
+        $('#plugins_contentbundle_diaporamatype_blocgeneral_isvisiblecarr').prop("checked",true);
+        $('#plugins_contentbundle_diaporamatype_blocgeneral_isvisiblecarr').parent().addClass("checked");        
+       /* $("#plugins_contentbundle_diaporamatype_blocgeneral_subrub").change( function() {
+            $.ajax({
+                type: "GET",
+                data: "data=" + $(this).val(),
+                url:"{{ path_url('admin_content_rub_liste_sous_rubrique', {'data':'1'})}}",
+                success: function(msg){
+                    if (msg != ''){
+                        $("#plugins_contentbundle_diaporamatype_blocgeneral_rub").html(msg).show();
+                    }
+                    else{
+                        $("#plugins_contentbundle_diaporamatype_blocgeneral_rub").html('<em>No item result</em>');
+                    }
+                }
+            });
+        });
+    });*/
+	//]]>   
+    </script>
+    		
+    {#
+    <script type="text/javascript">
+    //<![CDATA[
+            // Récupère le div qui contient la collection de tags
+            var collectionHolder = $('ul.medias');
+            // ajoute un lien « add a tag »
+            var $addMediaLink = $('<br/><h1><a href="#" class="add_media_link">Ajouter un media</a><h1>');
+            var $newLinkLi = $('<li></li>').append($addMediaLink);
+            jQuery(document).ready(function() {
+                // ajoute l'ancre « ajouter un tag » et li à la balise ul
+                collectionHolder.append($newLinkLi);
+                $addMediaLink.on('click', function(e) {
+                    // empêche le lien de créer un « # » dans l'URL
+                    e.preventDefault();
+                    // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
+                    addMediaForm(collectionHolder, $newLinkLi);
+                });
+            });
+            $('.removeA').on('click', function(e) {
+                // empêche le lien de créer un « # » dans l'URL
+                e.preventDefault();
+                // supprime l'élément li pour le formulaire de tag
+                $(this).parent().remove();
+            });
+            $("[class^='mediaLi']").each(function(i){
+        		var currentClass = $(this).attr('class');
+        		j_prototype_bytabs.ftc_accordion_form("image_collection", "{{ 'pi.block.form.group.pictures'|trans }} " + (i + 1), ".myform", currentClass);
+        		$(this).css({'display':'none'});
+        	});       
+        	     
+	        function addMediaForm(collectionHolder, $newLinkLi) {
+	            // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+	            var prototype = collectionHolder.attr('data-prototype');
+	            // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+	            // la longueur de la collection courante
+	            var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+	            // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+	            var $newFormLi = $('<li></li>').append(newForm);
+	            $newLinkLi.before($newFormLi);
+	            //Suppression d'image
+	            addMediaFormDeleteLink($newFormLi);
+	        }
+	        function addMediaFormDeleteLink($mediaFormLi) {
+	            var $removeFormA = $('<a href="#">Supprimer cette image</a>');
+	            $mediaFormLi.append($removeFormA);
+	            $removeFormA.on('click', function(e) {
+	                // empêche le lien de créer un « # » dans l'URL
+	                e.preventDefault();
+	                // supprime l'élément li pour le formulaire de tag
+	                $mediaFormLi.remove();
+	            });
+	        }
+	//]]>
+    </script>
+    #}
+{% endblock %}
