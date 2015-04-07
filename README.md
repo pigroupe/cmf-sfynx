@@ -165,6 +165,9 @@ Many systems allow you to use ACL chmod a +.
 **For more information** : http://symfony.com/doc/current/book/installation.html
 
 ``` bash
+    mkdir app/cache
+    mkdir app/logs
+    mkdir -p web/yui
     mkdir -p app/cachesfynx/loginfailure
     mkdir -p web/uploads/media
     mkdir web/yui
