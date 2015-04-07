@@ -19,7 +19,7 @@ app/bootstrap*
 nbproject/*
 vendor/*
 !vendor/sfynx-project/
-!vendor/sonata-project-news/
+!vendor/sonata-project/
 !vendor/Pear/
 !vendor/Zend/
 */logs/*
