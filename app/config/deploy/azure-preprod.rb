@@ -23,7 +23,7 @@ set :clear_controllers, false
 set :webserver_user,    "www-data"
 
 # Clean deploy releases
-set :keep_releases, 2
+set :keep_releases, 5
 
 # Run migrations before warming the cache
 #before "symfony:cache:warmup", "doctrine:migrate"

@@ -33,7 +33,7 @@ set :clear_controllers, false
 set :webserver_user,    "www-data"
 
 # Clean deploy releases
-set :keep_releases, 3
+set :keep_releases, 5
 
 after "deploy", "sfynxnamespace:reset_data_prod"
 after "sfynxnamespace:reset_data_prod", "deploy:cleanup"

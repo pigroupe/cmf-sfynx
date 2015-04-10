@@ -82,238 +82,38 @@ SFYNX is a free software distributed under the GPL license. This license guarant
 
 ## Installing automaticly all-in-one
 
-We have create an installer script shell which execute th e sfynx install.
+We have create an installer script shell which execute the sfynx install.
+
+### Step 1: Installation with apache or Nginx
+
+**If you want to install sfynx with apache-mysql-php** :
+``` bash
+
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-apache.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-sfynx-apache.sh | sudo sh
+
+``` 
+
+**If you want to install sfynx with gninx-mysql-php-fpm server** :
 
 ``` bash
 
-    chmod +x sysadmin/scriptshell/installer-sfynx.sh
-    ./sysadmin/scriptshell/installer-sfynx.sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-nginx.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-sfynx-nginx.sh | sudo sh
     
 ``` 
 
-After you will have to execute the installation step-by-step from the step 6.
+### Step 2: Connexion on /login
 
-## Installation step-by-step
-
-### Step 1: Configuring Serveur
-
-Before starting coding, make sure that your local system is properly
-configured for Symfony.
-
-Execute the `check.php` script from the command line:
+To connect as default super administrator, go to your navogator with on of the following url :
 
 ``` bash
-
-    php app/check.php
-
+http://dev.sfynx.local
+http://test.sfynx.local
+http://prod.sfynx.local
 ```
 
-**Required** : 
-
-- PHP with at least version 5.3.2 of PHP (php5.4.4 recommended)
-- Sqlite3 must be enabled
-- JSON must be enabled
-- Ctype must be enabled
-- PHP-XML module must be installed
-- Installtion the gd library (for images)
-- PHP.ini must have the extensions:
-
-    * php-pear php5-dev php5-gd  php5-curl  php5-imap php5-mcrypt 
-    * php5-geoip avec la database GeoLiteCountry/GeoIP.dat.gz (optional)
-    * php-apc avec APC 3.0.17+ 
-    * Intl (php5-intl) doit être installé avec ICU 4+
-    * timezonedb pour le parametre date.timezone
-    * JSON doit être activé
-    * pdo, pdo_mysql 
-    * php5-memcache / php5-memcached (optional)
-    * activation d'envoi de mail
-         - sous windows : 
-              - SMTP = smtp-host-value
-              - smtp_port = smtp-port-value
-         - sous linux :
-              - sendmail_path = "var-bin-sendmail"    
-
-### Step 2: Installing the vendor
-
-As Symfony uses [Composer][2] to manage its dependencies, the recommended way
-to create a new project is to use it.
-
-If you don't have Composer yet, download it following the instructions on
-http://getcomposer.org/ or just run the following command:
-
-``` bash
-
-    curl -s http://getcomposer.org/installer | php
-    
-```    
-    
-**Setting vendor with composer.json**
-``` bash
-
-    php -d memory_limit=1024M composer.phar install --no-interaction
-    php composer.phar dump-autoload --optimize
-
-```
-
-### Step 3: Setting up Permissions
-
-* The directories below should be writable by both the web server and the user.
-* On a UNIX system, if your web server is different from your user, you can run the following commands once in your project to ensure that the permissions are correctly installed. 
-* We must change www-data on your web server.
-
-Many systems allow you to use ACL chmod a +.
-**For more information** : http://symfony.com/doc/current/book/installation.html
-
-``` bash
-    mkdir app/cache
-    mkdir app/logs
-    mkdir -p web/yui
-    mkdir -p app/cachesfynx/loginfailure
-    mkdir -p web/uploads/media
-    mkdir web/yui
-
-    chmod -R 0777 app/cachesfynx
-    chmod -R 0777 app/cache
-    chmod -R 0777 app/logs
-    chmod -R 0777 web/uploads
-    chmod -R 0777 web/yui
-```
-
-### Step 4: Create database, tables and fixtures with phing
-
-**Execute initialize.xml configuration**
-``` bash
-
-    bin/phing -f app/config/phing/initialize.xml rebuild
-
-```
-
-### Step 5: Create database, tables and fixtures without phing
-
-**Type the following command to create the database**
-
-``` bash
-
-    php  app/console  doctrine:database:create
-
-```
-
-**Type the following command to create the tables**
-
-``` bash
-
-    php  app/console  doctrine:schema:create
-
-```
-
-**Type the following command to install fixtures of the tables**
-
-``` bash
-
-    php  app/console  doctrine:fixtures:load
-    php  app/console  sfynx:classification:fixtures
-
-```
-
-**Type the following command to install assets of the bundles**
-
-``` bash
-
-    php app/console assets:install web
-
-```
-
-**For more information** : http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
-
-### Step 6: Create the Virtual host file
-
-Create the virtualhost file like this
-
-``` bash
-    sudo nano /etc/apache2/sites-available/sfynx.conf
-
-```
-
-And in this file insert following code
-
-``` bash
-
-    <VirtualHost *:80>
-            ServerName  www.sfynx.local
-            ServerAlias www.sfynx.local             
-            DocumentRoot /var/www/cmf-sfynx/web/
-            <Directory "/var/www/cmf-sfynx/web">
-                    Options Indexes FollowSymLinks MultiViews
-                    AllowOverride None
-                    RewriteEngine On
-
-                    RewriteCond %{REQUEST_FILENAME} !-f
-                    RewriteRule ^(.*)$ app_dev.php [QSA,L]
-
-                    #php_value auto_prepend_file "/var/www/xhprof/external/header.php"
-                    #php_value auto_append_file "/var/www/xhprof/external/footer.php"
-
-                    #Require all granted
-                    Order allow,deny
-                    allow from all
-            </Directory>
-            ErrorLog ${APACHE_LOG_DIR}/error_sfynx_dev.log
-            LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
-            CustomLog ${APACHE_LOG_DIR}/access-dev.log varnishcombined
-    </VirtualHost>
-
-    <VirtualHost *:80>
-            ServerName  test.sfynx.local
-            ServerAlias test.sfynx.local
-            DocumentRoot /var/www/cmf-sfynx/web/
-            <Directory "/var/www/cmf-sfynx/web">
-                    Options Indexes FollowSymLinks MultiViews
-                    AllowOverride None
-                    RewriteEngine On
-
-                    RewriteCond %{REQUEST_FILENAME} !-f
-                    RewriteRule ^(.*)$ app_test.php [QSA,L]
-
-                    #php_value auto_prepend_file "/var/www/xhprof/external/header.php"
-                    #php_value auto_append_file "/var/www/xhprof/external/footer.php"
-
-                    #Require all granted
-                    Order allow,deny
-                    allow from all
-            </Directory>
-            ErrorLog ${APACHE_LOG_DIR}/error_sfynx_test.log
-            LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
-            CustomLog ${APACHE_LOG_DIR}/access-test.log varnishcombined
-    </VirtualHost>
-
-```
-
-And run a2ensite to create the alias
-
-``` bash
-    a2enmod rewrite
-    a2enmod expires
-    sudo a2ensite sfynx
-
-``` 
-
-Then update the hosts file /etc/hosts
-
-``` bash
-    sudo nano /etc/hosts
-``` 
-
-And add these lines
-
-``` bash
-    127.0.0.1       www.sfynx.local
-    127.0.0.1       test.sfynx.local
-``` 
-
-
-### Step 7: Connexion on /login
-
-To connect as default super administrator:
+and use this to connect
 
 ``` bash
 
@@ -324,7 +124,7 @@ To connect as default super administrator:
 
 **The password must be changed at the first use.**
 
-### Step 8: Run the phpunit tests
+### Step 3: Run the phpunit tests
 
 ``` bash
     
@@ -333,7 +133,7 @@ To connect as default super administrator:
 
 ```
 
-### Step 9: Run Behat tests
+### Step 4: Run Behat tests
 
 In first step, you have to install and configure Selenium Server :
 
@@ -365,5 +165,13 @@ After you just have to run behat.
     bin/behat --suite=cmf
     or
     php app/console sfynx:behat:execute --env=test --suite=cmf
+
+```
+
+## Re initialize project
+
+``` bash
+    
+     bin/phing -f app/config/phing/initialize.xml rebuild
 
 ```
