@@ -9,7 +9,7 @@
             "role": "Copyright Holder"
         }
     ],    
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "The Symfony Standard Edition distribution",
     "keywords": ["CMF"],
     "repositories": [
     {
