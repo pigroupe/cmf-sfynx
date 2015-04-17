@@ -18,20 +18,30 @@ mkdir -p app/cachesfynx/loginfailure
 mkdir -p web/uploads/media
 mkdir -p web/yui
 
-sudo chmod -R 0777 app/cachesfynx
-sudo chmod -R 0777 app/cache
-sudo chmod -R 0777 app/logs
-sudo chmod -R 0777 web/uploads
-sudo chmod -R 0777 web/yui
+# permission
+chown -R root:www-data app/cache
+chown -R root:www-data app/cachesfynx
+chown -R root:www-data app/logs
+chown -R root:www-data app/config/parameters.yml
+chown -R root:www-data web/uploads
+chown -R root:www-data web/yui
+
+sudo chmod -R 775 app/config/parameters.yml
+sudo chmod -R 775 app/cachesfynx
+sudo chmod -R 775 app/cache
+sudo chmod -R 775 app/logs
+sudo chmod -R 775 web/uploads
+sudo chmod -R 775 web/yui
 
 # we run the phing script to initialize the sfynx project
 bin/phing -f app/config/phing/initialize.xml rebuild
 
-sudo chmod -R 0777 app/cachesfynx
-sudo chmod -R 0777 app/cache
-sudo chmod -R 0777 app/logs
-sudo chmod -R 0777 web/uploads
-sudo chmod -R 0777 web/yui
+sudo chmod -R 775 app/config/parameters.yml
+sudo chmod -R 775 app/cachesfynx
+sudo chmod -R 775 app/cache
+sudo chmod -R 775 app/logs
+sudo chmod -R 775 web/uploads
+sudo chmod -R 775 web/yui
 
 # we create the virtualhiost of sfynx for apache
 sudo cat >> /tmp/sfynx << 'EOF'
