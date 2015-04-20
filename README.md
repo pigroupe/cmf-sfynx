@@ -137,16 +137,23 @@ and use this to connect
 
 In first step, you have to install and configure Selenium Server :
 
-Download the Selenium Server from the project website.
-Run the server with the following command (update the version number to the one you downloaded):
+**Install the selenium server lauching**
 
 ``` bash
 
-    java -jar selenium-server-standalone-2.44.0.jar
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/selenium/installer-selenium-server.sh | sudo sh
 
 ```
 
-After you just have to run behat.
+**Run the server with the following command (update the version number to the one you downloaded)**
+
+``` bash
+
+    sudo /etc/init.d/selenium <stop|start|restart>
+
+```
+
+After you just have to run behat :
 
 **To test the connexion handler**
 
@@ -168,7 +175,7 @@ After you just have to run behat.
 
 ```
 
-## Re initialize project
+## Re-initialize project
 
 ``` bash
     
