@@ -1,7 +1,7 @@
 set :domain,      "www.sfynx.fr"
-set :deploy_to,   "/websites/sfynx/preprod"
+set :deploy_to,   "<chemin-du-serveur>/preprod"
 
-set :user, "opendev"
+set :user, "<utilisateur>"
 
 role :web,        domain                         # Your HTTP server, Apache/etc
 role :app,        domain                         # This may be the same as your `Web` server

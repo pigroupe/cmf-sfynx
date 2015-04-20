@@ -1,7 +1,7 @@
 set :domain,      "www.sfynx.fr"
-set :deploy_to,   "/var/www/sfynx-preprod"
+set :deploy_to,   "<chemin-du-serveur>/preprod"
 
-set :user, "ssh-rapp"
+set :user, "<utilisateur>"
 # accept ssh
 set :default_run_options, {:pty => true}
 set :ssh_options, {:forward_agent => true}
