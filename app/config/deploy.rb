@@ -1,5 +1,5 @@
 #MULTISTAGE CONFIGURATION
-set :stages, %w(azure-dev azure-preprod preprod prod)
+set :stages, %w(develop preprod prod)
 set :default_stage, "azure-dev"
 set :stage_dir, 'app/config/deploy'
 require 'capistrano/ext/multistage'
@@ -47,14 +47,21 @@ end
  
 ##Reset all project's Datas
 namespace :sfynxnamespace do
-  task :reset_data, :except => { :no_release => true } do
+  task :reset_data_dev, :except => { :no_release => true } do
     capifony_pretty_print "--> Reset all project data"
-    run "${try_sudo} sh -c 'cd #{latest_release} && echo y | ./resetProjectData.sh'"
+    run "${try_sudo} sh -c 'cd #{latest_release} && echo y | ./resetProjectDataDev.sh'"
     capifony_puts_ok
   end
 end
 
-##Reset all project's Datas
+namespace :sfynxnamespace do
+  task :reset_data_preprod, :except => { :no_release => true } do
+    capifony_pretty_print "--> Reset all project data"
+    run "${try_sudo} sh -c 'cd #{latest_release} && echo y | ./resetProjectDataPreProd.sh'"
+    capifony_puts_ok
+  end
+end
+
 namespace :sfynxnamespace do
   task :reset_data_prod, :except => { :no_release => true } do
     capifony_pretty_print "--> Reset all project data"

@@ -2,6 +2,7 @@ set :domain,      "www.sfynx.fr"
 set :deploy_to,   "<chemin-du-serveur>/prod"
 
 set :user, "<utilisateur>"
+
 # accept ssh
 set :default_run_options, {:pty => true}
 set :ssh_options, {:forward_agent => true}
@@ -37,6 +38,3 @@ set :keep_releases, 5
 
 after "deploy", "sfynxnamespace:reset_data_prod"
 after "sfynxnamespace:reset_data_prod", "deploy:cleanup"
-
-# Run logger
-logger.level = Logger::MAX_LEVEL

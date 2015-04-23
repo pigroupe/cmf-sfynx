@@ -80,7 +80,7 @@ security:
 jms_security_extra:
     # Whether you want to secure all services (true), or only secure specific
     # services (false); see also below
-    secure_all_services: false
+    secure_all_services: false # important for optimal perform
     
     # Enables expression language
     expressions: true
@@ -94,6 +94,7 @@ jms_security_extra:
 jms_di_extra:
     locations:
         all_bundles: true
+        directories: ["%kernel.root_dir%/../src", "%kernel.root_dir%/../vendor/cmf-sfynx"] # important for optimal perform
     automatic_controller_injections:
         properties:
             request: "@request"

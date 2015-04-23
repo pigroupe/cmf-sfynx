@@ -122,7 +122,7 @@ EOT
             $this->em->flush();
             // Try and commit the transaction
             $this->em->getConnection()->commit();            
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
         	$output->writeln($e->getMessage());        	
         	// Rollback the failed transaction attempt
         	$this->em->getConnection()->rollback();

@@ -14,7 +14,7 @@ set :branch,      "develop"
 set :repository,  "git@github.com/pigroupe/cmf-sfynx.git"
 
 # SHARING PATH
-set :shared_files,      ["app/config/parameters.yml", "app/config/routing.yml", "web/robots.txt", "resetProjectData.sh"]
+set :shared_files,      ["app/config/parameters.yml", "web/robots.txt", "resetProjectDataDev.sh"]
 
 # Symfony2
 set :dump_assetic_assets, true
@@ -29,7 +29,7 @@ set :keep_releases, 5
 #before "symfony:cache:warmup", "doctrine:migrate"
 # Release cleanup
 
-after "deploy", "sfynxnamespace:reset_data"
+after "deploy", "sfynxnamespace:reset_data_dev"
 #after "sfynxnamespace:reset_data", "empty_cache"
 #after "deploy", "deploy:cleanup"
 
