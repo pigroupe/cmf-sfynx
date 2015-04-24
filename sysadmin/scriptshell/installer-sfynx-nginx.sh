@@ -1,7 +1,11 @@
 #!/bin/sh
 
 cd /var/www
-git clone https://github.com/pigroupe/cmf-sfynx.git cmf-sfynx
+
+if [ ! -d "cmf-sfynx" ]; then
+ git clone https://github.com/pigroupe/cmf-sfynx.git cmf-sfynx
+fi
+
 cd cmf-sfynx
 
 # we install the composer file

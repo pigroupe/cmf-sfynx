@@ -185,6 +185,7 @@ class BlocGeneral extends AbstractDefault
      * @Gedmo\Translatable
      * @ORM\Column(name="slug", type="string", nullable=false)
      * @Gedmo\Slug(separator="-", fields={"title", "id"})
+     * @Assert\Regex(pattern="/^[a-z0-9]+(?:-[a-z0-9]+)*$/u", message="bad.slug.regex")
      */
     private $slug;
 
