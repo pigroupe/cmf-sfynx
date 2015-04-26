@@ -19,4 +19,9 @@ else
     echo "Successfully installed $vargrantversion"
 fi
 
+# install adapter nfs
+sudo apt-get install nfs-common nfs-kernel-server
+
+# Install the VirtualBox guest additions plugin
+vagrant plugin install vagrant-vbguest
 

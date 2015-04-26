@@ -94,7 +94,7 @@ jms_security_extra:
 jms_di_extra:
     locations:
         all_bundles: true
-        directories: ["%kernel.root_dir%/../src", "%kernel.root_dir%/../vendor/cmf-sfynx"] # important for optimal perform
+        directories: ["%kernel.root_dir%/../src", "%kernel.root_dir%/../vendor/sfynx-project"] # important for optimal perform
     automatic_controller_injections:
         properties:
             request: "@request"
