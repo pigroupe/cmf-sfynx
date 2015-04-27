@@ -1,4 +1,6 @@
 #!/bin/bash
+. `dirname $0`/env.sh
+export INSTALL_USERWWW="${INSTALL_USERHOME}/www"
 
 # 
 sudo apt-get remove nginx* # Removes all but config files
@@ -14,29 +16,34 @@ sudo add-apt-repository ppa:nginx/stable
 sudo apt-get update
 sudo apt-get upgrade --show-upgraded
 sudo apt-get install libpcre3-dev build-essential libssl-dev
+sudo apt-get clean
 
 # install nginx
 sudo apt-get install nginx
 
-# start the server
-sudo /etc/init.d/nginx start
+# mysql install
+. `dirname $0`/installer-mysql.sh
+
+# php install
+. `dirname $0`/installer-php.sh
+sudo apt-get install php5-fpm
 
 # Create an Init Script to Manage nginx
 #sudo wget https://raw.github.com/JasonGiedymin/nginx-init-ubuntu/master/nginx -O /etc/init.d/nginx
 #sudo chmod +x /etc/init.d/nginx
 #sudo /usr/sbin/update-rc.d -f nginx defaults 
 
-#
-sudo apt-get install php5 php5-fpm php-apc php5-mcrypt php5-mysqlnd php5-sqlite php5-intl php5-cli php5-curl php5-mongo
-
-#
-sudo /etc/init.d/php5-fpm restart
-sudo /etc/init.d/nginx start
-
+# permission
 sudo chown -R www-data:www-data /var/www
-sudo chmod -R 777 /var/www
+
+# Au cas où ce script-ci ait été exécuté par root,
+# on donne les droits à notre utilisateur
+sudo chown -R ${INSTALL_USERNAME}:${INSTALL_USERGROUP} ${INSTALL_USERWWW}
 
 # installation phpmyadmin
 sudo apt-get install phpmyadmin
 sudo chmod 755 /etc/phpmyadmin/config.inc.php
 
+# restart servers
+sudo /etc/init.d/php5-fpm restart
+sudo /etc/init.d/nginx start
