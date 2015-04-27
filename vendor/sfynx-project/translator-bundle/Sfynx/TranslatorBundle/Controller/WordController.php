@@ -111,11 +111,11 @@ class WordController extends abstractController
         $locale     = $this->container->get('request')->getLocale();
         $NoLayout   = $this->container->get('request')->query->get('NoLayout');
         
-        $this->checkCsrf('listword'); // name of the generated token, must be equal to the one from Twig
+        $this->checkCsrf('listword'); // name of the generated token, must be equal to the one from Twig        
 
         $this->get('sfynx.annotation.subscriber.encrypters')->_load_enabled = true;
-        $entities   = $em->getRepository("SfynxTranslatorBundle:Word")->setContainer($this->container)->findAllByEntity($locale, 'object');        
-
+        $entities   = $em->getRepository("SfynxTranslatorBundle:Word")->setContainer($this->container)->findAllByEntity($locale, 'object');     
+        
         return $this->render("SfynxTranslatorBundle:Word:index.html.twig", array(
             'entities' => $entities,
             'NoLayout'    => $NoLayout,

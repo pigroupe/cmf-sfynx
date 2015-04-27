@@ -36,9 +36,10 @@ interface PiLogManagerInterface
     public function setName($name);
     public function setFile($filePath, $mode = 0777);
     public function setInit($id, $format = "YmdHis", $flag = FILE_APPEND, $path = "");
-    public function setInfo($info, $inLogger = true);
+    public function setErr($err);
+    public function setInfo($info);
+    public function setLog($level, $message, array $context = array());
     public function clearInfo();
-    public function setErr($err, $inLogger = true);
     public function delete();
     public function save($flag = FILE_APPEND, $mode = 0777);
 }

@@ -48,7 +48,7 @@ services:
         class: %sfynx.tool.manager.file.class%  
         arguments: ['@service_container']  
         
-    sfynx.tool.file_sqp_manager:
+    sfynx.tool.file_sql_manager:
         class: %sfynx.tool.manager.file_spl.class%  
         arguments: [%kernel.cache_dir%, '@logger']         
         
@@ -73,7 +73,7 @@ services:
         
     sfynx.tool.log_manager:
         class: %sfynx.tool.manager.log.class%      
-        arguments: ['@service_container']    
+        arguments: [%kernel.logs_dir%, '@logger']     
         
     sfynx.tool.timer_manager:
         class: %sfynx.tool.manager.timer.class%      

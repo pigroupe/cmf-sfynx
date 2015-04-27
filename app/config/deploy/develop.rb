@@ -1,7 +1,7 @@
 set :domain,      "www.sfynx.fr"
-set :deploy_to,   "/websites/sfynx/develop"
+set :deploy_to,   "<chemin-du-serveur>/develop"
 
-set :user, "opendev"
+set :user, "<utilisateur>"
 
 role :web,        domain                         # Your HTTP server, Apache/etc
 role :app,        domain                         # This may be the same as your `Web` server
@@ -14,7 +14,7 @@ set :branch,      "develop"
 set :repository,  "git@github.com/pigroupe/cmf-sfynx.git"
 
 # SHARING PATH
-set :shared_files,      ["app/config/parameters.yml", "app/config/routing.yml", "web/robots.txt", "resetProjectData.sh"]
+set :shared_files,      ["app/config/parameters.yml", "web/robots.txt", "resetProjectDataDev.sh"]
 
 # Symfony2
 set :dump_assetic_assets, true
@@ -23,13 +23,13 @@ set :clear_controllers, false
 set :webserver_user,    "www-data"
 
 # Clean deploy releases
-set :keep_releases, 2
+set :keep_releases, 5
 
 # Run migrations before warming the cache
 #before "symfony:cache:warmup", "doctrine:migrate"
 # Release cleanup
 
-after "deploy", "sfynxnamespace:reset_data"
+after "deploy", "sfynxnamespace:reset_data_dev"
 #after "sfynxnamespace:reset_data", "empty_cache"
 #after "deploy", "deploy:cleanup"
 

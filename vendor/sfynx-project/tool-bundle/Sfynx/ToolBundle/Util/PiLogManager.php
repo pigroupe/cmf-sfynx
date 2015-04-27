@@ -18,7 +18,8 @@
 namespace Sfynx\ToolBundle\Util;
 
 use Sfynx\ToolBundle\Builder\PiLogManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Description of the Log manager.
@@ -45,11 +46,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PiLogManager implements PiLogManagerInterface
 {
-   /**
-    * @var \Symfony\Component\DependencyInjection\ContainerInterface
-    */
-   protected $container;
-        
    /**
     * @var \Symfony\Bridge\Monolog\Logger
     */    
@@ -84,12 +80,11 @@ class PiLogManager implements PiLogManagerInterface
     * @access public
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
-   public function __construct(ContainerInterface $container)
+   public function __construct($logDir, LoggerInterface $logger = null)
    {
-        $this->container= $container;
-        $this->_logger    = $this->container->get('logger');           
-        if ($this->container->hasParameter("kernel.logs_dir")) {
-            $this->setPath($this->container->getParameter("kernel.logs_dir"));
+        $this->_logger    = $logger ?: new NullLogger();     
+        if ($logDir) {
+            $this->setPath($logDir);
         }
    }   
 
@@ -187,21 +182,55 @@ class PiLogManager implements PiLogManagerInterface
     * Add a info in the container.
     *
     * @param string  $info
-    * @param boolean $inLogger
     * 
     * @return PiLogManager
     * @access public
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */
-   public function setInfo($info, $inLogger = true)
+   public function setInfo($info)
    {
         $this->_info[] = $info;
-        if ($inLogger) {
-            $this->_logger->info($info);
-        }
+        $this->_logger->info($info);
         
         return $this;
    }
+   
+   /**
+    * Add an error in the container.
+    *
+    * @param string  $err
+    * 
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    */
+   public function setErr($err)
+   {
+        $this->_info[] = $err;
+        $this->_logger->err($err);
+        
+        return $this;
+   }   
+   
+   /**
+    * Add a log in the container with context by level.
+    *
+    * @param string  $level
+    * @param string $message
+    * @param array  $context
+    * 
+    * @return PiLogManager
+    * @access public
+    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+    */
+   public function setLog($level, $message, array $context = array())
+   {
+        $this->_info[] = $info;
+        $this->_logger->log($level, $message, $context);
+        
+        return $this;
+   }   
+   
    
    /**
     * Clear the container info.
@@ -213,26 +242,6 @@ class PiLogManager implements PiLogManagerInterface
    public function clearInfo()
    {
         $this->_info = null;
-        
-        return $this;
-   }   
-   
-   /**
-    * Add an error in the container.
-    *
-    * @param string  $err
-    * @param boolean $inLogger
-    * 
-    * @return PiLogManager
-    * @access public
-    * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-    */
-   public function setErr($err, $inLogger = true)
-   {
-        $this->_info[] = $err;
-        if ($inLogger) {
-            $this->_logger->err($err);
-        }
         
         return $this;
    }   

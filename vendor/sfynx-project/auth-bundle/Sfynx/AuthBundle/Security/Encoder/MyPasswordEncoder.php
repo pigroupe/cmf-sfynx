@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 
 class MyPasswordEncoder extends BasePasswordEncoder
 {
-	public function encodePassword($raw, $salt)
+    public function encodePassword($raw, $salt)
     {
         $this->algorithm = 'sha512';
         $this->encodeHashAsBase64 = true;
