@@ -177,8 +177,12 @@ class PageByBlockType extends AbstractType
                     //'help_block' => 'Does a full content caching during the specified lifetime. Leave empty for no cache.'
                     'help_block' => $this->_container->get('translator')->trans('pi.page.form.field.lifetime'),
             ))
-            ->add('route_name')
-            ->add('url')
+            ->add('route_name', 'text', array(
+                    'label'    => 'pi.page.form.route_name'
+            ))
+            ->add('url', 'text', array(
+                    'label'    => 'pi.page.form.url'
+            ))
             ->add('blocks', 'collection', array(
                     'allow_add' => true,
                     'allow_delete' => true,
