@@ -6,7 +6,7 @@ parameters:
     
 services:
     #
-    # configuration of the FORM BUILDER classes
+    # configuration of the FORM BUILDER services
     #
     pi_app_admin.formbuilder_manager.model.snippet:
         class: %piapp.manager.formbuilder.model.snippet.class%
