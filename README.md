@@ -86,19 +86,19 @@ We have create an installer script shell which execute the sfynx install.
 
 ### Step 1: Installation with apache or Nginx
 
-**If you want to install sfynx with apache-mysql-php** :
+**If you want to install sfynx with LAMP server** :
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-apache.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-lamp.sh | sudo sh
     curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-sfynx-apache.sh | sudo sh
 
 ``` 
 
-**If you want to install sfynx with gninx-mysql-php-fpm server** :
+**If you want to install sfynx with LEMP server** :
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-nginx.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-lemp.sh | sudo sh
     curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-sfynx-nginx.sh | sudo sh
     
 ``` 

@@ -274,6 +274,9 @@ class PageByTransController extends CmfabstractController
         $locale = $this->container->get('request')->getLocale();
         $User   = $this->get('security.context')->getToken()->getUser();
         $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        
+        //$form = $this->get('pi_app_admin.form.pagebytrans');
+        
         $editForm = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($entity->getId());
         
