@@ -39,6 +39,7 @@ app/config/parameters.yml
 app/phpunit.xml
 
 # Composer
+security-checker
 composer.phar
 composer.lock
 
