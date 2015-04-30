@@ -48,7 +48,7 @@ sudo chmod -R 775 web/uploads
 sudo chmod -R 775 web/yui
 
 # we create the virtualhiost of sfynx for apache
-sudo cat >> /tmp/sfynx << 'EOF'
+sudo cat > /tmp/sfynx << 'EOF'
 <VirtualHost *:80>
         ServerName  dev.sfynx.local
         ServerAlias dev.sfynx.local             
@@ -145,7 +145,7 @@ sudo cat >> /tmp/sfynx << 'EOF'
 
 </VirtualHost>
 EOF
-sudo mv /tmp/sfynx /etc/apache2/sites-available/
+sudo mv /tmp/sfynx /etc/apache2/sites-available/sfynx
 
 # we create the symbilic link
 sudo ln -s /etc/apache2/sites-available/sfynx /etc/apache2/sites-enabled/sfynx
@@ -157,6 +157,8 @@ if ! grep -q "dev.sfynx.local" /etc/hosts; then
     echo "127.0.0.1    test.sfynx.local" | sudo tee --append /etc/hosts
     echo "127.0.0.1    prod.sfynx.local" | sudo tee --append /etc/hosts
 fi
+
+sudo chown -R www-data:www-data /var/www/cmf-sfynx
 
 # we restart apache server
 sudo /etc/init.d/apache2 restart

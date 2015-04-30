@@ -48,7 +48,7 @@ sudo chmod -R 775 web/uploads
 sudo chmod -R 775 web/yui
 
 # we create the virtualhiost of sfynx for nginx
-sudo cat >> /tmp/sfynx << 'EOF'
+sudo cat > /tmp/sfynx << 'EOF'
 upstream php5-fpm-sock {  
     server unix:/var/run/php5-fpm.sock;  
 }
@@ -404,7 +404,7 @@ server {
 
 }
 EOF
-sudo mv /tmp/sfynx /etc/nginx/sites-available/
+sudo mv /tmp/sfynx /etc/nginx/sites-available/sfynx
 
 # we create the symbilic link
 sudo ln -s /etc/nginx/sites-available/sfynx /etc/nginx/sites-enabled/sfynx
@@ -417,5 +417,9 @@ if ! grep -q "dev.sfynx.local" /etc/hosts; then
     echo "127.0.0.1    prod.sfynx.local" | sudo tee --append /etc/hosts
 fi
 
+#
+sudo chown -R www-data:www-data /var/www/cmf-sfynx
+
 # we restart nginx server
 sudo /etc/init.d/nginx restart
+

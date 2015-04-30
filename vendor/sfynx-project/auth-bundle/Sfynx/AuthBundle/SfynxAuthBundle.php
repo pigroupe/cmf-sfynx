@@ -94,46 +94,46 @@ class SfynxAuthBundle extends Bundle
         // Security
         $container->loadFromExtension('security', array(
                 'role_hierarchy' => $heritage_role,
-                #
-                # The access_control section is where you specify the credentials necessary for users trying to access specific parts of your application.
-                #
-                'access_control' => array(
-                        #
-                        #  The bundle requires that the login form and all the routes used to create a user
-                        #  and reset the password be available to unauthenticated users but use the same firewall
-                        #  as the pages you want to secure with the bundle. This is why you have specified that
-                        #  the any request matching the /login pattern or starting with /register or /resetting have been made available to anonymous users.
-                        #  You have also specified that any request beginning with /admin will require a user to have the ROLE_ADMIN role.
-                        #
-        
-                        # The WDT has to be allowed to anonymous users to avoid requiring the login with the AJAX request
-                        array('path' => '^/_wdt/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
-                        array('path' => '^/_profiler/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
-                        # AsseticBundle paths used when using the controller for assets
-                        array('path' => '^/js/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
-                        array('path' => '^/css/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
-                        # URL of FOSUserBundle which need to be available to anonymous users
-                        array('path' => '^/login$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/login_check$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/change-password$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/profile$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/profile/edit$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/register$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/register/check-email$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/register/confirm/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/register/confirmed$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/resseting/request$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/resseting/send-email$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/resseting/check-email$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/user/resseting/reset/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
-                        # -> custom access control for the admin area of the URL
-                        array('path' => '^/client/', 'role' => 'ROLE_CUSTOMER', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/provider/', 'role' => 'ROLE_PROVIDER', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/admin/', 'role' => 'ROLE_EDITOR', 'requires_channel' => self::HTTP_TYPE),
-                        array('path' => '^/adminsonata/', 'role' => 'ROLE_SUPER_ADMIN', 'requires_channel' => self::HTTP_TYPE),
-                        # DESACTIVER LE FRONT ACCES AUX NON LOGGE
-                        #array('path' => '^/', 'role' => 'ROLE_USER', 'requires_channel' => self::HTTP_TYPE),
-                ),                
+//                #
+//                # The access_control section is where you specify the credentials necessary for users trying to access specific parts of your application.
+//                #
+//                'access_control' => array(
+//                        #
+//                        #  The bundle requires that the login form and all the routes used to create a user
+//                        #  and reset the password be available to unauthenticated users but use the same firewall
+//                        #  as the pages you want to secure with the bundle. This is why you have specified that
+//                        #  the any request matching the /login pattern or starting with /register or /resetting have been made available to anonymous users.
+//                        #  You have also specified that any request beginning with /admin will require a user to have the ROLE_ADMIN role.
+//                        #
+//        
+//                        # The WDT has to be allowed to anonymous users to avoid requiring the login with the AJAX request
+//                        array('path' => '^/_wdt/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
+//                        array('path' => '^/_profiler/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
+//                        # AsseticBundle paths used when using the controller for assets
+//                        array('path' => '^/js/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
+//                        array('path' => '^/css/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'),
+//                        # URL of FOSUserBundle which need to be available to anonymous users
+//                        array('path' => '^/login$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/login_check$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/change-password$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/profile$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/profile/edit$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/register$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/register/check-email$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/register/confirm/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/register/confirmed$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/resseting/request$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/resseting/send-email$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/resseting/check-email$', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/user/resseting/reset/', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => self::HTTP_TYPE),
+//                        # -> custom access control for the admin area of the URL
+//                        array('path' => '^/client/', 'role' => 'ROLE_CUSTOMER', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/provider/', 'role' => 'ROLE_PROVIDER', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/admin/', 'role' => 'ROLE_EDITOR', 'requires_channel' => self::HTTP_TYPE),
+//                        array('path' => '^/adminsonata/', 'role' => 'ROLE_SUPER_ADMIN', 'requires_channel' => self::HTTP_TYPE),
+//                        # DESACTIVER LE FRONT ACCES AUX NON LOGGE
+//                        #array('path' => '^/', 'role' => 'ROLE_USER', 'requires_channel' => self::HTTP_TYPE),
+//                ),                
         ));
     }
     

@@ -639,8 +639,10 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
             if (!$locale) {
                 // records all translations
                 $all_translations = $page->getTranslations();
-                foreach ($all_translations as $translation) {
-                    $this->translations[$page->getId()][$translation->getLangCode()->getId()] = $translation;
+                if (count($all_translations) >= 1) {
+                    foreach ($all_translations as $translation) {
+                        $this->translations[$page->getId()][$translation->getLangCode()->getId()] = $translation;
+                    }
                 }
             } else {
                 $translationPage = $this->getRepository('translationPage')->findOneBy(array('page' => $page->getId(), 'langCode'=>$locale));
