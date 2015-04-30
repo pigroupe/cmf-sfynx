@@ -1,5 +1,5 @@
 #!/bin/bash
-. `dirname $0`/config.sh
+. `dirname $0`/env.sh
 
 
 sudo sh -c "cat >> /etc/samba/smb.conf" <<EOF
