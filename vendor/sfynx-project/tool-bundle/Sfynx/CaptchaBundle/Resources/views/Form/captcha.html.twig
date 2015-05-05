@@ -7,14 +7,14 @@
         {% if (pictures_all|length >= 1) %}
             {% for key, value in pictures_all %} 
             <div class="item-challenge" data-key="{{ key }}" title="captcha" alt="captcha">
-                <img src="{{ value }}">
+                <img src="{{ value }}?{{ "now"|date("Y-m-d H:i:s") }}">
                 <div class="checked" style="display: none;"></div>
             </div>
             {% endfor %}
         {% elseif (pictures_all_secure|length >= 1) %}
             {% for key, value in pictures_all_secure %} 
             <div class="item-challenge" data-key="{{ key }}" title="captcha" alt="captcha">
-                <img src="{{ path(value, {'key' : key}) }}">
+                <img src="{{ path(value, {'key' : key}) }}?{{ "now"|date("Y-m-d H:i:s") }}">
                 <div class="checked" style="display: none;"></div>
             </div>
             {% endfor %}                
