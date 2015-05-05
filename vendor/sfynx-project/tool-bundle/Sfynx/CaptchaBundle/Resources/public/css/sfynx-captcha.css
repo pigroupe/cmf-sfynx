@@ -1,0 +1,41 @@
+.sfynx-captcha {
+    display: block;
+}
+.sfynx-captcha .captcha-challenge {
+  font-size: 14px;
+  text-align: center;
+}
+.sfynx-captcha .captcha-challenge span {
+  font-weight: bold;
+}
+.sfynx-captcha .challenges {
+  margin-top: 10px;
+  text-align: center;
+}
+.sfynx-captcha .challenges .item-challenge {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  width: 58px;
+  min-height: 43px;
+  border: 1px solid #b2b3b4;
+  vertical-align: top;
+  background-color: white;
+  -moz-border-radius:5px 5px;
+  -webkit-border-radius:5px 5px;
+  border-radius:5px 5px;
+}
+.sfynx-captcha .challenges .item-challenge img {
+  width: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.sfynx-captcha .challenges .item-challenge .checked {
+  background: url('../img/check_small.png') 0 0 no-repeat;
+  width: 11px;
+  height: 8px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  display: none;
+}

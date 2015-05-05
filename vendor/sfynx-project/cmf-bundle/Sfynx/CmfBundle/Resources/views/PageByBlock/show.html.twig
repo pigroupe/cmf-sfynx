@@ -86,7 +86,7 @@
 	
 	<script type="text/javascript">
 	//<![CDATA[
-			$(document).ready(function() {
+            $(document).ready(function() {
                 // http://jquery-ui.googlecode.com/svn/tags/1.6rc5/tests/static/icons.html
                 $("a.button-ui-create").button({icons: {primary: "ui-icon-circle-plus"}});
                 $("button.button-ui-update").button({icons: {primary: "ui-icon-disk"}});
@@ -100,21 +100,21 @@
                 $("a.button-ui-back-list").button({icons: {primary: "ui-icon-arrowreturn-1-w"}});
 
                 $("#dialog-confirm").dialog({
-              		 autoOpen: false,
-              		 resizable: false,
-              		 height:140,
-              		 modal: true,
-              		 buttons: {
-                  		 "{{ 'pi.form.tab.box.delete'|trans }}": function() {
-                          	$('#'+id_form_delete).trigger('submit');
-                          	$( this ).dialog( "close" );
-                  		 },
-                  		 "{{ 'pi.form.tab.box.cancel'|trans }}": function() {
-                  		 	$( this ).dialog( "close" );
-                  		 }
-              		 }
-          	 	});                
-			});
+                    autoOpen: false,
+                    resizable: false,
+                    height:140,
+                    modal: true,
+                    buttons: {
+                            "{{ 'pi.form.tab.box.delete'|trans }}": function() {
+                           $('#'+id_form_delete).trigger('submit');
+                           $( this ).dialog( "close" );
+                            },
+                            "{{ 'pi.form.tab.box.cancel'|trans }}": function() {
+                                   $( this ).dialog( "close" );
+                            }
+                    }
+          	});                
+            });
 	//]]>
 	</script>
 	{% endif %}

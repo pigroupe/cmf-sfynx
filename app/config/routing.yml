@@ -52,4 +52,11 @@ SfynxWsBundle:
 #     
 SfynxWsseBundle:
     resource: "@SfynxWsseBundle/Resources/config/routing.yml"
+    prefix:   / 
+   
+#
+#   Import SfynxCaptchaBundle routing files
+#      
+SfynxCaptchaBundle:
+    resource: "@SfynxCaptchaBundle/Resources/config/routing.yml"
     prefix:   /    

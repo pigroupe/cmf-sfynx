@@ -1,0 +1,29 @@
+{% block sfynx_captcha_widget %}
+<div class="sfynx-captcha">        
+    <div class="captcha-challenges">
+        <b>Vérification de sécurité</b> : veuillez cliquer sur le logo de la marque <span style="color: #E3001B;">{{ picture_name }}</span>
+    </div>
+    <div class="challenges">
+        {% if (pictures_all|length >= 1) %}
+            {% for key, value in pictures_all %} 
+            <div class="item-challenge" data-key="{{ key }}" title="captcha" alt="captcha">
+                <img src="{{ value }}?{{ "now"|date("Y-m-d H:i:s") }}">
+                <div class="checked" style="display: none;"></div>
+            </div>
+            {% endfor %}
+        {% elseif (pictures_all_secure|length >= 1) %}
+            {% for key, value in pictures_all_secure %} 
+            <div class="item-challenge" data-key="{{ key }}" title="captcha" alt="captcha">
+                <img src="{{ path(value, {'key' : key}) }}?{{ "now"|date("Y-m-d H:i:s") }}">
+                <div class="checked" style="display: none;"></div>
+            </div>
+            {% endfor %}                
+        {% endif %}
+    </div>
+    {{ form_widget(form,  { 'attr': {'data-key': 'sfynx-captcha-hidden-value'} }) }}
+</div>
+{% endblock %}
+
+
+
+

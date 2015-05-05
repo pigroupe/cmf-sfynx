@@ -22,6 +22,7 @@ The framework works with Symfony 2.3 and has been split into 17 bundles :
 * AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
 * ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
 * BehatBundle : A bundle which provides context tools to run mink tests
+* CaptchaBundle : A bundle which provides a captcha tool to secure form
 * MigrationBundle : A bundle which provides a command to set migration files with a version handler
 * CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
 ( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )

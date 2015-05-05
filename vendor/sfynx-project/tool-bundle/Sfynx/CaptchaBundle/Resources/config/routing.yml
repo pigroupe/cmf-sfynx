@@ -1,0 +1,6 @@
+#
+#   import routes from a controller directory
+#
+annotation_sfynx_captcha:
+    resource: "@SfynxCaptchaBundle/Controller"
+    type:     annotation
