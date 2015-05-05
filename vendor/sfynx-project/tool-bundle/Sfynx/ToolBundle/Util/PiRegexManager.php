@@ -18,6 +18,7 @@
 namespace Sfynx\ToolBundle\Util;
 
 use Sfynx\ToolBundle\Builder\PiRegexManagerBuilderInterface;
+use Sfynx\ToolBundle\Util\PiStringManager;
 
 /**
  * Standardizing the classroom management system regular expressions.
@@ -149,7 +150,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
      */
     public static function verifByRegularExpression($chaine, $typeExpression = "no", $flags = PREG_SET_ORDER)
     {
-            $w_var = \Sfynx\ToolBundle\Util\PiStringManager::trimUltime($chaine);
+            $w_var = PiStringManager::trimUltime($chaine);
 
             switch ($typeExpression)
             {
@@ -157,7 +158,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     return $w_var;
                     
                 case "num":
-                    if (preg_match_all("/[0-9]+/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[0-9]+/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -165,7 +166,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                     
                 case "letter":
-                    if (preg_match_all("/[a-zA-Z]+/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[a-zA-Z]+/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -173,7 +174,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                     
                 case "alphanum":
-                    if (preg_match_all("/[a-zA-Z0-9]+/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[a-zA-Z0-9]+/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -181,7 +182,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                     
                 case "nick":
-                    if (preg_match_all("/[_a-zA-Z0-9.-]+/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[_a-zA-Z0-9.-]+/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -189,7 +190,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                 
                 case "mail":
-                    if (preg_match_all("/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,3}/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,3}/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -197,7 +198,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                 
                 case "url":
-                    if (preg_match_all("/[www.]+[_a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[www.]+[_a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -205,7 +206,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                 
                 case "file":
-                    if (preg_match_all("/[_a-zA-Z0-9.-? /&é]+/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[_a-zA-Z0-9.-? /&é]+/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -213,7 +214,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                     
                 case "name":
-                    if (preg_match_all("/[_a-zA-Z0-9.-? \'/&éea]+/",$w_var, $matches, $flags))
+                    if (preg_match_all("/[_a-zA-Z0-9.-? \'/&éea]+/", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -222,7 +223,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
 
                 // Extraction de tous les numéros de téléphone d'un texte                    
                 case "phone":
-                    if (preg_match_all("/\(?  (\d{3})?  \)?  (?(1)  [\-\s] ) \d{3}-\d{4}/x",$w_var, $matches, $flags))
+                    if (preg_match_all("/\(?  (\d{3})?  \)?  (?(1)  [\-\s] ) \d{3}-\d{4}/x", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -230,7 +231,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                     }
                     
                 case "cp":
-                   	if (preg_match_all("/[0-9]{4,6}/",$w_var, $matches, $flags))
+                   	if (preg_match_all("/[0-9]{4,6}/", $w_var, $matches, $flags))
                    	{
                    		return $matches;
                    	} else {
@@ -238,7 +239,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                    	}  
 
                 case "date-fr":
-                	if (preg_match_all("/[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}/",$w_var, $matches, $flags))
+                	if (preg_match_all("/[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}/", $w_var, $matches, $flags))
                 	{
                    		return $matches;
                    	} else {
@@ -246,7 +247,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                    	}                   	
 
                 case "date-en":
-                	if (preg_match_all("/[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/",$w_var, $matches, $flags))
+                	if (preg_match_all("/[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/", $w_var, $matches, $flags))
                 	{
                 		return $matches;
                 	} else {
@@ -255,7 +256,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
                    	
                 // Recherche les couples de balises HTML                 
                 case "balise":
-                    if (preg_match_all("|<[^>]+>(.*)</[^>]+>|U",$w_var, $matches, $flags))
+                    if (preg_match_all("|<[^>]+>(.*)</[^>]+>|U", $w_var, $matches, $flags))
                     {
                         return $matches;
                     } else {
@@ -279,7 +280,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
      */
     public static function searchIdByTag($chaine,$tag)
     {
-        $w_var = \Sfynx\ToolBundle\Util\PiStringManager::trimUltime($chaine);
+        $w_var = PiStringManager::trimUltime($chaine);
 
         if (preg_match_all("|&lt;$tag(\d+)&gt;|U",$w_var, $matches, PREG_SET_ORDER ))
         {
@@ -302,7 +303,7 @@ class PiRegexManager implements PiRegexManagerBuilderInterface
      */
     public static function searchLinkByParam($chaine, $tag)
     {
-        $w_var = \Sfynx\ToolBundle\Util\PiStringManager::trimUltime($chaine);
+        $w_var = PiStringManager::trimUltime($chaine);
 
         if (preg_match_all("|&lt;$tag(.*)&gt;|U",$w_var, $matches, PREG_SET_ORDER ))
         {

@@ -47,6 +47,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),	       
 
             # Sfynx
+            new Sfynx\CaptchaBundle\SfynxCaptchaBundle(),
             new Sfynx\AclManagerBundle\SfynxAclManagerBundle(),
             new Sfynx\DatabaseBundle\SfynxDatabaseBundle(),
             new Sfynx\WsBundle\SfynxWsBundle(),
