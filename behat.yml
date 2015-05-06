@@ -33,6 +33,8 @@ default:
                 - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext                
             
     formatters:
+        progress: [build/logs/behat/progress.log]
+        junit: [build/logs/behat/logs/xml]
         pretty:
             verbose:  true
             paths:    true

@@ -12,7 +12,7 @@
 
     <property name="dir.app" value="${project.basedir}/app" />
     <property name="dir.src" value="${project.basedir}/src" />
-    <property name="dir.bin" value="${project.basedir}/bin" />
+    <property name="dir.bin" value="${project.basedir}/vendor/bin" />
     <property name="dir.build" value="${project.basedir}/build" />
     <property name="dir.docs" value="${dir.build}/docs" />
     <property name="dir.browser" value="${dir.build}/browser" />
