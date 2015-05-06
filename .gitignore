@@ -42,6 +42,7 @@ app/phpunit.xml
 security-checker
 composer.phar
 composer.lock
+phpmetrics.phar
 
 # OTHER
 *.DS_Store

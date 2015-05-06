@@ -129,7 +129,7 @@ and use this to connect
 
 ``` bash
     
-    bin/phpunit -c app vendor/sfynx-project
+    vendor/bin/phpunit -c app vendor/sfynx-project
     casperjs test app/Tests/casperjs/ --base-url=127.0.0.1:4042 --pre=app/Resources/casperjs/pre.js
 
 ```
@@ -160,7 +160,7 @@ After you just have to run behat :
 
 ``` bash
     
-    bin/behat --suite=auth
+    vendor/bin/behat --suite=auth
     or
     php app/console sfynx:behat:execute --env=test --suite=auth
 
@@ -170,7 +170,7 @@ After you just have to run behat :
 
 ``` bash
     
-    bin/behat --suite=cmf
+    vendor/bin/behat --suite=cmf
     or
     php app/console sfynx:behat:execute --env=test --suite=cmf
 
@@ -180,6 +180,6 @@ After you just have to run behat :
 
 ``` bash
     
-     bin/phing -f app/config/phing/initialize.xml rebuild
+     vendor/bin/phing -f app/config/phing/initialize.xml rebuild
 
 ```
