@@ -44,7 +44,7 @@ class AppKernel extends Kernel
 
             # tools
             new FOS\UserBundle\FOSUserBundle(),
-            new Knp\Bundle\MenuBundle\KnpMenuBundle(),	       
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
 
             # Sfynx
             new Sfynx\CaptchaBundle\SfynxCaptchaBundle(),
@@ -80,7 +80,8 @@ class AppKernel extends Kernel
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();            	
+            $bundles[] = new So\LogboardBundle\LogboardBundle();
         }
         
         if ('test' === $this->getEnvironment()) {

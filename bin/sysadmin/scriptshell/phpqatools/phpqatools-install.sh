@@ -1,10 +1,13 @@
 #!/bin/sh
 
-#Add lines to the beginning and end of the huge file
-ed -s ~/.profile << 'EOF'
+export SUDO_USER="user"
+
+# http://www.frandieguez.com/blog/2014/10/easy-way-to-install-php-qa-tools/
+
+#Add lines to the beginning and the end of the huge file
+sudo ed -s ~/.profile << 'EOF'
 0a
 #prepend these lines to the beginning
-
 .
 $a
 

@@ -90,8 +90,8 @@ We have create an installer script shell which execute the sfynx install.
 **If you want to install sfynx with LAMP server** :
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-lamp.sh | sudo sh
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-sfynx-apache.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-lamp.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-apache.sh | sudo sh
 
 ``` 
 
@@ -99,8 +99,8 @@ We have create an installer script shell which execute the sfynx install.
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-lemp.sh | sudo sh
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/installer-sfynx-nginx.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-lemp.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-nginx.sh | sudo sh
     
 ``` 
 
@@ -142,7 +142,7 @@ In first step, you have to install and configure Selenium Server :
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/sysadmin/scriptshell/selenium/installer-selenium-server.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/selenium/installer-selenium-server.sh | sudo sh
 
 ```
 
@@ -180,6 +180,6 @@ After you just have to run behat :
 
 ``` bash
     
-     vendor/bin/phing -f app/config/phing/initialize.xml rebuild
+     vendor/bin/phing -f config/phing/initialize.xml rebuild
 
 ```

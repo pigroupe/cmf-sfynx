@@ -1,7 +1,7 @@
 #MULTISTAGE CONFIGURATION
 set :stages, %w(develop preprod prod)
 set :default_stage, "azure-dev"
-set :stage_dir, 'app/config/deploy'
+set :stage_dir, 'config/deploy'
 require 'capistrano/ext/multistage'
 
 # GLOBAL CONFIGURATION

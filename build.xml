@@ -29,12 +29,12 @@
     </fileset>
 
     <!-- Imported tasks -->
-    <import file="${dir.app}/config/phing/prepare-build.xml" />
-    <import file="${dir.app}/config/phing/doctrine.xml" />
-    <import file="${dir.app}/config/phing/static-analysis.xml" />
-    <import file="${dir.app}/config/phing/test-php-unit.xml" />
-    <import file="${dir.app}/config/phing/test-javascript.xml" /> 
-    <import file="${dir.app}/config/phing/documentation.xml" />
+    <import file="${project.basedir}/config/phing/prepare-build.xml" />
+    <import file="${project.basedir}/config/phing/doctrine.xml" />
+    <import file="${project.basedir}/config/phing/static-analysis.xml" />
+    <import file="${project.basedir}/config/phing/test-php-unit.xml" />
+    <import file="${project.basedir}/config/phing/test-javascript.xml" /> 
+    <import file="${project.basedir}/config/phing/documentation.xml" />
 
     <!-- ************ -->
     <!-- Main Targets -->
