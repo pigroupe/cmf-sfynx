@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export SUDO_USER="user"
+mkdir -p ~/.composer
 
 # http://www.frandieguez.com/blog/2014/10/easy-way-to-install-php-qa-tools/
 
@@ -50,7 +50,10 @@ cat > ~/.composer/composer.json <<EOF
         "behat/mink-goutte-driver": "*@stable",
         "behat/mink-zombie-driver": "*@stable",
         "facebook/xhprof": "dev-master@dev",        
-        "phpcasperjs/phpcasperjs": "dev-master"
+        "phpcasperjs/phpcasperjs": "dev-master",
+        "psecio/iniscan": "dev-master",
+        "psecio/versionscan": "dev-master",
+        "psecio/parse": "dev-master"
     }
 }
 EOF
