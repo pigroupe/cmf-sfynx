@@ -38,7 +38,7 @@ sudo chmod -R 775 web/uploads
 sudo chmod -R 775 web/yui
 
 # we run the phing script to initialize the sfynx project
-vendor/bin/phing -f app/config/phing/initialize.xml rebuild
+vendor/bin/phing -f config/phing/initialize.xml rebuild
 
 sudo chmod -R 775 app/config/parameters.yml
 sudo chmod -R 775 app/cachesfynx
