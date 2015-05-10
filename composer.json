@@ -59,6 +59,9 @@
         "doctrine/cache": "v1.4.0"
     },
     "require-dev": {
+        "phpdocumentor/phpdocumentor": "2.*",
+        "mayflower/php-codebrowser": "~1.1",
+        "theseer/phpdox": "*",
         "sensio/generator-bundle": "~2.3",
         "halleck45/phpmetrics": "@dev",
         "squizlabs/php_codesniffer": "*",
@@ -71,7 +74,6 @@
         "pdepend/pdepend" : "@stable",
         "phploc/phploc": "*",
         "sebastian/hhvm-wrapper": "*",
-        "theseer/phpdox": "*",
         "phake/phake": "*",
         "phing/phing": "dev-master",
         "behat/behat": "3.0.*@dev",

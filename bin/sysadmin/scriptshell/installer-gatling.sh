@@ -1,6 +1,12 @@
 #!/bin/bash
 
-PATH_DIR="vendor/bin/gatling"
+if [ $# -eq 0 ]; then # s'il n'y a pas de paramètres
+    read PATH_DIR # on saisis la valeur
+else
+    PATH_DIR="vendor/bin/gatling"
+fi
+
+#
 PATH_CONF_FILE="${PATH_DIR}/conf/gatling.conf"
 
 mkdir -p $PATH_DIR

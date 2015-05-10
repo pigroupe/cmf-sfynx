@@ -18,13 +18,13 @@
     <target name="unit:unit" 
         description="Executes unit tests.">
         <echo msg="Running unit tests ..." />
-        <exec command="phpunit --log-junit ${dir.reports}/phpunit.xml --coverage-clover ${dir.reports.coverage}/clover.xml --coverage-html ${dir.reports.coverage}/ -c ${dir.app} --debug" passthru="true" />
+        <exec command="${dir.vendor.bin}/phpunit --log-junit ${dir.reports}/phpunit.xml --coverage-clover ${dir.reports.coverage}/clover.xml --coverage-html ${dir.reports.coverage}/ -c ${dir.app} --debug" passthru="true" />
     </target>
 
     <target name="unit:unit_withoutcover" 
         description="Executes unit tests without code coverage.">
         <echo msg="Running unit tests ..." />
-        <exec command="phpunit --log-junit ${dir.reports}/phpunit.xml -c ${dir.app} --debug" passthru="true" />
+        <exec command="${dir.vendor.bin}/phpunit --log-junit ${dir.reports}/phpunit.xml -c ${dir.app} --debug" passthru="true" />
     </target>
 
 </project>

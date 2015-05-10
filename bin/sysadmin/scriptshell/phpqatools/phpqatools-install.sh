@@ -25,6 +25,9 @@ EOF
 cat > ~/.composer/composer.json <<EOF
 {
     "require": {
+        "phpdocumentor/phpdocumentor": "2.*",
+        "mayflower/php-codebrowser": "~1.1",
+        "theseer/phpdox": "*",
         "halleck45/phpmetrics": "@dev",
         "squizlabs/php_codesniffer": "*",
         "fabpot/php-cs-fixer": "*",
@@ -36,7 +39,6 @@ cat > ~/.composer/composer.json <<EOF
         "pdepend/pdepend" : "@stable",
         "phploc/phploc": "*",
         "sebastian/hhvm-wrapper": "*",
-        "theseer/phpdox": "*",
         "phake/phake": "*",
         "phing/phing": "dev-master",
         "behat/behat": "3.0.*@dev",
