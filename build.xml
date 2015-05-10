@@ -13,10 +13,11 @@
     <property name="dir.app" value="${project.basedir}/app" />
     <property name="dir.src" value="${project.basedir}/src" />
     <property name="dir.bin" value="${project.basedir}/vendor/bin" />
+    <property name="dir.vendor.bin" value="${project.basedir}/vendor/bin" />
     <property name="dir.build" value="${project.basedir}/build" />
-    <property name="dir.docs" value="${dir.build}/docs" />
+    <property name="dir.docs" value="${dir.build}/documentation" />
     <property name="dir.browser" value="${dir.build}/browser" />
-    <property name="dir.reports" value="${dir.build}/logs" />
+    <property name="dir.reports" value="${dir.build}/logs/php" />
     <property name="dir.reports.pdepend" value="${dir.reports}/pdepend" />
     <property name="dir.reports.coverage" value="${dir.reports}/coverage" />
     <property name="url.test" value="http://www.sfynx.fr" />
@@ -26,6 +27,7 @@
         <include name="**/*.php" />
         <exclude name="**/map/*"/>
         <exclude name="**/om/*"/>
+        <exclude name="**/Resources/*"/>
     </fileset>
 
     <!-- Imported tasks -->

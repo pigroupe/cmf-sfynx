@@ -16,32 +16,32 @@
                         showSniffs="false"
                         showWarnings="true">
             <fileset refid="sourcecode" />
-            <formatter type="checkstyle" outfile="${dir.reports}/checkstyle.xml" />
+            <formatter type="checkstyle" outfile="${dir.reports}/cs-checkstyle.xml" />
         </phpcodesniffer>
     </target>
 
     <!-- copy/paste detector-->
     <target name="static:cpd" description="statics similar code blocks.">
         <echo msg="staticing similar code blocks ..." />
-        <exec command="bin/phpcpd --min-tokens=50 --min-lines=5 --names-exclude=Base*.php,**/map/*,**/om/* --log-pmd ${dir.reports}/pmd-cpd.xml ${dir.src}" passthru="false" />
+        <exec command="${dir.vendor.bin}/phpcpd --min-tokens=50 --min-lines=5 --names-exclude=Base*.php,**/map/*,**/om/* --log-pmd ${dir.reports}/pmd-cpd.xml ${dir.src}" passthru="false" />
     </target>
 
     <!-- PhpDepend -->
     <target name="static:depend" description="Analyse du couplage et des dépendances du code.">
         <echo msg="analyse du couplage et des dépendances du code ..." />
-        <exec command="bin/pdepend --jdepend-xml=${dir.reports.pdepend}/jdepend.xml --jdepend-chart=${dir.reports.pdepend}/dependencies.svg --overview-pyramid=${dir.reports.pdepend}/overview-pyramid.svg ${dir.src}" passthru="false" />
+        <exec command="${dir.vendor.bin}/pdepend --jdepend-xml=${dir.reports.pdepend}/jdepend.xml --jdepend-chart=${dir.reports.pdepend}/dependencies.svg --overview-pyramid=${dir.reports.pdepend}/overview-pyramid.svg ${dir.src}" passthru="false" />
     </target>
     
     <!-- PHP Mess Detector -->
     <target name="static:md" description="Analyse du code mort.">
         <echo msg="Analyse du code mort ..." />
-        <exec command="bin/phpmd  ${dir.src} xml codesize,unusedcode,naming,design --exclude **/map/*,**/om/* --reportfile ${dir.reports}/pmd.xml" passthru="true" />
+        <exec command="${dir.vendor.bin}/phpmd  ${dir.src} xml codesize,unusedcode,naming,design --exclude **/map/*,**/om/* --reportfile ${dir.reports}/pmd.xml" passthru="true" />
     </target>
     
     <!-- PHP Loc -->
     <target name="static:loc" description="A tool for quickly measuring the size of a PHP project.">
         <echo msg="Analyse du projet ..." />
-        <exec command='bin/phploc ${dir.src} --count-tests --log-xml="${dir.reports}/loc.xml"' passthru="true" />
+        <exec command='${dir.vendor.bin}/phploc ${dir.src} --count-tests --log-xml="${dir.reports}/loc.xml"' passthru="true" />
     </target>    
 
     <target name="static:info">

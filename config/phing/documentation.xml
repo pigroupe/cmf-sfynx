@@ -7,16 +7,16 @@
 
     <!-- PHP Code Browser -->
     <target name="documentation:browser" description="Generating code browser..."> 
-        <exec command="phpcb
+        <exec command="${dir.vendor.bin}/phpcb
             --log ${dir.reports} 
-            --source ${project.basedir}/src 
+            --source ${dir.src}
             --output ${dir.browser}" />
     </target>
 
     <!-- PHP Documentor -->
     <target name="documentation:phpdoc" description="Generate API documentation."> 
         <echo msg="Generating API documentation with PHPDoc..." />
-        <exec command="phpdoc -d ${dir.src} -t ${dir.docs} --template responsive" />
+        <exec command="${dir.vendor.bin}/phpdoc -d ${dir.src} -t ${dir.docs} --template responsive" />
     </target>
 
     <target name="documentation:info">
