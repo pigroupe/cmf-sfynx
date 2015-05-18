@@ -1,6 +1,5 @@
 #!/bin/sh
 . `dirname $0`/env.sh
-export INSTALL_USERWWW="${INSTALL_USERHOME}/www"
 
 # remove nginx
 sudo apt-get remove nginx* # Removes all but config files

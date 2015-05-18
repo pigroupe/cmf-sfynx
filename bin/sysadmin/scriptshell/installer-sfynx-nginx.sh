@@ -131,6 +131,7 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param  HTTPS off;
+        # fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/xhprof/external/header.php \n auto_append_file=/var/www/xhprof/external/footer.php";
     }
 
     # Nginx Cache Control for Static Files
@@ -248,6 +249,7 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param  HTTPS off;
+        # fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/xhprof/external/header.php \n auto_append_file=/var/www/xhprof/external/footer.php";
     }
 
     # Nginx Cache Control for Static Files
@@ -365,6 +367,7 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param  HTTPS off;
+        # fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/xhprof/external/header.php \n auto_append_file=/var/www/xhprof/external/footer.php";
     }
 
     # Nginx Cache Control for Static Files
