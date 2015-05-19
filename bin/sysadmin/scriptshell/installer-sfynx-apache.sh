@@ -1,6 +1,13 @@
 #!/bin/sh
 
-cd /var/www
+HOME_HTTP="/var/www"
+
+#
+if [ ! -d $HOME_HTTP ]; then
+    mkdir -p $HOME_HTTP
+fi
+
+cd $HOME_HTTP
 
 if [ ! -d "cmf-sfynx" ]; then
  git clone https://github.com/pigroupe/cmf-sfynx.git cmf-sfynx
@@ -48,80 +55,80 @@ sudo chmod -R 775 web/uploads
 sudo chmod -R 775 web/yui
 
 # we create the virtualhiost of sfynx for apache
-sudo cat > /tmp/sfynx << 'EOF'
+cat <<EOT >/tmp/sfynx
 <VirtualHost *:80>
         ServerName  dev.sfynx.local
         ServerAlias dev.sfynx.local             
-        DocumentRoot /var/www/cmf-sfynx/web/
-        <Directory "/var/www/cmf-sfynx/web">
+        DocumentRoot $HOME_HTTP/cmf-sfynx/web/
+        <Directory "$HOME_HTTP/cmf-sfynx/web">
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 RewriteEngine On
 
                 RewriteCond %{REQUEST_FILENAME} !-f
-                RewriteRule ^(.*)$ app_dev.php [QSA,L]
+                RewriteRule ^(.*)\$ app_dev.php [QSA,L]
 
-                #php_value auto_prepend_file "/var/www/xhprof/external/header.php"
-                #php_value auto_append_file "/var/www/xhprof/external/footer.php"
+                #php_value auto_prepend_file "$HOME_HTTP/xhprof/external/header.php"
+                #php_value auto_append_file "$HOME_HTTP/xhprof/external/footer.php"
 
                 #Require all granted
                 Order allow,deny
                 allow from all
         </Directory>
 
-        ErrorLog ${APACHE_LOG_DIR}/error_sfynx_dev.log
+        ErrorLog \${APACHE_LOG_DIR}/error_sfynx_dev.log
         LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
-        CustomLog ${APACHE_LOG_DIR}/access-dev.log varnishcombined
+        CustomLog \${APACHE_LOG_DIR}/access-dev.log varnishcombined
 </VirtualHost>
 
 <VirtualHost *:80>
         ServerName  test.sfynx.local
-        DocumentRoot /var/www/cmf-sfynx/web/
+        DocumentRoot $HOME_HTTP/cmf-sfynx/web/
 
-        <Directory "/var/www/cmf-sfynx/web">
+        <Directory "$HOME_HTTP/cmf-sfynx/web">
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 RewriteEngine On
 
                 RewriteCond %{REQUEST_FILENAME} !-f
-                RewriteRule ^(.*)$ app_test.php [QSA,L]
+                RewriteRule ^(.*)\$ app_test.php [QSA,L]
 
-                #php_value auto_prepend_file "/var/www/xhprof/external/header.php"
-                #php_value auto_append_file "/var/www/xhprof/external/footer.php"
+                #php_value auto_prepend_file "$HOME_HTTP/xhprof/external/header.php"
+                #php_value auto_append_file "$HOME_HTTP/xhprof/external/footer.php"
 
                 #Require all granted
                 Order allow,deny
                 allow from all
         </Directory>
 
-        ErrorLog ${APACHE_LOG_DIR}/error_sfynx_test.log
+        ErrorLog \${APACHE_LOG_DIR}/error_sfynx_test.log
         LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
-        CustomLog ${APACHE_LOG_DIR}/access-test.log varnishcombined
+        CustomLog \${APACHE_LOG_DIR}/access-test.log varnishcombined
 </VirtualHost>
 
 <VirtualHost *:80>
         ServerName prod.sfynx.local
-        DocumentRoot /var/www/cmf-sfynx/web/
+        DocumentRoot $HOME_HTTP/cmf-sfynx/web/
 
-        <Directory /var/www/cmf-sfynx/web>
+        <Directory $HOME_HTTP/cmf-sfynx/web>
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 RewriteEngine On
 
 	        RewriteCond %{REQUEST_FILENAME} !-f
-                RewriteRule ^(.*)$ app.php [QSA,L]
+                RewriteRule ^(.*)\$ app.php [QSA,L]
 
 	         # Desactiver l'utilistion des logiciels de type rapidLink
-                RewriteCond %{HTTP_REFERER} .*kristjanlilleoja.com.*$  [OR]
-                RewriteCond %{HTTP_REFERER} .*megaupload.byethost7.com.*$  [OR]
-                RewriteCond %{HTTP_REFERER} .*openurls.eu.*$  [OR]
-                RewriteCond %{HTTP_REFERER} .*urlopener.com.*$  [OR]
-                RewriteCond %{HTTP_REFERER} .*rapidlinkr.com.*$  [OR]
-                RewriteCond %{HTTP_REFERER} .*multilinkr.com.*$  [OR]
-                RewriteCond %{HTTP_REFERER} .*openmultipleurl.com.*$  [OR]
-                RewriteCond %{HTTP_REFERER} .*pastebin.com.*$
-                RewriteCond %{REQUEST_URI} !^/404error$$
-                RewriteRule ^(.*)$ http://prod.sfynx.local/404error$                
+                RewriteCond %{HTTP_REFERER} .*kristjanlilleoja.com.*\$  [OR]
+                RewriteCond %{HTTP_REFERER} .*megaupload.byethost7.com.*\$  [OR]
+                RewriteCond %{HTTP_REFERER} .*openurls.eu.*\$  [OR]
+                RewriteCond %{HTTP_REFERER} .*urlopener.com.*\$  [OR]
+                RewriteCond %{HTTP_REFERER} .*rapidlinkr.com.*\$  [OR]
+                RewriteCond %{HTTP_REFERER} .*multilinkr.com.*\$  [OR]
+                RewriteCond %{HTTP_REFERER} .*openmultipleurl.com.*\$  [OR]
+                RewriteCond %{HTTP_REFERER} .*pastebin.com.*\$
+                RewriteCond %{REQUEST_URI} !^/404error\$\$
+                RewriteRule ^(.*)\$ http://prod.sfynx.local/404error\$                
 		  
 		# autorize all IPs                
 	        Order allow,deny
@@ -139,12 +146,12 @@ sudo cat > /tmp/sfynx << 'EOF'
                 </IfModule>
         </Directory>
 
-        ErrorLog ${APACHE_LOG_DIR}/error_sfynx_prod.log
+        ErrorLog \${APACHE_LOG_DIR}/error_sfynx_prod.log
         LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
-        CustomLog ${APACHE_LOG_DIR}/access-prod.log varnishcombined
+        CustomLog \${APACHE_LOG_DIR}/access-prod.log varnishcombined
 
 </VirtualHost>
-EOF
+EOT
 sudo mv /tmp/sfynx /etc/apache2/sites-available/sfynx
 
 # we create the symbilic link
@@ -158,7 +165,7 @@ if ! grep -q "dev.sfynx.local" /etc/hosts; then
     echo "127.0.0.1    prod.sfynx.local" | sudo tee --append /etc/hosts
 fi
 
-sudo chown -R www-data:www-data /var/www/cmf-sfynx
+sudo chown -R www-data:www-data $HOME_HTTP/cmf-sfynx
 
 # we restart apache server
 sudo /etc/init.d/apache2 restart

@@ -1,6 +1,13 @@
 #!/bin/sh
 
-cd /var/www
+HOME_HTTP="/var/www"
+
+#
+if [ ! -d $HOME_HTTP ]; then
+    mkdir -p $HOME_HTTP
+fi
+
+cd $HOME_HTTP
 
 if [ ! -d "cmf-sfynx" ]; then
  git clone https://github.com/pigroupe/cmf-sfynx.git cmf-sfynx
@@ -48,14 +55,14 @@ sudo chmod -R 775 web/uploads
 sudo chmod -R 775 web/yui
 
 # we create the virtualhiost of sfynx for nginx
-sudo cat > /tmp/sfynx << 'EOF'
+cat <<EOT >/tmp/sfynx
 upstream php5-fpm-sock {  
     server unix:/var/run/php5-fpm.sock;  
 }
 
 server {
-    set $website_root "/var/www/cmf-sfynx/web";
-    set $default_env  "app_dev.php";
+    set \$website_root "$HOME_HTTP/cmf-sfynx/web";
+    set \$default_env  "app_dev.php";
 
     listen 80;
 
@@ -63,7 +70,7 @@ server {
     server_name dev.sfynx.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
-    root $website_root;
+    root \$website_root;
 
     # Don't show the nginx version number, a security best practice
     server_tokens off;
@@ -116,26 +123,26 @@ server {
 
     location / {
         # try to serve file directly, fallback to rewrite
-        try_files $uri @rewriteapp;
+        try_files \$uri @rewriteapp;
 
     }
 
     location @rewriteapp {
-        rewrite ^(.*)$ /$default_env/$1 last;
+        rewrite ^(.*)\$ /\$default_env/\$1 last;
     }
 
     # Pass the PHP scripts to FastCGI server
-    location ~ ^/(app|app_dev|app_test|config)\.php(/|$) {
+    location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
         fastcgi_pass php5-fpm-sock;
-        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/xhprof/external/header.php \n auto_append_file=/var/www/xhprof/external/footer.php";
+        # fastcgi_param PHP_VALUE "auto_prepend_file=$HOME_HTTP/xhprof/external/header.php \n auto_append_file=$HOME_HTTP/xhprof/external/footer.php";
     }
 
     # Nginx Cache Control for Static Files
-    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ { 
+    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)\$ { 
         access_log        off; 
         log_not_found     off; 
         expires           360d; 
@@ -152,15 +159,15 @@ server {
    location /phpmyadmin {
                root /usr/share/;
                index index.php index.html index.htm;
-               location ~ ^/phpmyadmin/(.+\.php)$ {
-                       try_files $uri =404;
+               location ~ ^/phpmyadmin/(.+\.php)\$ {
+                       try_files \$uri =404;
                        root /usr/share/;
                        fastcgi_pass php5-fpm-sock;
                        fastcgi_index index.php;
-                       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                       fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
                        include /etc/nginx/fastcgi_params;
                }
-               location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+               location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))\$ {
                        root /usr/share/;
                }
    }
@@ -172,8 +179,8 @@ server {
 }
 
 server {
-    set $website_root "/var/www/cmf-sfynx/web";
-    set $default_env  "app_test.php";
+    set \$website_root "$HOME_HTTP/cmf-sfynx/web";
+    set \$default_env  "app_test.php";
 
     listen 80;
 
@@ -181,7 +188,7 @@ server {
     server_name test.sfynx.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
-    root $website_root;
+    root \$website_root;
 
     # Don't show the nginx version number, a security best practice
     server_tokens off;
@@ -234,26 +241,26 @@ server {
 
     location / {
         # try to serve file directly, fallback to rewrite
-        try_files $uri @rewriteapp;
+        try_files \$uri @rewriteapp;
 
     }
 
     location @rewriteapp {
-        rewrite ^(.*)$ /$default_env/$1 last;
+        rewrite ^(.*)\$ /\$default_env/\$1 last;
     }
 
     # Pass the PHP scripts to FastCGI server
-    location ~ ^/(app|app_dev|app_test|config)\.php(/|$) {
+    location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
         fastcgi_pass php5-fpm-sock;
-        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/xhprof/external/header.php \n auto_append_file=/var/www/xhprof/external/footer.php";
+        # fastcgi_param PHP_VALUE "auto_prepend_file=$HOME_HTTP/xhprof/external/header.php \n auto_append_file=$HOME_HTTP/xhprof/external/footer.php";
     }
 
     # Nginx Cache Control for Static Files
-    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ { 
+    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)\$ { 
         access_log        off; 
         log_not_found     off; 
         expires           360d; 
@@ -270,15 +277,15 @@ server {
    location /phpmyadmin {
                root /usr/share/;
                index index.php index.html index.htm;
-               location ~ ^/phpmyadmin/(.+\.php)$ {
-                       try_files $uri =404;
+               location ~ ^/phpmyadmin/(.+\.php)\$ {
+                       try_files \$uri =404;
                        root /usr/share/;
                        fastcgi_pass php5-fpm-sock;
                        fastcgi_index index.php;
-                       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                       fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
                        include /etc/nginx/fastcgi_params;
                }
-               location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+               location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))\$ {
                        root /usr/share/;
                }
    }
@@ -290,8 +297,8 @@ server {
 }
 
 server {
-    set $website_root "/var/www/cmf-sfynx/web";
-    set $default_env  "app.php";
+    set \$website_root "$HOME_HTTP/cmf-sfynx/web";
+    set \$default_env  "app.php";
 
     listen 80;
 
@@ -299,7 +306,7 @@ server {
     server_name prod.sfynx.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
-    root $website_root;
+    root \$website_root;
 
     # Don't show the nginx version number, a security best practice
     server_tokens off;
@@ -352,26 +359,26 @@ server {
 
     location / {
         # try to serve file directly, fallback to rewrite
-        try_files $uri @rewriteapp;
+        try_files \$uri @rewriteapp;
 
     }
 
     location @rewriteapp {
-        rewrite ^(.*)$ /$default_env/$1 last;
+        rewrite ^(.*)\$ /\$default_env/\$1 last;
     }
 
     # Pass the PHP scripts to FastCGI server
-    location ~ ^/(app|app_dev|app_test|config)\.php(/|$) {
+    location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
         fastcgi_pass php5-fpm-sock;
-        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/xhprof/external/header.php \n auto_append_file=/var/www/xhprof/external/footer.php";
+        # fastcgi_param PHP_VALUE "auto_prepend_file=$HOME_HTTP/xhprof/external/header.php \n auto_append_file=$HOME_HTTP/xhprof/external/footer.php";
     }
 
     # Nginx Cache Control for Static Files
-    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ { 
+    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)\$ { 
         access_log        off; 
         log_not_found     off; 
         expires           360d; 
@@ -388,15 +395,15 @@ server {
    location /phpmyadmin {
                root /usr/share/;
                index index.php index.html index.htm;
-               location ~ ^/phpmyadmin/(.+\.php)$ {
-                       try_files $uri =404;
+               location ~ ^/phpmyadmin/(.+\.php)\$ {
+                       try_files \$uri =404;
                        root /usr/share/;
                        fastcgi_pass php5-fpm-sock;
                        fastcgi_index index.php;
-                       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                       fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
                        include /etc/nginx/fastcgi_params;
                }
-               location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+               location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))\$ {
                        root /usr/share/;
                }
    }
@@ -406,7 +413,7 @@ server {
    }
 
 }
-EOF
+EOT
 sudo mv /tmp/sfynx /etc/nginx/sites-available/sfynx
 
 # we create the symbilic link
@@ -421,7 +428,7 @@ if ! grep -q "dev.sfynx.local" /etc/hosts; then
 fi
 
 #
-sudo chown -R www-data:www-data /var/www/cmf-sfynx
+sudo chown -R www-data:www-data $HOME_HTTP/cmf-sfynx
 
 # we restart nginx server
 sudo /etc/init.d/nginx restart

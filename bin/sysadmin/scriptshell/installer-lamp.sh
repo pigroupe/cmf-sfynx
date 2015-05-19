@@ -41,8 +41,11 @@ sudo chown -R www-data:www-data /var/www
 sudo chown -R ${INSTALL_USERNAME}:${INSTALL_USERGROUP} ${INSTALL_USERWWW}
 
 # installation phpmyadmin
-sudo apt-get install phpmyadmin
+sudo apt-get -y install phpmyadmin
 sudo chmod 755 /etc/phpmyadmin/config.inc.php
+
+sudo sed -i "/'password'/d" /etc/phpmyadmin/config.inc.php
+echo "\$cfg['Servers'][\$i]['password'] = 'pacman';" | sudo tee --append /etc/phpmyadmin/config.inc.php
 
 # restart apache
 sudo /etc/init.d/apache2 restart

@@ -14,18 +14,18 @@ sudo rm -rf /etc/apache2
 sudo add-apt-repository ppa:nginx/stable
 sudo apt-get update
 sudo apt-get upgrade --show-upgraded
-sudo apt-get install libpcre3-dev build-essential libssl-dev
+sudo apt-get -y install libpcre3-dev build-essential libssl-dev
 sudo apt-get clean
 
 # install nginx
-sudo apt-get install nginx
+sudo apt-get -y install nginx
 
 # mysql install
 . `dirname $0`/installer-mysql.sh
 
 # php install
 . `dirname $0`/installer-php.sh
-sudo apt-get install php5-fpm
+sudo apt-get -y install php5-fpm
 
 # Create an Init Script to Manage nginx
 #sudo wget https://raw.github.com/JasonGiedymin/nginx-init-ubuntu/master/nginx -O /etc/init.d/nginx
@@ -40,8 +40,11 @@ sudo chown -R www-data:www-data /var/www
 sudo chown -R ${INSTALL_USERNAME}:${INSTALL_USERGROUP} ${INSTALL_USERWWW}
 
 # installation phpmyadmin
-sudo apt-get install phpmyadmin
+sudo apt-get -y install phpmyadmin
 sudo chmod 755 /etc/phpmyadmin/config.inc.php
+
+sudo sed -i "/'password'/d" /etc/phpmyadmin/config.inc.php
+echo "\$cfg['Servers'][\$i]['password'] = 'pacman';" | sudo tee --append /etc/phpmyadmin/config.inc.php
 
 # restart servers
 sudo /etc/init.d/php5-fpm restart

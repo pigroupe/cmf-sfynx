@@ -182,18 +182,20 @@ class PiRestManager implements PiRestManagerInterface
     * @access protected
     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
     */   
-   protected function _launch ($pUrl, $context)
-   {
+    protected function _launch ($pUrl, $context)
+    {
+        $output = array();
+        parse_str($pUrl, $output);
         if (($stream = @fopen($pUrl, 'r', false, $context)) !== false) {
             $content = stream_get_contents($stream);
             $header = stream_get_meta_data($stream);
-            fclose($stream);
+            fclose($stream);   
             
-            return array('content' => $content, 'header' => $header['wrapper_data'], 'url' => $pUrl);
+            return array('content' => $content, 'header' => $header['wrapper_data'], 'url' => $pUrl, 'output' => $output);
         } else {
             $header = get_headers($pUrl);
             
-            return array('content' => false, 'header' => $header, 'url' => $pUrl);
+            return array('content' => false, 'header' => $header, 'url' => $pUrl, 'output' => $output);
         }         
-   }   
+    }   
 }

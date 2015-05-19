@@ -6,7 +6,7 @@
 sudo sh -c "echo mysql-server mysql-server/root_password select root | debconf-set-selections"
 sudo sh -c "echo mysql-server mysql-server/root_password_again select root | debconf-set-selections"
 
-sudo apt-get install -y mysql-server mysql-client
+sudo apt-get -y install mysql-server mysql-client
 sudo apt-get clean
 
 # Active l'écoute autre qu'en local
