@@ -17,13 +17,13 @@ then
 fi
 
 echo "***** Second we update the system *****"
-#apt-get -y install build-essential > /dev/null
-#apt-get -y update > /dev/null
-#apt-get -y dist-upgrade > /dev/null
+apt-get -y install build-essential > /dev/null
+apt-get -y update > /dev/null
+apt-get -y dist-upgrade > /dev/null
 
-#$DIR/provisioners/shell/pc/installer-pc.sh $DIR $DISTRIB
-#$DIR/provisioners/shell/lemp/installer-lemp.sh $DIR
 $DIR/provisioners/shell/SWAP/installer-swap.sh $DIR
+$DIR/provisioners/shell/pc/installer-pc.sh $DIR $DISTRIB
+$DIR/provisioners/shell/lemp/installer-lemp.sh $DIR
 $DIR/provisioners/shell/QA/installer-phpqatools.sh $DIR
 #$DIR/provisioners/shell/jackrabbit/installer-jackrabbit-startup-script.sh $DIR
 #if [ -f $DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh ];
