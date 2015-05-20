@@ -24,8 +24,8 @@ chown -R www-data:www-data ${INSTALL_USERWWW}
 # on donne les droits à notre utilisateur
 chown -R ${INSTALL_USERNAME}:${INSTALL_USERGROUP} ${INSTALL_USERWWW}
 
-# Add www-data to www-data group
-usermod -a -G www-data www-data
+# Add www-data to vagrant group
+#usermod -a -G vagrant www-data
 
 echo "Restart mysql for the config to take effect"
 service mysql restart

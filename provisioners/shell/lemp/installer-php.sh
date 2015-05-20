@@ -30,7 +30,7 @@ apt-get -y install php-pear
 echo "Install PECL HTTP (depends on php-pear, php5-dev, libcurl4-openssl-dev)"
 printf "\n" | pecl install pecl_http
 # Enable PECL HTTP
-echo "extension=http.so" > /etc/php5/conf.d/http.ini
+#echo "extension=http.so" > /etc/php5/mods-available/http.ini
 
 # we get the php.ini file path
 PATH_PHP_INI=$(echo $(php -i | grep "Loaded Configuration File") | sed -e 's/Loaded Configuration File => //g')

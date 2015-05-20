@@ -77,6 +77,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision "shell" do |s|
         s.path = "provisioners/shell/bootstrap.sh"
         s.args = [$vm_mount_point, $box_distrib]
+        s.privileged = true
     end
 
     #config.vm.provision :shell, :inline => "sh /vagrant/provisioners/shell/pc/installer-pc.sh; sh /vagrant/provisioners/shell/lemp/installer-lemp.sh;"
@@ -116,3 +117,6 @@ end
 # rm /home/etienne/.vagrant.d/data/lock.fpcollision.lock
 # find /home/etienne/.vagrant.d -exec ls -al {} \;
 # rm -rf /home/etienne/.vagrant.d
+
+# SSH
+## vagrant plugin install vagrant-vbguest
