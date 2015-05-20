@@ -90,8 +90,7 @@ We have create an installer script shell which execute the sfynx install.
 **If you want to install sfynx with LAMP server** :
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-lamp.sh | sudo sh
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-apache.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-apache.sh "/var/www" | sudo sh
 
 ``` 
 
@@ -99,8 +98,7 @@ We have create an installer script shell which execute the sfynx install.
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-lemp.sh | sudo sh
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-nginx.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-nginx.sh "/var/www" | sudo sh
     
 ``` 
 

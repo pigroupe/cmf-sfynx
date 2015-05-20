@@ -2,6 +2,12 @@
 
 HOME_HTTP="/var/www"
 
+if [ $# -eq 0 ]; then # s'il n'y a pas de paramètres
+    read HOME_HTTP # on saisis la valeur
+else
+    HOME_HTTP=$1
+fi
+
 #
 if [ ! -d $HOME_HTTP ]; then
     mkdir -p $HOME_HTTP
@@ -431,5 +437,5 @@ fi
 sudo chown -R www-data:www-data $HOME_HTTP/cmf-sfynx
 
 # we restart nginx server
-sudo /etc/init.d/nginx restart
+sudo service nginx restart
 

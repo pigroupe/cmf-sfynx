@@ -1,9 +1,11 @@
 #!/bin/bash
 
+PATH_DIR="/var/www/gatling"
+
 if [ $# -eq 0 ]; then # s'il n'y a pas de paramètres
     read PATH_DIR # on saisis la valeur
 else
-    PATH_DIR="vendor/bin/gatling"
+    PATH_DIR=$1
 fi
 
 #
