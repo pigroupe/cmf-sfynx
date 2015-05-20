@@ -1,6 +1,6 @@
 #!/bin/bash
 DIR=$1
-source $DIR/vm/provisioners/shell/env.sh
+source $DIR/provisioners/shell/env.sh
 
 # PHPMYADMIN
 echo "*** PHPMYADMIN ***"

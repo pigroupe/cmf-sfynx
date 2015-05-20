@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
  
 # Load settings
-personalization = File.expand_path("../vm/personalization/parameters", __FILE__)
+personalization = File.expand_path("../provisioners/parameters", __FILE__)
 load personalization
  
 # Requierements
@@ -60,7 +60,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network :forwarded_port, guest: $pf_http, host: $pf_http_localhost,  auto_correct: true
 
     # Forward https port on 443, used for connecting web browsers to localhost:443
-    config.vm.network :forwarded_port, guest: $pf_https, host: $pf_https_localhost,  auto_correct: true
+    #config.vm.network :forwarded_port, guest: $pf_https, host: $pf_https_localhost,  auto_correct: true
 
     # Create a private network, which allows host-only access to the machine
     # using a specific IP.
@@ -75,16 +75,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Shell provisioning
     config.vm.provision "shell" do |s|
-        s.path = "vm/provisioners/shell/bootstrap.sh"
+        s.path = "provisioners/shell/bootstrap.sh"
         s.args = [$vm_mount_point, $box_distrib]
     end
 
     #config.vm.provision :shell, :inline => "sh /vagrant/provisioners/shell/pc/installer-pc.sh; sh /vagrant/provisioners/shell/lemp/installer-lemp.sh;"
 
 end
-
-
-
 
 # liste of all vm
 ## vagrant global-status
@@ -105,3 +102,17 @@ end
 ## vagrant package –-base Ubuntu-14.04-64-Desktop  # Create Vagrant Base Box
 ## vagrant box add Ubuntu-14.04-64-Desktop package.box # install vagrant box
 ## vagrant init Ubuntu-14.04-64-Desktop
+
+
+# chown -R <USERNAME> /<YOUR-WEBSITES-DIRECTORY>/.vagrant/machines/
+# chown -R <USERNAME> /<YOUR-HOME-DIRECTORY>/.vagrant.d
+# rm  /<YOUR-HOME-DIRECTORY>/.vagrant.d/data/lock.fpcollision.lock
+
+# http://stackoverflow.com/questions/25652769/should-vagrant-require-sudo-for-each-command
+# https://github.com/Varying-Vagrant-Vagrants/VVV/issues/261
+# http://stackoverflow.com/questions/27670076/permission-denied-error-for-vagrant
+
+
+# rm /home/etienne/.vagrant.d/data/lock.fpcollision.lock
+# find /home/etienne/.vagrant.d -exec ls -al {} \;
+# rm -rf /home/etienne/.vagrant.d

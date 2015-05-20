@@ -6,7 +6,7 @@ $box_distrib = "ubuntu"
  
 # VM settings
 $vm_hostname = "rapp.nbi.vagrant"
-$vm_name = "NBI"
+$vm_name = "NBI2"
 $vm_group = "/Vagrant"
  
 # VM configuration and capacities
@@ -20,9 +20,7 @@ $vm_ip = "192.168.33.20"
 # Port forwarding
 $pf_mysql = 3306
 $pf_mysql_localhost = 33066
-
 $pf_http = 80
 $pf_http_localhost = 8585
-
 $pf_https = 443
 $pf_https_localhost = 443

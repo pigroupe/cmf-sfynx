@@ -4,7 +4,7 @@
 #!/bin/bash
 DIR=$1
 DISTRIB=$2
-source $DIR/vm/provisioners/shell/env.sh
+source $DIR/provisioners/shell/env.sh
 
 echo "*****Enable all Startup Applications"
 cd /etc/xdg/autostart
@@ -46,7 +46,7 @@ echo "*****Install the latest git Version"
 add-apt-repository ppa:git-core/ppa -y
 apt-get -y update > /dev/null
 apt-get -y dist-upgrade > /dev/null
-apt-get -y install git > /dev/null
+apt-get -y install git git-core  > /dev/null
 
 echo "Install OpenSSH Server"
 apt-get -y install openssh-server > /dev/null
@@ -70,5 +70,12 @@ echo "Install sendmail"
 apt-get -y install sendmail > /dev/null
 
 echo "Install NFS client"
-apt-get -y install nfs-common portmap
+apt-get -y install nfs-common portmap > /dev/null
 
+echo "Install Make"
+apt-get -y install make > /dev/null
+
+echo "Install Curl and Nodejs"
+add-apt-repository -y ppa:chris-lea/node.js
+apt-get -y update > /dev/null
+apt-get -y install curl nodejs > /dev/null
