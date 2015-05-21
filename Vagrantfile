@@ -76,7 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Shell provisioning
     config.vm.provision "shell" do |s|
         s.path = "provisioners/shell/bootstrap.sh"
-        s.args = [$vm_mount_point, $box_distrib]
+        s.args = [$vm_mount_point, $box_distrib, $plateform_install_name, $plateform_install_type, $plateform_install_version, $plateform_projet_name]
         s.privileged = true
     end
 

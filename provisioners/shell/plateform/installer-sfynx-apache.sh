@@ -1,19 +1,13 @@
-#!/bin/sh
-
-HOME_HTTP="/var/www"
-
-if [ $# -eq 0 ]; then # s'il n'y a pas de paramètres
-    read $HOME_HTTP # on saisis la valeur
-else
-    $HOME_HTTP=$1
-fi
+#!/bin/bash
+DIR=$1
+source $DIR/provisioners/shell/env.sh
 
 #
-if [ ! -d $HOME_HTTP ]; then
-    mkdir -p $HOME_HTTP
+if [ ! -d $INSTALL_USERWWW ]; then
+    mkdir -p $INSTALL_USERWWW
 fi
 
-cd $HOME_HTTP
+cd $INSTALL_USERWWW
 
 if [ ! -d "cmf-sfynx" ]; then
  git clone https://github.com/pigroupe/cmf-sfynx.git cmf-sfynx
@@ -24,6 +18,7 @@ cd cmf-sfynx
 # we install the composer file
 if [ ! -f composer.phar ]; then
     wget https://getcomposer.org/composer.phar -O ./composer.phar
+    # curl -s https://getcomposer.org/installer | php
     php -d memory_limit=1024M composer.phar install --no-interaction
     php composer.phar dump-autoload --optimize
 fi
@@ -65,8 +60,8 @@ cat <<EOT >/tmp/sfynx
 <VirtualHost *:80>
         ServerName  dev.sfynx.local
         ServerAlias dev.sfynx.local             
-        DocumentRoot $HOME_HTTP/cmf-sfynx/web/
-        <Directory "$HOME_HTTP/cmf-sfynx/web">
+        DocumentRoot $INSTALL_USERWWW/cmf-sfynx/web/
+        <Directory "$INSTALL_USERWWW/cmf-sfynx/web">
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 RewriteEngine On
@@ -74,8 +69,8 @@ cat <<EOT >/tmp/sfynx
                 RewriteCond %{REQUEST_FILENAME} !-f
                 RewriteRule ^(.*)\$ app_dev.php [QSA,L]
 
-                #php_value auto_prepend_file "$HOME_HTTP/xhprof/external/header.php"
-                #php_value auto_append_file "$HOME_HTTP/xhprof/external/footer.php"
+                #php_value auto_prepend_file "$INSTALL_USERWWW/xhprof/external/header.php"
+                #php_value auto_append_file "$INSTALL_USERWWW/xhprof/external/footer.php"
 
                 #Require all granted
                 Order allow,deny
@@ -89,9 +84,9 @@ cat <<EOT >/tmp/sfynx
 
 <VirtualHost *:80>
         ServerName  test.sfynx.local
-        DocumentRoot $HOME_HTTP/cmf-sfynx/web/
+        DocumentRoot $INSTALL_USERWWW/cmf-sfynx/web/
 
-        <Directory "$HOME_HTTP/cmf-sfynx/web">
+        <Directory "$INSTALL_USERWWW/cmf-sfynx/web">
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 RewriteEngine On
@@ -99,8 +94,8 @@ cat <<EOT >/tmp/sfynx
                 RewriteCond %{REQUEST_FILENAME} !-f
                 RewriteRule ^(.*)\$ app_test.php [QSA,L]
 
-                #php_value auto_prepend_file "$HOME_HTTP/xhprof/external/header.php"
-                #php_value auto_append_file "$HOME_HTTP/xhprof/external/footer.php"
+                #php_value auto_prepend_file "$INSTALL_USERWWW/xhprof/external/header.php"
+                #php_value auto_append_file "$INSTALL_USERWWW/xhprof/external/footer.php"
 
                 #Require all granted
                 Order allow,deny
@@ -114,9 +109,9 @@ cat <<EOT >/tmp/sfynx
 
 <VirtualHost *:80>
         ServerName prod.sfynx.local
-        DocumentRoot $HOME_HTTP/cmf-sfynx/web/
+        DocumentRoot $INSTALL_USERWWW/cmf-sfynx/web/
 
-        <Directory $HOME_HTTP/cmf-sfynx/web>
+        <Directory $INSTALL_USERWWW/cmf-sfynx/web>
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 RewriteEngine On
@@ -171,7 +166,7 @@ if ! grep -q "dev.sfynx.local" /etc/hosts; then
     echo "127.0.0.1    prod.sfynx.local" | sudo tee --append /etc/hosts
 fi
 
-sudo chown -R www-data:www-data $HOME_HTTP/cmf-sfynx
+sudo chown -R www-data:www-data $INSTALL_USERWWW/cmf-sfynx
 
 # we restart apache server
 sudo service apache2 restart

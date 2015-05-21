@@ -5,8 +5,8 @@ $box_url = "https://vagrantcloud.com/ubuntu/boxes/trusty64/versions/14.04/provid
 $box_distrib = "ubuntu"
  
 # VM settings
-$vm_hostname = "rapp.nbi.vagrant"
-$vm_name = "NBI2"
+$vm_hostname = "pigroupe.sfynx.vagrant"
+$vm_name = "SFYNX"
 $vm_group = "/Vagrant"
  
 # VM configuration and capacities
@@ -24,3 +24,9 @@ $pf_http = 80
 $pf_http_localhost = 8585
 $pf_https = 443
 $pf_https_localhost = 443
+
+#Plateform
+$plateform_install_name="symfony-nginx"
+$plateform_install_type="composer"
+$plateform_install_version="2.3"
+$plateform_projet_name="myproject"
