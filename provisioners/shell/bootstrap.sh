@@ -1,6 +1,9 @@
 #!/bin/bash
 DIR=$1
-DISTRIB=$2
+PLATEFORM_INSTALL_NAME=$2
+PLATEFORM_INSTALL_TYPE=$3
+PLATEFORM_INSTALL_VERSION=$4
+PLATEFORM_PROJET_NAME=$5
 source $DIR/provisioners/shell/env.sh
 
 echo "***** We set permmissions for all scriptshell"
@@ -21,9 +24,10 @@ apt-get -y install build-essential > /dev/null
 apt-get -y update > /dev/null
 apt-get -y dist-upgrade > /dev/null
 
-$DIR/provisioners/shell/SWAP/installer-swap.sh $DIR
+$DIR/provisioners/shell/SWAP/installer-swap.sh $DIR # important to allow the composer to have enough memory
 $DIR/provisioners/shell/pc/installer-pc.sh $DIR $DISTRIB
 $DIR/provisioners/shell/lemp/installer-lemp.sh $DIR
+$DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME
 $DIR/provisioners/shell/QA/installer-phpqatools.sh $DIR
 #$DIR/provisioners/shell/jackrabbit/installer-jackrabbit-startup-script.sh $DIR
 #if [ -f $DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh ];
