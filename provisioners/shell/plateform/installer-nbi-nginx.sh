@@ -32,15 +32,17 @@ mkdir -p app/logs
 mkdir -p web/uploads/media
 
 # permission
-chown -R root:www-data app/cache
-chown -R root:www-data app/logs
-chown -R root:www-data app/config/parameters.yml
-chown -R root:www-data web/uploads
+#sudo chown -R root:www-data app/cache
+#sudo chown -R root:www-data app/logs
+#sudo chown -R root:www-data app/config/parameters.yml
+#sudo chown -R root:www-data web/uploads
 
-chmod -R 775 app/config/parameters.yml
-chmod -R 775 app/cache
-chmod -R 775 app/logs
-chmod -R 775 web/uploads
+#sudo chmod -R 775 app/config/parameters.yml
+#sudo chmod -R 775 app/cache
+#sudo chmod -R 775 app/logs
+#sudo chmod -R 775 web/uploads
+
+#sudo chown -R www-data:www-data $INSTALL_USERWWW/$PROJET_NAME
 
 # create database
 php app/console propel:build
@@ -429,9 +431,6 @@ if ! grep -q "dev.$PROJET_NAME.local" /etc/hosts; then
     echo "127.0.0.1    test.$PROJET_NAME.local" | tee --append /etc/hosts
     echo "127.0.0.1    prod.$PROJET_NAME.local" | tee --append /etc/hosts
 fi
-
-#
-chown -R www-data:www-data $INSTALL_USERWWW/$PROJET_NAME
 
 # we restart nginx server
 service nginx restart
