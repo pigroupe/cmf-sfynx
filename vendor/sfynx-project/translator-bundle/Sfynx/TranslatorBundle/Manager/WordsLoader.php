@@ -127,8 +127,11 @@ class WordsLoader implements LoaderInterface
                             }           
                             list($format, $file) = $data;
                             // merge catalogues
-                            $loader = $this->loadFile($file, $format, $locale, $domain);
-                            $catalogue->addCatalogue($loader);
+                            try{
+                                $loader = $this->loadFile($file, $format, $locale, $domain);
+                                $catalogue->addCatalogue($loader);
+                            } catch (\Exception $e) {                                
+                            }
                         }
                     }
                 }    

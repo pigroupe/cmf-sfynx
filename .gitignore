@@ -2,14 +2,14 @@
 tmp/*
 
 # documentation
-doc/uml/xmi/*
-doc/uml/php/*
-doc/uml/html/*
-doc/uml/htmlnew/*
-doc/phpdocumentor/*
+documentation/uml/xmi/*
+documentation/uml/php/*
+documentation/uml/html/*
+documentation/uml/htmlnew/*
+documentation/phpdocumentor/*
 web/phpdocumentor/*
-doc/phpmd/*
-doc/phpcpd/*
+documentation/phpmd/*
+documentation/phpcpd/*
 
 # Bootstrap
 app/bootstrap*
@@ -50,7 +50,6 @@ phpmetrics.phar
 .project
 .settings
 .svn
-resetProjectDatasTest.sh
 
 # Build
 build

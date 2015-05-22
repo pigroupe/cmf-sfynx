@@ -31,19 +31,21 @@ mkdir -p web/uploads/media
 mkdir -p web/yui
 
 # permission
-chown -R root:www-data app/cache
-chown -R root:www-data app/cachesfynx
-chown -R root:www-data app/logs
-chown -R root:www-data app/config/parameters.yml
-chown -R root:www-data web/uploads
-chown -R root:www-data web/yui
+#chown -R root:www-data app/cache
+#chown -R root:www-data app/cachesfynx
+#chown -R root:www-data app/logs
+#chown -R root:www-data app/config/parameters.yml
+#chown -R root:www-data web/uploads
+#chown -R root:www-data web/yui
 
-sudo chmod -R 775 app/config/parameters.yml
-sudo chmod -R 775 app/cachesfynx
-sudo chmod -R 775 app/cache
-sudo chmod -R 775 app/logs
-sudo chmod -R 775 web/uploads
-sudo chmod -R 775 web/yui
+#chmod -R 775 app/config/parameters.yml
+#chmod -R 775 app/cachesfynx
+#chmod -R 775 app/cache
+#chmod -R 775 app/logs
+#chmod -R 775 web/uploads
+#chmod -R 775 web/yui
+
+#chown -R www-data:www-data $INSTALL_USERWWW/$PROJET_NAME
 
 # we run the phing script to initialize the sfynx project
 vendor/bin/phing -f config/phing/initialize.xml rebuild
