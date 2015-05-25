@@ -168,7 +168,5 @@ if ! grep -q "dev.sfynx.local" /etc/hosts; then
     echo "127.0.0.1    prod.sfynx.local" | sudo tee --append /etc/hosts
 fi
 
-sudo chown -R www-data:www-data $INSTALL_USERWWW/cmf-sfynx
-
 # we restart apache server
 sudo service apache2 restart

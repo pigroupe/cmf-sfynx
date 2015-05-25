@@ -16,18 +16,18 @@ cd $INSTALL_USERWWW
 case $PLATEFORM_INSTALL_TYPE in
     'composer' )
         curl -s https://getcomposer.org/installer | php
-        php composer.phar create-project symfony/framework-standard-edition $INSTALL_USERWWW/$PROJET_NAME $PLATEFORM_VERSION
-        cd $PROJET_NAME
+        php composer.phar create-project symfony/framework-standard-edition $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
+        cd $PLATEFORM_PROJET_NAME
     ;;
     'stack' )
         curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
         chmod a+x /usr/local/bin/symfony
-        symfony new $PROJET_NAME $PLATEFORM_VERSION
-        cd $PROJET_NAME
+        symfony new $PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
+        cd $PLATEFORM_PROJET_NAME
     ;;
     'tar' )
-        mkdir  $PROJET_NAME
-        cd $PROJET_NAME
+        mkdir  $PLATEFORM_PROJET_NAME
+        cd $PLATEFORM_PROJET_NAME
         wget http://symfony.com/download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
         tar -zxvf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
         mv Symfony/* ./
@@ -48,38 +48,53 @@ if [ ! -f composer.phar ]; then
     php composer.phar dump-autoload --optimize
 fi
 
+# install doctrine bundles
+composer require --dev  --update-with-dependencies  doctrine/doctrine-fixtures-bundle:dev-master
+composer require --dev  --update-with-dependencies  doctrine/data-fixtures:1.0.*
+composer require --dev  --update-with-dependencies  doctrine/doctrine-cache-bundle:1.0.*
+composer require --dev  --update-with-dependencies  gedmo/doctrine-extensions:2.3.12
+composer require --dev  --update-with-dependencies  stof/doctrine-extensions-bundle:1.1.*@dev
+
+# install jms bundle
+composer require --dev  --update-with-dependencies  jms/security-extra-bundle:1.5.*
+composer require --dev  --update-with-dependencies  jms/di-extra-bundle:1.4.*
+composer require --dev  --update-with-dependencies  jms/serializer-bundle:0.13.*@dev
+composer require --dev  --update-with-dependencies  symfony/translation:2.6.*@dev
+composer require --dev  --update-with-dependencies  jms/translation-bundle:1.1.*@dev
+        
 # install QA depo in dev environment
-composer require --dev  --update-with-dependencies  phpdocumentor/phpdocumentor:2.*
-composer require --dev  --update-with-dependencies  mayflower/php-codebrowser:~1.1
-composer require --dev  --update-with-dependencies  theseer/phpdox:*
-composer require --dev  --update-with-dependencies  halleck45/phpmetrics:@dev
-composer require --dev  --update-with-dependencies  squizlabs/php_codesniffer:*
-composer require --dev  --update-with-dependencies  fabpot/php-cs-fixer:*
-composer require --dev  --update-with-dependencies  phpunit/phpunit:*
-composer require --dev  --update-with-dependencies  phpunit/php-invoker:dev-master
-composer require --dev  --update-with-dependencies  sebastian/phpcpd:*
-composer require --dev  --update-with-dependencies  sebastian/phpdcd:*
-composer require --dev  --update-with-dependencies  phpmd/phpmd:@stable
-composer require --dev  --update-with-dependencies  pdepend/pdepend:@stable
-composer require --dev  --update-with-dependencies  phploc/phploc:*
-composer require --dev  --update-with-dependencies  sebastian/hhvm-wrapper:*
-composer require --dev  --update-with-dependencies  phake/phake:*
-composer require --dev  --update-with-dependencies  phing/phing:dev-master
-composer require --dev  --update-with-dependencies  behat/behat:3.0.*@dev
-composer require --dev  --update-with-dependencies  instaclick/php-webdriver:~1.1
-composer require --dev  --update-with-dependencies  behat/mink:1.6.*@dev
-composer require --dev  --update-with-dependencies  behat/mink-bundle:~1.4
-composer require --dev  --update-with-dependencies  behat/symfony2-extension:~2.0@dev
-composer require --dev  --update-with-dependencies  behat/mink-extension:~2.0@dev
-composer require --dev  --update-with-dependencies  behat/mink-selenium2-driver:*@dev
-composer require --dev  --update-with-dependencies  behat/mink-browserkit-driver:~1.1@dev
-composer require --dev  --update-with-dependencies  behat/mink-goutte-driver:*@stable
-composer require --dev  --update-with-dependencies  behat/mink-zombie-driver:*@stable
-composer require --dev  --update-with-dependencies  facebook/xhprof:dev-master@dev        
-composer require --dev  --update-with-dependencies  phpcasperjs/phpcasperjs:dev-master
-composer require --dev  --update-with-dependencies  psecio/iniscan:dev-master
-composer require --dev  --update-with-dependencies  psecio/versionscan:dev-master
-composer require --dev  --update-with-dependencies  psecio/parse:dev-master
+#composer require --dev  --update-with-dependencies  phpdocumentor/phpdocumentor:2.*
+#composer require --dev  --update-with-dependencies  mayflower/php-codebrowser:~1.1
+#composer require --dev  --update-with-dependencies  theseer/phpdox:*
+#composer require --dev  --update-with-dependencies  halleck45/phpmetrics:@dev
+#composer require --dev  --update-with-dependencies  squizlabs/php_codesniffer:*
+#composer require --dev  --update-with-dependencies  fabpot/php-cs-fixer:*
+#composer require --dev  --update-with-dependencies  phpunit/phpunit:*
+#composer require --dev  --update-with-dependencies  phpunit/php-invoker:dev-master
+#composer require --dev  --update-with-dependencies  sebastian/phpcpd:*
+#composer require --dev  --update-with-dependencies  sebastian/phpdcd:*
+#composer require --dev  --update-with-dependencies  phpmd/phpmd:@stable
+#composer require --dev  --update-with-dependencies  pdepend/pdepend:@stable
+#composer require --dev  --update-with-dependencies  phploc/phploc:*
+#composer require --dev  --update-with-dependencies  sebastian/hhvm-wrapper:*
+#composer require --dev  --update-with-dependencies  phake/phake:*
+#composer require --dev  --update-with-dependencies  phing/phing:dev-master
+#composer require --dev  --update-with-dependencies  behat/behat:3.0.*@dev
+#composer require --dev  --update-with-dependencies  instaclick/php-webdriver:~1.1
+#composer require --dev  --update-with-dependencies  behat/mink:1.6.*@dev
+#composer require --dev  --update-with-dependencies  behat/mink-bundle:~1.4
+#composer require --dev  --update-with-dependencies  behat/symfony2-extension:~2.0@dev
+#composer require --dev  --update-with-dependencies  behat/mink-extension:~2.0@dev
+#composer require --dev  --update-with-dependencies  behat/mink-selenium2-driver:*@dev
+#composer require --dev  --update-with-dependencies  behat/mink-browserkit-driver:~1.1@dev
+#composer require --dev  --update-with-dependencies  behat/mink-goutte-driver:*@stable
+#composer require --dev  --update-with-dependencies  behat/mink-zombie-driver:*@stable
+#composer require --dev  --update-with-dependencies  facebook/xhprof:dev-master@dev        
+#composer require --dev  --update-with-dependencies  phpcasperjs/phpcasperjs:dev-master
+#composer require --dev  --update-with-dependencies  psecio/iniscan:dev-master
+#composer require --dev  --update-with-dependencies  psecio/versionscan:dev-master
+#composer require --dev  --update-with-dependencies  psecio/parse:dev-master
+#composer require --dev  --update-with-dependencies  mayflower/php-codebrowser:~1.1
 #composer update --with-dependencies
 
 # we create default directories
@@ -98,7 +113,7 @@ mkdir -p web/uploads/media
 #sudo chmod -R 775 app/logs
 #sudo chmod -R 775 web/uploads
 
-#sudo chown -R www-data:www-data $INSTALL_USERWWW/$PROJET_NAME
+#sudo chown -R www-data:www-data $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
 
 # executes commands
 php app/console doctrine:database:create
@@ -108,19 +123,19 @@ php app/console assets:install
 php app/console assetic:dump
 
 # we create the virtualhiost of sfynx for nginx
-cat <<EOT >/tmp/$PROJET_NAME
+cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 upstream php5-fpm-sock {  
     server unix:/var/run/php5-fpm.sock;  
 }
 
 server {
-    set \$website_root "$INSTALL_USERWWW/$PROJET_NAME/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app_dev.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name dev.$PROJET_NAME.local;
+    server_name dev.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -232,13 +247,13 @@ server {
 }
 
 server {
-    set \$website_root "$INSTALL_USERWWW/$PROJET_NAME/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app_test.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name test.$PROJET_NAME.local;
+    server_name test.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -350,13 +365,13 @@ server {
 }
 
 server {
-    set \$website_root "$INSTALL_USERWWW/$PROJET_NAME/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name prod.$PROJET_NAME.local;
+    server_name prod.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -467,17 +482,17 @@ server {
 
 }
 EOT
-mv /tmp/$PROJET_NAME /etc/nginx/sites-available/$PROJET_NAME
+mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
 # we create the symbilic link
-ln -s /etc/nginx/sites-available/$PROJET_NAME /etc/nginx/sites-enabled/$PROJET_NAME
+ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 # we add host in the /etc/hosts file
-if ! grep -q "dev.$PROJET_NAME.local" /etc/hosts; then
+if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
     echo "Adding QA hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.$PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    test.$PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
 fi
 
 # we restart nginx server
