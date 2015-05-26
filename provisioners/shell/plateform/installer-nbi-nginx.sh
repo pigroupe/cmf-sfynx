@@ -72,7 +72,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name dev.sfynx.local;
+    server_name dev.$PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -190,7 +190,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name test.sfynx.local;
+    server_name test.$PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -308,7 +308,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name prod.sfynx.local;
+    server_name prod.$PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;

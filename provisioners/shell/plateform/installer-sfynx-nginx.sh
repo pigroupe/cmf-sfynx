@@ -433,8 +433,5 @@ if ! grep -q "dev.$PROJET_NAME.local" /etc/hosts; then
     echo "127.0.0.1    prod.$PROJET_NAME.local" | tee --append /etc/hosts
 fi
 
-#
-chown -R www-data:www-data $INSTALL_USERWWW/$PROJET_NAME
-
 # we restart nginx server
 service nginx restart

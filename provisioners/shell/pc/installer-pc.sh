@@ -1,7 +1,8 @@
+#!/bin/bash
+
 #Download Elementary OS from here: 
 #http://sourceforge.net/projects/elementaryos/files/stable/
 
-#!/bin/bash
 DIR=$1
 DISTRIB=$2
 source $DIR/provisioners/shell/env.sh

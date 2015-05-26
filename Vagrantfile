@@ -26,6 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Setup box
     config.vm.box = $box_name
     config.vm.box_url = $box_url
+    #config.ssh.private_key_path = "~/.ssh/my_vagrant_key"
 
     # Set Hostname
     config.vm.host_name = $vm_hostname
@@ -84,39 +85,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 end
 
-# liste of all vm
-## vagrant global-status
 
-# destroy a vm by id
-## vagrant destroy <id>
-
-# list of all box
-## vagrant box list
-
-## vagrant up
-## vagrant reload --provision
-
-# create box from existing vm
-## vagrant package --base SPECIFIC_NAME_FOR_VM --output /yourfolder/OUTPUT_BOX_NAME.box
-
-# add ubuntu box
-## vagrant package –-base Ubuntu-14.04-64-Desktop  # Create Vagrant Base Box
-## vagrant box add Ubuntu-14.04-64-Desktop package.box # install vagrant box
-## vagrant init Ubuntu-14.04-64-Desktop
-
-
-# chown -R <USERNAME> /<YOUR-WEBSITES-DIRECTORY>/.vagrant/machines/
-# chown -R <USERNAME> /<YOUR-HOME-DIRECTORY>/.vagrant.d
-# rm  /<YOUR-HOME-DIRECTORY>/.vagrant.d/data/lock.fpcollision.lock
-
-# http://stackoverflow.com/questions/25652769/should-vagrant-require-sudo-for-each-command
-# https://github.com/Varying-Vagrant-Vagrants/VVV/issues/261
-# http://stackoverflow.com/questions/27670076/permission-denied-error-for-vagrant
-
-
-# rm /home/etienne/.vagrant.d/data/lock.fpcollision.lock
-# find /home/etienne/.vagrant.d -exec ls -al {} \;
-# rm -rf /home/etienne/.vagrant.d
-
-# SSH
-## vagrant plugin install vagrant-vbguest
+#    config.vm.define "serveur1" do |conf|
+#        conf.vm.box = "d7"
+#        conf.vm.box_url = "http://192.168.0.46:8080/Debian7-64.box"
+#        conf.ssh.private_key_path = "~/.ssh/my_vagrant_key"
+#        conf.vm.host_name = "serveur1"
+# 
+#        conf.vm.provider "virtualbox" do |vb|
+#            vb.customize ["modifyvm", :id, "--memory", "512"]
+#            vb.customize ["modifyvm", :id, "--name", "serveur1"]
+#        end
+#    end
