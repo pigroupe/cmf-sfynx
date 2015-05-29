@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+DIR=$1
+source $DIR/provisioners/shell/env.sh
 
 #
 apt-get install tomcat7 tomcat7-admin
@@ -33,7 +35,7 @@ cp app/config/solr/schema.xml /var/lib/tomcat7/solr/collection1/conf/
 #            timeout: 5
 
 #
-service tomcat7 restart
+sudo service tomcat7 restart
 
 #
 #http://localhost:8181/solr

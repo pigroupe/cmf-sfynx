@@ -1,9 +1,10 @@
 #!/bin/sh
 
-export INSTALL_USERNAME="www-data"
+# export INSTALL_USERNAME=$(ps -o user= -p $$ | awk '{print $1}')
+export INSTALL_USERNAME="vagrant"
 
-export INSTALL_USERGROUP="${INSTALL_USERNAME}"
+export INSTALL_USERGROUP="www-data"
 
-export INSTALL_USERHOME="/home/${INSTALL_USERNAME}"
+export INSTALL_USERHOME="/home/vagrant"
 
 export INSTALL_USERWWW="/web/www"

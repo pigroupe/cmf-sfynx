@@ -4,6 +4,9 @@ source $DIR/provisioners/shell/env.sh
 
 # NGINX
 echo "*** NGINX ***"
+sudo service apache2 stop
+apt-get remove apache2
+apt-get purge apache2
 
 #
 echo "Add repository for nginx"

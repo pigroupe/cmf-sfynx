@@ -1,21 +1,34 @@
 #!/bin/bash
+DIR=$1
 
-JACKRABBIT_URL="http://www.eu.apache.org/dist/jackrabbit/2.6.5/jackrabbit-standalone-2.6.5.jar"
-JACKRABBIT_MD5="d1aff4436f46f97908164549e4e6b854"
-echo Welcome to Jackrabbit Installer
+# Get the code
+mkdir -p /opt/jackrabbit-startup
+cp -R $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script/* /opt/jackrabbit-startup
 
-cd /app
-wget $JACKRABBIT_URL -O jackrabbit-standalone.jar --port 8888 #Download Jackrabbit
-DOWNLOAD_MD5=`md5sum /app/jackrabbit-standalone.jar  | cut -d" " -f1` # Get download hash
+# Configure the script
+# edit jackrabbit.sh to configure some settings
+# Create JMX config files
+cp /opt/jackrabbit-startup/jmx.role.template /opt/jackrabbit-startup/jmx.role
+cp /opt/jackrabbit-startup/jmx.user.template /opt/jackrabbit-startup/jmx.user
 
-if [ $JACKRABBIT_MD5 != $DOWNLOAD_MD5 ]; then
-    echo The downloaded jackrabbit version has a wrong MD5 hash
-    echo Expected MD5 = $JACKRABBIT_MD5
-    echo MD5 of download = $DOWNLOAD_MD5
-    exit 1
-fi
+chmod 0600 /opt/jackrabbit-startup/jmx.role
+chmod 0600 /opt/jackrabbit-startup/jmx.user
 
-mkdir /app/jackrabbit
+# Create an alias to the script
+ln -s /opt/jackrabbit-startup/jackrabbit.sh /etc/init.d/jackrabbit
+chmod 755 /etc/init.d/jackrabbit
 
-echo Jackrabbit successfully installed
-exit 0
+# create directory of the bdd of jackrabbit
+mkdir -p /opt/jackrabbit-startup/bdd
+mkdir -p /opt/jackrabbit-startup/log
+
+# on debian, register with
+update-rc.d jackrabbit defaults
+# if not using a system that provides update-rc.d, you hopefully know how
+# to proceed...
+
+#create port 8080
+sudo iptables -A INPUT -p tcp -m tcp --dport 8080 -j ACCEPT
+
+sudo /etc/init.d/jackrabbit stop
+sudo /etc/init.d/jackrabbit start 1> /dev/null & # 2> /opt/jackrabbit-startup/log/error.log &

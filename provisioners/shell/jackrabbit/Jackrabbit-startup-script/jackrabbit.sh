@@ -23,13 +23,13 @@
 
 ### PLEASE EDIT THESE VALUES FOR YOUR SETUP
 # Directory in which jackrabbit will store local data, must be writeable
-BASEDIR=/home/dev/Jackrabbit-startup-script/jackrabbit
+BASEDIR=/opt/jackrabbit-startup/bdd
 # Full filename of jackrabbit standalone .jar to run
 JACKRABBIT_JAR=$BASEDIR/jackrabbit-standalone-2.3.1-jackalope-SNAPSHOT.jar
 # IP address for jackrabbit to listen on. you can make jackrabbit listen on all
 # interfaces by using 0.0.0.0 here.
-JACKRABBIT_HOST=127.0.0.1
-# Port number to listen on. 8080 is default, you can use something else
+JACKRABBIT_HOST=0.0.0.0
+# Port number to listen on. 8081 is default, you can use something else
 JACKRABBIT_PORT=8080
 # JMX-Port for monitoring
 JMX_PORT=1111
