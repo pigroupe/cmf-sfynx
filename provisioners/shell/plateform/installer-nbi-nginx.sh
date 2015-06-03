@@ -472,5 +472,4 @@ bin/phing -f app/phing/initialize.xml rebuild
 #sudo $DIR/provisioners/shell/plateform/importUpload.sh $DIR/DUMP/uploadsNbi-28-05-2015.tar.gz $DIR
 #sudo $DIR/provisioners/shell/plateform/importJR.sh $DIR/DUMP/jrNbi-28-05-2015.tar.gz 
 
-sudo service jackrabbit stop
 sudo service jackrabbit start

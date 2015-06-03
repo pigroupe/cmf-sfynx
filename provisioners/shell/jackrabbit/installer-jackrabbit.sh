@@ -38,6 +38,3 @@ sudo update-rc.d jackrabbit defaults
 #sudo iptables -A INPUT -p tcp -m tcp --dport 8081 -j ACCEPT
 
 #$DIR/provisioners/shell/phpcr-browser/installer-browser.sh $DIR
-
-sudo service jackrabbit stop
-sudo service jackrabbit start
