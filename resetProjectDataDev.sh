@@ -18,12 +18,12 @@ php app/console cache:clear --env=test --no-debug
 php app/console cache:clear --env=prod --no-debug
 
 #echo "7 - we generate documentations"
-#rm -rf doc/phpdocumentor/*
+#rm -rf documentation/phpdocumentor/*
 #rm -rf web/phpdocumentor/*
-#rm -rf doc/uml/htmlnew/*
-#rm -rf doc/uml/html/*
-#rm -rf doc/uml/php/*
-#rm -rf doc/uml/xmi/*
+#rm -rf documentation/uml/htmlnew/*
+#rm -rf documentation/uml/html/*
+#rm -rf documentation/uml/php/*
+#rm -rf documentation/uml/xmi/*
 
 #mkdir -p doc/uml/xmi/auth-bundle
 #mkdir -p doc/uml/php/auth-bundle
@@ -39,6 +39,6 @@ php app/console cache:clear --env=prod --no-debug
 #phpuml vendor/sfynx-project/auth-bundle/Sfynx -f htmlnew -o doc/uml/htmlnew/auth-bundle
 #phpuml vendor/sfynx-project/auth-bundle/Sfynx -f html -o doc/uml/html/auth-bundle
 #phpdoc -d vendor/sfynx-project/auth-bundle/Sfynx -t doc/phpdocumentor --template responsive
-#cp -r doc/phpdocumentor/*  web/phpdocumentor/
-#bin/phpmd vendor/sfynx-project/auth-bundle/Sfynx html unusedcode,codesize,design,naming > doc/phpmd/auth-bundle/report.html
-#bin/phpcpd vendor/sfynx-project/auth-bundle/Sfynx > doc/phpcpd/auth-bundle/report.txt
+#cp -r documentation/phpdocumentor/*  web/phpdocumentor/
+#vendor/bin/phpmd vendor/sfynx-project/auth-bundle/Sfynx html unusedcode,codesize,design,naming > documentation/phpmd/auth-bundle/report.html
+#vendor/bin/phpcpd vendor/sfynx-project/auth-bundle/Sfynx > documentation/phpcpd/auth-bundle/report.txt

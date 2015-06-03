@@ -1,0 +1,45 @@
+{% stylesheet "bundles/sfynxsmoothness/layout/pi/models/layout-pi-model-base.css" %}
+{% stylesheet "bundles/sfynxsmoothness/layout/pi/models/layout-pi-model-responsive-two-fluid-columns.css" %}
+{% extends getParameter('sfynx.auth.theme.layout.global') %}
+
+{% block global_title %}{{ parent() }}{% endblock %}
+
+{% block global_meta %}{{ parent() }}{% endblock %}
+
+{% block global_script_divers %}{{ parent() }}{% endblock %}
+
+{% block global_layout %}
+	{% block pc_header %}
+	<h1>Démo Media Queries</h1>
+	{% endblock %}
+	<div id="menu">
+	    {% block pc_menuwrapper %}
+		<ul>
+			<li><a href="#">Lien 1</a></li>
+			<li><a href="#">Lien 2</a></li>
+			<li><a href="#">Lien 3</a></li>
+			<li><a href="#">Lien 4</a></li>
+			<li><a href="#">Lien 5</a></li>
+		</ul>
+		{% endblock %}
+	</div>
+	<div id="main">
+		<h2>{% block contenttitle %}Zone principale{% endblock %}</h2>
+		{% block content %}
+		<p>...</p>
+		{% endblock %}
+	</div>
+	<div id="aside">
+		<h2>{% block sidebaretitle %}Zone annexe{% endblock %}</h2>
+		{% block sidebare %}
+		<p>...</p>
+		{% endblock %}		
+	</div>
+	<p class="mention">
+	    {% block pc_footer %}
+	    <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'fr_FR'}) }}" title="">FR</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'en_GB'}) }}" title="">EN</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'ar_SA'}) }}" title="">AR</a> | 
+	    <a href="http://www.sfynx.fr" title="">www.sfynx.fr</a> |  
+	    <span>Mise en page d'après Elephorm et Alsacréations: www.alsacreations.com/static/gabarits</span>
+	    {% endblock %}
+    </p>
+{% endblock %}

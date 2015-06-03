@@ -36,7 +36,7 @@ cp app/config/parameters.dist app/config/parameters.yml
 cat <<EOT >> ~/.profile
 
 # env vars for NBI platform
-export SYMFONY__DATABASE__NAME__ENV=BelProd;
+export SYMFONY__DATABASE__NAME__ENV=BelProd_dev;
 export SYMFONY__DATABASE__USER__ENV=root;
 export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
 export SYMFONY__TEST__DATABASE__NAME__ENV=BelProd_test;
@@ -44,6 +44,7 @@ export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 export SYMFONY__FACEBOOK__KEY__ENV=382989545116231;
 export SYMFONY__FACEBOOK__SECRET__ENV=7b3e0691e121dc1c0d16b2b8cc83cdc9;
+
 EOT
 source ~/.profile
 
@@ -58,9 +59,9 @@ php composer.phar dump-autoload --optimize
 # we create the virtualhiost of sfynx for nginx
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
-upstream php5-fpm-sock {  
-    server unix:/var/run/php5-fpm.sock;  
-}
+#upstream php5-fpm-sock {  
+#    server unix:/var/run/php5-fpm.sock;  
+#}
 
 server {
     set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
@@ -447,7 +448,7 @@ ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled
 
 # we add host in the /etc/hosts file
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
-    echo "Adding hostname to your /etc/hosts"
+    echo "Adding QA hostname to your /etc/hosts"
     echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
     echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
     echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
@@ -465,3 +466,11 @@ php app/console propel:sql:insert --env test --force
 
 # we run the phing script to initialize the sfynx project
 bin/phing -f app/phing/initialize.xml rebuild
+
+#Import database
+#sudo $DIR/provisioners/shell/plateform/importBDD.sh $DIR/DUMP/dbNbi-28-05-2015.sql
+#sudo $DIR/provisioners/shell/plateform/importUpload.sh $DIR/DUMP/uploadsNbi-28-05-2015.tar.gz $DIR
+#sudo $DIR/provisioners/shell/plateform/importJR.sh $DIR/DUMP/jrNbi-28-05-2015.tar.gz 
+
+sudo service jackrabbit stop
+sudo service jackrabbit start

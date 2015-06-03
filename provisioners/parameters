@@ -25,9 +25,9 @@ $pf_https = 443
 $pf_https_localhost = 443
 
 #Plateform
-$plateform_install_name="sfynx-nginx"
+$plateform_install_name="nbi-nginx"
 $plateform_install_type="composer"
-$plateform_install_version="2.3"
-$plateform_projet_git=""
-$plateform_username_git=""
-$plateform_projet_name="myproject"
+$plateform_install_version="*"
+$plateform_projet_git="https://github.com/gvandencruche/rapp_nosbelidees"
+$plateform_username_git="guy.vandencruche"
+$plateform_projet_name="nosBelIdees"

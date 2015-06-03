@@ -1,0 +1,33 @@
+{% if is_granted("IS_AUTHENTICATED_FULLY") %}
+    <div class="showhide-account"><span class="connexion-my-account">{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</span></div>
+    <a href="{{ path('fos_user_security_logout') }}" id="logout" title="">
+        <img src="{{ asset('bundles/sfynxsmoothness/admin/images/shared/nav/nav_logout.png') }}" alt="" />
+        <span class="connexion-login-logout">{#{{ 'pi.dashboard.logout'|trans }}#}</span>
+    </a>
+    <div class="clear">&nbsp;</div>
+    <!--  start account-content -->	
+    <div class="account-content">
+        <div class="account-drop-inner">
+            {# <a href="{{ path('fos_user_profile_show') }}">{{ 'pi.layout.profil_consult'|trans }}</a> #}
+            <a href="{{ path('users_edit', { 'id': app.user.id, 'NoLayout':0, 'category':'' }) }}" title="{{ 'pi.grid.action.edit'|trans }}" id="behatLinkProfile">{{ 'pi.layout.profil_consult'|trans }}</a>
+            {% if is_granted("ROLE_ADMIN") %}
+            <div class="clear">&nbsp;</div>
+            <div class="acc-line">&nbsp;</div>
+            <a href="{{ path('users') }}" id="behatLinkUsers">{{ 'users'|trans }}</a>
+            {% endif %}
+            {% set options_languagechoice = {'class': 'language-choice', 'img-arrow': 'lang_arrow_index.png', 'action':'renderlist'} %}
+            {{ renderJquery('TOOL', 'languagechoice', options_languagechoice )|raw }}
+        </div>
+    </div>
+    <!--  end account-content -->
+{% else %}
+    <div class="nav-divider">&nbsp;</div>
+    <div class="showhide-account">
+        <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans([], 'FOSUserBundle') }}</a>
+    </div>
+    <div class="nav-divider">&nbsp;</div>
+    <a href="{{ path('fos_user_security_login') }}" id="logout" title="">
+        {{ 'layout.login'|trans([], 'FOSUserBundle') }}
+    </a>
+    <div class="clear">&nbsp;</div>
+{% endif %}	

@@ -67,9 +67,9 @@ source ~/.profile
 # we create the virtualhiost of sfynx for nginx
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
-upstream php5-fpm-sock {  
-    server unix:/var/run/php5-fpm.sock;  
-}
+#upstream php5-fpm-sock {  
+#    server unix:/var/run/php5-fpm.sock;  
+#}
 
 server {
     set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";

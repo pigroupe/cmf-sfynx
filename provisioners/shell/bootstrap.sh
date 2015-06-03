@@ -54,18 +54,22 @@ echo "***** Provisionning *****"
 $DIR/provisioners/shell/SWAP/installer-swap.sh $DIR # important to allow the composer to have enough memory
 $DIR/provisioners/shell/pc/installer-pc.sh $DIR $DISTRIB
 $DIR/provisioners/shell/lemp/installer-lemp.sh $DIR $PLATEFORM_PROJET_NAME
-$DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME $PLATEFORM_PROJET_GIT
 $DIR/provisioners/shell/QA/installer-phpqatools.sh $DIR
 $DIR/provisioners/shell/jackrabbit/installer-jackrabbit.sh $DIR
 if [ -f $DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh ];
 then
     #$DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh $DIR
-    $DIR/provisioners/shell/solr/installer.sh $DIR
+    #$DIR/provisioners/shell/solr/installer.sh $DIR
+    echo "pas solr"
 fi
+$DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME $PLATEFORM_PROJET_GIT
+
+
 
 echo "***** End we clean-up the system *****"
-apt-get -y autoremove > /dev/null
-apt-get -y clean > /dev/null
-apt-get -y autoclean > /dev/null
+sudo apt-get -y autoremove > /dev/null
+sudo apt-get -y clean > /dev/null
+sudo apt-get -y autoclean > /dev/null
 
 echo "Finished provisioning."
+

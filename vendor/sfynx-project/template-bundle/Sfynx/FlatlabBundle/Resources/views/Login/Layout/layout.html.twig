@@ -1,0 +1,12 @@
+{% if app.request.query.get('NoLayout') %}
+    {% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
+{% else %}
+    {% set layout_nav = getParameter('sfynx.auth.theme.layout.connexion.login') %}
+{% endif %}	
+{% extends layout_nav %}
+
+{% block title %}{% endblock %}
+ 
+{% block content %}
+    {% block fos_user_content %}{% endblock %}
+{% endblock %}
