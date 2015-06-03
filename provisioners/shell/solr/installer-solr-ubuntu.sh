@@ -1,10 +1,12 @@
-#!/bin/sh
+#!/bin/bash
+DIR=$1
+source $DIR/provisioners/shell/env.sh
 
+#
 apt-get -y install openjdk-7-jdk
-mkdir /usr/java
+mkdir -p /usr/java
 ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
-
 aptitude -y install solr-tomcat
-cp /home/vagrant/solr/schema.xml /usr/share/solr/conf/
+cp $DIR/provisioners/shell/jackrabbit/solr/schema.xml /usr/share/solr/conf/
 #php app/console nbi:recipe:solr:update --clean

@@ -43,6 +43,9 @@ apt-get -y update > /dev/null
 apt-get -y dist-upgrade > /dev/null
 apt-get -y install openjdk-7-jdk openjdk-7-jre > /dev/null
 
+echo "*****Install tomcat 7"
+sudo apt-get -y install tomcat7 tomcat7-common tomcat7-admin libtomcat7-java 
+
 echo "*****Install the latest git Version"
 add-apt-repository ppa:git-core/ppa -y
 apt-get -y update > /dev/null

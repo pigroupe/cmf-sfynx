@@ -1,0 +1,91 @@
+{% stylesheet "bundles/sfynxtemplate/css/layout/pi/pi-sfynx.css" %}
+{% extends getParameter('sfynx.auth.theme.layout.global') %}
+
+{% block global_title %}{{ parent() }}{% endblock %}
+
+{% block global_meta %}{{ parent() }}{% endblock %}
+
+{% block global_script_divers %}
+		{{ parent() }}
+		
+		<script type="text/javascript">
+		//<![CDATA[			
+			$(document).ready(function(){
+				$(".main-content").animate({top:0},1500,function(){
+					Move();
+				});
+			});
+			function Move() {
+			   $("#moving_arrow").animate({top:"45px"},1000, function(){
+				$(this).css({"top":"0px","display":"none"}).fadeIn(2000);
+			   });
+			   setTimeout("Move()",10000);
+			}           
+		//]]>
+		</script> 
+{% endblock %}
+
+{% block global_layout %}
+
+    	<div class="main-content" >
+			<h1>Sfynx - Content Management Framework</h1>
+			<a href="{{ path('home_page') }}"><img class="logo" src="{{ asset('bundles/sfynxtemplate/css/layout/pi/sfynx/logo.png') }}" title="Logo Sfynx" alt="Logo Sfynx" /></a>
+			<a class="githublink" href="" title="Fork me on GitHub">Fork me on GitHub</a>
+			<div class="leftcontent content">
+				<div class="firststyle">
+					<h2 class="sfynx-title">Sfynx ?</h2>
+				</div>
+				<p>Symfony 2 is the best framework made for PHP...really, it's the most powerfull framework...but symfony 2 is not simple to use...Try to install FOSuser, sonata bundle should be a nightmare for a developper....</p>
+				<p>The purpose of sfynx is to simplify the developper's work.</p>
+				<p>Symfony allow you to speed up the creation and maintenance of your PHP web applications*1, Sfynx allow you to start quickly your developpement.</p>
+				<p>In fact we did not reinvent the wheel, we just choose the best bundle made for Symfony.</p>
+				<p>Our modest contribution to symfony 2 is our SfynxCmfBundles  and our wondefull BootStrap Bundles.</p>
+			</div>
+			<div class="rightcontent content">
+				<div class="firststyle">
+					<h2>Want to play with us ?</h2>
+				</div>
+				<div class="box">
+					<p>Get Sfynx on</p>
+					<div>
+						<a href="https://github.com/pigroupe/cmf-sfynx" target="_blank" title="GitHub">
+							GitHub
+							<span id="moving_arrow"><!-- --></span>
+						</a>
+					</div>
+				</div>
+				<div class="firststyle">
+					<h3>Sfynx Choose for you</h3>
+				</div>
+				<p>FOSUserBundle, SonataMediaBundle, etc...</p>
+			</div>
+			<div class="clearer"><!-- --></div>
+			<div class="leftcontent content">
+				<div class="firststyle">
+					<h3>Why use Sfynx ?</h3>
+				</div>
+				<p>CMF Sfynx is not just to simplify the developper's work, and to speed up the creation and maintenance of your PHP web applications. It also allows you to create your own CMS. It's a CMF easy to use, build your own template (layout), add your own custom block with your own logic, build all the widget you need.</p>
+			</div>
+			<div class="rightcontent content">
+				<div class="secondstyle">
+					<h3>About PI-GROUPE</h3>
+				</div>
+				<p><a href="http://www.pi-groupe.fr" target="_blanc">PI-GROUPE</a> is a company oriented towards new information technologies and communication, which is Queen in its field to ((our customers and users are at the highest level)) in the control technological and innovation capacity computing.</p>
+				<a class="contact" href="mailto:contact@pi-groupe.fr" title="Contact Us">Contact Us</a>
+			</div>
+			
+			<div class="clearer"><!-- --></div>
+			{% block content %}{% endblock %}	            
+			<div class="clearer"><!-- --></div>
+			
+			<div class="footer">
+                {% set widget_service_params = {"template":"SfynxSmoothnessBundle:Login@@@@@@@@Security:connexion-ajax.html.twig"} %} 
+ 	            {{ getService('pi_app_admin.manager.authentication').renderSource('SfynxAuthBundle:User~_connexion_default', 'fr_FR', widget_service_params)|raw }}
+				<p>
+					<a href="{{ path('pi_layout_choisir_langue', {'langue' : 'fr_FR'}) }}" title="">FR</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'en_GB'}) }}" title="">EN</a> | <a href="{{ path('pi_layout_choisir_langue', {'langue' : 'ar_SA'}) }}" title="">AR</a> | - All rights reserved
+				</p>
+				{#<p><a href="{{ path('pi_layout_choisir_langue', {'langue' : 'fr'}) }}" title="">FR</a> | {{ app.request.locale }}</p>#}
+			</div>
+		</div>
+				     
+{% endblock %}

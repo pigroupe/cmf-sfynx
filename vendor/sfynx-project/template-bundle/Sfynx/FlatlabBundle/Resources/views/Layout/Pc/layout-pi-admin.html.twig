@@ -1,0 +1,106 @@
+{% stylesheet getParameter('sfynx.auth.theme.layout.admin.css')~":prepend" %}
+{% initJquery 'TOOL:languagechoice' %}
+{% extends getParameter('sfynx.auth.theme.layout.global') %}
+{% set global_local_language = app.request.getLocale()|lower %}
+
+{% block global_title %}Sfynx{% endblock %}
+
+{% block global_meta %}
+	<link rel="copyright" href="#copyright"/>
+	{{ parent() }}
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block global_script_js %}
+	{{ parent() }}	
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/js/html5shiv.js"></script>
+      <script src="/js/respond.min.js"></script>
+    <![endif]-->	
+{% endblock %}
+
+{% block global_layout %}
+  {{ parent() }}
+  <section id="container" class="">
+      <!--header start-->
+      <header class="header white-bg">
+            <div class="sidebar-toggle-box">
+                  <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+            <!--logo start-->
+            <a href="/" class="logo">Sf<span>ynx</span></a>
+            <!--logo end-->
+            <div class="top-nav ">
+                <!--search & user info start-->
+                <ul class="nav pull-right top-menu">
+                    <li>
+                        <input type="text" class="form-control search" placeholder="Search">
+                    </li>
+                    <!-- user login dropdown start-->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img alt="" src="">
+                            <span class="username">{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}{{ app.user.username }}{% endif %}</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu extended logout">
+                            <div class="log-arrow-up"></div>
+                            <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-key"></i> Se déconneter</a></li>
+                        </ul>
+                    </li>
+                    <!-- user login dropdown end -->
+                </ul>
+                <!--search & user info end-->
+            </div>
+      </header>    
+      {% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Menu:main_menu.html.twig" %}   {# SfynxFlatlabBundle:Menu:main_menu.html.twig #}       
+      <section id="main-content">
+          <section class="wrapper site-min-height">            
+          {% block content %}{{ block('title') }}{% endblock %}	
+          </section>
+      </section>
+      <footer class="site-footer">
+          <div class="text-center">
+              {{ 'pi.footer.copyright'|trans }} © 2011-{{ "now"|date("Y") }} Ltd.
+    	      <b>SFYNX</b>  is free software distributed <a href="{{ path_url('admin_licence') }}" onclick="javascript:window.open(this.href, 'sfynx_licence', 'scrollbars=yes,resizable=yes,width=740,height=630'); return false;">under the GPL license</a> |   
+    	      <a href="http://www.sfynx.fr" title="" target="_blank">www.sfynx.fr</a> 
+			  <img src="{{ asset('bundles/sfynxtemplate/images/logo/html5-badge.png') }}" height="19px" alt="html5 validated by contactpfelix@gmail.com" />
+              <a href="#" class="go-top">
+                  <i class="fa fa-angle-up"></i>
+              </a>
+          </div>
+      </footer>
+      <!--footer end-->
+  </section>
+
+{% endblock %}
+
+
+{% block global_script_js_footer %}
+  {{ parent() }}
+  <!-- js placed at the end of the document so the pages load faster -->
+  <!-- --- JQUERY PLUGINS --- -->
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/jquery.nicescroll.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/jquery.scrollTo.min.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/jquery.sparkline.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js') }}" ></script>
+  <!-- --- BOOTSTRAP --- -->
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/bootstrap.min.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/bootstrap-switch.js') }}" ></script>
+  <!-- --- WYSIYYG HTML5 --- -->
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js') }}"></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js') }}"></script>
+  <!-- --- OTHER --- -->
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/owl.carousel.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/sparkline-chart.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/easy-pie-chart.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/count.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/js/common-scripts.js') }}" ></script>
+  <script src="{{ asset('bundles/sfynxflatlab/admin/theme/assets/fuelux/js/spinner.min.js') }}"></script>
+  <script class="include" type="text/javascript" src="{{ asset('bundles/sfynxflatlab/admin/theme/js/jquery.dcjqaccordion.2.7.min.js') }}" ></script>
+  <script>
+      var Script = function () { $('#spinner4').spinner({value:0, step: 1, min: 0, max: 200000});}();
+  </script>	
+{% endblock %}

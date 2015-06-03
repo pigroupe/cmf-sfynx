@@ -1,0 +1,11 @@
+{% if is_granted("IS_AUTHENTICATED_FULLY") %}
+	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
+{% else %}
+	{% set layout_nav = getParameter('sfynx.auth.theme.layout.connexion.login') %}
+{% endif %}	
+
+{% extends layout_nav %}
+
+{% block content %}
+{% include "FOSUserBundle:Profile:show_content.html.twig" %}
+{% endblock content %}

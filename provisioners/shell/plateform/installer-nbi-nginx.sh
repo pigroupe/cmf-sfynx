@@ -4,7 +4,13 @@ PLATEFORM_INSTALL_NAME=$2
 PLATEFORM_INSTALL_TYPE=$3
 PLATEFORM_INSTALL_VERSION=$4
 PLATEFORM_PROJET_NAME=$5
+PLATEFORM_PROJET_GIT=$6
 source $DIR/provisioners/shell/env.sh
+
+#if var is empty
+if [ -z "$PLATEFORM_PROJET_GIT" ]; then
+    $PLATEFORM_PROJET_GIT="https://github.com/RappFrance/rapp_nosbelidees"
+fi
 
 # we create directories
 if [ ! -d $INSTALL_USERWWW ]; then
@@ -13,66 +19,58 @@ fi
 cd $INSTALL_USERWWW
 
 # we create project
-if [ ! -d $PROJET_NAME ]; then
- git clone https://github.com/RappFrance/rapp_nosbelidees $PROJET_NAME
+if [ ! -d $PLATEFORM_PROJET_NAME ]; then
+    #git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
+    mkdir -p $PLATEFORM_PROJET_NAME
 fi
-cd $PROJET_NAME
-
-# we install the composer file
-if [ ! -f composer.phar ]; then
-    wget https://getcomposer.org/composer.phar -O ./composer.phar
-    # curl -s https://getcomposer.org/installer | php
-    php -d memory_limit=1024M composer.phar install --no-interaction
-    php composer.phar dump-autoload --optimize
-fi
+cd $PLATEFORM_PROJET_NAME
 
 # we create default directories
 mkdir -p app/cache
 mkdir -p app/logs
 mkdir -p web/uploads/media
+rm app/config/parameters.yml
+cp app/config/parameters.dist app/config/parameters.yml
 
-# permission
-#sudo chown -R root:www-data app/cache
-#sudo chown -R root:www-data app/logs
-#sudo chown -R root:www-data app/config/parameters.yml
-#sudo chown -R root:www-data web/uploads
+# we add env var
+cat <<EOT >> ~/.profile
 
-#sudo chmod -R 775 app/config/parameters.yml
-#sudo chmod -R 775 app/cache
-#sudo chmod -R 775 app/logs
-#sudo chmod -R 775 web/uploads
+# env vars for NBI platform
+export SYMFONY__DATABASE__NAME__ENV=BelProd_dev;
+export SYMFONY__DATABASE__USER__ENV=root;
+export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
+export SYMFONY__TEST__DATABASE__NAME__ENV=BelProd_test;
+export SYMFONY__TEST__DATABASE__USER__ENV=root;
+export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
+export SYMFONY__FACEBOOK__KEY__ENV=382989545116231;
+export SYMFONY__FACEBOOK__SECRET__ENV=7b3e0691e121dc1c0d16b2b8cc83cdc9;
 
-#sudo chown -R www-data:www-data $INSTALL_USERWWW/$PROJET_NAME
+EOT
+source ~/.profile
 
-# create database
-php app/console propel:build
-php app/console propel:database:create
-php app/console propel:sql:insert --force
-php app/console propel:database:create --env test
-php app/console propel:sql:insert --env test --force
-
-# we run the phing script to initialize the sfynx project
-vendor/bin/phing -f config/phing/initialize.xml rebuild
-
-chmod -R 775 app/config/parameters.yml
-chmod -R 775 app/cache
-chmod -R 775 app/logs
-chmod -R 775 web/uploads
+# we install the composer file
+if [ ! -f composer.phar ]; then
+    wget https://getcomposer.org/composer.phar -O ./composer.phar
+    # curl -s https://getcomposer.org/installer | php
+fi
+php -d memory_limit=1024M composer.phar install --no-interaction
+php composer.phar dump-autoload --optimize
 
 # we create the virtualhiost of sfynx for nginx
-cat <<EOT >/tmp/$PROJET_NAME
-upstream php5-fpm-sock {  
-    server unix:/var/run/php5-fpm.sock;  
-}
+mkdir -p /tmp
+cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
+#upstream php5-fpm-sock {  
+#    server unix:/var/run/php5-fpm.sock;  
+#}
 
 server {
-    set \$website_root "$INSTALL_USERWWW/$PROJET_NAME/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app_dev.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name dev.$PROJET_NAME.local;
+    server_name dev.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -144,6 +142,14 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV BelProd_dev;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV BelProd_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__FACEBOOK__KEY__ENV 382989545116231;
+        fastcgi_param SYMFONY__FACEBOOK__SECRET__ENV 7b3e0691e121dc1c0d16b2b8cc83cdc9;
     }
 
     # Nginx Cache Control for Static Files
@@ -184,13 +190,13 @@ server {
 }
 
 server {
-    set \$website_root "$INSTALL_USERWWW/$PROJET_NAME/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app_test.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name test.$PROJET_NAME.local;
+    server_name test.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -262,6 +268,14 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV BelProd_dev;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV BelProd_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__FACEBOOK__KEY__ENV 382989545116231;
+        fastcgi_param SYMFONY__FACEBOOK__SECRET__ENV 7b3e0691e121dc1c0d16b2b8cc83cdc9;
     }
 
     # Nginx Cache Control for Static Files
@@ -302,13 +316,13 @@ server {
 }
 
 server {
-    set \$website_root "$INSTALL_USERWWW/$PROJET_NAME/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name prod.$PROJET_NAME.local;
+    server_name prod.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -373,13 +387,21 @@ server {
     }
 
     # Pass the PHP scripts to FastCGI server
-    location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+    location ~ ^/(app|set_dev|app_test|config)\.php(/|\$) {
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV nbiBelProd;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV nbiBelProd;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__FACEBOOK__KEY__ENV 382989545116231;
+        fastcgi_param SYMFONY__FACEBOOK__SECRET__ENV 7b3e0691e121dc1c0d16b2b8cc83cdc9;
     }
 
     # Nginx Cache Control for Static Files
@@ -419,19 +441,36 @@ server {
 
 }
 EOT
-mv /tmp/$PROJET_NAME /etc/nginx/sites-available/$PROJET_NAME
+mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
 # we create the symbilic link
-ln -s /etc/nginx/sites-available/$PROJET_NAME /etc/nginx/sites-enabled/$PROJET_NAME
+ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 # we add host in the /etc/hosts file
-if ! grep -q "dev.$PROJET_NAME.local" /etc/hosts; then
+if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
     echo "Adding QA hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.$PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    test.$PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
 fi
 
 # we restart nginx server
-service nginx restart
+sudo service nginx restart
 
+# create database
+php app/console propel:build
+php app/console propel:database:create
+php app/console propel:sql:insert --force
+php app/console propel:database:create --env test
+php app/console propel:sql:insert --env test --force
+
+# we run the phing script to initialize the sfynx project
+bin/phing -f app/phing/initialize.xml rebuild
+
+#Import database
+#sudo $DIR/provisioners/shell/plateform/importBDD.sh $DIR/DUMP/dbNbi-28-05-2015.sql
+#sudo $DIR/provisioners/shell/plateform/importUpload.sh $DIR/DUMP/uploadsNbi-28-05-2015.tar.gz $DIR
+#sudo $DIR/provisioners/shell/plateform/importJR.sh $DIR/DUMP/jrNbi-28-05-2015.tar.gz 
+
+sudo service jackrabbit stop
+sudo service jackrabbit start

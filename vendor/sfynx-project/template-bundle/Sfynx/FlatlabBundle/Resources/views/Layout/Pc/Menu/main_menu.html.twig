@@ -1,0 +1,59 @@
+<aside>
+          <div id="sidebar"  class="nav-collapse ">
+              <!-- sidebar menu start-->
+              <ul class="sidebar-menu" id="nav-accordion">
+                  {% if is_granted("ROLE_ADMIN") %}
+                  <li class="sub-menu">
+                      <a href="{{ path_url ('admin_sfynx_auth_role_list') }}" >
+                          <i class="fa fa-users"></i>
+                          <span>Gérer les Rôles</span>
+                      </a>
+                  </li>
+                  <li class="sub-menu">
+                      <a href="{{ path_url ('admin_sfynx_auth_permission_list') }}" >
+                          <i class="fa fa-users"></i>
+                          <span>Gérer les Permissions</span>
+                      </a>
+                  </li>
+                  <li class="sub-menu">
+                      <a href="{{ path_url ('admin_sfynx_auth_group_list') }}" >
+                          <i class="fa fa-users"></i>
+                          <span>Gérer les Groups</span>
+                      </a>
+                  </li>
+                  <li class="sub-menu">
+                      <a href="{{ path_url ('users', { '_token': csrf_token('listuser') }) }}" >
+                          <i class="fa fa-users"></i>
+                          <span>Gérer les Administrateurs</span>
+                      </a>
+                  </li>
+                  {% endif %}
+                  <li class="sub-menu">
+                      <a href="{{ path_url ('admin_layout', { '_token': csrf_token('listlayout') }) }}" >
+                          <i class="fa fa-globe"></i>
+                          <span>Liste des Layouts</span>
+                      </a>
+                  </li>
+                  <li class="sub-menu">
+                      <a href="{{ path_url ('admin_langue', { '_token': csrf_token('listlangue') }) }}" >
+                          <i class="fa fa-globe"></i>
+                          <span>Liste des Langues</span>
+                      </a>
+                  </li>     
+                  
+                  <li class="sub-menu">
+                      <a href="{{ path_url ('admin_word', { '_token': csrf_token('listword') }) }}" >
+                          <i class="fa fa-globe"></i>
+                          <span>Liste des Traductions</span>
+                      </a>
+                  </li>                                
+                  <li>
+                      <a  href="{{ path_url ('fos_user_security_logout') }}">
+                          <i class="fa fa-power-off"></i>
+                          <span>Se déconnecter</span>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </aside>
+      
