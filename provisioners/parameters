@@ -4,8 +4,8 @@ $box_url = "https://vagrantcloud.com/ubuntu/boxes/trusty64/versions/14.04/provid
 $box_distrib = "ubuntu"
  
 # VM settings
-$vm_hostname = "rapp.nbi.vagrant"
-$vm_name = "NBI"
+$vm_hostname = "dev.sfynx.vagrant"
+$vm_name = "SFYNX"
 $vm_group = "/Vagrant"
  
 # VM configuration and capacities

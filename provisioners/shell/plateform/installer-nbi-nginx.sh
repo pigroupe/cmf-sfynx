@@ -20,8 +20,8 @@ cd $INSTALL_USERWWW
 
 # we create project
 if [ ! -d $PLATEFORM_PROJET_NAME ]; then
-    #git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
-    mkdir -p $PLATEFORM_PROJET_NAME
+    git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
+    #mkdir -p $PLATEFORM_PROJET_NAME
 fi
 cd $PLATEFORM_PROJET_NAME
 
@@ -29,8 +29,9 @@ cd $PLATEFORM_PROJET_NAME
 mkdir -p app/cache
 mkdir -p app/logs
 mkdir -p web/uploads/media
-rm app/config/parameters.yml
-cp app/config/parameters.dist app/config/parameters.yml
+if [ ! -f app/config/parameters.yml ]; then
+    cp app/config/parameters.dist app/config/parameters.yml
+fi
 
 # we add env var
 if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
@@ -443,10 +444,10 @@ server {
 
 }
 EOT
-mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
+sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
 # we create the symbilic link
-ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
+sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 # we add host in the /etc/hosts file
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then

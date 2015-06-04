@@ -5,6 +5,8 @@ PLATEFORM_INSTALL_TYPE=$3
 PLATEFORM_INSTALL_VERSION=$4
 PLATEFORM_PROJET_NAME=$5
 PLATEFORM_PROJET_GIT=$6
+DATABASE_NAME="symfony"
+DATABASE_NAME_TEST="symfony_test"
 source $DIR/provisioners/shell/env.sh
 
 # we create directories
@@ -37,24 +39,27 @@ if [ ! -d $PLATEFORM_PROJET_NAME ]; then
             rm -rf Symfony
         ;;
     esac
+else
+    cd $PLATEFORM_PROJET_NAME
 fi
 
 # we create default directories
 mkdir -p app/cache
 mkdir -p app/logs
 mkdir -p web/uploads/media
-rm app/config/parameters.yml
-cp app/config/parameters.yml.dist app/config/parameters.yml
+if [ ! -f app/config/parameters.yml ]; then
+    cp app/config/parameters.yml.dist app/config/parameters.yml
+fi
 
-if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 # we add env var
+if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
 # env vars for SFYNFONY platform
-export SYMFONY__DATABASE__NAME__ENV=sf_$PLATEFORM_PROJET_NAME_dev;
+export SYMFONY__DATABASE__NAME__ENV=$DATABASE_NAME;
 export SYMFONY__DATABASE__USER__ENV=root;
 export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=sf_$PLATEFORM_PROJET_NAME_test;
+export SYMFONY__TEST__DATABASE__NAME__ENV=$DATABASE_NAME_TEST;
 export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 EOT
@@ -147,10 +152,10 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
@@ -271,10 +276,10 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
@@ -395,10 +400,10 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
@@ -440,10 +445,10 @@ server {
 
 }
 EOT
-mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
+sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
 # we create the symbilic link
-ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
+sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 # we add host in the /etc/hosts file
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
@@ -459,6 +464,7 @@ sudo service nginx restart
 # we delete bin-dir config to have the default value egal to "vendor/bin"
 if [ -f "composer.json" ]; then
      sed -i '/bin-dir/d' composer.json
+     rm composer.lock
 fi
 
 # we install the composer file
@@ -469,11 +475,16 @@ php -d memory_limit=1024M composer.phar install --no-interaction
 php composer.phar dump-autoload --optimize
 
 # install doctrine bundles
-#composer require --dev  --update-with-dependencies  doctrine/doctrine-fixtures-bundle:dev-master
-#composer require --dev  --update-with-dependencies  doctrine/data-fixtures:1.0.*
-#composer require --dev  --update-with-dependencies  doctrine/doctrine-cache-bundle:1.0.*
-#composer require --dev  --update-with-dependencies  gedmo/doctrine-extensions:2.3.12
-#composer require --dev  --update-with-dependencies  stof/doctrine-extensions-bundle:1.1.*@dev
+composer require   --update-with-dependencies doctrine/doctrine-fixtures-bundle:dev-master
+composer require  --update-with-dependencies  doctrine/data-fixtures:1.0.*
+composer require  --update-with-dependencies  doctrine/doctrine-cache-bundle:1.0.*
+composer require  --update-with-dependencies  gedmo/doctrine-extensions:2.3.12
+composer require  --update-with-dependencies  stof/doctrine-extensions-bundle:1.1.*@dev
+sed -i '/DoctrineBundle(),/a \            new Stof\\DoctrineExtensionsBundle\\StofDoctrineExtensionsBundle(),' app/AppKernel.php
+sed -i '/DoctrineBundle(),/a \            new Doctrine\\Bundle\\FixturesBundle\\DoctrineFixturesBundle(),' app/AppKernel.php
+
+php app/console config:dump-reference DoctrineFixturesBundle
+php app/console config:dump-reference StofDoctrineExtensionsBundle
 
 # install jms bundle
 #composer require --dev  --update-with-dependencies  jms/security-extra-bundle:1.5.*
@@ -516,6 +527,20 @@ php composer.phar dump-autoload --optimize
 #composer require --dev  --update-with-dependencies  psecio/parse:dev-master
 #composer require --dev  --update-with-dependencies  mayflower/php-codebrowser:~1.1
 #composer update --with-dependencies
+
+#
+rm -rf app/cache/*
+rm -rf app/logs/*
+
+# Utiliser l'ACL sur un système qui supporte chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+
+# Utiliser l'ACL sur un système qui ne supporte pas chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 
 # create database
 php app/console doctrine:database:create

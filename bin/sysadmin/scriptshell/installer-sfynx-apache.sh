@@ -3,6 +3,8 @@
 $INSTALL_USERWWW="/var/www"
 PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
 PLATEFORM_PROJET_NAME="sfynxproject"
+DATABASE_NAME="symfony"
+DATABASE_NAME_TEST="symfony_test"
 
 if [ $# -eq 0 ]; then # s'il n'y a pas de paramètres
     read INSTALL_USERWWW # on saisis la valeur
@@ -33,18 +35,19 @@ mkdir -p app/logs
 mkdir -p app/cachesfynx/loginfailure
 mkdir -p web/uploads/media
 mkdir -p web/yui
-rm app/config/parameters.yml
-cp app/config/parameters.yml.dist app/config/parameters.yml
+if [ ! -f app/config/parameters.yml ]; then
+    cp app/config/parameters.yml.dist app/config/parameters.yml
+fi
 
 # we add env var
 if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
 # env vars for SFYNX platform
-export SYMFONY__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_dev;
+export SYMFONY__DATABASE__NAME__ENV=$DATABASE_NAME;
 export SYMFONY__DATABASE__USER__ENV=root;
 export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_test;
+export SYMFONY__TEST__DATABASE__NAME__ENV=$DATABASE_NAME_TEST;
 export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 EOT
@@ -150,10 +153,10 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 
 </VirtualHost>
 EOT
-mv /tmp/$PLATEFORM_PROJET_NAME /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME
+sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME
 
 # we create the symbilic link
-ln -s /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME /etc/apache2/sites-enabled/$PLATEFORM_PROJET_NAME
+sudo ln -s /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME /etc/apache2/sites-enabled/$PLATEFORM_PROJET_NAME
 
 # we add host in the /etc/hosts file
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
@@ -173,6 +176,20 @@ if [ ! -f composer.phar ]; then
 fi
 php -d memory_limit=1024M composer.phar install --no-interaction
 php composer.phar dump-autoload --optimize
+
+#
+rm -rf app/cache/*
+rm -rf app/logs/*
+
+# Utiliser l'ACL sur un système qui supporte chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+
+# Utiliser l'ACL sur un système qui ne supporte pas chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 
 # create database
 php app/console doctrine:database:create

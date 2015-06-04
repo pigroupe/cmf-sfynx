@@ -5,6 +5,7 @@ mkdir -p ~/.composer
 # http://www.frandieguez.com/blog/2014/10/easy-way-to-install-php-qa-tools/
 
 #Add lines to the beginning and the end of the huge file
+if ! grep -q "~/.composer/vendor/bin" ~/.profile; then
 sudo ed -s ~/.profile << 'EOF'
 0a
 #prepend these lines to the beginning
@@ -17,6 +18,7 @@ export PATH=$PATH:~/.composer/vendor/bin
 .
 w
 EOF
+fi
 
 #Reload bash's .profile without logging out and back in again
 . ~/.profile
