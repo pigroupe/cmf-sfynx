@@ -33,6 +33,7 @@ rm app/config/parameters.yml
 cp app/config/parameters.dist app/config/parameters.yml
 
 # we add env var
+if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
 # env vars for NBI platform
@@ -46,6 +47,7 @@ export SYMFONY__FACEBOOK__KEY__ENV=382989545116231;
 export SYMFONY__FACEBOOK__SECRET__ENV=7b3e0691e121dc1c0d16b2b8cc83cdc9;
 EOT
 source ~/.profile
+fi
 
 # we install the composer file
 if [ ! -f composer.phar ]; then
@@ -58,9 +60,9 @@ php composer.phar dump-autoload --optimize
 # we create the virtualhiost of sfynx for nginx
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
-upstream php5-fpm-sock {  
-    server unix:/var/run/php5-fpm.sock;  
-}
+#upstream php5-fpm-sock {  
+#    server unix:/var/run/php5-fpm.sock;  
+#}
 
 server {
     set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
@@ -465,3 +467,11 @@ php app/console propel:sql:insert --env test --force
 
 # we run the phing script to initialize the sfynx project
 bin/phing -f app/phing/initialize.xml rebuild
+
+#Import database
+sudo $DIR/provisioners/shell/plateform/importBDD.sh $DIR/DUMP/dbNbi-28-05-2015.sql
+sudo $DIR/provisioners/shell/plateform/importUpload.sh $DIR/DUMP/uploadsNbi-28-05-2015.tar.gz $DIR
+sudo $DIR/provisioners/shell/plateform/importJR.sh $DIR/DUMP/jrNbi-28-05-2015.tar.gz 
+
+#echo "***** Start service jackrabbit"
+#sudo service jackrabbit start

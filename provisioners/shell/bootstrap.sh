@@ -9,7 +9,6 @@ PLATEFORM_PROJET_GIT=$7
 PLATEFORME_USERNAME_GIT=$8
 
 #
-
 is_pc=$9
 is_lemp=${10}
 is_plateform=${11}
@@ -46,7 +45,6 @@ apt-get -y update > /dev/null
 apt-get -y dist-upgrade > /dev/null
 
 echo "***** Add vagrant to www-data group *****"
-mkdir -p ${INSTALL_USERWWW}/${PROJET_NAME}
 sudo usermod -aG www-data vagrant
 #chown -R ${INSTALL_USERNAME}:${INSTALL_USERGROUP} ${INSTALL_USERWWW}/${PROJET_NAME}
 
@@ -54,14 +52,15 @@ echo "***** Provisionning *****"
 $DIR/provisioners/shell/SWAP/installer-swap.sh $DIR # important to allow the composer to have enough memory
 $DIR/provisioners/shell/pc/installer-pc.sh $DIR $DISTRIB
 $DIR/provisioners/shell/lemp/installer-lemp.sh $DIR $PLATEFORM_PROJET_NAME
-$DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME $PLATEFORM_PROJET_GIT
-$DIR/provisioners/shell/QA/installer-phpqatools.sh $DIR
+#$DIR/provisioners/shell/QA/installer-phpqatools.sh $DIR
 $DIR/provisioners/shell/jackrabbit/installer-jackrabbit.sh $DIR
 if [ -f $DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh ];
 then
     #$DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh $DIR
     $DIR/provisioners/shell/solr/installer.sh $DIR
+    #echo "pas solr"
 fi
+$DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME $PLATEFORM_PROJET_GIT
 
 echo "***** End we clean-up the system *****"
 apt-get -y autoremove > /dev/null

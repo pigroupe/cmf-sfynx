@@ -7,11 +7,6 @@ PLATEFORM_PROJET_NAME=$5
 PLATEFORM_PROJET_GIT=$6
 source $DIR/provisioners/shell/env.sh
 
-#if var is empty
-if [ -z "$PLATEFORM_PROJET_GIT" ]; then
-    $PLATEFORM_PROJET_GIT="https://github.com/RappFrance/rapp_nosbelidees"
-fi
-
 # we create directories
 if [ ! -d $INSTALL_USERWWW ]; then
     mkdir -p $INSTALL_USERWWW
@@ -51,6 +46,7 @@ mkdir -p web/uploads/media
 rm app/config/parameters.yml
 cp app/config/parameters.yml.dist app/config/parameters.yml
 
+if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 # we add env var
 cat <<EOT >> ~/.profile
 
@@ -63,13 +59,14 @@ export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 EOT
 source ~/.profile
+fi
 
 # we create the virtualhiost of sfynx for nginx
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
-upstream php5-fpm-sock {  
-    server unix:/var/run/php5-fpm.sock;  
-}
+#upstream php5-fpm-sock {  
+#    server unix:/var/run/php5-fpm.sock;  
+#}
 
 server {
     set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
@@ -150,6 +147,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV symfony_dev;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV symfony_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -268,6 +271,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV symfony_dev;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV symfony_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -386,6 +395,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV symfony_dev;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV symfony_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files

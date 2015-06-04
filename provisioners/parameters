@@ -10,7 +10,7 @@ $vm_group = "/Vagrant"
  
 # VM configuration and capacities
 $vm_gui = false # Enable or not GUI
-$vm_mount_point = "/web/www/nosBelIdees"
+$vm_mount_point = "/web/www/cmf-sfynx"
 $vm_memory = "1024"
 $vm_cpus = "2"
 $vm_cpu_cap = "100"
@@ -27,7 +27,7 @@ $pf_https_localhost = 443
 #Plateform
 $plateform_install_name="sfynx-nginx"
 $plateform_install_type="composer"
-$plateform_install_version="2.3"
+$plateform_install_version=""
 $plateform_projet_git=""
 $plateform_username_git=""
 $plateform_projet_name="myproject"

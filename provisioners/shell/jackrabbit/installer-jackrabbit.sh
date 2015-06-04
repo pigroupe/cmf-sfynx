@@ -1,34 +1,40 @@
 #!/bin/bash
 DIR=$1
+DIRJACKRABBIT=/usr/local/jackrabbit/develop
+JACKRABBIT_JAR=jackrabbit-standalone-2.7.5.jar
+
+if [ ! -f $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script/$JACKRABBIT_JAR ]; then
+    cd $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script
+    wget https://archive.apache.org/dist/jackrabbit/2.7.5/jackrabbit-standalone-2.7.5.jar  > /dev/null
+fi
+
 
 # Get the code
-mkdir -p /opt/jackrabbit-startup
-cp -R $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script/* /opt/jackrabbit-startup
+mkdir -p $DIRJACKRABBIT
+cp -R $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script/* $DIRJACKRABBIT
 
 # Configure the script
 # edit jackrabbit.sh to configure some settings
 # Create JMX config files
-cp /opt/jackrabbit-startup/jmx.role.template /opt/jackrabbit-startup/jmx.role
-cp /opt/jackrabbit-startup/jmx.user.template /opt/jackrabbit-startup/jmx.user
+cp $DIRJACKRABBIT/jmx.role.template $DIRJACKRABBIT/jmx.role
+cp $DIRJACKRABBIT/jmx.user.template $DIRJACKRABBIT/jmx.user
 
-chmod 0600 /opt/jackrabbit-startup/jmx.role
-chmod 0600 /opt/jackrabbit-startup/jmx.user
+chmod 0600 $DIRJACKRABBIT/jmx.role
+chmod 0600 $DIRJACKRABBIT/jmx.user
 
 # Create an alias to the script
-ln -s /opt/jackrabbit-startup/jackrabbit.sh /etc/init.d/jackrabbit
-chmod 755 /etc/init.d/jackrabbit
+sudo rm  /etc/init.d/jackrabbit
+sudo ln -s $DIRJACKRABBIT/jackrabbit.sh /etc/init.d/jackrabbit
+sudo chmod 755 /etc/init.d/jackrabbit
 
-# create directory of the bdd of jackrabbit
-mkdir -p /opt/jackrabbit-startup/bdd
-mkdir -p /opt/jackrabbit-startup/log
 
-# on debian, register with
-update-rc.d jackrabbit defaults
+# register jackrabbit in the boot 
+sudo update-rc.d jackrabbit defaults 
+
 # if not using a system that provides update-rc.d, you hopefully know how
 # to proceed...
 
-#create port 8080
-sudo iptables -A INPUT -p tcp -m tcp --dport 8080 -j ACCEPT
+#create port 8081
+#sudo iptables -A INPUT -p tcp -m tcp --dport 8081 -j ACCEPT
 
-sudo /etc/init.d/jackrabbit stop
-sudo /etc/init.d/jackrabbit start 1> /dev/null & # 2> /opt/jackrabbit-startup/log/error.log &
+$DIR/provisioners/shell/phpcr-browser/installer-browser.sh $DIR
