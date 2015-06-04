@@ -51,10 +51,10 @@ if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
 # env vars for SFYNFONY platform
-export SYMFONY__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_dev;
+export SYMFONY__DATABASE__NAME__ENV=sf_$PLATEFORM_PROJET_NAME_dev;
 export SYMFONY__DATABASE__USER__ENV=root;
 export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_test;
+export SYMFONY__TEST__DATABASE__NAME__ENV=sf_$PLATEFORM_PROJET_NAME_test;
 export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 EOT
@@ -147,10 +147,10 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV symfony_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_dev;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV symfony_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_test;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
@@ -271,10 +271,10 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV symfony_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_dev;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV symfony_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_test;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
@@ -395,10 +395,10 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV symfony_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_dev;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV symfony_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sf_$PLATEFORM_PROJET_NAME_test;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
