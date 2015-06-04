@@ -23,19 +23,21 @@
 
 ### PLEASE EDIT THESE VALUES FOR YOUR SETUP
 # Directory in which jackrabbit will store local data, must be writeable
-BASEDIR=/opt/jackrabbit-startup/bdd
+BASEDIR=/usr/local/jackrabbit/develop
+
 # Full filename of jackrabbit standalone .jar to run
-JACKRABBIT_JAR=$BASEDIR/jackrabbit-standalone-2.3.1-jackalope-SNAPSHOT.jar
+JACKRABBIT_JAR=$BASEDIR/jackrabbit-standalone-2.7.5.jar
+
 # IP address for jackrabbit to listen on. you can make jackrabbit listen on all
 # interfaces by using 0.0.0.0 here.
-JACKRABBIT_HOST=0.0.0.0
+JACKRABBIT_HOST=127.0.0.1
 # Port number to listen on. 8081 is default, you can use something else
-JACKRABBIT_PORT=8080
+JACKRABBIT_PORT=8081
 # JMX-Port for monitoring
 JMX_PORT=1111
 # Directory of the JMX configuration files (jmx.user & jmx.role). It defaults to
 # the script directory
-JMX_DIR=$PWD
+JMX_DIR=$BASEDIR
 # Java memory allocation
 MEMORY="-XX:MaxPermSize=128m \
         -Xmx512M \
@@ -63,7 +65,7 @@ do_start() {
         nohup java $MEMORY $MANAGEMENT -jar $JACKRABBIT_JAR -h $JACKRABBIT_HOST -p $JACKRABBIT_PORT >> $LOGFILE 2>&1 & echo $! > $PIDFILE
         # Wait until the server is ready (from an idea of Christoph Luehr)
         while [ -z "`curl -s "http://$JACKRABBIT_HOST:$JACKRABBIT_PORT"`" ] ; do sleep 1s; echo -n "."; done
-        echo "Jackrabbit started"
+        echo "Jackrabbit started on $JACKRABBIT_HOST:$JACKRABBIT_PORT"
     else
         echo "Jackrabbit is already running"
     fi

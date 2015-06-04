@@ -63,8 +63,9 @@ fi
 $DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME $PLATEFORM_PROJET_GIT
 
 echo "***** End we clean-up the system *****"
-apt-get -y autoremove > /dev/null
-apt-get -y clean > /dev/null
-apt-get -y autoclean > /dev/null
+sudo apt-get -y autoremove > /dev/null
+sudo apt-get -y clean > /dev/null
+sudo apt-get -y autoclean > /dev/null
 
 echo "Finished provisioning."
+

@@ -2,6 +2,7 @@
 tmp/*
 
 # documentation
+doc/*
 documentation/uml/xmi/*
 documentation/uml/php/*
 documentation/uml/html/*
@@ -39,7 +40,7 @@ app/config/parameters.yml
 app/phpunit.xml
 
 # Composer
-security-checker
+security-checker.phar
 composer.phar
 phpmetrics.phar
 

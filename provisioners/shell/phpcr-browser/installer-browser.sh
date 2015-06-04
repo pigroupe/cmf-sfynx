@@ -1,5 +1,8 @@
 #!/bin/bash
+<<<<<<< HEAD
 PLATEFORM_PROJET_NAME=phpcr-browser
+=======
+>>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378
 
 #Web interface for browsing PHPCR repositories, using Silex and AngularJS 
 #https://github.com/marmelab/phpcr-browser
@@ -12,11 +15,16 @@ mkdir -p $DIR/phpcr-browser
 
 cd /tmp
 echo "***** Clone the repository "
+<<<<<<< HEAD
 sudo git clone https://github.com/marmelab/phpcr-browser
+=======
+git clone git@github.com:marmelab/phpcr-browser.git
+>>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378
 cd phpcr-browser
 cp -r * $DIR/phpcr-browser
 
 cd $DIR/phpcr-browser
+<<<<<<< HEAD
 
 # we install the composer file
 if [ ! -f composer.phar ]; then
@@ -130,3 +138,8 @@ fi
 
 # we restart nginx server
 sudo service nginx restart
+=======
+echo "***** Install dependencies and configure the browser"
+sudo make install
+
+>>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378

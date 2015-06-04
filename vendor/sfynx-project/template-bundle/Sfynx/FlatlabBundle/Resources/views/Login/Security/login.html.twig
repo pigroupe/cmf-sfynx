@@ -1,0 +1,46 @@
+{% extends  getParameter('sfynx.auth.theme.login') ~ "Layout\\layout.html.twig" %}
+
+{% block content %}
+   <body class="login-body">
+       <div class="container">
+         <form class="form-signin" method="post" action="{{ path("fos_user_security_check") }}" id="behatFormLogin">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+           <h2 class="form-signin-heading">Espace administrateur</h2>
+           <div class="login-wrap">
+
+               {% if error %}
+               <div class="alert alert-block alert-danger fade in">
+                   <button data-dismiss="alert" class="close close-sm" type="button">
+                       <i class="fa fa-times"></i>
+                   </button>
+                       {# error #} Identifiant incorrect !
+               </div>
+               {% endif %}
+
+               <input type="text" class="form-control"  value="{{ last_username }}" name="_username" placeholder="{{ 'security.login.username'|trans([], 'FOSUserBundle') }}" autofocus>
+
+               <input type="password" class="form-control" name="_password" placeholder="{{ 'security.login.password'|trans([], 'FOSUserBundle') }}">
+               <div>
+                  <label for="remember_me">{{ 'security.login.remember_me'|trans([], 'FOSUserBundle') }}</label>
+                  <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                  <input type="hidden" name="roles" value='{"0":"ROLE_EDITOR","1":"ROLE_ADMIN","2":"ROLE_SUPER_ADMIN"}' />
+               </div>
+               <br>
+               <label class="checkbox">
+                   <span class="pull-right">
+                       <a data-toggle="modal" href="{{ path('fos_user_resetting_request') }}">{{ 'resetting.request.submit'|trans([], 'FOSUserBundle') }}</a>
+                   </span>
+               </label>
+               <br>
+               <button class="btn btn-lg btn-login btn-block" id="_submit" type="submit" name="_submit">Se connecter</button>
+           </div>
+         </form>
+       </div>
+    </body>
+
+    {#
+        <a href="{{ path('fos_user_resetting_request') }}" class="reset-pwd" title="">{{ 'resetting.request.submit'|trans([], 'FOSUserBundle') }}</a>
+	    <a href="{{ path('fos_user_registration_register') }}" class="user-register" title="">{{ 'layout.register'|trans([], 'FOSUserBundle') }}</a>
+    #}
+	
+{% endblock content %}

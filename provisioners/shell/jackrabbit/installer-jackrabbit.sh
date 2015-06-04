@@ -37,4 +37,8 @@ sudo update-rc.d jackrabbit defaults
 #create port 8081
 #sudo iptables -A INPUT -p tcp -m tcp --dport 8081 -j ACCEPT
 
+<<<<<<< HEAD
 $DIR/provisioners/shell/phpcr-browser/installer-browser.sh $DIR
+=======
+#$DIR/provisioners/shell/phpcr-browser/installer-browser.sh $DIR
+>>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378
