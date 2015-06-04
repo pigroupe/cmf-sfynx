@@ -41,7 +41,6 @@ app/phpunit.xml
 # Composer
 security-checker
 composer.phar
-composer.lock
 phpmetrics.phar
 
 # OTHER
