@@ -1,13 +1,11 @@
 #!/bin/bash
-<<<<<<< HEAD
 PLATEFORM_PROJET_NAME=phpcr-browser
-=======
->>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378
 
 #Web interface for browsing PHPCR repositories, using Silex and AngularJS 
 #https://github.com/marmelab/phpcr-browser
 
 DIR=$1
+INSTALL_USERWWW=$2
 
 echo "*****Install Web interface for browsing PHPCR repositories, using Silex and AngularJS"
 
@@ -15,29 +13,19 @@ mkdir -p $DIR/phpcr-browser
 
 cd /tmp
 echo "***** Clone the repository "
-<<<<<<< HEAD
 sudo git clone https://github.com/marmelab/phpcr-browser
-=======
-git clone git@github.com:marmelab/phpcr-browser.git
->>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378
 cd phpcr-browser
 cp -r * $DIR/phpcr-browser
 
 cd $DIR/phpcr-browser
-<<<<<<< HEAD
 
 # we install the composer file
 if [ ! -f composer.phar ]; then
     wget https://getcomposer.org/composer.phar -O ./composer.phar
     # curl -s https://getcomposer.org/installer | php
 fi
-
 echo "***** Install dependencies and configure the browser"
 php -d memory_limit=1024M composer.phar install --no-interaction
-
-
-
-
 
 # we create the virtualhiost of sfynx for nginx
 mkdir -p /tmp
@@ -64,14 +52,10 @@ server {
     # charset
     charset utf-8;
 
-    
-
     # Logging
     access_log off; 
     log_not_found off; 
     #error_log  /var/log/nginx/sfynx-error.log;
-
-   
 
     # Adjust output buffers
     fastcgi_buffers 256 16k; 
@@ -118,10 +102,6 @@ server {
         deny all; 
     }
 
-
-   
-
-
 }
 
 EOT
@@ -131,15 +111,10 @@ sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET
 sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 # we add host in the /etc/hosts file
-if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
+if ! grep -q "www.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
     echo "Adding hostname to your /etc/hosts"
     echo "127.0.0.1    www.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
 fi
 
 # we restart nginx server
 sudo service nginx restart
-=======
-echo "***** Install dependencies and configure the browser"
-sudo make install
-
->>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378

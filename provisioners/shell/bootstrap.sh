@@ -7,6 +7,7 @@ PLATEFORM_INSTALL_VERSION=$5
 PLATEFORM_PROJET_NAME=$6
 PLATEFORM_PROJET_GIT=$7
 PLATEFORME_USERNAME_GIT=$8
+INSTALL_USERWWW=$9
 
 #
 is_pc=$9
@@ -53,14 +54,14 @@ $DIR/provisioners/shell/SWAP/installer-swap.sh $DIR # important to allow the com
 $DIR/provisioners/shell/pc/installer-pc.sh $DIR $DISTRIB
 $DIR/provisioners/shell/lemp/installer-lemp.sh $DIR $PLATEFORM_PROJET_NAME
 #$DIR/provisioners/shell/QA/installer-phpqatools.sh $DIR
-$DIR/provisioners/shell/jackrabbit/installer-jackrabbit.sh $DIR
+$DIR/provisioners/shell/jackrabbit/installer-jackrabbit.sh $DIR $INSTALL_USERWWW
 if [ -f $DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh ];
 then
     #$DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh $DIR
     $DIR/provisioners/shell/solr/installer.sh $DIR
     #echo "pas solr"
 fi
-$DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME $PLATEFORM_PROJET_GIT
+$DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh $DIR $PLATEFORM_INSTALL_NAME $PLATEFORM_INSTALL_TYPE $PLATEFORM_INSTALL_VERSION $PLATEFORM_PROJET_NAME $PLATEFORM_PROJET_GIT $INSTALL_USERWWW
 
 echo "***** End we clean-up the system *****"
 sudo apt-get -y autoremove > /dev/null

@@ -6,5 +6,3 @@ export INSTALL_USERNAME="vagrant"
 export INSTALL_USERGROUP="www-data"
 
 export INSTALL_USERHOME="/home/vagrant"
-
-export INSTALL_USERWWW="/var/www"
