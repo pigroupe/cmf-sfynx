@@ -7,4 +7,4 @@ export INSTALL_USERGROUP="www-data"
 
 export INSTALL_USERHOME="/home/vagrant"
 
-export INSTALL_USERWWW="/web/www"
+export INSTALL_USERWWW="/var/www"

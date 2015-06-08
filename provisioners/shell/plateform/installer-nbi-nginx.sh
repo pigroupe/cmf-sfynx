@@ -18,22 +18,28 @@ if [ ! -d $INSTALL_USERWWW ]; then
 fi
 cd $INSTALL_USERWWW
 
-# we create project
+echo "**** we create directories ****"
 if [ ! -d $PLATEFORM_PROJET_NAME ]; then
     git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
     #mkdir -p $PLATEFORM_PROJET_NAME
 fi
 cd $PLATEFORM_PROJET_NAME
 
-# we create default directories
-mkdir -p app/cache
-mkdir -p app/logs
-mkdir -p web/uploads/media
+echo "**** we create default directories ****"
+if [ ! -d app/cachesfynx ]; then
+    mkdir -p app/cache
+    mkdir -p app/logs
+    mkdir -p web/uploads/media
+fi
 if [ ! -f app/config/parameters.yml ]; then
     cp app/config/parameters.dist app/config/parameters.yml
+    sed -i 's/%%/%/g' app/config/parameters.yml
+fi
+if [ ! -f app/phpunit.xml ]; then
+    cp app/phpunit.xml.dist app/phpunit.xml
 fi
 
-# we add env var
+echo "**** we add env variables ****"
 if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
@@ -51,15 +57,7 @@ EOT
 source ~/.profile
 fi
 
-# we install the composer file
-if [ ! -f composer.phar ]; then
-    wget https://getcomposer.org/composer.phar -O ./composer.phar
-    # curl -s https://getcomposer.org/installer | php
-fi
-php -d memory_limit=1024M composer.phar install --no-interaction
-php composer.phar dump-autoload --optimize
-
-# we create the virtualhiost of sfynx for nginx
+echo "**** we create the virtualhost ****"
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 #upstream php5-fpm-sock {  
@@ -446,10 +444,10 @@ server {
 EOT
 sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
-# we create the symbilic link
+echo "**** we create the symbilic link ****"
 sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
-# we add host in the /etc/hosts file
+echo "**** we add host in the /etc/hosts file ****"
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
     echo "Adding QA hostname to your /etc/hosts"
     echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
@@ -457,17 +455,28 @@ if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
     echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
 fi
 
-# we restart nginx server
+echo "**** we restart nginx server ****"
 sudo service nginx restart
 
-# create database
+echo "**** we install/update the composer file ****"
+if [ ! -f composer.phar ]; then
+    wget https://getcomposer.org/composer.phar -O ./composer.phar
+else
+    php composer.phar self-update
+fi
+echo "**** we lauch the composer ****"
+php -d memory_limit=1024M composer.phar install --no-interaction
+echo "**** Generating optimized autoload files ****"
+php composer.phar dump-autoload --optimize
+
+echo "**** we create database ****"
 php app/console propel:build
 php app/console propel:database:create
 php app/console propel:sql:insert --force
 php app/console propel:database:create --env test
 php app/console propel:sql:insert --env test --force
 
-# we run the phing script to initialize the sfynx project
+echo "**** we run the phing script to initialize the project ****"
 bin/phing -f app/phing/initialize.xml rebuild
 
 sudo $DIR/provisioners/shell/plateform/importBDD.sh $DIR/DUMP/dbNbi-28-05-2015.sql

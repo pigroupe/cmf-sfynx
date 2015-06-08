@@ -1,13 +1,14 @@
-#!/bin/bash
-DIR=$1
-PLATEFORM_INSTALL_NAME=$2
-PLATEFORM_INSTALL_TYPE=$3
-PLATEFORM_INSTALL_VERSION=$4
-PLATEFORM_PROJET_NAME=$5
-PLATEFORM_PROJET_GIT=$6
+#!/bin/sh
+
+DIR=$(pwd)
+chmod -R +x $DIR
+
+INSTALL_USERWWW="/var/www/framework/fm-symfony"
+PLATEFORM_INSTALL_TYPE="composer"
+PLATEFORM_VERSION="2.4.0"
+PLATEFORM_PROJET_NAME="sfproject24"
 DATABASE_NAME="symfony"
 DATABASE_NAME_TEST="symfony_test"
-source $DIR/provisioners/shell/env.sh
 
 echo "**** we create directories ****"
 if [ ! -d $INSTALL_USERWWW ]; then
@@ -15,10 +16,10 @@ if [ ! -d $INSTALL_USERWWW ]; then
 fi
 cd $INSTALL_USERWWW
 
-# we create project
+echo "**** we download artifact project ****"
 if [ ! -d $PLATEFORM_PROJET_NAME ]; then
     case $PLATEFORM_INSTALL_TYPE in
-        'composer' )
+        'composer' ) 
             curl -s https://getcomposer.org/installer | php
             php composer.phar create-project symfony/framework-standard-edition $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
             cd $PLATEFORM_PROJET_NAME
@@ -30,12 +31,12 @@ if [ ! -d $PLATEFORM_PROJET_NAME ]; then
             cd $PLATEFORM_PROJET_NAME
         ;;
         'tar' )
-            mkdir  $PLATEFORM_PROJET_NAME
+            mkdir -p $PLATEFORM_PROJET_NAME
             cd $PLATEFORM_PROJET_NAME
             wget http://symfony.com/download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
             tar -zxvf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
             mv Symfony/* ./
-            rm -rf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
+            #rm -rf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
             rm -rf Symfony
         ;;
     esac
@@ -43,15 +44,16 @@ else
     cd $PLATEFORM_PROJET_NAME
 fi
 
+#echo $(pwd)
+
 echo "**** we create default directories ****"
-if [ ! -d app/cachesfynx ]; then
+if [ ! -d app/cache ]; then
     mkdir -p app/cache
     mkdir -p app/logs
     mkdir -p web/uploads/media
 fi
 if [ ! -f app/config/parameters.yml ]; then
     cp app/config/parameters.yml.dist app/config/parameters.yml
-    sed -i 's/%%/%/g' app/config/parameters.yml
 fi
 if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
@@ -75,6 +77,16 @@ export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 EOT
 source ~/.profile
+fi
+
+echo "**** On déclare le socket Unix de PHP-FPM pour que Nginx puisse passer les requêtes PHP via fast_cgi ****"
+if [ ! -f /etc/nginx/conf.d/php5-fpm.conf ];
+then
+sh -c "cat > /etc/nginx/conf.d/php5-fpm.conf" <<EOT
+upstream php5-fpm-sock {  
+    server unix:/var/run/php5-fpm.sock;  
+}
+EOT
 fi
 
 echo "**** we create the virtualhost ****"
@@ -485,7 +497,6 @@ if [ ! -f composer.phar ]; then
 else
     php composer.phar self-update
 fi
-
 echo "**** we lauch the composer ****"
 php -d memory_limit=1024M composer.phar install --no-interaction
 echo "**** Generating optimized autoload files ****"
@@ -495,10 +506,10 @@ echo "**** we create database ****"
 php app/console doctrine:database:create
 
 echo "**** we install bundles and their dependancies ****"
-#$DIR/provisioners/shell/plateform/doctrine/doctrine-extension.sh $DIR $PLATEFORM_INSTALL_VERSION
-$DIR/provisioners/shell/plateform/fosuser/fosuser.sh $DIR $PLATEFORM_INSTALL_VERSION
-#$DIR/provisioners/shell/plateform/jms/jms.sh $DIR $PLATEFORM_INSTALL_VERSION
-#$DIR/provisioners/shell/plateform/qa/qa.sh $DIR $PLATEFORM_INSTALL_VERSION
+#$DIR/doctrine/doctrine-extension.sh $DIR $PLATEFORM_VERSION
+$DIR/fosuser/fosuser.sh $DIR $PLATEFORM_VERSION
+#$DIR/jms/jms.sh $DIR $PLATEFORM_VERSION
+#$DIR/qa/qa.sh $DIR $PLATEFORM_VERSION
 
 echo "**** we remove cache files ****"
 rm -rf app/cache/*

@@ -10,7 +10,7 @@ $vm_group = "/Vagrant"
  
 # VM configuration and capacities
 $vm_gui = false # Enable or not GUI
-$vm_mount_point = "/web/www/cmf-sfynx"
+$vm_mount_point = "/var/www/cmf-sfynx"
 $vm_memory = "1024"
 $vm_cpus = "2"
 $vm_cpu_cap = "100"
