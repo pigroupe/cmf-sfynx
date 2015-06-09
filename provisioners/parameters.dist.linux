@@ -1,0 +1,34 @@
+# Use CentOS 7 (64-bit) box
+$box_name = "ubuntu/trusty64"
+$box_url = "https://vagrantcloud.com/ubuntu/boxes/trusty64/versions/14.04/providers/virtualbox.box"
+$box_distrib = "ubuntu"
+ 
+# VM settings
+$vm_hostname = "dev.sfynx.vagrant"
+$vm_name = "SFYNX"
+$vm_group = "/Vagrant"
+ 
+# VM configuration and capacities
+$vm_gui = false # Enable or not GUI
+$vm_www_point = "/var/www"
+$vm_dir_project = "/var/www/cmf-sfynx"
+$vm_memory = "1024"
+$vm_cpus = "2"
+$vm_cpu_cap = "100"
+$vm_ip = "33.33.33.101"
+ 
+# Port forwarding
+$pf_mysql = 3306
+$pf_mysql_localhost = 3306
+$pf_http = 80
+$pf_http_localhost = 8080
+$pf_https = 443
+$pf_https_localhost = 443
+
+#Plateform
+$plateform_install_name="sfynx-nginx"
+$plateform_install_type="composer"
+$plateform_install_version=""
+$plateform_projet_git=""
+$plateform_username_git=""
+$plateform_projet_name="myproject"

@@ -17,10 +17,11 @@ fi
 cd $INSTALL_USERWWW
 
 # we create project
-if [ ! -d $PLATEFORM_PROJET_NAME ]; then
+if [ ! -f $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/composer.json ]; then
     case $PLATEFORM_INSTALL_TYPE in
         'composer' )
             curl -s https://getcomposer.org/installer | php
+            wget https://getcomposer.org/composer.phar -O ./composer.phar
             php composer.phar create-project symfony/framework-standard-edition $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
             cd $PLATEFORM_PROJET_NAME
         ;;
@@ -116,7 +117,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -240,7 +241,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -364,7 +365,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 

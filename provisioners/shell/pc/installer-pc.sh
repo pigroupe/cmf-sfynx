@@ -80,10 +80,9 @@ echo "Install Make"
 sudo apt-get -y install make > /dev/null
 
 echo "Install Curl and Nodejs"
-<<<<<<< HEAD
-sudo add-apt-repository -y ppa:chris-lea/node.js
-=======
 add-apt-repository -y ppa:chris-lea/node.js
->>>>>>> 121cf677661b06cbe38d79c9f1ba3be264433378
 sudo apt-get -y update > /dev/null
 sudo apt-get -y install curl nodejs > /dev/null
+
+echo "Install bower"
+sudo npm install -g bower

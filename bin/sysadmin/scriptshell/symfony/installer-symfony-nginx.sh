@@ -54,6 +54,7 @@ if [ ! -d app/cache ]; then
 fi
 if [ ! -f app/config/parameters.yml ]; then
     cp app/config/parameters.yml.dist app/config/parameters.yml
+    sed -i 's/%%/%/g' app/config/parameters.yml
 fi
 if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
@@ -125,9 +126,9 @@ server {
     gzip_http_version 1.1; 
 
     # Logging
-    access_log off; 
+    access_log on; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -249,9 +250,9 @@ server {
     gzip_http_version 1.1; 
 
     # Logging
-    access_log off; 
+    access_log on; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -375,7 +376,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
