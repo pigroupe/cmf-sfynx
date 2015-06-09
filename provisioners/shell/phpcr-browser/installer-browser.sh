@@ -103,7 +103,9 @@ fi
 #composer update jackalope/jackalope-doctrine-dbal
 
 echo "***** Install project"
-make install
+#make install
+php composer.phar install --no-interaction
+bower install --config.interactive=false
 
 # we restart nginx server
 sudo service nginx restart
