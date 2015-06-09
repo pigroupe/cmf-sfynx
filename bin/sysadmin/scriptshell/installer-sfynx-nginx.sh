@@ -1,32 +1,33 @@
 #!/bin/sh
 
-HOME_HTTP="/var/www"
+$INSTALL_USERWWW="/var/www"
+PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
+PLATEFORM_PROJET_NAME="sfynxproject"
+DATABASE_NAME="symfony"
+DATABASE_NAME_TEST="symfony_test"
 
 if [ $# -eq 0 ]; then # s'il n'y a pas de paramètres
-    read HOME_HTTP # on saisis la valeur
+    read INSTALL_USERWWW # on saisis la valeur
 else
-    HOME_HTTP=$1
+    INSTALL_USERWWW=$1
 fi
 
-#
-if [ ! -d $HOME_HTTP ]; then
-    mkdir -p $HOME_HTTP
+#if var is empty
+if [ -z "$PLATEFORM_PROJET_GIT" ]; then
+    PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
 fi
 
-cd $HOME_HTTP
-
-if [ ! -d "cmf-sfynx" ]; then
- git clone https://github.com/pigroupe/cmf-sfynx.git cmf-sfynx
+# we create directories
+if [ ! -d $INSTALL_USERWWW ]; then
+    mkdir -p $INSTALL_USERWWW
 fi
+cd $INSTALL_USERWWW
 
-cd cmf-sfynx
-
-# we install the composer file
-if [ ! -f composer.phar ]; then
-    wget https://getcomposer.org/composer.phar -O ./composer.phar
-    php -d memory_limit=1024M composer.phar install --no-interaction
-    php composer.phar dump-autoload --optimize
+# we create project
+if [ ! -d $PLATEFORM_PROJET_NAME ]; then
+    git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
 fi
+cd $PLATEFORM_PROJET_NAME
 
 # we create default directories
 mkdir -p app/cache
@@ -34,46 +35,50 @@ mkdir -p app/logs
 mkdir -p app/cachesfynx/loginfailure
 mkdir -p web/uploads/media
 mkdir -p web/yui
+if [ ! -f app/config/parameters.yml ]; then
+    cp app/config/parameters.yml.dist app/config/parameters.yml
+fi
 
-# permission
-chown -R root:www-data app/cache
-chown -R root:www-data app/cachesfynx
-chown -R root:www-data app/logs
-chown -R root:www-data app/config/parameters.yml
-chown -R root:www-data web/uploads
-chown -R root:www-data web/yui
+# we add env var
+if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
+cat <<EOT >> ~/.profile
 
-sudo chmod -R 775 app/config/parameters.yml
-sudo chmod -R 775 app/cachesfynx
-sudo chmod -R 775 app/cache
-sudo chmod -R 775 app/logs
-sudo chmod -R 775 web/uploads
-sudo chmod -R 775 web/yui
+# env vars for SFYNX platform
+export SYMFONY__DATABASE__NAME__ENV=$DATABASE_NAME;
+export SYMFONY__DATABASE__USER__ENV=root;
+export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
+export SYMFONY__TEST__DATABASE__NAME__ENV=$DATABASE_NAME_TEST;
+export SYMFONY__TEST__DATABASE__USER__ENV=root;
+export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
+EOT
+source ~/.profile
+fi
 
-# we run the phing script to initialize the sfynx project
-vendor/bin/phing -f config/phing/initialize.xml rebuild
-
-sudo chmod -R 775 app/config/parameters.yml
-sudo chmod -R 775 app/cachesfynx
-sudo chmod -R 775 app/cache
-sudo chmod -R 775 app/logs
-sudo chmod -R 775 web/uploads
-sudo chmod -R 775 web/yui
-
-# we create the virtualhiost of sfynx for nginx
-cat <<EOT >/tmp/sfynx
+# On déclarer le socket Unix de PHP-FPM pour que Nginx puisse passer les requêtes PHP via fast_cgi
+if [ ! -f /etc/nginx/conf.d/php5-fpm.conf ];
+then
+sh -c "cat > /etc/nginx/conf.d/php5-fpm.conf" <<EOT
 upstream php5-fpm-sock {  
     server unix:/var/run/php5-fpm.sock;  
 }
+EOT
+fi
+
+# we create the virtualhiost of sfynx for nginx
+mkdir -p /tmp
+cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
+#upstream php5-fpm-sock {  
+#    server unix:/var/run/php5-fpm.sock;  
+#}
 
 server {
-    set \$website_root "$HOME_HTTP/cmf-sfynx/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app_dev.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name dev.sfynx.local;
+    server_name dev.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -97,7 +102,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -144,7 +149,13 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=$HOME_HTTP/xhprof/external/header.php \n auto_append_file=$HOME_HTTP/xhprof/external/footer.php";
+        # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -185,13 +196,13 @@ server {
 }
 
 server {
-    set \$website_root "$HOME_HTTP/cmf-sfynx/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app_test.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name test.sfynx.local;
+    server_name test.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -215,7 +226,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -262,7 +273,13 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=$HOME_HTTP/xhprof/external/header.php \n auto_append_file=$HOME_HTTP/xhprof/external/footer.php";
+        # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -303,13 +320,13 @@ server {
 }
 
 server {
-    set \$website_root "$HOME_HTTP/cmf-sfynx/web";
+    set \$website_root "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web";
     set \$default_env  "app.php";
 
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name prod.sfynx.local;
+    server_name prod.$PLATEFORM_PROJET_NAME.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -333,7 +350,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/sfynx-error.log;
+    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -380,7 +397,13 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=$HOME_HTTP/xhprof/external/header.php \n auto_append_file=$HOME_HTTP/xhprof/external/footer.php";
+        # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -420,22 +443,51 @@ server {
 
 }
 EOT
-sudo mv /tmp/sfynx /etc/nginx/sites-available/sfynx
+sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
 # we create the symbilic link
-sudo ln -s /etc/nginx/sites-available/sfynx /etc/nginx/sites-enabled/sfynx
+sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 # we add host in the /etc/hosts file
-if ! grep -q "dev.sfynx.local" /etc/hosts; then
-    echo "Adding QA hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.sfynx.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    test.sfynx.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    prod.sfynx.local" | sudo tee --append /etc/hosts
+if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
+    echo "Adding hostname to your /etc/hosts"
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
 fi
-
-#
-sudo chown -R www-data:www-data $HOME_HTTP/cmf-sfynx
 
 # we restart nginx server
 sudo service nginx restart
 
+# we install the composer file
+if [ ! -f composer.phar ]; then
+    wget https://getcomposer.org/composer.phar -O ./composer.phar
+    # curl -s https://getcomposer.org/installer | php
+fi
+php -d memory_limit=1024M composer.phar install --no-interaction
+php composer.phar dump-autoload --optimize
+
+#
+rm -rf app/cache/*
+rm -rf app/logs/*
+
+# Utiliser l'ACL sur un système qui supporte chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+
+# Utiliser l'ACL sur un système qui ne supporte pas chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+
+# create database
+php app/console doctrine:database:create
+php app/console doctrine:schema:create
+php app/console doctrine:fixtures:load
+php app/console assets:install
+php app/console assetic:dump
+php app/console clear:cache
+
+# we run the phing script to initialize the sfynx project
+vendor/bin/phing -f app/phing/initialize.xml rebuild

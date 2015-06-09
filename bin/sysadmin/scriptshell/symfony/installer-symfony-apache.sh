@@ -1,19 +1,13 @@
-#!/bin/bash
-DIR=$1
-PLATEFORM_INSTALL_NAME=$2
-PLATEFORM_INSTALL_TYPE=$3
-PLATEFORM_INSTALL_VERSION=$4
-PLATEFORM_PROJET_NAME=$5
-PLATEFORM_PROJET_GIT=$6
-INSTALL_USERWWW=$7
-source $DIR/provisioners/shell/env.sh
+#!/bin/sh
 
-#if var is empty
-if [ -z "$PLATEFORM_PROJET_GIT" ]; then
-    $PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
-fi
+DIR=`dirname $0`
 
-echo "**** we create directories ****"
+INSTALL_USERWWW="/var/www/framework/fm-symfony"
+PLATEFORM_INSTALL_TYPE="composer"
+PLATEFORM_VERSION="2.3.0"
+PLATEFORM_PROJET_NAME="sfproject23"
+
+# we create directories
 if [ ! -d $INSTALL_USERWWW ]; then
     mkdir -p $INSTALL_USERWWW
 fi
@@ -21,18 +15,37 @@ cd $INSTALL_USERWWW
 
 # we create project
 if [ ! -d $PLATEFORM_PROJET_NAME ]; then
-    #git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
-    mkdir -p $PLATEFORM_PROJET_NAME
+    case $PLATEFORM_INSTALL_TYPE in
+        'composer' ) 
+            curl -s https://getcomposer.org/installer | php
+            php composer.phar create-project symfony/framework-standard-edition $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
+            cd $PLATEFORM_PROJET_NAME
+        ;;
+        'stack' )
+            curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
+            chmod a+x /usr/local/bin/symfony
+            symfony new $PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
+            cd $PLATEFORM_PROJET_NAME
+        ;;
+        'tar' )
+            mkdir -p $PLATEFORM_PROJET_NAME
+            cd $PLATEFORM_PROJET_NAME
+            wget http://symfony.com/download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
+            tar -zxvf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
+            mv Symfony/* ./
+            rm -rf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
+            rm -rf Symfony
+        ;;
+    esac
+else
+    cd $PLATEFORM_PROJET_NAME
 fi
-cd $PLATEFORM_PROJET_NAME
 
 echo "**** we create default directories ****"
-if [ ! -d app/cachesfynx ]; then
+if [ ! -d app/cache ]; then
     mkdir -p app/cache
     mkdir -p app/logs
-    mkdir -p app/cachesfynx/loginfailure
     mkdir -p web/uploads/media
-    mkdir -p web/yui
 fi
 if [ ! -f app/config/parameters.yml ]; then
     cp app/config/parameters.yml.dist app/config/parameters.yml
@@ -42,22 +55,27 @@ if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
 fi
 
+echo "****  we add in .gitignore file default values from symfony project ****"
+if ! grep -q "Symfony3" .gitignore; then
+    curl -L -s https://www.gitignore.io/api/symfony >> .gitignore
+fi
+
 echo "**** we add env variables ****"
 if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
-# env vars for SFYNX platform
-export SYMFONY__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_dev;
+# env vars for SFYNFONY platform
+export SYMFONY__DATABASE__NAME__ENV=sf_$PLATEFORM_PROJET_NAME_dev;
 export SYMFONY__DATABASE__USER__ENV=root;
 export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_test;
+export SYMFONY__TEST__DATABASE__NAME__ENV=sf_$PLATEFORM_PROJET_NAME_test;
 export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 EOT
 source ~/.profile
 fi
 
-# we create the virtualhiost of sfynx for apache
+# we create the virtualhiost of sfynx for nginx
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 <VirtualHost *:80>
@@ -158,12 +176,12 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 EOT
 sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME
 
-# we create the symbilic link
+echo "**** we create the symbilic link ****"
 sudo ln -s /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME /etc/apache2/sites-enabled/$PLATEFORM_PROJET_NAME
 
-# we add host in the /etc/hosts file
+echo "**** we add host in the /etc/hosts file ****"
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
-    echo "Adding hostname to your /etc/hosts"
+    echo "Adding QA hostname to your /etc/hosts"
     echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
     echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
     echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
@@ -171,6 +189,12 @@ fi
 
 echo "**** we restart apache2 server ****"
 sudo service apache2 restart
+
+echo "**** we delete bin-dir config to have the default value egal to 'vendor/bin' ****"
+if [ -f "composer.json" ]; then
+     sed -i '/bin-dir/d' composer.json
+     rm composer.lock
+fi
 
 echo "**** we install/update the composer file ****"
 if [ ! -f composer.phar ]; then
@@ -182,6 +206,15 @@ echo "**** we lauch the composer ****"
 php -d memory_limit=1024M composer.phar install --no-interaction
 echo "**** Generating optimized autoload files ****"
 php composer.phar dump-autoload --optimize
+
+echo "**** we create database ****"
+php app/console doctrine:database:create
+
+echo "**** we install bundles and their dependancies ****"
+#$DIR/doctrine/doctrine-extension.sh $DIR $PLATEFORM_VERSION
+$DIR/fosuser/fosuser.sh $DIR $PLATEFORM_VERSION
+#$DIR/jms/jms.sh $DIR $PLATEFORM_VERSION
+#$DIR/qa/qa.sh $DIR $PLATEFORM_VERSION
 
 echo "**** we remove cache files ****"
 rm -rf app/cache/*
@@ -223,11 +256,10 @@ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 
 echo "**** we create database ****"
 php app/console doctrine:database:create
-php app/console doctrine:schema:create
-php app/console doctrine:fixtures:load
+
+echo "**** we install assetic and asset files ****"
 php app/console assets:install
 php app/console assetic:dump
-php app/console clear:cache
 
-echo "**** we run the phing script to initialize the project ****"
-vendor/bin/phing -f app/phing/initialize.xml rebuild
+echo "** we detect mapping error execute **"
+php app/console doctrine:mapping:info

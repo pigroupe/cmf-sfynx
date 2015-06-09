@@ -4,13 +4,14 @@ $box_url = "https://vagrantcloud.com/ubuntu/boxes/trusty64/versions/14.04/provid
 $box_distrib = "ubuntu"
  
 # VM settings
-$vm_hostname = "rapp.nbi.vagrant"
-$vm_name = "NBI"
+$vm_hostname = "dev.sfynx.vagrant"
+$vm_name = "SFYNX"
 $vm_group = "/Vagrant"
  
 # VM configuration and capacities
 $vm_gui = false # Enable or not GUI
-$vm_mount_point = "/web/www/nosBelIdees"
+$vm_mount_point = "/var/www"
+$vm_dir_project = "/var/www/cmf-sfynx"
 $vm_memory = "1024"
 $vm_cpus = "2"
 $vm_cpu_cap = "100"
@@ -25,9 +26,9 @@ $pf_https = 443
 $pf_https_localhost = 443
 
 #Plateform
-$plateform_install_name="nbi-nginx"
+$plateform_install_name="sfynx-nginx"
 $plateform_install_type="composer"
-$plateform_install_version="*"
-$plateform_projet_git="https://github.com/gvandencruche/rapp_nosbelidees"
-$plateform_username_git="guy.vandencruche"
-$plateform_projet_name="nosBelIdees"
+$plateform_install_version=""
+$plateform_projet_git=""
+$plateform_username_git=""
+$plateform_projet_name="myproject"

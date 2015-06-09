@@ -1,61 +1,92 @@
-#!/bin/bash
-DIR=$1
-PLATEFORM_INSTALL_NAME=$2
-PLATEFORM_INSTALL_TYPE=$3
-PLATEFORM_INSTALL_VERSION=$4
-PLATEFORM_PROJET_NAME=$5
-PLATEFORM_PROJET_GIT=$6
-INSTALL_USERWWW=$7
-source $DIR/provisioners/shell/env.sh
+#!/bin/sh
 
-#if var is empty
-if [ -z "$PLATEFORM_PROJET_GIT" ]; then
-    $PLATEFORM_PROJET_GIT="https://github.com/RappFrance/rapp_nosbelidees"
-fi
+DIR=$(pwd)
+chmod -R +x $DIR
 
-# we create directories
+INSTALL_USERWWW="/var/www/framework/fm-symfony"
+PLATEFORM_INSTALL_TYPE="composer"
+PLATEFORM_VERSION="2.4.0"
+PLATEFORM_PROJET_NAME="sfproject24"
+DATABASE_NAME="symfony"
+DATABASE_NAME_TEST="symfony_test"
+
+echo "**** we create directories ****"
 if [ ! -d $INSTALL_USERWWW ]; then
     mkdir -p $INSTALL_USERWWW
 fi
 cd $INSTALL_USERWWW
 
-echo "**** we create directories ****"
+echo "**** we download artifact project ****"
 if [ ! -d $PLATEFORM_PROJET_NAME ]; then
-    git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
-    #mkdir -p $PLATEFORM_PROJET_NAME
+    case $PLATEFORM_INSTALL_TYPE in
+        'composer' ) 
+            curl -s https://getcomposer.org/installer | php
+            php composer.phar create-project symfony/framework-standard-edition $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
+            cd $PLATEFORM_PROJET_NAME
+        ;;
+        'stack' )
+            curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
+            chmod a+x /usr/local/bin/symfony
+            symfony new $PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
+            cd $PLATEFORM_PROJET_NAME
+        ;;
+        'tar' )
+            mkdir -p $PLATEFORM_PROJET_NAME
+            cd $PLATEFORM_PROJET_NAME
+            wget http://symfony.com/download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
+            tar -zxvf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
+            mv Symfony/* ./
+            #rm -rf download?v=Symfony_Standard_Vendors_$PLATEFORM_VERSION.tgz
+            rm -rf Symfony
+        ;;
+    esac
+else
+    cd $PLATEFORM_PROJET_NAME
 fi
-cd $PLATEFORM_PROJET_NAME
+
+#echo $(pwd)
 
 echo "**** we create default directories ****"
-if [ ! -d app/cachesfynx ]; then
+if [ ! -d app/cache ]; then
     mkdir -p app/cache
     mkdir -p app/logs
     mkdir -p web/uploads/media
 fi
 if [ ! -f app/config/parameters.yml ]; then
-    cp app/config/parameters.dist app/config/parameters.yml
-    sed -i 's/%%/%/g' app/config/parameters.yml
+    cp app/config/parameters.yml.dist app/config/parameters.yml
 fi
 if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
+fi
+
+echo "****  we add in .gitignore file default values from symfony project ****"
+if ! grep -q "Symfony3" .gitignore; then
+    curl -L -s https://www.gitignore.io/api/symfony >> .gitignore
 fi
 
 echo "**** we add env variables ****"
 if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
-# env vars for NBI platform
-export SYMFONY__DATABASE__NAME__ENV=BelProd_dev;
+# env vars for SFYNFONY platform
+export SYMFONY__DATABASE__NAME__ENV=$DATABASE_NAME;
 export SYMFONY__DATABASE__USER__ENV=root;
 export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=BelProd_test;
+export SYMFONY__TEST__DATABASE__NAME__ENV=$DATABASE_NAME_TEST;
 export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__FACEBOOK__KEY__ENV=382989545116231;
-export SYMFONY__FACEBOOK__SECRET__ENV=7b3e0691e121dc1c0d16b2b8cc83cdc9;
-
 EOT
 source ~/.profile
+fi
+
+echo "**** On déclare le socket Unix de PHP-FPM pour que Nginx puisse passer les requêtes PHP via fast_cgi ****"
+if [ ! -f /etc/nginx/conf.d/php5-fpm.conf ];
+then
+sh -c "cat > /etc/nginx/conf.d/php5-fpm.conf" <<EOT
+upstream php5-fpm-sock {  
+    server unix:/var/run/php5-fpm.sock;  
+}
+EOT
 fi
 
 echo "**** we create the virtualhost ****"
@@ -144,14 +175,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV BelProd_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV BelProd_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__FACEBOOK__KEY__ENV 382989545116231;
-        fastcgi_param SYMFONY__FACEBOOK__SECRET__ENV 7b3e0691e121dc1c0d16b2b8cc83cdc9;
     }
 
     # Nginx Cache Control for Static Files
@@ -270,14 +299,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV BelProd_dev;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV BelProd_test;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__FACEBOOK__KEY__ENV 382989545116231;
-        fastcgi_param SYMFONY__FACEBOOK__SECRET__ENV 7b3e0691e121dc1c0d16b2b8cc83cdc9;
     }
 
     # Nginx Cache Control for Static Files
@@ -389,21 +416,19 @@ server {
     }
 
     # Pass the PHP scripts to FastCGI server
-    location ~ ^/(app|set_dev|app_test|config)\.php(/|\$) {
+    location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV nbiBelProd;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
         fastcgi_param SYMFONY__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV nbiBelProd;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
         fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
         fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__FACEBOOK__KEY__ENV 382989545116231;
-        fastcgi_param SYMFONY__FACEBOOK__SECRET__ENV 7b3e0691e121dc1c0d16b2b8cc83cdc9;
     }
 
     # Nginx Cache Control for Static Files
@@ -446,18 +471,25 @@ EOT
 sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
 echo "**** we create the symbilic link ****"
+sudo rm /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 echo "**** we add host in the /etc/hosts file ****"
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
     echo "Adding QA hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
 fi
 
 echo "**** we restart nginx server ****"
 sudo service nginx restart
+
+echo "**** we delete bin-dir config to have the default value egal to 'vendor/bin' ****"
+if [ -f "composer.json" ]; then
+     sed -i '/bin-dir/d' composer.json
+     rm composer.lock
+fi
 
 echo "**** we install/update the composer file ****"
 if [ ! -f composer.phar ]; then
@@ -471,18 +503,55 @@ echo "**** Generating optimized autoload files ****"
 php composer.phar dump-autoload --optimize
 
 echo "**** we create database ****"
-php app/console propel:build
-php app/console propel:database:create
-php app/console propel:sql:insert --force
-php app/console propel:database:create --env test
-php app/console propel:sql:insert --env test --force
+php app/console doctrine:database:create
 
-echo "**** we run the phing script to initialize the project ****"
-bin/phing -f app/phing/initialize.xml rebuild
+echo "**** we install bundles and their dependancies ****"
+#$DIR/doctrine/doctrine-extension.sh $DIR $PLATEFORM_VERSION
+$DIR/fosuser/fosuser.sh $DIR $PLATEFORM_VERSION
+#$DIR/jms/jms.sh $DIR $PLATEFORM_VERSION
+#$DIR/qa/qa.sh $DIR $PLATEFORM_VERSION
 
-sudo $DIR/provisioners/shell/plateform/importBDD.sh $DIR/DUMP/dbNbi-28-05-2015.sql
-sudo $DIR/provisioners/shell/plateform/importUpload.sh $DIR/DUMP/uploadsNbi-28-05-2015.tar.gz $DIR
-sudo $DIR/provisioners/shell/plateform/importJR.sh $DIR/DUMP/jrNbi-28-05-2015.tar.gz 
+echo "**** we remove cache files ****"
+rm -rf app/cache/*
+rm -rf app/logs/*
 
-#echo "***** Start service jackrabbit"
-sudo service jackrabbit start
+echo "**** we set all necessary permissions ****"
+# Utiliser l'ACL sur un système qui supporte chmod +a
+#HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+#sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+#sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+
+# Utiliser l'ACL sur un système qui ne supporte pas chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+
+# sans utiliser ACL
+## Définit une permission 0775 aux fichiers
+#echo "umask(0002);" | sudo tee --prepend app/console
+#echo "umask(0002);" | sudo tee --prepend web/app_dev.php
+#echo "umask(0002);" | sudo tee --prepend web/app.php
+## Définit une permission 0777 aux fichiers
+#echo "umask(0000);" | sudo tee --prepend app/console
+#echo "umask(0000);" | sudo tee --prepend web/app_dev.php
+#echo "umask(0000);" | sudo tee --prepend web/app.php
+
+
+
+# permission
+#sudo chown -R root:www-data app/cache
+#sudo chown -R root:www-data app/logs
+#sudo chown -R root:www-data app/config/parameters.yml
+#sudo chown -R root:www-data web/uploads
+#sudo chmod -R 775 app/config/parameters.yml
+#sudo chmod -R 775 app/cache
+#sudo chmod -R 775 app/logs
+#sudo chmod -R 775 web/uploads
+#sudo chown -R www-data:www-data $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
+
+echo "**** we install assetic and asset files ****"
+php app/console assets:install
+php app/console assetic:dump
+
+echo "** we detect mapping error execute **"
+php app/console doctrine:mapping:info

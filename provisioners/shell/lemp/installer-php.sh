@@ -12,6 +12,10 @@ apt-get -y update > /dev/null
 apt-get -y dist-upgrade > /dev/null
 
 #
+echo "Install PHP pear"
+apt-get -y install php-pear
+
+#
 echo "Installing PHP"
 apt-get -y install php5-common php5-dev php5-cli php5-fpm
 
@@ -26,8 +30,6 @@ apt-get -y install php-pear php5-imagick php5-xdebug php5-ming php5-ps php5-pspe
 apt-get -y install libapache2-mod-php5 php5-mysqlnd php5-mongo php5-memcache
 apt-get -y install php5-memcached gearman
 pecl install timezonedb
-
-
 
 echo "Install PECL HTTP (depends on php-pear, php5-dev, libcurl4-openssl-dev)"
 printf "\n" | pecl install pecl_http

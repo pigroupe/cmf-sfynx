@@ -1,17 +1,17 @@
 parameters:
     database_driver:   pdo_mysql
-    database_host:     127.0.0.1
+    database_host:     localhost
     database_port:     ~
-    database_name:     symfsfynx
-    database_user:     root
-    database_password: ~
+    database_name:     "%%database.name.env%%"
+    database_user:     "%%database.user.env%%"
+    database_password: "%%database.password.env%%"
 
     test_database_driver:   pdo_mysql
     test_database_host:     localhost
     test_database_port:     ~
-    test_database_name:     symfsfynx_test
-    test_database_user:     root
-    test_database_password: ~
+    test_database_name:     "%test.database.name.env%"
+    test_database_user:     "%test.database.user.env%"
+    test_database_password: "%test.database.password.env%"
 
     mailer_transport:  sendmail
     mailer_host:       127.0.0.1

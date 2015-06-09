@@ -5,14 +5,12 @@ PLATEFORM_INSTALL_TYPE=$3
 PLATEFORM_INSTALL_VERSION=$4
 PLATEFORM_PROJET_NAME=$5
 PLATEFORM_PROJET_GIT=$6
+INSTALL_USERWWW=$7
+DATABASE_NAME="symfony"
+DATABASE_NAME_TEST="symfony_test"
 source $DIR/provisioners/shell/env.sh
 
-#if var is empty
-if [ -z "$PLATEFORM_PROJET_GIT" ]; then
-    $PLATEFORM_PROJET_GIT="https://github.com/RappFrance/rapp_nosbelidees"
-fi
-
-# we create directories
+echo "**** we create directories ****"
 if [ ! -d $INSTALL_USERWWW ]; then
     mkdir -p $INSTALL_USERWWW
 fi
@@ -42,29 +40,45 @@ if [ ! -d $PLATEFORM_PROJET_NAME ]; then
             rm -rf Symfony
         ;;
     esac
+else
+    cd $PLATEFORM_PROJET_NAME
 fi
 
-# we create default directories
-mkdir -p app/cache
-mkdir -p app/logs
-mkdir -p web/uploads/media
-rm app/config/parameters.yml
-cp app/config/parameters.yml.dist app/config/parameters.yml
+echo "**** we create default directories ****"
+if [ ! -d app/cachesfynx ]; then
+    mkdir -p app/cache
+    mkdir -p app/logs
+    mkdir -p web/uploads/media
+fi
+if [ ! -f app/config/parameters.yml ]; then
+    cp app/config/parameters.yml.dist app/config/parameters.yml
+    sed -i 's/%%/%/g' app/config/parameters.yml
+fi
+if [ ! -f app/phpunit.xml ]; then
+    cp app/phpunit.xml.dist app/phpunit.xml
+fi
 
-# we add env var
+echo "****  we add in .gitignore file default values from symfony project ****"
+if ! grep -q "Symfony3" .gitignore; then
+    curl -L -s https://www.gitignore.io/api/symfony >> .gitignore
+fi
+
+echo "**** we add env variables ****"
+if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
 cat <<EOT >> ~/.profile
 
 # env vars for SFYNFONY platform
-export SYMFONY__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_dev;
+export SYMFONY__DATABASE__NAME__ENV=$DATABASE_NAME;
 export SYMFONY__DATABASE__USER__ENV=root;
 export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=sfynx$PLATEFORM_PROJET_NAME_test;
+export SYMFONY__TEST__DATABASE__NAME__ENV=$DATABASE_NAME_TEST;
 export SYMFONY__TEST__DATABASE__USER__ENV=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
 EOT
 source ~/.profile
+fi
 
-# we create the virtualhiost of sfynx for nginx
+echo "**** we create the virtualhost ****"
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 #upstream php5-fpm-sock {  
@@ -150,6 +164,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -268,6 +288,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -386,6 +412,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -425,87 +457,91 @@ server {
 
 }
 EOT
-mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
+sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 
-# we create the symbilic link
-ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
+echo "**** we create the symbilic link ****"
+sudo rm /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
+sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
-# we add host in the /etc/hosts file
+echo "**** we add host in the /etc/hosts file ****"
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
-    echo "Adding hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+    echo "Adding QA hostname to your /etc/hosts"
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
 fi
 
-# we restart nginx server
+echo "**** we restart nginx server ****"
 sudo service nginx restart
 
-# we delete bin-dir config to have the default value egal to "vendor/bin"
+echo "**** we delete bin-dir config to have the default value egal to 'vendor/bin' ****"
 if [ -f "composer.json" ]; then
      sed -i '/bin-dir/d' composer.json
+     rm composer.lock
 fi
 
-# we install the composer file
+echo "**** we install/update the composer file ****"
 if [ ! -f composer.phar ]; then
     wget https://getcomposer.org/composer.phar -O ./composer.phar
+else
+    php composer.phar self-update
 fi
+
+echo "**** we lauch the composer ****"
 php -d memory_limit=1024M composer.phar install --no-interaction
+echo "**** Generating optimized autoload files ****"
 php composer.phar dump-autoload --optimize
 
-# install doctrine bundles
-#composer require --dev  --update-with-dependencies  doctrine/doctrine-fixtures-bundle:dev-master
-#composer require --dev  --update-with-dependencies  doctrine/data-fixtures:1.0.*
-#composer require --dev  --update-with-dependencies  doctrine/doctrine-cache-bundle:1.0.*
-#composer require --dev  --update-with-dependencies  gedmo/doctrine-extensions:2.3.12
-#composer require --dev  --update-with-dependencies  stof/doctrine-extensions-bundle:1.1.*@dev
-
-# install jms bundle
-#composer require --dev  --update-with-dependencies  jms/security-extra-bundle:1.5.*
-#composer require --dev  --update-with-dependencies  jms/di-extra-bundle:1.4.*
-#composer require --dev  --update-with-dependencies  jms/serializer-bundle:0.13.*@dev
-#composer require --dev  --update-with-dependencies  symfony/translation:2.6.*@dev
-#composer require --dev  --update-with-dependencies  jms/translation-bundle:1.1.*@dev
-        
-# install QA depo in dev environment
-#composer require --dev  --update-with-dependencies  phpdocumentor/phpdocumentor:2.*
-#composer require --dev  --update-with-dependencies  mayflower/php-codebrowser:~1.1
-#composer require --dev  --update-with-dependencies  theseer/phpdox:*
-#composer require --dev  --update-with-dependencies  halleck45/phpmetrics:@dev
-#composer require --dev  --update-with-dependencies  squizlabs/php_codesniffer:*
-#composer require --dev  --update-with-dependencies  fabpot/php-cs-fixer:*
-#composer require --dev  --update-with-dependencies  phpunit/phpunit:*
-#composer require --dev  --update-with-dependencies  phpunit/php-invoker:dev-master
-#composer require --dev  --update-with-dependencies  sebastian/phpcpd:*
-#composer require --dev  --update-with-dependencies  sebastian/phpdcd:*
-#composer require --dev  --update-with-dependencies  phpmd/phpmd:@stable
-#composer require --dev  --update-with-dependencies  pdepend/pdepend:@stable
-#composer require --dev  --update-with-dependencies  phploc/phploc:*
-#composer require --dev  --update-with-dependencies  sebastian/hhvm-wrapper:*
-#composer require --dev  --update-with-dependencies  phake/phake:*
-#composer require --dev  --update-with-dependencies  phing/phing:dev-master
-#composer require --dev  --update-with-dependencies  behat/behat:3.0.*@dev
-#composer require --dev  --update-with-dependencies  instaclick/php-webdriver:~1.1
-#composer require --dev  --update-with-dependencies  behat/mink:1.6.*@dev
-#composer require --dev  --update-with-dependencies  behat/mink-bundle:~1.4
-#composer require --dev  --update-with-dependencies  behat/symfony2-extension:~2.0@dev
-#composer require --dev  --update-with-dependencies  behat/mink-extension:~2.0@dev
-#composer require --dev  --update-with-dependencies  behat/mink-selenium2-driver:*@dev
-#composer require --dev  --update-with-dependencies  behat/mink-browserkit-driver:~1.1@dev
-#composer require --dev  --update-with-dependencies  behat/mink-goutte-driver:*@stable
-#composer require --dev  --update-with-dependencies  behat/mink-zombie-driver:*@stable
-#composer require --dev  --update-with-dependencies  facebook/xhprof:dev-master@dev        
-#composer require --dev  --update-with-dependencies  phpcasperjs/phpcasperjs:dev-master
-#composer require --dev  --update-with-dependencies  psecio/iniscan:dev-master
-#composer require --dev  --update-with-dependencies  psecio/versionscan:dev-master
-#composer require --dev  --update-with-dependencies  psecio/parse:dev-master
-#composer require --dev  --update-with-dependencies  mayflower/php-codebrowser:~1.1
-#composer update --with-dependencies
-
-# create database
+echo "**** we create database ****"
 php app/console doctrine:database:create
-php app/console doctrine:schema:create
-php app/console doctrine:fixtures:load
+
+echo "**** we install bundles and their dependancies ****"
+#$DIR/provisioners/shell/plateform/doctrine/doctrine-extension.sh $DIR $PLATEFORM_INSTALL_VERSION
+$DIR/provisioners/shell/plateform/fosuser/fosuser.sh $DIR $PLATEFORM_INSTALL_VERSION
+#$DIR/provisioners/shell/plateform/jms/jms.sh $DIR $PLATEFORM_INSTALL_VERSION
+#$DIR/provisioners/shell/plateform/qa/qa.sh $DIR $PLATEFORM_INSTALL_VERSION
+
+echo "**** we remove cache files ****"
+rm -rf app/cache/*
+rm -rf app/logs/*
+
+echo "**** we set all necessary permissions ****"
+# Utiliser l'ACL sur un système qui supporte chmod +a
+#HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+#sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+#sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+
+# Utiliser l'ACL sur un système qui ne supporte pas chmod +a
+HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+
+# sans utiliser ACL
+## Définit une permission 0775 aux fichiers
+#echo "umask(0002);" | sudo tee --prepend app/console
+#echo "umask(0002);" | sudo tee --prepend web/app_dev.php
+#echo "umask(0002);" | sudo tee --prepend web/app.php
+## Définit une permission 0777 aux fichiers
+#echo "umask(0000);" | sudo tee --prepend app/console
+#echo "umask(0000);" | sudo tee --prepend web/app_dev.php
+#echo "umask(0000);" | sudo tee --prepend web/app.php
+
+
+
+# permission
+#sudo chown -R root:www-data app/cache
+#sudo chown -R root:www-data app/logs
+#sudo chown -R root:www-data app/config/parameters.yml
+#sudo chown -R root:www-data web/uploads
+#sudo chmod -R 775 app/config/parameters.yml
+#sudo chmod -R 775 app/cache
+#sudo chmod -R 775 app/logs
+#sudo chmod -R 775 web/uploads
+#sudo chown -R www-data:www-data $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
+
+echo "**** we install assetic and asset files ****"
 php app/console assets:install
 php app/console assetic:dump
-php app/console clear:cache
+
+echo "** we detect mapping error execute **"
+php app/console doctrine:mapping:info
