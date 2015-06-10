@@ -1,0 +1,15 @@
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/change-password$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/profile$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/profile/edit$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/register$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/register/check-email$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/register/confirm/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/register/confirmed$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/resseting/request$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/resseting/send-email$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/resseting/check-email$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/resseting/reset/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        # -> custom access control for the admin area of the URL
+        - { path: ^/admin/, role: ROLE_ADMIN }

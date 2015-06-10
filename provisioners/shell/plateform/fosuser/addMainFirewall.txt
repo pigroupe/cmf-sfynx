@@ -1,0 +1,29 @@
+
+        # defaut login area for standard users   
+        main:
+            pattern: .*
+            form_login:
+                provider: fos_userbundle
+                use_forward: false
+                csrf_provider: form.csrf_provider
+                login_path: /login
+                check_path: /login_check
+                failure_path: /login_failure
+                #success_handler: sfynx.auth.authentication_handler
+                remember_me: true
+                #default_target_path: /home
+                #username_parameter: login[_username]
+                #password_parameter: login[_password]
+            remember_me:
+                key: "%secret%"
+                lifetime: 3600
+                path:     /
+                domain:   ~ # Prend la valeur par défaut du domaine courant depuis $_SERVER
+                remember_me_parameter: _remember_me
+            logout:
+                path: /logout
+                target: /
+                #success_handler: sfynx.auth.logout_handler
+                invalidate_session: false
+                #delete_cookies: [sfynx_auth_user]
+            anonymous: true

@@ -8,6 +8,9 @@ PLATEFORM_PROJET_GIT=$6
 INSTALL_USERWWW=$7
 source $DIR/provisioners/shell/env.sh
 
+PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME | awk '{print tolower($0)}') # we lower the string
+PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper($0)}') # we lower the string
+
 #if var is empty
 if [ -z "$PLATEFORM_PROJET_GIT" ]; then
     $PLATEFORM_PROJET_GIT="https://github.com/RappFrance/rapp_nosbelidees"
@@ -72,7 +75,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name dev.$PLATEFORM_PROJET_NAME.local;
+    server_name dev.$PLATEFORM_PROJET_NAME_LOWER.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -198,7 +201,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name test.$PLATEFORM_PROJET_NAME.local;
+    server_name test.$PLATEFORM_PROJET_NAME_LOWER.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -324,7 +327,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name prod.$PLATEFORM_PROJET_NAME.local;
+    server_name prod.$PLATEFORM_PROJET_NAME_LOWER.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -443,17 +446,19 @@ server {
 
 }
 EOT
-sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
-
 echo "**** we create the symbilic link ****"
+sudo rm /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
+sudo rm /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
+sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 echo "**** we add host in the /etc/hosts file ****"
-if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
-    echo "Adding QA hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | tee --append /etc/hosts
+if ! grep -q "dev.$PLATEFORM_PROJET_NAME_LOWER.local" /etc/hosts; then
+    echo "# Adding hostname of the $PLATEFORM_PROJET_NAME project" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "   " | sudo tee --append /etc/hosts
 fi
 
 echo "**** we restart nginx server ****"
@@ -480,9 +485,9 @@ php app/console propel:sql:insert --env test --force
 echo "**** we run the phing script to initialize the project ****"
 bin/phing -f app/phing/initialize.xml rebuild
 
-sudo $DIR/provisioners/shell/plateform/importBDD.sh $DIR/DUMP/dbNbi-28-05-2015.sql
-sudo $DIR/provisioners/shell/plateform/importUpload.sh $DIR/DUMP/uploadsNbi-28-05-2015.tar.gz $DIR
-sudo $DIR/provisioners/shell/plateform/importJR.sh $DIR/DUMP/jrNbi-28-05-2015.tar.gz 
+sudo $DIR/provisioners/shell/plateform/importBDD.sh "$DIR/DUMP/dbNbi-28-05-2015.sql"
+sudo $DIR/provisioners/shell/plateform/importUpload.sh "$DIR/DUMP/uploadsNbi-28-05-2015.tar.gz" "$DIR"
+sudo $DIR/provisioners/shell/plateform/importJR.sh "$DIR/DUMP/jrNbi-28-05-2015.tar.gz" 
 
 #echo "***** Start service jackrabbit"
 sudo service jackrabbit start
