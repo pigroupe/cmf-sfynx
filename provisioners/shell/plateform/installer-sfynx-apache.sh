@@ -8,6 +8,9 @@ PLATEFORM_PROJET_GIT=$6
 INSTALL_USERWWW=$7
 source $DIR/provisioners/shell/env.sh
 
+PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME | awk '{print tolower($0)}') # we lower the string
+PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper($0)}') # we lower the string
+
 #if var is empty
 if [ -z "$PLATEFORM_PROJET_GIT" ]; then
     $PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
@@ -61,8 +64,8 @@ fi
 mkdir -p /tmp
 cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 <VirtualHost *:80>
-        ServerName  dev.$PLATEFORM_PROJET_NAME.local
-        ServerAlias dev.$PLATEFORM_PROJET_NAME.local             
+        ServerName  dev.$PLATEFORM_PROJET_NAME_LOWER.local
+        ServerAlias dev.$PLATEFORM_PROJET_NAME_LOWER.local             
         DocumentRoot $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web/
         <Directory "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web">
                 Options Indexes FollowSymLinks MultiViews
@@ -86,7 +89,7 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 </VirtualHost>
 
 <VirtualHost *:80>
-        ServerName  test.$PLATEFORM_PROJET_NAME.local
+        ServerName  test.$PLATEFORM_PROJET_NAME_LOWER.local
         DocumentRoot $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web/
 
         <Directory "$INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web">
@@ -111,7 +114,7 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 </VirtualHost>
 
 <VirtualHost *:80>
-        ServerName prod.$PLATEFORM_PROJET_NAME.local
+        ServerName prod.$PLATEFORM_PROJET_NAME_LOWER.local
         DocumentRoot $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web/
 
         <Directory $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME/web>
@@ -132,7 +135,7 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
                 RewriteCond %{HTTP_REFERER} .*openmultipleurl.com.*\$  [OR]
                 RewriteCond %{HTTP_REFERER} .*pastebin.com.*\$
                 RewriteCond %{REQUEST_URI} !^/404error\$\$
-                RewriteRule ^(.*)\$ http://prod.$PLATEFORM_PROJET_NAME.local/404error\$                
+                RewriteRule ^(.*)\$ http://prod.$PLATEFORM_PROJET_NAME_LOWER.local/404error\$                
 		  
 		# autorize all IPs                
 	        Order allow,deny
@@ -156,17 +159,19 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
 
 </VirtualHost>
 EOT
+echo "**** we create the symbilic link ****"
+sudo rm /etc/apache2/sites-enabled/$PLATEFORM_PROJET_NAME
+sudo rm /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME
 sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME
-
-# we create the symbilic link
 sudo ln -s /etc/apache2/sites-available/$PLATEFORM_PROJET_NAME /etc/apache2/sites-enabled/$PLATEFORM_PROJET_NAME
 
-# we add host in the /etc/hosts file
-if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
-    echo "Adding hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
+echo "**** we add host in the /etc/hosts file ****"
+if ! grep -q "dev.$PLATEFORM_PROJET_NAME_LOWER.local" /etc/hosts; then
+    echo "# Adding hostname of the $PLATEFORM_PROJET_NAME project" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "   " | sudo tee --append /etc/hosts
 fi
 
 echo "**** we restart apache2 server ****"

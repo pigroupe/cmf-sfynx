@@ -1,3 +1,4 @@
+            ->add('username')
             ->add('groups','entity', array(
                     'label' => 'pi.form.label.field.usergroup',
                     'class' => 'AcmeAuthBundle:Group',

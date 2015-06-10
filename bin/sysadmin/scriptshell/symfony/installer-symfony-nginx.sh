@@ -7,8 +7,12 @@ INSTALL_USERWWW="/var/www/framework/fm-symfony"
 PLATEFORM_INSTALL_TYPE="composer"
 PLATEFORM_VERSION="2.4.0"
 PLATEFORM_PROJET_NAME="sfproject24"
-DATABASE_NAME="symfony"
-DATABASE_NAME_TEST="symfony_test"
+PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME | awk '{print tolower($0)}') # we lower the string
+PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper($0)}') # we lower the string
+DATABASE_NAME="symfony_${PLATEFORM_PROJET_NAME_LOWER}"
+DATABASE_NAME_TEST="symfony_${PLATEFORM_PROJET_NAME_LOWER}_test"
+DOMAINE="Acme"
+FOSUSER_PREFIX="admin"
 
 echo "**** we create directories ****"
 if [ ! -d $INSTALL_USERWWW ]; then
@@ -21,7 +25,7 @@ if [ ! -d $PLATEFORM_PROJET_NAME ]; then
     case $PLATEFORM_INSTALL_TYPE in
         'composer' ) 
             curl -s https://getcomposer.org/installer | php
-            php composer.phar create-project symfony/framework-standard-edition $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
+            php composer.phar create-project --no-interaction symfony/framework-standard-edition $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME $PLATEFORM_VERSION
             cd $PLATEFORM_PROJET_NAME
         ;;
         'stack' )
@@ -52,10 +56,20 @@ if [ ! -d app/cache ]; then
     mkdir -p app/logs
     mkdir -p web/uploads/media
 fi
-if [ ! -f app/config/parameters.yml ]; then
-    cp app/config/parameters.yml.dist app/config/parameters.yml
-    sed -i 's/%%/%/g' app/config/parameters.yml
+
+echo "**** we modify parameters.yml.dist ****"
+sed -i '/database_/d' app/config/parameters.yml.dist # delete lines witch contain "database"_ string
+sed -i "/parameters/r $DIR/artifacts/parameters.yml" app/config/parameters.yml.dist # we add lines contained in parameters.yml
+sed -i "s/myproject/${PLATEFORM_PROJET_NAME_LOWER}/g" app/config/parameters.yml.dist
+
+echo "**** we create parameters.yml ****"
+if [ -f app/config/parameters.yml ]; then
+    rm app/config/parameters.yml
 fi
+cp app/config/parameters.yml.dist app/config/parameters.yml
+sed -i 's/%%/%/g' app/config/parameters.yml
+
+echo "**** we create phpunit.xml ****"
 if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
 fi
@@ -66,18 +80,26 @@ if ! grep -q "Symfony3" .gitignore; then
 fi
 
 echo "**** we add env variables ****"
-if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
-cat <<EOT >> ~/.profile
+if ! grep -q "SYMFONY__DATABASE__NAME__ENV__$PLATEFORM_PROJET_NAME_UPPER=$DATABASE_NAME" /etc/profile.d/$PLATEFORM_PROJET_NAME_LOWER.sh; then
+sudo bash -c "cat << EOT > /etc/profile.d/$PLATEFORM_PROJET_NAME_LOWER.sh
 
 # env vars for SFYNFONY platform
-export SYMFONY__DATABASE__NAME__ENV=$DATABASE_NAME;
-export SYMFONY__DATABASE__USER__ENV=root;
-export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=$DATABASE_NAME_TEST;
-export SYMFONY__TEST__DATABASE__USER__ENV=root;
-export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
-EOT
-source ~/.profile
+export SYMFONY__DATABASE__NAME__ENV__$PLATEFORM_PROJET_NAME_UPPER=$DATABASE_NAME;
+export SYMFONY__DATABASE__USER__ENV__$PLATEFORM_PROJET_NAME_UPPER=root;
+export SYMFONY__DATABASE__PASSWORD__ENV__$PLATEFORM_PROJET_NAME_UPPER=pacman;
+export SYMFONY__TEST__DATABASE__NAME__ENV__$PLATEFORM_PROJET_NAME_UPPER=$DATABASE_NAME_TEST;
+export SYMFONY__TEST__DATABASE__USER__ENV__$PLATEFORM_PROJET_NAME_UPPER=root;
+export SYMFONY__TEST__DATABASE__PASSWORD__ENV__$PLATEFORM_PROJET_NAME_UPPER=pacman;
+
+EOT"
+fi
+. /etc/profile.d/${PLATEFORM_PROJET_NAME_LOWER}.sh
+printenv | grep "__ENV__$PLATEFORM_PROJET_NAME_UPPER" # list of all env
+# unset envName # delete a env var
+
+echo "**** we add test config for database ****"
+if ! grep -q "doctrine" app/config/config_test.yml; then
+    echo "$(cat $DIR/artifacts/config_test.yml)" >> app/config/config_test.yml
 fi
 
 echo "**** On déclare le socket Unix de PHP-FPM pour que Nginx puisse passer les requêtes PHP via fast_cgi ****"
@@ -104,7 +126,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name dev.$PLATEFORM_PROJET_NAME.local;
+    server_name dev.$PLATEFORM_PROJET_NAME_LOWER.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -126,9 +148,9 @@ server {
     gzip_http_version 1.1; 
 
     # Logging
-    access_log on; 
+    access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
+    #error_log  /var/log/nginx/sfynx-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -176,12 +198,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
-        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
-        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -228,7 +250,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name test.$PLATEFORM_PROJET_NAME.local;
+    server_name test.$PLATEFORM_PROJET_NAME_LOWER.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -250,9 +272,9 @@ server {
     gzip_http_version 1.1; 
 
     # Logging
-    access_log on; 
+    access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
+    #error_log  /var/log/nginx/sfynx-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -300,12 +322,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
-        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
-        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -352,7 +374,7 @@ server {
     listen 80;
 
     # Server name being used (exact name, wildcards or regular expression)
-    server_name prod.$PLATEFORM_PROJET_NAME.local;
+    server_name prod.$PLATEFORM_PROJET_NAME_LOWER.local;
 
     # Document root, make sure this points to your Symfony2 /web directory
     root \$website_root;
@@ -376,7 +398,7 @@ server {
     # Logging
     access_log off; 
     log_not_found off; 
-    #error_log  /var/log/nginx/$PLATEFORM_PROJET_NAME-error.log;
+    #error_log  /var/log/nginx/sfynx-error.log;
 
     # Cache information about frequently accessed files
     open_file_cache max=2000 inactive=20s; 
@@ -424,12 +446,12 @@ server {
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
         # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV $DATABASE_NAME;
-        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV $DATABASE_NAME_TEST;
-        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -469,18 +491,19 @@ server {
 
 }
 EOT
-sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
-
 echo "**** we create the symbilic link ****"
 sudo rm /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
+sudo rm /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
+sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
 sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
 
 echo "**** we add host in the /etc/hosts file ****"
-if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
-    echo "Adding QA hostname to your /etc/hosts"
-    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME.local" | sudo tee --append /etc/hosts
+if ! grep -q "dev.$PLATEFORM_PROJET_NAME_LOWER.local" /etc/hosts; then
+    echo "# Adding hostname of the $PLATEFORM_PROJET_NAME project" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
+    echo "   " | sudo tee --append /etc/hosts
 fi
 
 echo "**** we restart nginx server ****"
@@ -492,25 +515,28 @@ if [ -f "composer.json" ]; then
      rm composer.lock
 fi
 
-echo "**** we install/update the composer file ****"
 if [ ! -f composer.phar ]; then
+    echo "**** we install/update the composer file ****"
     wget https://getcomposer.org/composer.phar -O ./composer.phar
 else
-    php composer.phar self-update
+    echo "update composer.phar"
+    php composer.phar self-update    
 fi
+
+echo "**** we create database ****"
+php app/console doctrine:database:create --env=dev
+php app/console doctrine:database:create --env=test
+
+echo "**** we install bundles and their dependancies ****"
+#$DIR/doctrine/doctrine-extension.sh "$DIR" "$PLATEFORM_VERSION"
+$DIR/fosuser/fosuser.sh "$DIR" "$PLATEFORM_VERSION" "$DOMAINE" "$FOSUSER_PREFIX"
+#$DIR/jms/jms.sh "$DIR" "$PLATEFORM_VERSION"
+#$DIR/qa/qa.sh "$DIR" "$PLATEFORM_VERSION"
+
 echo "**** we lauch the composer ****"
 php -d memory_limit=1024M composer.phar install --no-interaction
 echo "**** Generating optimized autoload files ****"
 php composer.phar dump-autoload --optimize
-
-echo "**** we create database ****"
-php app/console doctrine:database:create
-
-echo "**** we install bundles and their dependancies ****"
-#$DIR/doctrine/doctrine-extension.sh $DIR $PLATEFORM_VERSION
-$DIR/fosuser/fosuser.sh $DIR $PLATEFORM_VERSION
-#$DIR/jms/jms.sh $DIR $PLATEFORM_VERSION
-#$DIR/qa/qa.sh $DIR $PLATEFORM_VERSION
 
 echo "**** we remove cache files ****"
 rm -rf app/cache/*
