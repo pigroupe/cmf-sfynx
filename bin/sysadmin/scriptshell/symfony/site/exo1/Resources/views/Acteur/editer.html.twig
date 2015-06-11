@@ -1,0 +1,55 @@
+{% extends 'MyAppSiteBundle::layout.html.twig' %}
+
+{% block title %}
+    {% if acteur.id %}
+        {{ 'acteur.modifier'|trans({'%prenom%':acteur.prenom,'%nom%':acteur.nom}) }}
+    {% else %}
+        {{ 'acteur.ajouter'|trans }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if message %}
+<p class="message">{{ message }}</p>
+{% endif %}
+
+<form action="" method="post" {{ form_enctype(form) }}>
+<div class="error">
+{{ form_errors(form) }}
+</div>
+<table>
+    <tr>
+	<td>{{ form_label(form.nom) }}</td>
+	<td>{{ form_label(form.prenom) }}</td>
+        <td>{{ form_label(form.dateNaissance) }}</td>
+        <td>{{ form_label(form.sexe) }}</td>
+    </tr>
+    <tr>
+	<td>
+	{{ form_errors(form.nom) }}
+	{{ form_widget(form.nom) }}
+	</td>
+	<td>
+	{{ form_errors(form.prenom) }}
+	{{ form_widget(form.prenom) }}
+	</td>
+	<td>
+	{{ form_errors(form.dateNaissance) }}
+	{{ form_widget(form.dateNaissance) }}
+	</td>
+	<td>
+	{{ form_errors(form.sexe) }}
+	{{ form_widget(form.sexe) }}
+	</td>
+    </tr>
+</table>
+
+{{ form_rest(form) }}
+
+<input type="submit" />
+</form>
+
+<p><a href="{{ path('myapp_acteur_lister') }}">{{ 'acteur.liste.retour'|trans }}</a></p>
+
+{% endblock %}

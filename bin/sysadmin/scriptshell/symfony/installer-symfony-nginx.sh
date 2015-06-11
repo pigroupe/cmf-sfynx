@@ -11,8 +11,10 @@ PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME | awk '{print tolower(
 PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper($0)}') # we lower the string
 DATABASE_NAME="symfony_${PLATEFORM_PROJET_NAME_LOWER}"
 DATABASE_NAME_TEST="symfony_${PLATEFORM_PROJET_NAME_LOWER}_test"
-DOMAINE="Acme"
-FOSUSER_PREFIX="admin"
+DOMAINE="MyApp"
+MYAPP_BUNDLE_NAME="Site"
+MYAPP_PREFIX="myapp"
+FOSUSER_PREFIX="$MYAPP_PREFIX/admin"
 
 echo "**** we create directories ****"
 if [ ! -d $INSTALL_USERWWW ]; then
@@ -74,15 +76,18 @@ if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
 fi
 
+echo "** we add config in AppKernel **"
+if ! grep -q "getContainerBaseClass" app/AppKernel.php; then
+    sed  -i -e "/registerContainerConfiguration/r $DIR/artifacts/appkernel.txt" -e //N app/AppKernel.php
+fi
+
 echo "****  we add in .gitignore file default values from symfony project ****"
 if ! grep -q "Symfony3" .gitignore; then
     curl -L -s https://www.gitignore.io/api/symfony >> .gitignore
 fi
 
 echo "**** we add env variables ****"
-if ! grep -q "SYMFONY__DATABASE__NAME__ENV__$PLATEFORM_PROJET_NAME_UPPER=$DATABASE_NAME" /etc/profile.d/$PLATEFORM_PROJET_NAME_LOWER.sh; then
 sudo bash -c "cat << EOT > /etc/profile.d/$PLATEFORM_PROJET_NAME_LOWER.sh
-
 # env vars for SFYNFONY platform
 export SYMFONY__DATABASE__NAME__ENV__$PLATEFORM_PROJET_NAME_UPPER=$DATABASE_NAME;
 export SYMFONY__DATABASE__USER__ENV__$PLATEFORM_PROJET_NAME_UPPER=root;
@@ -92,7 +97,6 @@ export SYMFONY__TEST__DATABASE__USER__ENV__$PLATEFORM_PROJET_NAME_UPPER=root;
 export SYMFONY__TEST__DATABASE__PASSWORD__ENV__$PLATEFORM_PROJET_NAME_UPPER=pacman;
 
 EOT"
-fi
 . /etc/profile.d/${PLATEFORM_PROJET_NAME_LOWER}.sh
 printenv | grep "__ENV__$PLATEFORM_PROJET_NAME_UPPER" # list of all env
 # unset envName # delete a env var
@@ -528,9 +532,10 @@ php app/console doctrine:database:create --env=dev
 php app/console doctrine:database:create --env=test
 
 echo "**** we install bundles and their dependancies ****"
-#$DIR/doctrine/doctrine-extension.sh "$DIR" "$PLATEFORM_VERSION"
-$DIR/fosuser/fosuser.sh "$DIR" "$PLATEFORM_VERSION" "$DOMAINE" "$FOSUSER_PREFIX"
-#$DIR/jms/jms.sh "$DIR" "$PLATEFORM_VERSION"
+$DIR/doctrine/doctrine-extension.sh "$DIR" "$PLATEFORM_VERSION"
+$DIR/jms/jms.sh "$DIR" "$PLATEFORM_VERSION"
+$DIR/fosuser/fosuser.sh "$DIR" "$PLATEFORM_VERSION" "$DOMAINE" "$FOSUSER_PREFIX" "$MYAPP_BUNDLE_NAME" "$MYAPP_PREFIX"
+#$DIR/site/install.sh "$DIR" "$PLATEFORM_VERSION" "$DOMAINE"  "$MYAPP_BUNDLE_NAME" "$MYAPP_PREFIX" 
 #$DIR/qa/qa.sh "$DIR" "$PLATEFORM_VERSION"
 
 echo "**** we lauch the composer ****"

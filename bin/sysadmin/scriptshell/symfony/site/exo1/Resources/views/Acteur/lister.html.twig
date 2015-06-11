@@ -1,0 +1,44 @@
+{% extends 'MyAppSiteBundle::layout.html.twig' %}
+
+{% block title %}{{ 'acteur.liste' | trans }}{% endblock %}
+
+{% block content %}
+
+<form id="form_recherche" action="{{ path('myapp_acteur_rechercher') }}" method="post">
+    {{ form_widget(form) }}
+    <input type="submit" value="{{ 'rechercher' | trans }}" />
+</form>
+<div class="loading"></div>
+<div id="resultats_recherche"> 
+    {% include 'MyAppSiteBundle:Acteur:liste.html.twig' with {'acteurs' : acteurs}  %}
+</div>
+
+{% if is_granted('ROLE_ADMIN') %}
+<p><a href="{{ path('myapp_acteur_ajouter') }}">{{ 'acteur.ajouter'|trans }}</a><p>
+{% endif %}
+
+<script>
+$(".loading").hide();
+$("#form_recherche").submit(function(){ 
+    $(".loading").show();
+    var motcle=$("#acteurrecherche_motcle").val();
+    if(motcle == ''){
+        $(".loading").hide();
+    }else{
+        $(".loading").show();
+        var DATA = 'motcle=' + motcle;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('myapp_acteur_rechercher')}}",
+            data: DATA,
+            cache: false,
+            success: function(data){
+               $('#resultats_recherche').html(data);
+               $(".loading").hide();
+            }
+        });
+    }
+    return false;
+});
+</script>
+{% endblock %}

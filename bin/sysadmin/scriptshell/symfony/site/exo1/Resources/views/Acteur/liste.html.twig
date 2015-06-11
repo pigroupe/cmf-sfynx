@@ -1,0 +1,19 @@
+<p>{{ 'acteur.trouve' | trans({'%nombre%': acteurs|length }) }}</p>
+
+<table>
+{% for a in acteurs %}
+    <tr>
+	<td>{{ a.nom }}</td>
+	<td>{{ a.prenom }}</td>
+	<td>{{ a.dateNaissance|date('d/m/Y') }}</td>
+	<td>{{ a.sexe }}</td>
+	{% if is_granted('ROLE_ADMIN') %}
+        <td><a href="{{ path('myapp_acteur_modifier', { 'id': a.id }) }}">{{ 'modifier'|trans }}</a></td>
+	<td><a href="{{ path('myapp_acteur_supprimer', { 'id': a.id }) }}">{{ 'supprimer'|trans }}</a></td>
+        {% endif %}
+{% else %}
+    <tr>
+	<td>{{ 'acteur.aucun'|trans }}</td>
+    </tr>
+{% endfor %}
+</table>

@@ -25,8 +25,6 @@ fi
 
 echo "** we add doctrine extension configuration **"
 if ! grep -q "stof_doctrine_extensions" app/config/config.yml; then
-    # since sf 2.4
-    #php app/console config:dump-reference StofDoctrineExtensionsBundle --format=yaml 1>> app/config/config.yml
 cat <<EOT >> app/config/config.yml
 
 #
@@ -71,3 +69,7 @@ stof_doctrine_extensions:
 
 EOT
 fi
+
+#echo "** we add JMS Security configuration **"
+# since sf 2.4
+# php app/console config:dump-reference StofDoctrineExtensionsBundle --format=yaml 1>> app/config/config.yml

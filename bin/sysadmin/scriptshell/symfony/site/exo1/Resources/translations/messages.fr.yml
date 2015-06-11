@@ -1,0 +1,45 @@
+# Acteur
+acteur: Acteur
+acteur.nom: Nom
+acteur.prenom: Prénom
+acteur.dateNaissance: Date de naissance
+acteur.sexe: Sexe
+acteur.liste: Liste des acteurs
+acteur.trouve: %nombre% acteurs ont été trouvés
+acteur.liste.retour: Retour à la liste des acteurs
+acteur.ajouter: Ajouter un acteur
+acteur.modifier: Modifier l'acteur %prenom% %nom%
+acteur.ajouter.succes: L'acteur %prenom% %nom% a été ajouté avec succès !
+acteur.modifier.succes: L'acteur %prenom% %nom% a été modifié avec succès !
+acteur.aucun: Aucun acteur n’a été trouvé
+acteur.top.jeunes: Top des acteurs les plus jeunes
+
+# Film
+film: Film
+film.titre: Titre
+film.description: Description
+film.categorie: Catégorie
+film.acteurs: Acteurs
+film.liste: Liste des films
+film.liste.retour: Retour à la liste des films
+film.ajouter: Ajouter un film
+film.modifier: Modifier le film %titre%
+film.ajouter.succes: Le film %titre% a été ajouté avec succès !
+film.modifier.succes: Le film %titre% a été modifié avec succès !
+film.aucun: Aucun film n'a été trouvé
+film.fiche: Fiche du film %titre%
+film.top: Top films
+
+# Menu
+menu.accueil: Accueil
+menu.films: Films
+menu.acteurs: Acteurs
+menu.choisir_langue: Choisir la langue
+
+# Divers
+voir: Voir
+modifier: Modifier
+supprimer: Supprimer
+motcle: "Mot-clé :"
+rechercher: Rechercher
+copyright: Tous droits réservés

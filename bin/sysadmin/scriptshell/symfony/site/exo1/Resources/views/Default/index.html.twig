@@ -1,0 +1,12 @@
+{% extends 'MyAppSiteBundle::layout.html.twig' %}
+
+{% block title %}{{ 'menu.accueil'|trans }}{% endblock %}
+
+{% block content %}
+<h3>{{ 'acteur.top.jeunes'|trans }}</h3>
+{% render "MyAppSiteBundle:Acteur:top" with {'max': 3} %}
+
+<h3>{{ 'film.top'|trans }}</h3>
+{% render "MyAppSiteBundle:Film:top" %}
+
+{% endblock %}

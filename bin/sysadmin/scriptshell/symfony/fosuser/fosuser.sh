@@ -4,6 +4,8 @@ DIR=$1
 PLATEFORM_VERSION=$2
 DOMAINE=$3
 FOSUSER_PREFIX=$4
+MYAPP_BUNDLE_NAME=$5
+MYAPP_PREFIX=$6
 
 echo "**** FOSUser install with composer ****"
 
@@ -13,88 +15,33 @@ composer require  --no-update  friendsofsymfony/user-bundle:2.0.*@dev
 echo "** we lauch composer install **"
 composer update --with-dependencies
 
+echo "** we generate ${DOMAINE}AuthBundle with User and Group entities **"
+if [ ! -d src/${DOMAINE}/AuthBundle ]; then
+    php app/console generate:bundle --namespace="${DOMAINE}/AuthBundle" --bundle-name="${DOMAINE}AuthBundle" --format=annotation --structure --dir=src --no-interaction
+    php app/console generate:doctrine:entity --no-interaction --entity="${DOMAINE}AuthBundle:User" --fields="groups:array name:string(50) nickname:string(50) birthday:datetime address:text zip_code:string(6) city:string(50) country:string(50) created_at:datetime updated_at_at:datetime archive_at:datetime" --format=annotation --with-repository --no-interaction
+    php app/console generate:doctrine:entity --no-interaction --entity="${DOMAINE}AuthBundle:Group" --fields="created_at:datetime updated_at_at:datetime archive_at:datetime enabled:boolean" --format=annotation --with-repository --no-interaction
+fi
+
 echo "** we define bundles in app/AppKernel.php file **"
 if ! grep -q "FOSUserBundle" app/AppKernel.php; then
     sed -i '/SensioFrameworkExtraBundle(),/a \            # tools' app/AppKernel.php
     sed -i '/# tools/a \            new FOS\\UserBundle\\FOSUserBundle(),' app/AppKernel.php
 fi
 
-echo "** we add FOSUser configuration **"
-    # since sf 2.4
-    #php app/console config:dump-reference FOSUserBundle --format=yaml 1>> app/config/config.yml
-if ! grep -q "fos_user" app/config/config.yml; then
-    # since sf 2.4
-    #php app/console config:dump-reference StofDoctrineExtensionsBundle --format=yaml 1>> app/config/config.yml
-cat <<EOT >> app/config/config.yml
-
-#
-# FOSUserBundle configuration
-#
-fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
-    firewall_name: main
-    user_class: ${DOMAINE}\AuthBundle\Entity\User
-    use_listener:           true
-    use_username_form_type: true
-    model_manager_name:     null  # change it to the name of your entity/document manager if you don't want to use the default one.
-    from_email:
-        address:       contact@sfynx.fr
-        sender_name:   Admin    
-    profile:
-        form:
-            type:               fos_user_profile
-            name:               fos_user_profile_form
-            validation_groups:  [Profile]
-    change_password:
-        form:
-            type:               fos_user_change_password
-            name:               fos_user_change_password_form
-            validation_groups:  [ChangePassword]
-    registration:
-        confirmation:
-            from_email: # Use this node only if you don't want the global email address for the confirmation email
-                address:        contact@sfynx.fr
-                sender_name:    commercial
-            enabled:    true # change to true for required email confirmation
-            #template:   FOSUserBundle:Registration:email.txt.twig
-        #email:
-            template:   FOSUserBundle:Registration:registration.email.twig
-        form:
-            type:               bootstrap_user_registration
-            name:               fos_user_registration_form
-            validation_groups:  [Registration]
-    resetting:
-        token_ttl: 86400
-        email:
-            from_email: # Use this node only if you don't want the global email address for the resetting email
-                address:        contact@sfynx.fr
-                sender_name:    admin
-            template:   FOSUserBundle:Resetting:email.txt.twig
-        form:
-            type:               fos_user_resetting
-            name:               fos_user_resetting_form
-            validation_groups:  [ResetPassword]            
-    service:
-        mailer:                 fos_user.mailer.default
-        email_canonicalizer:    fos_user.util.canonicalizer.default
-        username_canonicalizer: fos_user.util.canonicalizer.default
-        user_manager:           fos_user.user_manager.default
-    group:
-        group_class: ${DOMAINE}\AuthBundle\Entity\Group
-        group_manager:  fos_user.group_manager.default
-        form:
-            type:               fos_user_group
-            name:               fos_user_group_form
-            validation_groups:  [Registration]
-
-EOT
+echo "** we add extends bundle **"
+if ! grep -q "FOSUserBundle" src/${DOMAINE}/AuthBundle/${DOMAINE}AuthBundle.php; then
+    sed  -i "/{/r $DIR/fosuser/addBundle.txt" src/${DOMAINE}/AuthBundle/${DOMAINE}AuthBundle.php
 fi
 
-echo "** we generate ${DOMAINE}AuthBundle with User and Group entities **"
-if [ ! -d src/${DOMAINE}/AuthBundle ]; then
-    php app/console generate:bundle --namespace="${DOMAINE}/AuthBundle" --bundle-name="${DOMAINE}AuthBundle" --format=annotation --structure --dir=src --no-interaction
-    php app/console generate:doctrine:entity --no-interaction --entity="${DOMAINE}AuthBundle:User" --fields="groups:array name:string(50) nickname:string(50) birthday:datetime address:text zip_code:string(6) city:string(50) country:string(50) created_at:datetime updated_at_at:datetime archive_at:datetime" --format=annotation --with-repository --no-interaction
-    php app/console generate:doctrine:entity --no-interaction --entity="${DOMAINE}AuthBundle:Group" --fields="created_at:datetime updated_at_at:datetime archive_at:datetime enabled:boolean" --format=annotation --with-repository --no-interaction
+echo "** we add FOSUser configuration **"
+if ! grep -q "fos_user" app/config/config.yml; then
+    echo "$(cat $DIR/fosuser/addConfig.yml)" >> app/config/config.yml
+    sed -i "s/DOMAINE/${DOMAINE}/g" app/config/config.yml
+fi
+
+echo "** we add FOSUser routing **"
+if ! grep -q "FOSUserBundle" app/config/routing.yml; then
+    echo "$(cat $DIR/fosuser/addRouting.yml)" >> app/config/routing.yml
 fi
 
 echo "** we modify entities with extends classes and protected attributes **"
@@ -112,8 +59,10 @@ fi
 
 echo "** we create datatable in database **"
 rm -rf app/cache/*
-php app/console doctrine:schema:create --env=dev --process-isolation  -vvv
-php app/console doctrine:schema:update --force
+php app/console doctrine:schema:create --env=dev --process-isolation  -v
+php app/console doctrine:schema:update --env=dev --force
+php app/console doctrine:schema:create --env=test --process-isolation  -v
+php app/console doctrine:schema:update --env=test --force
 
 #echo "** If you want to add Roles you can use the FOSUserBundle command line tools **"
 #php app/console fos:user:promote admin ROLE_ADMIN
@@ -124,8 +73,8 @@ php app/console doctrine:query:sql 'UPDATE `fos_user` SET groups ="a:0:{}" WHERE
 
 echo "** we generate User and Group CRUD **"
 if [ ! -d src/${DOMAINE}/AuthBundle/Form ]; then
-    php app/console generate:doctrine:crud --entity="${DOMAINE}AuthBundle:User" --route-prefix="$FOSUSER_PREFIX" --with-write --format=annotation --no-interaction
-    php app/console generate:doctrine:crud --entity="${DOMAINE}AuthBundle:Group" --route-prefix="$FOSUSER_PREFIX" --with-write --format=annotation --no-interaction
+    php app/console generate:doctrine:crud --entity="${DOMAINE}AuthBundle:User" --route-prefix="$FOSUSER_PREFIX/user" --with-write --format=annotation --no-interaction
+    php app/console generate:doctrine:crud --entity="${DOMAINE}AuthBundle:Group" --route-prefix="$FOSUSER_PREFIX/group" --with-write --format=annotation --no-interaction
 fi
 
 echo "** we modify twig and php artifact files **"
@@ -144,14 +93,26 @@ if ! grep -q "plainPassword" src/${DOMAINE}/AuthBundle/Form/UserType.php; then
 fi
 
 echo "** we add encoder in security.yml **"
-if grep -q "plaintext" app/config/security.yml; then
+if ! grep -q "sha512" app/config/security.yml; then
     sed -i 's/Symfony\\Component\\Security\\Core\\User\\User: plaintext/'$DOMAINE'\\AuthBundle\\Entity\\User: sha512/g' app/config/security.yml
-    sed -i "/access_control/r $DIR/fosuser/addAccessControlSecurity.txt" app/config/security.yml
-    sed -i "/firewalls/r $DIR/fosuser/addMainFirewall.txt" app/config/security.yml
-    sed -i "/providers/r $DIR/fosuser/addFosProvider.txt" app/config/security.yml
+fi
+if ! grep -q "path: ^/login_check" app/config/security.yml; then
+    sed -i "/[^_]access_control:/r $DIR/fosuser/addAccessControlSecurity.yml" app/config/security.yml
+    sed -i "s/myapp/${MYAPP_PREFIX}/g" app/config/security.yml
+fi
+if ! grep -q "main" app/config/security.yml; then
+    sed -i "/firewalls/r $DIR/fosuser/addMainFirewall.yml" app/config/security.yml
+    sed -i "s/myapp/${MYAPP_PREFIX}/g" app/config/security.yml
+fi
+if ! grep -q "fos_userbundle:" app/config/security.yml; then
+    sed -i "/providers/r $DIR/fosuser/addFosProvider.yml" app/config/security.yml
+    sed -i "s/myapp/${MYAPP_PREFIX}/g" app/config/security.yml
 fi
 
+echo "** we add twig resource files **"
+cp -R $DIR/fosuser/Resources/views/* src/${DOMAINE}/AuthBundle/Resources/views
+sed -i "s/MyAppBundle/${DOMAINE}${MYAPP_BUNDLE_NAME}Bundle/g" src/${DOMAINE}/AuthBundle/Resources/views/layout.html.twig
 
-#sed -i "/->add('name')/a \            ->add('username')" src/Acme/AuthBundle/Form/UserType.php
-#sed -i "/->add('username')/a \            ->add('email')" src/Acme/AuthBundle/Form/UserType.php
-#sed -e '/username/ {' -e 'r /var/www/sysadmin/scriptshell/FRAMEWORK/symfony/fosuser/addFieldUserForm.txt' -e 'd' -e '}' -i src/Acme/AuthBundle/Form/UserType.php
+#echo "** we add JMS Security configuration **"
+# since sf 2.4
+#php app/console config:dump-reference FOSUserBundle --format=yaml 1>> app/config/config.yml

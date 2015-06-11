@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>{% block title %}Filmothèque{% endblock %}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="{{ asset('bundles/myappfilmotheque/css/main.css') }}" type="text/css" media="all" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
+    </head>
+    <body>
+        <div id="page">
+            <div id="header">
+                <img src="{{ asset('bundles/myappfilmotheque/images/logo.png') }}" alt="Filmothèque" width="128" height="128" />
+
+                <ul id="menu">
+                    <li><a href="{{ path('myapp_accueil') }}">{{ 'menu.accueil'|trans }}</a></li>
+                    <li><a href="{{ path('myapp_film_lister') }}">{{ 'menu.films'|trans }}</a></li>
+                    <li><a href="{{ path('myapp_acteur_lister') }}">{{ 'menu.acteurs'|trans }}</a></li>
+                </ul>
+
+                <div id="choisir_langue">{{ 'menu.choisir_langue'|trans }} :
+                    <a href="{{ path('myapp_choisir_langue', {'langue' : 'fr'}) }}">FR</a> |
+                    <a href="{{ path('myapp_choisir_langue', {'langue' : 'en'}) }}">EN</a>
+                </div>
+
+                <div id="connexion">
+                    {% include "MyAppUtilisateurBundle::connexion.html.twig" %}
+                </div>
+            </div>
+
+            <div id="content">
+                <h1>{{ block('title') }}</h1>
+                {% block content %}
+                {% endblock %}
+            </div>
+            <div id="footer">
+                <p>{{ 'copyright'|trans }} © 2011</p>
+            </div>
+        </div>
+    </body>
+</html>
