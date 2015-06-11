@@ -1,0 +1,12 @@
+{% extends 'MyAppSiteBundle::layout.html.twig' %}
+
+{% block title %}{{ 'film.liste'|trans }}{% endblock %}
+
+{% block content %}
+    {% include 'MyAppSiteBundle:Film:liste.html.twig' with {'films' : films}  %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+    <p><a href="{{ path('myapp_film_ajouter') }}">{{ 'film.ajouter'|trans }}</a><p>
+    {% endif %}
+
+{% endblock %}

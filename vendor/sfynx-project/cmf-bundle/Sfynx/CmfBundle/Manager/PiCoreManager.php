@@ -529,6 +529,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             $response->setPublic();
         }    
         if (method_exists($object, 'getLifetime') && $object->getLifetime()) {
+            // server side caching
             $response->setSharedMaxAge($object->getLifetime());
             // Une fois que ESI est utilisée, il ne faut pas oublier de toujours utiliser la directive s-maxage à la place de max-age. 
             // Comme le navigateur ne reçoit que la réponse « agrégée » de la ressource, il n'est pas conscient de son « sous-contenu », 
@@ -537,6 +538,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             $isEsi = $this->container->getParameter('pi_app_admin.page.esi.authorized');
             if ($isEsi) {
             } else {
+                // browser side caching
             	$response->setMaxAge($object->getLifetime());
             }
         } 
@@ -551,7 +553,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             $response->headers->set('Pragma', "no-cache");
             $response->headers->set('Cache-control', "private");
         } elseif ( (method_exists($object, 'getLifetime') && ($object->getLifetime() == 0))  ) {
+            // server side caching
             $response->setSharedMaxAge(0);
+            // browser side caching
             $response->setMaxAge(0);
         }
         if (method_exists($object, 'getMetaContentType')) {
