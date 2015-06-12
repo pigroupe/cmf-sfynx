@@ -105,7 +105,7 @@ class ActeurController extends ContainerAware
 
         if ($request->getMethod() == 'POST') 
         {
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) 
             {
