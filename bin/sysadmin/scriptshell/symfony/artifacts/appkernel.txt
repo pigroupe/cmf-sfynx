@@ -1,7 +1,0 @@
-    
-    protected function getContainerBaseClass()
-    {
-
-        return parent::getContainerBaseClass();
-    }
-

@@ -1,5 +1,0 @@
-
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            return '\JMS\DebuggingBundle\DependencyInjection\TraceableContainer';
-        }
-

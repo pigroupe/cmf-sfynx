@@ -4,5 +4,5 @@
 #
 myapp_site_bundle:
     resource: "@MyAppSiteBundle/Resources/config/routing.yml"
-    prefix: /
+    prefix: /myapp
     

@@ -7,8 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerAware,
 
 use MyApp\SiteBundle\Entity\Categorie,
     MyApp\SiteBundle\Entity\Acteur,
-    MyApp\SiteBundle\Entity\Film,
-    MyApp\UtilisateurBundle\Entity\Utilisateur
+    MyApp\SiteBundle\Entity\Film
     ;
 
 
@@ -32,7 +31,7 @@ class DefaultController extends ContainerAware
         if($langue != null)
         {
             // On enregistre la langue en session
-            $this->container->get('session')->setLocale($langue);
+            $this->container->get('request')->setLocale($langue);
         }
 
         // on tente de rediriger vers la page d’origine

@@ -3,12 +3,12 @@
 namespace MyApp\SiteBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use MyApp\SiteBundle\Form\ActeurForm;
 
 class FilmForm extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {        
         $builder->add('titre', 'text', array('label' => 'film.titre'))
                 ->add('description', 'textarea', array('label' => 'film.description'));

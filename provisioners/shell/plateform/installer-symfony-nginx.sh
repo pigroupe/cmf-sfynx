@@ -12,9 +12,9 @@ PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME | awk '{print tolower(
 PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper($0)}') # we lower the string
 DATABASE_NAME="symfony_${PLATEFORM_PROJET_NAME_LOWER}"
 DATABASE_NAME_TEST="symfony_${PLATEFORM_PROJET_NAME_LOWER}_test"
-DOMAINE="MyApp"
+DOMAINE="App"
 MYAPP_BUNDLE_NAME="Site"
-MYAPP_PREFIX="myapp"
+MYAPP_PREFIX="fr"
 FOSUSER_PREFIX="$MYAPP_PREFIX/admin"
 
 echo "**** we create directories ****"
@@ -52,6 +52,10 @@ else
     cd $PLATEFORM_PROJET_NAME
 fi
 
+find src/${DOMAINE}/${MYAPP_BUNDLE_NAME}Bundle/* -type f -exec sed -i  "s/MyApp\\SiteBundle/${DOMAINE}\\${MYAPP_BUNDLE_NAME}Bundle/g" {} \;
+
+exit 1
+
 echo "**** we create default directories ****"
 if [ ! -d app/cachesfynx ]; then
     mkdir -p app/cache
@@ -79,6 +83,12 @@ fi
 echo "** we add config in AppKernel **"
 if ! grep -q "getContainerBaseClass" app/AppKernel.php; then
     sed  -i -e "/registerContainerConfiguration/r $DIR/provisioners/shell/plateform/artifacts/appkernel.txt" -e //N app/AppKernel.php
+fi
+
+echo "** we modify config.yml **"
+if ! grep -q "assets_version: v1_0_0" app/config/config.yml; then
+    sed -i "/engines/a \        assets_version: v1_0_0 " app/config/config.yml
+    sed -i '/translator/c\    translator:      { fallback: "%locale%" }' app/config/config.yml
 fi
 
 echo "****  we add in .gitignore file default values from symfony project ****"
@@ -518,14 +528,15 @@ else
 fi
 
 echo "**** we create database ****"
-php app/console doctrine:database:create --env=dev
+php app/console doctrine:database:create
 php app/console doctrine:database:create --env=test
 
 echo "**** we install bundles and their dependancies ****"
 $DIR/provisioners/shell/plateform/doctrine/doctrine-extension.sh "$DIR" "$PLATEFORM_INSTALL_VERSION"
 $DIR/provisioners/shell/plateform/jms/jms.sh "$DIR" "$PLATEFORM_INSTALL_VERSION" 
 $DIR/provisioners/shell/plateform/fosuser/fosuser.sh "$DIR" "$PLATEFORM_INSTALL_VERSION" "$DOMAINE" "$FOSUSER_PREFIX" "$MYAPP_BUNDLE_NAME" "$MYAPP_PREFIX"
-$DIR/site/install.sh "$DIR" "$PLATEFORM_VERSION" "$DOMAINE"  "$MYAPP_BUNDLE_NAME" "$MYAPP_PREFIX" 
+$DIR/provisioners/shell/plateform/fosrest/fosrest.sh "$DIR" "$PLATEFORM_VERSION" "$DOMAINE"
+$DIR/site/install.sh "$DIR" "$PLATEFORM_VERSION" "$DOMAINE"  "$MYAPP_BUNDLE_NAME" "$MYAPP_PREFIX"
 #$DIR/provisioners/shell/plateform/qa/qa.sh "$DIR" "$PLATEFORM_INSTALL_VERSION"
 
 echo "**** we lauch the composer ****"

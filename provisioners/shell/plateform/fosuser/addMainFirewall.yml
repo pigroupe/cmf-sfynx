@@ -5,15 +5,13 @@
             form_login:
                 provider: fos_userbundle
                 use_forward: false
-                csrf_provider: form.csrf_provider
+                csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
                 login_path: /myapp/login
                 check_path: /myapp/login_check
                 failure_path: null #/login_failure
                 #success_handler: sfynx.auth.authentication_handler
                 remember_me: false
                 default_target_path: /myapp
-                #username_parameter: login[_username]
-                #password_parameter: login[_password]
 #            remember_me:
 #                key: "%secret%"
 #                lifetime: 3600

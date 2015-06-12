@@ -7,10 +7,12 @@ FOSUSER_PREFIX=$4
 MYAPP_BUNDLE_NAME=$5
 MYAPP_PREFIX=$6
 
+DOMAINE_LOWER=$(echo $DOMAINE | awk '{print tolower($0)}') # we lower the string
+
 echo "**** FOSUser install with composer ****"
 
 echo "** we add FOSUser bundle and dependencies in composer.json and app/AppKernel.php **"
-composer require  --no-update  friendsofsymfony/user-bundle:2.0.*@dev
+composer require  --no-update  friendsofsymfony/user-bundle:~2.0@dev
 
 echo "** we lauch composer install **"
 composer update --with-dependencies
@@ -20,6 +22,13 @@ if [ ! -d src/${DOMAINE}/AuthBundle ]; then
     php app/console generate:bundle --namespace="${DOMAINE}/AuthBundle" --bundle-name="${DOMAINE}AuthBundle" --format=annotation --structure --dir=src --no-interaction
     php app/console generate:doctrine:entity --no-interaction --entity="${DOMAINE}AuthBundle:User" --fields="groups:array name:string(50) nickname:string(50) birthday:datetime address:text zip_code:string(6) city:string(50) country:string(50) created_at:datetime updated_at_at:datetime archive_at:datetime" --format=annotation --with-repository --no-interaction
     php app/console generate:doctrine:entity --no-interaction --entity="${DOMAINE}AuthBundle:Group" --fields="created_at:datetime updated_at_at:datetime archive_at:datetime enabled:boolean" --format=annotation --with-repository --no-interaction
+
+    sed -i '/@ORM\\Column/ s=)=, nullable\=true)=' src/${DOMAINE}/AuthBundle/Entity/User.php
+    #sed -i '/@ORM\\Column/ s=, nullable\=true)=)=' src/${DOMAINE}/AuthBundle/Entity/User.php
+
+    sed -i "s/return \$this->groups;/return parent::getGroups();/g" src/${DOMAINE}/AuthBundle/Entity/User.php
+
+    sed -i "/protected \$archive_at;/r $DIR/fosuser/addEntity.txt" src/${DOMAINE}/AuthBundle/Entity/User.php
 fi
 
 echo "** we define bundles in app/AppKernel.php file **"
@@ -42,6 +51,7 @@ fi
 echo "** we add FOSUser routing **"
 if ! grep -q "FOSUserBundle" app/config/routing.yml; then
     echo "$(cat $DIR/provisioners/shell/plateform/fosuser/addRouting.yml)" >> app/config/routing.yml
+    sed -i "s/myapp/${MYAPP_PREFIX}/g" app/config/routing.yml
 fi
 
 echo "** we modify entities with extends classes and protected attributes **"
@@ -112,6 +122,13 @@ fi
 echo "** we add twig resource files **"
 cp -R $DIR/provisioners/shell/plateform/fosuser/Resources/views/* src/${DOMAINE}/AuthBundle/Resources/views
 sed -i "s/MyAppBundle/${DOMAINE}${MYAPP_BUNDLE_NAME}Bundle/g" src/${DOMAINE}/AuthBundle/Resources/views/layout.html.twig
+
+echo "we create admin/pacman and superadmin/pacman user"
+php app/console fos:user:create user user@gmail.com pacman
+php app/console fos:user:promote user ROLE_USER
+
+php app/console fos:user:create superadmin superadmin@gmail.com pacman
+php app/console fos:user:promote --super superadmin
 
 #echo "** we add JMS Security configuration **"
 # since sf 2.4

@@ -1,7 +1,0 @@
-
-
-    public function getParent()
-    {
-        return 'FOSUserBundle';
-    }
-

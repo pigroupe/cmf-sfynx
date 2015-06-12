@@ -10,8 +10,10 @@
 {% endif %}
 </div>
 
-{% for key, flash in app.session.getFlashes() %}
-<div class="{{ flash }}">
-    {{ key|trans([], 'FOSUserBundle') }}
-</div>
+{% for label, flashes in app.session.flashbag.all %}
+    {% for flash in flashes %}
+        <div class="{{ flash }} alert-{{ label }}">
+            {{ label|trans([], 'FOSUserBundle') }}
+        </div>
+    {% endfor %}
 {% endfor %}
