@@ -179,16 +179,16 @@ fi
 echo "**** we restart apache2 server ****"
 sudo service apache2 restart
 
-#if [ ! -f composer.phar ]; then
-#    echo "**** we install/update the composer file ****"
-#    #wget https://getcomposer.org/composer.phar -O ./composer.phar
-#    curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
-#else
-#    echo "update composer.phar"
-#    php composer.phar self-update    
-#fi
+if [ ! -f composer.phar ]; then
+    echo "**** we install/update the composer file ****"
+    wget https://getcomposer.org/composer.phar -O ./composer.phar
+    #curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+else
+    echo "update composer.phar"
+    php composer.phar self-update    
+fi
 echo "**** we lauch the composer ****"
-composer install --no-interaction --with-dependencies
+composer install --no-interaction
 echo "**** Generating optimized autoload files ****"
 composer dump-autoload --optimize
 

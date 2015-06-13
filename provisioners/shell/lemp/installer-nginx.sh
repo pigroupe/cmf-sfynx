@@ -27,3 +27,6 @@ upstream php5-fpm-sock {
 }
 EOT
 fi
+
+# register nginx in the boot 
+sudo update-rc.d nginx defaults 

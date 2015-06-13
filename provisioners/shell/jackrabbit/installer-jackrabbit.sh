@@ -5,10 +5,10 @@ JACKRABBIT_JAR=jackrabbit-standalone-2.7.5.jar
 
 if [ ! -f $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script/$JACKRABBIT_JAR ]; then
     cd $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script
-    wget https://archive.apache.org/dist/jackrabbit/2.7.5/jackrabbit-standalone-2.7.5.jar  > /dev/null
+    sudo wget https://archive.apache.org/dist/jackrabbit/2.7.5/jackrabbit-standalone-2.7.5.jar  > /dev/null
 fi
 
-
+ 
 # Get the code
 mkdir -p $DIRJACKRABBIT
 cp -R $DIR/provisioners/shell/jackrabbit/Jackrabbit-startup-script/* $DIRJACKRABBIT
@@ -27,7 +27,6 @@ sudo rm  /etc/init.d/jackrabbit
 sudo ln -s $DIRJACKRABBIT/jackrabbit.sh /etc/init.d/jackrabbit
 sudo chmod 755 /etc/init.d/jackrabbit
 
-
 # register jackrabbit in the boot 
 sudo update-rc.d jackrabbit defaults 
 
@@ -35,6 +34,6 @@ sudo update-rc.d jackrabbit defaults
 # to proceed...
 
 #create port 8081
-#sudo iptables -A INPUT -p tcp -m tcp --dport 8081 -j ACCEPT
+sudo iptables -A INPUT -p tcp -m tcp --dport 8081 -j ACCEPT
 
 $DIR/provisioners/shell/phpcr-browser/installer-browser.sh $DIR

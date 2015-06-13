@@ -2,20 +2,21 @@
 DIR=$1
 
 PLATEFORM_PROJET_NAME=phpcr-browser
+PLATEFORM_PROJET_NAME_HOST=phpcrbrowser
 
 #Web interface for browsing PHPCR repositories, using Silex and AngularJS 
 #https://github.com/marmelab/phpcr-browser
 
 echo "*****Install Web interface for browsing PHPCR repositories, using Silex and AngularJS"
-mkdir -p /tmp
-mkdir -p /websites/phpcr-browser
+sudo mkdir -p /websites/phpcr-browser
 sudo chmod -R 777 /websites/phpcr-browser
-cd /tmp
 
 echo "***** Clone the repository "
-sudo git clone https://github.com/marmelab/phpcr-browser
+cd /tmp
+git clone https://github.com/marmelab/phpcr-browser
 cd phpcr-browser
-sudo cp -r * /websites/phpcr-browser
+cp -r * /websites/phpcr-browser
+sudo chmod -R 777 /websites/phpcr-browser
 cd /websites/phpcr-browser
 
 echo "***** We configure phpcr-browser "
@@ -25,7 +26,8 @@ if [ ! -f config/prod.yml ]; then
 fi
 
 # we create the virtualhiost of sfynx for nginx
-cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
+mkdir -p /tmp
+cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME_HOST
 #upstream php5-fpm-sock {  
 #    server unix:/var/run/php5-fpm.sock;  
 #}
@@ -62,6 +64,7 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(index)\.php(/|\$) {
+        #include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
@@ -83,10 +86,11 @@ server {
     }
 }
 EOT
-sudo mv /tmp/$PLATEFORM_PROJET_NAME /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME
-
-# we create the symbilic link
-sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME
+echo "**** we create the symbilic link ****"
+sudo rm /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME_HOST
+sudo rm /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME_HOST
+sudo mv /tmp/$PLATEFORM_PROJET_NAME_HOST /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME_HOST
+sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME_HOST /etc/nginx/sites-enabled/$PLATEFORM_PROJET_NAME_HOST
 
 # we add host in the /etc/hosts file
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
@@ -95,17 +99,18 @@ if ! grep -q "dev.$PLATEFORM_PROJET_NAME.local" /etc/hosts; then
 fi
 
 # we install the composer file
-if [ ! -f composer.phar ]; then
-    wget https://getcomposer.org/composer.phar -O ./composer.phar
-    # curl -s https://getcomposer.org/installer | php
-fi
+#if [ ! -f composer.phar ]; then
+#    wget https://getcomposer.org/composer.phar -O ./composer.phar
+#    # curl -s https://getcomposer.org/installer | php
+#fi
 #composer require jackalope/jackalope-doctrine-dbal:1.1.* --no-update
 #composer update jackalope/jackalope-doctrine-dbal
 
 echo "***** Install project"
 #make install
-php composer.phar install --no-interaction
+composer install --no-interaction
 bower install --config.interactive=false
+mv bower_components web/assets
 
 # we restart nginx server
 sudo service nginx restart
