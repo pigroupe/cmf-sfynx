@@ -1,8 +1,0 @@
-
-#
-#   Import MyAppSiteBundle routing files
-#
-myapp_site_bundle:
-    resource: "@MyAppSiteBundle/Resources/config/routing.yml"
-    prefix: /myapp
-    

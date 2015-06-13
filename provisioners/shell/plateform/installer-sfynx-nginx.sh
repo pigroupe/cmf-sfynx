@@ -142,6 +142,7 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
@@ -266,6 +267,7 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
@@ -390,6 +392,7 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
@@ -459,16 +462,18 @@ fi
 echo "**** we restart nginx server ****"
 sudo service nginx restart
 
-echo "**** we install/update the composer file ****"
-if [ ! -f composer.phar ]; then
-    wget https://getcomposer.org/composer.phar -O ./composer.phar
-else
-    php composer.phar self-update
-fi
+#if [ ! -f composer.phar ]; then
+#    echo "**** we install/update the composer file ****"
+#    #wget https://getcomposer.org/composer.phar -O ./composer.phar
+#    curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+#else
+#    echo "update composer.phar"
+#    php composer.phar self-update    
+#fi
 echo "**** we lauch the composer ****"
-php -d memory_limit=1024M composer.phar install --no-interaction
+composer install --no-interaction --with-dependencies
 echo "**** Generating optimized autoload files ****"
-php composer.phar dump-autoload --optimize
+composer dump-autoload --optimize
 
 echo "**** we remove cache files ****"
 rm -rf app/cache/*

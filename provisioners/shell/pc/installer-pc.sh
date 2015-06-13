@@ -86,3 +86,7 @@ sudo apt-get -y install curl nodejs > /dev/null
 
 echo "Install bower"
 sudo npm install -g bower
+
+echo "**** we install/update the composer file ****"
+#wget https://getcomposer.org/composer.phar -O ./composer.phar
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer

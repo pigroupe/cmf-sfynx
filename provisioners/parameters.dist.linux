@@ -6,7 +6,7 @@ $box_distrib = "ubuntu"
 # VM settings
 $vm_hostname = "dev.sfynx.vagrant"
 $vm_name = "SFYNX"
-$vm_group = "/Vagrant"
+$vm_group = "/vagrant"
  
 # VM configuration and capacities
 $vm_gui = false # Enable or not GUI
