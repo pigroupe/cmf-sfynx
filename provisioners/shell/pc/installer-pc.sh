@@ -84,8 +84,9 @@ add-apt-repository -y ppa:chris-lea/node.js
 sudo apt-get -y update > /dev/null
 sudo apt-get -y install curl nodejs > /dev/null
 
-echo "Install bower"
+echo "Install bower/angularjs"
 sudo npm install -g bower
+sudo npm install -g generator-angular
 
 echo "**** we install/update the composer file ****"
 #wget https://getcomposer.org/composer.phar -O ./composer.phar

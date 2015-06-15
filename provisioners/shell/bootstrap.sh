@@ -24,6 +24,11 @@ is_swap=${19}
 
 source $DIR/provisioners/shell/env.sh
 
+echo "Removing Windows newlines on Linux (sed vs. awk)"
+find provisioners/* -type f -exec sed -i  "s/^M//" {} \;
+find provisioners/* -type f -exec sed -i  "s/\r\n//" {} \;
+find provisioners/* -type f -exec sed -i  "s/\r//" {} \;
+
 echo "***** We set permmissions for all scriptshell"
 mkdir -p /tmp
 sudo chmod -R 777 /tmp
@@ -62,6 +67,21 @@ then
     #echo "pas solr"
 fi
 $DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh "$DIR" "$PLATEFORM_INSTALL_NAME" "$PLATEFORM_INSTALL_TYPE" "$PLATEFORM_INSTALL_VERSION" "$PLATEFORM_PROJET_NAME" "$PLATEFORM_PROJET_GIT" "$INSTALL_USERWWW"
+
+echo "we install the mysql dump files if the DUMP/mysqldump.sql file exist"
+if [ -f $DIR/DUMP/mysqldump.sql ]; then
+    sudo $DIR/provisioners/shell/plateform/importBDD.sh "$DIR/DUMP/mysqldump.sql"
+fi
+
+echo "we install all uploads files if the DUMP/uploads.tar.gz file exist"
+if [ -f $DIR/DUMP/uploads.sql ]; then
+    sudo $DIR/provisioners/shell/plateform/importUpload.sh "$DIR/DUMP/uploads.tar.gz" "$DIR"
+fi
+
+echo "we install the jackribbit database if the DUMP/jr.tar.gz file exist"
+if [ -f $DIR/DUMP/jr.sql ]; then
+    sudo $DIR/provisioners/shell/plateform/importJR.sh "$DIR/DUMP/jr.tar.gz"
+fi
 
 echo "***** End we clean-up the system *****"
 sudo apt-get -y autoremove > /dev/null
