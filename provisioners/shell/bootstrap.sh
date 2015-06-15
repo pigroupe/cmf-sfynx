@@ -25,9 +25,9 @@ is_swap=${19}
 source $DIR/provisioners/shell/env.sh
 
 echo "Removing Windows newlines on Linux (sed vs. awk)"
-find provisioners/* -type f -exec sed -i  "s/^M//" {} \;
-find provisioners/* -type f -exec sed -i  "s/\r\n//" {} \;
-find provisioners/* -type f -exec sed -i  "s/\r//" {} \;
+find $DIR/provisioners/* -type f -exec sed -i  "s/^M//" {} \;
+find $DIR/provisioners/* -type f -exec sed -i  "s/\r\n//" {} \;
+find $DIR/provisioners/* -type f -exec sed -i  "s/\r//" {} \;
 
 echo "***** We set permmissions for all scriptshell"
 mkdir -p /tmp
