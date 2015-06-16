@@ -110,7 +110,7 @@ echo "***** Install project"
 #make install
 composer install --no-interaction
 bower install --config.interactive=false
-mv bower_components web/assets
+sudo mv bower_components web/assets
 
 # we restart nginx server
 sudo service nginx restart
