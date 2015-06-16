@@ -29,9 +29,7 @@ PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper(
 DATABASE_NAME="symfony_${PLATEFORM_PROJET_NAME_LOWER}"
 
 echo "Removing Windows newlines on Linux (sed vs. awk)"
-#find $DIR/provisioners/* -type f -exec sed -i  's/^M//g' {} \;
-#find $DIR/provisioners/* -type f -exec sed -i  's/\r\n//g' {} \;
-#find $DIR/provisioners/* -type f -exec sed -i  s/\r//g' {} \;
+#find $DIR/provisioners/* -type f -exec dos2unix {} \;
 
 echo "***** We set permmissions for all scriptshell"
 mkdir -p /tmp
@@ -39,11 +37,6 @@ sudo chmod -R 777 /tmp
 sudo chmod -R +x $DIR
 sudo chmod -R 777 $DIR
 sudo chmod 755 /etc/apt/sources.list
-
-echo "**** we install/update the composer file ****"
-#wget https://getcomposer.org/composer.phar -O ./composer.phar
-cd /tmp
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 echo "***** First we copy own sources.list to box *****"
 if [ -f $DIR/provisioners/shell/etc/apt/$DISTRIB/sources.list ];
@@ -74,6 +67,13 @@ then
     $DIR/provisioners/shell/solr/installer.sh "$DIR"
     #echo "pas solr"
 fi
+
+echo "**** we install/update the composer file ****"
+#wget https://getcomposer.org/composer.phar -O ./composer.phar
+cd /tmp
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+
+echo "**** we install plateform ****"
 $DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh "$DIR" "$PLATEFORM_INSTALL_NAME" "$PLATEFORM_INSTALL_TYPE" "$PLATEFORM_INSTALL_VERSION" "$PLATEFORM_PROJET_NAME" "$PLATEFORM_PROJET_GIT" "$INSTALL_USERWWW"
 
 echo "we install the mysql dump files if the DUMP/mysqldump.sql file exist"
