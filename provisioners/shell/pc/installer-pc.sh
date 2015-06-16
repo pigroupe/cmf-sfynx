@@ -87,3 +87,18 @@ sudo apt-get -y install curl nodejs > /dev/null
 echo "Install bower/angularjs"
 sudo npm install -g bower
 sudo npm install -g generator-angular
+
+echo "Install dos2unix"
+### http://englanders.us/~jason/howtos.php?howto=dos2unix
+#cd ~
+#wget http://www.xs4all.nl/~waterlan/dos2unix/dos2unix-5.0.tar.gz
+#mkdir -p -m 0700 src
+#cd src
+#find -maxdepth 1 -type d -name "dos2unix-*" -exec rm -r {} \;
+#tar xzvf ~/dos2unix-5.0.tar.gz
+#cd dos2unix-5.0
+#test $UID = 0 && chown -R root:root .
+#find -type f -exec chmod 644 {} \;
+
+# Compile it
+#make prefix=/usr/local
