@@ -87,7 +87,3 @@ sudo apt-get -y install curl nodejs > /dev/null
 echo "Install bower/angularjs"
 sudo npm install -g bower
 sudo npm install -g generator-angular
-
-echo "**** we install/update the composer file ****"
-#wget https://getcomposer.org/composer.phar -O ./composer.phar
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
