@@ -83,6 +83,7 @@ echo "Install Curl and Nodejs"
 add-apt-repository -y ppa:chris-lea/node.js
 sudo apt-get -y update > /dev/null
 sudo apt-get -y install curl nodejs > /dev/null
+sudo npm install -g npm
 
 echo "Install bower/angularjs"
 sudo npm install -g bower

@@ -45,6 +45,7 @@ then
     apt-get -y update > /dev/null
     apt-get -y dist-upgrade > /dev/null
 fi
+sudo dpkg --configure -a
 
 echo "***** Second we update the system *****"
 apt-get -y install build-essential > /dev/null
@@ -55,23 +56,29 @@ echo "***** Add vagrant to www-data group *****"
 sudo usermod -aG www-data vagrant
 #chown -R ${INSTALL_USERNAME}:${INSTALL_USERGROUP} ${INSTALL_USERWWW}/${PROJET_NAME}
 
-echo "***** Provisionning *****"
+echo "***** Provisionning PC *****"
 $DIR/provisioners/shell/SWAP/installer-swap.sh "$DIR" # important to allow the composer to have enough memory
 $DIR/provisioners/shell/pc/installer-pc.sh "$DIR" "$DISTRIB"
+
+echo "***** Provisionning LEMP *****"
 $DIR/provisioners/shell/lemp/installer-lemp.sh "$DIR" "$PLATEFORM_PROJET_NAME"
+
+echo "**** we install/update the composer file ****"
+#wget https://getcomposer.org/composer.phar -O ./composer.phar
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+
 #$DIR/provisioners/shell/QA/installer-phpqatools.sh "$DIR"
+
+echo "***** Provisionning JACKRABBIT *****"
 $DIR/provisioners/shell/jackrabbit/installer-jackrabbit.sh "$DIR" "$INSTALL_USERWWW"
+
+echo "***** Provisionning SOLR *****"
 if [ -f $DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh ];
 then
     #$DIR/provisioners/shell/solr/installer-solr-$DISTRIB.sh $DIR
     $DIR/provisioners/shell/solr/installer.sh "$DIR"
     #echo "pas solr"
 fi
-
-echo "**** we install/update the composer file ****"
-#wget https://getcomposer.org/composer.phar -O ./composer.phar
-cd /tmp
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 echo "**** we install plateform ****"
 $DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh "$DIR" "$PLATEFORM_INSTALL_NAME" "$PLATEFORM_INSTALL_TYPE" "$PLATEFORM_INSTALL_VERSION" "$PLATEFORM_PROJET_NAME" "$PLATEFORM_PROJET_GIT" "$INSTALL_USERWWW"
