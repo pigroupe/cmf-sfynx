@@ -39,10 +39,17 @@ if [ ! -d app/cachesfynx ]; then
     mkdir -p web/uploads/media
     mkdir -p web/yui
 fi
-if [ ! -f app/config/parameters.yml ]; then
-    cp app/config/parameters.yml.dist app/config/parameters.yml
-    sed -i 's/%%/%/g' app/config/parameters.yml
+
+echo "**** we modify parameters.yml.dist ****"
+sed -i "s/myproject/${PLATEFORM_PROJET_NAME_LOWER}/g" app/config/parameters.yml.dist
+
+echo "**** we create parameters.yml ****"
+if [ -f app/config/parameters.yml ]; then
+    rm app/config/parameters.yml
 fi
+cp app/config/parameters.yml.dist app/config/parameters.yml
+sed -i 's/%%/%/g' app/config/parameters.yml
+
 if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
 fi
@@ -522,4 +529,4 @@ php app/console assetic:dump
 php app/console clear:cache
 
 echo "**** we run the phing script to initialize the project ****"
-vendor/bin/phing -f app/phing/initialize.xml rebuild
+vendor/bin/phing -f config/phing/initialize.xml rebuild

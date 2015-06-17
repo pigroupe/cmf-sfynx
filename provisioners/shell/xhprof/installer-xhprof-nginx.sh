@@ -16,6 +16,7 @@ sudo chmod o+w $HOME_HTTP/xhprof
 #
 sudo apt-get install php5-dev
 sudo apt-get install -f xhprof
+sudo service php5-fpm restart
 
 # we create the xhprof.ini configuration file
 if [ -q "/etc/php5/mods-available/xhprof.ini" ]; then
