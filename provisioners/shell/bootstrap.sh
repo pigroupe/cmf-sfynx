@@ -80,6 +80,12 @@ then
     #echo "pas solr"
 fi
 
+echo "***** Provisionning JACKRABBIT *****"
+if [ -f $DIR/provisioners/shell/xhprof/installer-xhprof-$DISTRIB.sh ];
+then
+    $DIR/provisioners/shell/xhprof/installer-xhprof-$DISTRIB.sh "$DIR" "$INSTALL_USERWWW"
+fi
+
 echo "**** we install plateform ****"
 $DIR/provisioners/shell/plateform/installer-$PLATEFORM_INSTALL_NAME.sh "$DIR" "$PLATEFORM_INSTALL_NAME" "$PLATEFORM_INSTALL_TYPE" "$PLATEFORM_INSTALL_VERSION" "$PLATEFORM_PROJET_NAME" "$PLATEFORM_PROJET_GIT" "$INSTALL_USERWWW"
 
