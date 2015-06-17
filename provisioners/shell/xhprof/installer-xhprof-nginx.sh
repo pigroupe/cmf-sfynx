@@ -141,7 +141,7 @@ $_xhprof['dbpass'] = 'pacman';
 $_xhprof['dbname'] = 'xhprof';
 $_xhprof['dbadapter'] = 'Pdo';
 $_xhprof['servername'] = 'localhost';
-$_xhprof['namespace'] = 'http://www.xhprof.local';
+$_xhprof['namespace'] = 'localhost';
 $_xhprof['url'] = 'http://www.xhprof.local';
 
 /*
@@ -184,6 +184,7 @@ $_xhprof['doprofile'] = true;
 //$controlIPs = false; //Disables access controlls completely. 
 $controlIPs = array();
 $controlIPs[] = "127.0.0.1";   // localhost, you'll want to add your own ip here
+$controlIPs[] = "33.33.33.1"; 
 $controlIPs[] = "::1";         // localhost IP v6
 
 //$otherURLS = array();
@@ -322,7 +323,8 @@ EOF
 sudo chown -R www-data:www-data $HOME_HTTP/xhprof
 
 # we restart nginx server
-sudo /etc/init.d/nginx restart
+sudo service nginx restart
+sudo service php5-fpm restart
 
 # test
 php -m | grep xhprof

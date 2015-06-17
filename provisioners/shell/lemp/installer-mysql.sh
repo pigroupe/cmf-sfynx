@@ -22,7 +22,7 @@ then
     # Active l'écoute autre qu'en local
     # => Le serveur MySQL sera accessible via le réseau (depuis la machine physique, par exemple, pour s'y connecter avec un client lourd)
     echo "Accessibility server via the network"
-    sed -i -e 's/^bind-address.*=.*127.0.0.1.*$/#bind-address = 127.0.0.1/' /etc/mysql/my.cnf
+    sudo sed -i -e 's/^bind-address.*=.*127.0.0.1.*$/#bind-address = 127.0.0.1/' /etc/mysql/my.cnf
     echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' identified by 'pacman';" | mysql --user=root --password=pacman --host=localhost
     echo "\nUser password 'root' MySQL => 'pacman'\n"
 fi

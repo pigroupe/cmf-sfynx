@@ -8,28 +8,24 @@ echo "*** PHP ***"
 #
 echo "Updating PHP repository"
 add-apt-repository ppa:ondrej/php5 -y > /dev/null
-apt-get -y update > /dev/null
-apt-get -y dist-upgrade > /dev/null
-
-#
-echo "Install PHP pear"
-apt-get -y install php-pear
+sudo apt-get -y update > /dev/null
+sudo apt-get -y dist-upgrade > /dev/null
 
 #
 echo "Installing PHP"
-apt-get -y install php5-common php5-dev php5-cli php5-fpm
+sudo apt-get -y install php5-common php5-dev php5-cli php5-fpm
 
 #
 echo "Install PHP pear"
-apt-get -y install php-pear
+sudo apt-get -y install php-pear
 
 #
 echo "Installing PHP extensions"
-apt-get -y install php5-curl php5-gd php5-geoip php5-imagick php5-imap php5-intl php5-ldap php5-mcrypt php5-pgsql php5-sqlite php5-tidy php5-xmlrpc php5-xsl libapache2-svn php-pear
-apt-get -y install php-pear php5-imagick php5-xdebug php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-tidy php5-xmlrpc php5-xsl php5-cli php5-idn php5-openssl php-soap
-apt-get -y install libapache2-mod-php5 php5-mysqlnd php5-mongo php5-memcache
-apt-get -y install php5-memcached gearman
-pecl install timezonedb
+sudo apt-get -y install php5-curl php5-gd php5-geoip php5-imagick php5-imap php5-intl php5-ldap php5-mcrypt php5-pgsql php5-sqlite php5-tidy php5-xmlrpc php5-xsl libapache2-svn php-pear
+sudo apt-get -y install php-pear php5-imagick php5-xdebug php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-tidy php5-xmlrpc php5-xsl php5-cli php5-idn php5-openssl php-soap
+sudo apt-get -y install libapache2-mod-php5 php5-mysqlnd php5-mongo php5-memcache
+sudo apt-get -y install php5-memcached gearman
+sudo pecl install timezonedb
 
 echo "Install PECL HTTP (depends on php-pear, php5-dev, libcurl4-openssl-dev)"
 printf "\n" | pecl install pecl_http
@@ -109,53 +105,57 @@ fi
 
 
 # Installation xdebug via PECL
-sh -c 'printf "\n" | pecl install xdebug'
+sh -c 'printf "\n" | sudo pecl install xdebug'
 
-PATH_XDEBUG_INI=$(echo $(find /etc/php5 -type f -name 'xdebug.ini'))
-
+PATH_XDEBUG_INI="/etc/php5/mods-available/xdebug.ini"
 sh -c "cat > ${PATH_XDEBUG_INI}" <<EOT
-zend_extension=xdebug.so
-xdebug.default_enable = 1
-xdebug.overload_var_dump = 1
-xdebug.collect_includes = 1
-xdebug.collect_params = 2
-xdebug.collect_vars = 1
-xdebug.show_exception_trace = 0
-xdebug.show_mem_delta = 1
-xdebug.max_nesting_level = 256
-xdebug.var_display_max_children = 256
-xdebug.var_display_max_data = 2048
-xdebug.var_display_max_depth = 8
-xdebug.auto_trace = 0
-xdebug.profiler_enable = 0
-xdebug.profiler_enable_trigger = 1
-xdebug.profiler_append = 0
-xdebug.profiler_output_dir = /tmp
-xdebug.profiler_output_name = cachegrind.out.%t
+;zend_extension=xdebug.so
+;xdebug.default_enable = 1
+;xdebug.overload_var_dump = 1
+;xdebug.collect_includes = 1
+;xdebug.collect_params = 2
+;xdebug.collect_vars = 1
+;xdebug.show_exception_trace = 0
+;xdebug.show_mem_delta = 1
+;xdebug.max_nesting_level = 256
+;xdebug.var_display_max_children = 256
+;xdebug.var_display_max_data = 2048
+;xdebug.var_display_max_depth = 8
+;xdebug.auto_trace = 0
+;xdebug.profiler_enable = 0
+;xdebug.profiler_enable_trigger = 1
+;xdebug.profiler_append = 0
+;xdebug.profiler_output_dir = /tmp
+;xdebug.profiler_output_name = cachegrind.out.%t
 EOT
-
-# Installation apc via PECL
-sh -c 'printf "\n" | pecl install apc'
-
-PATH_APC_INI=$(echo $(find /etc/php5 -type f -name 'apc.ini'))
-APC_SO_FILE="apc.ini"
-if [ -z "${PATH_XDEBUG_INI}" ]; then
-    PATH_APC_INI=$(echo $(find /etc/php5 -type f -name 'apcu.ini'))
-    APC_SO_FILE="apcu.ini"
+# we create the symbilic links
+if [ ! -f "/etc/php5/cli/conf.d/20-xdebug.ini" ]; then
+    sudo ln -s /etc/php5/mods-available/xdebug.ini /etc/php5/cli/conf.d/20-xdebug.ini
 fi
 
+# Installation apc via PECL
+sh -c 'printf "\n" | sudo pecl install apc'
+
+PATH_APC_INI="/etc/php5/mods-available/apc.ini"
+APC_SO_FILE="apc.ini"
+
 sh -c "cat > ${PATH_APC_INI}" <<EOT
-extension=\$APC_SO_FILE
-apc.enabled = 1
-apc.ttl = 3600
-apc.file_update_protection = 2
-apc.stat = 1
-apc.shm_size = 128
-apc.shm_segments = 1
-apc.user_entries_hint = 9000
-apc.num_files_hint = 1024
-apc.include_once_override = 1
-apc.write_lock = 1
-apc.localcache = 1
-apc.localcache.size = 128
+;extension=\$APC_SO_FILE
+;apc.enabled = 1
+;apc.ttl = 3600
+;apc.file_update_protection = 2
+;apc.stat = 1
+;apc.shm_size = 128
+;apc.shm_segments = 1
+;apc.user_entries_hint = 9000
+;apc.num_files_hint = 1024
+;apc.include_once_override = 1
+;apc.write_lock = 1
+;apc.localcache = 1
+;apc.localcache.size = 128
 EOT
+# we create the symbilic links
+if [ ! -f "/etc/php5/cli/conf.d/20-apc.ini" ]; then
+    sudo ln -s /etc/php5/mods-available/apc.ini /etc/php5/cli/conf.d/20-apc.ini
+fi
+
