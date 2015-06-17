@@ -1,17 +1,21 @@
 #!/bin/bash
 
-DIR=$1
-HOME_HTTP=$2
+HOME_HTTP="/websites"
 
 #
 if [ ! -d $HOME_HTTP ]; then
-    mkdir -p $HOME_HTTP
+    sudo mkdir -p $HOME_HTTP
 fi
+sudo chmod -R 777 $HOME_HTTP
 
 #
 cd $HOME_HTTP
 git clone git://github.com/preinheimer/xhprof.git xhprof
 sudo chmod o+w $HOME_HTTP/xhprof
+
+#
+sudo apt-get install php5-dev
+sudo apt-get install -f xhprof
 
 # we create the xhprof.ini configuration file
 if [ -q "/etc/php5/mods-available/xhprof.ini" ]; then
@@ -22,11 +26,11 @@ EOF
 fi
 
 # we create the symbilic links
-if [ -q "/etc/php5/cli/conf.d/20-xhprof.ini" ]; then
+if [ ! -f "/etc/php5/cli/conf.d/20-xhprof.ini" ]; then
     sudo ln -s /etc/php5/mods-available/xhprof.ini /etc/php5/cli/conf.d/20-xhprof.ini
 fi
 
-if [ -q "/etc/php5/fpm/conf.d/20-xhprof.ini" ]; then
+if [ ! -f "/etc/php5/fpm/conf.d/20-xhprof.ini" ]; then
     sudo ln -s /etc/php5/mods-available/xhprof.ini /etc/php5/fpm/conf.d/20-xhprof.ini
 fi
 

@@ -77,8 +77,8 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
                 RewriteCond %{REQUEST_FILENAME} !-f
                 RewriteRule ^(.*)\$ app_dev.php [QSA,L]
 
-                #php_value auto_prepend_file "$INSTALL_USERWWW/xhprof/external/header.php"
-                #php_value auto_append_file "$INSTALL_USERWWW/xhprof/external/footer.php"
+                #php_value auto_prepend_file "/websites/xhprof/external/header.php"
+                #php_value auto_append_file "/websites/xhprof/external/footer.php"
 
                 #Require all granted
                 Order allow,deny
@@ -102,8 +102,8 @@ cat <<EOT >/tmp/$PLATEFORM_PROJET_NAME
                 RewriteCond %{REQUEST_FILENAME} !-f
                 RewriteRule ^(.*)\$ app_test.php [QSA,L]
 
-                #php_value auto_prepend_file "$INSTALL_USERWWW/xhprof/external/header.php"
-                #php_value auto_append_file "$INSTALL_USERWWW/xhprof/external/footer.php"
+                #php_value auto_prepend_file "/websites/xhprof/external/header.php"
+                #php_value auto_append_file "/websites/xhprof/external/footer.php"
 
                 #Require all granted
                 Order allow,deny

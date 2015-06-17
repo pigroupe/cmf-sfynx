@@ -83,7 +83,7 @@ fi
 echo "***** Provisionning JACKRABBIT *****"
 if [ -f $DIR/provisioners/shell/xhprof/installer-xhprof-$DISTRIB.sh ];
 then
-    $DIR/provisioners/shell/xhprof/installer-xhprof-$DISTRIB.sh "$DIR" "$INSTALL_USERWWW"
+    $DIR/provisioners/shell/xhprof/installer-xhprof-$DISTRIB.sh
 fi
 
 echo "**** we install plateform ****"
