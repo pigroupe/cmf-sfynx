@@ -36,8 +36,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     # Create a forwarded port mapping which allows access to a specific port within the machine from a port on the host machine.
-    config.vm.network :forwarded_port, guest: $pf_mysql, host: $pf_mysql_localhost,  auto_correct: true
-    config.vm.network :forwarded_port, guest: $pf_http, host: $pf_http_localhost,  auto_correct: true
+    #config.vm.network :forwarded_port, guest: $pf_mysql, host: $pf_mysql_localhost,  auto_correct: true
+    #config.vm.network :forwarded_port, guest: $pf_http, host: $pf_http_localhost,  auto_correct: true
 
     # Create a private network, which allows host-only access to the machine using a specific IP.
     config.vm.network :private_network, ip: $vm_ip
