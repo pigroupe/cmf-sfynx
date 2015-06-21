@@ -9,9 +9,9 @@ parameters:
     test_database_driver:   pdo_mysql
     test_database_host:     localhost
     test_database_port:     ~
-    test_database_name:     "%test.database.name.env.myproject%"
-    test_database_user:     "%test.database.user.env.myproject%"
-    test_database_password: "%test.database.password.env.myproject%"
+    test_database_name:     "%%test.database.name.env.myproject%%"
+    test_database_user:     "%%test.database.user.env.myproject%%"
+    test_database_password: "%%test.database.password.env.myproject%%"
 
     mailer_transport:  sendmail
     mailer_host:       127.0.0.1
