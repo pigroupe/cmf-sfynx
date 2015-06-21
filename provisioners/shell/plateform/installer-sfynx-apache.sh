@@ -32,7 +32,7 @@ fi
 cd $PLATEFORM_PROJET_NAME
 
 echo "**** we create default directories ****"
-if [ ! -d app/cachesfynx ]; then
+if [ ! -d web/yui ]; then
     mkdir -p app/cache
     mkdir -p app/logs
     mkdir -p app/cachesfynx/loginfailure
