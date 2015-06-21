@@ -83,6 +83,48 @@ echo "Install Curl and Nodejs"
 add-apt-repository -y ppa:chris-lea/node.js
 sudo apt-get -y update > /dev/null
 sudo apt-get -y install curl nodejs > /dev/null
+sudo npm install -g npm
 
-echo "Install bower"
+echo "Install bower/angularjs"
 sudo npm install -g bower
+sudo npm install -g generator-angular
+
+echo "Install keyborad fr"
+if [ "$DISTRIB" == *"ubuntu"* ]
+sudo loadkeys fr
+sudo cat <<EOT >/etc/default/keyboard
+# KEYBOARD CONFIGURATION FILE
+# Consult the keyboard(5) manual page.
+XKBMODEL="pc104"
+XKBLAYOUT="fr"
+XKBVARIANT=""
+XKBOPTIONS=""
+EOT
+fi
+if [ "$DISTRIB" == *"debian"* ]
+sudo cat <<EOT >/etc/default/keyboard
+# KEYBOARD CONFIGURATION FILE
+# Consult the keyboard(5) manual page.
+XKBMODEL="pc105"
+XKBLAYOUT="fr"
+XKBVARIANT="latin9"
+XKBOPTIONS=""
+BACKSPACE="guess"
+EOT
+fi
+service keyboard-setup restart
+
+echo "Install dos2unix"
+### http://englanders.us/~jason/howtos.php?howto=dos2unix
+#cd ~
+#wget http://www.xs4all.nl/~waterlan/dos2unix/dos2unix-5.0.tar.gz
+#mkdir -p -m 0700 src
+#cd src
+#find -maxdepth 1 -type d -name "dos2unix-*" -exec rm -r {} \;
+#tar xzvf ~/dos2unix-5.0.tar.gz
+#cd dos2unix-5.0
+#test $UID = 0 && chown -R root:root .
+#find -type f -exec chmod 644 {} \;
+
+# Compile it
+#make prefix=/usr/local

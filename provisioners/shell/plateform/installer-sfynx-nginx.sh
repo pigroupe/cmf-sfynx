@@ -10,6 +10,8 @@ source $DIR/provisioners/shell/env.sh
 
 PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME | awk '{print tolower($0)}') # we lower the string
 PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper($0)}') # we lower the string
+DATABASE_NAME="sfynx_${PLATEFORM_PROJET_NAME_LOWER}"
+DATABASE_NAME_TEST="sfynx_${PLATEFORM_PROJET_NAME_LOWER}_test"
 
 #if var is empty
 if [ -z "$PLATEFORM_PROJET_GIT" ]; then
@@ -37,28 +39,35 @@ if [ ! -d app/cachesfynx ]; then
     mkdir -p web/uploads/media
     mkdir -p web/yui
 fi
-if [ ! -f app/config/parameters.yml ]; then
-    cp app/config/parameters.yml.dist app/config/parameters.yml
-    sed -i 's/%%/%/g' app/config/parameters.yml
+
+echo "**** we modify parameters.yml.dist ****"
+sed -i "s/myproject/${PLATEFORM_PROJET_NAME_LOWER}/g" app/config/parameters.yml.dist
+
+echo "**** we create parameters.yml ****"
+if [ -f app/config/parameters.yml ]; then
+    rm app/config/parameters.yml
 fi
+cp app/config/parameters.yml.dist app/config/parameters.yml
+sed -i 's/%%/%/g' app/config/parameters.yml
+
 if [ ! -f app/phpunit.xml ]; then
     cp app/phpunit.xml.dist app/phpunit.xml
 fi
 
 echo "**** we add env variables ****"
-if ! grep -q "SYMFONY__DATABASE__NAME__ENV" ~/.profile; then
-cat <<EOT >> ~/.profile
+sudo bash -c "cat << EOT > /etc/profile.d/$PLATEFORM_PROJET_NAME_LOWER.sh
+# env vars for SFYNFONY platform
+export SYMFONY__DATABASE__NAME__ENV__$PLATEFORM_PROJET_NAME_UPPER=$DATABASE_NAME;
+export SYMFONY__DATABASE__USER__ENV__$PLATEFORM_PROJET_NAME_UPPER=root;
+export SYMFONY__DATABASE__PASSWORD__ENV__$PLATEFORM_PROJET_NAME_UPPER=pacman;
+export SYMFONY__TEST__DATABASE__NAME__ENV__$PLATEFORM_PROJET_NAME_UPPER=$DATABASE_NAME_TEST;
+export SYMFONY__TEST__DATABASE__USER__ENV__$PLATEFORM_PROJET_NAME_UPPER=root;
+export SYMFONY__TEST__DATABASE__PASSWORD__ENV__$PLATEFORM_PROJET_NAME_UPPER=pacman;
 
-# env vars for SFYNX platform
-export SYMFONY__DATABASE__NAME__ENV=sfynx_$PLATEFORM_PROJET_NAME_dev;
-export SYMFONY__DATABASE__USER__ENV=root;
-export SYMFONY__DATABASE__PASSWORD__ENV=pacman;
-export SYMFONY__TEST__DATABASE__NAME__ENV=sfynx_$PLATEFORM_PROJET_NAME_test;
-export SYMFONY__TEST__DATABASE__USER__ENV=root;
-export SYMFONY__TEST__DATABASE__PASSWORD__ENV=pacman;
-EOT
-source ~/.profile
-fi
+EOT"
+. /etc/profile.d/${PLATEFORM_PROJET_NAME_LOWER}.sh
+printenv | grep "__ENV__$PLATEFORM_PROJET_NAME_UPPER" # list of all env
+# unset envName # delete a env var
 
 echo "**** we create the virtualhost ****"
 mkdir -p /tmp
@@ -140,18 +149,19 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        #include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV sfynx_$PLATEFORM_PROJET_NAME_dev;
-        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sfynx_$PLATEFORM_PROJET_NAME_test;
-        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        # fastcgi_param PHP_VALUE "auto_prepend_file=/websites/xhprof/external/header.php \n auto_append_file=/websites/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -264,18 +274,19 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        #include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV sfynx_$PLATEFORM_PROJET_NAME_dev;
-        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sfynx_$PLATEFORM_PROJET_NAME_test;
-        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        # fastcgi_param PHP_VALUE "auto_prepend_file=/websites/xhprof/external/header.php \n auto_append_file=/websites/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -388,18 +399,19 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        #include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param  HTTPS off;
-        # fastcgi_param PHP_VALUE "auto_prepend_file=$INSTALL_USERWWW/xhprof/external/header.php \n auto_append_file=$INSTALL_USERWWW/xhprof/external/footer.php";
-        fastcgi_param SYMFONY__DATABASE__NAME__ENV sfynx_$PLATEFORM_PROJET_NAME_dev;
-        fastcgi_param SYMFONY__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV pacman;
-        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV sfynx_$PLATEFORM_PROJET_NAME_test;
-        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV root;
-        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV pacman;
+        # fastcgi_param PHP_VALUE "auto_prepend_file=/websites/xhprof/external/header.php \n auto_append_file=/websites/xhprof/external/footer.php";
+        fastcgi_param SYMFONY__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME;
+        fastcgi_param SYMFONY__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
+        fastcgi_param SYMFONY__TEST__DATABASE__NAME__ENV__${PLATEFORM_PROJET_NAME_UPPER} $DATABASE_NAME_TEST;
+        fastcgi_param SYMFONY__TEST__DATABASE__USER__ENV__${PLATEFORM_PROJET_NAME_UPPER} root;
+        fastcgi_param SYMFONY__TEST__DATABASE__PASSWORD__ENV__${PLATEFORM_PROJET_NAME_UPPER} pacman;
     }
 
     # Nginx Cache Control for Static Files
@@ -457,16 +469,18 @@ fi
 echo "**** we restart nginx server ****"
 sudo service nginx restart
 
-echo "**** we install/update the composer file ****"
 if [ ! -f composer.phar ]; then
+    echo "**** we install/update the composer file ****"
     wget https://getcomposer.org/composer.phar -O ./composer.phar
+    #curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 else
-    php composer.phar self-update
+    echo "update composer.phar"
+    php composer.phar self-update    
 fi
 echo "**** we lauch the composer ****"
-php -d memory_limit=1024M composer.phar install --no-interaction
+composer install --no-interaction
 echo "**** Generating optimized autoload files ****"
-php composer.phar dump-autoload --optimize
+composer dump-autoload --optimize
 
 echo "**** we remove cache files ****"
 rm -rf app/cache/*
@@ -515,4 +529,4 @@ php app/console assetic:dump
 php app/console clear:cache
 
 echo "**** we run the phing script to initialize the project ****"
-vendor/bin/phing -f app/phing/initialize.xml rebuild
+vendor/bin/phing -f config/phing/initialize.xml rebuild

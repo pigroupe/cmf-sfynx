@@ -1,3 +1,0 @@
-
-        fos_userbundle:
-            id: fos_user.user_provider.username

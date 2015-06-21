@@ -6,12 +6,12 @@ $box_distrib = "ubuntu"
 # VM settings
 $vm_hostname = "dev.sfynx.vagrant"
 $vm_name = "SFYNX"
-$vm_group = "/Vagrant"
+$vm_group = "/vagrant"
  
 # VM configuration and capacities
 $vm_gui = false # Enable or not GUI
-$vm_www_point = "C:/xampp/htdocs"
-$vm_dir_project = "C:/xampp/htdocs/cmf-sfynx"
+$vm_www_point = "/var/www"
+$vm_dir_project = "/var/www/cmf-sfynx"
 $vm_memory = "1024"
 $vm_cpus = "2"
 $vm_cpu_cap = "100"

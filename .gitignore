@@ -53,3 +53,6 @@ phpmetrics.phar
 
 # Build
 build
+
+#vagrant
+provisioners/parameters

@@ -23,6 +23,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Custom Exception handler.
@@ -96,6 +97,11 @@ class HandlerException
             $exception = $event->getException();
             // new Response object
             $response = new Response();
+            
+            //$kernel = $event->getKernel();
+            //$requestDuplicate = $event->getRequest()->duplicate(null, null, ['_controller' => 'MyAppSiteBundle:Default:exception']);
+            //$response = $kernel->handle($requestDuplicate, HttpKernelInterface::SUB_REQUEST);
+            //
             //
             if ($this->container->hasParameter('sfynx.auth.theme.layout.error.html')
                     && ($this->container->getParameter('sfynx.auth.theme.layout.error.html') != "")) {

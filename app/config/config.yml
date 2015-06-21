@@ -204,9 +204,9 @@ doctrine:
                 alias: Gedmo
                 prefix: Gedmo\Tree\Entity
                 dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
-        metadata_cache_driver: apc # array|apc|memcache
-        query_cache_driver: apc # array|apc|memcache
-        result_cache_driver: array # BE CARFULL ::: Strange Issue with Query Hint and APC or memcache
+        metadata_cache_driver: array # apc # array|apc|memcache
+        query_cache_driver: array #apc # array|apc|memcache
+        result_cache_driver: array #array # BE CARFULL ::: Strange Issue with Query Hint and APC or memcache
 #        metadata_cache_driver:
 #            type: memcache
 #            host: localhost
