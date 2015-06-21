@@ -246,18 +246,15 @@ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 #echo "umask(0000);" | sudo tee --prepend web/app_dev.php
 #echo "umask(0000);" | sudo tee --prepend web/app.php
 
-
-
-# permission
-#sudo chown -R root:www-data app/cache
-#sudo chown -R root:www-data app/logs
-#sudo chown -R root:www-data app/config/parameters.yml
-#sudo chown -R root:www-data web/uploads
-#sudo chmod -R 775 app/config/parameters.yml
-#sudo chmod -R 775 app/cache
-#sudo chmod -R 775 app/logs
-#sudo chmod -R 775 web/uploads
-#sudo chown -R www-data:www-data $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
+sudo usermod -aG www-data $HTTPDUSER
+sudo chown -R $HTTPDUSER:www-data $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
+sudo chmod -R 0755 $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
+sudo chmod -R 0775 app/config/parameters.yml
+sudo chmod -R 0775 app/cache
+sudo chmod -R 0755 app/cachesfynx/loginfailure
+sudo chmod -R 0775 app/logs
+sudo chmod -R 0775 web/uploads
+sudo chmod -R 0755 web/yui
 
 echo "**** we create database ****"
 php app/console doctrine:database:create
