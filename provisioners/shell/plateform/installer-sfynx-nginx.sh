@@ -523,6 +523,7 @@ echo "**** we create database ****"
 php app/console doctrine:database:create
 php app/console doctrine:schema:create
 php app/console doctrine:fixtures:load
+php app/console sfynx:classification:fixtures
 php app/console assets:install
 php app/console assetic:dump
 php app/console cache:clear

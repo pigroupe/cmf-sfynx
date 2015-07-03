@@ -9,6 +9,7 @@ mkdir -p build/logs/pdepend
 echo "" > build/logs/phpunit.xml
 
 # Tests unitaires avec couvertures de code et Analyse statique de code (PhpCodeSniffer, Phpcpd, Phpmd, PhpDepend, PhpLoc)
+# vendor/bin/phpunit --log-junit build/logs/php/phpunit.xml --coverage-clover build/logs/php/coverage/clover.xml --coverage-html build/logs/php/coverage/ -c app --debug
 vendor/bin/phing -f build.xml build:jenkins-normal -logger phing.listener.DefaultLogger -DdbUser=$DdbUser -DdbPw=$DdbPw -DdbName=$DdbName
 
 # Code mesure (nombre de ligne, de classses, d'interfaces, de méthodes, etc)
@@ -26,7 +27,7 @@ if [ ! -f phpmetrics.phar ]; then
 fi
 #php phpmetrics.phar src --report-html=build/metrics.html --report-xml=build/metrics.xml --chart-bubbles=build/metrics.svg  > /dev/null
 php phpmetrics.phar  --excluded-dirs="\.git|vendor|web|documentation|build|app|sysadmin|bin" -q --chart-bubbles=build/logs/phpmetrics/metrics.svg  --report-html=build/logs/phpmetrics/metrics.html --report-xml=build/logs/phpmetrics/metrics.xml  ./ > /dev/null
-./bin/metrics.sh src > build/metrics.txt
+#./bin/metrics.sh src > build/metrics.txt
 
 # Security checker :: contrôle des potentielles vulnérabilités des librairies installées par le composer
 mkdir -p build/logs/security
@@ -37,10 +38,10 @@ php security-checker.phar security:check composer.lock > build/logs/security/sec
 
 # Security php.ini :: relever les problèmes potentiels liés à la sécurité du fichier php.ini
 PATH_PHP_INI=echo $(php -i | grep "Loaded Configuration File") | sed -e 's/Loaded Configuration File => //g'
-./vendor/bin/iniscan     scan --format=xml --path=$PATH_PHP_INI  > build/logs/security/iniscan.xml
+vendor/bin/iniscan     scan --format=xml --path=$PATH_PHP_INI  > build/logs/security/iniscan.xml
 
 # Security PHP :: relever les problèmes potentiels liés à la sécurité de la version PHP
-./vendor/bin/versionscan scan --format=xml --sort=risk           > build/logs/security/versionscan.xml
+vendor/bin/versionscan scan --format=xml --sort=risk           > build/logs/security/versionscan.xml
 
 # Security parse :: relever les problèmes potentiels liés à la sécurité du code
-#./vendor/bin/parse       scan --format=xml src                   > build/logs/security/parse.xml
+#vendor/bin/parse       scan --format=xml src                   > build/logs/security/parse.xml

@@ -15,7 +15,7 @@ DATABASE_NAME_TEST="sfynx_${PLATEFORM_PROJET_NAME_LOWER}_test"
 
 #if var is empty
 if [ -z "$PLATEFORM_PROJET_GIT" ]; then
-    $PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
+    PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
 fi
 
 echo "**** we create directories ****"
@@ -262,6 +262,7 @@ echo "**** we create database ****"
 php app/console doctrine:database:create
 php app/console doctrine:schema:create
 php app/console doctrine:fixtures:load
+php app/console sfynx:classification:fixtures
 php app/console assets:install
 php app/console assetic:dump
 php app/console clear:cache

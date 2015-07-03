@@ -4,11 +4,11 @@ DdbUser="DdbUser"
 DdbPw="DdbPw"
 DdbName="DdbName"
 
-mkdir -p build/logs/php
+mkdir -p build/logs/php/coverage
 echo "" > build/logs/phpunit.xml
 
 # Tests unitaires sans couvertures de code
-# vendor/bin/phpunit -c app
+# vendor/bin/phpunit --log-junit build/logs/php/phpunit.xml -c app --debug
 vendor/bin/phing -f build.xml build:test-deploy -logger phing.listener.DefaultLogger -DdbUser=$DdbUser -DdbPw=$DdbPw -DdbName=$DdbName
 
 # PHPCPD - PHP COPY/PASTE DETECTION

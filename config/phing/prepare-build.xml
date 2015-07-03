@@ -43,12 +43,12 @@
         <copy file="app/config/parameters.yml.dist" tofile="app/config/parameters.yml" overwrite="true">
             <filterchain>
                     <replacetokens begintoken="%%" endtoken="%%">
-                        <token key="database_name" value="${dbName}" />
-                        <token key="database_user" value="${dbUser}" />
-                        <token key="database_password" value="${dbPw}" />
-                        <token key="test_database_name" value="${dbName}" />
-                        <token key="test_database_user" value="${dbUser}" />
-                        <token key="test_database_password" value="${dbPw}" />
+                        <token key="database.name.env.myproject" value="${dbName}" />
+                        <token key="database.user.env.myproject" value="${dbUser}" />
+                        <token key="database.password.env.myproject" value="${dbPw}" />
+                        <token key="test.database.name.env.myproject" value="${dbName}" />
+                        <token key="test.database.user.env.myproject" value="${dbUser}" />
+                        <token key="test.database.password.env.myproject" value="${dbPw}" />
                     </replacetokens>
             </filterchain>
         </copy>
