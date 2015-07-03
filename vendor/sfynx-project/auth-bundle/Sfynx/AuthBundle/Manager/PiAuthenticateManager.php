@@ -105,6 +105,10 @@ class PiAuthenticateManager extends Controller
             $em->persist($user);
             $em->flush();	                
         }
+        //now dispatch the login event
+        //$request = $this->container->get("request");
+        //$event = new \Symfony\Component\Security\Http\Event\InteractiveLoginEvent($request, $token);
+        //$this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
         //
         if ($response instanceof Response) {
             // Record all cookies in relation with ws.
