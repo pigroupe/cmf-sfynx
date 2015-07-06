@@ -11,8 +11,8 @@ sudo cp -R /tmp/solr-4.6.1/example/solr /var/lib/tomcat7
 sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/solr
 sudo cp $DIR/app/config/solr/schema.xml /var/lib/tomcat7/solr/collection1/conf/
 
-# we modify /var/lib/tomcat7/conf/server.xml file to change port connectorÒ
-#sudo sed -i -e 's/^<Connector port="8080" protocol="HTTP\/1.1"$/<Connector port="8181" protocol="HTTP\/1.1"/' /var/lib/tomcat7/conf/server.xml
+# we modify /var/lib/tomcat7/conf/server.xml file to change port connector
+sudo sed -i s/8080/8983/g /var/lib/tomcat7/conf/server.xml
 
 #cat <<EOT >>$DIR/app/config/config.yml
 #nelmio_solarium:

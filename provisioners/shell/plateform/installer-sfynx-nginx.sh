@@ -43,6 +43,9 @@ fi
 echo "**** we modify parameters.yml.dist ****"
 sed -i "s/myproject/${PLATEFORM_PROJET_NAME_LOWER}/g" app/config/parameters.yml.dist
 
+echo "**** we modify prepare-build.xml file for phing test ****"
+sed -i "s/myproject/${PLATEFORM_PROJET_NAME_LOWER}/g" config/phing/prepare-build.xml
+
 echo "**** we create parameters.yml ****"
 if [ -f app/config/parameters.yml ]; then
     rm app/config/parameters.yml
