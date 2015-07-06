@@ -99,7 +99,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
             //initialisation 
             $ch = curl_init($path); 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-            if (!empty($proxy_host) and !empty($proxy_host)){
+            if (!empty($proxy_host) && !empty($proxy_port)) {
                 curl_setopt($ch, CURLOPT_PROXY, $proxy_host.":".$proxy_port); 
                 curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port );                
             }
@@ -653,30 +653,96 @@ class PiFileManager implements PiFileManagerBuilderInterface
      * @param $retbytes
      * @return stream of bytes by chunks of 1Mo
      */
-    public static function readfileChunked ($filename, $retbytes=false)
+    public static function readFileChunked($filename, $retbytes = true, $optional_headers = null, $username = null, $password = null)
     {
-        $chunksize = 1*(1024*1024); // how many bytes per chunk
-        $buffer = '';
-        $cnt =0;
-        $handle = fopen($filename, 'rb');
-        if ($handle === false) {
-            return false;
-        }
-        while (!feof($handle)) {
-            $buffer = fread($handle, $chunksize);
-            echo $buffer;
-            ob_flush();
-            flush();
-            if ($retbytes) {
-                $cnt += $this->binaryStrLen($buffer);
+            if($username !== null)
+            {
+                    if($optional_headers === null)
+                    {
+                            $optional_headers = '';
+                    }
+                    $optional_headers = "Authorization: Basic " . base64_encode($username . ':' . $password) . "\r\n" . $optional_headers;
             }
-        }
-        $status = fclose($handle);
-        if ($retbytes && $status) {
-            return $cnt; // return num. bytes delivered like readfile() does.
-        }
-        
-        return $status;
+
+            if($optional_headers !== null)
+            {
+                    $params['http']['header'] = $optional_headers;
+            }
+
+            $ctx = stream_context_create($params);
+
+            $chunksize = 1*(1024*1024); // 1MB chunks - must be less than 2MB!
+            $buffer = '';
+            $cnt =0;
+            $handle = fopen($filename, 'rb', false, $ctx);
+            if($handle === false)
+            {
+                    return false;
+            }
+
+            while(!feof($handle))
+            {
+                    @set_time_limit(60*60); //reset time limit to 60 min - should be enough for 1 MB chunk
+                    $buffer = fread($handle, $chunksize);
+                    echo $buffer;
+                    flush();
+                    if ($retbytes)
+                    {
+                       $cnt += strlen($buffer);
+                    }
+            }
+            $status = fclose($handle);
+            if($retbytes && $status)
+            {
+                    return $cnt; // return num. bytes delivered like readfile() does.
+            }
+            return $status;
+    }
+
+
+    public static function copyFileChunked($filename, $destinationResource, $optional_headers = null, $username = null, $password = null)
+    {
+            if($username !== null)
+            {
+                    if($optional_headers === null)
+                    {
+                            $optional_headers = '';
+                    }
+                    $optional_headers = "Authorization: Basic " . base64_encode($username . ':' . $password) . "\r\n" . $optional_headers;
+            }
+
+            if($optional_headers !== null)
+            {
+                    $params['http']['header'] = $optional_headers;
+            }
+
+            $ctx = stream_context_create($params);
+
+            $chunksize = 1*(1024*1024); // 1MB chunks - must be less than 2MB!
+            $buffer = '';
+            $cnt =0;
+            $handle = fopen($filename, 'rb', false, $ctx);
+            if($handle === false)
+            {
+                    return false;
+            }
+
+            while(!feof($handle))
+            {
+                    @set_time_limit(60*60); //reset time limit to 60 min - should be enough for 1 MB chunk
+                    $buffer = fread($handle, $chunksize);
+                    fwrite($destinationResource, $buffer);
+                    if ($retbytes)
+                    {
+                       $cnt += strlen($buffer);
+                    }
+            }
+            $status = fclose($handle);
+            if($retbytes && $status)
+            {
+                    return $cnt; // return num. bytes delivered like readfile() does.
+            }
+            return $status;
     }
     
     /**
@@ -698,7 +764,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
         if (ini_get('zlib.output_compression')) {
             ini_set('zlib.output_compression', 'Off');
         }    
-        $ctype = $this->getMimeContentType($file);
+        $ctype = self::getMimeContentType($file);
         if ($mime != null) {
             $ctype = $mime;
         }    
@@ -710,7 +776,7 @@ class PiFileManager implements PiFileManagerBuilderInterface
         if ($name != null) {
             header("Content-Disposition: attachment; filename=\"" . $name . "\"");
         }
-        $this->readfileChunked($file);
+        self::readfileChunked($file);
         exit;
     }
     

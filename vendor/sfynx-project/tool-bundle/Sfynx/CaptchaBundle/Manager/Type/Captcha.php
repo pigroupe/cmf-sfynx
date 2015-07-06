@@ -178,6 +178,11 @@ class Captcha implements CaptchaInterface
      */
     public function getCode()
     {
+        /* very important to execute phpunit test of a form using captcha */
+        if ($this->kernel->getEnvironment() == "test") {
+            return "1234";
+        }   
+        
         return $this->session->get($this->key);
     }
 
@@ -198,6 +203,11 @@ class Captcha implements CaptchaInterface
      */
     public function encode($code)
     {
+        /* very important to execute phpunit test of a form using captcha */
+        if ($this->kernel->getEnvironment() == "test") {
+            return "1234";
+        }   
+        
         return md5($code.$this->secret);
     }
 }
