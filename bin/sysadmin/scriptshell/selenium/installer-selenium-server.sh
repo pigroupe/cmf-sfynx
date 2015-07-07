@@ -8,8 +8,10 @@ chmod a+w /var/log/selenium
 mkdir -p /usr/lib/selenium
 cd /usr/lib/selenium
 
-wget http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar
-ln -s selenium-server-standalone-2.44.0.jar selenium-server-standalone.jar
+sudo rm selenium-server-standalone.jar
+sudo wget http://selenium-release.storage.googleapis.com/2.46/selenium-server-standalone-2.46.0.jar
+sudo ln -s selenium-server-standalone-2.46.0.jar selenium-server-standalone.jar
+sudo chmod +x selenium-server-standalone.jar
 
 # Create a service file
 cat >> /etc/init.d/selenium << 'EOF'
@@ -21,7 +23,7 @@ case "${1:-''}" in
         then
             echo "Selenium is already running."
         else
-            export DISPLAY=localhost:99.0 && java -jar /usr/lib/selenium/selenium-server-standalone.jar -port 4444 -trustAllSSLCertificates > /var/log/selenium/output.log 2> /var/log/selenium/error.log & echo $! > /tmp/selenium.pid
+            export DISPLAY=localhost:99.0 && java -jar /usr/lib/selenium/selenium-server-standalone.jar -port 5555 -trustAllSSLCertificates > /var/log/selenium/output.log 2> /var/log/selenium/error.log & echo $! > /tmp/selenium.pid
             echo "Starting Selenium..."
 
             error=$?
@@ -67,7 +69,7 @@ case "${1:-''}" in
 esac
 EOF
 
-chmod 755 /etc/init.d/selenium
-update-rc.d selenium defaults
+sudo chmod 755 /etc/init.d/selenium
+sudo update-rc.d selenium defaults
 
 echo "You have to reboot the Ubuntu server and Selenium should be running fine"

@@ -107,7 +107,8 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         $path_dir_login_failure = static::$kernel->getContainer()->getParameter('sfynx.auth.loginfailure.cache_dir');
         $path_dir_login_failure = realpath($path_dir_login_failure);        
-        if (strlen($path_dir_login_failure)>= 2) {        
+        if (strlen($path_dir_login_failure)>= 2) {   
+            //print_r("$path_dir_login_failure/*");
             $process = new Process("rm -rf $path_dir_login_failure/*");        
             $process->setTimeout(2);
             $process->run();

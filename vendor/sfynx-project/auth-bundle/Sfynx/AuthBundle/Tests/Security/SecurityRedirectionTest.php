@@ -43,8 +43,9 @@ class SecurityRedirectionTest extends WebTestCase
     public function testRedirectsIfUserNotLogged()
     {
         $client = static::createClient();
-
+        
         $client->request('GET', '/admin/home');
+        
         $this->assertStatusCode('302', $client);
     }
 
@@ -54,6 +55,7 @@ class SecurityRedirectionTest extends WebTestCase
 
         $this->loginRoleUser($client)
             ->request('GET', '/admin/home');
+        
         $this->assertStatusCode('403', $client);
     }
 
@@ -63,6 +65,7 @@ class SecurityRedirectionTest extends WebTestCase
         
         $this->loginRoleAdmin($client)
             ->request('GET', '/admin/home');
+        
         $this->assertStatusCode('200', $client);
     }
 }
