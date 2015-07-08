@@ -271,7 +271,7 @@ class PiToolExtension extends \Twig_Extension
             $fileName  = $this->container->getParameter("sfynx.tool.date.cache_file");
         }
         $rout_i18n_files = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/");
-        $MyDirectory = opendir($rout_i18n_files) or die('Erreur');
+        $MyDirectory = opendir($rout_i18n_files);
         $fp = fopen($fileName, 'w');
         while($Entry = @readdir($MyDirectory)) {
             if ($Entry != '.' && $Entry != '..') {

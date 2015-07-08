@@ -20,6 +20,7 @@
     <property name="dir.reports" value="${dir.build}/logs/php" />
     <property name="dir.reports.pdepend" value="${dir.reports}/pdepend" />
     <property name="dir.reports.coverage" value="${dir.reports}/coverage" />
+    <property name="dir.reports.sonar" value="${dir.build}/sonar" />
     <property name="url.test" value="http://www.sfynx.fr" />
 
     <!-- Filesets -->

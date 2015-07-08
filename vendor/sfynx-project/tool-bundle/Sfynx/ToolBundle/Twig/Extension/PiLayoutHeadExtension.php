@@ -286,7 +286,7 @@ class PiLayoutHeadExtension extends \Twig_Extension
                    $this->files[]    = $javascript;
                    $linksPath[]    = $javascript;
                }
-        }           
+        }     
         if ($compressor == 'file') {
             return implode("\n", $scripts);
         } elseif ($compressor == 'php') {
@@ -322,13 +322,13 @@ class PiLayoutHeadExtension extends \Twig_Extension
         foreach ($this->files as $file) {            
             $basePath = str_replace($this->container->getParameter("kernel.root_dir"). '/../web/', '', dirname($file));            
             if (strtolower($this->options['type']) == "css") {
-                $content_file   = str_replace(array('url("', "url('", "')", '")'), array('url(', 'url(', ')', ')'), file_get_contents($file)) or die("Cannot read from uploaded file");
+                $content_file   = str_replace(array('url("', "url('", "')", '")'), array('url(', 'url(', ')', ')'), file_get_contents($file));
                 $content_file   = str_replace(array('url('), array('url(../../'.$basePath.'/'), $content_file);                
                 $content_file   = str_replace('@import "', "   @import \"../../".$basePath."/", $content_file);
                 $content_file   = str_replace('";', '";   ', $content_file);                
                 $this->string  .= $content_file;
             } else {
-                $this->string  .=  file_get_contents($file) or die("Cannot read from uploaded file");
+                $this->string  .=  file_get_contents($file);
             }
         }       
         if (preg_match_all('/@import "([^`]*?)";/i', $this->string, $allImports, PREG_SET_ORDER)) {

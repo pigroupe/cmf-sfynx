@@ -367,7 +367,7 @@ class PiDateManager implements PiDateManagerBuilderInterface
     		}
     		if ($dd > 0) {
     			// Jours
-    			if ($month or $year) {
+    			if ($month || $year) {
     				$duration .= " et";
     			}
     			$duration .= " <span>".$dd . "</span> jour" . (($dd > 1) ? "s" : "");

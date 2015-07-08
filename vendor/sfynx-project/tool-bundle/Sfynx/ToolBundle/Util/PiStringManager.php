@@ -232,7 +232,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
             preg_match_all("/(<\/?([\w+]+)[^>]*>)?([^<>]*)/", $text, $tags, PREG_SET_ORDER);
             foreach ($tags as $tag) {
                 if (!preg_match('/img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param/s', $tag[2])
-                        and preg_match('/<[\w]+[^>]*>/s', $tag[0]))
+                        && preg_match('/<[\w]+[^>]*>/s', $tag[0]))
                     array_unshift($openTags, $tag[2]);
                 elseif (preg_match('/<\/([\w]+)[^>]*>/s', $tag[0], $closeTag)) {
                     $pos = array_search($closeTag[1], $openTags);
@@ -403,7 +403,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
     {
         $string = str_replace('_', '/', trim($string));
         if ($relative) {
-            $string = $this->stripLeading('/', $string);
+            $string = self::stripLeading('/', $string);
         }
         $string = str_replace("[UNDERSCORE]", "_", $string);
         return $string;
@@ -839,7 +839,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
      * 
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    public static function filter($fst, $arr, $e ='utf-8', $output)
+    public static function filter($fst, $arr, $e ='utf-8')
     {
         $new_arr=array();    
         for($i=0;$i<=(count($arr)-1);$i++) {
@@ -1373,7 +1373,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
     public static function pluralize($string, $number = null)
     {
         $uncountable = array("moose", "sheep", "fish", "series", "species", "rice", "money", "information", "equipment", "piss");
-        if (in_array($string, $uncountable) or $number == 1) {
+        if (in_array($string, $uncountable) || $number == 1) {
             return $string;
         }
         $replacements = array("/person/i" => "people",
@@ -1420,7 +1420,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
      */
     public static function depluralize($string, $number = null) 
     {
-        if (isset($number) and $number != 1) {
+        if (isset($number) && $number != 1) {
             return $string;
         }
         $replacements = array("/people/i" => "person",
@@ -1445,7 +1445,7 @@ class PiStringManager implements PiStringManagerBuilderInterface
                 "/([ml])ice$/i" => "\\1ouse",
                 "/(quiz)zes$/i" => "\\1");    
         $replaced = preg_replace(array_keys($replacements), array_values($replacements), $string, 1);
-        if ($replaced == $string and substr($string, -1) == "s") {
+        if ($replaced == $string && substr($string, -1) == "s") {
             return substr($string, 0, -1);
         } else {
             return $replaced;

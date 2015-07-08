@@ -79,7 +79,7 @@ class PiMigrationCommand extends ContainerAwareCommand
             //if ($mivrationVersion == "24") {  // pour lancer la migration 24
                 $output->writeln('Start ' . $migrationName);
                 require_once($file->getRealpath());
-                new $migrationName($this->getContainer(), $output, $dialog);
+                $var = new $migrationName($this->getContainer(), $output, $dialog);
                 $output->writeln('End ' . $migrationName);
             }
         }

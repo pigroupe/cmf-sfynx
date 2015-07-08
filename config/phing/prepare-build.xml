@@ -33,6 +33,7 @@
         <mkdir dir="${dir.reports}" />
         <mkdir dir="${dir.reports.coverage}" />
         <mkdir dir="${dir.reports.pdepend}" />
+        <mkdir dir="${dir.reports.sonar}" />
     </target>
 
     <!-- Project build prepare -->

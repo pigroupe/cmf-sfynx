@@ -454,12 +454,12 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
         {
             $Drapeau    = true;
             $Result[]    = array_search($Val,$Tableau);
-            /*On récupère le chemin d'indexation menat � la valeur
+            /*On récupère le chemin d'indexation menant à la valeur
              Afin d'éviter Fatal error: Cannot use string offset as an array in..., on :
     
-            - Inverse le tableau de r�sultats
-            - Remonte l'arborescence jusqu'� trouver l'indice "racine" menant � la valeur
-            - On renvoie la cha�ne de caract�res compos�e */
+            - Inverse le tableau de résultats
+            - Remonte l'arborescence jusqu'à trouver l'indice "racine" menant à la valeur
+            - On renvoie la chaine de caractères composée */
     
             $Result = array_reverse($Result);
     
@@ -480,7 +480,7 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
     
             if (is_array($Valeur)){
                 $Result[]=$Cle; //$Result[]=$Cle: On rajoute l'indice parcouru dans le tableau de r�sultats
-                $Result=$this->findIndice($Valeur,$Val);
+                $Result=self::findIndice($Valeur,$Val);
             }
         }
         return $Result;

@@ -275,6 +275,7 @@ class PageByTransController extends CmfabstractController
         $User   = $this->get('security.context')->getToken()->getUser();
         $NoLayout = $this->container->get('request')->query->get('NoLayout');
         
+        //$this->get('pi_app_admin.form.page.type')->setInit($this->container, $locale, $User->getRoles());
         //$form = $this->get('pi_app_admin.form.pagebytrans');
         
         $editForm = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));

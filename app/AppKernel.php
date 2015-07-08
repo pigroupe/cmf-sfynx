@@ -81,7 +81,7 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();            	
-            $bundles[] = new So\LogboardBundle\LogboardBundle();
+            //$bundles[] = new So\LogboardBundle\LogboardBundle();
         }
         
         if ('test' === $this->getEnvironment()) {
