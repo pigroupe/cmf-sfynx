@@ -5,42 +5,42 @@ apt-get -y dist-upgrade > /dev/null
 
 # install virtualbox
 if sudo apt-get -qq install virtualbox; then
-    sudo apt-get purge virtualbox
+    echo "virtualbox package already install"
+else
+    sudo apt-get -y install virtualbox
+    echo "Successfully installed virtualbox"    
 fi
-
-echo "Successfully installed virtualbox" 
-sudo apt-get -y install linux-headers-$(uname -r|sed 's,[^-]*-[^-]*-,,')
-
-#echo "deb http://http.debian.net/debian wheezy-backports main" >> /etc/apt/sources.list
-#sudo apt-get update
-#sudo apt-get install -t wheezy-backports linux-image-amd64
-#sudo apt-get -t wheezy-backports install virtualbox
-#sudo /etc/init.d/vboxadd setup
-sudo apt-get -y install virtualbox
-
-sudo apt-get -y install dkms
-sudo apt-get -y install virtualbox-dkms
-sudo apt-get -y install install virtualbox-ose-guest-dkms
-
-# Before attempting to run this be sure that the current running Kernel headers are installed on your system. If you don't you will receive an error indicating that you need to install them or use the --kernelsource option to point to said headers.
-sudo dpkg-reconfigure virtualbox-dkms
-sudo dpkg-reconfigure virtualbox
 
 # install vargrant
 if sudo apt-get -qq install vagrant; then
-    sudo apt-get remove vagrant
+    echo "vagrant package already install"
+else
+    sudo apt-get -y install vagrant
+    echo "Successfully installed vagrant"    
 fi
-wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb
-sudo dpkg -i vagrant_1.7.2_x86_64.deb
+
+# Before attempting to run this be sure that the current running Kernel headers are installed on your system. If you don't you will receive an error indicating that you need to install them or use the --kernelsource option to point to said headers.
+sudo apt-get -y install dkms
+sudo apt-get -y install virtualbox-dkms
+#sudo apt-get -y install linux-headers-$(uname -r)
+sudo apt-get -y install linux-headers-generic 
+sudo dpkg-reconfigure virtualbox-dkms
+sudo dpkg-reconfigure virtualbox
 
 # In order to do the first, you must first remove the incompatible vb mod.  Then, follow Oracle's instructions to get the module loaded.
-#sudo modprobe vboxdrv
+sudo modprobe vboxdrv
 
 # install adapter nfs
 sudo apt-get install nfs-common nfs-kernel-server
 
 # Install the VirtualBox guest additions plugin
 vagrant plugin install vagrant-vbguest
+
+# Vagrant and local tmp folder write permissions
+sudo chmod 1777 /
+
+
+sudo dpkg --configure -a
 
 
 # liste of all vm
@@ -91,4 +91,3 @@ vagrant plugin install vagrant-vbguest
 ##to write to the destination location. Alternately, the user running
 ##Vagrant on the host machine may not have permission to read the file.
 ## solution>>>>  vagrant ssh =>  sudo chmod -R 777 /tmp => exit
-
