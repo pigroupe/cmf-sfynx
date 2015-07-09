@@ -1,11 +1,11 @@
 #!/bin/sh
 
 # log
-mkdir -p /var/log/selenium
-chmod a+w /var/log/selenium
+sudo mkdir -p /var/log/selenium
+sudo chmod a+w /var/log/selenium
 
 # selenium sever upload
-mkdir -p /usr/lib/selenium
+sudo mkdir -p /usr/lib/selenium
 cd /usr/lib/selenium
 
 sudo rm selenium-server-standalone.jar
@@ -14,7 +14,7 @@ sudo ln -s selenium-server-standalone-2.46.0.jar selenium-server-standalone.jar
 sudo chmod +x selenium-server-standalone.jar
 
 # Create a service file
-cat >> /etc/init.d/selenium << 'EOF'
+sudo cat >> /etc/init.d/selenium << 'EOF'
 #!/bin/bash
 
 case "${1:-''}" in
