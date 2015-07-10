@@ -52,7 +52,7 @@ class HandlerLocale
     * @param string             $defaultLocale	Locale value
     * @param ContainerInterface $container      The container service
     */   
-   public function __construct($defaultLocale = 'en', ContainerInterface $container)
+   public function __construct(ContainerInterface $container, $defaultLocale = 'en')
    {
        $this->defaultLocale = $defaultLocale;   
        $this->container     = $container;  

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coupons xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="coupons.xsd">
+  <coupon>
+    <id>0</id>
+    <montant>0.001</montant>
+    <img_url>ftp://sfynx.pi-groupe/images/imagesBr/0000000001.png</img_url>
+    <text>B</text>
+    <marque>Bo</marque>
+    <type>yaourt</type>
+    <statut>en stock</statut>
+  </coupon>
+</coupons>

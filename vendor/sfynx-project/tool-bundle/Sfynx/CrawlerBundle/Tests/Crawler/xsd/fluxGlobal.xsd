@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="coupons">
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="coupon">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="id" minOccurs="1" maxOccurs="1">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:integer">
+                                     <xs:minInclusive value="1"/>
+                            </xs:restriction>
+                         </xs:simpleType>
+                      </xs:element>
+                      <xs:element name="montant" minOccurs="1" maxOccurs="1" >
+                        <xs:simpleType>
+                            <xs:restriction base="xs:decimal">
+                                     <xs:minInclusive value="0.01"/>
+                            </xs:restriction>
+                         </xs:simpleType>
+                      </xs:element>
+                      <xs:element name="img_url" minOccurs="1" maxOccurs="1">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:pattern value="[hH][tT]{2}[pP][sS]://.*"/>
+                            </xs:restriction>
+                         </xs:simpleType>
+                      </xs:element>
+                      <xs:element name="text" minOccurs="1" maxOccurs="1" >
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="2"/>
+                            </xs:restriction>
+                         </xs:simpleType>
+                      </xs:element>
+                      <xs:element name="marque" minOccurs="1" maxOccurs="1" >
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="2"/>
+                            </xs:restriction>
+                         </xs:simpleType>
+                      </xs:element>
+                      <xs:element name="type" minOccurs="1" maxOccurs="1">
+                         <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                     <xs:enumeration value="du mois"/>
+                                     <xs:enumeration value="recette"/>
+                                     <xs:enumeration value="welcome process"/>
+                                     <xs:enumeration value="bundle"/>
+                            </xs:restriction>
+                         </xs:simpleType>
+                      </xs:element>
+                      <xs:element name="statut" minOccurs="1" maxOccurs="1">
+                         <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                     <xs:enumeration value="en stock"/>
+                                     <xs:enumeration value="epuise"/>
+                            </xs:restriction>
+                         </xs:simpleType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="nbTotal" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:integer">
+                  <xs:minInclusive value="1"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="remiseTotal" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                  <xs:minInclusive value="0.01"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

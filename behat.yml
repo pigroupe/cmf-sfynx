@@ -9,8 +9,8 @@ default:
                     selenium2:
                         wd_host: http://127.0.0.1:5555/wd/hub
                         capabilities:
-                            browser: firefox
-                            version: 21
+                            browser: chrome
+                            version: 43
                 my_session_zombie:
                     zombie: ~    
                 my_session_symfony2:

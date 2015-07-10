@@ -360,7 +360,7 @@ class RubController extends abstractController
         }
 
 
-        if(empty($data["media"]) and $data['parent'] == 37){
+        if(empty($data["media"]) && ($data['parent'] == 37)){
             $editForm->get('media')->addError(new FormError('L\'image est obligatoire'));
         }
 

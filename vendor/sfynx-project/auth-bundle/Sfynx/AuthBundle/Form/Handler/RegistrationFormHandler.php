@@ -3,13 +3,26 @@ namespace Sfynx\AuthBundle\Form\Handler;
 
 use Sfynx\CoreBundle\Form\Handler\AbstractFormHandler;
 use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
 
 class RegistrationFormHandler extends AbstractFormHandler
 {
+    /**
+     * @var \FOS\UserBundle\Model\UserInterface
+     */    
     protected $user;
+    
+    /**
+     * @var
+     */
     protected $confirmation;
     
-    public function __construct(FormInterface $form, Request $request, $userManager, $mailer)
+    /**
+     * @var \FOS\UserBundle\Model\UserManagerInterface
+     */
+    protected $userManager;
+    
+    public function __construct(FormInterface $form, Request $request, UserManagerInterface $userManager, $mailer)
     {
         parent::__construct($form, $request);
         

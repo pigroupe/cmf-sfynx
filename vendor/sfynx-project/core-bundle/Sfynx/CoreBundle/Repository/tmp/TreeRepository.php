@@ -348,7 +348,7 @@ class TreeRepository extends NestedTreeRepository
     /**
      * {@inheritDoc}
      */    
-    public function findAllParentChoises($node = null, $locale, $INNER_JOIN = false)
+    public function findAllParentChoises($locale, $node = null, $INNER_JOIN = false)
     {
         $dql = "SELECT c FROM {$this->_entityName} c";
         if (!is_null($node)) {

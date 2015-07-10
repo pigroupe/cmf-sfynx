@@ -53,6 +53,6 @@ Feature: I would like to log in to the system
        When I wait for 3 seconds
        Then I should see "user"
       Given I am logged as "user"
-       When I follow "behatLinkLogout"
+       When I follow "logout"
        When I wait for 2 seconds
        Then the response should contain "form-connexion"

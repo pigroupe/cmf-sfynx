@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coupons
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="coupons.xsd"
+        nbTotal="100"
+        remiseTotal="100">
+    <coupon>
+        <id>1</id>
+        <montant>0.40</montant>
+        <img_url>https://sfynx.pi-groupe/images/imagesBr/0000000001.png</img_url>
+        <text>Boite de 6 boursins</text>
+        <marque>Boursin</marque>
+        <type>recette</type>
+        <statut>en stock</statut>
+    </coupon>
+    <coupon>
+        <id>2</id>
+        <montant>0.60</montant>
+        <img_url>https://sfynx.pi-groupe/images/imagesBr/truc.png</img_url>
+        <text>Boite de 6 vache qui rit</text>
+        <marque>Vache qui rit</marque>
+        <type>bundle</type>
+        <statut>epuise</statut>
+    </coupon>
+</coupons>

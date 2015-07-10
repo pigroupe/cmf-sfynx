@@ -765,7 +765,7 @@ sfynx_tool:
 #
 sfynx_migration:
     path_dir:
-        migration: "%kernel.root_dir%/migration/"          
+        migration: "%kernel.root_dir%/migrations/"          
 
 #
 # SfynxMediaBundle configuration

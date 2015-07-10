@@ -32,7 +32,7 @@ services:
             
     sfynx.auth.locale_handler:
         class: %sfynx.auth.handler.localeHandler.class%
-        arguments: [%locale%, @service_container]
+        arguments: [@service_container, %locale%]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 66 }
                 
