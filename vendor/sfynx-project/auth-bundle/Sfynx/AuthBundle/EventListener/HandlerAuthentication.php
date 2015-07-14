@@ -80,21 +80,21 @@ class HandlerAuthentication implements AuthenticationSuccessHandlerInterface
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-		if (isset($_POST['roles']) && !empty($_POST['roles']))
-	    {
-	    	$all_authorization_roles = json_decode($_POST['roles'], true);
-	    	$best_roles_name = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
-	    	if (is_array($all_authorization_roles) && !in_array($best_roles_name, $all_authorization_roles)) {
-	    		// Set a flash message
-	    		$request->getSession()->getFlashBag()->add('notice', "Vous n'êtes pas autorisé à vous connecté !");
-	    		// we disconnect user
-	    		$request->getSession()->invalidate();
-	    	}
-	    }
-	    $response = new Response(json_encode('ok'));
-	    $response->headers->set('Content-Type', 'application/json');
-	    
-	    return $response;
-    }    
-    
+        if (isset($_POST['roles']) && !empty($_POST['roles'])) {
+            $all_authorization_roles = json_decode($_POST['roles'], true);
+            $best_roles_name = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
+            if (is_array($all_authorization_roles) 
+                    && !in_array($best_roles_name, $all_authorization_roles)
+            ) {
+                    // Set a flash message
+                    $request->getSession()->getFlashBag()->add('notice', "Vous n'êtes pas autorisé à vous connecté !");
+                    // we disconnect user
+                    $request->getSession()->invalidate();
+            }
+        }
+        $response = new Response(json_encode('ok'));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }        
 }

@@ -185,7 +185,7 @@ class PiTinyAccordeonManager extends PiJqueryExtension
 					var accordion=new TINY.accordion.slider(&quot;accordion&quot;);<br />
 					accordion.init(&quot;accordion&quot;,&quot;h3&quot;,false,0,&quot;selected&quot;);
 				</code><br /><br />
-				You must create a new accordion object before initialization. The parameter taken by accordion.slider is the variable name used for the object. The object.init function takes 5 parameters: the id of the accordion �ul�, the header element tag, whether the panels should be expandable independently (optional), the index of the initially expanded section (optional) and the class for the active header (optional).
+				You must create a new accordion object before initialization. The parameter taken by accordion.slider is the variable name used for the object. The object.init function takes 5 parameters: the id of the accordion ul, the header element tag, whether the panels should be expandable independently (optional), the index of the initially expanded section (optional) and the class for the active header (optional).
 			</div>
 		</div>
 	</li>

@@ -31,10 +31,10 @@
             {% stylesheet getParameter('sfynx.auth.theme.layout.global.css')~":prepend" %}
         {% endif %}	
         {% if (is_granted('ROLE_USER')) %}
-   			{% CMFstylesheets 'file' %}
-   		{% else %}	
-   			{% CMFstylesheets 'php' %}
-   		{% endif %}	
+            {% CMFstylesheets 'file' %}
+        {% else %}	
+            {% CMFstylesheets 'php' %}
+        {% endif %}	
         
         <!--  Js core ['php', 'yui', 'file', 'array', 'empty'] -->
         {% if (is_granted('ROLE_USER')) %}
@@ -42,12 +42,12 @@
             {% javascript "bundles/sfynxtemplate/js/jquery/jquery-migrate-1.2.1.min.js:prepend" %}
         {% endif %}
         {# {% javascript "bundles/sfynxflatlab/admin/theme/js/jquery-1.8.3.min.js:prepend" %} #}
-   		{% javascript "bundles/sfynxtemplate/js/jquery/jquery-1.10.2.min.js:prepend" %}
-		{% if (is_granted('ROLE_USER')) %}
-   			{% CMFjavascripts 'file' %}
-   		{% else %}	
-			{% CMFjavascripts 'file' %}
-   		{% endif %} 
+        {% javascript "bundles/sfynxtemplate/js/jquery/jquery-1.10.2.min.js:prepend" %}
+        {% if (is_granted('ROLE_USER')) %}
+            {% CMFjavascripts 'file' %}
+        {% else %}	
+            {% CMFjavascripts 'file' %}
+        {% endif %} 
    			
         <!--  script divers -->
         {% block global_script_divers %}
@@ -61,62 +61,66 @@
     </head>
     <body>
     	<div id="global-layout" >
-    		{% block global_layout %}{% endblock %}
-	    </div>
-	    <div id="global-flash">
-			{% block global_flashes %}
-					{#
-					{{ session_flash() }}
-					{% set options_flash = {'action':'renderdialog','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'symfony-layout-flash' } %}
-					{{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	   
-					#}					
-					{{ session_flash_frontoffice() }}
-					{% set options_flash = {'action':'renderfancybox','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'confirm-popup-flash' } %}
-					{{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	
-			{% endblock %}
-		</div>
+            {% block global_layout %}{% endblock %}
+        </div>
+        <div id="global-flash">
+            {% block global_flashes %}
+                {#
+                {{ session_flash() }}
+                {% set options_flash = {'action':'renderdialog','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'symfony-layout-flash' } %}
+                {{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	   
+                #}					
+                {{ session_flash_frontoffice() }}
+                {% set options_flash = {'action':'renderfancybox','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'confirm-popup-flash' } %}
+                {{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	
+            {% endblock %}
+        </div>
 					    
-		{% if is_granted('ROLE_USER') %}
-		<searchlucene>			
-				<div id="pi_page_bar_toggler"  class="menu-xp" ></div>
-				<div id="pi_media_bar_toggler" class="menu-xp org-tree-page" ></div>	
-									
-				{% set theme = getParameter('pi_app_admin.admin.context_menu_theme') %}
-				{% set options_contextmenu = {'id': '.menu-xp', 'theme': theme, 'menu': 'admin', 'options': {
-							'shadow':'true',
-							'shadowOpacity':'.4',
-							'shadowColor':'#000',
-							'shadowOffset':'13',
-					    	'shadowWidthAdjust':'-3',
-					    	'shadowHeightAdjust':'-3'
-				} } %}
-				{{ renderJquery('MENU', 'context-menu', options_contextmenu )|raw }}			
-				
-				{% set options_chartpage = {"action":"renderByClick", "id":".org-chart-page", "menu":"page"} %} 
-	 			{{ getService('pi_app_admin.manager.tree').run('organigram', 'Rubrique~org-chart-page', app.request.getLocale(), options_chartpage)|raw }}
-	 			
-				{{ renderJquery('TOOL', 'widgetadmin')|raw }}
-				
-				{% set options_veneer = {'id': '.veneer_blocks_widgets'} %}
-				{{ renderJquery('TOOL', 'veneer', options_veneer )|raw }}
-		</searchlucene>
-		{% endif %}		
+        {% if is_granted('ROLE_USER') %}
+        <searchlucene>			
+            <div id="pi_page_bar_toggler"  class="menu-xp" ></div>
+            <div id="pi_media_bar_toggler" class="menu-xp org-tree-page" ></div>	
 
-		{#
-		{% javascripts
-            'js/libs/xtcore.js'
-            'js/scriptXiti.js'		
-			'js/scriptFunct.js'
-            'js/scriptInit.js'
-        filter='yui_js' output='js/compiled/main.js' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+            {% set theme = getParameter('pi_app_admin.admin.context_menu_theme') %}
+            {% set options_contextmenu = {'id': '.menu-xp', 'theme': theme, 'menu': 'admin', 'options': {
+                'shadow':'true',
+                'shadowOpacity':'.4',
+                'shadowColor':'#000',
+                'shadowOffset':'13',
+                'shadowWidthAdjust':'-3',
+                'shadowHeightAdjust':'-3'
+            } } %}
+            {{ renderJquery('MENU', 'context-menu', options_contextmenu )|raw }}			
+
+            {% set options_chartpage = {"action":"renderByClick", "id":".org-chart-page", "menu":"page"} %} 
+            {{ getService('pi_app_admin.manager.tree').run('organigram', 'Rubrique~org-chart-page', app.request.getLocale(), options_chartpage)|raw }}
+
+            {{ renderJquery('TOOL', 'widgetadmin')|raw }}
+
+            {% set options_veneer = {'id': '.veneer_blocks_widgets'} %}
+            {{ renderJquery('TOOL', 'veneer', options_veneer )|raw }}
+        </searchlucene>
+        {% endif %}		
+
+        {#
+            {% javascripts
+                'js/libs/xtcore.js'
+                'js/scriptXiti.js'		
+		'js/scriptFunct.js'
+                'js/scriptInit.js'
+            filter='yui_js' output='js/compiled/main.js' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
         #}
 			
         {% include "SfynxWsBundle::Template\\Domains\\default.html.twig" %}
         
         {% block global_script_js_footer %}{% endblock %}
-        {% block global_script_divers_footer %}{% endblock %}           
+        {% block global_script_divers_footer %}{% endblock %}     
+        
+        {% if app.environment == "dev" %}
+            {{ nelmio_js_error_logger() }}
+        {% endif %}          
         						
     </body>
 </html>

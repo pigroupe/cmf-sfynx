@@ -15,7 +15,7 @@ $vm_dir_project = "/var/www/cmf-sfynx"
 $vm_memory = "1024"
 $vm_cpus = "2"
 $vm_cpu_cap = "100"
-$vm_ip = "33.33.33.101"
+$vm_ip = "192.168.33.00"
  
 # Port forwarding
 $pf_mysql = 3306

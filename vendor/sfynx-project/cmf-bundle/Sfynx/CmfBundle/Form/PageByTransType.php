@@ -51,7 +51,7 @@ class PageByTransType extends AbstractType
      * @param array $roles_user
      * @return void
      */
-    public function __construct($locale, $roles_user = array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_CONTENT_MANAGER'), ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $locale = '', $roles_user = array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_CONTENT_MANAGER'))
     {
         $this->setInit($container, $locale, $roles_user);
     }

@@ -1,4 +1,6 @@
 parameters:
+    pi_app_admin.cmf.monolog.processor.cmf.class: Sfynx\CmfBundle\Monolog\Processor\IntrospectionCmfProcessor
+        
     piapp.admin.repository.class: Sfynx\CmfBundle\Repository\Repository
     
     piapp.admin.manager.page.class: Sfynx\CmfBundle\Manager\PiPageManager
@@ -19,6 +21,15 @@ parameters:
     piapp.twig.caching.class: Sfynx\CmfBundle\Twig\PiTwigCache
     
 services:
+    #
+    # configuration of the user monolog processor
+    #    
+    pi_app_admin.cmf.monolog.processor.cmf:
+        class: %pi_app_admin.cmf.monolog.processor.cmf.class%
+        arguments:  [ @service_container ]
+        tags:
+            - { name: monolog.processor, channel: cmf, method: processRecord }
+            
     #
     # configuration of the main repository manager allowed for the repository management
     #  

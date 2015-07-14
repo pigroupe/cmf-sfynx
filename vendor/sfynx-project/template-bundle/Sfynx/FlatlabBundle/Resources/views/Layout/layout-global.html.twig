@@ -24,10 +24,10 @@
             {% stylesheet getParameter('sfynx.auth.theme.layout.admin.css')~":prepend" %}
         {% endif %}	
         {% if (is_granted('ROLE_USER')) %}
-   			{% CMFstylesheets 'file' %}
-   		{% else %}	
-   			{% CMFstylesheets 'php' %}
-   		{% endif %}	
+            {% CMFstylesheets 'file' %}
+        {% else %}	
+            {% CMFstylesheets 'php' %}
+        {% endif %}	
    		
    	    <!--  Js core ['php', 'yui', 'file', 'array', 'empty'] -->
         {% if (is_granted('ROLE_USER')) %}
@@ -35,12 +35,12 @@
             {% javascript "bundles/sfynxtemplate/js/jquery/jquery-migrate-1.2.1.min.js:prepend" %}
         {% endif %}
         {# {% javascript "bundles/sfynxflatlab/admin/theme/js/jquery-1.8.3.min.js:prepend" %} #}
-   		{% javascript "bundles/sfynxtemplate/js/jquery/jquery-1.10.2.min.js:prepend" %}
-		{% if (is_granted('ROLE_USER')) %}
-   			{% CMFjavascripts 'file' %}
-   		{% else %}	
-			{% CMFjavascripts 'file' %}
-   		{% endif %} 
+        {% javascript "bundles/sfynxtemplate/js/jquery/jquery-1.10.2.min.js:prepend" %}
+        {% if (is_granted('ROLE_USER')) %}
+            {% CMFjavascripts 'file' %}
+        {% else %}	
+            {% CMFjavascripts 'file' %}
+        {% endif %} 
         
         <!--  script divers -->
         {% block global_script_divers %}
@@ -56,26 +56,30 @@
     <body>
     
     	<div id="global-layout" >
-    		{% block global_layout %}{% endblock %}
-	    </div>
-	    
-	    <div id="global-flash">
-			{% block global_flashes %}
-					{#
-					{{ session_flash() }}
-					{% set options_flash = {'action':'renderdialog','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'symfony-layout-flash' } %}
-					{{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	   
-					#}					
-					{{ session_flash_frontoffice() }}
-					{% set options_flash = {'action':'renderfancybox','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'confirm-popup-flash' } %}
-					{{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	
-			{% endblock %}
-		</div>
-					    
-		{# {% include "SfynxWsBundle::Template\\Domains\\default.html.twig" %} #}
+            {% block global_layout %}{% endblock %}
+        </div>
+
+        <div id="global-flash">
+            {% block global_flashes %}
+                {#
+                {{ session_flash() }}
+                {% set options_flash = {'action':'renderdialog','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'symfony-layout-flash' } %}
+                {{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	   
+                #}					
+                {{ session_flash_frontoffice() }}
+                {% set options_flash = {'action':'renderfancybox','type': ['permission','notice', 'success', 'warning'], 'dialog-name': 'confirm-popup-flash' } %}
+                {{ renderJquery('SESSION', 'flash', options_flash )|raw }} 	
+            {% endblock %}
+        </div>
+
+        {# {% include "SfynxWsBundle::Template\\Domains\\default.html.twig" %} #}
         
         {% block global_script_js_footer %}{% endblock %}
-        {% block global_script_divers_footer %}{% endblock %}           
+        {% block global_script_divers_footer %}{% endblock %}          
+        
+        {% if app.environment == "dev" %}
+            {{ nelmio_js_error_logger() }}
+        {% endif %}  
         						
     </body>
 </html>

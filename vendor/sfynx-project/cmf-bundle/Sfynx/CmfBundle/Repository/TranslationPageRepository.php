@@ -127,7 +127,9 @@ class TranslationPageRepository extends TranslationRepository
         }
         // Shuffle the tags
         uksort($tagWeights, function() {
-            return rand() > rand();
+            $a = rand();
+            $b = rand();
+            return $a > $b;
         });
     
         $max = max($tagWeights);

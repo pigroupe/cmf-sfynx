@@ -22,12 +22,13 @@ vendor/bin/phpmd    src  xml codesize,unusedcode,naming,design --exclude **/map/
 vendor/bin/pdepend  --jdepend-xml=build/logs/pdepend/jdepend.xml --jdepend-chart=build/logs/pdepend/dependencies.svg --overview-pyramid=build/logs/pdepend/overview-pyramid.svg  src
 
 # QA
+mkdir -p build/logs/phpmetrics
 if [ ! -f phpmetrics.phar ]; then
     wget https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar -O phpmetrics.phar --no-check-certificate
 fi
 #php phpmetrics.phar src --report-html=build/metrics.html --report-xml=build/metrics.xml --chart-bubbles=build/metrics.svg  > /dev/null
-php phpmetrics.phar  --excluded-dirs="\.git|vendor|web|documentation|build|app|sysadmin|bin" -q --chart-bubbles=build/logs/phpmetrics/metrics.svg  --report-html=build/logs/phpmetrics/metrics.html --report-xml=build/logs/phpmetrics/metrics.xml  ./ > /dev/null
-#./bin/metrics.sh src > build/metrics.txt
+php phpmetrics.phar src --excluded-dirs="\.git|vendor|web|documentation|build|app|sysadmin|bin" -q --chart-bubbles=build/logs/phpmetrics/metrics.svg  --report-html=build/logs/phpmetrics/metrics.html --report-xml=build/logs/phpmetrics/metrics.xml  ./ > /dev/null
+#./bin/metrics.sh src > build/logs/phpmetrics/metrics.txt
 
 # Security checker :: contrôle des potentielles vulnérabilités des librairies installées par le composer
 mkdir -p build/logs/security

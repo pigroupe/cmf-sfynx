@@ -45,6 +45,9 @@ class AppKernel extends Kernel
             # tools
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Nelmio\JsLoggerBundle\NelmioJsLoggerBundle(),
+            new Lexik\Bundle\MaintenanceBundle\LexikMaintenanceBundle(),
 
             # Sfynx
             new Sfynx\CaptchaBundle\SfynxCaptchaBundle(),
@@ -55,6 +58,7 @@ class AppKernel extends Kernel
             new Sfynx\ApiBundle\SfynxApiBundle(),
             new Sfynx\CacheBundle\SfynxCacheBundle(),
             new Sfynx\ToolBundle\SfynxToolBundle(),
+            new Sfynx\CrawlerBundle\SfynxCrawlerBundle(),            
             new Sfynx\MigrationBundle\SfynxMigrationBundle(),
             new Sfynx\CoreBundle\SfynxCoreBundle(),
             new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
@@ -82,10 +86,12 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();            	
             //$bundles[] = new So\LogboardBundle\LogboardBundle();
+            $bundles[] = new Lexik\Bundle\MonologBrowserBundle\LexikMonologBrowserBundle();    
+            $bundles[] = new Bazinga\Bundle\FakerBundle\BazingaFakerBundle();
         }
         
         if ('test' === $this->getEnvironment()) {
-            $bundles[] = new Sfynx\BehatBundle\SfynxBehatBundle();
+            $bundles[]  = new Sfynx\BehatBundle\SfynxBehatBundle();
             $bundles[]  = new Behat\MinkBundle\MinkBundle();
         }
 

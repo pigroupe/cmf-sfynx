@@ -8,22 +8,89 @@ framework:
 web_profiler:
     toolbar: true
     intercept_redirects: false
+    
+doctrine:
+    dbal:
+        connections:
+            monolog:
+                driver:    pdo_sqlite
+                dbname:    monolog
+                path:      %kernel.root_dir%/cache/monolog2.db
+                charset:   UTF8
+                logging:   false
+                profiling: false       
+
+#monolog:
+#    handlers:
+#        main:
+#            type:  stream
+#            path:  %kernel.logs_dir%/%kernel.environment%.log
+#            level: error # error debug
+#        firephp:
+#            type:  firephp
+#            level: info
+#        chromephp:
+#            type:  chromephp
+#            level: info
 
 monolog:
     handlers:
         main:
-            type:  stream
-            path:  %kernel.logs_dir%/%kernel.environment%.log
-            level: error # error debug
-        firephp:
-            type:  firephp
-            level: info
-        chromephp:
-            type:  chromephp
-            level: info
+            type:         fingers_crossed # or buffer
+            level:        error
+            handler:      lexik_monolog_browser
+        app:
+            type:         buffer
+            action_level: info
+            channels:     app
+            handler:      lexik_monolog_browser
+        lexik_monolog_browser:
+            type:         service
+            id:           lexik_monolog_browser.handler.doctrine_dbal  
 
 assetic:
     use_controller: true
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+#
+# LexikMonologBrowserBundle configuration
+#     
+lexik_monolog_browser:
+    base_layout: "LexikMonologBrowserBundle::layout.html.twig"
+    doctrine:
+        connection_name: monolog
+        #table_name: monolog_entries
+            
+#
+# NelmioJsLoggerBundle configuration
+#            
+nelmio_js_logger:
+    allowed_levels: ['DEBUG', 'INFO', 'NOTICE', 'WARNING', 'ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY'] 
+    
+#
+# BazingaFakerBundle configuration (php app/console faker:populate)
+#     
+bazinga_faker:
+    orm: doctrine    
+#    entities:
+#        Acme\LibraryBundle\Model\Author:
+#            number: 5
+#        Acme\LibraryBundle\Model\Book:
+#            number: 5
+#            custom_formatters:
+#                Isbn:   { method: lexify, parameters: [ '?????????????' ] }
+#        Acme\LibraryBundle\Model\Book:
+#            custom_formatters:
+#                Isbn:   { method: randomElement, parameters: [ [ 'aaaaaaaaaa', 'bbbbbbbb', 'cccccccc' ] ] }
+#        Acme\LibraryBundle\Model\Book:
+#            custom_formatters:
+#                Isbn:   { method: word }
+#        Acme\LibraryBundle\Model\Book:
+#            custom_formatters:
+#                Slug:   { method: null }          
+#    seed:       1234
+#    locale:     en_GB
+#    populator:  Your\Own\Populator
+#    entity:     Your\Own\EntityPopulator      

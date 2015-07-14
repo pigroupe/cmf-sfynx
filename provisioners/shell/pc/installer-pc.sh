@@ -38,7 +38,7 @@ echo "*****Install python"
 sudo apt-get -y install python-software-properties > /dev/null
 
 echo "*****Install Java 7"
-add-apt-repository ppa:webupd8team/java -y
+sudo add-apt-repository ppa:webupd8team/java -y
 sudo apt-get -y update > /dev/null
 sudo apt-get -y dist-upgrade > /dev/null
 sudo apt-get -y install openjdk-7-jdk openjdk-7-jre > /dev/null
@@ -47,7 +47,7 @@ echo "*****Install tomcat 7"
 sudo sudo apt-get -y install tomcat7 tomcat7-common tomcat7-admin libtomcat7-java 
 
 echo "*****Install the latest git Version"
-add-apt-repository ppa:git-core/ppa -y
+sudo add-apt-repository ppa:git-core/ppa -y
 sudo apt-get -y update > /dev/null
 sudo apt-get -y dist-upgrade > /dev/null
 sudo apt-get -y install git git-core  > /dev/null
@@ -80,7 +80,7 @@ echo "Install Make"
 sudo apt-get -y install make > /dev/null
 
 echo "Install Curl and Nodejs"
-add-apt-repository -y ppa:chris-lea/node.js
+sudo add-apt-repository -y ppa:chris-lea/node.js
 sudo apt-get -y update > /dev/null
 sudo apt-get -y install curl nodejs > /dev/null
 sudo npm install -g npm

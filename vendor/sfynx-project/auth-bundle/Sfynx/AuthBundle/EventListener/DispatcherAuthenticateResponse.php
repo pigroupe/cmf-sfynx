@@ -118,7 +118,7 @@ class DispatcherAuthenticateResponse
         // we get the best role of the user.
         $this->BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
         if (!empty($this->BEST_ROLE_NAME)) {
-            $role         = $this->em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $this->BEST_ROLE_NAME));
+            $role = $this->em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $this->BEST_ROLE_NAME));
             if ($role instanceof Role) {
                 $RouteLogin = $role->getRouteLogin();
                 if (!empty($RouteLogin) && !is_null($RouteLogin)) {

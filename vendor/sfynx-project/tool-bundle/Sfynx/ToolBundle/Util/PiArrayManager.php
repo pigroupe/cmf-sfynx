@@ -337,42 +337,45 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
     
         $Balise correspond à la balise dont on veut extraire le contenu.
         Ne pas mettre les "<" et ">".
-        CONTRAINTE : dans le code HTML, la balise doit �tre coll�e � "<"
+        CONTRAINTE : dans le code HTML, la balise doit être collée à "<"
         <td... est correct et <          td... ne l'est pas.
     
-        $Prem_val correspond à la valeur qui est prise pour d�terminer une nouvelle ligne.
+        $Prem_val correspond à la valeur qui est prise pour déterminer une nouvelle ligne.
         InnerHTML est INSENSIBLE à la casse concernant $Prem_val. Pour changer cela remplacer les stripos par strpos.
     
         $Affiche_prems permet d'inclure (true) ou non (false) dans le tableau d'extraction $Prem_val si cette option est prise.
     
-        $Nbre_bal d�termine le nombre de contenus de balise composant une ligne.
-        Si $Prem_val et $Nbre_bal sont renseign�s, c'est $Prem_val qui prime.
+        $Nbre_bal détermine le nombre de contenus de balise composant une ligne.
+        Si $Prem_val et $Nbre_bal sont renseignés, c'est $Prem_val qui prime.
     
         Si $Nbre_bal est supérieur à 0, $Affiche_prems est toujours true
     
-        Sachant qu'entre <td> et </td> il peut y avoir en th�orie n'importe quoi (autres balises, saut de ligne...), on ne peut pas utiliser <td>([[:alnum:]]+)</td> pour le masque
+        Sachant qu'entre <td> et </td> il peut y avoir en théorie n'importe quoi (autres balises, saut de ligne...), on ne peut pas utiliser <td>([[:alnum:]]+)</td> pour le masque
     
-        Si on utilise <td>(.+)</td> �a ne marche pas non plus car la partie extraite dans un preg_match_all sera celle comprise entre le premier <td> et le dernier </td>.
+        Si on utilise <td>(.+)</td> ça ne marche pas non plus car la partie extraite dans un preg_match_all sera celle comprise entre le premier <td> et le dernier </td>.
         Tous les autres couples <td>...</td> ne seront pas pris en compte.
     
         On décompose donc l'extraction.*/
     
-        if (strlen($Prem_val)===0)//On va extraire les valeurs par nombre de ligne
-        {                        //==>Si $Nbre_bal n'est pas renseign� il faut qu'il soit sup�rieur � 0
-            $Affiche_prems=true;   //par contre, s'il est renseign� on garde la valeur pass�e en param�tre.
-            if ($Nbre_bal===0) $Nbre_bal=1;
-        }
-        else//Cela signifie que on va extraire les ligne par une valeur
-        {
-            $Nbre_bal=0;//Si $Nbre_bal a malencontreusement �t� renseign� en m�me temps que $Prem_val,
-        }//On remet cette variable � 0 pour que l'extraction par valeur soit d�tect�e (conf�re **)
+        if (strlen($Prem_val)===0) {
+            //On va extraire les valeurs par nombre de ligne
+                        //==>Si $Nbre_bal n'est pas renseigné il faut qu'il soit supérieur à 0
+            $Affiche_prems=true;   //par contre, s'il est renseigné on garde la valeur passée en paramètre.
+            if ($Nbre_bal===0) {
+                $Nbre_bal=1;
+            }
+        } else {
+            //Cela signifie que on va extraire les ligne par une valeur
+
+            $Nbre_bal=0;//Si $Nbre_bal a malencontreusement été renseigné en même temps que $Prem_val,
+        }//On remet cette variable à 0 pour que l'extraction par valeur soit détectée (confère **)
     
         $Compteur=$Nbre_bal+1;
         preg_match_all('~<'.$Balise.'[^>]*>~is',$HTML,$Deb_balise);
     
         foreach($Deb_balise[0] as $Val)
         {
-            $Val=substr($HTML,strpos($HTML,$Val)+strlen($Val));//On enl�ve tout ce qu'il y a avant le <td> y compris ce dernier
+            $Val=substr($HTML,strpos($HTML,$Val)+strlen($Val));//On enlève tout ce qu'il y a avant le <td> y compris ce dernier
             $Temp=substr($Val,0,stripos($Val,'</'.$Balise.'>'));
             $HTML=substr($HTML,stripos($HTML,'</'.$Balise.'>')+strlen($Balise));//On supprime le code <td>...</td> que l'on vient d'extraire
             $Taille=count($Recup)-1;
@@ -389,7 +392,7 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
             }
             else//Par valeur de balise commune
             {
-                if ($Taille===-1)$Taille=0;//C'est que $Prem_val n'est pas en premi�re position
+                if ($Taille===-1)$Taille=0;//C'est que $Prem_val n'est pas en première position
     
                 if (stripos($Temp,$Prem_val)===false)
                 {
@@ -418,11 +421,11 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
                     else
                         $Compteur=$Taille+1;
     
-                    Pour pouvoir ins�rer des contenus de balise se trouvant avant $Prem_val si cette valeur n'est pas en première position,
+                    Pour pouvoir insèrer des contenus de balise se trouvant avant $Prem_val si cette valeur n'est pas en première position,
                     on a forcé la taille à 0.
-                    Si $Prem_val est en premi�re position dans le tableau renvoy� dans $Deb_balise[0] alors $Taille, au lieu d'être à  0 sera à 1
+                    Si $Prem_val est en première position dans le tableau renvoyé dans $Deb_balise[0] alors $Taille, au lieu d'être à  0 sera à 1
                     Pour corriger cela on fait tourner le $Compteur.
-                    Ainsi, si la premi�re valeur de $Deb_balise[0] est �gale � $Prem_val, le premier indice du tableau de résultat sera 0.
+                    Ainsi, si la première valeur de $Deb_balise[0] est égale à $Prem_val, le premier indice du tableau de résultat sera 0.
                     */
                 }
                 ++$Compteur;
@@ -444,7 +447,7 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
     {
         static $Drapeau=false;static $Compteur=false;static $Result=array(); static $Tbl_origine=array();
     
-        if ($Compteur==false)    //$Compteur permet d'assigner à $Tbl_origine le tableau pass� en paramètre lors du premier appel de la fonction
+        if ($Compteur==false)    //$Compteur permet d'assigner à $Tbl_origine le tableau passé en paramètre lors du premier appel de la fonction
         {                       //En effet, lorsque l'on trouve la valeur le tableau en cours est celui contenant cette valeur.
             $Tbl_origine=$Tableau;
             $Compteur=true;
@@ -479,7 +482,7 @@ class PiArrayManager implements PiArrayManagerBuilderInterface
             if ($Drapeau==true) break;//break; Pour remonter l'arborescence d'appel de la fonction en gardant le résultat
     
             if (is_array($Valeur)){
-                $Result[]=$Cle; //$Result[]=$Cle: On rajoute l'indice parcouru dans le tableau de r�sultats
+                $Result[]=$Cle; //$Result[]=$Cle: On rajoute l'indice parcouru dans le tableau de résultats
                 $Result=self::findIndice($Valeur,$Val);
             }
         }

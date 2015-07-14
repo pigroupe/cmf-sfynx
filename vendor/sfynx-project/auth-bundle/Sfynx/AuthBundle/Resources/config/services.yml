@@ -1,4 +1,6 @@
 parameters:
+    sfynx.auth.monolog.processor.user.class: Sfynx\AuthBundle\Monolog\Processor\IntrospectionUserProcessor
+    
     sfynx.auth.handler.exception.class: Sfynx\AuthBundle\EventListener\HandlerException
     sfynx.auth.handler.localeHandler.class: Sfynx\AuthBundle\EventListener\HandlerLocale
     sfynx.auth.handler.requestHandler.class: Sfynx\AuthBundle\EventListener\HandlerRequest
@@ -20,7 +22,16 @@ parameters:
     sfynx.auth.manager.jquery.languagechoice.class: Sfynx\AuthBundle\Util\PiJquery\PiLanguageChoiceManager
     sfynx.auth.manager.jquery.dashboard.class: Sfynx\AuthBundle\Util\PiJquery\PiDashboardManager    
 
-services:       
+services:      
+    #
+    # configuration of the user monolog processor
+    #    
+    sfynx.auth.monolog.processor.user:
+        class: %sfynx.auth.monolog.processor.user.class%
+        arguments:  [ @service_container ]
+        tags:
+            - { name: monolog.processor, channel: user, method: processRecord }
+            
     #               
     # handlers Configuration
     #           
@@ -32,7 +43,7 @@ services:
             
     sfynx.auth.locale_handler:
         class: %sfynx.auth.handler.localeHandler.class%
-        arguments: [%locale%, @service_container]
+        arguments: [@service_container, %locale%]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 66 }
                 

@@ -12,3 +12,17 @@ _configurator:
 
 _main:
     resource: routing.yml
+    
+#
+#   Import NelmioJsLoggerBundle routing files
+#        
+NelmioJsLoggerBundle:
+    resource: "@NelmioJsLoggerBundle/Resources/config/routing.xml"
+    prefix:   /nelmio-js-logger    
+  
+#
+#   Import LexikMonologBrowserBundle routing files
+#     
+lexik_monolog_browser:
+    resource: "@LexikMonologBrowserBundle/Resources/config/routing.xml"
+    prefix:   /admin/monolog         

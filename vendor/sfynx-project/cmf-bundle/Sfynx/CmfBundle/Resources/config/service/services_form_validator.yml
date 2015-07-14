@@ -61,6 +61,6 @@ services:
         tags:
             - { name: form.type, alias: cmf_form_page }
         arguments:
-            - ~
-            - ~    
             - @service_container
+            - ~
+            - ~                
