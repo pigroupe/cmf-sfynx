@@ -45,6 +45,9 @@ class AppKernel extends Kernel
             # tools
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Nelmio\JsLoggerBundle\NelmioJsLoggerBundle(),
+            new Lexik\Bundle\MaintenanceBundle\LexikMaintenanceBundle(),
 
             # Sfynx
             new Sfynx\CaptchaBundle\SfynxCaptchaBundle(),
@@ -83,6 +86,8 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();            	
             //$bundles[] = new So\LogboardBundle\LogboardBundle();
+            $bundles[] = new Lexik\Bundle\MonologBrowserBundle\LexikMonologBrowserBundle();    
+            $bundles[] = new Bazinga\Bundle\FakerBundle\BazingaFakerBundle();
         }
         
         if ('test' === $this->getEnvironment()) {

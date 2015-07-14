@@ -185,13 +185,13 @@ class PiAuthenticateManager extends Controller
     /**
      * Return the connected user entity.
      *
-     * @return string User name
+     * @return UserInterface
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function getUser()
     {
-        return $this->getToken()->getUser()->getUsername();
+        return $this->getToken()->getUser();
     }
     
     /**
