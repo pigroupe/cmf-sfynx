@@ -39,6 +39,17 @@ monolog:
             type:         fingers_crossed # or buffer
             level:        error
             handler:      lexik_monolog_browser
+#            channels:     [!cmf, !user]            
+        user:
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.user.log
+            level: debug
+            channels: [user]             
+        cmf:
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.cmf.log
+            level: debug
+            channels: [cmf]            
         app:
             type:         buffer
             action_level: info

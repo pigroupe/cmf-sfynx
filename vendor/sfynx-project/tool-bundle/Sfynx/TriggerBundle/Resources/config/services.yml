@@ -1,0 +1,75 @@
+parameters:
+    sfynx.trigger.listener.postload.class: Sfynx\SfynxTrigger\EventListener\PostLoadListener
+    sfynx.trigger.listener.loadclassmetadata.class: Sfynx\SfynxTrigger\EventListener\loadClassMetadataListener
+    sfynx.trigger.listener.onflush.class: Sfynx\SfynxTrigger\EventListener\OnFlushListener
+    sfynx.trigger.listener.preremove.class: Sfynx\SfynxTrigger\EventListener\PreRemoveListener
+    sfynx.trigger.listener.postremove.class: Sfynx\SfynxTrigger\EventListener\PostRemoveListener
+    sfynx.trigger.listener.prepersist.class: Sfynx\SfynxTrigger\EventListener\PrePersistListener
+    sfynx.trigger.listener.postpersist.class: Sfynx\SfynxTrigger\EventListener\PostPersistListener
+    sfynx.trigger.listener.preupdate.class: Sfynx\SfynxTrigger\EventListener\PreUpdateListener
+    sfynx.trigger.listener.postupdate.class: Sfynx\SfynxTrigger\EventListener\PostUpdateListener
+    sfynx.trigger.listener.schema.class: Sfynx\SfynxTrigger\EventListener\SchemaListener
+
+services:
+    #               
+    # Doctrine events Configuration
+    #
+    sfynx.trigger.schema_listener:
+        class: %sfynx.trigger.listener.schema.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postGenerateSchema, connexion: default }
+            
+    sfynx.trigger.postload_listener:
+        class: %sfynx.trigger.listener.postload.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postLoad, connexion: default }
+
+    sfynx.trigger.loadclassmetadata_listener:
+        class: %sfynx.trigger.listener.loadclassmetadata.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata, connexion: default }
+
+    sfynx.trigger.onflush_listener:
+        class: %sfynx.trigger.listener.onflush.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: onFlush, connexion: default }
+
+    sfynx.trigger.preremove_listener:
+        class: %sfynx.trigger.listener.preremove.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preRemove, connexion: default }
+
+    sfynx.trigger.postremove_listener:
+        class: %sfynx.trigger.listener.postremove.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postRemove, connexion: default }
+
+    sfynx.trigger.prepersist_listener:
+        class: %sfynx.trigger.listener.prepersist.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: prePersist, connexion: default }   
+            
+    sfynx.trigger.postpersist_listener:
+        class: %sfynx.trigger.listener.postpersist.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, connexion: default }
+
+    sfynx.trigger.preupdate_listener:
+        class: %sfynx.trigger.listener.preupdate.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate, connexion: default } 
+
+    sfynx.trigger.postupdate_listener:
+        class: %sfynx.trigger.listener.postupdate.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, connexion: default }           
