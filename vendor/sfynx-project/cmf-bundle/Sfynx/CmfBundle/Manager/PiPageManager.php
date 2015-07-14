@@ -15,6 +15,7 @@ namespace Sfynx\CmfBundle\Manager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response as Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Psr\Log\LoggerInterface;
 
 use Sfynx\CmfBundle\Builder\PiPageManagerBuilderInterface;
 use Sfynx\CmfBundle\Repository\TranslationPageRepository;
@@ -34,6 +35,11 @@ use Sfynx\CmfBundle\Entity\Widget;
 class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterface 
 {    
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+    
+    /**
      * @var \Sfynx\CmfBundle\Manager\PiWidgetManager
      */    
     protected $widgetManager;    
@@ -43,8 +49,9 @@ class PiPageManager extends PiCoreManager implements PiPageManagerBuilderInterfa
      *
      * @param ContainerInterface $container The service container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(LoggerInterface $logger, ContainerInterface $container)
     {
+        $this->logger = $logger;
         parent::__construct($container);
     }
     

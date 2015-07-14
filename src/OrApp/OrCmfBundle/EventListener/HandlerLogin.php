@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Log\LoggerInterface;
+
 use Sfynx\AuthBundle\EventListener\HandlerLogin as baseLoginHandler;
 
 
@@ -38,8 +40,8 @@ class HandlerLogin extends baseLoginHandler
      * @param Doctrine        $doctrine
      * @param Container        $container
      */
-    public function __construct(SecurityContext $security, EventDispatcher $dispatcher, Doctrine $doctrine, ContainerInterface $container)
+    public function __construct(LoggerInterface $logger, SecurityContext $security, EventDispatcher $dispatcher, Doctrine $doctrine, ContainerInterface $container)
     {
-        parent::__construct($security, $dispatcher, $doctrine, $container);
+        parent::__construct($logger, $security, $dispatcher, $doctrine, $container);
     }
 }

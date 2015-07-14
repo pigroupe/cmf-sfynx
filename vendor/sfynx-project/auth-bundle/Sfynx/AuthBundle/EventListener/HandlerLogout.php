@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
+use Psr\Log\LoggerInterface;
 
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
@@ -42,10 +43,15 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  */
 class HandlerLogout implements LogoutSuccessHandlerInterface 
 {
-	/**
-	 * @var \Symfony\Component\Routing\Router
-	 */
-	protected $router;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+    
+    /**
+     * @var \Symfony\Component\Routing\Router
+     */
+    protected $router;
 		
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -78,8 +84,9 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
      * @param ContainerInterface $container The container service
      * @param Doctrine           $doctrine  The doctrine service
      */
-    public function __construct(ContainerInterface $container, Doctrine $doctrine)
+    public function __construct(LoggerInterface $logger, ContainerInterface $container, Doctrine $doctrine)
     {
+        $this->logger = $logger;
     	$this->router        = $container->get('sfynx.tool.route.factory');
     	$this->container     = $container;
     	$this->em            = $doctrine->getManager();
