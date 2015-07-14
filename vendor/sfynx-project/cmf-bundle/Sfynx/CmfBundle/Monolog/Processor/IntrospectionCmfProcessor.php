@@ -15,7 +15,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\AuthBundle;
+namespace Sfynx\CmfBundle\Monolog\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;

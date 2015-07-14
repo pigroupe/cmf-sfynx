@@ -14,6 +14,7 @@ namespace Sfynx\CmfBundle\Manager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Psr\Log\LoggerInterface;
 
 use Sfynx\CmfBundle\Builder\PiWidgetManagerBuilderInterface;
 use Sfynx\CmfBundle\Manager\PiCoreManager;
@@ -31,12 +32,18 @@ use Sfynx\CmfBundle\Entity\TranslationWidget;
 class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInterface 
 {    
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+    
+    /**
      * Constructor.
      *
      * @param ContainerInterface $container The service container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(LoggerInterface $logger, ContainerInterface $container)
     {
+        $this->logger = $logger;
         parent::__construct($container);
     }
     

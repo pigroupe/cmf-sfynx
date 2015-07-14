@@ -27,6 +27,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Psr\Log\LoggerInterface;
 
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
@@ -48,6 +49,11 @@ use Sfynx\AuthBundle\SfynxAuthEvents;
  */
 class HandlerLogin
 {
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+    
     /** 
      * @var \Symfony\Component\Security\Core\SecurityContext
      */
@@ -86,8 +92,9 @@ class HandlerLogin
      * @param Doctrine           $doctrine   The doctrine service
      * @param ContainerInterface $container  The container service
      */
-    public function __construct(SecurityContext $security, EventDispatcher $dispatcher, Doctrine $doctrine, ContainerInterface $container)
+    public function __construct(LoggerInterface $logger, SecurityContext $security, EventDispatcher $dispatcher, Doctrine $doctrine, ContainerInterface $container)
     {
+        $this->logger = $logger;
         $this->security     = $security;
         $this->dispatcher   = $dispatcher;
         $this->em           = $doctrine->getManager();

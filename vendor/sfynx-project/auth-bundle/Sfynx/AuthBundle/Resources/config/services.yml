@@ -59,13 +59,16 @@ services:
                     
     sfynx.auth.login_handler:
         class: %sfynx.auth.handler.loginHandler.class%
-        arguments: [@security.context, @event_dispatcher, @doctrine, @service_container]
+        arguments: ["@logger", @security.context, @event_dispatcher, @doctrine, @service_container]
         tags:
             - { name: kernel.event_listener, event: security.interactive_login}
+            - { name: monolog.logger , channel: user }       
             
     sfynx.auth.logout_handler:
         class: %sfynx.auth.handler.logoutHandler.class%
-        arguments: [@service_container, @doctrine]         
+        arguments: ["@logger", @service_container, @doctrine]         
+        tag:
+            - { name: monolog.logger , channel: user } 
         
     #               
     # Event dispatchers Configuration

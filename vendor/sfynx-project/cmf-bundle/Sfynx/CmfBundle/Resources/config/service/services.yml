@@ -42,11 +42,15 @@ services:
     #  
     pi_app_admin.manager.page:
         class: %piapp.admin.manager.page.class%
-        arguments: ['@service_container']    
+        arguments: ["@logger", '@service_container']
+        tags:
+            - { name: monolog.logger , channel: cmf }        
 
     pi_app_admin.manager.widget:
         class: %piapp.admin.manager.widget.class%
-        arguments: ['@service_container']    
+        arguments: ["@logger", '@service_container']  
+        tags:
+            - { name: monolog.logger , channel: cmf }         
         
     pi_app_admin.manager.transwidget:
         class: %piapp.admin.manager.transwidget.class%
