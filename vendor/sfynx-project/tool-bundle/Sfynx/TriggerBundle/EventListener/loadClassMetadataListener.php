@@ -15,9 +15,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\SfynxTrigger\EventListener;
+namespace Sfynx\TriggerBundle\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Sfynx\TriggerBundle\EventListener\abstractListener;
@@ -55,12 +55,12 @@ class loadClassMetadataListener extends abstractListener
      * Methos which will be called when the event is thrown.
      *
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param \Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function loadClassMetadata(LifecycleEventArgs $eventArgs)
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_LOADCLASSMETADATA, new TriggerEvent($eventArgs));       
+        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_LOADCLASSMETADATA, new TriggerEvent($eventArgs, $this->container));       
     }
 }

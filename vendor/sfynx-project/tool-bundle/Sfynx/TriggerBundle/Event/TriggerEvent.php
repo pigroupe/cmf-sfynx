@@ -19,6 +19,7 @@ namespace Sfynx\TriggerBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use Doctrine\Common\EventArgs;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Response event of connection user.
@@ -49,12 +50,26 @@ class TriggerEvent extends Event
     /**
      * @var array $options
      */
-    private $options;    
+    private $options;  
+    
+     /**
+     * @var ContainerInterface
+     */
+    private $container;       
    
     
-    public function __construct($eventArgs)
+    public function __construct($eventArgs, ContainerInterface $container)
     {
         $this->eventArgs  = $eventArgs;
+        $this->container  = $container;
+    }
+    
+    /**
+     * @return eventArgs
+     */
+    public function getContainer()
+    {
+    	return $this->container;
     }
     
     /**
@@ -119,5 +134,89 @@ class TriggerEvent extends Event
     public function getUnitOfWork()
     {
     	return $this->getEntityManager()->getUnitOfWork();
-    }       
+    }  
+    
+   /**
+     * Return the token object.
+     *
+     * @return \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function getToken()
+    {
+        return  $this->container->get('security.context')->getToken();
+    }
+
+    /**
+     * Return the connected user name.
+     *
+     * @return string User name
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function getUserName()
+    {
+        return $this->getToken()->getUser()->getUsername();
+    }    
+    
+    /**
+     * Return the user permissions.
+     *
+     * @return array User permissions
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function getUserPermissions()
+    {
+        return $this->getToken()->getUser()->getPermissions();
+    }  
+
+    /**
+     * Return the user roles.
+     *
+     * @return array User roles
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function getUserRoles()
+    {
+        return $this->getToken()->getUser()->getRoles();
+    }    
+    
+    /**
+     * Return if yes or no the user is anonymous token.
+     *
+     * @return boolean
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function isAnonymousToken()
+    {
+        if (
+            ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\AnonymousToken)
+            ||
+            ($this->getToken() === null)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }    
+    
+    /**
+     * Return if yes or no the user is UsernamePassword token.
+     *
+     * @return boolean
+     * @access protected
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public function isUsernamePasswordToken()
+    {
+        if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
+            return true;
+        } else {
+            return false;
+        }
+    }    
 }

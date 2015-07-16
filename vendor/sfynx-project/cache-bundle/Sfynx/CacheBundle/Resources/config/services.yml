@@ -44,12 +44,16 @@ services:
     sfynx.cache.session.memcached:
         class: %php_memcached.class%
         calls:
-             - [ addServer, [ %session_memcache_host%, %session_memcache_port% ] ]             
+             - [ addServer, [ %session_memcache_host%, %session_memcache_port% ] ]              
                  
     pi_session.handler.memcache:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcacheSessionHandler
         arguments: [@sfynx.cache.session.memcache, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]        
         
     pi_session.handler.memcached:
-        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler #Sfynx\CacheBundle\Session\Storage\Handler\MemcacheSessionHandler
+        class :    Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
         arguments: [@sfynx.cache.session.memcached, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire%} ]
+        
+    pi_session.handler.memcache.pool:
+        class:     Sfynx\CacheBundle\Session\Storage\Handler\MemcacheSessionHandler 
+        arguments: [@sfynx.cache.session.memcache, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire%, locking: %session_memcache_locking%, spin_lock_wait: %session_memcache_spin_lock_wait%, lock_max_wait: %session_memcache_lock_max_wait%} ]        

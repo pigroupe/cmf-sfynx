@@ -15,7 +15,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\SfynxTrigger\EventListener;
+namespace Sfynx\TriggerBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -63,6 +63,6 @@ class PreRemoveListener extends abstractListener
      */    
     public function PreRemove(LifecycleEventArgs $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_PREREMOVE, new TriggerEvent($eventArgs)); 
+        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_PREREMOVE, new TriggerEvent($eventArgs, $this->container)); 
     }    
 }

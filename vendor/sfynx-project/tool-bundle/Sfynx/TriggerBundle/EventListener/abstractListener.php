@@ -42,7 +42,7 @@ abstract class abstractListener
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container         = $container;
+        $this->container  = $container;
     }
   
     /**

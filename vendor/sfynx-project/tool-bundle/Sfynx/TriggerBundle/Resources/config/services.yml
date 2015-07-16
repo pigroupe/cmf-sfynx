@@ -1,14 +1,14 @@
 parameters:
-    sfynx.trigger.listener.postload.class: Sfynx\SfynxTrigger\EventListener\PostLoadListener
-    sfynx.trigger.listener.loadclassmetadata.class: Sfynx\SfynxTrigger\EventListener\loadClassMetadataListener
-    sfynx.trigger.listener.onflush.class: Sfynx\SfynxTrigger\EventListener\OnFlushListener
-    sfynx.trigger.listener.preremove.class: Sfynx\SfynxTrigger\EventListener\PreRemoveListener
-    sfynx.trigger.listener.postremove.class: Sfynx\SfynxTrigger\EventListener\PostRemoveListener
-    sfynx.trigger.listener.prepersist.class: Sfynx\SfynxTrigger\EventListener\PrePersistListener
-    sfynx.trigger.listener.postpersist.class: Sfynx\SfynxTrigger\EventListener\PostPersistListener
-    sfynx.trigger.listener.preupdate.class: Sfynx\SfynxTrigger\EventListener\PreUpdateListener
-    sfynx.trigger.listener.postupdate.class: Sfynx\SfynxTrigger\EventListener\PostUpdateListener
-    sfynx.trigger.listener.schema.class: Sfynx\SfynxTrigger\EventListener\SchemaListener
+    sfynx.trigger.listener.postload.class: Sfynx\TriggerBundle\EventListener\PostLoadListener
+    sfynx.trigger.listener.loadclassmetadata.class: Sfynx\TriggerBundle\EventListener\loadClassMetadataListener
+    sfynx.trigger.listener.onflush.class: Sfynx\TriggerBundle\EventListener\OnFlushListener
+    sfynx.trigger.listener.preremove.class: Sfynx\TriggerBundle\EventListener\PreRemoveListener
+    sfynx.trigger.listener.postremove.class: Sfynx\TriggerBundle\EventListener\PostRemoveListener
+    sfynx.trigger.listener.prepersist.class: Sfynx\TriggerBundle\EventListener\PrePersistListener
+    sfynx.trigger.listener.postpersist.class: Sfynx\TriggerBundle\EventListener\PostPersistListener
+    sfynx.trigger.listener.preupdate.class: Sfynx\TriggerBundle\EventListener\PreUpdateListener
+    sfynx.trigger.listener.postupdate.class: Sfynx\TriggerBundle\EventListener\PostUpdateListener
+    sfynx.trigger.listener.schema.class: Sfynx\TriggerBundle\EventListener\SchemaListener
 
 services:
     #               

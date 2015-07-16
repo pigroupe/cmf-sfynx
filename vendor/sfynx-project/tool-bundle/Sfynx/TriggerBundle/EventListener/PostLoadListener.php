@@ -15,7 +15,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\SfynxTrigger\EventListener;
+namespace Sfynx\TriggerBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -62,6 +62,6 @@ class PostLoadListener extends abstractListener
      */    
     public function postLoad(LifecycleEventArgs $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_POSTLOAD, new TriggerEvent($eventArgs)); 
+        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_POSTLOAD, new TriggerEvent($eventArgs, $this->container)); 
     }    
 }

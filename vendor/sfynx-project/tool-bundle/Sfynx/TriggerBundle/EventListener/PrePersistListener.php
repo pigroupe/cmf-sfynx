@@ -15,14 +15,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\SfynxTrigger\EventListener;
+namespace Sfynx\TriggerBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Sfynx\TriggerBundle\EventListener\abstractListener;
 use Sfynx\TriggerBundle\SfynxTriggerEvents;
-use Sftnx\TriggerBundle\Event\TriggerEvent;
 use Sfynx\TriggerBundle\Event\TriggerEvent;
 
 /**
@@ -62,6 +61,6 @@ class PrePersistListener extends abstractListener
      */    
     public function PrePersist(LifecycleEventArgs $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_PREPERSIST, new TriggerEvent($eventArgs));
+        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_PREPERSIST, new TriggerEvent($eventArgs, $this->container));
     }    
 }

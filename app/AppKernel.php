@@ -60,6 +60,7 @@ class AppKernel extends Kernel
             new Sfynx\ToolBundle\SfynxToolBundle(),
             new Sfynx\CrawlerBundle\SfynxCrawlerBundle(),            
             new Sfynx\MigrationBundle\SfynxMigrationBundle(),
+            new Sfynx\TriggerBundle\SfynxTriggerBundle(),
             new Sfynx\CoreBundle\SfynxCoreBundle(),
             new Sfynx\TranslatorBundle\SfynxTranslatorBundle(),
             new Sfynx\BrowserBundle\SfynxBrowserBundle(),

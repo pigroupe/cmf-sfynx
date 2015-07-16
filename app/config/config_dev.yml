@@ -15,7 +15,7 @@ doctrine:
             monolog:
                 driver:    pdo_sqlite
                 dbname:    monolog
-                path:      %kernel.root_dir%/cache/monolog2.db
+                path:      %kernel.root_dir%/logs/monolog2.db
                 charset:   UTF8
                 logging:   false
                 profiling: false       
@@ -35,6 +35,10 @@ doctrine:
 
 monolog:
     handlers:
+        default:        
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  debug         
         main:
             type:         fingers_crossed # or buffer
             level:        error
