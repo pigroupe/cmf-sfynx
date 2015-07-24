@@ -52,7 +52,7 @@ class PiWidgetAdminManager extends PiJqueryExtension
         $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/viewer/js/jquery.iviewer.js");
         $this->container->get('sfynx.tool.twig.extension.layouthead')->addCssFile("bundles/sfynxtemplate/js/viewer/css/jquery.iviewer.css");
         // Dialog extend for dialog ui
-        $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/ui/dialogextend/jquery.dialogextend.min.js");
+        $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/ui/dialogextend/build/jquery.dialogextend.min.js");
     }    
     
     /**
