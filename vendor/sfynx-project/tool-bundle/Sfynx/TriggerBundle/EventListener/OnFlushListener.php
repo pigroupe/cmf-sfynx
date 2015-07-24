@@ -19,9 +19,9 @@ namespace Sfynx\TriggerBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\TriggerBundle\EventListener\abstractListener;
-use Sfynx\TriggerBundle\SfynxTriggerEvents;
-use Sfynx\TriggerBundle\Event\TriggerEvent;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
+use Sfynx\TriggerBundle\Event\TriggerEvents;
+use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
 
 /**
  * Custom post load entities listener.
@@ -39,7 +39,7 @@ use Sfynx\TriggerBundle\Event\TriggerEvent;
  * @since      2015-02-16
  * 
  */
-class OnFlushListener extends abstractListener
+class OnFlushListener extends abstractTriggerListener
 {
     /**
      * Constructs a new instance of SecurityListener.
@@ -67,6 +67,10 @@ class OnFlushListener extends abstractListener
      */    
     public function onFlush(OnFlushEventArgs  $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_ONFLUSH, new TriggerEvent($eventArgs, $this->container)); 
+        $object_event = new TriggerEvent($eventArgs, $this->container, null);
+        
+        $this->container
+                ->get('event_dispatcher')
+                ->dispatch(TriggerEvents::TRIGGER_EVENT_ONFLUSH, $object_event); 
     }    
 }

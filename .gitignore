@@ -52,7 +52,7 @@ phpmetrics.phar
 .svn
 
 # Build
-build
+build/*
 
 #vagrant
 provisioners/parameters

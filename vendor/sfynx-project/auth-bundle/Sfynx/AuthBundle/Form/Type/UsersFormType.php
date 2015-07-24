@@ -70,7 +70,7 @@ class UsersFormType extends AbstractType
         ->add('name', 'text', array(
             'label' => 'pi.form.label.field.name',
         ))
-    ->add('nickname', 'text', array(
+        ->add('nickname', 'text', array(
             'label' => 'pi.form.label.field.nickname',
         ))
         ->add('groups','entity', array(

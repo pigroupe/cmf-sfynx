@@ -4,7 +4,7 @@
  *
  * @category   Trigger
  * @package    EventListener
- * @subpackage preRemove
+ * @subpackage onFlush
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -17,22 +17,20 @@
  */
 namespace Sfynx\TriggerBundle\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
 use Sfynx\TriggerBundle\Event\TriggerEvents;
 use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
 
 /**
- * Custom pre remove entities listener.
- * The preRemove event occurs for a given entity before the respective EntityManager 
- * remove operation for that entity is executed.
- * It is not called for a DQL DELETE statement.
+ * Custom post load entities listener.
+ * The onFlush event occurs after the change-sets of all managed entities are computed.
+ * This event is not a lifecycle callback.
  *
  * @category   Trigger
  * @package    EventListener
- * @subpackage preRemove
+ * @subpackage onFlush
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -41,11 +39,11 @@ use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
  * @since      2015-02-16
  * 
  */
-class PreRemoveListener extends abstractTriggerListener
+class PostFlushListener extends abstractTriggerListener
 {
     /**
      * Constructs a new instance of SecurityListener.
-     * 
+     *
      * @param ContainerInterface        $container
      */
     public function __construct(ContainerInterface $container)
@@ -54,20 +52,16 @@ class PreRemoveListener extends abstractTriggerListener
     }
         
     /**
-     * Method which will be called when the event is thrown.
-     *
-     *
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function PreRemove(LifecycleEventArgs $eventArgs)
+    public function postFlush(PostFlushEventArgs  $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
-        $object_event = new TriggerEvent($eventArgs, $this->container, $entity);
+        $object_event = new TriggerEvent($eventArgs, $this->container, null);
         
         $this->container
                 ->get('event_dispatcher')
-                ->dispatch(TriggerEvents::TRIGGER_EVENT_PREREMOVE, $object_event); 
+                ->dispatch(TriggerEvents::TRIGGER_EVENT_ONFLUSH, $object_event); 
     }    
 }

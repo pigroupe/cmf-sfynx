@@ -61,7 +61,8 @@
         "lexik/maintenance-bundle": "^1.0",
         "lexik/monolog-browser-bundle": "^1.0",
         "nelmio/js-logger-bundle": "^1.2",
-        "willdurand/faker-bundle": "^1.2"
+        "willdurand/faker-bundle": "^1.2",
+        "php-curl-class/php-curl-class": "^3.5"
     },
     "require-dev": {
         "phpdocumentor/phpdocumentor": "2.*",

@@ -1,10 +1,10 @@
 <?php
 /**
- * This file is part of the <Trigger> project.
+ * This file is part of the <Auth> project.
  *
  * @category   Trigger
- * @package    EventListener
- * @subpackage abstract
+ * @package    Event
+ * @subpackage Object
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -15,44 +15,141 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\TriggerBundle\EventListener;
+namespace Sfynx\TriggerBundle\Event\ViewObject;
 
+use Symfony\Component\EventDispatcher\Event;
+use Doctrine\Common\EventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * abstract listener manager.
- * This event is called after an entity is constructed by the EntityManager.
+ * Response event of connection user.
  *
- * @subpackage Core
- * @package    EventListener
- * @abstract
+ * @category   Trigger
+ * @package    Event
+ * @subpackage Object
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
+ * 
  */
-abstract class abstractListener
+class TriggerEvent extends Event
 {
+    /**
+     * @var EventArgs $eventArgs
+     */
+    private $eventArgs;
+    
+    /**
+     * @var Object $entities
+     */
+    private $entities;
+    
+    /**
+     * @var Object $entities
+     */
+    private $entity;    
+    
+    /**
+     * @var array $options
+     */
+    private $options;  
+    
      /**
      * @var ContainerInterface
      */
-    protected $container;    
-
-    /**
-     * Constructor
-     * 
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    private $container;       
+   
+    
+    public function __construct($eventArgs, ContainerInterface $container, $entity)
     {
+        $this->eventArgs  = $eventArgs;
         $this->container  = $container;
+        $this->entity     = $entity;
     }
-  
+    
     /**
+     * @return eventArgs
+     */
+    public function getContainer()
+    {
+    	return $this->container;
+    }
+    
+    /**
+     * @return eventArgs
+     */
+    public function geteventArgs()
+    {
+    	return $this->eventArgs;
+    }
+    
+    /**
+     * @return locale
+     */
+    public function getOptions()
+    {
+    	return $this->options;
+    }
+    
+    /**
+     * @return  void
+     */
+    public function setOptions($option, $status)
+    {
+    	$this->options[$status][] = $option;
+    }   
+    
+    /**
+     * @return redirect
+     */
+    public function getEntities()
+    {
+    	return $this->entities;
+    }
+    
+    /**
+     * @return  void
+     */
+    public function setEntities($entity, $status = "persist")
+    {
+    	$this->entities[$status][] = $entity;
+    }   
+    
+    /**
+     * @return object entity
+     */
+    public function getEntity()
+    {
+    	return $this->entity;
+    }   
+    
+    /**
+     * @return object Manager
+     */
+    public function getEntityManager()
+    {
+    	return $this->eventArgs->getEntityManager();
+    }      
+    
+    /**
+     * @return object UnitOfWork Manager
+     */
+    public function getUnitOfWork()
+    {
+    	return $this->getEntityManager()->getUnitOfWork();
+    }  
+    
+   /**
      * Return the token object.
      *
      * @return \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getToken()
+    public function getToken()
     {
         return  $this->container->get('security.context')->getToken();
     }
@@ -64,7 +161,7 @@ abstract class abstractListener
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserName()
+    public function getUserName()
     {
         return $this->getToken()->getUser()->getUsername();
     }    
@@ -76,7 +173,7 @@ abstract class abstractListener
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserPermissions()
+    public function getUserPermissions()
     {
         return $this->getToken()->getUser()->getPermissions();
     }  
@@ -88,38 +185,11 @@ abstract class abstractListener
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function getUserRoles()
+    public function getUserRoles()
     {
         return $this->getToken()->getUser()->getRoles();
     }    
     
-    /**
-     * Sets the flash message.
-     *
-     * @param string $message
-     * @param string $type
-     *
-     * @return void
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function setFlash($message, $type = "permission")
-    {
-           $this->getFlashBag()->add($type, $message);
-    }
-
-    /**
-     * Gets the flash bag.
-     *
-     * @return \Symfony\Component\HttpFoundation\Session\Flash\FlashBag
-     * @access protected
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    protected function getFlashBag()
-    {
-        return $this->container->get('request')->getSession()->getFlashBag();
-    }
-        
     /**
      * Return if yes or no the user is anonymous token.
      *
@@ -127,7 +197,7 @@ abstract class abstractListener
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function isAnonymousToken()
+    public function isAnonymousToken()
     {
         if (
             ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\AnonymousToken)
@@ -147,12 +217,12 @@ abstract class abstractListener
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
-    protected function isUsernamePasswordToken()
+    public function isUsernamePasswordToken()
     {
         if ($this->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
             return true;
         } else {
             return false;
         }
-    }
+    }    
 }

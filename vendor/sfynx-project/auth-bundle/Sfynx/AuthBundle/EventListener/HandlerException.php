@@ -92,17 +92,15 @@ class HandlerException
     {
         $this->request = $event->getRequest($event);
         // provide the better way to display a enhanced error page only in prod environment, if you want
-        if ('prod' == $this->kernel->getEnvironment()) {
+        if (in_array($this->kernel->getEnvironment(), array('test', 'prod'))) {
             // exception object
             $exception = $event->getException();
             // new Response object
             $response = new Response();
             
-            //$kernel = $event->getKernel();
-            //$requestDuplicate = $event->getRequest()->duplicate(null, null, ['_controller' => 'MyAppSiteBundle:Default:exception']);
-            //$response = $kernel->handle($requestDuplicate, HttpKernelInterface::SUB_REQUEST);
-            //
-            //
+            //$requestDuplicate = $this->request->duplicate(null, null, ['_controller' => 'MyAppSiteBundle:Default:exception']);
+            //$response = $this->kernel->handle($requestDuplicate, HttpKernelInterface::SUB_REQUEST);
+
             if ($this->container->hasParameter('sfynx.auth.theme.layout.error.html')
                     && ($this->container->getParameter('sfynx.auth.theme.layout.error.html') != "")) {
                 $path_error_file = realpath($this->kernel->locateResource($this->container->getParameter('sfynx.auth.theme.layout.error.html')));

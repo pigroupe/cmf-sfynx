@@ -20,9 +20,9 @@ namespace Sfynx\TriggerBundle\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Sfynx\TriggerBundle\EventListener\abstractListener;
-use Sfynx\TriggerBundle\SfynxTriggerEvents;
-use Sfynx\TriggerBundle\Event\TriggerEvent;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
+use Sfynx\TriggerBundle\Event\TriggerEvents;
+use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
 
 /**
  * Custom pre persist entities listener.
@@ -40,7 +40,7 @@ use Sfynx\TriggerBundle\Event\TriggerEvent;
  * @since      2015-02-16
  * 
  */
-class PrePersistListener extends abstractListener
+class PrePersistListener extends abstractTriggerListener
 {
     /**
      * Constructs a new instance of SecurityListener.
@@ -61,6 +61,11 @@ class PrePersistListener extends abstractListener
      */    
     public function PrePersist(LifecycleEventArgs $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_PREPERSIST, new TriggerEvent($eventArgs, $this->container));
+        $entity = $eventArgs->getEntity();
+        $object_event = new TriggerEvent($eventArgs, $this->container, $entity);
+        
+        $this->container
+                ->get('event_dispatcher')
+                ->dispatch(TriggerEvents::TRIGGER_EVENT_PREPERSIST, $object_event);
     }    
 }

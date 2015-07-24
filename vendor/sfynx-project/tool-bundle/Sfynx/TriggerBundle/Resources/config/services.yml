@@ -1,7 +1,11 @@
 parameters:
+    sfynx.trigger.entities.listener.class: Sfynx\TriggerBundle\EventListener\EntitiesContainer
+    
     sfynx.trigger.listener.postload.class: Sfynx\TriggerBundle\EventListener\PostLoadListener
     sfynx.trigger.listener.loadclassmetadata.class: Sfynx\TriggerBundle\EventListener\loadClassMetadataListener
+    sfynx.trigger.listener.preflush.class: Sfynx\TriggerBundle\EventListener\PreFlushListener
     sfynx.trigger.listener.onflush.class: Sfynx\TriggerBundle\EventListener\OnFlushListener
+    sfynx.trigger.listener.postflush.class: Sfynx\TriggerBundle\EventListener\PostFlushListener
     sfynx.trigger.listener.preremove.class: Sfynx\TriggerBundle\EventListener\PreRemoveListener
     sfynx.trigger.listener.postremove.class: Sfynx\TriggerBundle\EventListener\PostRemoveListener
     sfynx.trigger.listener.prepersist.class: Sfynx\TriggerBundle\EventListener\PrePersistListener
@@ -11,6 +15,13 @@ parameters:
     sfynx.trigger.listener.schema.class: Sfynx\TriggerBundle\EventListener\SchemaListener
 
 services:
+    #
+    # configuration of the persist Entities container
+    # 
+    sfynx.trigger.entities.listener:
+        class: %sfynx.trigger.entities.listener.class%
+        arguments: ['@service_container']
+        
     #               
     # Doctrine events Configuration
     #
@@ -31,12 +42,24 @@ services:
         arguments: [@service_container]
         tags:
             - { name: doctrine.event_listener, event: loadClassMetadata, connexion: default }
+            
+    sfynx.trigger.preflush_listener:
+        class: %sfynx.trigger.listener.preflush.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preFlush, connexion: default }            
 
     sfynx.trigger.onflush_listener:
         class: %sfynx.trigger.listener.onflush.class%
         arguments: [@service_container]
         tags:
             - { name: doctrine.event_listener, event: onFlush, connexion: default }
+            
+    sfynx.trigger.postflush_listener:
+        class: %sfynx.trigger.listener.postflush.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postFlush, connexion: default }            
 
     sfynx.trigger.preremove_listener:
         class: %sfynx.trigger.listener.preremove.class%

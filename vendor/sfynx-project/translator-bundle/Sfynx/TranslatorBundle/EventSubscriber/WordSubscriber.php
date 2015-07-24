@@ -16,7 +16,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\CoreBundle\EventListener\abstractListener;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
 use Sfynx\TranslatorBundle\Entity\Word;
 
 /**
@@ -26,7 +26,7 @@ use Sfynx\TranslatorBundle\Entity\Word;
  * @package    EventSubscriber 
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class WordSubscriber  extends abstractListener implements EventSubscriber
+class WordSubscriber  extends abstractTriggerListener implements EventSubscriber
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface

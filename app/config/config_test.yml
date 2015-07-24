@@ -32,8 +32,8 @@ doctrine:
 mink:
     base_url: http://test.sfynx.local
     selenium2:
-        wd_host: http://localhost:4444/wd/hub
-    browser_name: firefox 
+        wd_host: http://localhost:5555/wd/hub
+    browser_name: chrome 
     
 #
 # SfynxBehatBundle configuration

@@ -15,7 +15,7 @@ namespace Sfynx\CmfBundle\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
-use Sfynx\CoreBundle\EventListener\abstractListener;
+use Sfynx\CmfBundle\EventListener\abstractListener;
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Entity\Langue;
 use Sfynx\AuthBundle\Entity\Layout;
@@ -59,7 +59,7 @@ abstract class CoreListener extends abstractListener
                 && ($entity instanceof Role)
         ){
             // we register the hierarchy roles in the heritage.jon file in the cache
-            if ($this->_container()->get('sfynx.auth.role.factory')->setJsonFileRoles()) {
+            if ($this->container->get('sfynx.auth.role.factory')->setJsonFileRoles()) {
                 $this->setFlash('pi.session.flash.rolecache.created');
             }
         }
@@ -83,7 +83,7 @@ abstract class CoreListener extends abstractListener
     	if ($this->isUsernamePasswordToken() 
                 && ($entity instanceof Langue)
         ) {
-            $this->_container()
+            $this->container
                 ->get('sfynx.auth.locale_manager')
                 ->setJsonFileLocales();
     	}
@@ -109,7 +109,7 @@ abstract class CoreListener extends abstractListener
                 || $entity instanceof Widget
             )
     	) {
-    	    $this->_container()
+    	    $this->container
                 ->get('pi_app_admin.manager.page')
                 ->cacheDelete($entity, $delete_cache_only);
 	}
@@ -134,7 +134,7 @@ abstract class CoreListener extends abstractListener
                 || $entity instanceof TranslationPage 
             )
     	) {
-    	    $this->_container()
+    	    $this->container
                 ->get('pi_app_admin.manager.page')
                 ->cachePage($entity, $type);
 	}
@@ -153,7 +153,7 @@ abstract class CoreListener extends abstractListener
     final protected function _TwigCache($eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        $is_refresh_authorized = $this->_container()
+        $is_refresh_authorized = $this->container
                 ->getParameter('pi_app_admin.page.refresh.allpage');        
         if ($this->isUsernamePasswordToken() 
             && $is_refresh_authorized 
@@ -163,7 +163,7 @@ abstract class CoreListener extends abstractListener
                 || $entity instanceof TranslationWidget
             )
         ) {
-            $all_locales = $this->_container()
+            $all_locales = $this->container
                 ->get('sfynx.auth.locale_manager')
                 ->getAllLocales();
             $names = $this->_recursive($eventArgs, $entity, $all_locales);
@@ -209,15 +209,15 @@ abstract class CoreListener extends abstractListener
                 // we refresh the cache
                 $name             = $type.$entity->getId().':'.$lang;
                 $names[$name]     = $name;
-                $this->_container()
+                $this->container
                         ->get('pi_app_admin.manager.page')
                         ->cacheRefreshByname($name);                
                 // we refresh the cache of all widgets of the page
                 if ($entity instanceof Page) {
-                    $this->_container()
+                    $this->container
                             ->get('pi_app_admin.manager.page')
                             ->setPageByRoute($entity->getRouteName(), true);
-                    $this->_container()
+                    $this->container
                             ->get('pi_app_admin.manager.page')
                             ->cacheRefresh();
                 }                
@@ -229,7 +229,7 @@ abstract class CoreListener extends abstractListener
                                 $name_trans         = 'transwidget:'.$translationWidget->getId().':'.$lang;
                                 $names[$name_trans] = $name_trans;                                
                                 // we refresh the cache
-                                $this->_container()
+                                $this->container
                                         ->get('pi_app_admin.manager.page')
                                         ->cacheRefreshByname($name_trans, true);
                             }
@@ -247,7 +247,7 @@ abstract class CoreListener extends abstractListener
                         );
                     } else {
                         // We check the permission in config.
-                        $is_refresh_snippet_authorized = $this->_container()
+                        $is_refresh_snippet_authorized = $this->container
                                 ->getParameter('pi_app_admin.page.refresh.allpage_containing_snippet');
                         if ($is_refresh_snippet_authorized) {
                         	// we get all widgets which use the gedmo snippet
@@ -280,7 +280,7 @@ abstract class CoreListener extends abstractListener
                     // we have to warm up all pages which are used by the snippet 
                     if (!($entity->getWidget()->getBlock() instanceof Block) ) {                            
                         // We check the permission in config.
-                        $is_refresh_snippet_authorized = $this->_container()
+                        $is_refresh_snippet_authorized = $this->container
                                 ->getParameter('pi_app_admin.page.refresh.allpage_containing_snippet');
                         if ($is_refresh_snippet_authorized) {
                             // we get all widgets which use the content snippet 
@@ -359,10 +359,10 @@ abstract class CoreListener extends abstractListener
                         $values             = explode(':', $controller);
                         $entity_widget_name = str_replace('\\\\', '\\', strtolower($values[1]));
                         $method_widget_name = strtolower($values[2]);                        
-                        $entity_widget      = $this->_container()
+                        $entity_widget      = $this->container
                                 ->get('pi_app_gedmo.repository')
                                 ->getRepository($entity_widget_name)->find($id);
-                        //$entity_widget_table    = $this->_container()->get('pi_app_gedmo.repository')->getRepository($entity_widget_name)->getClassName();
+                        //$entity_widget_table    = $this->container->get('pi_app_gedmo.repository')->getRepository($entity_widget_name)->getClassName();
                         $entity_widget_table= $this->getOwningTable($eventArgs, $entity_widget);
                         
                         if (is_object($entity_widget) 
@@ -378,9 +378,9 @@ abstract class CoreListener extends abstractListener
                             try {
                                 $query = "UPDATE $entity_widget_table mytable SET mytable.page_id ='$page_id' WHERE mytable.id = ?";
                                 $this->_connexion($eventArgs)->executeUpdate($query, array($id));
-                                //$table         = $this->_container()->get('pi_app_gedmo.repository')->getRepository(get_class($entity))->getClassName();
+                                //$table         = $this->container->get('pi_app_gedmo.repository')->getRepository(get_class($entity))->getClassName();
                                 //$query = "UPDATE $table mytable SET mytable.page_id='$page_id' WHERE mytable.id = ?";
-                                //$this->_container()->get('pi_app_gedmo.repository')->getRepository(get_class($entity))
+                                //$this->container->get('pi_app_gedmo.repository')->getRepository(get_class($entity))
                                 //->getEntityManager()->createQuery($query)->getSingleScalarResult();
                             } catch (\Exception $e) {
                                 return null;
@@ -415,25 +415,25 @@ abstract class CoreListener extends abstractListener
                 $init_pc_layout     = str_replace("\\", "/", $entity->getFilePc());
                 $init_mobile_layout = str_replace("\\", "/", $entity->getFileMobile());
                 if (empty($init_pc_layout)) {
-                    $init_pc_layout = $this->_container()
+                    $init_pc_layout = $this->container
                             ->getParameter('sfynx.auth.layout.init.pc.template');
                 }
                 if (empty($init_mobile_layout)) {
-                    $init_mobile_layout = $this->_container()
+                    $init_mobile_layout = $this->container
                             ->getParameter('sfynx.auth.layout.init.mobile.template');
                 }
-                $path_pc_layout     = realpath($this->_container()
+                $path_pc_layout     = realpath($this->container
                         ->get('kernel')
-                        ->locateResource($this->_container()->getParameter('sfynx.auth.theme.layout.front.pc.path') . $init_pc_layout));
-                $path_mobile_layout = realpath($this->_container()
+                        ->locateResource($this->container->getParameter('sfynx.auth.theme.layout.front.pc.path') . $init_pc_layout));
+                $path_mobile_layout = realpath($this->container
                         ->get('kernel')
-                        ->locateResource($this->_container()->getParameter('sfynx.auth.theme.layout.front.mobile.path') . $init_mobile_layout . '/' . 'modele.html.twig'));
+                        ->locateResource($this->container->getParameter('sfynx.auth.theme.layout.front.mobile.path') . $init_mobile_layout . '/' . 'modele.html.twig'));
                 // if the both path layout exist.
                 if (!empty($path_pc_layout) && !empty($path_mobile_layout)) {
-                    $content_file_pc         = $this->_container()
+                    $content_file_pc         = $this->container
                             ->get('sfynx.tool.file_manager')
                             ->getFileContent($path_pc_layout);
-                    $content_file_mobile     = $this->_container()
+                    $content_file_mobile     = $this->container
                             ->get('sfynx.tool.file_manager')
                             ->getFileContent($path_mobile_layout);
                     // Gets the different blocks from Twig layout
@@ -449,11 +449,11 @@ abstract class CoreListener extends abstractListener
                     } else {
                         $tabs = array();
                     }
-                    $tabs = $this->_container()
+                    $tabs = $this->container
                             ->get('sfynx.tool.array_manager')
                             ->TrimArray($tabs);
                     // we get the list of all global blocks.
-                    $pageManager = $this->_container()->get('pi_app_admin.manager.page');
+                    $pageManager = $this->container->get('pi_app_admin.manager.page');
                     $unset_values= $pageManager::$global_blocks;
                     // we create the xml content about all layout block information.
                     $source_xml  = "<?xml version=\"1.0\"?>\n";
@@ -544,7 +544,7 @@ abstract class CoreListener extends abstractListener
             $entityManager->getUnitOfWork()->detach($entity);
             $this->setFlash('pi.session.flash.right.homepage.undelete');
         }
-        $is_permission_delete_widget_homepage = $this->_container()
+        $is_permission_delete_widget_homepage = $this->container
                 ->getParameter('pi_app_admin.page.homepage_deletewidget');
         // if we want to undelete all widgets of the home page
         if (!$is_permission_delete_widget_homepage
@@ -593,13 +593,13 @@ abstract class CoreListener extends abstractListener
                         $this->_connexion($eventArgs)
                                 ->delete('pi_routing', array('id'=>$id));
                         // we delete all caches of the page
-                        $urls  = $this->_container()
+                        $urls  = $this->container
                                 ->get('pi_app_admin.manager.page')
                                 ->getUrlByPage($entity);
                         foreach($urls as $locale => $url){
                             $name = "page:" .$entity->getId() . ':' . $locale . ':' . $url;
                             try {
-                                $this->_container()->get('pi_app_admin.caching')->invalidate($name);
+                                $this->container->get('pi_app_admin.caching')->invalidate($name);
                             } catch (\Exception $e) {
                             }
                         }
@@ -687,7 +687,7 @@ abstract class CoreListener extends abstractListener
     {
         $entity        = $eventArgs->getEntity();
         $entityManager = $eventArgs->getEntityManager();
-        $is_permission_management_page_by_user_only = $this->_container()
+        $is_permission_management_page_by_user_only = $this->container
                 ->getParameter('pi_app_admin.page.management_by_user_only');
         if ($this->isUsernamePasswordToken() 
                 && $is_permission_management_page_by_user_only
@@ -846,11 +846,11 @@ abstract class CoreListener extends abstractListener
                 && (!$page->getTranslations()->isEmpty())
             ) {                
                 // we delete all references of the page in the index file.
-                $this->_container()
+                $this->container
                         ->get('pi_app_admin.manager.search_lucene')
                         ->deletePage($page);                                    
                 // we get all urls of a page
-                $locales            = $this->_container()
+                $locales = $this->container
                         ->get('pi_app_admin.manager.page')
                         ->getUrlByPage($page, 'sql');
                 $no_permission_urls = null;
@@ -891,7 +891,7 @@ abstract class CoreListener extends abstractListener
                 $entity->setSlug('undefined-value');
             }
             $urls = implode(', ', $no_permission_urls);
-            $message = $this->_container()
+            $message = $this->container
                     ->get('translator')
                     ->trans('pi.session.flash.page.slug.exist', array('url'=> $urls));
             $this->setFlash($message, 'only');
@@ -913,7 +913,7 @@ abstract class CoreListener extends abstractListener
         $entity        = $eventArgs->getEntity();
         $entityManager = $eventArgs->getEntityManager();
         // We check the permission in config.
-        $is_indexation_authorized = $this->_container()
+        $is_indexation_authorized = $this->container
                 ->getParameter('pi_app_admin.page.indexation_authorized_automatically');
         if ($this->isUsernamePasswordToken() 
                 && $is_indexation_authorized
@@ -943,11 +943,11 @@ abstract class CoreListener extends abstractListener
                 return false;    
             }    
             if (in_array($action, array('insert', 'update'))) {
-                $this->_container()
+                $this->container
                     ->get('pi_app_admin.manager.search_lucene')
                     ->indexPage($page);
             } elseif ($action == 'delete') {
-                $this->_container()
+                $this->container
                     ->get('pi_app_admin.manager.search_lucene')
                     ->deletePage($page);
             }
@@ -976,7 +976,7 @@ abstract class CoreListener extends abstractListener
         } else {
             return false;
         }
-        $routeCacheManager = $this->_container()
+        $routeCacheManager = $this->container
                 ->get('sfynx.tool.route.cache');
         $routeCacheManager->setGenerator();
         $routeCacheManager->setMatcher();

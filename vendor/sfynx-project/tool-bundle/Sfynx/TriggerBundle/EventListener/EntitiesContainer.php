@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the <Core> project.
+ * This file is part of the <Trigger> project.
  *
  * @subpackage   Core
  * @package    EventListener
@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\CoreBundle\EventListener;
+namespace Sfynx\TriggerBundle\EventListener;
 
 use Doctrine\ORM\Events;
 use Doctrine\DBAL\Types\Type;

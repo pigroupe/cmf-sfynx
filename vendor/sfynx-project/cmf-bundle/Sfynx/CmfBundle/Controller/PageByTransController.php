@@ -200,10 +200,12 @@ class PageByTransController extends CmfabstractController
     {
         $locale = $this->container->get('request')->getLocale();
         $User   = $this->get('security.context')->getToken()->getUser();
+        
         $entity = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
-        $form   = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
+        
+        $form   = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
         $NoLayout = $this->container->get('request')->query->get('NoLayout');
         
         //$form->remove('page_css');
@@ -226,15 +228,18 @@ class PageByTransController extends CmfabstractController
      */
     public function createAction()
     {
-        $locale  = $this->container->get('request')->getLocale();
-        $User    = $this->get('security.context')->getToken()->getUser();
-        $entity  = new Page();
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        $locale   = $this->container->get('request')->getLocale();
+        $User     = $this->get('security.context')->getToken()->getUser();
+        
+        $entity   = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
+        
         $request = $this->getRequest();
-        $form    = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
+        $form    = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
         $form->bind($request);
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        
         if ('POST' === $request->getMethod()) {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();    
@@ -278,7 +283,7 @@ class PageByTransController extends CmfabstractController
         //$this->get('pi_app_admin.form.page.type')->setInit($this->container, $locale, $User->getRoles());
         //$form = $this->get('pi_app_admin.form.pagebytrans');
         
-        $editForm = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
+        $editForm = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($entity->getId());
         
         return $this->render("SfynxCmfBundle:PageByTrans:edit.html.twig", array(
@@ -312,7 +317,7 @@ class PageByTransController extends CmfabstractController
                 $originalTranslations[] = $Translation;
             }
         }        
-        $editForm   = $this->createForm(new PageType($locale, $User->getRoles(), $this->container), $entity, array('show_legend' => false));
+        $editForm   = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($entity->getId());
         $editForm->bind($this->getRequest());        
         if ($editForm->isValid()) {
