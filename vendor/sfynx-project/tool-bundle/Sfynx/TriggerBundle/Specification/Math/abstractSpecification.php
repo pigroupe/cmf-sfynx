@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfynx\TriggerBundle\Specification\Compare;
+namespace Sfynx\TriggerBundle\Specification\Math;
 
 use Sfynx\TriggerBundle\Specification\Builder\InterfaceSpecification;
 
@@ -16,7 +16,7 @@ abstract class abstractSpecification implements InterfaceSpecification
 {
     public function __call($name, $arguments)
     {
-        $className = '\Sfynx\TriggerBundle\Specification\Compare\\' . $name;        
+        $className = '\Sfynx\TriggerBundle\Specification\Math\\' . $name;        
         if (class_exists($className)) {            
             if (isset($arguments[0]) 
                     && $arguments[0] instanceof  InterfaceSpecification
@@ -31,7 +31,7 @@ abstract class abstractSpecification implements InterfaceSpecification
         }
     }
     
-    protected function setValues($specification1, $specification2, $object)
+    protected function setValues($specification1, $specification2)
     {
         if ($specification1 instanceof  InterfaceSpecification
                 && $specification2 instanceof  InterfaceSpecification)

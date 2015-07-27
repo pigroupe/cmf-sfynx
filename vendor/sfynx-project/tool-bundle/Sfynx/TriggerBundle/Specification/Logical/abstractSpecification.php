@@ -15,19 +15,24 @@ use Sfynx\TriggerBundle\Specification\Compare\abstractSpecification as CompareSp
  */
 abstract class abstractSpecification extends CompareSpec implements InterfaceSpecification {
 
-    public function andSpec(InterfaceSpecification $specification) {
+    public function AndSpec(InterfaceSpecification $specification) {
         return new AndSpec($this, $specification);
     }
 
-    public function orSpec(InterfaceSpecification $specification) {
+    public function OrSpec(InterfaceSpecification $specification) {
         return new OrSpec($this, $specification);
     }
 
-    public function notSpec(InterfaceSpecification $specification) {
-        return new NotSpec($specification);
+    public function NotSpec($specification = null) {
+        if ($specification instanceof  InterfaceSpecification)
+        {
+            return new NotSpec($specification);
+        } else {
+            return new NotSpec($this);
+        }   
     }
     
-    public function xorSpec(InterfaceSpecification $specification) {
+    public function XorSpec(InterfaceSpecification $specification) {
         return new XorSpec($this, $specification);
     }    
 }

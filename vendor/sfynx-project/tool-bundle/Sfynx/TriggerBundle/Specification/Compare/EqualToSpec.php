@@ -7,7 +7,7 @@ use Sfynx\TriggerBundle\Specification\Compare\abstractSpecification;
 
 /**
  * This file is part of the <Trigger> project.
- * true if $a > $b
+ * true if $a == $b
  * 
  * @category   Trigger
  * @package    Specification
@@ -24,18 +24,10 @@ class EqualToSpec extends abstractSpecification implements InterfaceSpecificatio
         $this->specification2 = $specification2;
     }
 
-    public function isSatisfiedBy($object = null) {
-        if ($this->specification1 instanceof  InterfaceSpecification
-                && $this->specification2 instanceof  InterfaceSpecification)
-        {
-            return ($this->specification1->isSatisfiedBy($object)
-                    == $this->specification2->isSatisfiedBy($object));
-        } else {
-            return $this->run();
-        }
+    public function isSatisfiedBy($object = null)
+    {
+        list($a, $b) = $this->setValues($this->specification1, $this->specification2, $object, $object);
+        
+        return ($a == $b);
     }
-    
-    public function run() {
-            return ($this->specification1 == $this->specification2);
-    }    
 }

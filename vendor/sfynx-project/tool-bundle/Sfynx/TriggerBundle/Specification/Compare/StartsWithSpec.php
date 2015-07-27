@@ -7,7 +7,7 @@ use Sfynx\TriggerBundle\Specification\Compare\abstractSpecification;
 
 /**
  * This file is part of the <Trigger> project.
- * true if $a > $b
+ * true if stripos($b, $a) === false
  * 
  * @category   Trigger
  * @package    Specification
@@ -24,8 +24,10 @@ class StartsWithSpec extends abstractSpecification implements InterfaceSpecifica
         $this->specification2 = $specification2;
     }
 
-    public function isSatisfiedBy($object) {
-        return ($this->specification1->isSatisfiedBy($object)
-                > $this->specification2->isSatisfiedBy($object));
-    }
+    public function isSatisfiedBy($object = null)
+    {
+        list($a, $b) = $this->setValues($this->specification1, $this->specification2, $object);
+        
+        return stripos($b, $a) === false;
+    } 
 }

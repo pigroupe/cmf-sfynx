@@ -1,20 +1,20 @@
 <?php
 
-namespace Sfynx\TriggerBundle\Specification\Compare;
+namespace Sfynx\TriggerBundle\Specification\Math;
 
 use Sfynx\TriggerBundle\Specification\Builder\InterfaceSpecification;
-use Sfynx\TriggerBundle\Specification\Compare\abstractSpecification;
+use Sfynx\TriggerBundle\Specification\Math\abstractSpecification;
 
 /**
  * This file is part of the <Trigger> project.
- * true if $a >= $b
+ * true if $a + $b
  * 
  * @category   Trigger
  * @package    Specification
  * @subpackage Object
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class GreaterThanOrEqualToSpec extends abstractSpecification implements InterfaceSpecification {
+class NegateSpec extends abstractSpecification implements InterfaceSpecification {
 
     private $specification1;
     private $specification2;
@@ -24,10 +24,10 @@ class GreaterThanOrEqualToSpec extends abstractSpecification implements Interfac
         $this->specification2 = $specification2;
     }
 
-    public function isSatisfiedBy($object)
+    public function isSatisfiedBy($object = null)
     {
         list($a, $b) = $this->setValues($this->specification1, $this->specification2, $object);
         
-        return ($a >= $b);
-    }
+        return -$b;
+    } 
 }
