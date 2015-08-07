@@ -25,8 +25,11 @@ use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
 
 /**
  * Custom post load entities listener.
- * The onFlush event occurs after the change-sets of all managed entities are computed.
- * This event is not a lifecycle callback.
+ * The postFlush event occurs when the EntityManager#flush() operation is invoked and
+ * after all actual database operations are executed successfully. The event is only raised if there is
+ * actually something to do for the underlying UnitOfWork. If nothing needs to be done,
+ * the postFlush event is not raised. The event won't be raised if an error occurs during the
+ * flush operation.
  *
  * @category   Trigger
  * @package    EventListener

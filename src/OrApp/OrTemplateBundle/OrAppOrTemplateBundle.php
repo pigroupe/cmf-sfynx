@@ -8,7 +8,7 @@ use OrApp\OrTemplateBundle\DependencyInjection\Compiler\OverrideServiceCompilerP
 
 class OrAppOrTemplateBundle extends Bundle
 {
-     /**
+    /**
      * {@inheritdoc}
      */
     public function getParent()

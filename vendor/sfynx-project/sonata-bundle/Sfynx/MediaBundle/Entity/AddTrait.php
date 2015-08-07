@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Media> project.
  *
- * @category   Trait
- * @package    Entity
+ * @category   Entity
+ * @package    Generalisation
+ * @subpackage Trait
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2012-07-31
  *
@@ -15,8 +16,9 @@ namespace Sfynx\MediaBundle\Entity;
 /**
  * Bundle Subscriber.
  *
- * @category Trait
- * @package  Entity
+ * @category   Generalisation
+ * @package    Trait
+ * @subpackage Entity
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 trait AddTrait

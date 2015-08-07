@@ -72,12 +72,14 @@ class Group extends BaseGroup
       */
      protected $permissions = array('VIEW', 'EDIT', 'CREATE', 'DELETE');    
 
-     public function __construct($name, $roles = array())
+     public function __construct($name = "", $roles = array())
      {
          parent::__construct($name, $roles);
          
          $this->setCreatedAt(new \DateTime());
          $this->setUpdatedAt(new \DateTime());
+         
+         $this->setPermissions(array('VIEW', 'EDIT', 'CREATE', 'DELETE'));
      }
      
     /**

@@ -72,8 +72,6 @@
         "halleck45/phpmetrics": "@dev",
         "squizlabs/php_codesniffer": "*",
         "fabpot/php-cs-fixer": "*",
-        "phpunit/phpunit": "*",
-        "phpunit/php-invoker": "dev-master",
         "sebastian/phpcpd": "*",
         "sebastian/phpdcd": "*",
         "phpmd/phpmd" : "@stable",
@@ -95,7 +93,11 @@
         "phpcasperjs/phpcasperjs": "dev-master",
         "so/logboard-bundle": "1.4.*@dev",
         "psecio/iniscan": "dev-master",
-        "psecio/versionscan": "dev-master"
+        "psecio/versionscan": "dev-master",
+        "phpunit/phpunit": "*",
+        "phpunit/php-invoker": "dev-master",        
+        "phpunit/phpunit-skeleton-generator": "*",
+        "phpunit/phpunit-mock-objects": "2.3.*"
     },       
     "scripts": {
         "post-install-cmd": [
@@ -139,6 +141,7 @@
             "Sfynx\\CacheBundle": "vendor/sfynx-project/cache-bundle",
             "Sfynx\\ToolBundle": "vendor/sfynx-project/tool-bundle",
             "Sfynx\\TriggerBundle": "vendor/sfynx-project/tool-bundle",
+            "Sfynx\\SpecificationBundle": "vendor/sfynx-project/tool-bundle",
             "Sfynx\\CrawlerBundle": "vendor/sfynx-project/tool-bundle",
             "Sfynx\\BehatBundle": "vendor/sfynx-project/tool-bundle",
             "Sfynx\\CaptchaBundle": "vendor/sfynx-project/tool-bundle",

@@ -1,5 +1,6 @@
 parameters:
     sfynx.auth.monolog.processor.user.class: Sfynx\AuthBundle\Monolog\Processor\IntrospectionUserProcessor
+    sfynx.monolog.handler.socket.class: sfynx\AuthBundle\Monolog\Handler\SocketHandler    
     
     sfynx.auth.handler.exception.class: Sfynx\AuthBundle\EventListener\HandlerException
     sfynx.auth.handler.localeHandler.class: Sfynx\AuthBundle\EventListener\HandlerLocale
@@ -24,13 +25,17 @@ parameters:
 
 services:      
     #
-    # configuration of the user monolog processor
-    #    
+    # MONOLOG:::configuration of the user monolog processor
+    #       
     sfynx.auth.monolog.processor.user:
         class: %sfynx.auth.monolog.processor.user.class%
         arguments:  [ @service_container ]
         tags:
             - { name: monolog.processor, channel: user, method: processRecord }
+            
+            
+    sfynx.monolog.handler.socket:
+        class: %sfynx.monolog.handler.socket.class%            
             
     #               
     # handlers Configuration

@@ -25,8 +25,9 @@ use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
 
 /**
  * Custom post load entities listener.
- * The onFlush event occurs after the change-sets of all managed entities are computed.
- * This event is not a lifecycle callback.
+ * The preFlush event occurs when the EntityManager#flush() operation is invoked,
+ * but before any changes to managed entities have been calculated. This event is
+ * always raised right after EntityManager#flush() call.
  *
  * @category   Trigger
  * @package    EventListener

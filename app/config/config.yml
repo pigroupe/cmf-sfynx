@@ -14,7 +14,10 @@ framework:
         strict_requirements: %kernel.debug%
     form:            true
     csrf_protection: true
-    validation:      { enabled: true, enable_annotations: true }
+    validation:
+        enabled: true
+        enable_annotations: true
+        #cache: apc
     templating:
         engines: ['twig']
         assets_version: v1_0_0
@@ -33,7 +36,7 @@ framework:
 #        gc_divisor:           ~
 #        gc_probability:       ~
 #        gc_maxlifetime:       ~
-    #esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php       
+    esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php       
     fragments:  { path: /_proxy  } 
     
 # Twig Configuration

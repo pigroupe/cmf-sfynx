@@ -126,5 +126,13 @@ final class TriggerEvents
      * This event allows you to modify the default values of the response before a user deconnection.
      * The event listener method receives a Symfony\Component\HttpFoundation\Response instance.
      */
-    const TRIGGER_EVENT_LOADCLASSMETADATA = 'sfynx.trigger.loadClassMetadata';      
+    const TRIGGER_EVENT_LOADCLASSMETADATA = 'sfynx.trigger.loadClassMetadata';    
+    
+    /**
+     * The TRIGGER_EVENT_LOADCLASSMETADATA event occurs
+     *
+     * This event allows you to modify the default values of the response before a user deconnection.
+     * The event listener method receives a Symfony\Component\HttpFoundation\Response instance.
+     */
+    const TRIGGER_EVENT_ONCLEAR = 'sfynx.trigger.onclear';        
 }

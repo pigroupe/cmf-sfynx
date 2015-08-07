@@ -6,7 +6,7 @@ parameters:
     database_user:     "%%database.user.env.myproject%%"
     database_password: "%%database.password.env.myproject%%"
 
-    test_database_driver:   pdo_mysql
+    test_database_driver:   pdo_sqlite
     test_database_host:     localhost
     test_database_port:     ~
     test_database_name:     "%%test.database.name.env.myproject%%"
@@ -19,7 +19,7 @@ parameters:
     mailer_password:   ~
 
     locale:            en_GB
-    secret:            5b5a0ff57bd45284dafe7f104fc7d8e15
+    secret:            ThisTokenIsNotSoSecretChangeIt
     
     # memcache params
     session_memcache_host: 127.0.0.1 # 127.0.0.1

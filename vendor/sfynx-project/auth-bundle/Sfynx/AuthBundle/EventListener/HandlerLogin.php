@@ -187,6 +187,10 @@ class HandlerLogin
         $event_response = new ResponseEvent(null, $dateExpire, $this->getRequest(), $this->getUser(), $this->locale);
         $this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGIN_CHANGERESPONSE, $event_response);
         $response       = $event_response->getResponse();
+        
+        // we set logs
+        $this->logger->info("User ".$this->getUser()." has been saved", array('user' => $this->getUser()));
+        
         //
         $event->setResponse($response);        
     }    

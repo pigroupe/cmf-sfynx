@@ -1,6 +1,7 @@
 parameters:
     sfynx.trigger.entities.listener.class: Sfynx\TriggerBundle\EventListener\EntitiesContainer
     
+    sfynx.trigger.listener.onclear.class: Sfynx\TriggerBundle\EventListener\OnClearListener
     sfynx.trigger.listener.postload.class: Sfynx\TriggerBundle\EventListener\PostLoadListener
     sfynx.trigger.listener.loadclassmetadata.class: Sfynx\TriggerBundle\EventListener\loadClassMetadataListener
     sfynx.trigger.listener.preflush.class: Sfynx\TriggerBundle\EventListener\PreFlushListener
@@ -24,7 +25,13 @@ services:
         
     #               
     # Doctrine events Configuration
-    #
+    #            
+    sfynx.trigger.onclear_listener:
+        class: %sfynx.trigger.listener.onclear.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: onClear, connexion: default }  
+            
     sfynx.trigger.schema_listener:
         class: %sfynx.trigger.listener.schema.class%
         arguments: [@service_container]

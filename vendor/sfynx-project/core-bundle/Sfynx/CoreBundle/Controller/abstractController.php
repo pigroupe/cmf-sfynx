@@ -458,7 +458,6 @@ abstract class abstractController extends Controller
         $request = $this->container->get('request');
         $locale = $this->container->get('request')->getLocale();
         $em     = $this->getDoctrine()->getManager();
-        $cacheDriver = $em->getConfiguration()->getResultCacheImpl();
         
         if (is_null($qb)) {
             $qb     = $em->createQueryBuilder();
@@ -491,12 +490,12 @@ abstract class abstractController extends Controller
                     $date = \DateTime::createFromFormat($columnSearch['format'], $request->get($idMin));
                     $dateMin = $date->format('Y-m-d 00:00:00');
                     //$dateMin = $this->container->get('sfynx.tool.date_manager')->format($date->getTimestamp(), 'long','medium', $locale, "yyyy-MM-dd 00:00:00");
-               		$qb->andWhere("{$columnSearch['column']} >= '" . $dateMin . "'");
+                    $qb->andWhere("{$columnSearch['column']} >= '" . $dateMin . "'");
                 }
                 if ( $request->get($idMax) != '') {
                     $date = \DateTime::createFromFormat($columnSearch['format'], $request->get($idMax));
                     $dateMax = $date->format('Y-m-d 23:59:59');
-                	$qb->andWhere("{$columnSearch['column']} <= '" . $dateMax . "'");
+                    $qb->andWhere("{$columnSearch['column']} <= '" . $dateMax . "'");
                 }
             }
         }

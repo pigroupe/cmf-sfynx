@@ -1,3 +1,21 @@
+## Installation ##
+
+If you haven't configured the ACL enable it in `app/config/security.yml`:
+
+```yaml
+# app/config/security.yml
+security:
+    acl:
+        connection: default
+```
+
+Finally run the ACL init command
+
+    php app/console init:acl
+
+    
+## Usage ##    
+
 ```php
 <?php
 
@@ -8,9 +26,31 @@ $em->persist($comment);
 $em->flush(); // entity must be persisted and flushed before AclManager can act on it (needs identifier)
 $aclManager = $this->get('pi.acl_manager');
 
-$aclManager->addPermission($comment, $userEntity, MaskBuilder::MASK_OWNER);
-$aclManager->revokePermission($comment, $userEntity, MaskBUILDER::MASK_DELETE);
-$aclManager->revokeAllPermissions($comment, $userEntity);
+// Adds a permission no matter what other permissions existed before
+$aclManager->addObjectPermission($comment, MaskBuilder::MASK_OWNER, $userEntity);
+// Or:
+$aclManager->addObjectPermission($comment, MaskBuilder::MASK_OWNER);
+// Replaces all current permissions with this new one
+$aclManager->setObjectPermission($comment, MaskBuilder::MASK_OWNER, $userEntity);
+$aclManager->revokePermission($comment, MaskBUILDER::MASK_DELETE, $userEntity);
+$aclManager->revokeAllObjectPermissions($comment, $userEntity);
+
+// Same with class permissions:
+$aclManager->addClassPermission($comment, MaskBuilder::MASK_OWNER, $userEntity);
+$aclManager->setClassPermission($comment, MaskBuilder::MASK_OWNER, $userEntity);
+$aclManager->revokePermission($comment, MaskBUILDER::MASK_DELETE, $userEntity, 'class');
+$aclManager->revokeAllClassPermissions($comment, $userEntity);
+
+// You can alse use object-field...
+$aclManager->addObjectFieldPermission($comment, 'title', MaskBuilder:MASK_EDIT, $userEntity);
+$aclManager->setObjectFieldPermission($comment, 'title', MaskBuilder:MASK_EDIT, $userEntity);
+$aclManager->revokeFieldPermission($comment,, 'title' MaskBUILDER::MASK_DELETE, $userEntity);
+$aclManager->revokeAllObjectFieldPermissions($comment, 'title', $userEntity);
+// ...and class-field scope permissions :
+$aclManager->addClassFieldPermission($comment, 'title', MaskBuilder:MASK_EDIT, $userEntity);
+$aclManager->setClassFieldPermission($comment, 'title', MaskBuilder:MASK_EDIT, $userEntity);
+$aclManager->revokeFieldPermission($comment,, 'title' MaskBUILDER::MASK_DELETE, $userEntity, 'class');
+$aclManager->revokeAllClassFieldPermissions($comment, 'title', $userEntity);
 
 $aclManager->deleteAclFor($comment);
 $em->remove($comment);

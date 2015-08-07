@@ -34,26 +34,48 @@ doctrine:
 #            level: info
 
 monolog:
+#    channels:
+#        - security
+#        - doctrine
+#        - request
+#        - cmf
+#        - user          
     handlers:
         default:        
             type:   stream
             path:   "%kernel.logs_dir%/%kernel.environment%.log"
-            level:  debug         
-        main:
-            type:         fingers_crossed # or buffer
-            level:        error
-            handler:      lexik_monolog_browser
-#            channels:     [!cmf, !user]            
-        user:
+            level:  debug     
+            channels: [!user, !doctrine, !security, !request, !cmf]
+        doctrine:
+            #bubble: false
+            #action_level: DEBUG  #DEBUG INFO NOTICE WARNING ERROR CRITICAL ALERT EMERGENCY            
             type: stream
-            path: %kernel.logs_dir%/%kernel.environment%.user.log
+            path: %kernel.logs_dir%/%kernel.environment%.doctrine.log
             level: debug
-            channels: [user]             
+            channels: [doctrine]  
+        request:
+            #bubble: false
+            #action_level: DEBUG  #DEBUG INFO NOTICE WARNING ERROR CRITICAL ALERT EMERGENCY
+            type:  stream
+            path: "%kernel.logs_dir%/%kernel.environment%_request.log"
+            level: debug
+            channels: [request]
+        login:
+            #bubble: false
+            #action_level: DEBUG  #DEBUG INFO NOTICE WARNING ERROR CRITICAL ALERT EMERGENCY            
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.login.log
+            level: debug
+            channels: [user, security]             
         cmf:
             type: stream
             path: %kernel.logs_dir%/%kernel.environment%.cmf.log
             level: debug
-            channels: [cmf]            
+            channels: [cmf]   
+        main:
+            type:         fingers_crossed # or buffer
+            level:        error
+            handler:      lexik_monolog_browser
         app:
             type:         buffer
             action_level: info
@@ -61,7 +83,11 @@ monolog:
             handler:      lexik_monolog_browser
         lexik_monolog_browser:
             type:         service
-            id:           lexik_monolog_browser.handler.doctrine_dbal  
+            id:           lexik_monolog_browser.handler.doctrine_dbal
+        socket:
+            type: socket
+            connection_string: udp://127.0.0.1:5565      
+            handler:      sfynx.monolog.handler.socket            
 
 assetic:
     use_controller: true

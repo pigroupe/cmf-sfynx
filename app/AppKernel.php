@@ -56,6 +56,7 @@ class AppKernel extends Kernel
             new Sfynx\WsBundle\SfynxWsBundle(),
             new Sfynx\WsseBundle\SfynxWsseBundle(),
             new Sfynx\ApiBundle\SfynxApiBundle(),
+            new Sfynx\SpecificationBundle\SfynxSpecificationBundle(),            
             new Sfynx\CacheBundle\SfynxCacheBundle(),
             new Sfynx\ToolBundle\SfynxToolBundle(),
             new Sfynx\CrawlerBundle\SfynxCrawlerBundle(),            
@@ -79,7 +80,7 @@ class AppKernel extends Kernel
             #override Sfynx bundles
             new OrApp\OrCmfBundle\OrAppOrCmfBundle(),
             new OrApp\OrGedmoBundle\OrAppOrGedmoBundle(),
-            new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(), 
+            new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),
         );
             
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

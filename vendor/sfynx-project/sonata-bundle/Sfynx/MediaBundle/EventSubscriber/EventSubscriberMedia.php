@@ -18,7 +18,8 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
+use Sfynx\CmfBundle\EventListener\abstractListener as abstractCmfListener;
+use Sfynx\ToolBundle\Util\PiStringManager;
 
 /**
  * Media entity Subscriber.
@@ -27,7 +28,7 @@ use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
  * @package  EventSubscriber 
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class EventSubscriberMedia  extends abstractTriggerListener implements EventSubscriber
+class EventSubscriberMedia  extends abstractCmfListener implements EventSubscriber
 {
     /**
      * Constructor
@@ -198,12 +199,12 @@ class EventSubscriberMedia  extends abstractTriggerListener implements EventSubs
             $entity->setImage(null);
         }         
         // we clean the filename.
-        if ( $this->isUsernamePasswordToken() 
+        if ($this->isUsernamePasswordToken() 
                 && (($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) 
                         || ($entity instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
                 ) 
         ){
-            if ( $entity->getImage() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) {
+            if ($entity->getImage() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) {
                 $entity->getImage()->setName($this->_cleanName($entity->getImage()->getName()));
             }
         }        
@@ -220,8 +221,8 @@ class EventSubscriberMedia  extends abstractTriggerListener implements EventSubs
      */
     private function _cleanName($string)
     {
-        $string = \Sfynx\ToolBundle\Util\PiStringManager::minusculesSansAccents($string);
-        $string = \Sfynx\ToolBundle\Util\PiStringManager::cleanFilename($string);
+        $string = PiStringManager::minusculesSansAccents($string);
+        $string = PiStringManager::cleanFilename($string);
          
         return $string;
     }   

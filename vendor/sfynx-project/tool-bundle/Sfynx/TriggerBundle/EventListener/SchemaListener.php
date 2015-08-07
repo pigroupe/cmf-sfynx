@@ -63,8 +63,8 @@ class SchemaListener extends abstractTriggerListener
      */    
     public function postGenerateSchema(GenerateSchemaEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
-        $object_event = new TriggerEvent($eventArgs, $this->container, $entity);
+        $schema = $eventArgs->getSchema();
+        $object_event = new TriggerEvent($eventArgs, $this->container, $schema);
         
         $this->container
                 ->get('event_dispatcher')
