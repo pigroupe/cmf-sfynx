@@ -24,7 +24,7 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  * @ORM\Entity(repositoryClass="Sfynx\AuthBundle\Repository\LangueRepository")
  * @ORM\Table(
  *         name="pi_langue_translations",
- *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx_sfynx_trans_auth_langue", columns={
  *             "locale", "object_id", "field"
  *         })}
  * )

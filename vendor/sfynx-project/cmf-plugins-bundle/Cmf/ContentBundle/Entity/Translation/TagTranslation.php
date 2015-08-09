@@ -24,7 +24,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  * @ORM\Entity(repositoryClass="Cmf\ContentBundle\Repository\TagRepository")
  * @ORM\Table(
  *         name="gedmo_tag_translations",
- *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx_sfynx_trans_cmfplugin_tag", columns={
  *             "locale", "object_id", "field"
  *         })}
  * )

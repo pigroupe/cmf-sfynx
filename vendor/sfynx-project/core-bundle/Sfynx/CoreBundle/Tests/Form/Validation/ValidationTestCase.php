@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Form
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -18,8 +19,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * This is the base class for testing object validation.
  * 
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Form
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class ValidationTestCase extends WebTestCase

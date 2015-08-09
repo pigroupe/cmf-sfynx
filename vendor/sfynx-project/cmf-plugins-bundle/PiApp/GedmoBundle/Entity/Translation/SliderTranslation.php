@@ -24,7 +24,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  * @ORM\Entity(repositoryClass="PiApp\GedmoBundle\Repository\SliderRepository")
  * @ORM\Table(
  *         name="gedmo_slider_translations",
- *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx_sfynx_trans_cmfplugin_slider", columns={
  *             "locale", "object_id", "field"
  *         })}
  * )

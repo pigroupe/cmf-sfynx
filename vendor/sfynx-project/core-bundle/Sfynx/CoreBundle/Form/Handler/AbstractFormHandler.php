@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage Core
- * @package    Repository
+ * @category   Core
+ * @package    Form
+ * @subpackage Handler
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2012-03-09
  *
@@ -14,12 +15,14 @@ namespace Sfynx\CoreBundle\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Sfynx\CoreBundle\Form\Handler\FormHandlerInterface;
 
 /**
  * A FormHandler is a object that is reponsable of form binding and post treatment
  * 
- * @subpackage Core
- * @package    Repository
+ * @category   Core
+ * @package    Form
+ * @subpackage Handler
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class AbstractFormHandler implements FormHandlerInterface

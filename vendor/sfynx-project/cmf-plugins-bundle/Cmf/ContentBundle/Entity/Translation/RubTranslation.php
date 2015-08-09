@@ -24,7 +24,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  * @ORM\Entity(repositoryClass="Cmf\ContentBundle\Repository\RubRepository")
  * @ORM\Table(
  *         name="cont_rub_translations",
- *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx_sfynx_trans_rub", columns={
  *             "locale", "object_id", "field"
  *         })}
  * )

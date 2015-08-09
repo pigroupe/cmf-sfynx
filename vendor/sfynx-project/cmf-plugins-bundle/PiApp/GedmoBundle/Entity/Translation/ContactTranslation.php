@@ -24,7 +24,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  * @ORM\Entity(repositoryClass="PiApp\GedmoBundle\Repository\ContactRepository")
  * @ORM\Table(
  *         name="gedmo_contact_translations",
- *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx_cmfplugin_contact", columns={
  *             "locale", "object_id", "field"
  *         })}
  * )

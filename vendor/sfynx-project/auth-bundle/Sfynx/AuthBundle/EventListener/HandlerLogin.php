@@ -55,12 +55,12 @@ class HandlerLogin
     protected $logger;
     
     /** 
-     * @var \Symfony\Component\Security\Core\SecurityContext
+     * @var SecurityContext
      */
     protected $security;
     
     /**
-     * @var \Symfony\Component\EventDispatcher\Event\EventDispatcher
+     * @var EventDispatcher
      */
     protected $dispatcher;    
 
@@ -70,12 +70,12 @@ class HandlerLogin
     protected $em;
 
     /**
-     * @var Symfony\Component\Security\Http\Event\InteractiveLoginEvent
+     * @var InteractiveLoginEvent
      */
     protected $event;
     
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     protected $container;    
     

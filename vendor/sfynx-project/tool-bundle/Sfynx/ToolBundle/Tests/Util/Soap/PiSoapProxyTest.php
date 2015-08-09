@@ -1,9 +1,26 @@
 <?php
-
+/**
+ * This file is part of the <Tool> project.
+ *
+ * @category   Tool
+ * @package    Tests
+ * @subpackage Proxy
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2015-01-08
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Sfynx\ToolBundle\Tests\Util\Soap;
 
 use Sfynx\ToolBundle\Util\Soap\PiSoapProxy;
 
+/**
+ * @category   Tool
+ * @package    Tests
+ * @subpackage Proxy
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ */
 class PiSoapProxyTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
@@ -17,7 +34,6 @@ class PiSoapProxyTest extends \PHPUnit_Framework_TestCase
     
     public function testProxy()
     {
-
         $proxy = $this->getMockBuilder('Sfynx\ToolBundle\Util\Soap\PiSoapProxy')
                 ->setConstructorArgs(array($this->soap_client))
                 ->getMock();

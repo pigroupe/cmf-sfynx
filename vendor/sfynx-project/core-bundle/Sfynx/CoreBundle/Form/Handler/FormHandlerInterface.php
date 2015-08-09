@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage Core
- * @package    Repository
+ * @category   Core
+ * @package    Form
+ * @subpackage Handler
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2012-03-09
  *
@@ -15,6 +16,10 @@ namespace Sfynx\CoreBundle\Form\Handler;
 /**
  * A FormHandler is a object that is reponsable of form binding and post treatment
  *
+ * @category   Core
+ * @package    Form
+ * @subpackage Handler
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 interface FormHandlerInterface
 {

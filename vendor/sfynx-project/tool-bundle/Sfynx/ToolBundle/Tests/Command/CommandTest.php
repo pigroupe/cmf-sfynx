@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Tool> project.
  *
- * @subpackage Tool
- * @package    PhpUnit
+ * @category   Tool
+ * @package    Test
+ * @subpackage Command
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2013-03-29
  *
@@ -22,8 +23,9 @@ use Sfynx\ToolBundle\Command\RoutesCommand;
 /**
  * Default Controller Test
  *
- * @subpackage Tool
- * @package    PhpUnit
+ * @category   Tool
+ * @package    Test
+ * @subpackage Command
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class CommandTest extends WebTestCase

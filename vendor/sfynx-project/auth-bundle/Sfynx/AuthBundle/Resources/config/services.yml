@@ -71,7 +71,7 @@ services:
             
     sfynx.auth.logout_handler:
         class: %sfynx.auth.handler.logoutHandler.class%
-        arguments: ["@logger", @service_container, @doctrine]         
+        arguments: ["@logger", @service_container, @doctrine, @security.context, @event_dispatcher]         
         tag:
             - { name: monolog.logger , channel: user } 
         

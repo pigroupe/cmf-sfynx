@@ -2,9 +2,11 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage   BootStrap_Model
+ * @category   Core
  * @package    Model
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @subpackage Time
+ * @abstract
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-22
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,10 +25,10 @@ use Sfynx\CoreBundle\Model\AbstractTranslation;
 /**
  * abstract class for default attribut.
  *
- * @subpackage   BootStrap_Model
+ * @category   Core
  * @package    Model
+ * @subpackage Time
  * @abstract
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class AbstractDefault extends AbstractTranslation 

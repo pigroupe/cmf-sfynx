@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Event
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -15,11 +16,12 @@ namespace Sfynx\CoreBundle\Tests\Event;
 use Phake;
 
 /**
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Event
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-abstract class SubscriberTest extends \PHPUnit_Framework_TestCase
+abstract class EventTest extends \PHPUnit_Framework_TestCase
 {
     protected function createEvent($subject)
     {
