@@ -18,7 +18,8 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\CoreBundle\EventListener\abstractListener;
+use Sfynx\CmfBundle\EventListener\abstractListener as abstractCmfListener;
+use Sfynx\ToolBundle\Util\PiStringManager;
 
 /**
  * Media entity Subscriber.
@@ -27,7 +28,7 @@ use Sfynx\CoreBundle\EventListener\abstractListener;
  * @package  EventSubscriber 
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class EventSubscriberMedia  extends abstractListener implements EventSubscriber
+class EventSubscriberMedia  extends abstractCmfListener implements EventSubscriber
 {
     /**
      * Constructor
@@ -128,11 +129,6 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
         return array(
             Events::prePersist,
             Events::preUpdate,
-            Events::preRemove,
-            Events::postUpdate,
-            Events::postRemove,
-            Events::postPersist,
-            Events::loadClassMetadata
         );
     }
     
@@ -149,42 +145,6 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
             $args->getEntity()
         );
     }
-    
-    /**
-     * @param EventArgs $args
-     * 
-     * @return void
-     */
-    public function postUpdate(EventArgs $eventArgs)
-    {
-    }
-    
-    /**
-     * @param EventArgs $args
-     * 
-     * @return void
-     */
-    public function postRemove(EventArgs $eventArgs)
-    {
-    }
-    
-    /**
-     * @param EventArgs $args
-     * 
-     * @return void
-     */
-    public function postPersist(EventArgs $eventArgs)
-    {        
-    }
-    
-    /**
-     * @param EventArgs $args
-     * 
-     * @return void
-     */
-    public function preRemove(EventArgs $eventArgs)
-    {
-    }    
     
     /**
      * @param EventArgs $args
@@ -231,20 +191,20 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
                 $query = "UPDATE $entity_table mytable SET mytable.media = null WHERE mytable.id = ?";
                 $this->_connexion($eventArgs)->executeUpdate($query, array($entity->getId()));
                 
-                $this->_container()->get('bootstrap.media.provider.image')->preRemove($entity->getImage());
+                $this->container->get('bootstrap.media.provider.image')->preRemove($entity->getImage());
                 $this->_connexion($eventArgs)->delete($this->getOwningTable($eventArgs, $entity->getImage()), array('id'=>$entity->getImage()->getId()));
-                $this->_container()->get('bootstrap.media.provider.image')->postRemove($entity->getImage());                
+                $this->container->get('bootstrap.media.provider.image')->postRemove($entity->getImage());                
             } catch (\Exception $e) {
             }
             $entity->setImage(null);
         }         
         // we clean the filename.
-        if ( $this->isUsernamePasswordToken() 
+        if ($this->isUsernamePasswordToken() 
                 && (($entity instanceof \Proxies\__CG__\Sfynx\MediaBundle\Entity\Mediatheque) 
                         || ($entity instanceof \Sfynx\MediaBundle\Entity\Mediatheque)
                 ) 
         ){
-            if ( $entity->getImage() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) {
+            if ($entity->getImage() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) {
                 $entity->getImage()->setName($this->_cleanName($entity->getImage()->getName()));
             }
         }        
@@ -261,8 +221,8 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
      */
     private function _cleanName($string)
     {
-        $string = \Sfynx\ToolBundle\Util\PiStringManager::minusculesSansAccents($string);
-        $string = \Sfynx\ToolBundle\Util\PiStringManager::cleanFilename($string);
+        $string = PiStringManager::minusculesSansAccents($string);
+        $string = PiStringManager::cleanFilename($string);
          
         return $string;
     }   
@@ -279,19 +239,19 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
      */
     private function _cropImage($eventArgs) 
     {
-    	if ($this->_container()->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
+    	if ($this->container->isScopeActive('request') && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
             $entityManager = $eventArgs->getEntityManager();
-            $tab_post = $this->_container()->get('request')->request->all();
+            $tab_post = $this->container->get('request')->request->all();
             if (!empty($tab_post['img_crop']) && $tab_post['img_crop'] == '1') {
                     $entity = $eventArgs->getEntity();
                     $getMedia = "getMedia";
                     $setMedia = "setMedia";
                     if ($this->isUsernamePasswordToken() && method_exists($entity, $getMedia) && method_exists($entity, $setMedia)&& ( ($entity->$getMedia() instanceof \Sfynx\MediaBundle\Entity\Mediatheque) ) ) {
-                            $mediaPath = $this->_container()->get('sonata.media.twig.extension')->path($entity->$getMedia()->getImage()->getId(), 'reference');
-                            $src = $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
+                            $mediaPath = $this->container->get('sonata.media.twig.extension')->path($entity->$getMedia()->getImage()->getId(), 'reference');
+                            $src = $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
                             if (file_exists($src)) {
                                     $extension =  pathinfo($src, PATHINFO_EXTENSION);
-                                    $mediaCrop = $this->_container()->get('sonata.media.twig.extension')->path($entity->$getMedia()->getImage()->getId(), $tab_post['img_name']);
+                                    $mediaCrop = $this->container->get('sonata.media.twig.extension')->path($entity->$getMedia()->getImage()->getId(), $tab_post['img_name']);
                                     $targ_w = $tab_post['img_width']; //$globals['tailleWidthEdito1'];
                                     $targ_h = $tab_post['img_height'];
                                     $jpeg_quality = $tab_post['img_quality'];
@@ -316,33 +276,33 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
                                     imagecopyresampled($dst_r, $img_r, 0, 0, $tab_post['x'], $tab_post['y'], $targ_w, $targ_h, $tab_post['w'], $tab_post['h']);
                                     switch ($extension) {
                                             case 'jpg':
-                                                    imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
+                                                    imagejpeg($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
                                                     break;
                                             case 'jpeg':
-                                                    imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
+                                                    imagejpeg($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
                                                     break;
                                             case 'gif':
-                                                    imagegif($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
+                                                    imagegif($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
                                                     break;
                                             case 'png':
-                                                    imagepng($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
+                                                    imagepng($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
                                                     break;
                                             default:
                                                     echo "L'image n'est pas dans un format reconnu. Extensions autorisÃ©es : jpg, gif, png";
                                                     break;
                                     }
-                                    @chmod($this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, 0777);
+                                    @chmod($this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, 0777);
                             }
                     }
             } elseif(!empty($tab_post['img_crop']) && count($tab_post['img_crop']) >= 1){                
                 if ($this->isUsernamePasswordToken() ) {
                     foreach ($tab_post['img_crop'] as $media_id => $value) {
                         if ($value == 1) {
-                            $mediaPath = $this->_container()->get('sonata.media.twig.extension')->path($media_id, 'reference');
-                            $src = $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
+                            $mediaPath = $this->container->get('sonata.media.twig.extension')->path($media_id, 'reference');
+                            $src = $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
                             if (file_exists($src)) {
                                 $extension =  pathinfo($src, PATHINFO_EXTENSION);
-                                $mediaCrop = $this->_container()->get('sonata.media.twig.extension')->path($media_id, $tab_post['img_name_'.$media_id]);
+                                $mediaCrop = $this->container->get('sonata.media.twig.extension')->path($media_id, $tab_post['img_name_'.$media_id]);
                                 $targ_w = $tab_post['img_width_'.$media_id]; //$globals['tailleWidthEdito1'];
                                 $targ_h = $tab_post['img_height_'.$media_id];
                                 $jpeg_quality = $tab_post['img_quality_'.$media_id];
@@ -367,22 +327,22 @@ class EventSubscriberMedia  extends abstractListener implements EventSubscriber
                                 imagecopyresampled($dst_r, $img_r, 0, 0, $tab_post['x_'.$media_id], $tab_post['y_'.$media_id], $targ_w, $targ_h, $tab_post['w_'.$media_id], $tab_post['h_'.$media_id]);
                                 switch ($extension) {
                                     case 'jpg':
-                                        imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
+                                        imagejpeg($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
                                         break;
                                     case 'jpeg':
-                                        imagejpeg($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
+                                        imagejpeg($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, $jpeg_quality);
                                         break;
                                     case 'gif':
-                                        imagegif($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
+                                        imagegif($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
                                         break;
                                     case 'png':
-                                        imagepng($dst_r, $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
+                                        imagepng($dst_r, $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop);
                                         break;
                                     default:
                                         echo "L'image n'est pas dans un format reconnu. Extensions autorisÃ©es : jpg, gif, png";
                                         break;
                                 }
-                                @chmod($this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, 0777);
+                                @chmod($this->container->get('kernel')->getRootDir() . '/../web/' . $mediaCrop, 0777);
                             }                            
                         }
                     } // endforeach        

@@ -18,9 +18,7 @@
 namespace Sfynx\AuthBundle\Monolog\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-use FOS\UserBundle\Model\UserInterface;
+use Sfynx\AuthBundle\Entity\User;
 
 /**
  * Custom login handler.
@@ -55,73 +53,16 @@ class IntrospectionUserProcessor
 
     public function processRecord(array $record)
     {
-        if($this->isUsernamePasswordToken()) {   
-            $record['extra']['user'] = array(
-                'username' => $this->getUser()->getUsername(),
-                'email'    => $this->getUser()->getEmail(),
-            );
+        if (isset($record['context']['user'])) {
+            $user = $record['context']['user'];
+            if ($user instanceof User ) {
+                $record['extra']['user'] = array(
+                    'username' => $user->getUsername(),
+                    'email'    => $user->getEmail(),
+                );
+            }
         }
 
         return $record;
     }
-    
-    /**
-     * Return if yes or no the user is anonymous token.
-     *
-     * @return boolean
-     * @access public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function isAnonymousToken()
-    {
-        if (
-            ($this->getToken() instanceof AnonymousToken)
-            ||
-            ($this->getToken() === null)
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }    
-    
-    /**
-     * Return if yes or no the user is UsernamePassword token.
-     *
-     * @return boolean
-     * @access public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function isUsernamePasswordToken()
-    {
-        if ($this->getToken() instanceof UsernamePasswordToken) {
-            return true;
-        } else {
-            return false;
-        }
-    }        
-    
-    /**
-     * Return the connected user entity.
-     *
-     * @return UserInterface
-     * @access public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function getUser()
-    {
-        return $this->getToken()->getUser();
-    }    
-    
-    /**
-     * Return the token object.
-     *
-     * @return UsernamePasswordToken
-     * @access public
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function getToken()
-    {
-        return  $this->container->get('security.token_storage')->getToken();
-    }        
 }

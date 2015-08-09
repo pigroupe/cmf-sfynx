@@ -364,6 +364,10 @@ class User extends AbstractUser
     public function __construct()
     {
         parent::__construct();
+        
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+         
         $this->groups        = new \Doctrine\Common\Collections\ArrayCollection();        
         $this->applicationTokens = array();
     }  

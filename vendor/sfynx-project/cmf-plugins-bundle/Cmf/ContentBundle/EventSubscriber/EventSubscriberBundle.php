@@ -18,7 +18,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Sfynx\CoreBundle\EventListener\abstractListener;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
 
 /**
  * Bundle Subscriber.
@@ -28,7 +28,7 @@ use Sfynx\CoreBundle\EventListener\abstractListener;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class EventSubscriberBundle  extends abstractListener implements EventSubscriber
+class EventSubscriberBundle  extends abstractTriggerListener implements EventSubscriber
 {
     /**
      * @return array
@@ -130,14 +130,14 @@ class EventSubscriberBundle  extends abstractListener implements EventSubscriber
     {
     	$entity			= $eventArgs->getEntity();
     	$entityManager 	= $eventArgs->getEntityManager();
-    	$locale         = $this->_container()->get('request')->getLocale();
+    	$locale         = $this->container->get('request')->getLocale();
     	//
     	if (
     		($entity instanceof \Cmf\ContentBundle\Entity\Article)
     		||
     		($entity instanceof \Cmf\ContentBundle\Entity\BlocGeneral)
     	) {
-	    	$flux 				= $this->_container()->get('doctrine')->getRepository('PluginsContentBundle:Article')->findFlux();    
+	    	$flux 				= $this->container->get('doctrine')->getRepository('PluginsContentBundle:Article')->findFlux();    
 	    	$tab  				= array();
 	    	$tab['references']  = array();
 	    	//
@@ -192,12 +192,12 @@ class EventSubscriberBundle  extends abstractListener implements EventSubscriber
 	                if ($obj_media) {
 	                    try {
 	                        //
-	                    	//$mediaPath = $this->_container()->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($obj_media->getImage(), 'reference', true, $obj_media->getUpdatedAt(), 'plugin_content_article_media_reference');
-	                        //$src 	   = $this->_container()->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
+	                    	//$mediaPath = $this->container->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($obj_media->getImage(), 'reference', true, $obj_media->getUpdatedAt(), 'plugin_content_article_media_reference');
+	                        //$src 	   = $this->container->get('kernel')->getRootDir() . '/../web/' . $mediaPath;
 	                    	//                        
-	                        $item['imageUri'] = $this->_container()->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($obj_media->getImage(), 'default_mosaique', true, $obj_media->getUpdatedAt(), 'plugin_content_article_media_default_mosaique');
+	                        $item['imageUri'] = $this->container->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($obj_media->getImage(), 'default_mosaique', true, $obj_media->getUpdatedAt(), 'plugin_content_article_media_default_mosaique');
 	                        //
-	                        $item['imageBigUri'] = $this->_container()->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($obj_media->getImage(), 'default_big', true, $obj_media->getUpdatedAt(), 'plugin_content_article_media_default_big');
+	                        $item['imageBigUri'] = $this->container->get('pi_app_admin.twig.extension.route')->getMediaUrlFunction($obj_media->getImage(), 'default_big', true, $obj_media->getUpdatedAt(), 'plugin_content_article_media_default_big');
 	                        //
 	                    } catch (\Exception $e) {
 	                        $item['imageUri']    = '';
@@ -229,7 +229,7 @@ class EventSubscriberBundle  extends abstractListener implements EventSubscriber
 	            array_push($tab['references'], $item);    
 	        }
 			//    
-	        $file = $this->_container()->get('kernel')->getRootDir()."/../web/ressources/references_{$locale}.json";
+	        $file = $this->container->get('kernel')->getRootDir()."/../web/ressources/references_{$locale}.json";
 	        \PiApp\AdminBundle\Util\PiFileManager::save($file, json_encode($tab), 0777, LOCK_EX);
     	}
     } 

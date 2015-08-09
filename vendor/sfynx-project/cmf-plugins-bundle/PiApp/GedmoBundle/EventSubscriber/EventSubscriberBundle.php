@@ -18,7 +18,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Sfynx\CoreBundle\EventListener\abstractListener;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
 
 /**
  * Bundle Subscriber.
@@ -27,7 +27,7 @@ use Sfynx\CoreBundle\EventListener\abstractListener;
  * @package  EventSubscriber
  * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class EventSubscriberBundle  extends abstractListener implements EventSubscriber
+class EventSubscriberBundle  extends abstractTriggerListener implements EventSubscriber
 {
     /**
      * Constructor

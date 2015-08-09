@@ -17,7 +17,7 @@ case "${1:-''}" in
 
             # For chrome we also need to specify the Chrome driver location.:
             #java -jar -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver /usr/lib/selenium/selenium-server-standalone.jar -port 5555 -htmlSuite *googlechrome http://yoursite.com "/path/to/your/tests/Suite.html" "/tmp/chrome-results.html"
-            java -jar -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver /usr/lib/selenium/selenium-server-standalone.jar -port 5555 -trustAllSSLCertificates > /var/log/selenium/output.log 2> /var/log/selenium/error.log & echo $! > /tmp/selenium.pid
+            java -jar -Dwebdriver.chrome.driver=/usr/bin/chromedriver /usr/lib/selenium/selenium-server-standalone.jar -port 5555 -trustAllSSLCertificates > /var/log/selenium/output.log 2> /var/log/selenium/error.log & echo $! > /tmp/selenium.pid
             
             echo "Starting Selenium..."
 
@@ -35,12 +35,13 @@ case "${1:-''}" in
             PID=`cat /tmp/selenium.pid`
             kill -3 $PID
             if kill -9 $PID ;
-                then
-                    sleep 2
-                    test -f /tmp/selenium.pid && rm -f /tmp/selenium.pid
-                else
-                    echo "Selenium could not be stopped..."
-                fi
+            then
+                sleep 2
+                test -f /tmp/selenium.pid && rm -f /tmp/selenium.pid
+            else
+                echo "Selenium could not be stopped..."
+            fi
+            sudo /etc/init.d/xvfb stop
         else
             echo "Selenium is not running."
         fi

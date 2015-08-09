@@ -214,6 +214,7 @@ class MediathequeController extends abstractController
         ->leftJoin('a.image', 'm')
         ->leftJoin('a.category', 'c')
         ->andWhere('a.image IS NOT NULL');
+        
         //
         $is_Server_side = true;
         //

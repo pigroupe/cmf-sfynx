@@ -15,13 +15,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\SfynxTrigger\EventListener;
+namespace Sfynx\TriggerBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\TriggerBundle\EventListener\abstractListener;
-use Sfynx\TriggerBundle\SfynxTriggerEvents;
-use Sfynx\TriggerBundle\Event\TriggerEvent;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
+use Sfynx\TriggerBundle\Event\TriggerEvents;
+use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
 
 /**
  * Custom post persist entities listener.
@@ -40,7 +40,7 @@ use Sfynx\TriggerBundle\Event\TriggerEvent;
  * @since      2015-02-16
  * 
  */
-class PostPersistListener extends abstractListener
+class PostPersistListener extends abstractTriggerListener
 {
     /**
      * Constructs a new instance of SecurityListener.
@@ -62,6 +62,11 @@ class PostPersistListener extends abstractListener
      */    
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_POSTPERSIST, new TriggerEvent($eventArgs)); 
+        $entity = $eventArgs->getEntity();
+        $object_event = new TriggerEvent($eventArgs, $this->container, $entity);
+        
+        $this->container
+                ->get('event_dispatcher')
+                ->dispatch(TriggerEvents::TRIGGER_EVENT_POSTPERSIST, $object_event); 
     }    
 }

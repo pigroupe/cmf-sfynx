@@ -38,6 +38,10 @@ http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
         <field name="locale"          column="locale"          type="string"    length="8"/>
         <field name="field"           column="field"           type="string"    length="32"/>
         <field name="content"         column="content"         type="text"      nullable="true"/>
+        
+        <many-to-one field="object" target-entity="Sfynx\MediaBundle\Entity\Mediatheque" inversed-by="translations">
+            <join-column name="object_id" referenced-column-name="id" on-delete="CASCADE" />
+        </many-to-one>          
 
     </entity>
 </doctrine-mapping>

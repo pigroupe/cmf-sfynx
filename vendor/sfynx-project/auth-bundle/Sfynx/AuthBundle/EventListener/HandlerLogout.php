@@ -86,10 +86,10 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
      */
     public function __construct(LoggerInterface $logger, ContainerInterface $container, Doctrine $doctrine)
     {
-        $this->logger = $logger;
-    	$this->router        = $container->get('sfynx.tool.route.factory');
-    	$this->container     = $container;
-    	$this->em            = $doctrine->getManager();
+        $this->logger    = $logger;
+    	$this->router    = $container->get('sfynx.tool.route.factory');
+    	$this->container = $container;
+    	$this->em        = $doctrine->getManager();
     }
     
     /**
@@ -122,14 +122,14 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     protected function setValues()
     {
     	try {
-    		// we get the best role of the user.
-    		$BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
-    		if (!empty($BEST_ROLE_NAME)) {
-    			$role         = $this->em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $BEST_ROLE_NAME));
-    			if ($role instanceof \Sfynx\AuthBundle\Entity\Role) {
-    				$this->redirection = $role->getRouteLogout();
-    			}
-    		}    		
+            // we get the best role of the user.
+            $BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
+            if (!empty($BEST_ROLE_NAME)) {
+                $role         = $this->em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $BEST_ROLE_NAME));
+                if ($role instanceof \Sfynx\AuthBundle\Entity\Role) {
+                    $this->redirection = $role->getRouteLogout();
+                }
+            }    		
     	} catch (\Exception $e) {
     	}
     }    
@@ -148,6 +148,7 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     	} else {
     		$response = new RedirectResponse($this->router->getRoute('home_page'), 302);
     	}
+        
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-key', '', time() - 3600));
@@ -155,12 +156,27 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-screen', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', '', time() - 3600));
     	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', '', time() - 3600));
+        
     	// we apply all events allowed to change the redirection response
     	$event_response = new ResponseEvent($response, time() - 3600);
     	$this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGOUT_CHANGERESPONSE, $event_response);
     	$response = $event_response->getResponse();
+        
+        // Set log
+        $this->logger->info("User ".$this->getUser()." has been saved", array('user' => $this->getUser()));        
     	
     	return $response;
     }    
     
+    /**
+     * Return the connected user entity object.
+     *
+     * @access protected
+     * @return \Sfynx\AuthBundle\Entity\user
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */    
+    protected function getUser()
+    {
+        return $this->container->get('security.context')->getToken()->getUser();
+    }    
 }

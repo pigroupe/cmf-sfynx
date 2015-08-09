@@ -15,15 +15,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\SfynxTrigger\EventListener;
+namespace Sfynx\TriggerBundle\EventListener;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Sfynx\TriggerBundle\EventListener\abstractListener;
-use Sfynx\TriggerBundle\SfynxTriggerEvents;
-use Sfynx\TriggerBundle\Event\TriggerEvent;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
+use Sfynx\TriggerBundle\Event\TriggerEvents;
+use Sfynx\TriggerBundle\Event\ViewObject\TriggerEvent;
 
 /**
  * Custom post load entities listener.
@@ -41,7 +41,7 @@ use Sfynx\TriggerBundle\Event\TriggerEvent;
  * @since      2015-02-16
  * 
  */
-class SchemaListener extends abstractListener
+class SchemaListener extends abstractTriggerListener
 {
     /**
      * Constructs a new instance of SecurityListener.
@@ -63,6 +63,11 @@ class SchemaListener extends abstractListener
      */    
     public function postGenerateSchema(GenerateSchemaEventArgs $eventArgs)
     {
-        $this->container->get('event_dispatcher')->dispatch(SfynxTriggerEvents::TRIGGER_EVENT_POSTGENERATESCHEM, new TriggerEvent($eventArgs)); 
+        $schema = $eventArgs->getSchema();
+        $object_event = new TriggerEvent($eventArgs, $this->container, $schema);
+        
+        $this->container
+                ->get('event_dispatcher')
+                ->dispatch(TriggerEvents::TRIGGER_EVENT_POSTGENERATESCHEM, $object_event); 
     }    
 }

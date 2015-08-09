@@ -14,16 +14,18 @@ applications. It also allows you to create your own CMS. It's a CMF easy to use,
 
 ## Structure of the framework
 
-The framework works with Symfony 2.3 and has been split into 17 bundles :
+The framework works with Symfony 2.3 and has been split into 23 bundles :
 
 
 ``` bash
-* CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)
-* AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior
-* ToolBundle : A bundle which provides tool libraries and services of route and role and twig extensions
-* BehatBundle : A bundle which provides context tools to run mink tests
-* CaptchaBundle : A bundle which provides a captcha tool to secure form
-* MigrationBundle : A bundle which provides a command to set migration files with a version handler
+* CoreBundle : A bundle which provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms).
+* AuthBundle : A bundle which overload the FOSUserBundle with role, permission and group dynamic system, and set handlers for login behavior, logout behavior and failure connection behavior.
+* ToolBundle : A bundle which provides a whole range of features and twig extension, tools for road management, tools for managing SOAP, a bunch of classes for managing mails, regex, files, dates, cryptography, etc.
+* BehatBundle : A bundle which provides a lot of additional contexts in mink extension Behat, offering a bunch of ready-to-use features for the realization of the scenarios functional testing via the Behat tool.
+* CaptchaBundle : A bundle which provides a captcha tool to secure form.
+* CrawlerBundle:  A bundle which provides an XML file crawler including a validation system via an XSD file.
+* TriggerBUndle: A bundle which implements a methodology for managing a project specifications through event dispatchers, all connected to one of the events existing Doctrine. We can dispatcher project management rules all services there is rule, and consolidate in a specific order of execution by tagging them with the value of the associated event.
+* MigrationBundle : A bundle which provides a command for running multiple migration file from a given version.
 * CmfBundle : A bundle which construct all the CMF with all managers of the creation of page with blocks and widgets.
 ( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )
 * GedmoBundle : A bundle which is used to create a project with the CMF.
@@ -37,8 +39,8 @@ The framework works with Symfony 2.3 and has been split into 17 bundles :
 * BrowserBundle : A bundle which provides library to run Browscap Manager`s utilities and MobileDetect Manager`s utilities.
 * WsBundle : A bundle which provides web services allowing to connect authentication service with the SS0 protocol.
 * WsseBundle : A bundle which provides web services allowing to connect authentication service with the Wsse protocol.
-* EncryptBundle : A bundle which provides annotations to encrypt fields
-* PositionBundle : A bundle which provides annotations to manage position of entiy rows
+* EncryptBundle : A bundle which provides annotations to encrypt fields.
+* PositionBundle : A bundle which provides annotations to manage position of entiy rows.
 * AdminBundle : A bundle which overload the SonataAdminBundle.
 ```
 

@@ -320,13 +320,13 @@ class DefaultController extends abstractController
      *       (!$this->request->cookies->has('ws-sfynx-sso-connected'))
      *   ) {  
      *       // we get sso parameters values
-     *       $sso_prefix_host      = $this->_container()->getParameter("ws.sso.prefix_host");
-     *       $sso_uri_proxy        = $this->_container()->getParameter("ws.sso.uri_proxy");
-     *       $sso_application_name = $this->_container()->getParameter("ws.sso.application_name");
+     *       $sso_prefix_host      = $this->container->getParameter("ws.sso.prefix_host");
+     *       $sso_uri_proxy        = $this->container->getParameter("ws.sso.uri_proxy");
+     *       $sso_application_name = $this->container->getParameter("ws.sso.application_name");
      *       // we create the uri proxy
-     *       $redirectUri       = $this->_container()->get('request')->getUri();   
-     *       $redirectHost      = $sso_prefix_host.$this->_container()->get('request')->getHttpHost();   
-     *       $redirectUriProxy  = $sso_uri_proxy . $this->_container()->get('router')->generate('ws_auth_authenticate_proxy');
+     *       $redirectUri       = $this->container->get('request')->getUri();   
+     *       $redirectHost      = $sso_prefix_host.$this->container->get('request')->getHttpHost();   
+     *       $redirectUriProxy  = $sso_uri_proxy . $this->container->get('router')->generate('ws_auth_authenticate_proxy');
      *       $redirectUriProxy .= sprintf('?ws_redirect_uri=%s', rawurlencode($redirectUri));
      *       $redirectUriProxy .= sprintf('&ws_redirect_host=%s', rawurlencode($redirectHost));
      *       $redirectUriProxy .= sprintf('&ws_application=%s', $sso_application_name);

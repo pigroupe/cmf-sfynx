@@ -20,7 +20,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use \ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Sfynx\CoreBundle\EventListener\abstractListener;
+use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
 
 /**
  * Position Subscriber.
@@ -29,7 +29,7 @@ use Sfynx\CoreBundle\EventListener\abstractListener;
  * @package    EventSubscriber 
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class PositionSubscriber  extends abstractListener implements EventSubscriber
+class PositionSubscriber  extends abstractTriggerListener implements EventSubscriber
 {
     /**
      * Annotation reader
@@ -73,9 +73,6 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
             Events::prePersist,
             Events::preUpdate,
             Events::preRemove,
-            Events::postUpdate,
-            Events::postRemove,
-            Events::postPersist,
         );
     }
 
@@ -93,36 +90,6 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
             $em->getClassMetadata(get_class($args->getEntity())),
             $args->getEntity()
         );
-    }
-    
-    /**
-     * @param \Doctrine\Common\EventArgs $args
-     * 
-     * @return void
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function postUpdate(EventArgs $eventArgs)
-    {
-    }
-    
-    /**
-     * @param \Doctrine\Common\EventArgs $args
-     * 
-     * @return void
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function postRemove(EventArgs $eventArgs)
-    {
-    }
-    
-    /**
-     * @param \Doctrine\Common\EventArgs $args
-     * 
-     * @return void
-     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */
-    public function postPersist(EventArgs $eventArgs)
-    {
     }
     
     /**
@@ -356,9 +323,9 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
         $_is_change_position = false;
         if (isset($GLOBALS['ENTITIES'][$type]) && isset($GLOBALS['ENTITIES'][$type][$entity_name])) {
             if (is_array($GLOBALS['ENTITIES'][$type][$entity_name])) {
-                $route = $this->_container()->get('request')->get('_route');
+                $route = $this->container->get('request')->get('_route');
                 if ((empty($route) || ($route == "_internal"))) {
-                        $route = $this->_container()->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+                        $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request')->getLocale());
                 }
                 if (in_array($route, $GLOBALS['ENTITIES'][$type][$entity_name])) {
                         $_is_change_position = true;
@@ -375,9 +342,9 @@ class PositionSubscriber  extends abstractListener implements EventSubscriber
                     $methodName = \Sfynx\ToolBundle\Util\PiStringManager::capitalize($propName);
                     if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
                         // we get the route name
-                        $route = $this->_container()->get('request')->get('_route');
+                        $route = $this->container->get('request')->get('_route');
                         if ((empty($route) || ($route == "_internal"))) {
-                                $route = $this->_container()->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container()->get('request')->getLocale());
+                                $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request')->getLocale());
                         }
                         //
                         $properties = $this->annReader->getPropertyAnnotation($refProperty, $this->annotationclass);

@@ -41,7 +41,7 @@
         <exec executable="php" passthru="true">
             <arg line="app/console" />
             <arg line="lexik:monolog-browser:schema-create --env=dev" />
-        </exec>               
+        </exec>        
     </target>
 
     <target name="doctrine:info">

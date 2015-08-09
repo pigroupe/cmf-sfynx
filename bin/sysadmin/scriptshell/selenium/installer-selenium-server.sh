@@ -25,10 +25,16 @@ sudo sh -c 'echo deb http://dl.google.com/linux/chrome/deb/ stable main > /etc/a
 sudo apt-get update && sudo apt-get install -y xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic xvfb x11-apps  imagemagick firefox google-chrome-stable
 
 # /usr/lib/chromium-browser/chromedriver
-sudo apt-get install chromium-chromedriver
-#wget -N http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux64.zip -P ~/Downloads
-#unzip ~/Downloads/chromedriver_linux64.zip -d ~/Downloads
-#chmod +x ~/Downloads/chromedriver
+#sudo apt-get install python-selenium chromium-chromedriver
+#sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+
+sudo apt-get install unzip
+wget -N http://chromedriver.storage.googleapis.com/2.16/chromedriver_linux64.zip -P ~/Downloads
+unzip ~/Downloads/chromedriver_linux64.zip -d ~/Downloads
+chmod +x ~/Downloads/chromedriver
+sudo mv -f ~/Downloads/chromedriver /usr/local/share/chromedriver
+sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 
 # Create an alias to the script
 sudo rm  /etc/init.d/selenium

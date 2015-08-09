@@ -3,9 +3,9 @@
  * This file is part of the <Cache> project.
  * 
  * @uses SessionHandlerInterface
- * @subpackage   Handler
+ * @subpackage Handler
  * @package    Session
- * @since 2012-02-23
+ * @since      2012-02-23
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,16 +13,16 @@
 namespace Sfynx\CacheBundle\Session\Storage\Handler;
 
 /**
- * LockingSessionHandler.
+ * MemcacheSessionHandler.
  *
  * Memcached based session storage handler based on the Memcached class
- * provided by the PHP memcached extension with added locking support.
+ * provided by the PHP memcache extension with added locking support.
  *
  * @uses SessionHandlerInterface
- * @subpackage   Handler
+ * @subpackage Handler
  * @package    Session
- * @see http://php.net/memcached
- * @author Maurits van der Schee <m.vanderschee@leaseweb.com>
+ * @see        http://php.net/memcache
+ * @author     Maurits van der Schee <m.vanderschee@leaseweb.com>
  */
 class MemcacheSessionHandler implements \SessionHandlerInterface
 {
@@ -60,7 +60,7 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
     /**
      * @var \Memcached Memcached driver.
      */
-    private $memcached;
+    private $memcache;
 
     /**
      * @var integer Time to live in seconds
@@ -76,19 +76,22 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      * Constructor.
      *
      * List of available options:
-     *  * prefix: The prefix to use for the memcached keys in order to avoid collision
+     *  * prefix: The prefix to use for the memcache keys in order to avoid collision
      *  * expiretime: The time to live in seconds
+     *  * locking: Indicates whether session locking is enabled or not
+     *  * spin_lock_wait: Microseconds to wait between acquire lock tries
+     *  * lock_max_wait: Maximum amount of seconds to wait for the lock
      *
-     * @param \Memcached $memcached A \Memcached instance
-     * @param array      $options   An associative array of Memcached options
+     * @param \Memcache $memcache  A \Memcache instance
+     * @param array     $options   An associative array of Memcache options
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct(\Memcached $memcached, array $options = array())
+    public function __construct(\Memcache $memcache, array $options = array())
     {
-        $this->memcached = $memcached;
+        $this->memcache = $memcache;
 
-        if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime', 'locking', 'spin_lock_wait'))) {
+        if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime', 'locking', 'spin_lock_wait', 'lock_max_wait'))) {
             throw new \InvalidArgumentException(sprintf(
                 'The following options are not supported "%s"', implode(', ', $diff)
             ));
@@ -101,7 +104,8 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
         $this->locked = false;
         $this->lockKey = null;
         $this->spinLockWait = $options['spin_lock_wait'];
-        $this->lockMaxWait = ini_get('max_execution_time');
+        $this->lockMaxWait = $options['lock_max_wait'] ? $options['lock_max_wait'] : ini_get('max_execution_time');
+        
         if (!$this->lockMaxWait) {
             $this->lockMaxWait = self::DEFAULT_MAX_EXECUTION_TIME;
         }
@@ -118,27 +122,21 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
     private function lockSession($sessionId)
     {
         $attempts = (1000000 / $this->spinLockWait) * $this->lockMaxWait;
-
         $this->lockKey = $sessionId.'.lock';
         for ($i=0;$i<$attempts;$i++) {
-            $success = $this->memcached->add($this->prefix.$this->lockKey, '1', $this->lockMaxWait+1);
+            $success = $this->memcache->add($this->prefix.$this->lockKey, '1', null, $this->lockMaxWait+1);
             if ($success) {
                 $this->locked = true;
                 return true;
             }
-            $status = $this->memcached->getResultCode();
-            if ($status != \Memcached::RES_NOTSTORED && $status != \Memcached::RES_DATA_EXISTS) {
-                break;
-            }
             usleep($this->spinLockWait);
         }
-
         return false;
     }
 
     private function unlockSession()
     {
-        $this->memcached->delete($this->prefix.$this->lockKey);
+        $this->memcache->delete($this->prefix.$this->lockKey);
         $this->locked = false;
     }
 
@@ -152,6 +150,7 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
                 $this->unlockSession();
             }
         }
+        
         return true;
     }
 
@@ -168,7 +167,7 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
             }
         }
 
-        return $this->memcached->get($this->prefix.$sessionId) ?: '';
+        return $this->memcache->get($this->prefix.$sessionId) ?: '';
     }
 
     /**
@@ -184,7 +183,7 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
             }
         }
         
-        return $this->memcached->set($this->prefix.$sessionId, $data, time() + $this->ttl);
+        return $this->memcache->set($this->prefix.$sessionId, $data, 0, time() + $this->ttl);
     }
 
     /**
@@ -192,8 +191,9 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        $this->memcached->delete($this->prefix.$sessionId);
+        $this->memcache->delete($this->prefix.$sessionId);
         $this->close();
+        
         return true;
     }
 
@@ -202,7 +202,7 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      */
     public function gc($lifetime)
     {
-        // not required here because memcached will auto expire the records anyhow.
+        // not required here because memcache will auto expire the records anyhow.
         return true;
     }
 

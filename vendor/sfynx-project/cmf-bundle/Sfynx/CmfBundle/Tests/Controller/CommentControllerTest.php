@@ -10,6 +10,7 @@ class CommentControllerTest extends WebTestCase
     public function testCompleteScenario()
     {
         $this->markTestSkipped('must be revisited.');
+        
         // Create a new client to browse the application
         $client = static::createClient();
 

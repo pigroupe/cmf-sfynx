@@ -12,7 +12,7 @@
  */
 namespace Sfynx\CmfBundle\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Sfynx\CmfBundle\EventListener\CoreListener;
@@ -43,11 +43,11 @@ class loadClassMetadataListener extends CoreListener
      * Methos which will be called when the event is thrown.
      *
      *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param \Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs
      *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */    
-    public function loadClassMetadata(LifecycleEventArgs $eventArgs)
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
     {
 //        exemple :
 //         $classMetadata = $eventArgs->getClassMetadata();
