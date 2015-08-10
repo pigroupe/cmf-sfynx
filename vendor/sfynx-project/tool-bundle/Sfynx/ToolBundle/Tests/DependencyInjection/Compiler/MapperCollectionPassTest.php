@@ -1,9 +1,10 @@
 <?php
 /**
- * This file is part of the <Core> project.
+ * This file is part of the <Tool> project.
  *
- * @subpackage Core
- * @package    Tests
+ * @category   Tool
+ * @package    Test
+ * @subpackage DependencyInjectionCompile
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -17,8 +18,9 @@ use Phake;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @subpackage Core
- * @package    Tests
+ * @category   Tool
+ * @package    Test
+ * @subpackage DependencyInjectionCompile
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class MapperCollectionPassTest extends \PHPUnit_Framework_TestCase

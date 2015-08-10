@@ -50,13 +50,16 @@ abstract class WebTestCase extends BaseWebTestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-
-        static::$kernel = static::createKernel();
+        
+        if (null === static::$kernel) {
+            static::$kernel = static::createKernel();
+        }        
+        
         static::$kernel->boot();
         
         static::$kernel->getContainer()->get('request')->setLocale('en_EN');
 
-        static::$em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        static::$em = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
         
         static::$translator = static::$kernel->getContainer()->get('translator');
         
@@ -89,12 +92,24 @@ abstract class WebTestCase extends BaseWebTestCase
         self::runCommand('doctrine:fixtures:load --append --fixtures=vendor/sfynx-project/auth-bundle/Sfynx/AuthBundle --env=test');
     }
     
-    protected static function emptyDatabase()
+    /**
+     * Generates the schema to use on the test environment.
+     *
+     * @throws \Doctrine\DBAL\Schema\SchemaException
+     */
+    protected static function generateSchema()
     {
-        self::runCommand('doctrine:database:drop --force --env=test');
-        self::runCommand('doctrine:database:create --env=test');
-        self::runCommand('doctrine:schema:create --env=test');
-    }
+        // Get the metadata of the application to create the schema.
+        if (!empty(static::$metadata)) {
+            $tool = new \Doctrine\ORM\Tools\SchemaTool(static::$em);
+            $tool->dropDatabase();
+            $tool->createSchema(static::$metadata);
+        } else {
+            throw new \Doctrine\DBAL\Schema\SchemaException(
+                'No Metadata Classes to process.'
+            );
+        }
+   } 
     
     protected static function emptyCache()
     {
@@ -263,4 +278,45 @@ abstract class WebTestCase extends BaseWebTestCase
 
         return $this->validator;
     }    
+    
+    /**
+     * Mocking security.context service with a user
+     *
+     */    
+    protected function setSecurityContextUser()
+    {
+        //
+        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        
+        // The user I want to return                                                                                        
+        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');  
+
+        // I create a Token for mock getUser()                    
+        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');   
+        $token
+            ->expects($this->once())
+            ->method('getUser')                                                               
+            ->will($this->returnValue($user));                                                
+
+        // I mock the service. PHPUnit don't return an error here.
+        $securityContext = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
+            ->disableOriginalConstructor()                                                    
+            ->getMock();  
+        $securityContext
+            ->expects($this->once()) //->expects($this->any()) 
+            ->method('isGranted')
+            ->with('IS_AUTHENTICATED_FULLY')
+            ->will($this->returnValue(true));        
+        $securityContext
+            ->expects($this->once())                                          
+            ->method('getToken')                                                              
+            ->will($this->returnValue($token));          
+        
+        // I replace the real service by the mock
+        $this->container
+            ->expects($this->once()) //->expects($this->any()) 
+            ->method('get')
+            ->with('security.context')
+            ->will($this->returnValue($securityContext));
+    }
 }

@@ -19,7 +19,7 @@ namespace Sfynx\MediaBundle\Entity;
  * @category   Generalisation
  * @package    Trait
  * @subpackage Entity
- * @author   Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 trait AddTrait
 {

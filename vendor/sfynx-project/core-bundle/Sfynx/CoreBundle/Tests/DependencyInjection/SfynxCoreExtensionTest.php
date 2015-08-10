@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage DependencyInjection
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -16,8 +17,9 @@ use Sfynx\CoreBundle\DependencyInjection\SfynxCoreExtension;
 use Phake;
 
 /**
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage DependencyInjection
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class SfynxCoreExtensionTest extends \PHPUnit_Framework_TestCase

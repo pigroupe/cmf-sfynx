@@ -117,6 +117,8 @@ class LoginTest extends WebTestCase
      */
     public function testLogout(Client $client)
     {
+        $this->setSecurityContextUser();
+        
         $crawler = $client->getCrawler();
         $crawler = $client->request('GET', self::URL_DECONNECTION);
         $this->assertEquals(302, $client->getResponse()->getStatusCode());

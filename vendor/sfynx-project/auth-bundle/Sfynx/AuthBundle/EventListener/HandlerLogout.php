@@ -17,16 +17,22 @@
  */
 namespace Sfynx\AuthBundle\EventListener;
 
+use Symfony\Component\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
+use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use Sfynx\AuthBundle\Event\ResponseEvent;
 use Sfynx\AuthBundle\SfynxAuthEvents;
+use Sfynx\AuthBundle\Entity\Role;
 
 /**
  * Custom logout handler.
@@ -49,27 +55,37 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     protected $logger;
     
     /**
-     * @var \Symfony\Component\Routing\Router
+     * @var Router
      */
     protected $router;
 		
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     protected $container;
     
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     protected $em;    
     
     /**
-     * @var \Symfony\Component\HttpFoundation\RedirectResponse
+     * @var SecurityContext
+     */
+    protected $security;      
+    
+    /**
+     * @var EventDispatcher
+     */
+    protected $dispatcher;     
+    
+    /**
+     * @var RedirectResponse
      */
     protected $redirection = '';    
     
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var Request
      */
     protected $request;    
     
@@ -83,13 +99,17 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
      * 
      * @param ContainerInterface $container The container service
      * @param Doctrine           $doctrine  The doctrine service
+     * @param SecurityContext    $security   The security context
+     * @param EventDispatcher    $dispatcher The event dispatcher
      */
-    public function __construct(LoggerInterface $logger, ContainerInterface $container, Doctrine $doctrine)
+    public function __construct(LoggerInterface $logger, ContainerInterface $container, Doctrine $doctrine, SecurityContext $securityContext, EventDispatcher $dispatcher)
     {
-        $this->logger    = $logger;
-    	$this->router    = $container->get('sfynx.tool.route.factory');
-    	$this->container = $container;
-    	$this->em        = $doctrine->getManager();
+        $this->logger     = $logger;
+    	$this->router     = $container->get('sfynx.tool.route.factory');
+    	$this->container  = $container;
+    	$this->em         = $doctrine->getManager();
+        $this->security   = $securityContext;
+        $this->dispatcher = $dispatcher;
     }
     
     /**
@@ -123,10 +143,15 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     {
     	try {
             // we get the best role of the user.
-            $BEST_ROLE_NAME = $this->container->get('sfynx.auth.role.factory')->getBestRoleUser();
+            $BEST_ROLE_NAME = $this->container
+                    ->get('sfynx.auth.role.factory')
+                    ->getBestRoleUser();
+            
             if (!empty($BEST_ROLE_NAME)) {
-                $role         = $this->em->getRepository("SfynxAuthBundle:Role")->findOneBy(array('name' => $BEST_ROLE_NAME));
-                if ($role instanceof \Sfynx\AuthBundle\Entity\Role) {
+                $role = $this->em
+                        ->getRepository("SfynxAuthBundle:Role")
+                        ->findOneBy(array('name' => $BEST_ROLE_NAME));
+                if ($role instanceof Role) {
                     $this->redirection = $role->getRouteLogout();
                 }
             }    		
@@ -144,22 +169,22 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
     protected function redirection()
     {
     	if (!empty($this->redirection)) {
-    		$response = new RedirectResponse($this->router->getRoute($this->redirection), 302);
+            $response = new RedirectResponse($this->router->getRoute($this->redirection), 302);
     	} else {
-    		$response = new RedirectResponse($this->router->getRoute('home_page'), 302);
+            $response = new RedirectResponse($this->router->getRoute('home_page'), 302);
     	}
         
-    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-user-id', '', time() - 3600));
-    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-application-id', '', time() - 3600));
-    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-ws-key', '', time() - 3600));
-    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-layout', '', time() - 3600));
-    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-screen', '', time() - 3600));
-    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sfynx-redirection', '', time() - 3600));
-    	$response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('_locale', '', time() - 3600));
+    	$response->headers->setCookie(new Cookie('sfynx-ws-user-id', '', time() - 3600));
+    	$response->headers->setCookie(new Cookie('sfynx-ws-application-id', '', time() - 3600));
+    	$response->headers->setCookie(new Cookie('sfynx-ws-key', '', time() - 3600));
+    	$response->headers->setCookie(new Cookie('sfynx-layout', '', time() - 3600));
+    	$response->headers->setCookie(new Cookie('sfynx-screen', '', time() - 3600));
+    	$response->headers->setCookie(new Cookie('sfynx-redirection', '', time() - 3600));
+    	$response->headers->setCookie(new Cookie('_locale', '', time() - 3600));
         
     	// we apply all events allowed to change the redirection response
     	$event_response = new ResponseEvent($response, time() - 3600);
-    	$this->container->get('event_dispatcher')->dispatch(SfynxAuthEvents::HANDLER_LOGOUT_CHANGERESPONSE, $event_response);
+    	$this->dispatcher->dispatch(SfynxAuthEvents::HANDLER_LOGOUT_CHANGERESPONSE, $event_response);
     	$response = $event_response->getResponse();
         
         // Set log
@@ -177,6 +202,28 @@ class HandlerLogout implements LogoutSuccessHandlerInterface
      */    
     protected function getUser()
     {
-        return $this->container->get('security.context')->getToken()->getUser();
+        if ($this->isUsernamePasswordToken()) {
+            return $this->security->getToken()->getUser();
+        } else {
+            //return $this->security->getToken()->getUser();
+            return 'UserPhpUnit';
+        }
     }    
+    
+    /**
+     * Return if yes or no the user is UsernamePassword token.
+     *
+     * @return boolean
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    protected function isUsernamePasswordToken()
+    {
+        if ($this->security->getToken() instanceof \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken) {
+            return true;
+        } else {
+            return false;
+        }
+    }        
 }

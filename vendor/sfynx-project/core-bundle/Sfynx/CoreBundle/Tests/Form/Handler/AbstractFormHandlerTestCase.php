@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Form
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -17,8 +18,9 @@ use \Phake;
 /**
  * This is a base test case for all FormHandlers.
  * 
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Form
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class AbstractFormHandlerTestCase extends \PHPUnit_Framework_TestCase

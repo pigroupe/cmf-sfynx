@@ -2,8 +2,9 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Form
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -20,8 +21,9 @@ use Symfony\Component\Form\FormBuilder;
 /**
  * This class adds extension validator
  * 
- * @subpackage Core
- * @package    Tests
+ * @category   Core
+ * @package    Test
+ * @subpackage Form
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class TypeWithValidatorExtensionTestCase extends TypeTestCase

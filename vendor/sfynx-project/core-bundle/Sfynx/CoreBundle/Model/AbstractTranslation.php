@@ -2,8 +2,10 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage   BootStrap_Model
+ * @category   Core
  * @package    Model
+ * @subpackage Translate
+ * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-08
  *
@@ -21,10 +23,10 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 /**
  * abstract class for Translation management.
  *
- * @subpackage   BootStrap_Model
+ * @category   Core
  * @package    Model
+ * @subpackage Translate
  * @abstract
- *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class AbstractTranslation implements Translatable

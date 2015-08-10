@@ -24,7 +24,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  * @ORM\Entity(repositoryClass="Cmf\ContentBundle\Repository\TestRepository")
  * @ORM\Table(
  *         name="cont_test_translations",
- *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx_sfynx_trans_cmfplugin_test", columns={
  *             "locale", "object_id", "field"
  *         })}
  * )

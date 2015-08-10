@@ -24,7 +24,7 @@ use Sfynx\CoreBundle\Model\AbstractTranslationEntity;
  * @ORM\Entity(repositoryClass="Sfynx\MediaBundle\Repository\MediathequeRepository")
  * @ORM\Table(
  *         name="gedmo_media_translations",
- *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *         uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx_sfynx_trans_cmfplugin_mediatheque", columns={
  *             "locale", "object_id", "field"
  *         })}
  * )

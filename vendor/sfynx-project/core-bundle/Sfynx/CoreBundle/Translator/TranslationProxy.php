@@ -2,10 +2,11 @@
 /**
  * This file is part of the <Core> project.
  *
- * @subpackage   BootStrap_Repositories
- * @package    Repository
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since 2012-03-09
+ * @category   Core
+ * @package    Translator
+ * @subpackage Translation
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @since      2012-03-09
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,11 +17,11 @@ use Doctrine\Common\Collections\Collection;
 
 /**
  * Proxy Translator
- *
- * @subpackage   BootStrap_Repositories
- * @package    Repository
- *
- * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * 
+ * @category   Core
+ * @package    Translator
+ * @subpackage Translation
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class TranslationProxy
 {
