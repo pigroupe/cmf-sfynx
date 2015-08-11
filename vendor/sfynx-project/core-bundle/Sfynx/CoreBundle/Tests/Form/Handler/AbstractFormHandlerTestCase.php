@@ -5,6 +5,7 @@
  * @category   Core
  * @package    Test
  * @subpackage Form
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -21,6 +22,7 @@ use \Phake;
  * @category   Core
  * @package    Test
  * @subpackage Form
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class AbstractFormHandlerTestCase extends \PHPUnit_Framework_TestCase

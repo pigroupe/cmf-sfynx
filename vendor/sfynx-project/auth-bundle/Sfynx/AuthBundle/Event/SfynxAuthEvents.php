@@ -1,10 +1,11 @@
 <?php
-
 /**
  * This file is part of the <Auth> project.
  *
  * @category   Auth
  * @package    Event
+ * @subpackage Constant
+ * @final
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -15,10 +16,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\AuthBundle;
+namespace Sfynx\AuthBundle\Event;
 
 /**
  * Contains all events thrown in the SFYNX
+ * 
+ * @category   Auth
+ * @package    Event
+ * @subpackage Constant
+ * @final
+ * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * 
  */
 final class SfynxAuthEvents
 {

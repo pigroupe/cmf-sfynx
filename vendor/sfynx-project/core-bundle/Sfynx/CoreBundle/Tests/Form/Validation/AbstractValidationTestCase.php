@@ -5,6 +5,7 @@
  * @category   Core
  * @package    Test
  * @subpackage Form
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -22,9 +23,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @category   Core
  * @package    Test
  * @subpackage Form
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class ValidationTestCase extends WebTestCase
+abstract class AbstractValidationTestCase extends WebTestCase
 {
    /**
      * @var Validation

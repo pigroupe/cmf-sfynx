@@ -1,17 +1,21 @@
 <?php
-
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage Object
+ * @category   Auth
  * @package    Event
+ * @subpackage ViewObject
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2014-07-23
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\AuthBundle\Event;
+namespace Sfynx\AuthBundle\Event\ViewObject;
 
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +25,15 @@ use Sfynx\AuthBundle\Entity\User;
 /**
  * Response event of connection user.
  *
- * @subpackage Object
+ * @category   Auth
  * @package    Event
+ * @subpackage ViewObject
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright  2015 PI-GROUPE
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version    2.3
+ * @link       http://opensource.org/licenses/gpl-license.php
+ * @since      2015-02-16
  */
 class ResponseEvent extends Event
 {

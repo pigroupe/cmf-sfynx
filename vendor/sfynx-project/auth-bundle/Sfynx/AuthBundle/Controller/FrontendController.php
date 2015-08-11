@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\CoreBundle\Controller\abstractController;
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\AuthBundle\SfynxAuthEvents;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
+use Sfynx\AuthBundle\Event\SfynxAuthEvents;
 
 /**
  * Frontend controller.

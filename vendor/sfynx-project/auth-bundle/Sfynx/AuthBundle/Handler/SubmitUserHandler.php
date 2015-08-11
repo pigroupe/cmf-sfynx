@@ -26,7 +26,7 @@ use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Validator\SubmitUserValidator;
 use Sfynx\AuthBundle\Model\UserWS;
 use FOS\UserBundle\Event\UserEvent;
-use Sfynx\CmfBundle\SfynxCmfEvents;
+use Sfynx\CmfBundle\Event\SfynxCmfEvents;
 
 /**
  * This class is used to process json data transmit in post from the new api Webservice

@@ -24,7 +24,7 @@ class Migration_1 extends abstractMigration
     {
         $em = $this->container->get('doctrine')->getManager();
         
-        $group = new Dirisi\AuthBundle\Entity\Group("Group admin", array('ROLE_ADMIN'));
+        $group = new Sfynx\AuthBundle\Entity\Group("Group admin", array('ROLE_ADMIN'));
         $group->setEnabled(true);
         $em->persist($group);
         $em->flush();        

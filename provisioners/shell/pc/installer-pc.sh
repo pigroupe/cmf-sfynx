@@ -37,6 +37,8 @@ sudo apt-get -y install unace zip unzip xz-utils p7zip p7zip-full sharutils uude
 echo "*****Install python"
 sudo apt-get -y install python-software-properties > /dev/null
 sudo apt-get -y install python-tk
+sudo apt-get -y install python-tix
+sudo apt-get -y install tix-dev
 
 echo "*****Install Java 7"
 sudo add-apt-repository ppa:webupd8team/java -y

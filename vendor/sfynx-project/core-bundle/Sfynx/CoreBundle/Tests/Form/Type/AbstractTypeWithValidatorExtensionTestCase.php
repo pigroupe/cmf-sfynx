@@ -5,6 +5,7 @@
  * @category   Core
  * @package    Test
  * @subpackage Form
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since      2015-01-08
  *
@@ -24,9 +25,10 @@ use Symfony\Component\Form\FormBuilder;
  * @category   Core
  * @package    Test
  * @subpackage Form
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-abstract class TypeWithValidatorExtensionTestCase extends TypeTestCase
+abstract class AbstractTypeWithValidatorExtensionTestCase extends TypeTestCase
 {
     protected function setUp()
     {

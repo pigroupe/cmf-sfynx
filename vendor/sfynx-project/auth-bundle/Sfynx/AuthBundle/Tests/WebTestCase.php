@@ -2,10 +2,11 @@
 /**
  * This file is part of the <Auth> project.
  *
- * @subpackage Auth
+ * @category   Auth
  * @package    Tests
+ * @subpackage WebTestCase
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @since      2015-01-08
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,13 +19,16 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Component\Process\Process;
 use Sfynx\AuthBundle\DataFixtures\ORM\UsersFixtures;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /**
  * This is the base test case for all functional tests.
  * It bootstraps the database before each test class.
  *
- * @subpackage Auth
+ * @category   Auth
  * @package    Tests
+ * @subpackage WebTestCase
+ * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 abstract class WebTestCase extends BaseWebTestCase
@@ -263,11 +267,35 @@ abstract class WebTestCase extends BaseWebTestCase
         }
     }
 
-    protected function assertHasEventsCalled($profile, $event)
+    protected function assertHasEventsCalled(Profile $profile, $eventName)
     {
         $calledEvents = $profile->getCollector('events')->getCalledListeners();
-        $this->assertContains($event, implode(array_keys($calledEvents)));
+        $this->assertContains($eventName, implode(array_keys($calledEvents)));
     }
+    
+    protected function assertHasQueryCount(Profile $profile, $count, $method = "assertLessThan")
+    {
+        $this->$method($count, $profile->getCollector('db')->getQueryCount());
+    }    
+    
+    protected function assertHasMessageCount(Profile $profile, $count, $method = "assertEquals")
+    {
+        $this->$method($count, $profile->getCollector('swiftmailer')->getMessageCount());
+    }     
+    
+    protected function assertHasServiceInDIContainer(Profile $profile, $serviceName, $RequestedService = array("security.context"))
+    {
+        $logMessages = $profile->getCollector("dependency_injection")->getLogMessages();
+        $servicesDI = array();        
+        if (null !== $logMessages) {
+            foreach ($logMessages as $k => $message) {
+                if(in_array($message['id'], $RequestedService)) {
+                    $servicesDI[] = $message['caller']['method'];
+                }
+            }
+        }
+        $this->assertContains($serviceName, implode(array_values($servicesDI)));
+    }     
     
     protected function getValidator()
     {
@@ -285,36 +313,27 @@ abstract class WebTestCase extends BaseWebTestCase
      */    
     protected function setSecurityContextUser()
     {
-        //
         $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        
         // The user I want to return                                                                                        
         $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');  
-
         // I create a Token for mock getUser()                    
         $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');   
-        $token
-            ->expects($this->once())
+        $token->expects($this->once())
             ->method('getUser')                                                               
             ->will($this->returnValue($user));                                                
-
         // I mock the service. PHPUnit don't return an error here.
         $securityContext = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
             ->disableOriginalConstructor()                                                    
             ->getMock();  
-        $securityContext
-            ->expects($this->once()) //->expects($this->any()) 
+        $securityContext->expects($this->once()) //->expects($this->any()) 
             ->method('isGranted')
             ->with('IS_AUTHENTICATED_FULLY')
             ->will($this->returnValue(true));        
-        $securityContext
-            ->expects($this->once())                                          
+        $securityContext->expects($this->once())                                          
             ->method('getToken')                                                              
             ->will($this->returnValue($token));          
-        
         // I replace the real service by the mock
-        $this->container
-            ->expects($this->once()) //->expects($this->any()) 
+        $this->container->expects($this->once()) //->expects($this->any()) 
             ->method('get')
             ->with('security.context')
             ->will($this->returnValue($securityContext));
