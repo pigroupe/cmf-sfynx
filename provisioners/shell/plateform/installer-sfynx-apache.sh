@@ -251,25 +251,16 @@ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 #echo "umask(0000);" | sudo tee --prepend web/app_dev.php
 #echo "umask(0000);" | sudo tee --prepend web/app.php
 
+echo "**** add permission for $HTTPDUSER user ****"
 sudo usermod -aG www-data $HTTPDUSER
 sudo chown -R $HTTPDUSER:www-data $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
 sudo chmod -R 0755 $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
-sudo chmod -R 0775 app/config/parameters.yml
-sudo chmod -R 0775 app/cache
-sudo chmod -R 0755 app/cachesfynx/loginfailure
-sudo chmod -R 0775 app/logs
-sudo chmod -R 0775 web/uploads
-sudo chmod -R 0755 web/yui
-
-echo "**** we create database ****"
-php app/console doctrine:database:create
-php app/console doctrine:schema:create
-php app/console doctrine:fixtures:load
-php app/console sfynx:classification:fixtures
-php app/console lexik:monolog-browser:schema-create
-php app/console assets:install
-php app/console assetic:dump
-php app/console cache:clear
+sudo chmod -R 0755 app/config/parameters.yml
+sudo chmod -R 0777 app/cache
+sudo chmod -R 0777 app/cachesfynx/loginfailure
+sudo chmod -R 0777 app/logs
+sudo chmod -R 0777 web/uploads
+sudo chmod -R 0777 web/yui
 
 echo "**** we run the phing script to initialize the project ****"
-vendor/bin/phing -f config/phing/initialize.xml rebuild
+$DIR/vendor/bin/phing -f config/phing/initialize.xml rebuild

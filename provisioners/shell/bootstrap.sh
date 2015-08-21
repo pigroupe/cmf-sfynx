@@ -34,8 +34,8 @@ echo "Removing Windows newlines on Linux (sed vs. awk)"
 echo "***** We set permmissions for all scriptshell"
 mkdir -p /tmp
 sudo chmod -R 777 /tmp
-sudo chmod -R +x $DIR
-sudo chmod -R 777 $DIR
+sudo chmod -R +x $DIR/provisioners
+sudo chmod -R 777 $DIR/provisioners
 sudo chmod 755 /etc/apt/sources.list
 
 echo "***** First we copy own sources.list to box *****"

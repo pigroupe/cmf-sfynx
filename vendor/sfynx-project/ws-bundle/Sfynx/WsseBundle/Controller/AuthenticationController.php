@@ -23,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sfynx\CoreBundle\Controller\abstractController;
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Model\UserWS;
-use Sfynx\AuthBundle\Event\ResponseEvent;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
 use Sfynx\AuthBundle\Event\SfynxAuthEvents;
 
 /**

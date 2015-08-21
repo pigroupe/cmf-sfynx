@@ -21,7 +21,7 @@
         <delete dir="${dir.app}/cache"/>
         <delete file="${project.basedir}/composer.phar"/>
         <delete file="${dir.app}/config/parameters.yml"/>
-        <delete dir="${dir.app}/logs" />
+        <delete dir="${dir.log}" />
     </target>
 
     <!-- Project build prepare -->
@@ -30,6 +30,8 @@
         <mkdir dir="${dir.build}" />
         <mkdir dir="${dir.docs}" />
         <mkdir dir="${dir.browser}" />
+        <mkdir dir="${dir.log}" />
+        <mkdir dir="${dir.db}" />      
         <mkdir dir="${dir.reports}" />
         <mkdir dir="${dir.reports.coverage}" />
         <mkdir dir="${dir.reports.pdepend}" />

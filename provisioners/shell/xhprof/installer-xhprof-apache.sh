@@ -33,43 +33,25 @@ fi
 
 # we create the virtualhiost of xhprof for apache
 sudo cat <<EOT >/tmp/xhprof
-server {
-    listen 80;
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+	ServerName www.xhprof.local
+	DocumentRoot $HOME_HTTP/xhprof/xhprof_html 
+	<Directory $HOME_HTTP/xhprof/xhprof_html>
+		Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                RewriteEngine On
+                Order allow,deny
+                allow from all
+	</Directory>
+	ErrorLog \${APACHE_LOG_DIR}/error.log	
+	LogLevel warn
+	CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
 
-    # Server name being used (exact name, wildcards or regular expression)
-    server_name www.xhprof.local;
-
-    # Document root, make sure this points to your Symfony2 /web directory
-    root $HOME_HTTP/xhprof/xhprof_html;
-
-    location / {
-        index index.php;
-        try_files \$uri \$uri/ /index.php?\$args;
-    }
-
-    # charset
-    charset utf-8;
-
-    location ~ /\. {
-        error_log  /var/log/nginx/xhprof-error.log;
-        access_log  /var/log/nginx/xhprof-access.log;
-        log_not_found off;
-        deny all;
-    }
-
-    # Pass the PHP scripts to FastCGI server
-    location ~ \.php\$ {
-        fastcgi_pass php5-fpm-sock;
-        fastcgi_split_path_info ^(.+\.php)(/.*)\$;
-        fastcgi_index index.php;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        fastcgi_param  HTTPS off;
-    }
-}
 EOT
-sudo mv /tmp/xhprof /etc/nginx/sites-available/xhprof
-sudo ln -s /etc/nginx/sites-available/xhprof /etc/nginx/sites-enabled/xhprof
+sudo mv /tmp/xhprof /etc/apache2/sites-available/xhprof
+sudo ln -s /etc/apache2/sites-available/xhprof /etc/apache2/sites-enabled/xhprof
 
 # we add host in the /etc/hosts file
 if ! grep -q "www.xhprof.local" /etc/hosts; then
@@ -319,8 +301,7 @@ EOF
 sudo chown -R www-data:www-data $HOME_HTTP/xhprof
 
 # we restart nginx server
-sudo service nginx restart
-sudo service php5-fpm restart
+sudo service apache2 restart
 
 # test
 php -m | grep xhprof

@@ -174,8 +174,6 @@ class TreeRepository extends NestedTreeRepository
         } else {
             throw new \InvalidArgumentException("We haven't set the good option value : array or object !");
         }
-        // Frees the resources used by the query object.
-        $query->free();
     
         return $entities;
     }    

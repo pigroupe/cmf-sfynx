@@ -49,7 +49,6 @@ class FeatureContext extends baseFeatureContext
      */
     public function __construct()
     {
-        parent::__construct();
     }
     
     /** @BeforeScenario */

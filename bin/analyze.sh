@@ -8,10 +8,6 @@ mkdir -p build/logs/php
 mkdir -p build/logs/pdepend
 echo "" > build/logs/phpunit.xml
 
-# Tests unitaires avec couvertures de code et Analyse statique de code (PhpCodeSniffer, Phpcpd, Phpmd, PhpDepend, PhpLoc)
-# vendor/bin/phpunit --log-junit build/logs/php/phpunit.xml --coverage-clover build/logs/php/coverage/clover.xml --coverage-html build/logs/php/coverage/ -c app --debug
-vendor/bin/phing -f build.xml build:jenkins-normal -logger phing.listener.DefaultLogger -DdbUser=$DdbUser -DdbPw=$DdbPw -DdbName=$DdbName
-
 # Code mesure (nombre de ligne, de classses, d'interfaces, de méthodes, etc)
 vendor/bin/phploc   src  --count-tests --log-xml="build/logs/php/loc.xml" > /dev/null
 
@@ -27,7 +23,7 @@ if [ ! -f phpmetrics.phar ]; then
     wget https://github.com/Halleck45/PhpMetrics/raw/master/build/phpmetrics.phar -O phpmetrics.phar --no-check-certificate
 fi
 #php phpmetrics.phar src --report-html=build/metrics.html --report-xml=build/metrics.xml --chart-bubbles=build/metrics.svg  > /dev/null
-php phpmetrics.phar src --excluded-dirs="\.git|vendor|web|documentation|build|app|sysadmin|bin" -q --chart-bubbles=build/logs/phpmetrics/metrics.svg  --report-html=build/logs/phpmetrics/metrics.html --report-xml=build/logs/phpmetrics/metrics.xml  ./ > /dev/null
+php phpmetrics.phar src --excluded-dirs="\.git|vendor|web|documentation|build|app|bin" -q --chart-bubbles=build/logs/phpmetrics/metrics.svg  --report-html=build/logs/phpmetrics/metrics.html --report-xml=build/logs/phpmetrics/metrics.xml  ./ > /dev/null
 #./bin/metrics.sh src > build/logs/phpmetrics/metrics.txt
 
 # Security checker :: contrôle des potentielles vulnérabilités des librairies installées par le composer
@@ -46,3 +42,9 @@ vendor/bin/versionscan scan --format=xml --sort=risk           > build/logs/secu
 
 # Security parse :: relever les problèmes potentiels liés à la sécurité du code
 #vendor/bin/parse       scan --format=xml src                   > build/logs/security/parse.xml
+
+# Tests unitaires avec couvertures de code
+vendor/bin/phpunit --log-junit build/logs/php/phpunit.xml --coverage-clover build/logs/php/coverage/clover.xml --coverage-html build/logs/php/coverage/ -c app --debug
+
+# Tests unitaires avec couvertures de code et Analyse statique de code (PhpCodeSniffer, Phpcpd, Phpmd, PhpDepend, PhpLoc)
+#vendor/bin/phing -f build.xml build:jenkins-normal -logger phing.listener.DefaultLogger -DdbUser=$DdbUser -DdbPw=$DdbPw -DdbName=$DdbName

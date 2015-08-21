@@ -17,6 +17,8 @@
     <property name="dir.build" value="${project.basedir}/build" />
     <property name="dir.docs" value="${dir.build}/documentation" />
     <property name="dir.browser" value="${dir.build}/browser" />
+    <property name="dir.log" value="${dir.build}/logs" />
+    <property name="dir.db" value="${dir.app}/logs/db" />  
     <property name="dir.reports" value="${dir.build}/logs/php" />
     <property name="dir.reports.pdepend" value="${dir.reports}/pdepend" />
     <property name="dir.reports.coverage" value="${dir.reports}/coverage" />

@@ -92,7 +92,7 @@ We have create an installer script shell which execute the sfynx install.
 **If you want to install sfynx with LAMP server** :
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-apache.sh "/var/www" | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/provisioners/installer-sfynx-apache.sh "/var/www" | sudo sh
 
 ``` 
 
@@ -100,7 +100,7 @@ We have create an installer script shell which execute the sfynx install.
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-nginx.sh "/var/www" | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/provisioners/installer-sfynx-nginx.sh "/var/www" | sudo sh
     
 ``` 
 
@@ -142,7 +142,7 @@ In first step, you have to install and configure Selenium Server :
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/selenium/installer-selenium-server.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/provisioners/selenium/installer-selenium-server.sh | sudo sh
 
 ```
 

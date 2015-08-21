@@ -7,10 +7,6 @@ DdbName="DdbName"
 mkdir -p build/logs/php/coverage
 echo "" > build/logs/phpunit.xml
 
-# Tests unitaires sans couvertures de code
-# vendor/bin/phpunit --log-junit build/logs/php/phpunit.xml -c app --debug
-vendor/bin/phing -f build.xml build:test-deploy -logger phing.listener.DefaultLogger -DdbUser=$DdbUser -DdbPw=$DdbPw -DdbName=$DdbName
-
 # PHPCPD - PHP COPY/PASTE DETECTION
 vendor/bin/phpcpd  --min-tokens=50 --min-lines=5 --names-exclude=*/Resources/*,**/map/*,**/om/* --log-pmd build/logs/php/pmd-cpd.xml src
 
@@ -22,3 +18,7 @@ vendor/bin/phpcs --standard=PSR2 src --ignore=*/Resources/* --encoding=utf-8  --
 
 # PHP Code sniffer Fix for psr2
 vendor/bin/php-cs-fixer fix src --level=psr2  > build/logs/php/cs-fixer.txt
+
+# Tests unitaires sans couvertures de code
+vendor/bin/phpunit --log-junit build/logs/php/phpunit.xml -c app --debug
+#vendor/bin/phing -f build.xml build:test-deploy -logger phing.listener.DefaultLogger -DdbUser=$DdbUser -DdbPw=$DdbPw -DdbName=$DdbName
