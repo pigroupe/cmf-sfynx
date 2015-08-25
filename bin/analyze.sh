@@ -8,7 +8,7 @@ mkdir -p build/logs/php
 mkdir -p build/logs/pdepend
 echo "" > build/logs/phpunit.xml
 
-# Code mesure (nombre de ligne, de classses, d'interfaces, de méthodes, etc)
+# Code mesure (nombre de ligne, de classses, d'interfaces, de méthodes, complexité cyclomatique, etc)
 vendor/bin/phploc   src  --count-tests --log-xml="build/logs/php/loc.xml" > /dev/null
 
 # php Mess Detector (anomalies directes, complexité cyclomatique=nombre de chemins indépendants d’un programme, fonctions à risque, code mort)

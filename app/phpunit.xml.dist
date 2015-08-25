@@ -11,6 +11,7 @@
     processIsolation            = "false"
     stopOnFailure               = "false"
     syntaxCheck                 = "false"
+    verbose                     = "true"     
     bootstrap                   = "bootstrap_tests.php" >
 
     <testsuites>
