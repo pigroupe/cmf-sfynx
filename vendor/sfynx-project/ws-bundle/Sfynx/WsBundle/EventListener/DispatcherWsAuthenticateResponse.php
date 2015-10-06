@@ -13,7 +13,7 @@
 namespace Sfynx\WsBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sfynx\AuthBundle\Event\ResponseEvent;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
 use Symfony\Component\HttpFoundation\Cookie;
 use Sfynx\AuthBundle\Entity\User;
 
