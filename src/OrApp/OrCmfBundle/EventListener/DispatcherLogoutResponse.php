@@ -15,7 +15,7 @@ namespace OrApp\OrCmfBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-use Sfynx\AuthBundle\Event\ResponseEvent;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
 
 /**
  * Response handler of user deconnection

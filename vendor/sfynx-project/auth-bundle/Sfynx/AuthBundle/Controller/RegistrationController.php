@@ -21,7 +21,7 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\UserEvent;
-use Sfynx\CmfBundle\SfynxCmfEvents;
+use Sfynx\CmfBundle\Event\SfynxCmfEvents;
 /**
  * Controller managing the registration
  * 

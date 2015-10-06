@@ -5,7 +5,9 @@ framework:
     test: ~
     session:
         storage_id: session.storage.mock_file
-    profiler: { only_exceptions: false }
+    profiler:
+        enabled: true
+        collect: true
 
 web_profiler:
     toolbar: false
@@ -24,27 +26,8 @@ doctrine:
                 dbname:   %test_database_name%
                 user:     %test_database_user%
                 password: %test_database_password%
-                path:      %kernel.root_dir%/logs/db/databasetest.db
+                path:     %test_database_path%
                 charset:   UTF8
                 logging:   false
                 profiling: false                 
-                
 
-#
-# MinkBundle configuration
-#
-mink:
-    base_url: http://test.sfynx.local
-    selenium2:
-        wd_host: http://localhost:5555/wd/hub
-    browser_name: chrome 
-    
-#
-# SfynxBehatBundle configuration
-#
-sfynx_behat:
-    servers: [local, test]
-    locales: [en, fr, ar]
-    options:
-        server: local
-        locale: en 

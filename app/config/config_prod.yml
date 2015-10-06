@@ -11,11 +11,29 @@ framework:
     #validation:
     #    cache: apc
 
-#doctrine:
-#    orm:
-#        metadata_cache_driver: apc
-#        result_cache_driver: apc
-#        query_cache_driver: apc
+doctrine:
+    orm:
+        metadata_cache_driver: apc
+        result_cache_driver: apc
+        query_cache_driver: apc
+#        metadata_cache_driver:
+#            type: memcache
+#            host: localhost
+#            port: 11211
+#            class: Doctrine\Common\Cache\MemcacheCache
+#            instance_class: Memcache         
+#        query_cache_driver: 
+#            type: memcache
+#            host: localhost
+#            port: 11211
+#            class: Doctrine\Common\Cache\MemcacheCache
+#            instance_class: Memcache          
+#        result_cache_driver:
+#            type: memcache
+#            host: localhost
+#            port: 11211
+#            class: Doctrine\Common\Cache\MemcacheCache
+#            instance_class: Memcache          
 
 monolog:
     handlers:

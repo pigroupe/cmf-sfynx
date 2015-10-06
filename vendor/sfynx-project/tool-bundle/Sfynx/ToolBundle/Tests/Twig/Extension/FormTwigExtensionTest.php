@@ -25,9 +25,14 @@ use \Phake;
  */
 class FormTwigExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+    }
+    
     public function testGroupedFormErrors()
     {
-        $extension = new PiFormExtension();
+        $extension = new PiFormExtension($this->container);
 
         $functions = $extension->getFunctions();
         $this->assertArrayHasKey('group_form_view_errors', $functions);

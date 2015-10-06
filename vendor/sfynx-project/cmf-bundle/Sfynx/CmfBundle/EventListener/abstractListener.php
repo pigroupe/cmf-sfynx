@@ -132,14 +132,14 @@ abstract class abstractListener  extends abstractTriggerListener
         $entity_name    = get_class($entity);
         //update updated_at field when method setUpdatedAt exists in entity object
         if (method_exists($entity, 'setUpdatedAt')) {
-            // we modify the Update_at value
+            // we modify the Created_at value
             if(!$entity->getUpdatedAt()) {
                 $entity->setUpdatedAt(new \DateTime());
             }
         }
         //update created_at field when method setCreatedAt exists in entity object
         if (method_exists($entity, 'setCreatedAt')) {
-            // we modify the Update_at value
+            // we modify the Updated_at value
             if(!$entity->getCreatedAt()) {
                 $entity->setCreatedAt(new \DateTime());
             }

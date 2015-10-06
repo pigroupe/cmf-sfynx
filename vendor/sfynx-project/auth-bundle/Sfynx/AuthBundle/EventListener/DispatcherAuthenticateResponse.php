@@ -16,13 +16,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\AuthBundle\Event\RedirectionEvent;
+use Doctrine\ORM\EntityManager;
+
+use Sfynx\AuthBundle\Event\SfynxAuthEvents;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
+use Sfynx\AuthBundle\Event\ViewObject\RedirectionEvent;
 use Sfynx\AuthBundle\Entity\Role;
 use Sfynx\AuthBundle\Entity\Layout;
 use Sfynx\ToolBundle\Route\RouteTranslatorFactory;
-use Sfynx\AuthBundle\SfynxAuthEvents;
-use Doctrine\ORM\EntityManager;
 
 /**
  * Response handler of authenticate response

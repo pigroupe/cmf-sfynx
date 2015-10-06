@@ -19,8 +19,8 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\UserBundle\Model\UserInterface;
 
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\AuthBundle\SfynxAuthEvents;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
+use Sfynx\AuthBundle\Event\SfynxAuthEvents;
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Mailer\PiMailerManager;
 

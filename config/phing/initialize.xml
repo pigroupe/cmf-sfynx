@@ -4,7 +4,7 @@
     <import file="config/phing/frontend.xml" />
 
     <target name="rebuild"
-        depends="clean-cache, composer:install, composer:dump, doctrine:rebuild, assetic:dump, clear-cache"
+        depends="clean-cache, composer:install, composer:dump, prepare:folders, doctrine:rebuild, assetic:dump, clear-cache"
         description="Rebuild dev environement from the scratch"
         />
 

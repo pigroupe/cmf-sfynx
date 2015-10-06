@@ -12,9 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 // Use APC for autoloading to improve performance.
 // Change 'sf2' to a unique prefix in order to prevent cache key conflicts
 // with other applications also using APC.
-//if (extension_loaded('apc')) {
-//    $loader = new ApcUniversalClassLoader('sfynx23', $loader);
-//    $loader->register(true);
+if (extension_loaded('apc')) {
+    $loader = new ApcUniversalClassLoader('sfynx23', $loader);
+    $loader->register(true);
 
 //    apc_clear_cache();
 //    
@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 //    apc_clear_cache('sfynx23'); 
 //    
 //    var_dump(realpath_cache_get());
-//}
+}
  
 //  sudo varnishadm "ban req.http.host ~ www.sfynx.local/"
  

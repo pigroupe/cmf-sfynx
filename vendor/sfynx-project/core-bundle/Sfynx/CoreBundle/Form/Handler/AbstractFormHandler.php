@@ -27,8 +27,25 @@ use Sfynx\CoreBundle\Form\Handler\FormHandlerInterface;
  */
 abstract class AbstractFormHandler implements FormHandlerInterface
 {
+    /**
+     * @var FormInterface
+     */
     protected $form;
+    
+    /**
+     * @var Request
+     */
     protected $request;
+    
+    /**
+     * @var
+     */
+    protected $processHandler;
+    
+    /**
+     * @var Object
+     */
+    protected $obj;
 
     public function __construct(FormInterface $form, Request $request)
     {
@@ -60,18 +77,34 @@ abstract class AbstractFormHandler implements FormHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function process()
+    public function process($object = null)
     {
+        $this->setObject($object);
+        
         if ($this->validateRequest()) {
-            $this->form->bind($this->request);
-
+            $this->form->handleRequest($this->request);
+            
             if ($this->form->isValid()) {
                 return $this->onSuccess();
             }
+        } elseif(!is_null($this->getObject())) {
+            $this->getForm()->setData($this->getObject());
         }
 
         return false;
     }
+    
+    /**
+     * Set Process Manager
+     *
+     * @param object $processManager
+     */
+    public function setProcessManager($processManager)
+    {
+        $this->processManager = $processManager;
+        
+        return $this;
+    }        
 
     /**
      * Returns the current form
@@ -82,4 +115,24 @@ abstract class AbstractFormHandler implements FormHandlerInterface
     {
         return $this->form;
     }
+    
+    /**
+     * Set object
+     *
+     * @param object $obj
+     */
+    public function setObject($obj)
+    {
+        $this->obj = $obj;
+        
+        return $this;
+    }
+    
+    /**
+     * Get object
+     */
+    public function getObject()
+    {
+        return $this->obj;
+    }    
 }

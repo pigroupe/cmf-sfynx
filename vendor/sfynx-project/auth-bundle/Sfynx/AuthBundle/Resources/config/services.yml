@@ -136,9 +136,9 @@ services:
     #
     # configuration overload validators
     # 
-    sfynx.auth.validator.unique:
+    sfynx.auth.validator.emailblackList:
         class: %sfynx.auth.validator.emailblackList.class%
-        alls:
+        calls:
             - [ setBlackList, [ %mail_blacklist% ] ]
         tags:
             - { name: validator.constraint_validator, alias: email_black_list }

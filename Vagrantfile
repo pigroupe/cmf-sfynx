@@ -21,7 +21,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Set Hostname
     config.vm.host_name = $vm_hostname
 
-    # Set the default project share
     config.vm.synced_folder ".",  $vm_group, id: "vagrant-root", :nfs => true
     config.vm.synced_folder "./", $vm_dir_project, create: false, type: "nfs"
  
@@ -29,6 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provider "virtualbox" do |v|
       v.gui = $vm_gui
       v.name = $vm_name   
+      #v.name = (0...8).map { (65 + rand(26)).chr }.join
       v.customize ["modifyvm", :id, "--groups",          $vm_group,
                                     "--cpuexecutioncap", $vm_cpu_cap,
                                     "--memory",          $vm_memory,

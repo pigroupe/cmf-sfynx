@@ -36,7 +36,7 @@ use Symfony\Component\Form\FormError;
 
 use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\Event\FormEvent;
-use Sfynx\CmfBundle\SfynxCmfEvents;
+use Sfynx\CmfBundle\Event\SfynxCmfEvents;
 
 /**
  * Users controller.

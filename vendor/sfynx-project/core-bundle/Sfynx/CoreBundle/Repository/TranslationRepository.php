@@ -208,8 +208,6 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
         } else {
             throw new \InvalidArgumentException("We haven't set the good option value : array or object !");
         }
-        // Frees the resources used by the query object.
-        $query->free();
    
         return $entities;
     }    
@@ -308,6 +306,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param string  $locale
      * @param string  $result = {'array', 'object'}
      * @param boolean $INNER_JOIN
+     * @param int     $MaxResults
      * @param boolean $FALLBACK
      * @param boolean $lazy_loading
      * 
@@ -338,6 +337,7 @@ class TranslationRepository extends EntityRepository implements RepositoryBuilde
      * @param integer $id
      * @param string  $result = {'array', 'object'}
      * @param bool    $INNER_JOIN
+     * @param int    $MaxResults
      * @param bool    $FALLBACK
      * @param bool    $lazy_loading  
      *  

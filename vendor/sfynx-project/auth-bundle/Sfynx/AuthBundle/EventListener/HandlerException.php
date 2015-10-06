@@ -24,6 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Sfynx\ToolBundle\Util\PiFileManager;
 
 /**
  * Custom Exception handler.
@@ -114,7 +115,7 @@ class HandlerException
                     $route_name = 'error_404';
                 }
                 $url      = $this->container->get('sfynx.tool.route.factory')->getRoute($route_name, array('locale'=> $this->locale));
-                $content  = \Sfynx\ToolBundle\Util\PiFileManager::getCurl('/'.$url, null, null, $this->request->getUriForPath(''));
+                $content  = PiFileManager::getCurl('/'.$url, null, null, $this->request->getUriForPath(''));
                 $response->setContent($content);
             }
             // HttpExceptionInterface is a special type of exception

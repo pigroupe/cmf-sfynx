@@ -17,14 +17,14 @@
 namespace Sfynx\WsseBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sfynx\CoreBundle\Controller\abstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sfynx\CoreBundle\Controller\abstractController;
 use Sfynx\AuthBundle\Entity\User;
 use Sfynx\AuthBundle\Model\UserWS;
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\AuthBundle\SfynxAuthEvents;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
+use Sfynx\AuthBundle\Event\SfynxAuthEvents;
 
 /**
  * Authentication Controller

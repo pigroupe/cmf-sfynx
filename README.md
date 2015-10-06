@@ -66,7 +66,7 @@ The framework works with Symfony 2.3 and has been split into 23 bundles :
 
 SFYNX is a free software distributed under the GPL license. This license guarantees the following freedoms:
 
-``` bash
+```
 - the freedom to install and use SFYNX for any usage whatsoever;
 - the freedom to look into SFYNX’s code and adapt it to your own needs by modifying the source code, to which you have direct access since SFYNX is entirely developed in PHP;
 - the freedom to distribute copies of the software to anyone, provided you do not modify or delete the license;
@@ -92,7 +92,7 @@ We have create an installer script shell which execute the sfynx install.
 **If you want to install sfynx with LAMP server** :
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-apache.sh "/var/www" | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/provisioners/installer-sfynx-apache.sh "/var/www" | sudo sh
 
 ``` 
 
@@ -100,7 +100,7 @@ We have create an installer script shell which execute the sfynx install.
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/installer-sfynx-nginx.sh "/var/www" | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/provisioners/installer-sfynx-nginx.sh "/var/www" | sudo sh
     
 ``` 
 
@@ -116,7 +116,7 @@ http://prod.sfynx.local
 
 and use this to connect
 
-``` bash
+```
 
     Username: superadmin
     Password: superadmin
@@ -142,7 +142,7 @@ In first step, you have to install and configure Selenium Server :
 
 ``` bash
 
-    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/sysadmin/scriptshell/selenium/installer-selenium-server.sh | sudo sh
+    curl https://github.com/pigroupe/cmf-sfynx/tree/master/bin/provisioners/selenium/installer-selenium-server.sh | sudo sh
 
 ```
 

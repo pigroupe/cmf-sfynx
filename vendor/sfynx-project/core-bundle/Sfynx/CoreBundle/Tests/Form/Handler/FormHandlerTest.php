@@ -39,7 +39,7 @@ class FormHandlerTest extends AbstractFormHandlerTestCase
 
         $handler->process();
 
-        $this->verifyBind();
+        $this->verifyHandleRequest();
         Phake::verify($handler, Phake::times(1))->onSuccess();
     }
 
@@ -60,7 +60,7 @@ class FormHandlerTest extends AbstractFormHandlerTestCase
 
         $this->assertFalse($handler->process());
 
-        $this->verifyBind();
+        $this->verifyHandleRequest();
         Phake::verify($handler, Phake::times(1))->onSuccess();
     }
 

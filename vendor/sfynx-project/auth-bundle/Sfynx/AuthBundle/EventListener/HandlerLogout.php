@@ -30,8 +30,8 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\AuthBundle\SfynxAuthEvents;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
+use Sfynx\AuthBundle\Event\SfynxAuthEvents;
 use Sfynx\AuthBundle\Entity\Role;
 
 /**

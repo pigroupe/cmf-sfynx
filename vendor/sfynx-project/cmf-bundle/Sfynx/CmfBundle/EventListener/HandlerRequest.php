@@ -22,8 +22,8 @@ use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sfynx\AuthBundle\Event\ResponseEvent;
-use Sfynx\CmfBundle\SfynxCmfEvents;
+use Sfynx\AuthBundle\Event\ViewObject\ResponseEvent;
+use Sfynx\CmfBundle\Event\SfynxCmfEvents;
 
 /**
  * Custom request handler.
