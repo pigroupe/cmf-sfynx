@@ -7,7 +7,9 @@ default:
             sessions:
                 my_session_selenium:
                     selenium2:
-                        wd_host: http://127.0.0.1:5555/wd/hub
+                        # wd_host: "http://127.0.0.1:5555/wd/hub" # localhost
+                        # wd_host: "http://phantomjs:8643/wd/hub" # phantomjs
+                        wd_host: "http://chrome:5555/wd/hub" # selenium
                         capabilities:
                             browser: chrome
                             version: 43
@@ -15,7 +17,7 @@ default:
                     zombie: ~    
                 my_session_symfony2:
                     symfony2: ~                       
-            base_url: http://test.sfynx.local
+            base_url: http://validation.sfynx.local
             
     suites:
         auth:

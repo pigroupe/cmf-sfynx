@@ -29,6 +29,7 @@ cat > ~/.composer/composer.json <<EOF
     "require": {
         "phpdocumentor/phpdocumentor": "2.*",
         "mayflower/php-codebrowser": "~1.1",
+        "theseer/phpdox": "*",
         "halleck45/phpmetrics": "@dev",
         "squizlabs/php_codesniffer": "*",
         "fabpot/php-cs-fixer": "*",
@@ -60,6 +61,6 @@ cat > ~/.composer/composer.json <<EOF
     }
 }
 EOF
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+curl -sS https://getcomposer.org/installer |sudo php -- --install-dir=/usr/local/bin --filename=composer
 /usr/local/bin/composer global install
 chown -R $SUDO_USER.$SUDO_USER ~/.composer

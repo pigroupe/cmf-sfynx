@@ -67,7 +67,6 @@
     "require-dev": {
         "phpdocumentor/phpdocumentor": "2.*",
         "mayflower/php-codebrowser": "~1.1",
-        "theseer/phpdox": "*",
         "sensio/generator-bundle": "~2.3",
         "halleck45/phpmetrics": "@dev",
         "squizlabs/php_codesniffer": "*",

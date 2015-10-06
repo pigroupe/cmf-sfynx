@@ -1,15 +1,15 @@
 #!/bin/bash
-PLATEFORM_PROJET_NAME="cmfsfynx"
-PLATEFORM_PROJET_GIT="https://github.com/pigroupe/cmf-sfynx.git"
+DIR=$1
+PLATEFORM_INSTALL_NAME=$2
+PLATEFORM_INSTALL_TYPE=$3
+PLATEFORM_INSTALL_VERSION=$4
+PLATEFORM_PROJET_NAME=$5
+PLATEFORM_PROJET_GIT=$6
+INSTALL_USERWWW=$7
+source $DIR/provisioners/shell/env.sh
 
-if [ $# -eq 0 ]; then # s'il n'y a pas de paramètres
-    read INSTALL_USERWWW # on saisis la valeur
-else
-    INSTALL_USERWWW=$1
-fi
-
-PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME | awk '{print tolower($0)}') # we lower the string
-PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME | awk '{print toupper($0)}') # we lower the string
+PLATEFORM_PROJET_NAME_LOWER=$(echo $PLATEFORM_PROJET_NAME |awk '{print tolower($0)}') # we lower the string
+PLATEFORM_PROJET_NAME_UPPER=$(echo $PLATEFORM_PROJET_NAME |awk '{print toupper($0)}') # we lower the string
 DATABASE_NAME="sfynx_${PLATEFORM_PROJET_NAME_LOWER}"
 DATABASE_NAME_TEST="sfynx_${PLATEFORM_PROJET_NAME_LOWER}_test"
 
@@ -26,8 +26,8 @@ cd $INSTALL_USERWWW
 
 # we create project
 if [ ! -d $PLATEFORM_PROJET_NAME ]; then
-    git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
-    #mkdir -p $PLATEFORM_PROJET_NAME
+    #git clone $PLATEFORM_PROJET_GIT $PLATEFORM_PROJET_NAME
+    mkdir -p $PLATEFORM_PROJET_NAME
 fi
 cd $PLATEFORM_PROJET_NAME
 
@@ -42,6 +42,9 @@ fi
 
 echo "**** we modify parameters.yml.dist ****"
 sed -i "s/myproject/${PLATEFORM_PROJET_NAME_LOWER}/g" app/config/parameters.yml.dist
+
+echo "**** we modify prepare-build.xml file for phing test ****"
+sed -i "s/myproject/${PLATEFORM_PROJET_NAME_LOWER}/g" config/phing/prepare-build.xml
 
 echo "**** we create parameters.yml ****"
 if [ -f app/config/parameters.yml ]; then
@@ -149,6 +152,7 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        #include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
@@ -273,6 +277,7 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        #include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
@@ -397,6 +402,7 @@ server {
 
     # Pass the PHP scripts to FastCGI server
     location ~ ^/(app|app_dev|app_test|config)\.php(/|\$) {
+        #include snippets/fastcgi-php.conf
         fastcgi_pass php5-fpm-sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)\$;
         include fastcgi_params;
@@ -456,27 +462,27 @@ sudo ln -s /etc/nginx/sites-available/$PLATEFORM_PROJET_NAME /etc/nginx/sites-en
 
 echo "**** we add host in the /etc/hosts file ****"
 if ! grep -q "dev.$PLATEFORM_PROJET_NAME_LOWER.local" /etc/hosts; then
-    echo "# Adding hostname of the $PLATEFORM_PROJET_NAME project" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
-    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME_LOWER.local" | sudo tee --append /etc/hosts
-    echo "   " | sudo tee --append /etc/hosts
+    echo "# Adding hostname of the $PLATEFORM_PROJET_NAME project" |sudo tee --append /etc/hosts
+    echo "127.0.0.1    dev.$PLATEFORM_PROJET_NAME_LOWER.local" |sudo tee --append /etc/hosts
+    echo "127.0.0.1    test.$PLATEFORM_PROJET_NAME_LOWER.local" |sudo tee --append /etc/hosts
+    echo "127.0.0.1    prod.$PLATEFORM_PROJET_NAME_LOWER.local" |sudo tee --append /etc/hosts
+    echo "   " |sudo tee --append /etc/hosts
 fi
 
 echo "**** we restart nginx server ****"
 sudo service nginx restart
 
-#if [ ! -f composer.phar ]; then
-#    echo "**** we install/update the composer file ****"
-#    #wget https://getcomposer.org/composer.phar -O ./composer.phar
-#    curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
-#else
-#    echo "update composer.phar"
-#    php composer.phar self-update    
-#fi
+if [ ! -f composer.phar ]; then
+    echo "**** we install/update the composer file ****"
+    wget https://getcomposer.org/composer.phar -O ./composer.phar
+    #curl -sS https://getcomposer.org/installer |sudo php -- --install-dir=/usr/local/bin --filename=composer
+else
+    echo "update composer.phar"
+    php composer.phar self-update    
+fi
 echo "**** we lauch the composer ****"
 sudo composer self-update
-composer install --no-interaction
+composer install --prefer-dist --no-interaction
 echo "**** Generating optimized autoload files ****"
 composer dump-autoload --optimize
 
@@ -486,45 +492,36 @@ rm -rf app/logs/*
 
 echo "**** we set all necessary permissions ****"
 # Utiliser l'ACL sur un système qui supporte chmod +a
-#HTTPDUSER=`ps aux |grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' |grep -v root | head -1 | cut -d\  -f1`
+#HTTPDUSER=`ps aux |grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' |grep -v root |head -1 |cut -d\  -f1`
 #sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 #sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 
 # Utiliser l'ACL sur un système qui ne supporte pas chmod +a
-#HTTPDUSER=`ps aux |grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' |grep -v root | head -1 | cut -d\  -f1`
-HTTPDUSER=$(ps -o user= -p $$ | awk '{print $1}')
+#HTTPDUSER=`ps aux |grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' |grep -v root |head -1 |cut -d\  -f1`
+HTTPDUSER=$(ps -o user= -p $$ |awk '{print $1}')
 sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 
 # sans utiliser ACL
 ## Définit une permission 0775 aux fichiers
-#echo "umask(0002);" | sudo tee --prepend app/console
-#echo "umask(0002);" | sudo tee --prepend web/app_dev.php
-#echo "umask(0002);" | sudo tee --prepend web/app.php
+#echo "umask(0002);" |sudo tee --prepend app/console
+#echo "umask(0002);" |sudo tee --prepend web/app_dev.php
+#echo "umask(0002);" |sudo tee --prepend web/app.php
 ## Définit une permission 0777 aux fichiers
-#echo "umask(0000);" | sudo tee --prepend app/console
-#echo "umask(0000);" | sudo tee --prepend web/app_dev.php
-#echo "umask(0000);" | sudo tee --prepend web/app.php
+#echo "umask(0000);" |sudo tee --prepend app/console
+#echo "umask(0000);" |sudo tee --prepend web/app_dev.php
+#echo "umask(0000);" |sudo tee --prepend web/app.php
 
+echo "**** add permission for $HTTPDUSER user ****"
 sudo usermod -aG www-data $HTTPDUSER
 sudo chown -R $HTTPDUSER:www-data $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
 sudo chmod -R 0755 $INSTALL_USERWWW/$PLATEFORM_PROJET_NAME
-sudo chmod -R 0775 app/config/parameters.yml
-sudo chmod -R 0775 app/cache
-sudo chmod -R 0755 app/cachesfynx/loginfailure
-sudo chmod -R 0775 app/logs
-sudo chmod -R 0775 web/uploads
-sudo chmod -R 0755 web/yui
-
-echo "**** we create database ****"
-php app/console doctrine:database:create
-php app/console doctrine:schema:create
-php app/console doctrine:fixtures:load
-php app/console sfynx:classification:fixtures
-php app/console lexik:monolog-browser:schema-create
-php app/console assets:install
-php app/console assetic:dump
-php app/console clear:cache
+sudo chmod -R 0755 app/config/parameters.yml
+sudo chmod -R 0777 app/cache
+sudo chmod -R 0777 app/cachesfynx/loginfailure
+sudo chmod -R 0777 app/logs
+sudo chmod -R 0777 web/uploads
+sudo chmod -R 0777 web/yui
 
 echo "**** we run the phing script to initialize the project ****"
-vendor/bin/phing -f config/phing/initialize.xml rebuild
+$DIR/vendor/bin/phing -f config/phing/initialize.xml rebuild

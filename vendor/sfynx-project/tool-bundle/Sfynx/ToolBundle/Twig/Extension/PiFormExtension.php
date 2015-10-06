@@ -107,7 +107,7 @@ class PiFormExtension extends \Twig_Extension
     	if (is_array($all)) {
             foreach ($all as $child) {
                 if (!$child->isValid()) {
-                    $errors[$child->getName()] = $this->getErrorMessages($child, 'array');
+                    $errors[$child->getName()] = $this->getFormErrors($child, 'array');
                 }
             }
     	}

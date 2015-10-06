@@ -66,7 +66,7 @@ The framework works with Symfony 2.3 and has been split into 23 bundles :
 
 SFYNX is a free software distributed under the GPL license. This license guarantees the following freedoms:
 
-``` bash
+```
 - the freedom to install and use SFYNX for any usage whatsoever;
 - the freedom to look into SFYNX’s code and adapt it to your own needs by modifying the source code, to which you have direct access since SFYNX is entirely developed in PHP;
 - the freedom to distribute copies of the software to anyone, provided you do not modify or delete the license;
@@ -116,7 +116,7 @@ http://prod.sfynx.local
 
 and use this to connect
 
-``` bash
+```
 
     Username: superadmin
     Password: superadmin

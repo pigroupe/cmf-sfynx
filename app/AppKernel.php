@@ -83,7 +83,7 @@ class AppKernel extends Kernel
             new OrApp\OrTemplateBundle\OrAppOrTemplateBundle(),
         );
             
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), array('dev', 'test', 'unit', 'acceptation'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();            	
@@ -92,7 +92,7 @@ class AppKernel extends Kernel
             $bundles[] = new Bazinga\Bundle\FakerBundle\BazingaFakerBundle();
         }
         
-        if ('test' === $this->getEnvironment()) {
+        if ('acceptation' === $this->getEnvironment()) {
             $bundles[]  = new Sfynx\BehatBundle\SfynxBehatBundle();
             $bundles[]  = new Behat\MinkBundle\MinkBundle();
         }
