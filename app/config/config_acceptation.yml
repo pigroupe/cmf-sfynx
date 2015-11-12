@@ -5,7 +5,7 @@ imports:
 # MinkBundle configuration
 #
 mink:
-    base_url: http://validation.sfynx.fr
+    base_url: http://test.sfynx.local
     selenium2:
         # wd_host: "http://127.0.0.1:5555/wd/hub" # localhost
         # wd_host: "http://phantomjs:8643/wd/hub" # phantomjs
