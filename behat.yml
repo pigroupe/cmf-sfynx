@@ -17,7 +17,7 @@ default:
                     zombie: ~    
                 my_session_symfony2:
                     symfony2: ~                       
-            base_url: http://validation.sfynx.local
+            base_url: http://test.sfynx.local
             
     suites:
         auth:
@@ -44,5 +44,6 @@ default:
         pretty:
             verbose:  true
             paths:    true
-            snippets: true            
+            snippets: true
+         
 

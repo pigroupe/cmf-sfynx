@@ -6,7 +6,7 @@ vendor/bin/behat --lang=fr -f pretty -o build/logs/behat/pretty.out -f progress 
 
 # Tests de tire de charge Gatling
 mkdir -p build/logs/gatling
-mkdir -p config/gatling/user-files/simulations
+mkdir -p testing/load/gatling/user-files/simulations
 PATH_GATLING_DIR="testing/load/gatling"
 if [ ! -d $PATH_GATLING_DIR ]; then    
     wget https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/2.1.5/gatling-charts-highcharts-bundle-2.1.5-bundle.zip
