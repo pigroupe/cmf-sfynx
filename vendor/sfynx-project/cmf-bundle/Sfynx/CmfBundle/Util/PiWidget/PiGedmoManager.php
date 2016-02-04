@@ -140,7 +140,7 @@ class PiGedmoManager extends PiWidgetExtension
     /**
      * checks if the controller  and the action are in the container.
      *
-     * @param string    $controller
+     * @param string $controller
      * @access protected
      * @return BooleanType
      *
@@ -204,9 +204,9 @@ class PiGedmoManager extends PiWidgetExtension
      * </code>
      * 
      * @param    $options    tableau d'options.
+     *
      * @access protected
      * @return void
-     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function renderSnippet($options = null)
