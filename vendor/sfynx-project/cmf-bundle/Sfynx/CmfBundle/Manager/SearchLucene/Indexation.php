@@ -53,10 +53,10 @@ class Indexation
      * @param string                    $locale
      * @param object                    $obj
      * @param string                     $pathFile        The path to the PDF document.
+     *
      * @return \Zend_Search_Lucene_Proxy
      * @access    public
      * @static
-     * 
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      * @since 2012-06-11
      */

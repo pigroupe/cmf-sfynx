@@ -56,3 +56,6 @@ build/*
 
 #vagrant
 provisioners/parameters
+
+# .idea
+.idea
