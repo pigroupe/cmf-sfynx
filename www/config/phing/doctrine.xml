@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="doctrine" description="Frontend build" default="doctrine:info" basedir=".">
+
+    <target name="doctrine:info">
+        <echo>This is a set of tools for doctrine managment</echo>
+    </target>
+
+    <target name="doctrine:build" depends="doctrine:create, doctrine:mapping-convert" description="Update doctrine class, and pass migration if needed">
+        <if>
+            <not>
+                <equals arg1="${app.return.create}" arg2="0"/>
+            </not>
+            <then>
+                <echo>... we test updated doctrine database </echo>
+                <phingCall target="doctrine:update-test"/>
+            </then>
+            <else>
+                <echo>... we rebuild doctrine database </echo>
+                <phingCall target="doctrine:rebuild"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="doctrine:update-test" depends="doctrine:update" description="Update doctrine class, and pass migration if needed">
+        <if>
+            <not>
+                <equals arg1="${app.return.update}" arg2="0"/>
+            </not>
+            <then>
+                <echo>... we rebuild doctrine database </echo>
+                <phingCall target="doctrine:rebuild"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="doctrine:update" description="Update doctrine tables">
+        <echo>... we update schemas in ${project.env.sf} environment of the ${phing.project.name} project from ${project.dbHost} mysql host</echo>
+        <exec executable="php" passthru="true" returnProperty="app.return.update" logoutput="false">
+            <arg line="app/console" />
+            <arg line="doctrine:schema:update" />
+            <arg line="--force" />
+            <arg line="--env=${project.env.sf}" />
+            <arg line="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="doctrine:rebuild"
+        description="Rebuilds doctrine completely"
+        depends="doctrine:rebuild-db, doctrine:create, doctrine:mapping-convert"
+        />
+
+    <target name="doctrine:rebuild-db">
+        <echo>... we drop all tables of the database in ${project.env.sf} environment of the ${phing.project.name} project from ${project.dbHost} mysql host</echo>
+        <exec executable="php" passthru="true" logoutput="true">
+            <arg line="app/console" />
+            <arg line="doctrine:tables:drop" />
+            <arg line="--env=${project.env.sf}" />
+            <arg line="--no-interaction" />
+        </exec>
+        <echo>... we create database in ${project.env.sf} environment of the ${phing.project.name} project from ${project.dbHost} mysql host</echo>
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="doctrine:database:create" />
+            <arg line="--env=${project.env.sf}" />
+            <arg line="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="doctrine:create" description="Create doctrine tables">
+        <echo>... we create schemas in ${project.env.sf} environment of the ${phing.project.name} project from ${project.dbHost} mysql host</echo>
+        <exec executable="php" passthru="false" returnProperty="app.return.create" logoutput="false">
+            <arg line="app/console" />
+            <arg line="doctrine:schema:create" />
+            <arg line="--env=${project.env.sf}" />
+            <arg line="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="doctrine:fixtures">
+        <echo>... we insert fixtures in ${project.env.sf} environment of the ${phing.project.name} project from ${project.dbHost} mysql host</echo>
+        <exec executable="php" passthru="true">
+            <arg line="app/console" />
+            <arg line="doctrine:fixtures:load" />
+            <arg line="--env=${project.env.sf}" />
+            <arg line="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="doctrine:migrations-migrate" description="Execute doctrine migrations">
+        <echo>... we execute doctrine migration in ${project.env.sf} environment of the ${phing.project.name} project from ${project.dbHost} mysql host</echo>
+        <exec executable="php" passthru="true" returnProperty="app.return">
+            <arg line="app/console" />
+            <arg line="doctrine:migrations:migrate" />
+            <arg line="--env=${project.env.sf}" />
+            <arg line="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="doctrine:mapping-convert" description="Execute doctrine migrations">
+        <echo>... we execute doctrine migration in ${project.env.sf} environment of the ${phing.project.name} project from ${project.dbHost} mysql host</echo>
+        <exec executable="php" passthru="true" returnProperty="app.return">
+            <arg line="app/console" />
+            <arg line="doctrine:mapping:convert" />
+            <arg line="yml" />
+        </exec>
+    </target>
+
+</project>

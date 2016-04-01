@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="repo" description="Frontend build" default="repo:info" basedir=".">
+
+    <target name="repo:info">
+        <echo>This file is a shortcut build for repository definition</echo>
+    </target>
+    
+    <target name="repo:switch">  
+        <available file="/.git" type="dir" property="dir.Exists.git" />
+        <available file="/.svn" type="dir" property="dir.Exists.svn" />
+        <if>
+            <isset property="dir.Exists.git"/>
+            <then>
+                <phingcall target="git:switch" />
+            </then> 
+        </if>
+        <if>
+            <isset property="dir.Exists.svn"/>
+            <then>
+                <phingcall target="svn:switch" />
+            </then> 
+        </if>               
+    </target>      
+
+</project>
+
+

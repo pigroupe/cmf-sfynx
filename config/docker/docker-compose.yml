@@ -1,0 +1,136 @@
+www-documentation:
+  image: busybox
+  stdin_open: true
+  volumes:
+    - ../../data/documentation:/www-documentation
+
+www-doc-pratical:
+  image: busybox
+  stdin_open: true
+  volumes:
+    - ../../documentation:/www-doc-pratical
+
+www-application:
+  image: busybox
+  stdin_open: true
+  volumes:
+    - ../../www/:/var/www/
+    - ../../www/vendor:/www-vendor
+
+www-build:
+  image: busybox
+  stdin_open: true
+  volumes:
+    - ../../data/build:/www-build
+
+www-composer-cache:
+  image: busybox
+  stdin_open: true
+  volumes:
+    - /tmp/.composer                 # pour le partage du cache composer.
+    - /etc/passwd:/etc/passwd:ro      # pour connaitre le home de l'user ($USER) qui lance la commande.
+
+phing:
+  build: images/tools/phing
+  volumes:
+    - /www-phing
+
+caddy-doc:
+  build: images/http/caddy
+  working_dir: '/www-documentation'
+  volumes_from:
+    - www-documentation
+  volumes:
+    - ./env/doc/Caddyfile:/etc/Caddyfile
+    - ../../data/http/doc/log:/var/log/caddy
+    - /etc/passwd:/etc/passwd:ro      # pour connaitre le home de l'user ($USER) qui lance la commande.
+  ports:
+    - 80
+
+caddy:
+  build: images/http/caddy
+  working_dir: '/var/www'
+  volumes_from:
+    - www-application
+  volumes:
+    - ./env/$STACK_NAME/Caddyfile:/etc/Caddyfile
+    - ../../data/http/$ENV_NAME/log:/var/log/caddy
+    - /etc/passwd:/etc/passwd:ro      # pour connaitre le home de l'user ($USER) qui lance la commande.
+  ports:
+    - 80
+
+caddy-dev:
+  build: images/http/caddy
+  working_dir: '/var/www'
+  volumes_from:
+    - www-application
+  volumes:
+    - ./env/dev/Caddyfile:/etc/Caddyfile
+    - ../../data/http/dev/log:/var/log/caddy
+    - /etc/passwd:/etc/passwd:ro      # pour connaitre le home de l'user ($USER) qui lance la commande.
+  ports:
+    - 80
+
+caddy-prod:
+  build: images/http/caddy
+  working_dir: '/var/www'
+  volumes_from:
+    - www-application
+  volumes:
+    - ./env/prod/Caddyfile:/etc/Caddyfile
+    - ../../data/http/prod/log:/var/log/caddy
+    - /etc/passwd:/etc/passwd:ro      # pour connaitre le home de l'user ($USER) qui lance la commande.
+  ports:
+    - 80
+
+php-local:
+  build: images/php
+  working_dir: '/var/www'
+  volumes_from:
+    - phing
+    - www-build
+    - www-application
+    - www-composer-cache
+
+php-dev:
+  build: images/php
+  working_dir: '/var/www'
+  volumes_from:
+    - phing
+    - www-build
+    - www-application
+    - www-composer-cache
+
+php-prod:
+  build: images/php
+  working_dir: '/var/www'
+  volumes_from:
+    - phing
+    - www-build
+    - www-application
+    - www-composer-cache
+
+database:
+  image: 'hub.alterway.fr/library/mysql:5.5'
+
+#database-dev:
+#  image: 'hub.alterway.fr/library/mysql:5.5'
+database-dev:
+  build: images/database/pgsql/9.5
+  ports:
+    - 5432
+
+database-prod:
+  image: 'hub.alterway.fr/library/mysql:5.5'
+
+smtp:
+  image: 'hub.alterway.fr/library/mailcatcher'
+  ports:
+    - 80
+
+phpmyadmin:
+  build: images/phpmyadmin/4.5
+  ports:
+    - 80
+
+

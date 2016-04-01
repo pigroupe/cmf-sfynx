@@ -1,0 +1,24 @@
+imports:
+    - { resource: config_test.yml }
+                     
+#
+# MinkBundle configuration
+#
+mink:
+    base_url: http://test.sfynx.local
+    selenium2:
+        # wd_host: "http://127.0.0.1:5555/wd/hub" # localhost
+        # wd_host: "http://phantomjs:8643/wd/hub" # phantomjs
+        wd_host: "http://hub:4444/wd/hub" # selenium        
+    browser_name: chrome   
+    
+    
+#
+# SfynxBehatBundle configuration
+#
+sfynx_behat:
+    servers: [local, test]
+    locales: [en, fr, ar]
+    options:
+        server: local
+        locale: en     

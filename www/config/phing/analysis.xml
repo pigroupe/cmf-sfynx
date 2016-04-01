@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="analysis" description="Php static code analysis build definition" default="analysis:info" basedir=".">
+
+    <target name="analysis:info">
+        <echo>This file contains the central configuration for Php static code analysis</echo>
+    </target>
+
+    <!-- Run all static parallel tasks -->
+    <target name="run_parallel_tasks_static_all">
+        <parallel threadCount="${threads}">
+                <phingcall target="tasks_to_try_static_all" />
+        </parallel>
+    </target>
+    <target name="run_serial_tasks_static_all">
+            <phingcall target="tasks_to_try_static_all" />
+    </target>
+    <target name="tasks_to_try_static_all">
+        <phingcall target="static:cpd" />
+        <phingcall target="static:dcd" />
+        <phingcall target="static:cs" />
+        <phingcall target="static:loc" />
+        <phingcall target="static:md" />
+        <phingcall target="static:pdepend" />
+        <phingcall target="static:metrics" />
+    </target>
+    <target name="static:all" description="Run the phpmetrics, pdepend, phpmd, phpcpd, phpcs-fixer, phpdcd and phploc tasks. Checks for parallel support in PHP.">
+        <exec command="php -m | grep pcntl" returnProperty="pcntl_enabled"/>
+        <if>
+            <equals arg1="${pcntl_enabled}" arg2="pcntl" />
+            <then>
+                    <echo message="PCNTL Enabled. Running Taks in parallel with ${threads} threads." />
+                    <phingcall target="run_parallel_tasks_static_all"/>
+            </then>
+            <else>
+                    <echo message="PCNTL is not enabled. Running task serially." />
+                    <phingcall target="run_serial_tasks_static_all"/>
+            </else>
+        </if>
+    </target>
+
+    <!-- Run quick static parallel tasks -->
+    <target name="run_parallel_tasks_static_quick">
+        <parallel threadCount="${threads}">
+                <phingcall target="tasks_to_try_static_quick" />
+        </parallel>
+    </target>
+    <target name="run_serial_tasks_static_quick">
+            <phingcall target="tasks_to_try_static_quick" />
+    </target>
+    <target name="tasks_to_try_static_quick">
+        <phingcall target="static:cpd" />
+        <phingcall target="static:dcd" />
+        <phingcall target="static:loc" />
+        <phingcall target="static:md" />
+        <phingcall target="static:pdepend" />
+    </target>
+    <target name="static:quick" description="Run the phpmd, phpcpd, phpcs-fixer and phpdcd tasks. Checks for parallel support in PHP.">
+        <exec command="php -m | grep pcntl" returnProperty="pcntl_enabled"/>
+        <if>
+            <equals arg1="${pcntl_enabled}" arg2="pcntl" />
+            <then>
+                    <echo message="PCNTL Enabled. Running Taks in parallel with ${threads} threads." />
+                    <phingcall target="run_parallel_tasks_static_quick"/>
+            </then>
+            <else>
+                    <echo message="PCNTL is not enabled. Running task serially." />
+                    <phingcall target="run_serial_tasks_static_quick"/>
+            </else>
+        </if>
+    </target>
+
+    <!-- Run sonar static parallel tasks -->
+    <target name="run_parallel_tasks_static_sonar">
+        <parallel threadCount="${threads}">
+                <phingcall target="tasks_to_try_static_sonar" />
+        </parallel>
+    </target>
+    <target name="run_serial_tasks_static_sonar">
+            <phingcall target="tasks_to_try_static_sonar" />
+    </target>
+    <target name="tasks_to_try_static_sonar">
+        <phingcall target="static:cpd" />
+        <phingcall target="static:dcd" />
+        <phingcall target="static:loc" />
+        <phingcall target="static:md" />
+        <phingcall target="static:pdepend" />
+        <phingcall target="static:metrics" />
+    </target>
+    <target name="static:sonar" description="Run the sonar runner, phpcs-fixer and phpdcd tasks. Checks for parallel support in PHP.">
+        <exec command="php -m | grep pcntl" returnProperty="pcntl_enabled"/>
+        <if>
+            <equals arg1="${pcntl_enabled}" arg2="pcntl" />
+            <then>
+                    <echo message="PCNTL Enabled. Running Taks in parallel with ${threads} threads." />
+                    <phingcall target="run_parallel_tasks_static_sonar"/>
+            </then>
+            <else>
+                    <echo message="PCNTL is not enabled. Running task serially." />
+                    <phingcall target="run_serial_tasks_static_sonar"/>
+            </else>
+        </if>
+    </target>
+
+    <!--
+    <target name="static:all"
+        depends="static:cpd, static:dcd, static:cs-fixer-psr2, static:loc, static:md, static:pdepend"
+        description="Static analysis of code with Php code sniffer, copy/paste detector, PHP Mess Detector and PhpDepend is not used" />
+
+    <target name="static:quick"
+        depends="static:cpd, static:dcd, static:cs-fixer-psr2, static:md-specific"
+        description="Static analysis of code with Php code sniffer and copy/paste detecto" />
+
+    <target name="static:sonar"
+        depends="sonar:runner, static:dcd, static:cs-fixer-psr2"
+        description="Static analysis of code with Php code sniffer, copy/paste detector, PHP Mess Detector and PhpDepend is not used" />
+    -->
+
+    <!-- PHP Copy/Paste Detector-->
+    <target name="static:cpd" description="statics similar code blocks.">
+        <echo msg="Staticing similar code blocks ... dans ${dir.src}" />
+        <exec command="phpcpd --min-tokens=50 --min-lines=5 --names-exclude=Base*.php,**/map/*,**/om/* --log-pmd ${dir.reports}/pmd-cpd.xml ${dir.src}" passthru="false" />
+    </target>
+
+    <!-- PHP Dead Code Detection (code static mort)-->
+    <target name="static:dcd" description="statics similar code blocks.">
+        <echo msg="Code static mort ... dans ${dir.src}" />
+        <exec command="phpcpd --min-tokens=50 --min-lines=5 --names-exclude=Base*.php,**/map/*,**/om/* --log-pmd ${dir.reports}/pmd-cpd.xml ${dir.src}" passthru="false" />
+    </target>
+
+    <!-- Php code sniffer -->
+    <target name="static:cs" description="statics coding standard.">
+        <echo msg="staticing coding standard with checkstyle ... dans ${dir.build}" />
+        <exec command='phpcs --standard=PSR2 ${dir.src} --ignore=*/Resources/*,*/Tests/* --encoding=utf-8  --tab-width=4 --report=checkstyle --report-file=${dir.reports}/cs-checkstyle.xml' passthru="false" />
+    </target>
+    <target name="static:cs-psr1" description="fixes statics coding standard.">
+        <echo msg="staticing coding standard with PSR1 ... dans ${dir.src}" />
+        <exec command='phpcs --standard=PSR1 ${dir.src} --ignore=*/Resources/*,*/Tests/* --encoding=utf-8  --report=csv --report-file=${dir.reports}/cs-psr1.csv' passthru="false" />
+    </target>
+    <target name="static:cs-psr2" description="fixes statics coding standard.">
+        <echo msg="staticing coding standard with PSR2 ... dans ${dir.src}" />
+        <exec command='phpcs --standard=PSR2 ${dir.src} --ignore=*/Resources/*,*/Tests/* --encoding=utf-8  --report=csv --report-file=${dir.reports}/cs-psr2.csv' passthru="false" />
+    </target>
+
+    <!-- PHP Loc -->
+    <target name="static:loc" description="A tool for quickly measuring the size of a PHP project.">
+        <echo msg="Nombre de ligne, de classses, d'interfaces, de méthodes, complexité cyclomatique  ... dans ${dir.src}" />
+        <exec command='phploc ${dir.src} --count-tests --log-xml="${dir.reports}/phploc.xml" --log-csv="${dir.reports}/phploc.csv"' passthru="false" />
+    </target>
+
+    <!-- PHP Mess Detector -->
+    <target name="static:md" description="Metrics from php code">
+        <echo msg="Anomalies directes, complexité cyclomatique=nombre de chemins indépendants d’un programme, fonctions à risque, code mort ... dans ${dir.src}" />
+        <exec command="phpmd  ${dir.src} xml codesize,unusedcode,naming,design --exclude **/map/*,**/om/* --reportfile ${dir.reports}/pmd.xml" passthru="false" />
+    </target>
+    <target name="static:md-specific" description="Metrics from php code.">
+        <echo msg="Anomalies directes, complexité cyclomatique=nombre de chemins indépendants d’un programme, fonctions à risque, code mort ... dans ${dir.src}" />
+        <exec command="phpmd  ${dir.src} xml cleancode,codesize,controversial,design,naming,unusedcode --exclude **/map/*,**/om/* --reportfile ${dir.reports}/pmd.xml" passthru="false" />
+    </target>
+
+    <!-- PHP Depend -->
+    <target name="static:pdepend" description="Analyse du couplage et des dépendances du code.">
+        <echo msg="Analyse du couplage et des dépendances du code, métriques orienté objet ... ${dir.src}" />
+        <exec command="pdepend --jdepend-xml=${dir.reports.pdepend}/pdepend.xml --jdepend-chart=${dir.reports.pdepend}/dependencies.svg --overview-pyramid=${dir.reports.pdepend}/overview-pyramid.svg ${dir.src}" passthru="false" />
+    </target>
+
+    <!-- PHP Loc -->
+    <target name="sonar:runner" description="Execute sonnarQube.">
+        <echo msg="PHP metrics project with Sonar Qube" />
+        <exec command='sonar-runner' passthru="false" />
+    </target>
+
+    <!-- PHP Metrics -->
+    <target name="static:metrics" description="Execute PHP metrics">
+        <echo msg="PHP metrics project ... dans ${dir.src}" />
+        <exec command='phpmetrics ${dir.src} --excluded-dirs="Tests|Test|Entity|Features" -q --chart-bubbles=${dir.reports.metrics}/metrics.svg  --report-html=${dir.reports.metrics}/metrics.html --report-xml=${dir.reports.metrics}/metrics.xml --config=${dir.app}/phpmetrics.yml' passthru="true" />
+        <exec command="chmod -R 0777 ${dir.bin}/pipeline/d_analyse/metrics.sh" escape="false" />
+        <exec command="${dir.bin}/pipeline/d_analyse/metrics.sh ${dir.src} > ${dir.reports.metrics}/metrics.txt" passthru="false" />
+    </target>
+
+    <!-- PHP Storm inspection https://www.jetbrains.com/phpstorm/help/working-with-phpstorm-features-from-command-line.html -->
+    <target name="static:phpstorm" description="Execute phpStorm inspection.">
+        <echo msg="PHP metrics project with phpStorm : ./home/etienne/PhpStorm/bin/inspect.sh ${project.basedir} ./app/phpstorm.inspection.xml ${dir.reports.phpstorm.inspection} -v2 -d ${dir.src}" />
+        <exec command='${dir.phpstorm.bin}/inspect.sh ${project.basedir} ./app/phpstorm.inspection.xml ${dir.reports.phpstorm.inspection} -v2 -d ${dir.src}' passthru="false"/>
+    </target>
+
+    <!-- DIACENTER -->
+
+    <!-- AUTODIA -->
+    <target name="static:autodia" description="Class diagram uml generator">
+        <echo msg="Class diagram uml ... perl /usr/local/bin/autodia.pl -l php -d ${dir.src}/Presentation -r -o ${dir.reports.diacenter.autodia}/actor.presentation.dia" />
+        <exec command="perl /usr/local/bin/autodia.pl -l php -d ${dir.src}/Presentation -r -o ${dir.reports.diacenter.autodia}/actor.presentation.dia" logoutput="true" passthru="false" />
+    </target>
+
+</project>

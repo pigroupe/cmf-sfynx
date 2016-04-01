@@ -1,0 +1,35 @@
+.env
+.idea
+
+### Symfony ###
+
+# Cache and logs (Symfony2)
+vendor
+/app/cache/*
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+
+# Cache and logs (Symfony3)
+/var/cache/*
+/var/logs/*
+!var/cache/.gitkeep
+!var/logs/.gitkeep
+
+# PHPUnit
+/app/phpunit.xml
+
+# Symfony Patch
+/web/bundles/
+/web/uploads/
+/web/css/
+/web/js/
+
+# bin
+bin/*
+!bin/provisioners
+!bin/entrypoint
+
+# build
+build
+build.xml

@@ -1,4 +1,4 @@
-﻿CMF SFYNX Bundles
+CMF SFYNX Bundles
 =====================
 
 

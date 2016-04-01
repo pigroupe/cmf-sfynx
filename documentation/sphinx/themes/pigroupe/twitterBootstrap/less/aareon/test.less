@@ -1,0 +1,90 @@
+
+body {
+
+  background-color:#EFEFEF;
+  li {margin-top: 3px;}
+  div.stepOne {width:100%;}
+  overflow-x: hidden;
+
+  div#Content.container_site {
+
+    z-index:500;
+
+    .pageOngletContentWidget {
+      margin-top:-20px;
+      background-color:@white;
+      padding-top:20px;
+    }
+
+    background: url("../img/background.jpg") no-repeat scroll left center transparent;
+    min-height: 559px;
+    margin: 0 auto auto;
+    width: @containerWidth;
+
+    &:before {
+      background: url("../img/fond2.png") repeat-x scroll right center transparent;
+      content: " ";
+      margin-left: @marginMin60Width;
+      min-height: 559px;
+      position: absolute;
+      width: @marginmax60Width;
+    }
+
+    &:after {
+      background: url("../img/fond1.png") repeat-x scroll right center transparent;
+      content: " ";
+      min-height: 559px;
+      margin-left: @containerWidth;
+      position: absolute;
+      width: @marginmax60Width;
+      top:0;
+    }
+
+    ul.breadcrumb {
+      position:absolute;
+      background-color: transparent;
+      z-index:501;
+      li {
+        font-size: 10px;
+        font-family: Arial,sans-serif;
+        font-weight: bold;
+        a {
+          color: #000000;
+          font-family: Arial,sans-serif;
+          font-weight: bold;
+          font-size: 10px;
+          cursor:pointer;
+        }
+      }
+    }
+
+    .row {
+      min-height:10px;
+    }
+
+    #menu0 {
+      font-size: 10px;
+      z-index: 11;
+      margin-top:140px;
+    }
+
+    div#content.contained {
+
+      background: url("../img/cbg.png") repeat-x scroll center top transparent;
+      clear: both;
+      display: block;
+      width: @containerWidthAdjust;
+      padding: 5px 5px 50px;
+      border: 1px solid #CCCCCC;
+      -webkit-border-radius: 5px 5px 5px 5px;
+      border-radius: 5px 5px 5px 5px;
+      position:absolute;
+      margin-top:200px;
+      z-index: 10;
+      margin-bottom:50px;
+
+    }
+
+  }
+
+}

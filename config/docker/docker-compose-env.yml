@@ -1,0 +1,68 @@
+caddy-doc:
+  env_file:
+    - ./env/doc/caddy.env
+    - ./env/doc/.env
+
+caddy:
+  env_file:
+    - ./env/$STACK_NAME/caddy.env
+    - ./env/command/${ENV_NAME}/.env
+
+caddy-dev:
+  env_file:
+    - ./env/dev/caddy.env
+    - ./env/dev/.env
+
+caddy-prod:
+  env_file:
+    - ./env/prod/caddy.env
+    - ./env/prod/.env
+
+php-local:
+  env_file:
+    - ./env/$STACK_NAME/php.env
+    - ./env/command/${ENV_NAME}/.env
+
+php-dev:
+  env_file:
+    - ./env/dev/php.env
+    - ./env/dev/.env
+
+php-prod:
+  env_file:
+    - ./env/prod/php.env
+    - ./env/prod/.env
+
+database:
+  volumes:
+    - ../../data/mysql/pipeline/${ENV_NAME}:/var/lib/mysql
+  env_file:
+    - ./env/$STACK_NAME/mysql.env
+
+#database-dev:
+#  volumes:
+#    - ../../data/mysql/dev:/var/lib/mysql
+#  env_file:
+#    - ./env/dev/mysql.env
+database-dev:
+  volumes:
+    - ../../data/pgsql/dev/log:/var/log/postgresql
+    - ../../data/pgsql/dev/pgdata:/pgdata
+  environment:
+      PGDATA: pgdata
+      POSTGRES_USER: sfynx
+      POSTGRES_PASSWORD: sfynx
+
+database-prod:
+  volumes:
+    - ../../data/mysql/prod:/var/lib/mysql
+  env_file:
+    - ./env/prod/mysql.env
+
+smtp:
+  env_file:
+    - ./env/smtp.env
+
+phpmyadmin:
+  env_file:
+    - ./env/phpmyadmin.env

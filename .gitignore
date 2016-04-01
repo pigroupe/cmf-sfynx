@@ -1,61 +1,34 @@
-#tmp
-tmp/*
-
-# documentation
-doc/*
-documentation/uml/xmi/*
-documentation/uml/php/*
-documentation/uml/html/*
-documentation/uml/htmlnew/*
-documentation/phpdocumentor/*
-web/phpdocumentor/*
-documentation/phpmd/*
-documentation/phpcpd/*
-
-# Bootstrap
-app/bootstrap*
-!app/bootstrap_tests.php
-
-# Symfony directories
-nbproject/*
-vendor/*
-!vendor/sfynx-project/
-!vendor/sonata-project/
-!vendor/Pear/
-!vendor/Zend/
-*/logs/*
-*/cache/*
-*/cachesfynx/Etag/*
-*/cachesfynx/Seo/old_urls*
-*/cachesfynx/Widget/*
-*/cachesfynx/Indexation/*
-*/cachesfynx/Media/*
-*/cachesfynx/loginfailure/*
-web/uploads/*
-web/bundles/*
-web/yui/*
-
-# Configuration files
-app/config/parameters.yml
-app/phpunit.xml
-
-# Composer
-security-checker.phar
-composer.phar
-phpmetrics.phar
-
-# OTHER
-*.DS_Store
-.buildpath
-.project
-.settings
+## GLOBAL
+*~
+.DS_Store
 .svn
+.cvs
+*.bak
+*.swp
+Thumbs.db
+*.log
 
-# Build
-build/*
+## Default docker-compose
+/nbproject/private/
 
-#vagrant
-provisioners/parameters
+### other ###
+/.vagrant
+/.sonar
 
-# .idea
-.idea
+### Netbeans ###
+/nbproject
+
+### phpstorm ###
+/.idea
+
+### data ###
+/data
+
+### patternlab ###
+/patternlab
+
+### vendor ###
+/vendor
+
+### build ###
+/build

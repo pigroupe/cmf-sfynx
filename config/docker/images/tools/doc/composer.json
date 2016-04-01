@@ -1,0 +1,9 @@
+{
+  "require": {
+    "sphpdox/sphpdox": "dev-master",
+    "apigen/apigen": "@stable"
+  },
+  "config": {
+    "bin-dir": "/usr/local/bin/"
+  }
+}

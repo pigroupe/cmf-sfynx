@@ -1,0 +1,74 @@
+-------------------------------------------------------------------------
+DemoContext\\Domain\\Generalisation\\Repository\\TraitRepositoryInterface
+-------------------------------------------------------------------------
+
+.. php:namespace: DemoContext\\Domain\\Generalisation\\Repository
+
+.. php:interface:: TraitRepositoryInterface
+
+    interface Repository
+
+    .. php:method:: getClassName()
+
+        :returns: string
+
+    .. php:method:: count($enabled = null)
+
+        Count all fields existed from the given entity
+
+        :type $enabled: boolean
+        :param $enabled: [0, 1]
+        :returns: string the count of all fields.
+
+    .. php:method:: cacheQuery(Query $query, $time = 3600, $MODE = 3 /* \Doctrine\ORM\Cache::MODE_NORMAL */, $setCacheable = true, $namespace = '', $input_hash = '')
+
+        return query in cache
+
+        :type $query: Query
+        :param $query:
+        :type $time: integer
+        :param $time:
+        :param $MODE:
+        :type $setCacheable: boolean
+        :param $setCacheable:
+        :param $namespace:
+        :param $input_hash:
+        :returns: Query
+
+    .. php:method:: setHints(Query $query, $lazy_loading = true)
+
+        Loads all translations with all translatable
+        fields from the given entity
+
+        :type $query: Query
+        :param $query:
+        :type $lazy_loading: boolean
+        :param $lazy_loading:
+        :returns: Query
+
+    .. php:method:: remove($entity)
+
+        Remove a film entity
+
+        :type $entity: Film
+        :param $entity:
+
+    .. php:method:: findAllByEntity($result = "object", $MaxResults = null, $orderby = '')
+
+        Find all translations by an entity.
+
+        :type $result: string
+        :param $result: = {'array', 'object'}
+        :param $MaxResults:
+        :type $orderby: string
+        :param $orderby:
+        :returns: array|object
+
+    .. php:method:: findByQuery(Query $query, $result = "array")
+
+        Loads all translations with all translatable fields from the given entity
+
+        :type $query: Query
+        :param $query:
+        :param $result:
+        :returns: array|object of result query

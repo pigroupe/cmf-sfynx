@@ -1,0 +1,531 @@
+@import "../bootstrap.3.2.0/variables.less";
+
+@pathImg: "../img/"; // for SVN
+/*@pathImg: "../../../img/themes/@{themeName}/";*/
+@iconSpritePath: "../../img/glyphicons-halflings.png";
+
+
+// Basic Colors
+// -------------------------
+@black:                 #000;
+@white:                 #fff;
+@whiteSmoke:            #F5F5F5;
+
+// Grays
+// -------------------------
+@grayLight:             #d2d9df;
+@grayLighter:           #d8dde1;
+@grayLightest:          #f0f1f4;
+@grayStrong:            #7F7F7F;
+@blueLight:             #4bf;
+@blueLighter:           #d7f0f8;
+@blueLightest:          #e9f7fb;
+@grayDarker:            #33454e;
+@grayDark:              #7b8084;
+@gray:                  #acb1b4;
+
+// Blues
+// -------------------------
+@blueDark:              #1659AC;
+@blue:                  #3C9BD6;
+@blueLight:             #58B4ED;
+@blueLigher:            #D4EBF9;
+
+@lightBlue:             #41AAEB;
+@darkBlue:              #1659AC;
+
+@fontBlueLight:         #58B4ED;
+@fontBlueDark:          #1659AC;
+
+// GREEN
+// -------------------------
+@grayGreen:             #628179;
+
+@greenDark:             #547A10;
+@green:                 #82BD1A;
+@greenLight:            #87C032;
+
+@lightGreen:            #93D323;
+@darkGreen:             #73A717;
+
+@fontGreenLight:        #9FE129;
+@fontGreenDark:         #82BD1A;
+
+// Reds
+// -------------------------
+@redDarker:             #9d261d;
+@redDarkest:            #FF0303;
+@red:                   #e3432c;
+@lightRed:              #EC0202;
+@darkRed:               #B60000;
+
+// Oranges
+// -------------------------
+@orangeDark:            #f89406;
+@orange:                #ff8a3c;
+@orangeLight:           #ffd5b8;
+@orangeLighter:         #ffe8d8;
+
+// Accent colors
+// -------------------------
+@yellow:                #f7b42c;
+@cyan:                  #cceaf3;
+
+// Scaffolding
+// -------------------------
+@bodyBackground:        @grayLightest;
+@textColor:             @grayDarker;
+
+// TEMPORARY
+// -------------------------
+// Use for form with dojo
+@radius5:               5px 5px 5px 5px;
+@radius4040:            4px 0 4px 0;
+@radius4:               4px 4px 4px 4px;
+@lightBlueForm:         #D9EDF7;
+@blueGreyForm:          #B7C9DD;
+@lightGreyForm:         #F5F5F5;
+@greyForm:              #DDDDDD;
+@strongGreyForm:        #9DA0A4;
+@strongBlueForm:        #2F368A;
+@titleOblig:            #737373;
+@grayMiddle:            #CCCCCC;
+@grayStrongest:         #333333;
+@grayStrongest2:        #222222;
+@blueLighter2:          #9FCFFF;
+@blueMiddle:            #316d9e;
+@yellowMiddle:          #FFCC33;
+@accountEncard:         transparent;
+
+//Grid
+@containerWidth:        100%;
+@width:                 980px;
+@widthMin:              @width - 1;
+@gridGutterWidth:       30px;
+@gridColumns:           12;
+@gridColumnWidth:       ((@containerWidth - ((@gridColumns - 1) * @gridGutterWidth )) / @gridColumns);
+
+//det/tbm/tbx
+@noneBackground:          #F0F1F4;
+@infoBackground:          #d9edf7;
+
+
+//useful-contact-test
+//--------------------------
+@aa_panel-baseline_FontSize: 14px;
+@aa_panel-baseline_Color: #373f47;
+@aa_panel-baseline_TextAlign: center;
+@aa_panel-baseline_Padding:0 0 20px;
+@aa_panel_ImgWidth:200px;
+@aa_panel_ImgHeight:auto;
+
+
+
+//Carousel
+//--------------------------------
+@aa_carousel_BoxShadow:none;
+@aa_carousel_CursorImgTop:47%;
+@aa_carousel_CursorImgWidth:37px;
+@aa_carousel_CursorImgOpacity:0.5;
+@aa_carousel_IndicatorsColor: #18a0c7;
+@aa_carousel_CaptionLeft:17%;
+@aa_carousel_CaptionTop:103px;
+
+
+//timeline
+//--------------------------------
+@aa_timeline_linePosition_Top:15px;
+@aa_timeline_linePosition_Left:13px;
+@aa_timeline_linePosition_Width:4px;
+@aa_timeline_linePosition_Height:285px;
+@aa_timeline_linePosition_Background:#c4d1db;
+@aa_timeline_bulle_Left:0;
+@aa_timeline_bulle_Top:15px;
+@aa_timeline_bulle_Margin:0 auto;
+@aa_timeline_bulle_LiFontSize:12px;
+@aa_timeline_bulle_LiPadding:0;
+@aa_timeline_bulle_LiMargin:0;
+@aa_timeline_bulle_Li_AWidth:30px;
+@aa_timeline_bulle_Li_AHeight:30px;
+@aa_timeline_bulle_Li_Abg:url(images/point.png) no-repeat 0 0;
+
+//notification orange
+//-----------------------------
+@aa_notif_bgColor:#f37c01;
+@aa_notif_height:90px;
+@aa_notif_TextColor:#fff;
+@aa_notif_CloseTop:37px;
+@aa_notif_CloseRight:22px;
+@aa_notif_TextMargin:auto;
+@aa_notif_div_img_margin:0 20px 0 0;
+@aa_notif_div_img_float:left;
+
+
+//annonce
+//---------------------------------
+@aa_annonce_minHeight:191px;
+@aa_annonce_width:557px;
+@aa_annonce_border:1px solid #c6ccd3;
+@aa_annonce_borderRadius:3px;
+@aa_annonce_img_bgColor:#eff2f4;
+@aa_annonce_img_bgImg:url(images/service-annonce.png);
+@aa_annonce_img_marginRight:18px;
+@aa_annonce_h3Color:#82909b;
+@aa_annonce_h3Margin:10px auto auto auto;
+@aa_annonce_h4Color:#31549f;
+@aa_annonce_h4FontSize:12px;
+@aa_annonce_spanColor:#9aa5ad;
+@aa_annonce_pPadding: 0 10px 0 10px;
+
+
+
+
+
+// lettrine
+@aa_lettrine_size:30px;
+@aa_lettrine_color:@text-color;
+@aa_lettrine_width:50px;
+@aa_lettrine_height:50px;
+
+
+//Availability Picker
+//---------------------------------
+@aa_availability_daysColor:     #373F47;
+@aa_availability_daysBg:        #C6CCD3;
+@aa_availability_disabledBg:    #E3E6E9;
+@aa_availability_disabledColor: #9B9FA3;
+@aa_day_bg:                     #f4fcfe;
+
+//custom table
+//---------------------------------
+@aa_TitleFont:                  'arial';
+
+
+
+//Button
+//----------------------------------
+/*button-size*/
+@btn_padding-vertical:6px;
+@btn_padding-horizontal:12px;
+@btn_font-size:14px;
+@btn_line-height-base:1.42857143;
+@btn_font-weight:bold;
+@btn_text-transform:uppercase;
+
+@btnlg_padding-vertical:22px;
+@btnlg_padding-horizontal:64px;
+@btnlg_font-size:12px;
+@btnlg_line-height-base:1.42857143;
+@btnlg_font-weight:bold;
+@btnlg_text-transform:uppercase;
+
+@btnsm_padding-vertical:11px;
+@btnsm_padding-horizontal:32px;
+@btnsm_font-size:11px;
+@btnsm_line-height-base:1.42857143;
+@btnsm_font-weight:bold;
+@btnsm_text-transform:uppercase;
+
+/*btn-default*/
+@btn_default_bgColor:#c6ccd3;
+@btn_default_Color: #82909b;
+@btn_default_Border: 2px solid #c6ccd3;
+@btn_default_hover_BgColor: #d9dee1;
+@btn_default_HoverColor: #82909b;
+
+@btn_inverse_bgColor: transparent;
+
+/*btn-default-inverse*/
+@btn_default_inverse_Color: #fff;
+@btn_default_inverse_Border: 2px solid @btn_default_inverse_Color;
+
+/*btn-primary-inverse*/
+@btn_primary_inverse_Color: #31549f;
+@btn_primary_inverse_Border: 2px solid @btn_primary_inverse_Color;
+
+
+/*border-color des boutons*/
+@btn-primary-borderColor:#357ebd;
+@btn-info-borderColor:#4cae4c;
+@btn-success-borderColor:#269abc;
+@btn-warning-borderColor:#eea236;
+@btn-danger-borderColor:#d43f3a;
+
+/* datepicker */
+//datepicker
+//-----------------------------
+@aa_H4Color:#373f47;
+@aa_H4FontSize:13px;
+@aa_H3FontSize:18px;
+@aa_H3Color:#373f47;
+@aa_datepicker_width:393px;
+@aa_datepicker_margin:0 auto;
+@aa_datepicker_padding: 0px;
+@aa_datepicker_tableFont:@aa_H4FontSize+1;
+@aa_datepicker_tableMargin:0 0 25px 0;
+@aa_datepicker_td_Padding:0;
+@aa_datepicker_td_spanHeight:49px;
+@aa_datepicker_td_spanWidth:85px;
+@aa_datepicker_td_spanMargin:10px 15px 0 0;
+@aa_datepicker_td_bg:#f5f7fa;
+@aa_datepicker_td_bgHover:#c6ccd3;
+@aa_datepicker_td_ColorHover:white;
+@aa_datepicker_thead_bg:@aa_H3Color;
+@aa_datepicker_thead_height:46px;
+@aa_datepicker_thead_width:100%;
+@aa_datepicker_thead_titre_color:white;
+@aa_datepicker_thead_titre_font:@aa_H3FontSize -2;
+@aa_datepicker_thead_titre_colorHover:#373f47;
+@aa_datepicker_thead_div_border:1px solid;
+@aa_datepicker_thead_div_borderRadius:3px;
+@aa_datepicker_thead_div_Color:#f5f7fa;
+@aa_datepicker_thead_div_height:22px;
+@aa_datepicker_thead_div_width:22px;
+@aa_datepicker_thead_div_line-height:17px;
+@aa_datepicker_thead_div_bgHover:#f5f7fa;
+
+@img_bg: url(../img/bg.jpg);
+
+//== Badges
+//** Default badge background color
+@badge-default-bg:            @gray-light;
+//** Primary badge background color
+@badge-primary-bg:            @brand-primary;
+//** Success badge background color
+@badge-success-bg:            @brand-success;
+//** Info badge background color
+@badge-info-bg:               @brand-info;
+//** Warning badge background color
+@badge-warning-bg:            @brand-warning;
+//** Danger badge background color
+@badge-danger-bg:             @brand-danger;
+
+//** Default badge text color
+@badge-color:                 #fff;
+//** Default text color of a linked badge
+@badge-link-hover-color:      #fff;
+
+
+//== Typography (Extends)
+//** Computed "line-height-small" (`font-size-small` * `line-height-small`) for use with progress-bars
+@line-height-small-computed: floor((@font-size-small * @line-height-small)); // ~18px
+//** Computed "line-height-large" (`font-size-large` * `line-height-large`) for use with progress-bars
+@line-height-large-computed: floor((@font-size-large * @line-height-large)); // ~23px
+
+
+//Media queries
+//-----------------------------------------------------
+@mobile:        ~"only screen and (max-width: 767px)";
+@tablet:        ~"only screen and (min-width: 768px) and (max-width: 991px)";
+@desktop:       ~"only screen and (min-width: 992px) and (max-width: 1199px)";
+@desktop-lg:    ~"only screen and (min-width: 1200px)";
+
+// For all
+// -------------------------
+
+@marginmax60Width:      2000px;
+@marginMin60Width:      -2000px;
+@containerWidth:        980px;
+@containerWidthAdjust:  980px;
+@blueMarine : #004A95;
+@backgroundGrisclair : #F0F0F0;
+@navbar-padding-horizontal:0;
+
+// Block
+// -------------------------
+
+@backgroundNostyle:none repeat scroll 0 0 transparent;
+@borderRadiusNostyle:0;
+@fontNostyle:normal;
+@heightNostyle:auto;
+@widthNostyle:auto;
+@marginNostyle:0;
+@paddingNostyle:0;
+@floatNostyle:none;
+@clearNostyle:null;
+@display:null;
+@border:null;
+
+@backgroundH2Nostyle:transparent;
+@radiusH2Nostyle:0;
+@fontH2Nostyle:bold 14px Arial,sans-serif;
+@heightH2Nostyle:0px;
+@heightH2Nostyle:0px;
+@widthH2Nostyle:auto;
+@marginH2Nostyle:0;
+@paddingH2Nostyle:0;
+@floatH2Nostyle:none;
+@clearH2Nostyle:null;
+
+@backgroundSPANNostyle:transparent;
+@colorSPANNostyle:#000;
+@floatSPANNostyle:left !important;
+@fontSPANNostyle:null;
+@paddingSPANNostyle:0;
+@clearSPANNostyle:null;
+
+@floatIMGNostyle:null;
+@heightIMGNostyle:auto;
+@widthIMGNostyle:auto;
+@paddingIMGNostyle:0;
+@marginIMGNostyle:0;
+@clearIMGNostyle:null;
+
+@backgroundCENTERNostyle:null;
+@colorCENTERNostyle:null;
+@heightCENTERNostyle:null;
+@widthCENTERNostyle:100%;
+@marginCENTERNostyle:0;
+@paddingCENTERNostyle:null;
+@fontCENTERNostyle:null;
+@clearCENTERNostyle:null;
+
+
+// Bleu
+@backgroundBleu:none repeat scroll 0 0 transparent;
+@borderRadiusBleu:0;
+@fontBleu:normal;
+@heightBleu:auto;
+@widthBleu:auto;
+@marginBleu:0;
+@paddingBleu:0;
+@floatBleu:none;
+@clearBleu:null;
+@display:null;
+
+@backgroundH2Bleu:#D4E9FE;
+@radiusH2Bleu:0;
+@fontH2Bleu:bold 14px Arial,sans-serif;
+@heightH2Bleu:64px;
+@widthH2Bleu:100%;
+@marginH2Bleu:10px 0 0 0;
+@paddingH2Bleu:5px 0 0 0;
+@floatH2Bleu:none;
+@clearH2Bleu:null;
+
+@backgroundSPANBleu:transparent;
+@colorSPANBleu:@blueMarine;
+@floatSPANBleu:left !important;
+@fontSPANBleu:null;
+@paddingSPANBleu:0 0 0 15px;
+@clearSPANBleu:null;
+
+@floatIMGBleu:null;
+@heightIMGBleu:auto;
+@widthIMGBleu:100%;
+@paddingIMGBleu:0;
+@marginIMGBleu:0;
+@clearIMGBleu:null;
+
+@backgroundCENTERBleu:null;
+@colorCENTERBleu:null;
+@heightCENTERBleu:null;
+@widthCENTERBleu:auto;
+@marginCENTERBleu:0;
+@paddingCENTERBleu:15px;
+@fontCENTERBleu:11px Arial,sans-serif;
+@clearCENTERBleu:null;
+@borderCENTERBleu:1px solid #D4E9FE;
+
+
+// Bleu1
+@backgroundBleu1:none repeat scroll 0 0 transparent;
+@borderRadiusBleu1:0;
+@fontBleu1:normal;
+@heightBleu1:auto;
+@widthBleu1:auto;
+@marginBleu1:0;
+@paddingBleu1:0;
+@floatBleu1:none;
+@clearBleu1:null;
+@display:null;
+
+@backgroundH2Bleu1:null;
+@radiusH2Bleu1:0;
+@fontH2Bleu1:bold 14px Arial,sans-serif;
+@heightH2Bleu1:20px;
+@widthH2Bleu1:100%;
+@marginH2Bleu1:10px 0 0 0;
+@paddingH2Bleu1:5px 0 0 0;
+@floatH2Bleu1:none;
+@clearH2Bleu1:null;
+
+@backgroundSPANBleu1:transparent;
+@colorSPANBleu1:@blueMarine;
+@floatSPANBleu1:left !important;
+@fontSPANBleu1:null;
+@paddingSPANBleu1:0 0 0 15px;
+@clearSPANBleu1:null;
+
+@floatIMGBleu1:null;
+@heightIMGBleu1:auto;
+@widthIMGBleu1:100%;
+@paddingIMGBleu1:0;
+@marginIMGBleu1:0;
+@clearIMGBleu1:null;
+
+@backgroundCENTERBleu1:null;
+@colorCENTERBleu1:null;
+@heightCENTERBleu1:null;
+@widthCENTERBleu1:auto;
+@marginCENTERBleu1:0;
+@paddingCENTERBleu1:15px;
+@fontCENTERBleu1:11px Arial,sans-serif;
+@clearCENTERBleu1:null;
+@borderCENTERBleu1:3px outset #F2F7ED;
+
+
+// Vert1
+@backgroundVert1:none repeat scroll 0 0 #D1E072;
+@borderRadiusVert1:20px;
+@fontVert1:normal;
+@heightVert1:auto;
+@widthVert1:auto;
+@marginVert1:0;
+@paddingVert1:0;
+@floatVert1:none;
+@clearVert1:null;
+@display:null;
+
+@backgroundH2Vert1:null;
+@radiusH2Vert1:0;
+@fontH2Vert1:bold 14px Arial,sans-serif;
+@heightH2Vert1:20px;
+@widthH2Vert1:100%;
+@marginH2Vert1:10px 0 0 0;
+@paddingH2Vert1:5px 0 0 0;
+@floatH2Vert1:none;
+@clearH2Vert1:null;
+
+@backgroundSPANVert1:transparent;
+@colorSPANVert1:@blueMarine;
+@floatSPANVert1:left !important;
+@fontSPANVert1:null;
+@paddingSPANVert1:0 0 0 15px;
+@clearSPANVert1:null;
+
+@floatIMGVert1:null;
+@heightIMGVert1:auto;
+@widthIMGVert1:100%;
+@paddingIMGVert1:0;
+@marginIMGVert1:0;
+@clearIMGVert1:null;
+
+@backgroundCENTERVert1:null;
+@colorCENTERVert1:null;
+@heightCENTERVert1:null;
+@widthCENTERVert1:auto;
+@marginCENTERVert1:0;
+@paddingCENTERVert1:15px;
+@fontCENTERVert1:11px Arial,sans-serif;
+@clearCENTERVert1:null;
+@borderCENTERVert1:null;
+
+
+// Gris1
+@backgroundGris1:none repeat scroll 0 0 #E3E3E3;
+
+// Orange1
+@backgroundOrange1:none repeat scroll 0 0 #FFAF37;
+
+@font-size-base:12px;

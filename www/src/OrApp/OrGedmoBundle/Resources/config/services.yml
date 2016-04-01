@@ -1,0 +1,27 @@
+services:
+    #
+    # configuration of the forms
+    #            
+    orapp_orgedmobundle_mediatype_file:
+        class: OrApp\OrGedmoBundle\Form\MediaType
+        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'file' ]
+        tags:
+            - { name: form.type }      
+            
+    orapp_orgedmobundle_mediatype_image:
+        class: Sfynx\MediaBundle\Form\MediaType
+        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'image' ]
+        tags:
+            - { name: form.type }
+            
+    orapp_orgedmobundle_mediatype_youtube:
+        class: Sfynx\MediaBundle\Form\MediaType
+        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'youtube' ]
+        tags:
+            - { name: form.type }        
+            
+    orapp_orgedmobundle_mediatype_dailymotion:
+        class: Sfynx\MediaBundle\Form\MediaType
+        arguments: ['@service_container', '@doctrine.orm.entity_manager', 'dailymotion' ]
+        tags:
+            - { name: form.type } 

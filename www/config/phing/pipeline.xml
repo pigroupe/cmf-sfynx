@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pipeline" description="Pipeline worflow" default="pipeline:info" basedir=".">
+
+    <target name="pipeline:info">
+        <echo>This file contains all tasks used for a symfony2 project for CI with Jenkins, gitlab-ci or local build</echo>
+        <echo>You can launch:</echo>
+    </target>
+
+    <target name="prepare:artifact-project"
+            depends="prepare:project, prepare:owner-change, prepare:clean"
+            description="Create dev environement from the scratch" />
+    <target name="prepare:artifact-analyse"
+            depends="prepare:folders, prepare:owner-change, prepare:clean-oldbuild"
+            description="Create dev environement from the scratch" />
+
+    <target name="prepare:repo"
+            depends="composer:self, composer:update, composer:dump, composer:install-dev"
+            description="Create dev environement from the scratch" />
+
+    <target name="prepare:initialize"
+            depends="doctrine:rebuild, doctrine:migrations-migrate, frontend:assets, verify:normal"
+            description="Create dev environement from the scratch" />
+    <target name="prepare:initialize-test"
+            depends="doctrine:rebuild, doctrine:fixtures, doctrine:migrations-migrate, frontend:assets, verify:normal"
+            description="Create dev environement from the scratch" />
+    <target name="prepare:persistence"
+            depends="doctrine:build, doctrine:migrations-migrate, frontend:assets, verify:normal"
+            description="Update dev environement from the scratch" />
+
+    <target name="verify:normal"
+            depends="verify:smoke"
+            description="Rebuild dev environement from the scratch" />
+
+    <target name="verify:recette"
+            depends="verify:smoke, verify:sanity"
+            description="Rebuild dev environement from the scratch" />
+
+
+    <target name="functional:unit-all"
+            depends="unit:all"
+            description="All build (for example for fork, or test Pull Request) with phpunit test with code coverage" />
+
+    <target name="functional:unit-quick"
+            depends="unit:quick"
+            description="Quick build (for example for fork, or test Pull Request) with phpunit test without code coverage" />
+    <target name="functional:integration-quick"
+            depends="integration:quick"
+            description="Quick build (for example for fork, or test Pull Request) with phpunit test without code coverage" />
+    <target name="functional:test-quick"
+            depends="unit:quick, integration:quick"
+            description="Quick build (for example for fork, or test Pull Request) with phpunit test without code coverage" />
+
+    <target name="functional:unit-normal"
+            depends="unit:normal"
+            description="Quick build (for example for fork, or test Pull Request) with phpunit test with code coverage" />
+    <target name="functional:integration-normal"
+            depends="integration:normal"
+            description="Quick build (for example for fork, or test Pull Request) with phpunit test with code coverage" />
+    <target name="functional:test-normal"
+            depends="unit:normal, integration:normal"
+            description="Quick build (for example for fork, or test Pull Request) with phpunit test with code coverage" />
+
+    <target name="functional:system"
+            depends="system:behat"
+            description="Launch behat tests" />
+
+
+    <target name="analyse:quick"
+            depends="static:quick, documentation:create"
+            description="Generate default metrcis and documentation" />
+    <target name="analyse:normal"
+            depends="static:all, documentation:create"
+            description="Generate all metrics and documentation" />
+    <target name="analyse:sonar"
+            depends="static:sonar, documentation:create"
+            description="Generate sonar metrcis and documentation on Jenkins" />
+
+    <target name="load-quick"
+            depends="performance:quick"
+            description="Launch quick performance tests" />
+    <target name="load-stress"
+            depends="performance:stress"
+            description="Launch normal performance tests" />
+
+</project>
+
+

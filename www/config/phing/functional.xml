@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="functional" description="tests unit build definition" default="functional:info" basedir=".">
+
+    <target name="functional:info">
+        <echo>This file contains the central configuration for functionnal test with phpunit and behat</echo>
+    </target>
+
+    <!-- Unit tests -->
+    <target name="unit:quick"
+          depends="unit:unit_withoutcover"
+          description="Launch unit tests without code covering" />
+
+    <target name="unit:normal"
+          depends="unit:unit"
+          description="Launch unit tests with code covering." />
+
+    <target name="unit:all"
+        description="Executes all unit tests.">
+        <echo msg="Running unit tests ..." />
+        <exec command="phpunit --log-junit ${dir.reports.unit}/phpunit.xml --coverage-clover ${dir.reports.unit}/clover.xml --coverage-html ${dir.reports.unit}/coverage -c ${dir.app} --debug" passthru="true" />
+    </target>
+
+    <target name="unit:unit"
+        description="Executes unit tests.">
+        <echo msg="Running unit tests ..." />
+        <exec command="phpunit --group unit --log-junit ${dir.reports.unit}/phpunit.xml --coverage-clover ${dir.reports.unit}/clover.xml --coverage-html ${dir.reports.unit}/coverage -c ${dir.app} --debug" passthru="true" />
+    </target>
+
+    <target name="unit:unit_withoutcover"
+        description="Executes unit tests without code coverage.">
+        <echo msg="Running unit tests ..." />
+        <exec command="phpunit --group unit --log-junit ${dir.reports.unit}/phpunit.xml -c ${dir.app} --debug" passthru="true" />
+    </target>
+
+    <!-- integration tests -->
+    <target name="integration:quick"
+          depends="integration:test_withoutcover"
+          description="Launch integration tests without code covering" />
+
+    <target name="integration:normal"
+          depends="integration:test_normal"
+          description="Launch integration tests with code covering." />
+
+    <target name="integration:test_normal"
+        description="Executes unit tests.">
+        <echo msg="Running integration tests ..." />
+        <exec command="phpunit --group integration --log-junit ${dir.reports.integration}/phpunit.xml --coverage-clover ${dir.reports.integration}/clover.xml --coverage-html ${dir.reports.integration}/coverage -c ${dir.app} --debug" passthru="true" />
+        <exec command="phpunit --group specification --log-junit ${dir.reports.specification}/phpunit.xml --coverage-clover ${dir.reports.specification}/clover.xml --coverage-html ${dir.reports.specification}/coverage -c ${dir.app} --debug" passthru="true" />
+        <exec command="phpunit --group regression --log-junit ${dir.reports.regression}/phpunit.xml --coverage-clover ${dir.reports.regression}/clover.xml --coverage-html ${dir.reports.regression}/coverage -c ${dir.app} --debug" passthru="true" />
+    </target>
+
+    <target name="integration:test_withoutcover"
+        description="Executes unit tests without code coverage.">
+        <echo msg="Running integration tests ..." />
+        <exec command="phpunit --group integration --log-junit ${dir.reports.integration}/phpunit.xml -c ${dir.app} --debug" passthru="true" />
+        <exec command="phpunit --group specification --log-junit ${dir.reports.specification}/phpunit.xml -c ${dir.app} --debug" passthru="true" />
+        <exec command="phpunit --group regression --log-junit ${dir.reports.regression}/phpunit.xml -c ${dir.app} --debug" passthru="true" />
+    </target>
+
+    <!-- system tests -->
+    <target name="system:behat"
+        description="Launch system behat tests">
+        <echo msg="Running behat tests ..." />
+        <exec command="behat --config ${dir.config}/behat.yml -f pretty -o ${dir.reports.behat}/pretty.out -f progress -o ${dir.reports.behat}/STDOUT --lang=fr" passthru="true" />
+    </target>
+
+</project>

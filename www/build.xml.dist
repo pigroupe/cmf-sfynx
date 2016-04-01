@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Symfony2" basedir="." default="info">
+
+    <!-- use test tools from composer instalation -->
+    <php function="putenv">
+        <param value="PATH=${env.PATH}:./vendor/bin" />
+    </php>
+
+    <!-- ******************* -->
+    <!-- Imported properties -->
+    <!-- ******************* -->
+    <available file="${project.basedir}/../env/.env" property="file.Exists.env" />
+    <if>
+        <isset property="file.Exists.git"/>
+        <then>
+            <property file="${project.basedir}/../env/.env" />
+            <property name="project.dbName" value="${SYMFONY__DATABASE__NAME__ENV}" />
+            <property name="project.dbHost" value="${SYMFONY__DATABASE__HOST__ENV}" />
+            <property name="project.dbType" value="${SYMFONY__DATABASE__TYPE__ENV}" />
+            <property name="project.dbPort" value="${SYMFONY__DATABASE__PORT__ENV}" />
+            <property name="project.dbUser" value="${SYMFONY__DATABASE__USER__ENV}" />
+            <property name="project.dbPw" value="${SYMFONY__DATABASE__PASSWORD__ENV}" />
+
+            <property name="project.dir.src" value="${SYMFONY__PROJECT__DIR__SRC__ENV}" />
+            <property name="project.dir.cache" value="${SYMFONY__PROJECT__DIR__CACHE__ENV}" />
+            <property name="project.dir.log" value="${SYMFONY__PROJECT__DIR__LOG__ENV}" />
+            <property name="project.dir.vendor" value="${SYMFONY__PROJECT__DIR__VENDOR__ENV}" />
+            <property name="project.dir.build" value="${SYMFONY__PROJECT__DIR__BUILD__ENV}" />
+            <property name="project.dir.doc.pratical" value="${SYMFONY__PROJECT__DIR__DOC__PRATICAL__ENV}" />
+            <property name="project.dir.documentation" value="${SYMFONY__PROJECT__DIR__DOCUMENTATION__ENV}" />
+            <property name="project.dir.composer.cache" value="${COMPOSER_CACHE_DIR}" />
+            <property name="project.branch" value="${SYMFONY__PROJECT__BRANCH}" />
+            <property name="project.env.sf" value="${SYMFONY__PROJECT__ENV}" />
+            <property name="project.build.age" value="${SYMFONY__PROJECT__BUILD_AGE__ENV}" />
+            <property name="project.db.backup.dir" value="${SYMFONY__DATABASE__BACKUP_DIR__ENV}" />
+            <property name="project.db.backup.age" value="${SYMFONY__DATABASE__BACKUP_AGE__ENV}" />
+            <property name="project.db.mysqldump" value="${SYMFONY__DATABASE__MYSQLDUMP__ENV}" />
+        </then>
+        <else>
+            <property name="project.dbName" value="${env.SYMFONY__DATABASE__NAME__ENV}" />
+            <property name="project.dbHost" value="${env.SYMFONY__DATABASE__HOST__ENV}" />
+            <property name="project.dbType" value="${env.SYMFONY__DATABASE__TYPE__ENV}" />
+            <property name="project.dbPort" value="${env.SYMFONY__DATABASE__PORT__ENV}" />
+            <property name="project.dbUser" value="${env.SYMFONY__DATABASE__USER__ENV}" />
+            <property name="project.dbPw" value="${env.SYMFONY__DATABASE__PASSWORD__ENV}" />
+
+            <property name="project.dir.src" value="${env.SYMFONY__PROJECT__DIR__SRC__ENV}" />
+            <property name="project.dir.cache" value="${env.SYMFONY__PROJECT__DIR__CACHE__ENV}" />
+            <property name="project.dir.log" value="${env.SYMFONY__PROJECT__DIR__LOG__ENV}" />
+            <property name="project.dir.vendor" value="${env.SYMFONY__PROJECT__DIR__VENDOR__ENV}" />
+            <property name="project.dir.build" value="${env.SYMFONY__PROJECT__DIR__BUILD__ENV}" />
+            <property name="project.dir.doc.pratical" value="${env.SYMFONY__PROJECT__DIR__DOC__PRATICAL__ENV}" />
+            <property name="project.dir.documentation" value="${env.SYMFONY__PROJECT__DIR__DOCUMENTATION__ENV}" />
+            <property name="project.dir.composer.cache" value="${env.COMPOSER_CACHE_DIR}" />
+            <property name="project.branch" value="${env.SYMFONY__PROJECT__BRANCH}" />
+            <property name="project.env.sf" value="${env.SYMFONY__PROJECT__ENV}" />
+            <property name="project.build.age" value="${env.SYMFONY__PROJECT__BUILD_AGE__ENV}" />
+            <property name="project.db.backup.dir" value="${env.SYMFONY__DATABASE__BACKUP_DIR__ENV}" />
+            <property name="project.db.backup.age" value="${env.SYMFONY__DATABASE__BACKUP_AGE__ENV}" />
+            <property name="project.db.mysqldump" value="${env.SYMFONY__DATABASE__MYSQLDUMP__ENV}" />
+        </else>
+    </if>
+    <property file="${project.basedir}/config/phing/properties/default.properties" />
+    <if>
+        <not>
+            <isset property="buildrelease"/>
+        </not>
+        <then>
+            <tstamp />
+            <property name="buildrelease" value="${DSTAMP}0000" />
+        </then>
+    </if>
+
+    <!-- ****************** -->
+    <!-- Project properties -->
+    <!-- ****************** -->
+    <if>
+        <not>
+            <isset property="owneruser"/>
+        </not>
+        <then>
+            <property name="owneruser" value="www-data" />
+        </then>
+    </if>
+    <property name="owner.user" value="${owneruser}" />
+    <property name="owner.group" value="www-data" />
+
+
+    <property name="dir.composer.cache" value="${project.dir.composer.cache}" />
+    <property name="dir.app" value="${project.basedir}/app" />
+    <property name="dir.src" value="${project.dir.src}" />
+    <property name="dir.web" value="${project.basedir}/web" />
+    <property name="dir.bin" value="${project.basedir}/bin" />
+    <property name="dir.phpstorm.bin" value="/home/etienne/PhpStorm/bin/" />
+    <property name="dir.vendor" value="${project.dir.vendor}" />
+    <property name="dir.vendor.bin" value="${dir.vendor}/bin" />
+    <property name="dir.gatling" value="./testing/load/gatling" />
+    <property name="dir.uploads" value="${dir.web}/uploads" />
+    <property name="dir.config" value="${project.basedir}/config" />
+    <property name="dir.cache" value="${project.dir.cache}" />
+    <property name="dir.log" value="${project.dir.log}" />
+    <property name="dir.build" value="${project.dir.build}/${project.env.sf}/${buildrelease}" />
+    <property name="dir.doc.pratical" value="${project.dir.doc.pratical}" />
+    <property name="dir.docs" value="${project.dir.documentation}/${project.env.sf}" />
+    <property name="dir.docs.phpcb" value="${dir.docs}/phpcb" />
+    <property name="dir.docs.phpdoc" value="${dir.docs}/phpdoc" />
+    <property name="dir.docs.api" value="${dir.docs}/api" />
+    <property name="dir.docs.sphinx" value="${dir.docs}/sphinx" />
+    <property name="dir.docs.sphinx.conf" value="${dir.doc.pratical}/sphinx/conf" />
+    <property name="dir.docs.sphinx.theme" value="${dir.doc.pratical}/sphinx/theme" />
+    <property name="dir.docs.sphinx.source" value="${dir.doc.pratical}/sphinx/source" />
+    <property name="dir.reports" value="${dir.build}/logs/php" />
+    <property name="dir.reports.unit" value="${dir.build}/logs/php/phpunit/unit" />
+    <property name="dir.reports.integration" value="${dir.build}/logs/php/integration" />
+    <property name="dir.reports.specification" value="${dir.build}/logs/php/specification" />
+    <property name="dir.reports.regression" value="${dir.build}/logs/php/regression" />
+    <property name="dir.reports.pdepend" value="${dir.build}/logs/php/pdepend" />
+    <property name="dir.reports.sonar" value="${dir.build}/logs/php/sonar" />
+    <property name="dir.reports.behat" value="${dir.build}/logs/behat" />
+    <property name="dir.reports.gatling" value="${dir.build}/logs/gatling" />
+    <property name="dir.reports.metrics" value="${dir.build}/logs/php/phpmetrics" />
+    <property name="dir.reports.phpstorm.inspection" value="${dir.build}/logs/php/storm/inspection" />
+    <property name="dir.reports.diacenter.autodia" value="${dir.build}/logs/php/diacenter/autodia" />
+
+    <!-- Filesets -->
+    <fileset id="sourcecode" dir="${dir.src}">
+        <include name="**/*.php" />
+        <exclude name="**/map/*"/>
+        <exclude name="**/om/*"/>
+        <exclude name="**/Resources/*"/>
+        <exclude name="**/*.twig"/>
+        <exclude name="**/*.xml"/>
+        <exclude name="**/*.yml"/>
+    </fileset>
+
+    <!-- Imported tasks -->
+    <import file="${project.basedir}/config/phing/repo.xml" />
+    <import file="${project.basedir}/config/phing/git.xml" />
+    <import file="${project.basedir}/config/phing/svn.xml" />
+    <import file="${project.basedir}/config/phing/frontend.xml" />
+    <import file="${project.basedir}/config/phing/prepare.xml" />
+    <import file="${project.basedir}/config/phing/verify.xml" />
+    <import file="${project.basedir}/config/phing/functional.xml" />
+    <import file="${project.basedir}/config/phing/analysis.xml" />
+    <import file="${project.basedir}/config/phing/doctrine.xml" />
+    <import file="${project.basedir}/config/phing/load.xml" />
+    <import file="${project.basedir}/config/phing/documentation.xml" />
+    <import file="${project.basedir}/config/phing/pipeline.xml" />
+
+
+    <!-- ************ -->
+    <!-- Main Targets -->
+    <!-- ************ -->
+
+
+
+
+</project>

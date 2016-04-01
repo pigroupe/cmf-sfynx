@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="load" description="Frontend build" default="load:info" basedir=".">
+    
+    <target name="load:info">
+        <echo>This file is a shortcut build for frontend-ers</echo>
+    </target>
+    
+    <target name="performance:quick"
+        depends="gatling:quick"
+        description="quick gatling test" />
+    
+    <target name="performance:stress"
+        depends="gatling:stress"
+        description="stress gatling test" />    
+       
+    <target name="gatling:quick" description="Gatling stress tests">
+        <echo msg="cmd:::   ${dir.gatling}/bin/gatling.sh -sf ${dir.gatling}/user-files/simulations/project/ -rf ${dir.reports.gatling}/ -df ${dir.gatling}/user-files/data -s SymfonyConnexionQuick" />
+        <exec command="chmod -R 777 ${dir.build}" escape="false" />   
+        <exec passthru="true" command="${dir.gatling}/bin/gatling.sh -sf ${dir.gatling}/user-files/simulations/project/ -rf ${dir.reports.gatling}/ -df ${dir.gatling}/user-files/data -s SymfonyConnexionQuick" />
+    </target>
+    
+    <target name="gatling:stress" description="Gatling stress tests">
+        <echo msg="cmd:::   ${dir.gatling}/bin/gatling.sh -sf ${dir.gatling}/user-files/simulations/project/ -rf ${dir.reports.gatling}/ -df ${dir.gatling}/user-files/data -s SymfonyConnexionQuick" />
+        <exec command="chmod -R 777 ${dir.build}" escape="false" />  
+        <exec passthru="true" command="${dir.gatling}/bin/gatling.sh -sf ${dir.gatling}/user-files/simulations/project/ -rf ${dir.reports.gatling}/ -df ${dir.gatling}/user-files/data -s SymfonyConnexionStress" />
+    </target>   
+
+</project>

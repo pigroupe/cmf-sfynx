@@ -1,0 +1,77 @@
+### behat handler
+hub:
+  image: "selenium/hub:2.47.1"
+  ports:
+    - 4444
+
+chrome:
+  image: "selenium/node-chrome-debug:2.47.1"
+  ports:
+    - 5555
+
+behat:
+  build: images/tools/behat
+  working_dir: '/var/www'
+  env_file:
+    - ./env/command/${ENV_NAME}/.env
+  volumes_from:
+    - phing
+    - www-build
+    - www-application
+    - www-composer-cache
+  entrypoint:
+    - /entrypoint.sh
+
+phpunit:
+  build: images/tools/phpunit
+  working_dir: '/var/www'
+  env_file:
+    - ./env/command/${ENV_NAME}/.env
+  volumes_from:
+    - phing
+    - www-build
+    - www-application
+    - www-composer-cache
+  entrypoint:
+    - /entrypoint.sh
+
+qualimetry:
+  build: images/tools/qa
+  working_dir: '/var/www'
+  env_file:
+    - ./env/command/${ENV_NAME}/.env
+  volumes_from:
+    - phing
+    - www-build
+    - www-application
+  volumes:
+    - /etc/passwd:/etc/passwd:ro      # pour connaitre le home de l'user ($USER) qui lance la commande.
+
+diacenter:
+  build: images/tools/diacenter
+  working_dir: '/var/www'
+  env_file:
+    - ./env/command/${ENV_NAME}/.env
+  volumes_from:
+    - phing
+    - www-build
+    - www-application
+  volumes:
+    - /etc/passwd:/etc/passwd:ro      # pour connaitre le home de l'user ($USER) qui lance la commande.
+
+documentation:
+  build: images/tools/doc
+  working_dir: '/var/www'
+  env_file:
+    - ./env/command/${ENV_NAME}/.env
+  volumes_from:
+    - phing
+    - www-application
+    - www-doc-pratical
+    - www-documentation
+
+deploy:
+  build: images/tools/capistrano
+  working_dir: '/var/www'
+  volumes:
+    - ../../config/deployment:/var/www

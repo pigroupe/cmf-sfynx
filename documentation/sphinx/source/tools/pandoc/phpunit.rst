@@ -1,0 +1,206 @@
+.. role:: math(raw)
+   :format: html latex
+..
+
+PHP unit
+========
+
+Commands
+~~~~~~~~
+
+::
+
+    $ bin/phpunit --help
+    $ bin/phpunit -c app/
+    $ bin/phpunit -c app/   src/.../TestFile.php
+
+Memento
+~~~~~~~
+
+To ignore a test set at the beginning of the method the following code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    $this->markTestSkipped('must be revisited.');
+
+The methods of crawler
+^^^^^^^^^^^^^^^^^^^^^^
+
+:math:`client = static::createClient(); `\ crawler =
+$client->request('GET', '/idees-recettes');
+
+::
+
+    [0] => __construct
+    [1] => clear
+    [2] => add
+    [3] => addContent
+    [4] => addHtmlContent
+    [5] => addXmlContent
+    [6] => addDocument
+    [7] => addNodeList
+    [8] => addNodes
+    [9] => addNode
+    [10] => eq
+    [11] => each
+    [12] => reduce
+    [13] => first
+    [14] => last
+    [15] => siblings
+    [16] => nextAll
+    [17] => previousAll
+    [18] => parents
+    [19] => children
+    [20] => attr
+    [21] => text
+    [22] => html
+    [23] => extract
+    [24] => filterXPath
+    [25] => filter
+    [26] => selectLink
+    [27] => selectButton
+    [28] => link
+    [29] => links
+    [30] => form
+    [31] => xpathLiteral
+    [32] => attach
+    [33] => detach
+    [34] => contains
+    [35] => addAll
+    [36] => removeAll
+    [37] => removeAllExcept
+    [38] => getInfo
+    [39] => setInfo
+    [40] => getHash
+    [41] => count
+    [42] => rewind
+    [43] => valid
+    [44] => key
+    [45] => current
+    [46] => next
+    [47] => unserialize
+    [48] => serialize
+    [49] => offsetExists
+    [50] => offsetSet
+    [51] => offsetUnset
+    [52] => offsetGet
+
+Index
+^^^^^
+
+::
+
+    .
+    Printed when the test succeeds.
+
+    F
+    Printed when an assertion fails while running the test method.
+
+    E
+    Printed when an error occurs while running the test method.
+
+    R
+    Printed when the test has been marked as risky.
+
+    S
+    Printed when the test has been skipped.
+
+    I
+    Printed when the test is marked as being incomplete or not yet implemented.
+
+Links
+^^^^^
+
+::
+
+    https://phpunit.de/manual/current/en/textui.html
+
+PHP MutaTesting : un nouvel outil pour la qualité PHP
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Introduction
+^^^^^^^^^^^^
+
+MutaTesting, c'est quoi ? C'est un outil PHP qui crée des mutants à
+partir de votre code source puis lance vos tests unitaires pour voir
+s'il est possible de tuer ces mutants.
+
+Mon idée première a été de faire un outil très simple : pas besoin
+d'extension PHP, pas besoin de configuration compliquée ; il suffit, en
+ligne de commande, d'indiquer trois choses :
+
+::
+
+    * le framework de test utilisé
+    * le chemin du binaire à exécuter pour lancer les tests
+    * le dossier des tests unitaires
+
+https://github.com/Halleck45/MutaTesting/
+
+Commands
+^^^^^^^^
+
+::
+
+    $ bin/mutatesting {tool} {binary}  {test directory}
+    $ bin/mutatesting {tool} {binary} {test directory} --processes=10
+    $ bin/mutatesting {tool} {binary} {test directory} --report-html=/tmp/file.html
+
+Exemples
+^^^^^^^^
+
+::
+
+    $ bin/mutatesting phpunit phpunit.phar myTestFolder
+    $ bin/mutatesting atoum mageekguy.atoum.phar myTestFolder
+
+    $ bin/mutatesting phpunit phpunit.phar  myTestFolder --options="-c phpunit.xml"
+
+PHP Metrics for Jenkins
+~~~~~~~~~~~~~~~~~~~~~~~
+
+link
+^^^^
+
+::
+
+    * http://blog.lepine.pro/industrialisation/indice-de-maintenabilite-dun-projet-php-et-jenkins/
+
+    * https://github.com/Halleck45/PhpMetrics
+
+Skeleton Generator
+^^^^^^^^^^^^^^^^^^
+
+The PHPUnit Skeleton Generator is a tool that can generate skeleton test
+classes from production code classes and vice versa. It can be installed
+using the following command.
+
+installation
+^^^^^^^^^^^^
+
+-  Intsllation with pear
+
+::
+
+    pear install phpunit/PHPUnit_SkeletonGenerator
+
+-  Installation with updalod
+
+::
+
+    wget https://phar.phpunit.de/phpunit-skelgen.phar
+    chmod +x phpunit-skelgen.phar
+    mv phpunit-skelgen.phar /usr/local/bin/phpunit-skelgen
+
+-  Installation with composer
+
+::
+
+    composer global require "phpunit/phpunit-skeleton-generator=*"
+
+links
+^^^^^
+
+https://phpunit.de/manual/3.7/en/skeleton-generator.html
+https://github.com/sebastianbergmann/phpunit-skeleton-generator

@@ -1,0 +1,8 @@
+{
+  "require": {
+    "phing/phing": "dev-master"
+  },
+  "config": {
+    "bin-dir": "/www-phing/bin"
+  }
+}

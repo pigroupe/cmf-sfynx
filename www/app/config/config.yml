@@ -1,0 +1,895 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: mail_blacklist.yml }
+    - { resource: securityips_blacklist.yml }
+    - { resource: security.yml }    
+    - { resource: "@SfynxAclManagerBundle/Resources/config/security.yml" }
+    - { resource: "@SfynxAdminBundle/Resources/config/security.yml" }
+
+framework:
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: %kernel.debug%
+    form:            true
+    csrf_protection: true
+    validation:
+        enabled: true
+        enable_annotations: true
+        #cache: apc
+    templating:
+        engines: ['twig']
+        assets_version: v1_0_0
+    default_locale:  "%locale%"
+    trusted_proxies: [127.0.0.1] # is to Work behind a Load Balancer or a Reverse Proxy
+    #trust_proxy_headers: false # Whether or not the Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP) 
+    session:
+        name: %pi_session_name%
+        cookie_lifetime: %pi_cookie_lifetime%  # 604800 86400 
+        # surcharge session handler with memcache
+        handler_id: ~ #pi_session.handler.memcache.pool
+#        cookie_path:          ~
+#        cookie_domain:        ~
+#        cookie_secure:        true # true pour déterminer que les cookies soient envoyés seulement par des connexions sécurisée.
+#        cookie_httponly:      true # true pour ne pas permettre l'accès aux cookies par les langages de script, tels que Javascript. Ce paramétrage a pour effet de réduire le vol d'identité à travers les attaques de type XSS.
+#        gc_divisor:           ~
+#        gc_probability:       ~
+#        gc_maxlifetime:       ~
+    esi: { enabled: true } # Pour utiliser les tags ESI dans les templates Twig. Il faut activer AppCache dans app_dev.php et app.php       
+    fragments:  { path: /_proxy  } 
+    
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: false
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+#    bundles:        [ SfynxTemplateBundle, PiAppGedmoBundle, SfynxCmfBundle ]
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        compass: ~
+        sass: ~
+        #closure:
+        #    jar: %kernel.root_dir%/Resources/java/compiler.jar
+        yui_css:
+            jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
+        yui_js:
+            jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar        
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+#    port:                 587
+#    encryption:           ssl
+#    auth_mode:            login
+    spool:
+        type:                 file
+        path:                 "%kernel.cache_dir%/swiftmailer/spool"
+#    sender_address:       ~
+#    antiflood:
+#        threshold:            99
+#        sleep:                0
+#    delivery_address:     ~
+#    disable_delivery:     ~
+#    logging:              "%kernel.debug%"    
+    
+    
+# Stof Doctrine Configuration
+stof_doctrine_extensions:
+    default_locale: %locale%
+    translation_fallback: true
+    persist_default_translation: true
+    orm:
+        default:
+            tree: true
+            timestampable: true
+            sluggable: true
+            loggable: true
+            sortable: true
+            translatable: true
+            
+#
+# SonataDoctrineORMAdminBundle configuration
+#
+sonata_doctrine_orm_admin:
+    # default value is null, so doctrine uses the value defined in the configuration
+    entity_manager: ~
+
+    templates:
+        form:
+            - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
+        filter:
+            - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
+        types:
+            list:
+                array:      SonataAdminBundle:CRUD:list_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:list_date.html.twig
+                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
+                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+
+            show:
+                array:      SonataAdminBundle:CRUD:show_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:show_date.html.twig
+                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
+                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
+ 
+#               
+# Doctrine Configuration
+#
+doctrine:
+    dbal:
+        types:
+            json: Sonata\Doctrine\Types\JsonType    
+        default_connection:       default
+        connections:
+            default:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+                mapping_types:
+                      enum:       string
+                      varbinary:  string
+                      tinyblob:   text
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+        mappings:
+            ## http://brentertainment.com/other/docs/book/doctrine/orm.html
+            ## http://symfony.com/fr/doc/current/reference/configuration/doctrine.html
+            #MyBundle1: ~
+            #MyBundle2: yml
+            #MyBundle3: { type: annotation, dir: Entity/ , alias: BundleAlias}
+            #MyBundle4: { type: xml, dir: Resources/config/doctrine/mapping , alias: BundleAlias }
+            #MyBundle5:
+            #    mapping:              true
+            #    type:                 ~
+            #    dir:                  ~
+            #    alias:                ~
+            #    prefix:               ~
+            #    is_bundle:            ~    OrAppOrCmfBundle 
+            FOSUserBundle: ~
+            StofDoctrineExtensionsBundle: ~
+            SonataClassificationBundle: ~
+            SfynxClassificationBundle: ~
+            SonataMediaBundle: ~
+            SfynxMediaBundle: ~
+            OrAppOrCmfBundle: ~
+            OrAppOrGedmoBundle: ~
+            SfynxTranslatorBundle: ~
+            SfynxCmfBundle: ~
+            PiAppGedmoBundle: ~
+            SfynxAuthBundle: ~
+            #SfynxAuthBundle:
+            #    type: xml
+            #    dir: "%kernel.root_dir%/../src/OrApp/OrAuthBundle/Resources/config/doctrine/mapping"
+            #    prefix: Sfynx\AuthBundle\Entity
+            #    alias: SfynxAuthBundle
+            #    is_bundle: false             
+            translatable:
+                type: annotation
+                alias: Gedmo
+                prefix: Gedmo\Translatable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+            loggable:
+                type: annotation
+                alias: Gedmo
+                prefix: Gedmo\Loggable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+            tree:
+                type: annotation
+                alias: Gedmo
+                prefix: Gedmo\Tree\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+        metadata_cache_driver: array # array|apc|memcache
+        query_cache_driver: array # array|apc|memcache
+        result_cache_driver: array # array|apc|memcache
+
+#
+# FOSUserBundle configuration
+#
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: Sfynx\AuthBundle\Entity\User  #OrApp\OrAuthBundle\Entity\User   Sfynx\AuthBundle\Entity\User
+    use_listener:           true
+    use_username_form_type: true
+    model_manager_name:     null  # change it to the name of your entity/document manager if you don't want to use the default one.
+    from_email:
+        address:       contact@sfynx.fr
+        sender_name:   Admin    
+    profile:
+        form:
+            type:               fos_user_profile
+            name:               fos_user_profile_form
+            validation_groups:  [Profile]
+    change_password:
+        form:
+            type:               fos_user_change_password
+            name:               fos_user_change_password_form
+            validation_groups:  [ChangePassword]
+    registration:
+        confirmation:
+            from_email: # Use this node only if you don't want the global email address for the confirmation email
+                address:        contact@sfynx.fr
+                sender_name:    commercial
+            enabled:    true # change to true for required email confirmation
+            #template:   FOSUserBundle:Registration:email.txt.twig
+        #email:
+            template:   FOSUserBundle:Registration:registration.email.twig
+        form:
+            type:               bootstrap_user_registration
+            name:               fos_user_registration_form
+            validation_groups:  [Registration]
+    resetting:
+        token_ttl: 86400
+        email:
+            from_email: # Use this node only if you don't want the global email address for the resetting email
+                address:        contact@sfynx.fr
+                sender_name:    admin
+            template:   FOSUserBundle:Resetting:email.txt.twig
+        form:
+            type:               fos_user_resetting
+            name:               fos_user_resetting_form
+            validation_groups:  [ResetPassword]            
+    service:
+        mailer:                 fos_user.mailer.default
+        email_canonicalizer:    fos_user.util.canonicalizer.default
+        username_canonicalizer: fos_user.util.canonicalizer.default
+        user_manager:           fos_user.user_manager.default
+    group:
+        group_class: Sfynx\AuthBundle\Entity\Group
+        group_manager:  fos_user.group_manager.default
+        form:
+            type:               fos_user_group
+            name:               fos_user_group_form
+            validation_groups:  [Registration]
+ 
+#
+# routing configuration
+#        
+be_simple_i18n_routing: ~   
+
+
+#
+# maintenance configuration  (lexik:maintenance:lock [--set-ttl])   (lexik:maintenance:lock --no-interaction)  (lexik:maintenance:lock 3600 -n)
+#        
+lexik_maintenance:
+    authorized:
+        path: /path                                                         # Optional. Authorized path, accepts regexs
+        host: your-domain.com                                               # Optional. Authorized domain, accepts regexs
+        ips: ['127.0.0.1', '172.123.10.14']                                 # Optional. Authorized ip addresses
+        query: { foo: bar }                                                 # Optional. Authorized request query parameter (GET/POST)
+        route:                                                              # Optional. Authorized route name
+        attributes:                                                         # Optional. Authorized route attributes
+    driver:      
+        ttl: 3600                                                                  # Optional ttl option, can be not set
+
+         # File driver    
+        class: '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver'                # class for file driver 
+        options: {file_path: %kernel.root_dir%/cache/lock}                         # file_path is the complete path for create the file
+
+         # Shared memory driver
+        class: '\Lexik\Bundle\MaintenanceBundle\Drivers\ShmDriver'                 # class for shared memory driver 
+
+         # MemCache driver
+        class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver 
+        options: {key_name: 'maintenance', host: 127.0.0.1, port: 11211}           # need to define a key_name, the host and port
+
+        # Database driver:               
+        class: 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'             # class for database driver
+
+        # Option 1 : for doctrine   
+        options: {connection: custom}                                            # Optional. You can choice an other connection. Without option it's the doctrine default connection who will be used
+
+        # Option 2 : for dsn, you must have a column ttl type datetime in your table.
+        options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password 
+
+    #Optional. response code and status of the maintenance page
+    response:
+        code: 503 
+        status: "Service Temporarily Unavailable"  
+
+#
+# SonataAdminBundle configuration
+#
+sonata_admin:
+    security:
+        handler: sonata.admin.security.handler.role
+    title: SFYNX
+    title_logo: %kernel.http_host%/bundles/sfynxtemplate/images/logo/logo-sfynx-white.png
+    templates:
+            user_block:           SonataAdminBundle:Core:user_block.html.twig
+            add_block:            SonataAdminBundle:Core:add_block.html.twig
+            layout:               SonataAdminBundle::standard_layout.html.twig
+            ajax:                 SonataAdminBundle::ajax_layout.html.twig
+            dashboard:            SonataAdminBundle:Core:dashboard.html.twig
+            search:               SonataAdminBundle:Core:search.html.twig
+            list:                 SonataAdminBundle:CRUD:list.html.twig
+            filter:               SonataAdminBundle:Form:filter_admin_fields.html.twig
+            show:                 SonataAdminBundle:CRUD:show.html.twig
+            show_compare:         SonataAdminBundle:CRUD:show_compare.html.twig
+            edit:                 SonataAdminBundle:CRUD:edit.html.twig
+            preview:              SonataAdminBundle:CRUD:preview.html.twig
+            history:              SonataAdminBundle:CRUD:history.html.twig
+            acl:                  SonataAdminBundle:CRUD:acl.html.twig
+            history_revision_timestamp:  SonataAdminBundle:CRUD:history_revision_timestamp.html.twig
+            action:               SonataAdminBundle:CRUD:action.html.twig
+            select:               SonataAdminBundle:CRUD:list__select.html.twig
+            list_block:           SonataAdminBundle:Block:block_admin_list.html.twig
+            search_result_block:  SonataAdminBundle:Block:block_search_result.html.twig
+            short_object_description:  SonataAdminBundle:Helper:short-object-description.html.twig
+            delete:               SonataAdminBundle:CRUD:delete.html.twig
+            batch:                SonataAdminBundle:CRUD:list__batch.html.twig
+            batch_confirmation:   SonataAdminBundle:CRUD:batch_confirmation.html.twig
+            inner_list_row:       SonataAdminBundle:CRUD:list_inner_row.html.twig
+            base_list_field:      SonataAdminBundle:CRUD:base_list_field.html.twig
+            pager_links:          SonataAdminBundle:Pager:links.html.twig
+            pager_results:        SonataAdminBundle:Pager:results.html.twig
+            tab_menu_template:    SonataAdminBundle:Core:tab_menu_template.html.twig
+
+    assets:
+        stylesheets:
+
+            # Defaults:
+            - bundles/sfynxadmin/css/bootstrap/bootstrap.min.css
+            - bundles/sonataadmin/vendor/AdminLTE/css/font-awesome.min.css
+            - bundles/sonataadmin/vendor/AdminLTE/css/ionicons.min.css
+            - bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
+            - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
+            - bundles/sonataadmin/vendor/jqueryui/themes/base/jquery-ui.css
+            - bundles/sfynxadmin/css/select2/select2.css
+            - bundles/sfynxadmin/css/select2/select2-bootstrap.css
+            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+            - bundles/sonataadmin/css/styles.css
+            - bundles/sonataadmin/css/layout.css
+        javascripts:
+
+            # Defaults:
+            - bundles/sfynxadmin/js/jquery/jquery.min.js
+            - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
+            - bundles/sonatacore/vendor/moment/min/moment.min.js
+            - bundles/sfynxadmin/js/bootstrap/bootstrap.min.js
+            - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+            - bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js
+            - bundles/sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min.js
+            - bundles/sonataadmin/jquery/jquery.form.js
+            - bundles/sonataadmin/jquery/jquery.confirmExit.js
+            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
+            - bundles/sfynxadmin/js/select2/select2.min.js
+            - bundles/sonataadmin/App.js
+            - bundles/sonataadmin/Admin.js       
+       
+#
+# SonataCacheBundle configuration
+#
+
+
+#
+# SonataBlockBundle configuration
+#
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+        #sonata.admin_doctrine_orm.block.audit:
+        #    contexts:   [admin]
+
+        sonata.block.service.text:
+        sonata.block.service.action:
+        sonata.block.service.rss:
+
+        # Some specific block from the SonataMediaBundle
+        #sonata.media.block.media:
+        #sonata.media.block.gallery:
+        #sonata.media.block.feature_media:
+            
+#
+# SonataClassificationBundle configuration
+#            
+sonata_classification:
+    class:
+        tag:          Sfynx\ClassificationBundle\Entity\Tag
+        collection:   Sfynx\ClassificationBundle\Entity\Collection
+        context:      Sfynx\ClassificationBundle\Entity\Context
+        media:        Sfynx\MediaBundle\Entity\Media
+        category:     Sfynx\ClassificationBundle\Entity\Category
+
+    admin:
+        tag:
+            class:        Sonata\ClassificationBundle\Admin\TagAdmin
+            controller:   SonataAdminBundle:CRUD
+            translation:  SonataClassificationBundle
+        category:
+            class:        Sonata\ClassificationBundle\Admin\CategoryAdmin
+            controller:   SonataAdminBundle:CRUD
+            translation:  SonataClassificationBundle
+        collection:
+            class:        Sonata\ClassificationBundle\Admin\CollectionAdmin
+            controller:   SonataAdminBundle:CRUD
+            translation:  SonataClassificationBundle    
+        context:
+            class:        Sonata\ClassificationBundle\Admin\ContextAdmin
+            controller:   SonataAdminBundle:CRUD
+            translation:  SonataClassificationBundle              
+
+#
+# SonataMediaBundle configuration
+#
+sonata_media:
+    default_context: default
+    db_driver: doctrine_orm
+    class:
+        media:              Sfynx\MediaBundle\Entity\Media
+        category:           Sfynx\ClassificationBundle\Entity\Category
+        gallery:            Sfynx\MediaBundle\Entity\Gallery
+        gallery_has_media:  Sfynx\MediaBundle\Entity\GalleryHasMedia
+    contexts:
+        sonata_collection:
+            providers:
+              - sonata.media.provider.image
+
+            formats:
+                preview: { width: 100, quality: 100}
+                wide:    { width: 820, quality: 100}
+
+        sonata_category:
+            providers:
+              - sonata.media.provider.image
+
+            formats:
+                preview: { width: 100, quality: 100}
+                wide:    { width: 820, quality: 100}  
+        default:  # the default context is mandatory
+            download:
+                #strategy: sonata.media.security.session_strategy # a media can be downloaded only once per session.            
+                strategy: sonata.media.security.public_strategy         # ROLE_USER
+                #strategy: sonata.media.security.superadmin_strategy  # ROLE_SUPER_ADMIN or ROLE_ADMIN
+                #strategy: sonata.media.security.public_strategy      # no restriction, files are public
+                #strategy: sonata.media.security.forbidden_strategy   # not possible to retrieve the original file
+                #strategy: sonata.media.security.connected_strategy   # IS_AUTHENTICATED_FULLY or IS_AUTHENTICATED_REMEMBERED
+                mode: http              # use php to send the file
+                #mode: X-Sendfile        # use the X-Sendfile flag (Apache + mod_xsendfile : https://tn123.org/mod_xsendfile/)
+                #mode: X-Accel-Redirect  # use the X-Accel-Redirect flag (Nginx : http://wiki.nginx.org/X-accel)
+            providers:
+                - sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+
+            formats:
+                small: { width: 100 , quality: 70}
+                #big:   { width: 500 , quality: 70}
+                #cinema:     { width: 1850 , quality: 768}
+                #grandmatv:  { width: 640 , quality: 480}                
+                
+    cdn:
+        server:
+            path: %kernel.http_host%/uploads/media # http://media.sonata-project.org/
+            
+        #panther:
+        #    path:       http://domain.pantherportal.com/uploads/media
+        #    site_id:
+        #    password:
+        #    username:
+
+        #fallback:
+        #    master:     sonata.media.cdn.panther
+        #    fallback:   sonata.media.cdn.server     
+                
+    filesystem:
+        local:
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     true
+
+    providers:
+        file:
+            resizer:    false
+            filesystem: sonata.media.filesystem.local
+            cdn:        sonata.media.cdn.server
+            generator:  sonata.media.generator.default
+            thumbnail:  sonata.media.thumbnail.format
+
+        image:
+            resizer:    sonata.media.resizer.square # sonata.media.resizer.simple
+            filesystem: sonata.media.filesystem.local
+            cdn:        sonata.media.cdn.server
+            generator:  sonata.media.generator.default
+            thumbnail:  sonata.media.thumbnail.format
+        
+        youtube:
+            resizer:    sonata.media.resizer.simple
+            filesystem: sonata.media.filesystem.local
+            cdn:        sonata.media.cdn.server
+            generator:  sonata.media.generator.default
+            thumbnail:  sonata.media.thumbnail.format
+
+        dailymotion:
+            resizer:    sonata.media.resizer.simple
+            filesystem: sonata.media.filesystem.local
+            cdn:        sonata.media.cdn.server
+            generator:  sonata.media.generator.default
+            thumbnail:  sonata.media.thumbnail.format
+                       
+        vimeo:
+            resizer:    sonata.media.resizer.simple
+            filesystem: sonata.media.filesystem.local
+            cdn:        sonata.media.cdn.server
+            generator:  sonata.media.generator.default
+            thumbnail:  sonata.media.thumbnail.format  
+
+#
+# MenuBundle configuration
+#
+knp_menu:
+    twig: true  # set to false to disable the Twig extension and the TwigRenderer
+    templating: false # if true, enables the helper for PHP templates
+    default_renderer: twig # The renderer to use, list is also available by default
+    
+##
+## KnpPaginationBundle configuration
+##
+#knp_paginator:
+#    page_range: 5                      # default page range used in pagination control
+#    default_options:
+#        page_name: page                # page query parameter name
+#        sort_field_name: sort          # sort field query parameter name
+#        sort_direction_name: direction # sort direction query parameter name
+#        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+#    template:
+#        pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
+#        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template 
+#        
+#knp_snappy:
+#    pdf:
+#        enabled:    true
+#        #binary:     /usr/local/bin/wkhtmltopdf
+#        options:    []
+#    image:
+#        enabled:    true
+#        #binary:     /usr/local/bin/wkhtmltoimage
+#        options:    []                                           
+    
+                
+#
+# SfynxCmfBundle configuration
+#
+sfynx_cmf:
+    cache_dir:
+        etag: "%kernel.root_dir%/cachesfynx/Etag/"
+        indexation: "%kernel.root_dir%/cachesfynx/Indexation/"
+        widget: "%kernel.root_dir%/cachesfynx/Widget/"
+        seo : "%kernel.root_dir%/cachesfynx/Seo"
+    seo:
+        redirection_oldurl_to_new_url:
+            authorized: false
+            file_name : seo_links.yml         
+        meta_head:
+            author: Sfynx
+            copyright: http://www.sfynx.fr
+            title: Sfynx
+            description: Based in Europe with operational offices in Switzerland, France, Russia, West and South Africa, Singapore.
+            keywords: Sfynx, symfony 2, framework, CMF, CMS, PHP web applications
+            og_title_add: "Sfynx : "
+            og_type: website
+            og_image: bundles/sfynxtemplate/images/logo/logo-sfynx-white.png
+            og_site_name: http://pigroupe.github.io/cmf-sfynx/
+            additions:
+                 ### robot management
+                 1: "<meta name='robots' content='ALL'/>" # to start referencement
+                 #1: "<meta name='robots' content='noodp'/>" # referencement without DMOZ description
+                 #1: "<meta name='robots' content='noindex, nofollow'/>"   # to stop referencement
+                 
+                 ### mobile management
+                 #2: "<meta name='apple-mobile-web-app-capable' content='yes'/>"
+                 #3: "<meta name='apple-mobile-web-app-status-bar-style' content='black'/>"
+                 #4: "<meta name='viewport' id='viewport'  content='target-densitydpi=device-dpi, user-scalable=no' />"
+                 #5: "<meta name='viewport' content='initial-scale=1.0; user-scalable=0; minimum-scale=1.0; maximum-scale=1.0;' />"
+                 #6: "<!-- Mobile viewport optimized: h5bp.com/viewport -->"
+                 #7: "<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>"
+                 
+                 ### Empécher Microsoft de générer des "smart tags" sur notre page web.
+                 #8: "<meta name='MSSmartTagsPreventParsing' content='TRUE'/>"
+    page:
+        homepage_deletewidget: true
+        page_management_by_user_only: true
+        route:
+            with_prefix_locale: true
+            single_slug: false
+        esi:
+            authorized: false
+            encrypt_key: %esi_key%
+            force_widget_tag_esi_for_varnish: false # true to remplace render_esi function to the esi tag used by varnish
+            force_private_response_for_all: false # true if you want that all responses will have a private Cache-control without max-age
+            force_private_response_only_with_authentication: false # true if you want that all responses will have a private Cache-control without max-age after authentification
+            disable_after_post_request: true
+        widget:
+            render_service_with_ttl: true
+            render_service_with_ajax: false
+            ajax_disable_after_post_request: true
+        refresh:
+            allpage: true
+            allpage_containing_snippet: true
+            css_js_cache_file: true
+        indexation_authorized_automatically: false
+        memcache_enable_all: false
+        scop:
+            authorized: false    
+            globals:
+                navigator:
+                    chrome:  25
+                    safari:  4
+                    ie:      7
+                    firefox: 11.9
+                mobile:
+                    android: 2.2
+                    ios: 5.9
+                tablet:
+                    android: 3.9
+                    ios: 5.9      
+    admin:
+        context_menu_theme: pi2 # {'xp', 'default', 'vista', 'osx', 'human', 'gloss', 'gloss,gloss-cyan', 'gloss,gloss-semitransparent', 'pi', 'pi2'}
+        
+#
+# SfynxCoreBundle configuration
+#       
+sfynx_core:  
+    cache_dir:
+        media: "%kernel.root_dir%/cachesfynx/Media/"     
+    cookies:
+        date_expire: true
+        date_interval:  %pi_cookie_lifetime% # 604800 PT4H  604800
+        application_id: sfynx  
+    translation:
+        defaultlocale_setting: false        
+    permission:
+        restriction_by_roles: false
+        authorization:
+            prepersist: true
+            preupdate: true
+            preremove: true
+        prohibition:
+            preupdate: true
+            preremove: true 
+            
+#
+# SfynxAuthBundle configuration
+#  
+sfynx_auth:
+    loginfailure:
+        authorized: true
+        time_expire: 3600
+        connection_attempts: 5
+        cache_dir: "%kernel.root_dir%/cachesfynx/loginfailure/"
+    locale:
+        authorized: ~ #[fr_FR, en_GB]
+        cache_file: "%kernel.root_dir%/cachesfynx/languages.json"
+    browser:
+        switch_language_authorized: true
+        switch_layout_mobile_authorized: false
+    default_layout:
+        init_pc:
+            template: layout-pi-sfynx.html.twig
+        init_mobile:
+            template: Default
+    default_login_redirection:
+        redirection: admin_homepage
+        template: layout-pi-admin-cmf.html.twig
+    theme:  
+        name: smoothness # {'flatlab','smoothness'} 
+        login: "SfynxSmoothnessBundle::Login\\"
+        layout: "SfynxSmoothnessBundle::Layout\\"
+        email:
+            registration:
+                from_email:
+                    address: contact@sfynx.fr
+                template: SfynxSmoothnessBundle:Login\\Registration:email.txt.twig
+            resetting:
+                from_email:
+                    address: contact@sfynx.fr
+                template: SfynxSmoothnessBundle:Login\\Resetting:email.txt.twig        
+        global:
+            layout: "SfynxSmoothnessBundle::Layout\\layout-global-cmf.html.twig"
+            css: "bundles/sfynxsmoothness/layout/screen-layout-global.css"
+        ajax:
+            layout: "SfynxSmoothnessBundle::Layout\\layout-ajax.html.twig"
+            css: "bundles/sfynxsmoothness/layout/screen-layout-ajax.css"
+        error:
+            route_name: error_404
+            html: ~ #"@SfynxSmoothnessBundle/Resources/views/Error/error.html.twig"
+        admin:
+            pc: "SfynxSmoothnessBundle::Layout\\Pc\\"
+            mobile: "SfynxSmoothnessBundle::Layout\\Mobile\\Admin\\"
+            css: "bundles/sfynxsmoothness/admin/screen.css"
+            home: "SfynxSmoothnessBundle:Home:admin.html.twig"  # SfynxAuthBundle:Frontend:index.html.twig
+            dashboard: "dashboard.default.html.twig"
+            grid:
+                img: "/bundles/sfynxsmoothness/admin/grid/img/"
+                css: ""   
+                type: simple
+                state_save: false
+                row_select: 'multi'  # multi, single
+                pagination: true 
+                pagination_type: "full_numbers"  # bootstrap, full_numbers, simple_numbers    
+                pagination_top: false
+                lengthmenu: 20
+                filters_tfoot_up: true
+                filters_active: false  
+            form:
+                builder: "SfynxSmoothnessBundle:Form"
+                template: "SfynxSmoothnessBundle:Form:fields.html.twig" 
+                css: ""  
+            flash: "SfynxSmoothnessBundle:Flash:flash.html.twig" 
+        front:
+            pc: "SfynxSmoothnessBundle::Layout\\Pc\\"
+            pc_path: "@SfynxSmoothnessBundle/Resources/views/Layout/Pc/"
+            mobile: "SfynxSmoothnessBundle::Layout\\Mobile\\"
+            mobile_path: "@SfynxSmoothnessBundle/Resources/views/Layout/Mobile/"
+            css: ""
+        connexion:
+            login: "SfynxSmoothnessBundle::Login\\Security\\login-layout.html.twig"
+            widget : "SfynxSmoothnessBundle::Login\\Security\\connexion-widget.html.twig" 
+
+        
+#
+# SfynxTemplateBundle configuration
+#        
+sfynx_template:  
+    form:
+        show_legend: false
+        show_child_legend: false
+        error_type: inline  
+        render_fieldset: true
+        render_required_asterisk: false
+        render_optional_text: true
+        errors_on_forms: true
+        checkbox_label: 'both'
+        tooltip:
+            icon: 'icon-info-sign'
+            placement: 'top'          
+                    
+#
+# SfynxToolBundle configuration
+#
+sfynx_tool: 
+    mail:
+        overloading_mail: ~ # test@gmail.com  
+    date:
+        cache_file: "%kernel.root_dir%/cachesfynx/i18n_date.json"  
+
+#
+# SfynxMigrationBundle configuration
+#
+sfynx_migration:
+    path_dir:
+        migration: "%kernel.root_dir%/migrations/"          
+
+#
+# SfynxMediaBundle configuration
+#       
+sfynx_media:        
+    crop:
+        formats:
+            0:
+                prefix: default_mosaique
+                legend: Mosaique
+                width: 380
+                height: 380
+                ratio: 1
+                quality: 70
+            1:
+                prefix: default_big
+                legend: Big
+                width: 760
+                height: 380
+                ratio: 2
+                quality: 70                          
+            
+#
+# SfynxEncryptBundle configuration
+# 
+sfynx_encrypt:
+    encrypters:
+        encrypter_expert:
+            encryptor_annotation_name: Sfynx\EncryptBundle\Annotation\Encryptors\Expertencrypted
+            encryptor_class: Sfynx\EncryptBundle\EventSubscriber\Encryptors\ExpertEncryptor #  If you want, you can use your own Encryptor. Encryptor must implements EncryptorInterface interface
+            encryptor_options:
+                secret_key: "@kernel.secret" #The secret that is used to encrypt data. By default, it will use the kernel secret.
+                algorithm: "rijndael-128" #Encryption algorithm
+                mode: "cbc" #Encryption mode
+                random_initialization_vector: true #If you set it to false, it will use a blank string as initialization vector.
+                base64: true #Encode the encrypted data with the base64 algorithm.
+                base64_url_safe: true #Replace "+" and "/" characters by "-" and "_" 
+        encrypter_aes:
+            encryptor_annotation_name: Sfynx\EncryptBundle\Annotation\Encryptors\Aesencrypted
+            encryptor_class: Sfynx\EncryptBundle\EventSubscriber\Encryptors\AESEncryptor
+            encryptor_options:      
+                secret_key: "@kernel.secret"            
+            
+#
+# SfynxBrowserBundle configuration
+#  
+sfynx_browser:            
+    browscap:
+        remote_ini_url:       http://browscap.org/stream?q=Full_PHP_BrowsCapINI
+        remote_ver_url:       http://browscap.org/version
+        cache_dir:            "%kernel.root_dir%/cachesfynx/browscap" # null : If null, use your application cache directory
+        timeout:              5
+        update_interval:      432000
+        error_interval:       7200
+        do_auto_update:       true
+        update_method:        'cURL' # Supported methods: 'URL-wrapper','socket','cURL' and 'local'.
+        local_file:           null # Only if used
+        cache_filename:       'cache.php'
+        ini_filename:         'browscap.ini'
+        lowercase:            false # You need to rebuild the cache if this option is changed
+        silent:               false             
+                  
+#
+# SfynxWsBundle configuration
+#
+sfynx_ws:    
+    auth:
+        log:
+            dev: true
+            test: true
+            prod: false
+#        domains:
+#            domain1:
+#                key: or23
+#                url: http://www.sfynx.local/setCookies.php
+#            domain2:
+#                key: or22
+#                url: http://www.sfynx22.local/setCookies.php                
+        handlers:
+            getpermisssion:
+                key: %ws_key%
+                method: GET
+                api: http://www.sfynx22.local/ws/auth/get/permisssion
+                format: json
+            validatetoken:
+                key: %ws_key%
+                method: GET
+                api: http://www.sfynx22.local/ws/auth/validate/token
+                format: json   
+    sso:
+        prefix_host: 'http://'
+        uri_proxy: 'http://www.sfyn22.local'
+        uri_proxy_login: 'http://www.sfyn22.local'
+        application_name: sso-sfynx  
+        
+#
+# SfynxWsseBundle configuration
+#       
+sfynx_wsse:
+    security:
+        cache_dir: %wsse_cache_dir%
+        nonce_lifetime: 300

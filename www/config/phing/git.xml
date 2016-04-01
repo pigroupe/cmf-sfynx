@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="git" description="Frontend build" default="git:info" basedir=".">
+
+    <target name="git:info">
+        <echo>This file is a shortcut build for git definition</echo>
+    </target>
+    
+    <target name="git:switch">  
+        <available file="/.git" type="dir" property="dir.Exists" />
+        <if>
+            <isset property="dir.Exists"/>
+            <then>
+                <phingcall target="git:switch-done" />
+            </then> 
+        </if>               
+    </target>      
+ 
+    <target name="git:switch-done">         
+        <!-- Switch the project to the given branch -->
+        <gitcheckout
+            repository="${project.basedir}"
+            branchname="${project.branch}" quiet="true" />
+    </target>  
+    
+    <target name="git:create-switch-done">         
+        <!-- create and switch to "mybranch" branch -->
+        <gitcheckout
+            repository="${project.basedir}"
+            branchname="${project.branch}" quiet="true" create="true"/>
+    </target>
+    
+    <target name="git:create-force-done">         
+        <!-- create (force) already created branch -->
+        <gitcheckout
+            repository="${project.basedir}"
+            branchname="${project.branch}" quiet="true" forceCreate="true"/>
+    </target>           
+
+</project>
+
+

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="svn" description="Frontend build" default="svn:info" basedir=".">
+
+    <target name="svn:info">
+        <echo>This file is a shortcut build for SVN definition</echo>
+    </target>
+    
+    <target name="svn:switch">  
+        <available file="/.svn" type="dir" property="dir.Exists" />
+        <if>
+            <isset property="dir.Exists"/>
+            <then>
+                <phingcall target="svn:switch-done" />
+            </then> 
+        </if>               
+    </target>      
+ 
+    <target name="svn:switch-done">         
+        <!-- Switch the project to the given branch -->
+        <svnswitch
+         repositoryurl="${svn.repository.url}/${project.branch}"
+         username="${svn.repository.username}"
+         password="${svn.repository.password}"
+         todir="${project.basedir}" />        
+    </target>  
+    
+    
+    <target name="svn:prepare-tag" description="Prepares a tag in the remote repository">
+        <!-- Ask for a tag label to copy the current trunk -->
+        <property name="tagLabel" value="false" override="true" />
+
+        <!-- The tag name cannot be empty! -->
+        <if>
+            <isfalse value="${tagLabel}"/>
+            <then>
+                <fail message="Invalid tag name!" />
+            </then>
+        </if>
+
+        <echo>Preparing tag ${tagLabel}...</echo>
+
+        <!-- Copy trunk to the new tag under tags/tagLabel -->
+        <svncopy
+         force="true"
+         nocache="true"
+         repositoryurl="${svn.repository.url}/trunk"
+         todir="${svn.repository.url}/tags/${tagLabel}"
+         username="${svn.repository.username}"
+         password="${svn.repository.password}"
+         message="Tag release ${tagLabel}" />
+
+        <!-- Switch the working copy repo to the newly created tag -->
+        <svnswitch
+         repositoryurl="${svn.repository.url}/tags/${tagLabel}"
+         username="${svn.repository.username}"
+         password="${svn.repository.password}"
+         todir="${project.basedir}" />
+
+        <!-- Here you can perform any kind of editing: generate documentation, export SQL files, ecc -->
+         <touch file="README.txt" />
+
+        <!-- Commit changes -->
+        <svncommit
+         workingcopy="."
+         message="Finish editing tag ${tagLabel}" />
+        <echo message="Committed revision: ${svn.committedrevision}"/>
+
+        <!-- Reset working copy repo to trunk -->
+        <svnswitch
+         repositoryurl="${svn.repository.url}/trunk" />
+
+        <echo msg="Tag ${tagLabel} completed!" />
+    </target>   
+
+    <!-- build.xml svn:prepare-tag -DtagLabel=<tagLabel> -Drelease=<release> -Dupload=true -->
+    <target name="svn:release" description="Exports the trunk or the given tag along with install scripts and FTP uploads">
+        <property name="release" value="trunk" override="true" />
+
+        <echo message="Creating package for '${release}'" />
+
+        <!-- Process repository path for trunk or tag -->
+        <if>
+           <equals arg1="${release}" arg2="trunk" />
+           <then>
+               <property name="repo-path" value="${release}" override="true" />  
+           </then>
+           <else>
+               <property name="repo-path" value="tags/${release}" override="true" /> 
+           </else>
+        </if>
+
+        <!-- Export selected branch/tag from remote repository -->
+        <svnexport 
+         repositoryurl="${svn.repository.url}/${repo-path}"
+         force="true"
+         username="${svn.repository.username}"
+         password="${svn.repository.password}"
+         nocache="true"
+         todir="${svn.export.basedir}/${release}" />
+
+        <!-- Do other custom editing here... -->
+
+        <!-- Create TAR archive -->
+        <tar
+         destfile="${svn.export.basedir}/${phing.project.name}-${release}.tar.gz"
+         compression="gzip">
+           <fileset dir="${svn.export.basedir}/${release}">
+               <include name="*" />
+           </fileset>
+        </tar>
+
+        <!-- Delete Temporary Export directory -->
+        <delete
+         dir="${svn.export.basedir}/${release}"
+         includeemptydirs="true"
+         verbose="false"
+         failonerror="true" />
+
+        <!-- Compute SHA1 digest -->
+        <property name="hash" value="empty" />
+        <filehash
+         file="${svn.export.basedir}/${phing.project.name}-${release}.tar.gz"
+         hashtype="1"
+         propertyname="hash" />
+        <echo msg="SHA1 Digest = ${hash}" />
+
+        <echo msg="Files copied and compressed in build directory OK!" />
+
+        <!-- Prepare install.sh, backup.sh and update.sh scripts -->
+        <copy todir="${svn.export.basedir}" overwrite="true">
+           <mapper type="glob" from="*.template.sh" to="*.sh"/>
+           <fileset dir="./build/config/scripts">
+               <include name="*.sh" />
+           </fileset>
+           <filterchain>
+               <replacetokens begintoken="##" endtoken="##">
+                   <token key="SRCURL" value="${http.srcurl}/${release}/" />
+                   <token key="FILENAME" value="${phing.project.name}-${release}" />
+                   <token key="FILEXT" value="tar.gz" />
+                   <token key="HASH" value="${hash}" />
+                   <token key="APPNAME" value="${phing.project.name}" />
+                   <token key="APPVERSION" value="${release}" />
+               </replacetokens>
+           </filterchain>
+        </copy>
+
+        <!-- Upload the generated file(s) to FTP -->
+        <property name="upload" value="false" override="true" />
+        <if>
+           <equals arg1="${upload}" arg2="true" />
+           <then>
+               <echo msg="Uploading to FTP server for release..." />
+               <ftpdeploy 
+                host="${ftp.host}" 
+                port="${ftp.port}" 
+                username="${ftp.username}" 
+                password="${ftp.password}"
+                dir="${ftp.dir}/${release}" 
+                passive="${ftp.passive}"
+                mode="${ftp.mode}">
+                   <fileset dir="${svn.export.basedir}">
+                       <include name="${phing.project.name}-${release}.tar.gz" />
+                       <include name="install.sh" />
+                   </fileset>
+               </ftpdeploy>
+               <echo>Now you can run: wget ${http.srcurl}/${release}/install.sh &amp;&amp; sh install.sh [stage|local|prod] 2>&amp;1 > ./install.log</echo>
+           </then>
+        </if>
+
+        <echo msg="Done!" /> 
+    </target>       
+
+</project>
+
+

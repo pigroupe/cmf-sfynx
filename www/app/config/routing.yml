@@ -1,0 +1,62 @@
+#
+#   Import PiAppGedmoBundle routing files
+#        
+PiAppGedmoBundle:
+    resource: "@PiAppGedmoBundle/Resources/config/routing.yml"
+    prefix: / 
+    
+#
+#   Import SfynxMediaBundle routing files
+#     
+SfynxMediaBundle:
+    resource: "@SfynxMediaBundle/Resources/config/routing.yml"
+    prefix:   /   
+    
+#
+#   Import SfynxAdminBundle routing files
+#     
+SfynxAdminBundle:
+    resource: "@SfynxAdminBundle/Resources/config/routing.yml"
+    prefix:   /    
+    
+#
+#   Import SfynxCmfBundle routing files
+#     
+SfynxCmfBundle:
+    resource: "@SfynxCmfBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#
+#   Import SfynxAuthBundle routing files
+#       
+SfynxAuthBundle:
+    resource: "@SfynxAuthBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+#
+#   Import SfynxTranslatorBundle routing files
+#     
+SfynxTranslatorBundle:
+    resource: "@SfynxTranslatorBundle/Resources/config/routing.yml"
+    prefix:   /   
+    
+#
+#   Import SfynxWsBundle routing files
+#     
+SfynxWsBundle:
+    resource: "@SfynxWsBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+#
+#   Import SfynxWsseBundle routing files
+#     
+SfynxWsseBundle:
+    resource: "@SfynxWsseBundle/Resources/config/routing.yml"
+    prefix:   / 
+   
+#
+#   Import SfynxCaptchaBundle routing files
+#      
+SfynxCaptchaBundle:
+    resource: "@SfynxCaptchaBundle/Resources/config/routing.yml"
+    prefix:   /    

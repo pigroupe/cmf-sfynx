@@ -1,0 +1,31 @@
+:80
+root /var/www/web/
+fastcgi / bne_php-prod_1:9000 php
+gzip
+ext .html .htm .php jpg jpeg png gif css js pdf mp3 mp4 flv swf
+
+log /var/log/caddy/access.log {
+     rotate {
+             size 100 # Rotate after 100 MB
+             age  14  # Keep log files for 14 days
+             keep 10  # Keep at most 10 log files
+     }
+}
+
+errors {
+	log /var/log/caddy/error.log {
+		size 50 # Rotate after 50 MB
+		age  30 # Keep rotated files for 30 days
+		keep 5  # Keep at most 5 log files
+	}
+}
+
+rewrite {
+    regexp (.*)\.(ico|jpg|jpeg|css|js|gif|png|pdf|mp3|mp4|flv|swf)
+    to     /{path}
+}
+
+rewrite {
+    regexp .*
+    to     /index.php?{query}
+}

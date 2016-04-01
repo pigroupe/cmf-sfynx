@@ -1,0 +1,55 @@
+# https://github.com/Behat/Symfony2Extension/blob/master/doc/index.rst
+# http://docs.behat.org/en/v3.0/guides/6.profiles.html
+
+default:
+    autoload: src
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                path: app/AppKernel.php
+                class: AppKernel
+        Behat\MinkExtension:
+            browser_name: chrome
+            sessions:
+                my_session_selenium:
+                    selenium2:
+                        # wd_host: "http://127.0.0.1:5555/wd/hub" # localhost
+                        # wd_host: "http://phantomjs:8643/wd/hub" # phantomjs
+                        wd_host: "http://sfynx_chrome_run_1:5555/wd/hub" # selenium
+                        capabilities:
+                            browser: chrome
+                            version: 43
+                my_session_zombie:
+                    zombie: ~
+                my_session_symfony2:
+                    symfony2: ~
+
+    suites:
+        auth:
+            type: symfony_bundle
+            bundle: 'SfynxAuthBundle'
+            contexts:
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext
+        cmf:
+            type: symfony_bundle
+            bundle: 'SfynxCmfBundle'
+            contexts:
+                - Sfynx\CmfBundle\Features\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\MinkContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\AjaxSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\HiddenFieldSubContext
+                - Sfynx\BehatBundle\Behat\MinkExtension\Context\SubContext\XpathSubContext
+
+    formatters:
+        pretty:
+            verbose:  true
+            paths:    true
+            snippets: true
+        progress:
+            verbose:  true
+            paths:    true
+            snippets: true
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="verify" description="Frontend build" default="verify:info" basedir=".">
+
+    <target name="verify:info">
+        <echo>This file is a shortcut build for verify step of the pipeline</echo>
+    </target>        
+    
+    <target name="verify:smoke">
+        <exec command='find src -name "*.php" -exec php -ln {} \;' passthru="false" />
+    </target>
+    
+    <target name="verify:sanity">
+        <exec command="chmod -R 0777 ./bin/b_verify/sanity.sh" escape="false" />
+        <exec command="sanity.sh" dir="./bin/b_verify" passthru="false" />
+    </target>    
+
+</project>

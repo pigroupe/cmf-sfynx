@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="documentation" description="Documentation build definition" default="documentation:info" basedir=".">
+
+    <target name="documentation:info">
+        <echo>This file contains the central configuration for generate documentation</echo>
+    </target>
+
+    <target name="documentation:create"
+            depends="doc:browser, doc:doc, doc:sphinx, doc:api"
+            description="Generate project documentation with PHP Documentor and PHP Code Browser" />
+
+    <!-- PHP Code Browser -->
+    <target name="doc:browser" description="Generating code browser...">
+        <exec command="phpcb -h --source=${dir.src} --output=${dir.docs.phpcb} --log=${dir.docs.phpcb}--extension=xml --exclude=**/map/*,**/om/*" />
+    </target>
+
+    <!-- PHP Documentor -->
+    <target name="doc:doc" description="Generate API documentation.">
+        <echo msg="Generating PHPDoc documentation" />
+        <exec logoutput="true" command="phpdoc run --directory ${dir.src} --target ${dir.docs.phpdoc} --ignore '*/Tests/*, */Features/*' --sourcecode --no-interaction" />
+    </target>
+
+    <!-- Generate the RST documentation -->
+    <target name="doc:sphinx" description="Generate RST documentation">
+        <echo msg="dox cmd: ${dir.bin}/provisioners/buildDoc.sh ${dir.docs.sphinx.source}/src ${dir.src}" />
+        <exec command="${dir.bin}/provisioners/buildDoc.sh ${dir.docs.sphinx.source}/src ${dir.src}" logoutput="false" passthru="true" />
+
+        <echo msg="dox cmd: sphinx-build -c ${dir.docs.sphinx.conf} -a -b html ${dir.src} ${dir.docs.sphinx}" />
+        <exec command="sphinx-build -c ${dir.docs.sphinx.conf} -a -b html ${dir.docs.sphinx.source} ${project.dir.documentation}" logoutput="false" passthru="true" />
+    </target>
+
+    <!-- Generate the Api documentation -->
+    <target name="doc:api"
+            description="Generate API documentation">
+
+        <exec executable="apigen" logoutput="true" passthru="true">
+            <arg line="--source ${dir.src}" />
+            <arg line="--exclude */Features/*" />
+            <arg line="--exclude */Tests/*" />
+            <arg line="--destination ${dir.docs.api}" />
+        </exec>
+
+    </target>
+
+</project>

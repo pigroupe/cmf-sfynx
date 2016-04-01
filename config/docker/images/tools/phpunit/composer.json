@@ -1,0 +1,12 @@
+{
+  "require": {
+    "phpunit/phpunit": "@stable",
+    "phpunit/php-invoker": "dev-master",
+    "phake/phake": "*",
+    "phpunit/phpunit-skeleton-generator": "*",
+    "phpunit/phpunit-mock-objects": "*"
+  },
+  "config": {
+    "bin-dir": "/usr/local/bin/"
+  }
+}

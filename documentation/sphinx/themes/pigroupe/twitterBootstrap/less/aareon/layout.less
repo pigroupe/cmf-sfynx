@@ -1,0 +1,44 @@
+body {
+    overflow-x: hidden;
+    font-size:15px;
+    p {
+        text-align:justify;
+    }
+    img {
+        max-width:100%;
+        margin-bottom: 10px;
+    }
+    header {
+        position: fixed;
+        width:100%;
+        z-index:1;
+        top:0;
+        div.navbar-header {
+            margin-right:15px !important;
+        }
+        .navbar-nav > li > a {
+            padding-bottom: 18.5px;
+            padding-top: 18.5px;
+        }
+    }
+    main {
+        margin-top:80px;
+        p > strong {
+            font-size:17px;
+        }
+        .theme_selector {
+            position:fixed;
+            .badge {
+                margin-top:10px;
+                float:left;
+                clear: both;
+                cursor: pointer;
+                &.blue {background-color:#428bca;}
+            }
+        }
+        .logo {max-width: 50px;}
+    }
+    footer {
+        text-align: center;
+    }
+}

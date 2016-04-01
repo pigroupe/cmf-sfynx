@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="prepare" description="Prepare build" default="prepare:info" basedir=".">
+
+    <target name="prepare:info">
+        <echo>This file contains the central configuration for prepare build</echo>
+    </target>
+
+    <!-- Set owner -->
+    <target name="prepare:owner-change">
+        <if>
+            <not>
+                <isset property="owner.user" />
+            </not>
+            <then>
+                <php expression="trim(`whoami`);" returnProperty="owner.user"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <isset property="owner.group" />
+            </not>
+            <then>
+                <php expression="`id -gn`;" returnProperty="owner.group"/>
+            </then>
+        </if>
+        <echo message=" Set files perms. : chmod -R 0755 ${project.basedir}"/>
+        <exec command="chmod -R 0755 ${project.basedir}" escape="false" />
+
+        <property name="tmp.repo.path" value="${dir.vendor}/ ${dir.cache}/ ${dir.log}/ ${dir.uploads}/ ${dir.composer.cache}/" />
+
+        <echo message=" Set files perms. : chgrp ${owner.user} -R ${tmp.repo.path}"/>
+        <exec command="chgrp ${owner.user} -R ${tmp.repo.path}" escape="false" />
+
+        <echo message=" Set files perms. : chmod ug+r -R  ${tmp.repo.path}"/>
+        <exec command="chmod ug+r -R  ${tmp.repo.path}" escape="false" />
+
+        <echo message=" Set files perms. : chmod o-rwx -R  ${tmp.repo.path}"/>
+        <exec command="chmod o-rwx -R  ${tmp.repo.path}" escape="false" />
+
+        <echo message=" Set files perms. : chmod g+rw -R ${tmp.repo.path}"/>
+        <exec command="chmod g+rw -R ${tmp.repo.path}" escape="false" />
+
+        <echo message=" Set files perms. : chown -R ${owner.user}:${owner.group} ${project.basedir} ${dir.composer.cache} ${project.dir.build} ${project.dir.documentation}"/>
+        <exec command="chown -R ${owner.user}:${owner.group} ${project.basedir} ${dir.composer.cache} ${project.dir.build} ${project.dir.documentation} " escape="false" />
+    </target>
+
+    <!-- Project build clean -->
+    <target name="prepare:clean" description="Clean up cache directories.">
+        <echo msg="Cleaning cache directories of the ${project.env.sf} environnement ..." />
+        <exec command="chmod -R 0777 ${dir.cache}" escape="false" />
+        <exec command="rm -rf ${dir.cache}/${project.env.sf}" escape="false"/>
+    </target>
+
+    <target name="prepare:clean-oldbuild" description="Clean up build old directories.">
+        <echo msg="Cleaning build old directories ..." />
+        <exec command="chmod -R 0777 ${dir.bin}/provisioners/release-build.sh" escape="false" />
+        <exec command='${dir.bin}/provisioners/release-build.sh "${dir.build}" "${project.build.age}"' passthru="false" />
+    </target>
+
+    <target name="prepare:project"
+          depends="prepare:folders, prepare:configuration"
+          description="Prepare folder for a local build (dont manage dependancy and configuration file)" />
+
+    <!-- Project build prepare -->
+    <target name="prepare:folders" description="Create build directories.">
+        <echo msg="Creating build directories ..." />
+        <mkdir dir="${dir.composer.cache}"/>
+        <mkdir dir="${dir.vendor}"/>
+        <mkdir dir="${dir.uploads}"/>
+        <mkdir dir="${dir.cache}"/>
+        <mkdir dir="${dir.log}" />
+        <mkdir dir="${dir.build}" />
+        <mkdir dir="${dir.docs}" />
+        <mkdir dir="${dir.docs.phpcb}" />
+        <mkdir dir="${dir.docs.phpdoc}" />
+        <mkdir dir="${dir.docs.sphinx}" />
+        <mkdir dir="${dir.docs.api}" />
+        <mkdir dir="${dir.reports}" />
+        <mkdir dir="${dir.reports.unit}/coverage" />
+        <mkdir dir="${dir.reports.integration}/coverage" />
+        <mkdir dir="${dir.reports.specification}/coverage" />
+        <mkdir dir="${dir.reports.regression}/coverage" />
+        <mkdir dir="${dir.reports.pdepend}" />
+        <mkdir dir="${dir.reports.sonar}" />
+        <mkdir dir="${dir.reports.behat}" />
+        <mkdir dir="${dir.reports.metrics}" />
+        <mkdir dir="${dir.reports.gatling}" />
+        <mkdir dir="${dir.reports.phpstorm.inspection}" />
+        <mkdir dir="${dir.reports.diacenter.autodia}" />
+        <tempfile property="phpunit" destDir="${dir.reports.unit}" suffix=".xml"/>
+        <tempfile property="phpunit" destDir="${dir.reports.integration}" suffix=".xml"/>
+        <tempfile property="phpunit" destDir="${dir.reports.specification}" suffix=".xml"/>
+        <tempfile property="phpunit" destDir="${dir.reports.regression}" suffix=".xml"/>
+    </target>
+
+    <!-- Project build prepare -->
+    <!-- phing -f build.xml build:xx -logger phing.listener.DefaultLogger -Dproject.dbName=xx -Dproject.dbUser=xx -Dproject.dbPw=xx ... -->
+    <target name="prepare:configuration" description="Prepare files configuration.">
+        <copy file="app/phpunit.xml.dist" tofile="app/phpunit.xml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="testsuite.directory" value="${project.dir.src}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- Set right -->
+    <target name="prepare:right-change">
+        <echo msg="Creating rights directories ... ${dir.uploads} ${dir.cache} ${dir.log}" />
+        <exec command="sudo setfacl -R -m u:${owner.group}:rwx -m u:${owner.user}:rwx ${dir.cache} ${dir.log} ${dir.uploads}" />
+        <exec command="sudo setfacl -dR -m u:${owner.group}:rwx -m u:${owner.user}:rwx ${dir.cache} ${dir.log} ${dir.uploads}" />
+    </target>
+
+    <!-- Composer -->
+    <target name="composer:self" description="Update composer tool">
+        <echo msg="Installing vendors with composer ..." />
+        <exec executable="composer" passthru="false" logoutput="false">
+            <arg value="self-update" />
+        </exec>
+    </target>
+
+    <target name="composer:install" description="Installing vendors with composer">
+        <exec command="php -d memory_limit=1024M composer install --prefer-dist --no-interaction" passthru="true" />
+    </target>
+
+    <target name="composer:install-dev" description="Installing vendors with composer">
+        <echo msg="Installing vendors with composer ..." />
+        <exec executable="composer" passthru="false" logoutput="false">
+            <arg value="install" />
+            <arg line="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="composer:update" description="Updating vendors with composer">
+        <echo msg="Updating vendors with composer ..."/>
+        <exec executable="composer" logoutput="true">
+            <arg value="update" />
+            <arg line="--with-dependencies" />
+        </exec>
+    </target>
+
+    <target name="composer:dump" description="Optimize composer">
+        <exec command="composer dump-autoload --optimize" passthru="true" />
+    </target>
+
+</project>
